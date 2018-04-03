@@ -18,8 +18,8 @@
       </div>
 		<?php
 		// MySQL connect info
-			mysql_connect("localhost", "tpdbuser", "india@123");
-			mysql_select_db("trackingprortaldb");
+			mysql_connect("localhost", "root", "");
+			mysql_select_db("trackingportaldb");
 			
 			//mysql_connect("localhost", "root", "");
 			//mysql_select_db("trackingprortaldb20");
