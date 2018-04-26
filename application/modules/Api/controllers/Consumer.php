@@ -116,7 +116,7 @@ class Consumer extends ApiController {
     /**
      * editProfile to edit profile, Login is required.
      * @param json $post like  user_name, dob,gender
-     * @return json api response
+     * @return json api responsess
      */
     
     public function editProfile(){
