@@ -130,6 +130,41 @@ class Consumer extends ApiController {
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
         $validate = [
+            ['field' =>'user_name','label'=>'User Name','rules' => 'min_length[2]' ],
+			['field' =>'email','label'=>'Email','rules' => 'min_length[2]' ],
+            ['field' =>'dob','label'=>'Date of birth','rules' => [$this->ConsumerModel,'dob_check'] ],
+            ['field' =>'gender','label'=>'Gender','rules' => 'trim|in_list[male,female]' ],
+        ];
+        $errors = $this->ConsumerModel->validate($input,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+        $this->db->set('modified_at', date("Y-m-d H:i:s"));
+        $this->db->set('user_name',Utils::getVar('user_name', $input));
+		$this->db->set('email',Utils::getVar('email', $input));
+        $this->db->set('dob', Utils::getVar('dob', $input));
+        $this->db->set('gender', Utils::getVar('gender', $input));
+        $this->db->where('id',$user['id']);
+        if($this->db->update($this->ConsumerModel->table)){
+            Utils::response(['status'=>true,'message'=>'Your account has been updated.','data'=>$input]);
+        }else{
+            Utils::response(['status'=>false,'message'=>'System failed to update.'],200);
+        }
+    }
+	/*
+	// originalfunction for edit profile... 
+    
+	public function editProfile(){
+        $user = $this->auth();
+        if(empty($user)){
+            Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        
+        $input = $this->getInput();
+        if(($this->input->method() != 'post') || empty($input)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
             ['field' =>'user_name','label'=>'User Name','rules' => 'required|min_length[8]' ],
             ['field' =>'dob','label'=>'Date of birth','rules' => ['required',['dob_check',[$this->ConsumerModel,'dob_check']]] ],
             ['field' =>'gender','label'=>'Gender','rules' => 'trim|required|in_list[male,female]' ],
@@ -149,6 +184,7 @@ class Consumer extends ApiController {
             Utils::response(['status'=>false,'message'=>'System failed to update.'],200);
         }
     }
+	*/
     
     /**
      * changePassword to change password
