@@ -34,7 +34,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                         <i class="ace-icon fa fa-home home-icon"></i>
 
-                        <a href="#">Home</a>
+                        <a href="<?php echo DASH_B;?>">Home</a>
 
                     </li>
 

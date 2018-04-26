@@ -34,7 +34,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                         <i class="ace-icon fa fa-home home-icon"></i>
 
-                        <a href="#">Home</a>
+                       <a href="<?php echo DASH_B;?>">Home</a>
 
                     </li>
 
@@ -134,7 +134,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 											 <th>CreatedDate</th>
                                              <th>Action</th>
                                              <th>Add Media</th>
-                                             <th>Feedback</th>
+                                             <th>Feedback Questions</th>
 											<!-- <th>Assign Product</th>-->
                                          </tr>
                                      </thead>
@@ -191,8 +191,11 @@ $this->load->view('../includes/admin_top_navigation'); ?>
   													</td>
                                                     <td> 
  														<div class="hidden-sm hidden-xs btn-group">
-   															<a title="Customer Feedback" href="<?php echo base_url();?>product/ask_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-info-circle" aria-hidden="true"></i> 
- 															</a> 
+   															<a title="Product Description Feedback" href="<?php echo base_url();?>product/ask_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-info-circle" aria-hidden="true"></i></a> 
+															<a title="Product Image Feedback" href="<?php echo base_url();?>product/ask_image_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-info-circle" aria-hidden="true"></i></a>
+															<a title="Product Video Feedback" href="<?php echo base_url();?>product/ask_video_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-info-circle" aria-hidden="true"></i> </a>
+															<a title="Product Audio Feedback" href="<?php echo base_url();?>product/ask_audio_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-info-circle" aria-hidden="true"></i> </a>
+															<a title="Product PDF Feedback" href="<?php echo base_url();?>product/ask_pdf_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-info-circle" aria-hidden="true"></i> </a>
  														</div>
   													</td>
 													<!--<td><input type="checkbox" name="assignProduct[]" class="assignProduct" /></td>-->
