@@ -4,7 +4,7 @@
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
-			<?php $label = 'Plants with Assigned Products';?>
+			<?php $label = '/ Assign Product to Plant';?>
 
 			<?php $this->load->view('../includes/admin_sidebar');?>
 			

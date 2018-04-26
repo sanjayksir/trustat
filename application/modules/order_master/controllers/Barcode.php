@@ -238,6 +238,167 @@
    		 $this->load->view('list_scanned_report_tpl', $params);
      }
 	 
+	 
+	 public function list_purchased_products() {
+ 		##--------------- pagination start ----------------##
+		 // init params
+        $params = array();
+        $limit_per_page =20;
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$srch_string =  $this->input->post('search'); 
+		if(empty($srch_string)){
+			$srch_string ='';
+		}
+        $total_records = $this->order_master_model->get_barcode_total_order_list_all($srch_string);
+		
+		if ($total_records > 0) 
+        {
+            // get current page records
+            $params["ScanedCodeListing"] = $this->order_master_model->get_purchsed_barqrcodelist($limit_per_page, $start_index,$srch_string);
+             
+            $config['base_url'] = base_url() . 'order_master/barcode/list_scanned_report';
+            $config['total_rows'] = $total_records;
+            $config['per_page'] = $limit_per_page;
+            $config["uri_segment"] = 4;
+             
+ 			$config["full_tag_open"] = '<ul class="pagination">';
+			$config["full_tag_close"] = '</ul>';	
+			$config["first_link"] = "&laquo;";
+			$config["first_tag_open"] = "<li>";
+			$config["first_tag_close"] = "</li>";
+			$config["last_link"] = "&raquo;";
+			$config["last_tag_open"] = "<li>";
+			$config["last_tag_close"] = "</li>";
+			$config['next_link'] = '&gt;';
+			$config['next_tag_open'] = '<li>';
+			$config['next_tag_close'] = '<li>';
+			$config['prev_link'] = '&lt;';
+			$config['prev_tag_open'] = '<li>';
+			$config['prev_tag_close'] = '<li>';
+			$config['cur_tag_open'] = '<li class="active"><a href="#">';
+			$config['cur_tag_close'] = '</a></li>';
+			$config['num_tag_open'] = '<li>';
+			$config['num_tag_close'] = '</li>';
+ 
+			## paging style configuration End 
+            $this->pagination->initialize($config);
+             // build paging links
+            $params["links"] = $this->pagination->create_links();
+        }
+		##--------------- pagination End ----------------##
+  		 $data					= array();
+  		 $user_id 	= $this->session->userdata('admin_user_id');		
+		 //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+   		 $this->load->view('list_purchased_products_report_tpl', $params);
+     }
+	
+
+
+public function list_complaint_log() {
+ 		##--------------- pagination start ----------------##
+		 // init params
+        $params = array();
+        $limit_per_page =20;
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$srch_string =  $this->input->post('search'); 
+		if(empty($srch_string)){
+			$srch_string ='';
+		}
+        $total_records = $this->order_master_model->get_barcode_total_order_list_all($srch_string);
+		
+		if ($total_records > 0) 
+        {
+            // get current page records
+            $params["ScanedCodeListing"] = $this->order_master_model->get_complaint_log($limit_per_page, $start_index,$srch_string);
+             
+            $config['base_url'] = base_url() . 'order_master/barcode/list_complaint_log';
+            $config['total_rows'] = $total_records;
+            $config['per_page'] = $limit_per_page;
+            $config["uri_segment"] = 4;
+             
+ 			$config["full_tag_open"] = '<ul class="pagination">';
+			$config["full_tag_close"] = '</ul>';	
+			$config["first_link"] = "&laquo;";
+			$config["first_tag_open"] = "<li>";
+			$config["first_tag_close"] = "</li>";
+			$config["last_link"] = "&raquo;";
+			$config["last_tag_open"] = "<li>";
+			$config["last_tag_close"] = "</li>";
+			$config['next_link'] = '&gt;';
+			$config['next_tag_open'] = '<li>';
+			$config['next_tag_close'] = '<li>';
+			$config['prev_link'] = '&lt;';
+			$config['prev_tag_open'] = '<li>';
+			$config['prev_tag_close'] = '<li>';
+			$config['cur_tag_open'] = '<li class="active"><a href="#">';
+			$config['cur_tag_close'] = '</a></li>';
+			$config['num_tag_open'] = '<li>';
+			$config['num_tag_close'] = '</li>';
+ 
+			## paging style configuration End 
+            $this->pagination->initialize($config);
+             // build paging links
+            $params["links"] = $this->pagination->create_links();
+        }
+		##--------------- pagination End ----------------##
+  		 $data					= array();
+  		 $user_id 	= $this->session->userdata('admin_user_id');		
+		 //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+   		 $this->load->view('list_complaint_log_tpl', $params);
+     }
+
+public function list_warranty_claims() {
+ 		##--------------- pagination start ----------------##
+		 // init params
+        $params = array();
+        $limit_per_page =20;
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$srch_string =  $this->input->post('search'); 
+		if(empty($srch_string)){
+			$srch_string ='';
+		}
+        $total_records = $this->order_master_model->get_barcode_total_order_list_all($srch_string);
+		
+		if ($total_records > 0) 
+        {
+            // get current page records
+            $params["ScanedCodeListing"] = $this->order_master_model->get_warranty_claims($limit_per_page, $start_index,$srch_string);
+             
+            $config['base_url'] = base_url() . 'order_master/barcode/list_warranty_claims';
+            $config['total_rows'] = $total_records;
+            $config['per_page'] = $limit_per_page;
+            $config["uri_segment"] = 4;
+             
+ 			$config["full_tag_open"] = '<ul class="pagination">';
+			$config["full_tag_close"] = '</ul>';	
+			$config["first_link"] = "&laquo;";
+			$config["first_tag_open"] = "<li>";
+			$config["first_tag_close"] = "</li>";
+			$config["last_link"] = "&raquo;";
+			$config["last_tag_open"] = "<li>";
+			$config["last_tag_close"] = "</li>";
+			$config['next_link'] = '&gt;';
+			$config['next_tag_open'] = '<li>';
+			$config['next_tag_close'] = '<li>';
+			$config['prev_link'] = '&lt;';
+			$config['prev_tag_open'] = '<li>';
+			$config['prev_tag_close'] = '<li>';
+			$config['cur_tag_open'] = '<li class="active"><a href="#">';
+			$config['cur_tag_close'] = '</a></li>';
+			$config['num_tag_open'] = '<li>';
+			$config['num_tag_close'] = '</li>';
+ 
+			## paging style configuration End 
+            $this->pagination->initialize($config);
+             // build paging links
+            $params["links"] = $this->pagination->create_links();
+        }
+		##--------------- pagination End ----------------##
+  		 $data					= array();
+  		 $user_id 	= $this->session->userdata('admin_user_id');		
+		 //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+   		 $this->load->view('list_warranty_claims_tpl', $params);
+     }	 
 	
    }?>
 

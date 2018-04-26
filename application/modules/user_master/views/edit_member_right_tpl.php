@@ -130,6 +130,12 @@
 			 	<?php }?>
 			 </select>  
  			</div> 
+                    <div class="col-sm-6">
+                    <label for="form-field-8">Select Plant</label>
+                    <select name="plant_id" id="plant_id" class="form-control" required="required">
+                        <?php echo Utils::selectOptions('plant_id', ['options' => $plants, 'empty' => 'Select Plant', 'value' => Utils::elemValue('plant_id', $get_user_details[0])]) ?>
+                    </select>
+                </div> 
 		</div>
 		<?php }else{?>
          <select  id="ccadmin" name="ccadmin" style="display:none;">

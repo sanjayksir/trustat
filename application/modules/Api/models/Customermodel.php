@@ -79,7 +79,7 @@ class CustomerModel extends CI_Model {
      * @param string $token token of user log table
      * @return array user details
      */
-    public function verifyToken($token = null){
+    public function verifyToken($token = null,$plant=null){
         if($token == null){
             return false;
         }
@@ -89,6 +89,13 @@ class CustomerModel extends CI_Model {
         $this->db->join($this->UserLogModel->table,$this->UserLogModel->table.'.customer_id='.$this->table.'.user_id','left');
         $this->db->where($this->UserLogModel->table.'.token',$token);
         $users = $this->db->get()->row_array();
+        if(!empty($users)){
+            $userPlant = $this->db->get_where('assign_plants_to_users',['user_id'=>$users['user_id'],'plant_id'=>$plant])->row_array();
+            if(empty($userPlant['plant_id'])){
+                return 'plant';
+            }
+            $users['plant_id'] = $plant;
+        }
         //echo $this->db->last_query();die;
         return $users;
     }

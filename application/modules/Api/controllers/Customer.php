@@ -29,8 +29,7 @@ class Customer extends ApiController {
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
         $validate = [
-            ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
-            ['field' =>'plant_id','label'=>'Plant Code','rules' => 'required'],
+            ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ]
         ];
         $errors = $this->ProductModel->validate($data,$validate);
         if(is_array($errors)){
@@ -41,7 +40,7 @@ class Customer extends ApiController {
             $this->response(['status'=>false,'message'=>'Record not found'],200);
         }
         $inventory = [
-            'plant_id' => $data['plant_id'],
+            'plant_id' => $user['plant_id'],
             'customer_id' => $user['user_id'],
             'created_at' => (new DateTime('now'))->format('Y-m-d H:i:s')
         ];
@@ -130,8 +129,7 @@ class Customer extends ApiController {
         }
         $validate = [
             ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
-            ['field' =>'pack_level','label'=>'Packet Level','rules' => 'required'],
-            ['field' =>'plant_id','label'=>'Plant Code','rules' => 'required'],
+            ['field' =>'pack_level','label'=>'Packet Level','rules' => 'required']
         ];
         $errors = $this->ProductModel->validate($data,$validate);
         if(is_array($errors)){
@@ -140,11 +138,10 @@ class Customer extends ApiController {
         $result = $this->ProductModel->barcodeProducts($data['bar_code']);
         if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
-        }
-        
+        }        
         $this->db->set('active_status',1);
         $this->db->set('pack_level',$data['pack_level']);
-        $this->db->set('plant_id',$data['plant_id']);
+        $this->db->set('plant_id',$user['plant_id']);
         $this->db->set('customer_id',$user['user_id']);
         $this->db->set('modified_at', (new DateTime('now'))->format('Y-m-d H:i:s'));
         foreach(explode(',',$data['bar_code']) as $ind => $code){
@@ -191,9 +188,12 @@ class Customer extends ApiController {
         if($user == 'mobile'){
             $this->response(['status'=>false,'message'=>'Mobile No has not been verified.']);
         }
+        
         if(!is_object($user)){
             $this->response(['status'=>false,'message'=>'Invalid Credentials.']);
         }else{
+            $userPlant = $this->db->get_where('assign_plants_to_users',['user_id'=>$user->user_id])->row();
+            $user->plant_id = $userPlant->plant_id;
             $this->response(['status'=>true,'message'=>'Login done successfully.','data'=>$user]);
         }
         

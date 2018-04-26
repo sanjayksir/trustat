@@ -108,6 +108,7 @@ $route['default_controller'] = 'backend';
 /* API routing */
 $route['api/register'] = 'Api/Consumer/register';
 $route['api/login'] = 'Api/Consumer/login';
+$route['api/upload-avatar'] = 'Api/Consumer/uploadAvatar';
 $route['api/logout'] = 'Api/Consumer/logout';
 $route['api/user/view'] = 'Api/Consumer/viewProfile';
 $route['api/user/edit'] = 'Api/Consumer/editProfile';
@@ -211,8 +212,11 @@ $route['city-news/(:any)'] = 'home/citywise_stories_view/$1';
 
 
 
-$route['reports/barcode_scanned_reports'] = 'order_master/barcode/list_scanned_report';
 $route['reports/barcode_printed_reports'] = 'order_master/barcode/list_printed_report';
+$route['reports/barcode_scanned_reports'] = 'order_master/barcode/list_scanned_report';
+$route['reports/list_purchased_products'] = 'order_master/barcode/list_purchased_products';
+$route['reports/list_complaint_log'] = 'order_master/barcode/list_complaint_log';
+$route['reports/list_warranty_claims'] = 'order_master/barcode/list_warranty_claims';
 
 
 

@@ -4,7 +4,7 @@
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
-			<?php $label = 'Assign Plants';?>
+			<?php $label = '/ Assign Plant to Plant Controllers';?>
 
 			<?php $this->load->view('../includes/admin_sidebar');?>
 			
@@ -47,10 +47,10 @@
  												<thead>
 													<tr>
 														<th>#</th>
-  														<th>Username</th>
+  														<th>Plant User Name</th>
 														<th>Email ID</th>
 														<th>Phone</th>
-                                                        <th>Plant</th>
+                                                        <th>Plant Name</th>
   														<th>Created on</th>
  														<th>Action</th>
  													</tr>

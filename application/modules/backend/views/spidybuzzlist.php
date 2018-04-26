@@ -104,11 +104,11 @@
 													<?php $storyUrl =  getstoryurl($buzz['spidypickId']);
 													?>
                                                         <a href="<?php  echo $storyUrl['url'];?>" class="blue" target="_blank" title="View Story"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>
-													   <?php echo anchor("buzzadmn/addSpidyBuzz/" . $buzz['spidypickId'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green', 'title' => 'Edit Story')); ?>
+													   <?php echo anchor("backend/addSpidyBuzz/" . $buzz['spidypickId'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green', 'title' => 'Edit Story')); ?>
                                                         <?php
 															$color = ($buzz['status']) ? " title='Active' style='color:green;'" : "title='Inactive' style='color:red;'";
 															$title = ($buzz['status']) ? " title='Active'" : "title='Inactive'";
-															$action_anchor = anchor("buzzadmn/spideyStatus/" . $buzz['spidypickId'] . "/" . $buzz['status'] . "", '<i class="ace-icon fa fa-circle bigger-130" ' . $color . '></i>', $title);
+															$action_anchor = anchor("backend/spideyStatus/" . $buzz['spidypickId'] . "/" . $buzz['status'] . "", '<i class="ace-icon fa fa-circle bigger-130" ' . $color . '></i>', $title);
                                                          echo $action_anchor;
                                                         ?>
                                                     </div>

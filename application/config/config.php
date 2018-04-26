@@ -1009,7 +1009,7 @@ $config['modules_locations'] = array(
 );
 
 
-$config['admin_email'] = 'sanjay.sirohee@gmail.com';
+$config['admin_email'] = 'sanjayksir@gmail.com';
 $config['site_name'] = 'Tracking Portal';
 $config['smtp'] = [
     'protocol' => 'smtp',

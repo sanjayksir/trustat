@@ -4,7 +4,7 @@
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
-			<?php $label = 'Report';?>
+			<?php $label = 'Printed Bar/OR Codes';?>
 
 			<?php $this->load->view('../includes/admin_sidebar');?>
 			
@@ -53,9 +53,9 @@
                                                 	<button type="button" id="btn-reset" class="btn btn-default btn-search">Reset</button>
                                             	</td>
                                          	</tr>
-                                 		 </tbody>
+                           		  </tbody>
                                    	
-                                 </table></form>
+                              </table></form>
                             </div>
                       <!--------------- Search Tab start----------------->
 										<!-- div.table-responsive -->
@@ -66,7 +66,8 @@
 														<th>#</th>
 														<th>Printed Bar/OR Code</th>
 														<th>Product Name</th>
-														<th>Customer Name</th>
+														<th>Printed By </th>
+ 														<th>Plant Name</th>
  														<th>Active Status</th>
 														<th>Packaging Level</th>
                                                        <!-- <th>Action</th> -->
@@ -84,19 +85,27 @@
 											   <td><?php echo $i; ?></td>
 											   <td><?php echo $listData['barcode_qr_code_no']; ?></td>
 												<td><?php echo $listData['product_name']; ?></td>
-												<td><?php echo $listData['product_sku']; ?></td>
+												<td><?php echo $listData['user_name']; ?></td>
+												<td><?php echo $listData['plant_name']; ?></td>
 												<td>
 																								
-												<?php echo $listData['active_status']; ?>
-												</td>
+												<?php 												
+												
+												 $activeinactive = $listData['active_status'];
+												 if ($activeinactive == 1)
+													 { echo "Active";
+													 } else { 
+													 echo "In-active";
+													 }
+												 
+												  ?>												</td>
 												<td><?php echo $listData['pack_level']; ?></td>
- 												 
                                               </tr>
                                          <?php }
 										}else{ ?>
-										<tr><td align="center" colspan="8" class="color error">No Records Founds</td></tr>
+										<tr><td align="center" colspan="9" class="color error">No Records Founds</td></tr>
 										<?php }?>
-                                        <tr><td align="right" colspan="10" class="color"><?php if (isset($links)) { ?>
+                                        <tr><td align="right" colspan="11" class="color"><?php if (isset($links)) { ?>
                 <?php echo $links ?>
             <?php } ?></td></tr>
                                     </tbody>

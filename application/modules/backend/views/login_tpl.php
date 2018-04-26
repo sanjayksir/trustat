@@ -115,7 +115,12 @@
  									<div class="widget-body">
  										<div class="widget-main">
  											<h4 class="header blue lighter bigger center" style="color:#ff6600 !important; font-weight:bold;">
- 												Welcome to Company Panel <br /> Please Login
+ 												 <br /> 
+					<img src="<?php echo base_url()?>/assets/images/tlogo.jpg" height="70" width="200">
+											<br />
+												<br /> <font size="3" color="Gray">Enter Username and Password </font>
+												
+												<br /><br />
  											</h4>
  											<span class="space-6" id="eror_msg" style="display:none;"></span>
 											<span class="space-6" >
@@ -162,26 +167,27 @@
  													</label>
   													<div class="space"></div>
   													<div class="clearfix">
-  						<input type="submit" class="width-35 pull-right btn btn-sm btn-primary" name="submit" id="submitbtn" style="background-color: #ff6600 !important;
-    color: #ffffff !important; border-color: #ff6600 !important;" value="Submit">
-                                                           <div id="displayAfter" style="display:none;" class="pull-right"><div class="btn btn-sm btn-primary" name="submit" id="submitbtn" value="submit" type="submit">Submit</div><span class="btn btn-sm btn-primary" style="margin-left:-10px"> <i class="fa fa-spinner fa-spin"></i></span>
+  	<input type="submit" class="width-35 pull-right btn btn-sm btn-primary" name="submit" id="submitbtn" style="background-color: #666666 !important;
+    color:#ffffff !important; border-color: gray !important; font-size:16px !important; font-weight:800 !important;" value="Submit">
+                                                           <div id="displayAfter" style="display:none;" class="pull-right"><div class="btn btn-sm btn-primary" name="submit" id="submitbtn" value="submit" type="submit"><b>Submit</b></div><span class="btn btn-sm btn-primary" style="margin-left:-10px"> <i class="fa fa-spinner fa-spin"></i></span>
   													</div>
   													<div class="space-4"></div>
  												</fieldset>
  											</form>
  										</div><!-- /.widget-main -->
- 										<div class="toolbar clearfix" style="background-color: #ff6600 !important; color:#ffffff !important">
+ 										<div class="toolbar clearfix" style="background-color: #666666 !important; color:#ffffff !important; font-size:16px !important;">
  											<div>
- 												<a href="#" data-target="#forgot-box" class="forgot-password-link">
- 													<i class="ace-icon fa fa-arrow-left"></i>
+ 												
+ 											</div>
+											<div><a href="#" data-target="#forgot-box" class="forgot-password-link" style="background-color: #666666 !important; color:#ffffff !important; font-size:16px !important;">
+ 													<i class="ace-icon fa fa-arrow-right"></i>
  													I forgot my password
  												</a>
- 											</div>
-											<div>
- 												<a href="#" data-target="#signup-box" class="user-signup-link">
+ 												<!--<a href="#" data-target="#signup-box" class="user-signup-link">
  													Click here to register
  													<i class="ace-icon fa fa-arrow-right"></i>
  												</a>
+												-->
  											</div>
  										</div>
  									</div><!-- /.widget-body -->

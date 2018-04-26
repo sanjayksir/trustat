@@ -4,7 +4,7 @@
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
-			<?php $label = 'Report';?>
+			<?php $label = 'Scanned Bar/OR Codes';?>
 
 			<?php $this->load->view('../includes/admin_sidebar');?>
 			

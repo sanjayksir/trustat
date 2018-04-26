@@ -48,3 +48,4 @@
 08.03.2018: error 0 in file video_12_1520510217584.mp4
 10.03.2018: error 0 in file video_12_1520662382908.mp4
 12.03.2018: error 0 in file video_12_1520834803981.mp4
+19.04.2018: error 0 in file video_12_1524130719208.mp4

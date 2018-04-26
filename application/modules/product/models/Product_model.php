@@ -200,6 +200,36 @@
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 		return $resultDt ;
     }
+	
+	// assigned products listing 	
+	function assigned_product_listing($limit,$start,$srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR product_description LIKE '%$srch_string%') and (created_by=$user_id)");
+			}else{
+				$this->db->where(array('created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR product_description LIKE '%$srch_string%')");
+			}
+		}
+		
+		$this->db->select("*");
+		$this->db->from("products");
+		//if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+		//}
+		
+		$this->db->order_by("created_date", " desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	
 	function total_product_listing($srch_string='') {
 		$user_id 	= $this->session->userdata('admin_user_id');
 		 

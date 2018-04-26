@@ -1664,7 +1664,7 @@
       "examples": [
         {
           "title": "Success-Response: ",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"Your account details.\",\n    \"data\": {\n        \"id\": \"1\",\n        \"user_name\": \"subashh kumar\",\n        \"email\": \"subhash.sign@gmail.com\",\n        \"password\": \"999ca51334ef2896b0c10707a278cb29\",\n        \"mobile_no\": \"9716322021\",\n        \"gender\": \"male\",\n        \"dob\": \"1988-02-02\",\n        \"ip\": \"::1\",\n        \"is_verified\": \"1\",\n        \"verification_code\": \"997453\",\n        \"status\": \"inactive\",\n        \"terms_conditions\": \"0\",\n        \"created_at\": \"2018-02-16 15:42:10\",\n        \"modified_at\": \"2018-02-19 22:19:14\"\n    }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"Your account details.\",\n    \"data\": {\n        \"id\": \"1\",\n        \"user_name\": \"devtest\",\n        \"email\": \"devtest@gmail.com\",\n        \"password\": \"999ca51334ef2896b0c10707a278cb29\",\n        \"mobile_no\": \"9716322087\",\n        \"gender\": \"male\",\n        \"dob\": \"1988-02-02\",\n        \"ip\": \"::1\",\n        \"is_verified\": \"1\",\n        \"verification_code\": \"997453\",\n        \"status\": \"inactive\",\n        \"terms_conditions\": \"0\",\n        \"created_at\": \"2018-02-16 15:42:10\",\n        \"modified_at\": \"2018-02-19 22:19:14\"\n    }\n}",
           "type": "json"
         }
       ]
@@ -1902,7 +1902,7 @@
       "examples": [
         {
           "title": "Success-Response: ",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"Your account has been updated.\",\n    \"data\": {\n        \"user_name\": \"subashh kumar\",\n        \"gender\": \"male\",\n        \"dob\": \"1988-2-2\"\n    }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"Your account has been updated.\",\n    \"data\": {\n        \"user_name\": \"devtest\",\n        \"gender\": \"male\",\n        \"dob\": \"1988-2-2\"\n    }\n}",
           "type": "json"
         }
       ]
@@ -2022,7 +2022,7 @@
       "examples": [
         {
           "title": "Success-Response: ",
-          "content": "HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"Login successfully.\",\n    \"data\": {\n        \"user_name\": \"dev test\",\n        \"email\": \"devtest@gmail.com\",\n        \"gender\": \"male\",\n        \"dob\": \"2000-02-02\",\n        \"mobile_no\": \"9343233787\",\n        \"id\": \"1\",\n        \"token\": \"ebd65aa7817b650ad78b2b68f989c742\"\n    }\n}",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"Login successfully.\",\n    \"data\": {\n        \"user_name\": \"dev test\",\n        \"email\": \"devtest@gmail.com\",\n        \"gender\": \"male\",\n        \"dob\": \"2000-02-02\",\n        \"mobile_no\": \"9343233787\",\n        \"avatar_url\": \"http://domain.com/uploads/consumer/abc.png\",\n        \"id\": \"1\",\n        \"token\": \"ebd65aa7817b650ad78b2b68f989c742\"\n    }\n}",
           "type": "json"
         }
       ]
@@ -2229,7 +2229,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "\n{\n    \"user_name\":\"subashh kumar\",\n    \"email\":\"subhash.sign@gmail.com\",\n    \"mobile_no\":\"9343233787\",\n    \"gender\":\"male\",\n    \"dob\":\"2000-2-2\",\n    \"terms_conditions\":\"0\"\n}",
+        "content": "\n{\n    \"user_name\":\"devtest\",\n    \"email\":\"devtest@gmail.com\",\n    \"mobile_no\":\"9343233787\",\n    \"gender\":\"male\",\n    \"dob\":\"2000-2-2\",\n    \"terms_conditions\":\"0\"\n}",
         "type": "json"
       }
     ],
@@ -2378,6 +2378,111 @@
     "sampleRequest": [
       {
         "url": "http://innovigents.com/api/verifyotp"
+      }
+    ],
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "status",
+            "description": "<p>false.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "message",
+            "description": "<p>api error as per request.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "errors",
+            "description": "<p>validation errors.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response (example):",
+          "content": "HTTP/1.1 400 Bad Request\n{\n   \"status\":false,\n   \"message\": \"Bad request\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "url": "/upload-avatar",
+    "title": "Upload Profile Image",
+    "version": "0.1.0",
+    "name": "postUploadAvatar",
+    "group": "User",
+    "permission": [
+      {
+        "name": "Private user"
+      }
+    ],
+    "description": "<p>Upload profile image.Image mime type must be image/png,image/gif and image/jpg and size below 4MB.Data must be sent in form-data format on HTTP.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<ul> <li>Token must be in header.</li> </ul>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Object",
+            "optional": false,
+            "field": "avatar",
+            "description": "<ul> <li>Profile Image object (Required).</li> </ul>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>true.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Image has been uploaded successfully.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response: ",
+          "content": "    HTTP/1.1 200 OK\n    {\n    \"status\": true,\n    \"message\": \"Image has been uploaded successfully.\",\n    \"data\": {\n        \"avatar_url\": \"http://domain.com/uploads/consumer/profile11.jpg\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "doc/user.js",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "http://innovigents.com/api/upload-avatar"
       }
     ],
     "error": {

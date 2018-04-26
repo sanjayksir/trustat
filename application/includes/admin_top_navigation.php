@@ -63,16 +63,28 @@
             
 
 				<div class="navbar-header pull-left">
+			<a href="<?php echo base_url()?>backend/dashboard" title="howzzt"><img src="<?php echo base_url()?>/assets/images/finallogow.png" height="70"></a>
+					<!--<a href="<?php echo base_url()?>backend/dashboard" class="navbar-brand" title="Admin">
 
-					<a href="<?php echo base_url()?>backend/dashboard" class="navbar-brand" title="Admin">
-
-						<img src="<?php echo base_url()?>/assets/images/logo.png" height="">
-
-					</a>
+						<!--<img src="<?php echo base_url()?>/assets/images/logo.png" height="">
+						<?php 
+								$image = '';
+								$image = getUserProfileById($this->session->userdata('admin_user_id'));
+								if($image!=''){?>
+								<img class="nav-user-photo" src="<?php echo $image;?>" alt="<?php echo $this->session->userdata('user_name');?>"  title="<?php echo $this->session->userdata('user_name');?>" style="max-height: 30px;"/>
+								<?php }?>
+					</a>-->
 
 				</div>
 
- <span style="color:white; font-size:25px; margin-top:10px !important;">Tracek – Trace, Track & Konnect</span>
+ <!--<span style="color:white; font-size:25px; margin-top:10px !important;">Welcome, <?php   $user_name = getUserFullNameById($this->session->userdata('admin_user_id'));
+									
+										if(empty($user_name)){
+											$user_name_arr =  get_rwa_username($this->session->userdata('admin_user_id'));
+											$user_name=$user_name_arr[0]['user_name'];
+										}
+										echo $user_name;
+									?></span>-->
 
 				<div class="navbar-buttons navbar-header pull-right" role="navigation">
 
@@ -93,9 +105,9 @@
 								<?php }?>
 								
 
-								<span class="user-info">
+								<span class="user-info" style="font-size:20px">
 
-									<small>Welcome,</small>
+									<!--<small>Welcome,</small>-->
 
 									<?php   $user_name = getUserFullNameById($this->session->userdata('admin_user_id'));
 									

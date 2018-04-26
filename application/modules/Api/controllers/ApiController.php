@@ -66,8 +66,15 @@ class ApiController extends MX_Controller {
     }
     /* customer authentication */
     public function customerAuth($key=null){
-        $this->load->model('CustomerModel');        
-        $user = $this->CustomerModel->verifyToken($this->request->token);
+        $this->load->model('CustomerModel');
+        $plant = $this->input->server('HTTP_PLANT');
+        if(empty($plant)){
+            $this->response(['status'=>false,'message'=>'Plant is required in header.']);
+        }
+        $user = $this->CustomerModel->verifyToken($this->request->token,$plant);
+        if($user == 'plant'){
+            $this->response(['status'=>false,'message'=>'Plant id is invalid.']);
+        }
         if($key != null && array_key_exists($key, $user)){
             return $user[$key];
         }else{

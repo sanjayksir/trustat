@@ -21,26 +21,82 @@ class Consumer extends ApiController {
         if(($this->input->method() != 'post') || empty($data)){ 
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
-
-        $errors = $this->ConsumerModel->signupValidate($data);
+		// if number already exists 
+		$checkmobileno = $this->getInput('mobile_no');
+		$checkmobileno2 = $checkmobileno['mobile_no'];
+		
+		
+		
+		$query = $this->db->get_where('consumers',array('mobile_no'=>$checkmobileno2));	
+		if($query->num_rows() > 0){		
+            $errors = $this->ConsumerModel->signupValidateNew($data);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+        $this->db->set('modified_at', date("Y-m-d H:i:s"));
+        //$this->db->set('user_name',Utils::getVar('user_name', $input));
+        //$this->db->set('dob', Utils::getVar('dob', $input));
+       // $this->db->set('gender', Utils::getVar('gender', $input));
+		$emailid = $this->getInput('email');
+		$emailidr = $emailid['email'];
+		
+		$this->db->set('email', $emailidr);
+	    $data['verification_code'] = Utils::randomNumber(5);
+		$this->db->set('verification_code', $data['verification_code']);
+		$this->db->set('password', md5($data['verification_code']));
+        $this->db->where('mobile_no',$data['mobile_no']);
+        if($this->db->update($this->ConsumerModel->table)){
+			//$data['token'] = $this->ConsumerModel->authIdentifyDR($data);
+			//$data['token'] = $user;
+			
+			
+			//$data['password2'] = $checkmobileno[mobile_no];
+			//$data['token'] = $data['token'];
+            $this->signupMail($data);
+            $smstext = 'Your OTP for mobile verifivation is '.$data['verification_code'].', please enter the OTP to complete the signup proccess.';
+            Utils::sendSMS($data['mobile_no'],$smstext);
+            Utils::response(['status'=>true,'message'=>'You are re-registered with this device.','data'=>$data]);
+        }else{
+            Utils::response(['status'=>false,'message'=>'System failed to update.'],200);
+        }
+        } else {
+		
+		$errors = $this->ConsumerModel->signupValidateNew($data);
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
         $data['ip'] =  $this->input->ip_address();        
         $data['created_at'] = date("Y-m-d H:i:s");
         $data['modified_at'] = date("Y-m-d H:i:s");
+		//$emailid = $this->getInput('email');
+		//$data['email'] = $emailid;
         $data['verification_code'] = Utils::randomNumber(5);
         $data['password'] =  md5($data['verification_code']);
         if($this->db->insert('consumers', $data)){
-            $data['password'] = $data['mobile_no'];
+            //$data['password'] = $data['mobile_no'];
+			//$data['token'] = $this->ConsumerModel->authIdentifyDR($data);
+			/*
+			$user = $this->ConsumerModel->authIdentifyDR($data);
+			$data['token'] = $user;
+			if($user == 'mobile'){
+				$this->response(['status'=>false,'message'=>'Mobile No has not been verified.']);
+			}
+			else{
+				$this->response(['status'=>true,'message'=>'Login done successfully.','data'=>$user]);
+			}
+			*/
+			//$data['password1'] = $checkmobileno;
             $this->signupMail($data);
-            $smstext = 'Your OTP is '.$data['verification_code'].', Your OTP is your login password as well as mobile verification password to complete the signup proccess';
+            $smstext = 'Your OTP for mobile verifivation is '.$data['verification_code'].', please enter the OTP to complete the signup proccess.';
             Utils::sendSMS($data['mobile_no'],$smstext);
             Utils::response(['status'=>true,'message'=>'Your account has been registered.','data'=>$data],200);
+			
+			
+			
         }else{
             Utils::response(['status'=>false,'message'=>'Registration has been failed.'],200);
         }
-        
+        }
     }
     
     /**
@@ -314,7 +370,7 @@ class Consumer extends ApiController {
         $errors = $this->ConsumerModel->validate($data,$validate);
         if(is_array($errors)){
             $this->response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
-        }        
+        }
         $user = $this->ConsumerModel->authIdentify($data);
         if($user == 'email'){
             $this->response(['status'=>false,'message'=>'Email has not been verified.']);
@@ -325,6 +381,9 @@ class Consumer extends ApiController {
         if(!is_object($user)){
             $this->response(['status'=>false,'message'=>'Invalid Credentials.']);
         }else{
+            if(!empty($user->avatar_url)){
+                $user->avatar_url = base_url($user->avatar_url);
+            }
             $this->response(['status'=>true,'message'=>'Login done successfully.','data'=>$user]);
         }
         
@@ -340,6 +399,44 @@ class Consumer extends ApiController {
         $this->load->model('UserLogModel');
         $this->db->where('token',$this->request->token)->delete($this->UserLogModel->table);
         $this->response(['status'=>true,'message'=>'Logout successfully.']);
+    }
+    
+        /**
+     * uploadAvatar method to upload profile pic.
+     * 
+     * @param Array $avatar avatar property like size,type,tmp_name and name
+     * @return Object $response contain uploaded avatar url or failed message
+     */
+    
+    public function uploadAvatar() {
+        $user = $this->auth();
+        if(empty($user)){
+            Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        $data = $this->getInput();        
+        if(($this->request->method != 'post') || empty($data)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        
+        $this->load->library('upload', [
+            'upload_path'=>'./uploads/consumer/',
+            'allowed_types'=>'gif|jpg|png|jpeg',
+            'max_size'=>'5120',
+        ]);
+        if(!$this->upload->do_upload('avatar')){
+            $this->response(['status'=>false,'message'=> Utils::errors($this->upload->display_errors())]);
+        }
+        $data['avatar_url'] = 'uploads/consumer/'.$this->upload->data('file_name');
+        $this->db->set('avatar_url', $data['avatar_url']);
+        $this->db->where('id',$user['id']);
+        if($this->db->update($this->ConsumerModel->table)){
+            unset($data['avatar']);
+            $data['avatar_url'] = base_url($data['avatar_url']);
+            Utils::response(['status'=>true,'message'=>'Image has been uploaded successfully.','data'=>$data]);
+        }else{
+            Utils::response(['status'=>false,'message'=>'System failed to upload.'],200);
+        }
+        
     }
 
 }

@@ -194,10 +194,14 @@ class ProductModel extends CI_Model {
         if ($barCodes == null) {
             return false;
         }
+        if(!is_array($barCodes)){
+            $barCodes = explode(',', $barCodes);
+        }
+        
         $query = $this->db->select(['p.*','pbq.id AS pbq_id','pbq.active_status','pbq.pack_level','pbq.barcode_qr_code_no'])
                 ->from('printed_barcode_qrcode AS pbq')
                 ->join('products AS p', 'p.id=pbq.product_id')
-                ->where(['pbq.barcode_qr_code_no IN ('.$barCodes.')'])
+                ->where('pbq.barcode_qr_code_no IN ("'.implode('", "',$barCodes).'")')
                 ->get()
                 ->result();
         //echo $this->db->last_query();die;
@@ -393,7 +397,7 @@ class ProductModel extends CI_Model {
         if(empty($ids)){
             return;
         }
-        if(is_array($ids)){
+        if(is_array($ids) || strstr($ids,'Array')){
             return;
         }
         $query = $this->db->select('a.name,p.name as value')

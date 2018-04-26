@@ -198,7 +198,7 @@ define("INBRIEF_URL", BASE_URL . "uploads/spidey/thumb_300x149/");
 
 define('TEMP_URL',BASE_URL .'/uploads/temp/');
 
-define('DASH_B',BASE_URL .'buzzadmn/dashboard'); 
+define('DASH_B',BASE_URL .'backend/dashboard'); 
 
 define('GOOGLE_MAP_API_KEY', 'AIzaSyAxGaOVPKXDd458QugSeScM1FNmc5vFJC0');
 

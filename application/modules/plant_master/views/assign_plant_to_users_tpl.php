@@ -76,7 +76,7 @@
 
                     <!--left end---->
 
-                    
+                    <div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/list_assigned_plants_user" class="btn btn-primary pull-right" title="List Assign Plant to Plant Controllers">List Assign Plant to Plant Controllers</a></div>
 
                     <div class="col-xs-12">
 

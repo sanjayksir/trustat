@@ -44,6 +44,26 @@ class ConsumerModel extends CI_Model {
         }
         return true;
     }
+	
+	public function signupValidateNew($data){
+        $validate = [
+            ['field' =>'user_name','label'=>'User Name','rules' => 'min_length[8]' ],
+            ['field' =>'email','label'=>'Email','rules' => 'trim|valid_email' ],
+            ['field' =>'mobile_no','label'=>'Mobile No','rules' => 'trim|required|integer|exact_length[10]' ],
+            ['field' =>'dob','label'=>'Date of birth','rules' => [['dob_check',[$this,'dob_check']]] ],
+            ['field' =>'gender','label'=>'Gender','rules' => 'trim|in_list[male,female]' ],
+            ['field' =>'terms_conditions','label'=>'Terms and Conditions','rules' => 'trim' ],
+        ];        
+        $this->load->library('form_validation');        
+        $this->form_validation->set_data($data);
+        $this->form_validation->set_rules($validate);
+        if ($this->form_validation->run() == FALSE) { 
+            return Utils::errors($this->form_validation->error_string());
+        }
+        return true;
+    }
+	
+	
     public function validate($data,$fields){        
         $this->load->library('form_validation');
         $this->form_validation->reset_validation();       
