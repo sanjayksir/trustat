@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- Generation Time: Apr 25, 2018 at 10:27 PM
+-- Generation Time: Apr 26, 2018 at 02:24 AM
 -- Server version: 5.6.39-cll-lve
 -- PHP Version: 5.6.30
 
@@ -2020,7 +2020,10 @@ INSERT INTO `ci_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
 ('a738a4b453fcca09c856b291e4ea76fe238f2613', '106.199.59.42', 1524676509, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532343637363530393b),
 ('d4151c26302f8bf4b6f97a7355cf358561e1e8dc', '106.199.59.42', 1524676554, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532343637363535343b),
 ('7a267bfe8fd7c7c92c06f6ee09bb8cb75447d7d2', '106.199.59.42', 1524676650, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532343637363635303b),
-('623baca2c8af966d62b6bbf1acef0568a85a3c94', '106.199.59.42', 1524676744, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532343637363734343b);
+('623baca2c8af966d62b6bbf1acef0568a85a3c94', '106.199.59.42', 1524676744, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532343637363734343b),
+('0374aeda031f03b0410927c2c28a95ba0b3565ce', '103.201.141.106', 1524720824, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532343732303035353b),
+('96782e0744a83722030102dffa1d64132f88133d', '122.176.3.166', 1524724853, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532343732343833353b),
+('6ab81cac27da4b935a5dc5f38defd51689b1e044', '103.201.141.106', 1524731053, 0x5f5f63695f6c6173745f726567656e65726174657c693a313532343733303934363b61646d696e5f757365725f69647c733a333a22323231223b757365725f6e616d657c733a393a2273616e6a6179636363223b6c6f67696e5f747970657c733a353a2261646d696e223b6c6f676765645f696e7c623a313b737563636573737c733a32383a225175657374696f6e204164646564205375636365737366756c6c7921223b5f5f63695f766172737c613a313a7b733a373a2273756363657373223b733a333a226f6c64223b7d);
 
 -- --------------------------------------------------------
 
@@ -2059,7 +2062,7 @@ INSERT INTO `consumers` (`id`, `user_name`, `email`, `password`, `mobile_no`, `g
 (10, 'Sandeep Sikka', '', 'e232b38a6f7f24706c4b934bc34c859a', 9810078031, '', '2000-01-01', '103.240.193.67', 2, NULL, 'inactive', 1, NULL, '2018-03-31 12:58:58', '2018-04-23 13:25:24'),
 (11, 'sandeepsikka', '', '8b1dd029b253ce48a0931bc73d6c2ad7', 9810110075, '', '2000-01-01', '106.210.25.52', 2, NULL, 'inactive', 1, NULL, '2018-04-01 18:28:54', '2018-04-17 22:59:26'),
 (13, 'HowZzt Customer', '7290085263@gmail.com', '6dae9537e89dd9dd2d083628e046a269', 7290085263, 'male', '2000-01-01', '1.39.28.84', 0, '616734', 'inactive', 1, NULL, '2018-04-06 15:35:10', '2018-04-06 15:35:10'),
-(14, 'Sameer', '9958439076@gmail.com', '7c59fd9815ff758d223b526f833ebbce', 9958439076, '', '2000-01-01', '14.142.251.210', 2, NULL, 'inactive', 1, 'uploads/consumer/mypic2.jpg', '2018-04-06 15:39:57', '2018-04-19 15:36:54'),
+(14, 'Sameer', '9958439076@gmail.com', '72967b91c81e405d3525bdd4d8f3d067', 9958439076, '', '2000-01-01', '14.142.251.210', 2, NULL, 'inactive', 1, 'uploads/consumer/mypic2.jpg', '2018-04-06 15:39:57', '2018-04-26 10:50:55'),
 (15, 'Manish Gupta', '', '04ccd23ec0b1b3a8c81002eb67a266b7', 9899703291, '', '2000-01-01', '182.69.37.90', 2, NULL, 'inactive', 1, NULL, '2018-04-09 23:34:25', '2018-04-22 21:10:44'),
 (16, 'Sanjay Kumar', '', '5a896c88a836e45f091928e9f54fe22e', 7678665537, '', '2000-01-01', '47.31.62.249', 2, '999367', 'inactive', 1, NULL, '2018-04-10 16:52:45', '2018-04-24 11:53:31'),
 (17, 'ashvin', '', 'c17b29097c068547655a1c47bd57ea15', 9810078029, '', '2000-01-01', '106.210.74.131', 2, NULL, 'inactive', 1, NULL, '2018-04-12 19:59:37', '2018-04-18 22:04:53'),
@@ -2219,6 +2222,7 @@ CREATE TABLE IF NOT EXISTS `customer_feedback` (
 CREATE TABLE IF NOT EXISTS `feedback_question_bank` (
   `question_id` bigint(20) NOT NULL AUTO_INCREMENT,
   `question` varchar(555) NOT NULL,
+  `question_type` varchar(100) NOT NULL,
   `answer1` varchar(500) NOT NULL,
   `answer2` varchar(500) NOT NULL,
   `answer3` varchar(500) NOT NULL,
@@ -2227,19 +2231,20 @@ CREATE TABLE IF NOT EXISTS `feedback_question_bank` (
   `status` tinyint(4) NOT NULL DEFAULT '1',
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`question_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `feedback_question_bank`
 --
 
-INSERT INTO `feedback_question_bank` (`question_id`, `question`, `answer1`, `answer2`, `answer3`, `answer4`, `correct_answer`, `status`, `created_date`) VALUES
-(2, 'How you like the product', 'Bad', 'Average', 'Good', 'Awesome', 3, 1, '2018-01-25 12:00:03'),
-(3, 'Whta is Best Feature of product', 'Presentation', 'Look', 'Quality', 'Weight', 3, 1, '2018-01-25 12:02:53'),
-(4, 'What is need to improve the product', 'Quality', 'Color', 'Print', 'Look', 2, 1, '2018-01-25 12:07:38'),
-(5, 'Q1', 'opt1', 'opt2', 'opt3', 'opt4', 2, 1, '2018-02-15 09:36:10'),
-(6, 'Question', '1', '2', '3', '4', 2, 1, '2018-02-24 09:03:02'),
-(7, 'Question9', 'Option1', 'Option2', 'Option3', 'Option4', 1, 1, '2018-03-31 07:51:28');
+INSERT INTO `feedback_question_bank` (`question_id`, `question`, `question_type`, `answer1`, `answer2`, `answer3`, `answer4`, `correct_answer`, `status`, `created_date`) VALUES
+(2, 'How you like the product', '', 'Bad', 'Average', 'Good', 'Awesome', 3, 1, '2018-01-25 12:00:03'),
+(3, 'Whta is Best Feature of product', '', 'Presentation', 'Look', 'Quality', 'Weight', 3, 1, '2018-01-25 12:02:53'),
+(4, 'What is need to improve the product', '', 'Quality', 'Color', 'Print', 'Look', 2, 1, '2018-01-25 12:07:38'),
+(5, 'Q1', '', 'opt1', 'opt2', 'opt3', 'opt4', 2, 1, '2018-02-15 09:36:10'),
+(6, 'Question', '', '1', '2', '3', '4', 2, 1, '2018-02-24 09:03:02'),
+(7, 'Question9', '', 'Option1', 'Option2', 'Option3', 'Option4', 1, 1, '2018-03-31 07:51:28'),
+(8, 'How the image Looked', 'Product Image Feedback', 'Good Image', 'Its OK', 'Not OK', 'Bad Image', 1, 1, '2018-04-26 08:24:11');
 
 -- --------------------------------------------------------
 
@@ -10662,7 +10667,7 @@ CREATE TABLE IF NOT EXISTS `purchased_product` (
   `status` tinyint(3) DEFAULT NULL COMMENT '0=>pending,1=>completed',
   `modified` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 --
 -- Dumping data for table `purchased_product`
@@ -10673,7 +10678,9 @@ INSERT INTO `purchased_product` (`id`, `consumer_id`, `bar_code`, `product_id`, 
 (2, 14, 'prosinc-9538-0000-72-1', 93, NULL, '#kdlskl3343', 'uploads/invoice/download.png', '2018-02-02', 0, '2018-04-16 22:43:08'),
 (3, 14, 'prosinc-9538-0000-72-1', 93, NULL, '#kdlskl3uyt', 'uploads/invoice/profile1.jpg', '2018-02-04', 0, '2018-04-16 22:53:18'),
 (4, 14, 'prosinc-9538-0000-72-1', 93, NULL, '#kdlskl3uyt', 'uploads/invoice/logo2.png', '2018-02-04', 0, '2018-04-16 23:00:26'),
-(5, 16, 'sln-black-5580-0000-102-2', 113, NULL, '123456', 'uploads/invoice/300x300-mid-ads.png', '2019-02-02', 0, '2018-04-16 23:10:54');
+(5, 16, 'sln-black-5580-0000-102-2', 113, NULL, '123456', 'uploads/invoice/300x300-mid-ads.png', '2019-02-02', 0, '2018-04-16 23:10:54'),
+(6, 14, 'colgate-total-9494-0000-124-1', 143, NULL, '123456', 'uploads/invoice/02_2015_Bentley_Continental_GTC_High_Resolution_Pictures.png', '2028-02-01', 0, '2018-04-26 11:00:22'),
+(7, 14, 'colgate-total-9494-0000-124-1', 143, NULL, '123456', 'uploads/invoice/02_2015_Bentley_Continental_GTC_High_Resolution_Pictures1.png', '2028-02-01', 0, '2018-04-26 11:00:57');
 
 -- --------------------------------------------------------
 
@@ -11587,7 +11594,7 @@ CREATE TABLE IF NOT EXISTS `scanned_products` (
   `longitude` varchar(50) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=157 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=158 ;
 
 --
 -- Dumping data for table `scanned_products`
@@ -11749,7 +11756,8 @@ INSERT INTO `scanned_products` (`id`, `consumer_id`, `product_id`, `bar_code`, `
 (153, 10, 143, 'colgate-total-9494-0000-124-3', '0.0', '0.0', '2018-04-25 22:45:09'),
 (154, 10, 143, 'colgate-total-9494-0000-124-3', '0.0', '0.0', '2018-04-25 22:45:54'),
 (155, 10, 143, 'colgate-total-9494-0000-124-3', '0.0', '0.0', '2018-04-25 22:47:30'),
-(156, 10, 143, 'colgate-total-9494-0000-124-3', '0.0', '0.0', '2018-04-25 22:49:04');
+(156, 10, 143, 'colgate-total-9494-0000-124-3', '0.0', '0.0', '2018-04-25 22:49:04'),
+(157, 14, 143, 'colgate-total-9494-0000-124-1', '33333.3333', '33.333333', '2018-04-26 11:03:44');
 
 -- --------------------------------------------------------
 
@@ -12360,7 +12368,7 @@ CREATE TABLE IF NOT EXISTS `user_log` (
   `last_login` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=118 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=119 ;
 
 --
 -- Dumping data for table `user_log`
@@ -12381,7 +12389,7 @@ INSERT INTO `user_log` (`id`, `consumer_id`, `customer_id`, `token`, `plain_toke
 (112, 10, NULL, '3cfbd6972dde543c39de6581208b6709', '3cfbd6972dde543c39de6581208b6709', '356530060794241', 1, '2018-04-23 13:24:21', '2018-04-23 13:24:21'),
 (113, 1, NULL, '15a863249b1cdafe0dfdd72b71b572bd', '15a863249b1cdafe0dfdd72b71b572bd', '866469034306506', 1, '2018-04-24 10:11:31', '2018-04-24 10:11:31'),
 (116, 2, NULL, '3cda2835225db5add667abaf11f3a284', '3cda2835225db5add667abaf11f3a284', 'DATEOSDEVICEIP', 1, '2018-04-25 10:39:01', '2018-04-25 10:39:01'),
-(117, 14, NULL, '3069b287db65ad679085210dd3befaa8', '3069b287db65ad679085210dd3befaa8', 'DATEOSDEVICEIP', 1, '2018-04-25 11:40:05', '2018-04-25 11:40:05');
+(118, 14, NULL, 'ff093ef7bcbf729672a5d5df9af49faf', 'ff093ef7bcbf729672a5d5df9af49faf', 'DATEOSDEVICEIP', 1, '2018-04-26 10:52:13', '2018-04-26 10:52:13');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

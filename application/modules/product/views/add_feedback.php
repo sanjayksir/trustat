@@ -271,6 +271,7 @@
  
    	$("form#user_frm").validate({
 		rules:{
+			QuestionType:{valueNotEquals: "0" },
 			Question:{required: true},
 			answer1:{required: true},
 			answer2:{required: true},
@@ -279,12 +280,13 @@
  			correctAns:{valueNotEquals: "0" }  
  		},
  		messages: {
+				QuestionType: {valueNotEquals: "Please Choose Question Type"},
 				Question: {required: "Please enter Question"},
 				answer1: {required: "Please enter Option 1"},
 				answer2: {required: "Please enter Option 2"}, 
 				answer3: {required: "Please enter Option 3" },
 				answer4: {required: "Please enter Option 4"},
-				correctAns: {valueNotEquals: "Please enter Correct Option"}
+				correctAns: {valueNotEquals: "Please Choose the Answer Option"}
  		},
 		submitHandler: function(form) {
     		var formData;

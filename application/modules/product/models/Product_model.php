@@ -317,6 +317,7 @@
  		}
 		
 		function save_feedback($postData){
+			 $question_type  = $postData['QuestionType'];
 			 $question 		 = $postData['Question'];
 			 $answer1 		 = $postData['answer1'];
 			 $answer2 		 = $postData['answer2'];
@@ -325,6 +326,7 @@
 			 $correct_answer = $postData['correctAns'];
 			 
 			 $insertData=array(
+					"question_type"	  => $question_type,
 					"question"		  => $question,
 					"answer1"	 	  => $answer1,
 					"answer2"		  => $answer2,
