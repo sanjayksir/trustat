@@ -327,3 +327,82 @@ function GetProductDetails() { return; }
  * @apiUse ProductError
  */
 function PostComplaint() { return; }
+/**
+ * @api {post} /feedback-answer Feedback Answer
+ * @apiVersion 0.1.0
+ * @apiName PostFeedbackAnswer
+ * @apiGroup Product
+ * @apiPermission required
+ *
+ * @apiDescription Save the consumer feedback answer.
+ *
+ * @apiHeader {String} token token must be set in header. 
+ * 
+ * @apiParam {Integer} product_id Purchased product id. (Required).
+ * @apiParam {Integer} question_id Purchased product id. (Required).
+ * @apiParam {String} selected_answer answer selected by consumer. (Required).
+ * 
+ * @apiExample Example usage:
+{
+	"product_id":142,
+	"question_id":223,
+	"selected_answer":"answer3"
+}
+
+ * @apiSuccess {String} status true.
+ * @apiSuccess {String} message Feedback answer has been saved successfully.
+ * @apiSuccess {Object} data Input details.
+ * @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+{
+    "status": true,
+    "message": "Feedback answer has been saved successfully.",
+    "data": {
+        "product_id": 142,
+        "question_id": 2,
+        "selected_answer": "answer3",
+        "user_id": "2",
+        "updated_date": "2018-04-27 10:56:39",
+        "created_date": "2018-04-27 10:56:39"
+    }
+}
+ *
+ * @apiUse ProductError
+ */
+function PostFeedbackAnswer() { return; }
+/**
+ @api {get} /feedback-question/(:product_id) Feedback Question
+  @apiVersion 0.1.0
+  @apiName getFeedbackQuestion
+  @apiGroup Product
+  @apiPermission Private user
+ 
+  @apiDescription List of feedback question related to product.
+
+  @apiHeader {String} token token must be set in header. 
+ 
+  @apiParam {Integer} product_id existing product id (Required).
+ 
+  @apiSuccess {String} status true.
+  @apiSuccess {String} message List of questions for feedback.
+  @apiSuccessExample {json} Success-Response: 
+    HTTP/1.1 200 OK
+{
+    "status": true,
+    "message": "List of questions for feedback.",
+    "data": [
+        {
+            "question_id": "5",
+            "question": "Q1",
+            "question_type": "",
+            "answer1": "opt1",
+            "answer2": "opt2",
+            "answer3": "opt3",
+            "answer4": "opt4",
+            "correct_answer": "2"
+        }
+    ]    
+}
+  @apiUse UserError
+*/
+function getFeedbackQuestion() { return; }

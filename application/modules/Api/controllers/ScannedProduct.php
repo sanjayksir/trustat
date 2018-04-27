@@ -39,6 +39,9 @@ class ScannedProduct extends ApiController {
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
         
         if(empty($result)){
+            $data['user_id'] = $user['id'];
+            $data['created'] = date('Y-m-d H:i:s');
+            $this->db->insert('scanned_product_logs', $data);
             $this->response(['status'=>false,'message'=>'Record not found'],200);
         }
         if(!empty($result->product_images)){

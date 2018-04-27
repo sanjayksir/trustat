@@ -1069,6 +1069,139 @@
   },
   {
     "type": "post",
+    "url": "/feedback-answer",
+    "title": "Feedback Answer",
+    "version": "0.1.0",
+    "name": "PostFeedbackAnswer",
+    "group": "Product",
+    "permission": [
+      {
+        "name": "required"
+      }
+    ],
+    "description": "<p>Save the consumer feedback answer.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token must be set in header.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "product_id",
+            "description": "<p>Purchased product id. (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "question_id",
+            "description": "<p>Purchased product id. (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "selected_answer",
+            "description": "<p>answer selected by consumer. (Required).</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "{\n\t\"product_id\":142,\n\t\"question_id\":223,\n\t\"selected_answer\":\"answer3\"\n}",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>true.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Feedback answer has been saved successfully.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Input details.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "     HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"Feedback answer has been saved successfully.\",\n    \"data\": {\n        \"product_id\": 142,\n        \"question_id\": 2,\n        \"selected_answer\": \"answer3\",\n        \"user_id\": \"2\",\n        \"updated_date\": \"2018-04-27 10:56:39\",\n        \"created_date\": \"2018-04-27 10:56:39\"\n    }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "doc/scanned_product.js",
+    "groupTitle": "Product",
+    "sampleRequest": [
+      {
+        "url": "http://innovigents.com/api/feedback-answer"
+      }
+    ],
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "status",
+            "description": "<p>false.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "message",
+            "description": "<p>api error as per request like record not found or validation errors.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "errors",
+            "description": "<p>validation errors.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response (example):",
+          "content": "HTTP/1.1 400 Bad Request\n{\n   \"status\":false,\n   \"message\": \"Bad request\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
     "url": "/register-product",
     "title": "My Product Registration",
     "version": "0.1.0",
@@ -1322,6 +1455,111 @@
             "optional": false,
             "field": "message",
             "description": "<p>api error as per request like record not found or validation errors.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "errors",
+            "description": "<p>validation errors.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response (example):",
+          "content": "HTTP/1.1 400 Bad Request\n{\n   \"status\":false,\n   \"message\": \"Bad request\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "get",
+    "url": "/feedback-question/(:product_id)",
+    "title": "Feedback Question",
+    "version": "0.1.0",
+    "name": "getFeedbackQuestion",
+    "group": "Product",
+    "permission": [
+      {
+        "name": "Private user"
+      }
+    ],
+    "description": "<p>List of feedback question related to product.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token must be set in header.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "product_id",
+            "description": "<p>existing product id (Required).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>true.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>List of questions for feedback.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response: ",
+          "content": "    HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"List of questions for feedback.\",\n    \"data\": [\n        {\n            \"question_id\": \"5\",\n            \"question\": \"Q1\",\n            \"question_type\": \"\",\n            \"answer1\": \"opt1\",\n            \"answer2\": \"opt2\",\n            \"answer3\": \"opt3\",\n            \"answer4\": \"opt4\",\n            \"correct_answer\": \"2\"\n        }\n    ]    \n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "doc/scanned_product.js",
+    "groupTitle": "Product",
+    "sampleRequest": [
+      {
+        "url": "http://innovigents.com/api/feedback-question/(:product_id)"
+      }
+    ],
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "status",
+            "description": "<p>false.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "message",
+            "description": "<p>api error as per request.</p>"
           },
           {
             "group": "Error 4xx",
@@ -1948,139 +2186,6 @@
   },
   {
     "type": "post",
-    "url": "/feedback-answer",
-    "title": "Feedback Answer",
-    "version": "0.1.0",
-    "name": "PostFeedbackAnswer",
-    "group": "User",
-    "permission": [
-      {
-        "name": "required"
-      }
-    ],
-    "description": "<p>Save the consumer feedback answer.</p>",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "token",
-            "description": "<p>token must be set in header.</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "product_id",
-            "description": "<p>Purchased product id. (Required).</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "question_id",
-            "description": "<p>Purchased product id. (Required).</p>"
-          },
-          {
-            "group": "Parameter",
-            "type": "String",
-            "optional": false,
-            "field": "selected_answer",
-            "description": "<p>answer selected by consumer. (Required).</p>"
-          }
-        ]
-      }
-    },
-    "examples": [
-      {
-        "title": "Example usage:",
-        "content": "{\n\t\"product_id\":142,\n\t\"question_id\":223,\n\t\"selected_answer\":\"answer3\"\n}",
-        "type": "json"
-      }
-    ],
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status",
-            "description": "<p>true.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>Feedback answer has been saved successfully.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "Object",
-            "optional": false,
-            "field": "data",
-            "description": "<p>Input details.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response:",
-          "content": "     HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"Feedback answer has been saved successfully.\",\n    \"data\": {\n        \"product_id\": 142,\n        \"question_id\": 2,\n        \"selected_answer\": \"answer3\",\n        \"user_id\": \"2\",\n        \"updated_date\": \"2018-04-27 10:56:39\",\n        \"created_date\": \"2018-04-27 10:56:39\"\n    }\n}",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "doc/user.js",
-    "groupTitle": "User",
-    "sampleRequest": [
-      {
-        "url": "http://innovigents.com/api/feedback-answer"
-      }
-    ],
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "status",
-            "description": "<p>false.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "message",
-            "description": "<p>api error as per request like record not found or validation errors.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "errors",
-            "description": "<p>validation errors.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Response (example):",
-          "content": "HTTP/1.1 400 Bad Request\n{\n   \"status\":false,\n   \"message\": \"Bad request\"\n}",
-          "type": "json"
-        }
-      ]
-    }
-  },
-  {
-    "type": "post",
     "url": "/login",
     "title": "Login",
     "version": "0.1.0",
@@ -2511,111 +2616,6 @@
     "sampleRequest": [
       {
         "url": "http://innovigents.com/api/verifyotp"
-      }
-    ],
-    "error": {
-      "fields": {
-        "Error 4xx": [
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "status",
-            "description": "<p>false.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "message",
-            "description": "<p>api error as per request.</p>"
-          },
-          {
-            "group": "Error 4xx",
-            "optional": false,
-            "field": "errors",
-            "description": "<p>validation errors.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Response (example):",
-          "content": "HTTP/1.1 400 Bad Request\n{\n   \"status\":false,\n   \"message\": \"Bad request\"\n}",
-          "type": "json"
-        }
-      ]
-    }
-  },
-  {
-    "type": "get",
-    "url": "/feedback-question/(:product_id)",
-    "title": "Feedback Question",
-    "version": "0.1.0",
-    "name": "getFeedbackQuestion",
-    "group": "User",
-    "permission": [
-      {
-        "name": "Private user"
-      }
-    ],
-    "description": "<p>List of feedback question related to product.</p>",
-    "header": {
-      "fields": {
-        "Header": [
-          {
-            "group": "Header",
-            "type": "String",
-            "optional": false,
-            "field": "token",
-            "description": "<p>token must be set in header.</p>"
-          }
-        ]
-      }
-    },
-    "parameter": {
-      "fields": {
-        "Parameter": [
-          {
-            "group": "Parameter",
-            "type": "Integer",
-            "optional": false,
-            "field": "product_id",
-            "description": "<p>existing product id (Required).</p>"
-          }
-        ]
-      }
-    },
-    "success": {
-      "fields": {
-        "Success 200": [
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "status",
-            "description": "<p>true.</p>"
-          },
-          {
-            "group": "Success 200",
-            "type": "String",
-            "optional": false,
-            "field": "message",
-            "description": "<p>List of questions for feedback.</p>"
-          }
-        ]
-      },
-      "examples": [
-        {
-          "title": "Success-Response: ",
-          "content": "    HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"List of questions for feedback.\",\n    \"data\": [\n        {\n            \"question_id\": \"5\",\n            \"question\": \"Q1\",\n            \"question_type\": \"\",\n            \"answer1\": \"opt1\",\n            \"answer2\": \"opt2\",\n            \"answer3\": \"opt3\",\n            \"answer4\": \"opt4\",\n            \"correct_answer\": \"2\"\n        }\n    ]    \n}",
-          "type": "json"
-        }
-      ]
-    },
-    "filename": "doc/user.js",
-    "groupTitle": "User",
-    "sampleRequest": [
-      {
-        "url": "http://innovigents.com/api/feedback-question/(:product_id)"
       }
     ],
     "error": {
