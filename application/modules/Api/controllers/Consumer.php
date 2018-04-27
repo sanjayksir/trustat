@@ -8,6 +8,7 @@ class Consumer extends ApiController {
         parent::__construct();
         $this->load->library('form_validation');
         $this->load->model('ConsumerModel');
+        $this->load->model('ProductModel');
     }
     
     /**
@@ -473,6 +474,58 @@ class Consumer extends ApiController {
             Utils::response(['status'=>false,'message'=>'System failed to upload.'],200);
         }
         
+    }
+    public function feedbackQuestion($product=null) {
+        $user = $this->auth();
+        if(empty($user)){
+            Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        
+        if(($this->request->method != 'get') || is_null($product)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $data = $this->ProductModel->feedbackQuestion($product);
+        if(!empty($data)){
+            Utils::response(['status'=>true,'message'=>'List of questions for feedback.','data'=>$data]);
+        }else{
+            Utils::response(['status'=>false,'message'=>'System failed to proccess the request.'],200);
+        }
+    }
+    public function feedbackAnswer() {
+        $user = $this->auth();
+        if(empty($user)){
+            Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        $data = $this->getInput();
+        if(($this->request->method != 'post') || empty($data)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        
+        $validate = [
+            ['field' =>'product_id','label'=>'Product','rules' => 'trim|required|integer'],
+            ['field' =>'question_id','label'=>'Question','rules' => 'trim|required|integer'],
+            ['field' =>'selected_answer','label'=>'User answer','rules' => 'trim|required'],
+        ];
+        $errors = $this->ConsumerModel->validate($data,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+        $questionQuery = $this->db->get_where('feedback_question_bank',['question_id'=>$data['question_id']])->row();
+        $productQuery = $this->db->get_where('products',['id'=>$data['product_id']])->row();
+        if(empty($questionQuery)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'Invalid question id.']);
+        }
+        if(empty($productQuery)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'Invalid product id.']);
+        }
+       
+        $data['user_id'] = $user['id'];
+        $data['created_date'] = $data['updated_date'] = date('Y-m-d H:i:s');
+        if($this->db->insert('consumer_feedback', $data)){
+            Utils::response(['status'=>true,'message'=>'Feedback answer has been saved successfully.','data'=>$data]);
+        }else{
+            Utils::response(['status'=>false,'message'=>'System failed to proccess the request.'],200);
+        }
     }
 
 }

@@ -420,5 +420,19 @@ class ProductModel extends CI_Model {
                 ->result();
         return $query;
     }
+    public function feedbackQuestion($product=null,$type=null){
+        if(is_null($product)){
+            return [];
+        }
+        $query = $this->db->select('q.question_id,q.question,q.question_type,q.answer1,q.answer2,q.answer3,q.answer4,q.correct_answer')
+                ->from('feedback_question_bank AS q')
+                ->join('product_feedback_questions AS pq', 'pq.question_id=q.question_id','INNER')
+                ->where('pq.product_id ="'.$product.'"')
+                ->where('q.status =1')
+                ->get()
+                ->result();
+        return $query;
+        
+    }
 
 }
