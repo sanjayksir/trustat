@@ -50,92 +50,103 @@
 							<div class="col-xs-12">
  								<div class="row">
 									 <div class="col-xs-12">
+                                <div class="widget-box widget-color-blue">
+                                    <div class="widget-header widget-header-flat">
+                                        <h5 class="widget-title bigger lighter">Manage Plant Controller</h5>
+                                        <div class="widget-toolbar">
+                                            <a href="<?php echo base_url('user_master/add_plant_controller/') ?>" class="btn btn-xs btn-warning" title="Add PLant Controller">Add <?php echo $label; ?> </a></div>
 										 
- 										<div style="clear:both;height:40px;"><a href="<?php echo base_url()?>user_master/add_plant_controller/" class="btn btn-primary pull-right" title="Add PLant Controller">Add <?php echo $label;?> </a></div> 
-										<!-- div.table-responsive -->
- 										<!-- div.dataTables_borderWrap -->
-										<?php $label = 'Created';?>
-										<!--------------- Search Tab start----------------->
-                            <div class="row"><form id="form-filter" action="" method="post" class="form-horizontal" onsubmit="return validateSrch();">
-                                <table id="search" class="table table-hover display">
+                                    </div>
                                     
-                                        <tbody>
-                                        	<tr>
-                                            	<td><input name="search" value="<?php if(!empty($this->input->post('search'))){echo $this->input->post('search');}?>" id="searchStr" placeholder="Search Records" class="form-control" type="text"></td>
-                                            	<td>
-                                                	<input type="submit" id="btn-filter" value="Search" name="Search" class="btn btn-primary btn-search">&nbsp;
-                                                	<button type="button" id="btn-reset" class="btn btn-default btn-search">Reset</button>
-                                            	</td>
-                                         	</tr>
-                                 		 </tbody>
-                                   	
-                                 </table></form>
+<div class="widget-body">
+    <div class="row filter-box">
+        <form id="form-filter" action="" method="post" class="form-horizontal" onsubmit="return validateSrch();">
+        <div class="col-sm-6">
+            <label>Display            
+                <select name="page_limit" id="page_limit" class="form-control" onchange="this.form.submit()">
+                <?php echo Utils::selectOptions('pagelimit',['options'=>$this->config->item('pageOption'),'value'=>$this->config->item('pageLimit')]) ?>
+            </select>
+            Records
+            </label>
                             </div>
+        <div class="col-sm-6">
+                <div class="input-group">
+                    <input type="text" name="search" id="search" value="<?= $this->input->post('search',null); ?>" class="form-control search-query" placeholder="Type your query"><span class="input-group-btn"><button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button></span>
+                </div>
+        </div>
+        </form>
+    </div>
                       <!--------------- Search Tab start----------------->
  											<table id="missing_people" class="table table-striped table-bordered table-hover">
  												<thead>
 													<tr>
-														<th>#</th>
+                                            <th>SNo.</th>
  														<th>Full Name</th>
  														<th>User Name</th>
 														<th>Email ID</th>
 														<th>Phone</th>
-  														<th><?php echo $label;?> By</th>
+                                            <th><?php echo $label; ?> By</th>
  														<th>Action</th>
  													</tr>
 												</thead>
 												<tbody>
-
-                                        <?php $i = 0;
-										if(count($userListing)>0){
-                                        foreach ($userListing as $listData){
-										$i++;
+                                    <?php
+                                    $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+                                    $limit = $this->config->item('per_page');
+                                    $sno =  $page + 1;
+                                        if (count($userListing) > 0) {
+                                            foreach ($userListing as $listData) {
 											$status = $listData['status'];
-                                            if($status ==1){
-											$status ='Active';
- 												$colorStyle="style='color:white;border-radius:10px;background-color:green;border:none;'";
-											}else{
-											$status ='Inactive';
-												$colorStyle="style='color:black;border-radius:10px;background-color:red;border:none;'";
-											}?>
+                                                if ($status == 1) {
+                                                    $status = 'Active';
+                                                    $colorStyle = "style='color:white;border-radius:10px;background-color:green;border:none;'";
+                                                } else {
+                                                    $status = 'Inactive';
+                                                    $colorStyle = "style='color:black;border-radius:10px;background-color:red;border:none;'";
+                                                }
+                                                ?>
                                                <tr id="show<?php echo $listData['user_id']; ?>">
-											   <td><?php echo $i; ?></td>
-												<td><?php echo $listData['f_name'].' '. $listData['l_name']; ?></td>
+                                                    <td><?php echo $sno; ?></td>
+                                                    <td><?php echo $listData['f_name'] . ' ' . $listData['l_name']; ?></td>
 												<td><?php echo $listData['user_name']; ?></td>
 												<td><?php echo $listData['email_id']; ?></td>
 												<td><?php echo $listData['mobile_no']; ?></td>
  												<td><?php echo getUserNameById($listData['is_parent']); ?></td>
                                                  <td>
                                                      <div class="hidden-sm hidden-xs action-buttons">
-                                                         <a href="<?php  echo base_url().'user_master/view_user/'.$listData['user_id'];?>" class="btn btn-xs btn-success"  target="_blank" title="View"><i class="fa fa-eye"></i></a>
-                                                         <?php echo anchor("user_master/edit_plant_controller/" . $listData['user_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?><?php if($listData['is_verified']==1){?>
-                                                         <a title="Delete User" href="javascript:void(0);" onclick="return confirmDelete('<?php echo base64_encode($listData['user_id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>  
-                                                         <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['user_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['user_id'];?>',this.value);" />
- 														  <?php }else{?>
+                                                            <a href="<?php echo base_url() . 'user_master/view_user/' . $listData['user_id']; ?>" class="btn btn-xs btn-success"  target="_blank" title="View"><i class="fa fa-eye"></i></a>
+                                                            <?php echo anchor("user_master/edit_plant_controller/" . $listData['user_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info', 'title' => 'Edit')); ?><?php if ($listData['is_verified'] == 1) { ?>
+                                                                <a title="Delete User" href="javascript:void(0);" onclick="return confirmDelete('<?php echo base64_encode($listData['user_id']); ?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>  
+                                                                <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['user_id']; ?>" value="<?php echo $status; ?>" onclick="return change_status('<?php echo $listData['user_id']; ?>', this.value);" />
+                                                            <?php } else { ?>
 													   <span><a href="#" class="btn btn-xs btn-warning" title="Email Not Verified">X</a></span>
-													   <?php }?>
+        <?php } ?>
                                                      </div>
                                                  </td>
                                              </tr>
-                                         <?php }
-										}else{ ?>
+                                        <?php
+                                        $sno++;
+                                            }
+                                        } else {
+                                            ?>
 										<tr><td align="center" colspan="8" class="color error">No Records Founds</td></tr>
-										<?php }?>
-										<tr><td align="right" colspan="10" class="color"><?php if (isset($links)) { ?>
-										<?php echo $links ?>
-									<?php } ?></td></tr>
+                                                <?php } ?>
+                                        
                                     </tbody>
 											</table>
+                                <div class="row paging-box">
+                                    <?php echo $links ?>
+                                </div>
+                            </div>
+                            </div>
   								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
-				</div><div class="footer">
+                </div>
+                <div class="footer">
 				<div class="footer-inner">
 					<div class="footer-content">
-						 
-
-
 						&nbsp; &nbsp;
 						<span class="action-buttons">
 							<a href="#">

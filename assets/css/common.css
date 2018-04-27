@@ -97,3 +97,9 @@ ul.word_cloud li{width:14%; height:30px; float:left; margin-top:10px; height:30p
 .facility_sec .v_top {width: 100px;margin-bottom: 15px;}
 
 .error{color: #FF0000;}
+.filter-box{padding:7px 7px;}
+.filter-box label{display: inline-block;max-width: 100%;}
+.filter-box select{display: inline-block !important;width:auto !important;height: 30px; padding:2px 3px;}
+.row.paging-box{border-bottom: 1px solid #e0e0e0;padding-top: 0px;padding-bottom: 0px;background-color: #EFF3F8;margin: 0!important;}
+.paging-box ul.pagination{margin: 10px 0px !important;}
+.paging-box .counter{display: block;margin:15px 10px;}
