@@ -65,6 +65,24 @@ class ScannedproductsModel extends CI_Model {
         }
         return $items;
     }
+	// check if the product code is registered or not 
+	public function isProductRegistered($bar_code_data) {
+		
+		 $query = $this->db->get_where('purchased_product', array('bar_code' => $bar_code_data)); 
+
+                if ($query->num_rows() == 0 )
+                {
+                     return FALSE;
+                }
+                else
+                {
+                      return TRUE;
+                }
+				
+		
+                
+    }
+	
     
     public function findScannedProducts($userid = null){
         if($userid == null){

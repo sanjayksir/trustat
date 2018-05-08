@@ -37,7 +37,9 @@ class ScannedProduct extends ApiController {
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
-        
+		$bar_code_data = $data['bar_code'];
+		$isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);
+        //echo $isRegistered;
         if(empty($result)){
             $data['user_id'] = $user['id'];
             $data['created'] = date('Y-m-d H:i:s');
@@ -56,6 +58,10 @@ class ScannedProduct extends ApiController {
         if(!empty($result->product_pdf)){
             $result->product_pdf = Utils::setFileUrl($result->product_pdf);
         }
+		
+		
+		$result->product_registration_status = $isRegistered;
+		
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
         $data['created_at'] = date("Y-m-d H:i:s");
