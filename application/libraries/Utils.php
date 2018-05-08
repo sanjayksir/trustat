@@ -267,5 +267,12 @@ class Utils {
         }
         return '<div class="col-sm-4"><span class="counter">Showing '.$startPage.' to '.$endPage.' of '.$totalRecords.' entries</span></div><div class="col-sm-8">'.$pagelink.'</div>';
     }
+    
+    public static function countAll($table,$conditions) {
+        self::$ci->db->select('COUNT(*) AS `numrows`');
+        self::$ci->db->where($conditions);
+        $query = self::$ci->db->get($table);
+        return $query->row()->numrows;
+    }
 
 }

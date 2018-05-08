@@ -89,15 +89,15 @@ class User_master extends MX_Controller {
         ##--------------- pagination start ----------------##
         // init params
         $params = array();
-        if(!empty($this->input->post('page_limit'))){
-            $limit_per_page = $this->input->post('page_limit');
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
         }else{
             $limit_per_page = $this->config->item('pageLimit');
         }
         
         $this->config->set_item('pageLimit', $limit_per_page);
         $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $srch_string = $this->input->post('search');
+        $srch_string = $this->input->get('search');
         if (empty($srch_string)) {
             $srch_string = '';
         }

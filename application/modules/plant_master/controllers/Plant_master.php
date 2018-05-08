@@ -14,64 +14,42 @@
       }
 	  
       public function list_plants() {
- 		 $data					= array();
-		 
-		 #--------------- pagination start ----------------##
-		 // init params
+        $data = array();
+
+        #--------------- pagination start ----------------##
+        // init params
         $params = array();
-        $limit_per_page = 20;
-        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-		$srch_string =  $this->input->post('search'); 
-		if(empty($srch_string)){
-			$srch_string ='';
-		}
-		  $user_id 	= $this->session->userdata('admin_user_id');	
-		 
-		  $total_records 	= $this->plant_master_model->total_get_user_list_all($srch_string);
-		 
-        //$total_records = $this->Category_model->total_load_listingData($srch_string);
-		
-		if ($total_records > 0) 
-        {
-            // get current page records
- 			$params['userListing'] 	= $this->plant_master_model->get_user_list_all($limit_per_page, $start_index,$srch_string);
-  			
-			//$data['listingData']=$this->Category_model->load_listingData();
-             
-            $config['base_url'] = base_url() . 'plant_master/list_plants';
-            $config['total_rows'] = $total_records;
-            $config['per_page'] = $limit_per_page;
-            $config["uri_segment"] = 3;
-             
- 			$config["full_tag_open"] = '<ul class="pagination">';
-			$config["full_tag_close"] = '</ul>';	
-			$config["first_link"] = "&laquo;";
-			$config["first_tag_open"] = "<li>";
-			$config["first_tag_close"] = "</li>";
-			$config["last_link"] = "&raquo;";
-			$config["last_tag_open"] = "<li>";
-			$config["last_tag_close"] = "</li>";
-			$config['next_link'] = '&gt;';
-			$config['next_tag_open'] = '<li>';
-			$config['next_tag_close'] = '<li>';
-			$config['prev_link'] = '&lt;';
-			$config['prev_tag_open'] = '<li>';
-			$config['prev_tag_close'] = '<li>';
-			$config['cur_tag_open'] = '<li class="active"><a href="#">';
-			$config['cur_tag_close'] = '</a></li>';
-			$config['num_tag_open'] = '<li>';
-			$config['num_tag_close'] = '</li>';
- 
-			## paging style configuration End 
-            $this->pagination->initialize($config);
-             // build paging links
-            $params["links"] = $this->pagination->create_links();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
         }
-		##--------------- pagination End ----------------##
-    	$this->load->view('list_plant_tpl', $params);
-     }
-  
-     public function add_plant() {
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $user_id = $this->session->userdata('admin_user_id');
+
+        $total_records = $this->plant_master_model->total_get_user_list_all($srch_string);
+
+        //$total_records = $this->Category_model->total_load_listingData($srch_string);
+
+        if ($total_records > 0) {
+            // get current page records
+            $params['userListing'] = $this->plant_master_model->get_user_list_all($limit_per_page, $start_index, $srch_string);
+
+            //$data['listingData']=$this->Category_model->load_listingData();
+
+            // build paging links
+            $params["links"] = Utils::pagination('plant_master/list_plants', $total_records);
+        }
+        ##--------------- pagination End ----------------##
+        $this->load->view('list_plant_tpl', $params);
+    }
+
+    public function add_plant() {
  		 $data					= array();
    		 $this->load->view('add_plant', $data); 
       }
@@ -268,15 +246,40 @@
 			return $result;
 	 }	
 	
-	  public function list_assigned_plants_user() {
-			 $data					= array();
-			 $parent_id				= $this->session->userdata('admin_user_id');		
-			 $data['plant_data'] 	= get_all_users($parent_id);
-			 $this->load->view('list_plant_user_assign', $data);
-     	}
-		
-		
-		public function change_assign_plant_status() {
+    public function list_assigned_plants_user() {
+        $data = array();
+        $parent_id = $this->session->userdata('admin_user_id');
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        //ini_set('display_errors',1);
+        //error_reporting(E_ALL);
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+        
+        $conditions = 'is_parent='.$parent_id;
+        if(!empty($srch_string)){
+            $conditions .= ' And (user_name LIKE "%'.$srch_string.'%" OR mobile_no LIKE "%'.$srch_string.'%" OR email_id LIKE "%'.$srch_string.'%" OR f_name LIKE "%'.$srch_string.'%" OR l_name LIKE "%'.$srch_string.'%")';
+        }
+        $totalRecords = Utils::countAll('backend_user', $conditions);
+        $this->db->select('*');
+        $this->db->from('backend_user');
+        $this->db->where($conditions);
+        if(empty($srch_string)){ 
+            $this->db->limit($limit_per_page,$start_index);
+        }
+        $query = $this->db->get();
+        $data['plant_data']= $query->result_array();
+        //echo $this->db->last_query();die;
+        $data["links"] = Utils::pagination('plant_master/list_assigned_plants_user', $totalRecords);
+        //$data['plant_data'] = get_all_users($parent_id);
+        $this->load->view('list_plant_user_assign', $data);
+    }
+
+    public function change_assign_plant_status() {
  		 $id = $this->input->post('id');
 		 $plantsId = $this->input->post('plant_id');
 		 $status = $this->input->post('value');
