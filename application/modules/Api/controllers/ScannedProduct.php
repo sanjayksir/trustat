@@ -101,13 +101,13 @@ class ScannedProduct extends ApiController {
         $validate = [
             ['field' =>'bar_code','label'=>'Barcode','rules' => 'required'],
             ['field' =>'purchase_date','label'=>'Purchase date','rules' => ['required',['date',[$this->ScannedproductsModel,'validDate']]]],
-            ['field' =>'invoice','label'=>'Invoice','rules' => ['trim','required']],
+            ['field' =>'invoice','label'=>'Invoice','rules' => ['trim']],
             //['field' =>'invoice_image','label'=>'Invoice image','rules' => [['file',[$this->ScannedproductsModel,'validFile']]]],
-            ['field' =>'expiry_date','label'=>'Expiry date','rules' => ['required',['date',[$this->ScannedproductsModel,'validDate']]]],
+            ['field' =>'expiry_date','label'=>'Expiry date','rules' => ['',['date',[$this->ScannedproductsModel,'validDate']]]],
         ];
         
         $errors = $this->ScannedproductsModel->validate($data,$validate);
-        
+        /*
         if(is_array($errors) || empty($data['invoice_image'])){
             if($errors){
                 Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'Invoice image is required.']);
@@ -115,6 +115,7 @@ class ScannedProduct extends ApiController {
                 Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
             }            
         }
+		*/
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
         
         if(empty($result)){
