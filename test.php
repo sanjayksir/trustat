@@ -2,9 +2,9 @@ Super admin
 1.Existing Customer http://innovigents.com/user_master/list_user/ = Page not exist
 2.Existing Plant Controller http://localhost/trackingprortal20/user_master/list_plant_controllers = Done
 3.Existing Plants http://localhost/trackingprortal20/plant_master/list_plants  = Done
-4.Assign Plant to Plant Controller http://localhost/trackingprortal20/plant_master/list_assigned_plants_user
+4.Assign Plant to Plant Controller http://localhost/trackingprortal20/plant_master/list_assigned_plants_user = done
 
-5.Existing Products http://localhost/trackingprortal20/product/list_product
+5.Existing Products http://localhost/trackingprortal20/product/list_product = DOne
 6.Existing Orders http://localhost/trackingprortal20/order_master/list_orders
 7.List Consumer http://localhost/trackingprortal20/consumer/consumer_list
 8.Barcode Scanned http://localhost/trackingprortal20/consumer/barcode_scanned

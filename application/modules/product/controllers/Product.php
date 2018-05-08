@@ -159,65 +159,33 @@
 		exit;
    }
    
-    function list_product() {
-		 $this->checklogin();
-		 if(!empty($this->input->post('del_submit'))){
-		 	if($this->db->query("delete from products where id='".$this->input->post('del_submit')."'")){
-				$this->session->set_flashdata('success', 'Product Deleted Successfully!');	
-			}
-		 }
-		 ##--------------- pagination start ----------------##
-		 // init params
-        $params = array();
-        $limit_per_page = 20;
-        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-		$srch_string =  $this->input->post('search'); 
-		if(empty($srch_string)){
-			$srch_string ='';
-		}
-        $total_records = $this->Product_model->total_product_listing($srch_string);
-		
-		if ($total_records > 0) 
-        {
-            // get current page records
-            $params["product_list"] = $this->Product_model->product_listing($limit_per_page, $start_index,$srch_string);
-             
-            $config['base_url'] = base_url() . 'product/list_product';
-            $config['total_rows'] = $total_records;
-            $config['per_page'] = $limit_per_page;
-            $config["uri_segment"] = 3;
-             
- 			$config["full_tag_open"] = '<ul class="pagination">';
-			$config["full_tag_close"] = '</ul>';	
-			$config["first_link"] = "&laquo;";
-			$config["first_tag_open"] = "<li>";
-			$config["first_tag_close"] = "</li>";
-			$config["last_link"] = "&raquo;";
-			$config["last_tag_open"] = "<li>";
-			$config["last_tag_close"] = "</li>";
-			$config['next_link'] = '&gt;';
-			$config['next_tag_open'] = '<li>';
-			$config['next_tag_close'] = '<li>';
-			$config['prev_link'] = '&lt;';
-			$config['prev_tag_open'] = '<li>';
-			$config['prev_tag_close'] = '<li>';
-			$config['cur_tag_open'] = '<li class="active"><a href="#">';
-			$config['cur_tag_close'] = '</a></li>';
-			$config['num_tag_open'] = '<li>';
-			$config['num_tag_close'] = '</li>';
- 
-			## paging style configuration End 
-            $this->pagination->initialize($config);
-             // build paging links
-            $params["links"] = $this->pagination->create_links();
+   public function list_product() {
+        $this->checklogin();
+        if (!empty($this->input->post('del_submit'))) {
+            if ($this->db->query("delete from products where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Product Deleted Successfully!');
+            }
         }
-		##--------------- pagination End ----------------##
-		
-       //  $data['product_list'] = $this->Product_model->product_listing();
- 		$this->load->view('product_list', $params);
-     }
-	 
-	
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+       
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_product_listing($srch_string);
+        $params["product_list"] = $this->Product_model->product_listing($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('product/list_product', $total_records);
+        $this->load->view('product_list', $params);
+    }
 // list assigned products to Plant controller 
 
 function list_assigned_products() {
