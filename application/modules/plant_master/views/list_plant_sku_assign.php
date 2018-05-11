@@ -35,76 +35,78 @@
  									<?php echo $this->session->flashdata('success'); ?>
 								</div>
                         <?php } ?>
-   						<div class="row">
-							<div class="col-xs-12">
- 								<div class="row">
-									<div class="col-xs-12">
-										<h3 class="header smaller lighter blue">List <?php echo $label;?></h3>
- 										<div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/assign_plants" class="btn btn-primary pull-right" title="Add Plant">Assign Products</a></div>
-										<!-- div.table-responsive -->
- 										<!-- div.dataTables_borderWrap -->
- 											<table id="missing_people" class="table table-striped table-bordered table-hover">
- 												<thead>
-													<tr>
-														<th>#</th>
- 														<th>Plant Code</th>
- 														<th>Plant Name</th>
-														<th>Email ID</th>
-														<th>Phone</th>
-                                                        <th>Products</th>
-  														<th>Created on</th>
- 														<th>Action</th>
- 													</tr>
-												</thead>
-												<tbody>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="widget-box widget-color-blue">
+                                    <div class="widget-header widget-header-flat">
+                                        <h5 class="widget-title bigger lighter">List <?php echo $label;?></h5>
+                                        <div class="widget-toolbar">
+                                            <a href="<?php echo base_url('plant_master/assign_plants') ?>" class="btn btn-xs btn-warning" title="Add PLant">Assign Products</a>
+                                        </div>
+                                    </div>
+                                    <div class="widget-body">
+                                            <table id="missing_people" class="table table-striped table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Plant Code</th>
+                                                            <th>Plant Name</th>
+                                                            <th>Email ID</th>
+                                                            <th>Phone</th>
+                                                            <th>Products</th>
+                                                            <th>Created on</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                    <?php $i = 0;
+                                    if(count($plant_data)>0){
 
-                                        <?php $i = 0;
-										if(count($plant_data)>0){
-										
-										//echo '<pre>';print_r($plant_data);exit;
-                                        foreach ($plant_data as $listData){
-										$i++;
-											$status = $listData['status'];
-                                            if($status =='1'){
-											$status ='Active';
- 												$colorStyle="style='color:white;border-radius:10px;background-color:green;border:none;'";
-											}else{
-											$status ='Inactive';
-												$colorStyle="style='color:black;border-radius:10px;background-color:red;border:none;'";
-											}?>
-                                               <tr id="show<?php echo $listData['plant_id']; ?>">
-											   <td><?php echo $i; ?></td>
-												<td><?php echo $listData['plant_code'];?></td>
-												<td><?php echo $listData['plant_name']; ?></td>
-												<td><?php echo $listData['email_id']; ?></td>
-												<td><?php echo $listData['phone']; ?></td>
-												<td><?php $products = get_assigned_products_list($listData['plant_id']) ;
-												
-												
-												echo get_products_name_by_id($products);?></td>
-                                       
-												<td><?php echo date('d/M/Y',strtotime($listData['created_date'])); ?></td>
-                                                 <td>
-                                                     <div class="hidden-sm hidden-xs action-buttons">
-                                                         <a href="<?php  echo base_url().'plant_master/view_plant/'.$listData['plant_id'];?>" class="blue" target="_blank" title="View"><i class="fa fa-eye"></i></a>
-                                                         <?php echo anchor("plant_master/assign_plants/" . $listData['plant_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green','title'=>'Edit')); ?>
-                                                         <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['plant_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['plant_id'];?>',this.value);" />
+                                    //echo '<pre>';print_r($plant_data);exit;
+foreach ($plant_data as $listData){
+                                    $i++;
+                                            $status = $listData['status'];
+if($status =='1'){
+                                            $status ='Active';
+                                                    $colorStyle="style='color:white;border-radius:10px;background-color:green;border:none;'";
+                                            }else{
+                                            $status ='Inactive';
+                                                    $colorStyle="style='color:black;border-radius:10px;background-color:red;border:none;'";
+                                            }?>
+   <tr id="show<?php echo $listData['plant_id']; ?>">
+                                               <td><?php echo $i; ?></td>
+                                                    <td><?php echo $listData['plant_code'];?></td>
+                                                    <td><?php echo $listData['plant_name']; ?></td>
+                                                    <td><?php echo $listData['email_id']; ?></td>
+                                                    <td><?php echo $listData['phone']; ?></td>
+                                                    <td><?php $products = get_assigned_products_list($listData['plant_id']) ;
 
-                                                    </div>
 
-                                                </td>
-                                             </tr>
-                                         <?php }
-										}else{ ?>
-										<tr><td align="center" colspan="8" class="color error">No Records Founds</td></tr>
-										<?php }?>
-                                    </tbody>
-											</table>
-  								<!-- PAGE CONTENT ENDS -->
-							</div><!-- /.col -->
-						</div><!-- /.row -->
-					</div><!-- /.page-content -->
-				</div><div class="footer">
+                                                    echo get_products_name_by_id($products);?></td>
+
+                                                    <td><?php echo date('d/M/Y',strtotime($listData['created_date'])); ?></td>
+     <td>
+         <div class="hidden-sm hidden-xs action-buttons">
+             <a href="<?php  echo base_url().'plant_master/view_plant/'.$listData['plant_id'];?>" class="blue" target="_blank" title="View"><i class="fa fa-eye"></i></a>
+             <?php echo anchor("plant_master/assign_plants/" . $listData['plant_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green','title'=>'Edit')); ?>
+             <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['plant_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['plant_id'];?>',this.value);" />
+
+        </div>
+
+    </td>
+ </tr>
+<?php }
+                                    }else{ ?>
+                                    <tr><td align="center" colspan="8" class="color error">No Records Founds</td></tr>
+                                    <?php }?>
+</tbody>
+                                            </table>
+                            <!-- PAGE CONTENT ENDS -->
+                    </div><!-- /.col -->
+                                </div><!-- /.row -->
+                            </div><!-- /.page-content -->
+                        </div>
+                                            <div class="footer">
 				<div class="footer-inner">
 					<div class="footer-content">
 						 

@@ -6,15 +6,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 <div class="main-container ace-save-state" id="main-container">
 
     <script type="text/javascript">
-
-        try {
-
-            ace.settings.loadState('main-container')
-
-        } catch (e) {
-
-        }
-
+        try{ace.settings.loadState('main-container')}catch(e){}
     </script>
 
     <?php $this->load->view('../includes/admin_sidebar'); ?>
@@ -85,7 +77,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="col-xs-12">
 
                         <div class="widget-box widget-color-blue">
-                             <div class="widget-header widget-header-flat">
+                            <div class="widget-header widget-header-flat">
                                 <h5 class="widget-title bigger lighter">MANAGE PRODUCTS</h5>
                                 <div class="widget-toolbar">
                                     <a href="<?php echo base_url('product/add_product') ?>" class="btn btn-xs btn-warning" title="Add Product">Add <?php echo $label; ?> </a>

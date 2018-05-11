@@ -187,14 +187,25 @@
 		 
 		 
 		 
- 		 public function list_assigned_plants_sku() {
-			 $data					= array();
-			 $user_id 				= $this->session->userdata('admin_user_id');		
-			 $data['plant_data'] 	= get_all_plants($user_id);
-			 $this->load->view('list_plant_sku_assign', $data);
-     	}
-		
-		public function change_assign_product_status() {
+    public function list_assigned_plants_sku() {
+        $data = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $user_id = $this->session->userdata('admin_user_id');
+        $data['plant_data'] = get_all_plants($user_id);
+        $this->load->view('list_plant_sku_assign', $data);
+    }
+
+    public function change_assign_product_status() {
  		 $id = $this->input->post('id');
 		 $status = $this->input->post('value');
 		 if(strtolower($status)=='inactive'){

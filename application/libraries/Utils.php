@@ -227,6 +227,9 @@ class Utils {
         if(is_null($limit)){
             $limit = self::$ci->config->item('pageLimit');
         }
+        if(empty($url)){
+            $url = self::$ci->uri->uri_string();
+        }
         $config['base_url'] = base_url() . $url;
         $config['total_rows'] = $totalRecords;
         $config['per_page'] = $limit;
@@ -249,6 +252,7 @@ class Utils {
         $config['cur_tag_close'] = '</a></li>';
         $config['num_tag_open'] = '<li>';
         $config['num_tag_close'] = '</li>';
+        $config['reuse_query_string'] = TRUE;
         self::$ci->pagination->initialize($config);
         $pagelink = self::$ci->pagination->create_links();
         if(empty($pagelink)){
@@ -273,6 +277,12 @@ class Utils {
         self::$ci->db->where($conditions);
         $query = self::$ci->db->get($table);
         return $query->row()->numrows;
+    }
+    
+    public static function currentUrl() {
+        $url = self::$ci->uri->uri_string();
+        $param = $_SERVER['QUERY_STRING'];
+        return !empty($param) ? $url . '?' . $param : $url;
     }
 
 }

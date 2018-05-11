@@ -164,7 +164,8 @@
                             </div><!-- /.col -->
                         </div><!-- /.row -->
                     </div><!-- /.page-content -->
-                </div><div class="footer">
+                </div>
+                <div class="footer">
                     <div class="footer-inner">
                         <div class="footer-content">
 
