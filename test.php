@@ -5,10 +5,10 @@ Super admin
 4.Assign Plant to Plant Controller http://localhost/trackingprortal20/plant_master/list_assigned_plants_user = done
 
 5.Existing Products http://localhost/trackingprortal20/product/list_product = DOne
-6.Existing Orders http://localhost/trackingprortal20/order_master/list_orders
-7.List Consumer http://localhost/trackingprortal20/consumer/consumer_list
-8.Barcode Scanned http://localhost/trackingprortal20/consumer/barcode_scanned
-9.Assign Products to Plant http://innovigents.com/plant_master/list_assigned_plants_sku
+6.Existing Orders http://localhost/trackingprortal20/order_master/list_orders = done
+7.List Consumer http://localhost/trackingprortal20/consumer/consumer_list = Page not exist
+8.Barcode Scanned http://localhost/trackingprortal20/consumer/barcode_scanned = page not exist
+9.Assign Products to Plant http://innovigents.com/plant_master/list_assigned_plants_sku = DONE
 10.Barcode Status Reports http://localhost/trackingprortal20/reports/barcode_printed_reports
 11.Barcode Scanned Reports http://localhost/trackingprortal20/reports/barcode_scanned_reports
 

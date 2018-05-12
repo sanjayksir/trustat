@@ -45,6 +45,27 @@
                                         </div>
                                     </div>
                                     <div class="widget-body">
+                                        <div class="row filter-box">
+                                        <form id="form-filter" action="" method="get" class="form-horizontal" >
+                                            <div class="col-sm-6">
+                                                <label>Display
+                                                    <select name="page_limit" id="page_limit" class="form-control" onchange="this.form.submit()">
+                                                    <?php echo Utils::selectOptions('pagelimit',['options'=>$this->config->item('pageOption'),'value'=>$this->config->item('pageLimit')]) ?>
+                                                    </select>
+                                                Records
+                                                </label>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="input-group">
+                                                    <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Type your query">
+                                                    <span class="input-group-btn">
+                                                        <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
+                                                        <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
                                             <table id="missing_people" class="table table-striped table-bordered table-hover">
                                                     <thead>
                                                         <tr>
@@ -61,9 +82,10 @@
                                                     <tbody>
                                     <?php $i = 0;
                                     if(count($plant_data)>0){
-
+                                        $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+                                        $sno =  $page + 1;
                                     //echo '<pre>';print_r($plant_data);exit;
-foreach ($plant_data as $listData){
+                    foreach ($plant_data as $listData){
                                     $i++;
                                             $status = $listData['status'];
 if($status =='1'){
@@ -74,7 +96,7 @@ if($status =='1'){
                                                     $colorStyle="style='color:black;border-radius:10px;background-color:red;border:none;'";
                                             }?>
    <tr id="show<?php echo $listData['plant_id']; ?>">
-                                               <td><?php echo $i; ?></td>
+                                               <td><?php echo $sno; ?></td>
                                                     <td><?php echo $listData['plant_code'];?></td>
                                                     <td><?php echo $listData['plant_name']; ?></td>
                                                     <td><?php echo $listData['email_id']; ?></td>
@@ -95,12 +117,17 @@ if($status =='1'){
 
     </td>
  </tr>
-<?php }
+<?php 
+                                $sno++;
+                                            }
                                     }else{ ?>
                                     <tr><td align="center" colspan="8" class="color error">No Records Founds</td></tr>
                                     <?php }?>
 </tbody>
                                             </table>
+                                        <div class="row paging-box">
+                                        <?php echo $links ?>
+                                        </div>
                             <!-- PAGE CONTENT ENDS -->
                     </div><!-- /.col -->
                                 </div><!-- /.row -->
