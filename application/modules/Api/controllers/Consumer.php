@@ -527,5 +527,25 @@ class Consumer extends ApiController {
             Utils::response(['status'=>false,'message'=>'System failed to proccess the request.'],200);
         }
     }
+    
+    /**
+     * loylty method to retrieve thelist of loylty for various transaction type
+     */
+    public function loylty(){
+        $user = $this->auth();
+        if(empty($this->auth())){
+            Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        if(($this->input->method() != 'get')){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $data = [];
+        $data = $this->ConsumerModel->loylty();
+                if(!empty($data)){
+            Utils::response(['status'=>true,'message'=>'List of loylties.','data'=>$data]);
+        }else{
+            Utils::response(['status'=>false,'message'=>'There is no record found.'],200);
+        }
+    }
 
 }

@@ -1580,6 +1580,98 @@
   },
   {
     "type": "get",
+    "url": "/loylties",
+    "title": "List of loylties",
+    "version": "0.1.0",
+    "name": "getLoylties",
+    "group": "Product",
+    "permission": [
+      {
+        "name": "Private user"
+      }
+    ],
+    "description": "<p>List of loylties.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token must be set in header.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>true.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>List of loylties.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response: ",
+          "content": "    HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"List of loylties.\",\n    \"data\": [\n        {\n            \"id\": \"1\",\n            \"transaction_type\": \"User Registration\",\n            \"points\": \"100\",\n            \"customer\": null,\n            \"product\": null,\n            \"status\": \"1\",\n            \"created_at\": \"2018-05-12 00:00:00\",\n            \"modified_at\": \"2018-05-12 00:00:00\"\n        }\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "doc/user.js",
+    "groupTitle": "Product",
+    "sampleRequest": [
+      {
+        "url": "http://innovigents.com/api/loylties"
+      }
+    ],
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "status",
+            "description": "<p>false.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "message",
+            "description": "<p>api error as per request.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "errors",
+            "description": "<p>validation errors.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response (example):",
+          "content": "HTTP/1.1 400 Bad Request\n{\n   \"status\":false,\n   \"message\": \"Bad request\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "get",
     "url": "/forgot-password/(:mobile_no|:email)",
     "title": "Forgot Password",
     "version": "0.1.0",

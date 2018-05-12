@@ -131,6 +131,14 @@
 			</div>
 			
 		</div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="form-field-8">Select Plant</label>
+                    <select name="plant_id" id="plant_id" class="form-control" required="required">
+                        <?php echo Utils::selectOptions('plant_id', ['options' => $plants, 'empty' => 'Select Plant', 'value' => Utils::elemValue('plant_id', $_POST)]) ?>
+                    </select>
+                </div>
+            </div>
         
 
           <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">

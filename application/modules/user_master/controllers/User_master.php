@@ -315,6 +315,8 @@ class User_master extends MX_Controller {
         $data = array();
         $id = $this->uri->segment(3); //$this->session->userdata('admin_user_id');
         //$data['ownership'] 	= $this->myspidey_user_group_permissions_model->get_ownership_user();
+        $plants= $this->myspidey_user_master_model->getPlants();        
+        $data['plants'] = array_column($plants, 'plant_name','plant_id');
 
         $data['get_user_details'] = $this->myspidey_user_master_model->get_user_details($id);
 

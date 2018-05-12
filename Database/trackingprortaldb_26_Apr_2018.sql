@@ -12394,3 +12394,50 @@ INSERT INTO `user_log` (`id`, `consumer_id`, `customer_id`, `token`, `plain_toke
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+CREATE TABLE `loylties` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `transaction_type` varchar(100) NOT NULL,
+  `points` int(20) NOT NULL,
+  `customer` varchar(100) DEFAULT NULL,
+  `product` varchar(100) DEFAULT NULL,
+  `status` tinyint(3) NOT NULL DEFAULT '1',
+  `created_at` datetime NOT NULL,
+  `modified_at` datetime NOT NULL,
+  PRIMARY KEY (`id`) 
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `loylties`
+--
+
+INSERT INTO `loylties` (`id`, `transaction_type`, `points`, `customer`, `product`, `status`, `created_at`, `modified_at`) VALUES
+(1, 'User Registration', 100, NULL, NULL, 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(2, 'Family Group Addition', 21, NULL, NULL, 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(3, 'Scan for Genuity and Video Response', 2, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(4, 'Scan for Genuity and pdf Response', 6, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(5, 'Product Registration with Warranty', 8, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(6, 'Product Registration without Warranty', 10, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(7, 'Survey Response', 12, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(8, 'Advt1', 14, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(9, 'Advt2', 16, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `loylty_points`
+--
+
+CREATE TABLE `loylty_points` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT 'The id of the user the points belong to',
+  `num_points` int(11) NOT NULL COMMENT 'The number of points in this block of points',
+  `transaction_type` varchar(200) DEFAULT NULL,
+  `status` tinyint(3) NOT NULL DEFAULT '1',
+  `modified_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `created_at` datetime NOT NULL,
+  `date_expire` datetime NOT NULL COMMENT 'When do these reward points expire',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
