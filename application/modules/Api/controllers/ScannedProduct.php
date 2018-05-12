@@ -38,6 +38,7 @@ class ScannedProduct extends ApiController {
         }
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
 		$bar_code_data = $data['bar_code'];
+		// function to get product registration status
 		$isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);
         //echo $isRegistered;
         if(empty($result)){
