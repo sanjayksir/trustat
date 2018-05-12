@@ -147,5 +147,17 @@ class ConsumerModel extends CI_Model {
         $users = $this->db->get()->row_array();
         return $users;
     }
+    
+    /**
+     * loylty method to retrieve thelist of loylty for various transaction type
+     */
+    public function loylty(){
+        $items = [];
+        $query = $this->db->select('*')->from('loylties')->get();
+        if($query->num_rows() <= 0){
+            return false;
+        }
+        return $query->result_array();
+    }
 
 }

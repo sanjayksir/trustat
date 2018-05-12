@@ -428,22 +428,36 @@ class plant_master_model extends CI_Model {
             return '1';
         }
     }
-    function getAllPlants($user_id) {
-        $res = '0';
-        if (!empty($user_id)) {
+    function getAllPlants($user_id,$limit,$offset,$keyword = null) {        
+        if (empty($user_id)) {
             return false;
         }
+        
         $admin_id = $this->session->userdata('admin_user_id');
         
-        $ci->db->select('plant_id,plant_name,plant_code,email_id,phone,created_date,status');
-        $ci->db->from('plant_master');
+        $condition = null;
         if ($admin_id > 1) {
-            $ci->db->where('created_by', $user_id);
+            $condition[] = sprintf('created_by="%d"',$user_id);
         }
-        $query = $ci->db->get();
-        $res = $query->result_array();
-        
-        return($res);
+        if(!empty($keyword)){
+            $condition[] = sprintf('plant_id LIKE "%%%1$s%%" OR plant_name LIKE "%%%1$s%%" OR plant_code LIKE "%%%1$s%%" OR email_id LIKE "%%%1$s%%" OR phone LIKE "%%%1$s%%"',$keyword);
+            
+        }
+        $conditions = trim(implode(' AND ',$condition),' AND ');
+        $total = Utils::countAll('plant_master', $conditions);
+        $this->db->select('plant_id,plant_name,plant_code,email_id,phone,created_date,status');
+        $this->db->from('plant_master');
+        if(!empty($conditions)){
+            $this->db->where($conditions);
+        }
+        $this->db->order_by('plant_id', 'DESC');
+        if (empty($keyword)) {
+            $this->db->limit($limit, $offset);
+        }
+        $query = $this->db->get();
+        $items = $query->result_array();
+        //echo $this->db->last_query();
+        return [$total,$items];
     }
 
 }

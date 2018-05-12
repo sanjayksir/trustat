@@ -41,7 +41,7 @@ class Myspidey_user_master_model extends CI_Model {
         if (isset($frmData['ccadmin']) && $frmData['ccadmin'] != '') {
             $is_parent = $frmData['ccadmin'];
         }
-
+        
         /* if($user_id>1){## if user id is greater than one means plant controller is created by cc admin
           $user_type='plant controller';
           }else{
@@ -92,9 +92,15 @@ class Myspidey_user_master_model extends CI_Model {
                 "plant_id" => $frmData['plant_id'],
                 "assigned_by" => $this->session->userdata('admin_user_id')
             ];
-            $this->db->where(['user_id'=>$frmData['user_id']]);
-            $this->db->set($assignedPlant);
-            $this->db->update("assign_plants_to_users");
+            $apQuery = $this->db->get_where('assign_plants_to_users',['user_id'=>$frmData['user_id']]);
+            if($apQuery->num_rows() > 0){
+                $this->db->where(['user_id'=>$frmData['user_id']]);
+                $this->db->set($assignedPlant);
+                $this->db->update("assign_plants_to_users");
+            }else{
+                $assignedPlant['user_id'] = $frmData['user_id'];
+                $this->db->insert("assign_plants_to_users", $assignedPlant);
+            }            
             //$this->db->insert("assign_plants_to_users", $insertData);
             $whereData = array(
                 'user_id' => $frmData['user_id']

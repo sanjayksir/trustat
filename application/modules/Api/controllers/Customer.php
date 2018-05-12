@@ -215,4 +215,5 @@ class Customer extends ApiController {
         $this->db->where('token',$this->request->token)->delete($this->UserLogModel->table);
         $this->response(['status'=>true,'message'=>'Logout successfully.']);
     }
+    
 }

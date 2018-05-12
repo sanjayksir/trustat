@@ -201,7 +201,10 @@
             $srch_string = '';
         }
         $user_id = $this->session->userdata('admin_user_id');
-        $data['plant_data'] = get_all_plants($user_id);
+        //$data['plant_data'] = get_all_plants($user_id);
+        list($data['total'],$data['plant_data']) = $this->plant_master_model->getAllPlants($user_id,$limit_per_page,$start_index,$srch_string);
+        
+        $data["links"] = Utils::pagination('plant_master/list_assigned_plants_sku', $data['total']);
         $this->load->view('list_plant_sku_assign', $data);
     }
 

@@ -1,4 +1,6 @@
-<?php  // echo '<pre>';print_r($get_user_details);exit;?>
+<?php 
+// echo '<pre>';print_r($get_user_details);exit;
+?>
 
 <div class="col-xs-12">
 		<div class="widget-box">
@@ -117,6 +119,14 @@
 			  <textarea  class="form-control" name="remark" placeholder="Write your remark..."  maxlength="500"><?php echo $get_user_details[0]['remark'];?></textarea>
  			</div>  
 		</div>
+            <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="form-field-8">Select Plant</label>
+                    <select name="plant_id" id="plant_id" class="form-control" required="required">
+                        <?php echo Utils::selectOptions('plant_id', ['options' => $plants, 'empty' => 'Select Plant', 'value' => Utils::elemValue('plant_id', $get_user_details[0])]) ?>
+                    </select>
+                </div> 
+            </div>
 		 <?php if($this->uri->segment(2)=='edit_plant_controller'){?>
 		 <div class="form-group row">
 		     <div class="col-sm-6">
@@ -130,18 +140,14 @@
 			 	<?php }?>
 			 </select>  
  			</div> 
-                    <div class="col-sm-6">
-                    <label for="form-field-8">Select Plant</label>
-                    <select name="plant_id" id="plant_id" class="form-control" required="required">
-                        <?php echo Utils::selectOptions('plant_id', ['options' => $plants, 'empty' => 'Select Plant', 'value' => Utils::elemValue('plant_id', $get_user_details[0])]) ?>
-                    </select>
-                </div> 
+                
 		</div>
 		<?php }else{?>
          <select  id="ccadmin" name="ccadmin" style="display:none;">
   				<option value="1"></option> 
  			 </select>  
 		<?php }?>
+            
 		     
 
            <hr>

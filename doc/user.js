@@ -330,3 +330,38 @@ function getView() { return; }
   @apiUse UserError
 */
 function postUploadAvatar() { return; }
+/**
+ @api {get} /loylties List of loylties
+  @apiVersion 0.1.0
+  @apiName getLoylties
+  @apiGroup Product
+  @apiPermission Private user
+ 
+  @apiDescription List of loylties.
+
+  @apiHeader {String} token token must be set in header. 
+ 
+ 
+  @apiSuccess {String} status true.
+  @apiSuccess {String} message List of loylties.
+  @apiSuccessExample {json} Success-Response: 
+    HTTP/1.1 200 OK
+{
+    "status": true,
+    "message": "List of loylties.",
+    "data": [
+        {
+            "id": "1",
+            "transaction_type": "User Registration",
+            "points": "100",
+            "customer": null,
+            "product": null,
+            "status": "1",
+            "created_at": "2018-05-12 00:00:00",
+            "modified_at": "2018-05-12 00:00:00"
+        }
+    ]
+}
+  @apiUse UserError
+*/
+function getLoylties() { return; }

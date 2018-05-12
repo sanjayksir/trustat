@@ -272,9 +272,11 @@ class Utils {
         return '<div class="col-sm-4"><span class="counter">Showing '.$startPage.' to '.$endPage.' of '.$totalRecords.' entries</span></div><div class="col-sm-8">'.$pagelink.'</div>';
     }
     
-    public static function countAll($table,$conditions) {
+    public static function countAll($table,$conditions = null) {
         self::$ci->db->select('COUNT(*) AS `numrows`');
-        self::$ci->db->where($conditions);
+        if(!empty($conditions)){
+            self::$ci->db->where($conditions);
+        }
         $query = self::$ci->db->get($table);
         return $query->row()->numrows;
     }
@@ -283,6 +285,11 @@ class Utils {
         $url = self::$ci->uri->uri_string();
         $param = $_SERVER['QUERY_STRING'];
         return !empty($param) ? $url . '?' . $param : $url;
+    }
+    
+    public function debug(){
+        ini_set('display_errors', 1);
+        error_reporting(E_ALL);
     }
 
 }

@@ -121,6 +121,7 @@ $route['emailverify/(:any)/(:any)'] = 'Api/Consumer/mailVerification/$1/$2';
 $route['api/forgot-password/(:any)'] = 'Api/Consumer/forgotPassword/$1';
 $route['api/feedback-question/(:num)'] = 'Api/Consumer/feedbackQuestion/$1';
 $route['api/feedback-answer'] = 'Api/Consumer/feedbackAnswer';
+$route['api/loylties'] = 'Api/Consumer/loylty';
 
 $route['api/scan-product'] = 'Api/ScannedProduct/productScanning';
 $route['api/view-scanned-product'] = 'Api/ScannedProduct/viewScannedProduct';
