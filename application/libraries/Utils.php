@@ -223,7 +223,7 @@ class Utils {
         }
         return $value;
     }
-    public static function pagination($url,$totalRecords,$limit = null){
+    public static function pagination($url,$totalRecords,$limit = null,$segment=3){
         if(is_null($limit)){
             $limit = self::$ci->config->item('pageLimit');
         }
@@ -233,7 +233,7 @@ class Utils {
         $config['base_url'] = base_url() . $url;
         $config['total_rows'] = $totalRecords;
         $config['per_page'] = $limit;
-        $config["uri_segment"] = 3;             
+        $config["uri_segment"] = $segment;             
         $config["full_tag_open"] = '<ul class="pagination">';
         $config["full_tag_close"] = '</ul>';	
         $config["first_link"] = "&laquo;";

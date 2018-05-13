@@ -740,10 +740,15 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
  
+                $condition = null;
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')");
+                    $condition = "(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')";
 		}
-		 
+		
+                $total = Utils::countAll('consumers', $condition); 
+                if(!empty($condition)){
+                    $this->db->where($condition);
+                }
  		$this->db->select(' C.*, PP.*, P.product_name, P.product_sku',false);
 		$this->db->from('consumers C');
 		$this->db->join('consumer_complaint PP', 'C.id = PP.consumer_id');
@@ -754,28 +759,60 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
  		if ($query->num_rows() > 0) {
 			$resultData = $query->result_array();
  		}
-		return $resultData;
+		return [$total,$resultData];
 	 }
 	 
 	 function get_warranty_claims($limit,$start,$srch_string=''){
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
+                
+                $condition = null;
  
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')");
+ 			$condition= "(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')";
 		}
-		 
+		$total = $this->totalWarrantyClaims($condition);
+                if(!empty($condition)){
+                    $this->db->where($condition);
+                } 
  		$this->db->select(' C.*, PP.*, P.product_name, P.product_sku',false);
 		$this->db->from('consumers C');
 		$this->db->join('purchased_product PP', 'C.id = PP.consumer_id');
 		$this->db->join('products P', 'P.id = PP.product_id');
    		$this->db->order_by('PP.ordered_date','desc');
+                
 		$this->db->limit($limit, $start);
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$resultData = $query->result_array();
  		}
-		return $resultData;
+		return [$total,$resultData];
+	 }
+	 function totalWarrantyClaims($condition){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+                
+                $condition = null;
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$condition= "(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')";
+		}
+		
+                if(!empty($condition)){
+                    $this->db->where($condition);
+                } 
+                
+ 		$this->db->select(' C.*, PP.*, P.product_name, P.product_sku',false);
+		$this->db->from('consumers C');
+		$this->db->join('purchased_product PP', 'C.id = PP.consumer_id');
+		$this->db->join('products P', 'P.id = PP.product_id');
+   		$this->db->order_by('PP.ordered_date','desc');
+                
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return count($resultData);
 	 }
 	 
 	 function get_ordered_product_detail($orderId=''){

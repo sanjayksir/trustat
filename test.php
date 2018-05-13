@@ -9,32 +9,56 @@ Super admin
 7.List Consumer http://localhost/trackingprortal20/consumer/consumer_list = Page not exist
 8.Barcode Scanned http://localhost/trackingprortal20/consumer/barcode_scanned = page not exist
 9.Assign Products to Plant http://innovigents.com/plant_master/list_assigned_plants_sku = DONE
-10.Barcode Status Reports http://localhost/trackingprortal20/reports/barcode_printed_reports
-11.Barcode Scanned Reports http://localhost/trackingprortal20/reports/barcode_scanned_reports
+10.Barcode Status Reports http://localhost/trackingprortal20/reports/barcode_printed_reports = Done
+11.Barcode Scanned Reports http://localhost/trackingprortal20/reports/barcode_scanned_reports = Done
 
  
 
 CCC admin
 
-1.Existing Plants http://innovigents.com/plant_master/list_plants
+1.Existing Plants http://innovigents.com/plant_master/list_plants = Done
 2.Existing Plant Controllers http://innovigents.com/user_master/list_user/
-3.Assign Plant to Plant Controller http://innovigents.com/plant_master/list_assigned_plants_user
-4.Existing Products http://innovigents.com/product/list_product
-5.Assign Products to Plant http://innovigents.com/plant_master/list_assigned_plants_sku
-6.Existing Orders http://innovigents.com/order_master/list_orders
-7.Bar/QR Code Status http://innovigents.com/reports/barcode_printed_reports
-8.Products Scanned http://innovigents.com/reports/barcode_scanned_reports
-9.Products Purchased http://innovigents.com/reports/list_purchased_products
-10.Complaint Log http://innovigents.com/reports/list_complaint_log
-11.Warranty Claims http://innovigents.com/reports/list_warranty_claims
+3.Assign Plant to Plant Controller http://innovigents.com/plant_master/list_assigned_plants_user = Done
+4.Existing Products http://innovigents.com/product/list_product = Done
+5.Assign Products to Plant http://innovigents.com/plant_master/list_assigned_plants_sku = Done
+6.Existing Orders http://innovigents.com/order_master/list_orders = Done
+7.Bar/QR Code Status http://innovigents.com/reports/barcode_printed_reports  = Done
+8.Products Scanned http://innovigents.com/reports/barcode_scanned_reports = Done
+9.Products Purchased http://innovigents.com/reports/list_purchased_products = Done
+10.Complaint Log http://innovigents.com/reports/list_complaint_log = Done
+11.Warranty Claims http://innovigents.com/reports/list_warranty_claims = Done
 
 
+
+if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->get_total_order_list_all($srch_string);
+
+        $params["orderListing"] = $this->order_master_model->get_order_list_all($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/list_orders', $total_records);
+        
+        $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+        $sno =  $page + 1;
+        
+        
+        
+        
 
 <div class="row">
 <div class="col-xs-12">
     <div class="widget-box widget-color-blue">
         <div class="widget-header widget-header-flat">
-            <h5 class="widget-title bigger lighter">Manage Plant Controller</h5>
+            <h5 class="widget-title bigger lighter">List <?php echo $label;?></h5>
             <div class="widget-toolbar">
                 <a href="<?php echo base_url('plant_master/assign_plant_to_users') ?>" class="btn btn-xs btn-warning" title="Add PLant Controller">Add <?php echo $label; ?> </a>
             </div>
@@ -61,6 +85,8 @@ CCC admin
                 </div>
             </form>
         </div>
+        
+     
         
         
         
