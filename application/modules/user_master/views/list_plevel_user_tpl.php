@@ -89,7 +89,7 @@
  														<th>User Name</th>
 														<th>Email ID</th>
 														<th>Phone</th>
-  														<th><?php echo $label;?> Plants</th>
+  														<th><?php echo $label;?> Plant</th>
  														<th>Action</th>
  													</tr>
 												</thead>
