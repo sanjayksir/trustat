@@ -14,6 +14,7 @@ class ScannedProduct extends ApiController {
         parent::__construct();
         $this->load->library('form_validation');
         $this->load->model('ScannedproductsModel');
+        $this->load->model('ProductModel');
     }
     /**
      * productScanning scan the product with the help of bar code and keep the recrod.
@@ -126,7 +127,7 @@ class ScannedProduct extends ApiController {
             $this->response(['status'=>false,'message'=>'Record not found'],200);
         }
         $data['invoice_image'] = null;
-        if(!empty($data['invoice_image'])){die("END");
+        if(!empty($data['invoice_image'])){
             $this->load->library('upload', [
                 'upload_path'=>'./uploads/invoice/',
                 'allowed_types'=>'gif|jpg|png|pdf',
@@ -148,6 +149,12 @@ class ScannedProduct extends ApiController {
         if($this->db->insert('purchased_product', $data)){
             $data['pack_level'] = $result->pack_level;
             $data['id'] = $this->db->insert_id();
+            if(!empty($data['expiry_date'])){
+                $transactionType = 'product-registration-with-warranty';
+            }else{
+                $transactionType = 'product-registration-without-warranty';
+            }
+            $this->ProductModel->saveLoylty($transactionType,$user['id'],['product_id'=>$data['id']]);
             //$data['invoice_image'] = base_url($data['invoice_image']);
             $this->response(['status'=>true,'message'=>'Product has been registered for pack level '.$result->pack_level.'.','data'=>$data]);
         }else{

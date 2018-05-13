@@ -74,6 +74,8 @@ class Consumer extends ApiController {
         $data['verification_code'] = Utils::randomNumber(5);
         $data['password'] =  md5($data['verification_code']);
         if($this->db->insert('consumers', $data)){
+            $userId = $this->db->insert_id();
+            $this->ProductModel->saveLoylty('user-registration',$userId,['user_id'=>$userId]);
             //$data['password'] = $data['mobile_no'];
 			//$data['token'] = $this->ConsumerModel->authIdentifyDR($data);
 			/*
@@ -511,6 +513,7 @@ class Consumer extends ApiController {
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
         $questionQuery = $this->db->get_where('feedback_question_bank',['question_id'=>$data['question_id']])->row();
+        
         $productQuery = $this->db->get_where('products',['id'=>$data['product_id']])->row();
         if(empty($questionQuery)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'Invalid question id.']);
@@ -522,6 +525,20 @@ class Consumer extends ApiController {
         $data['user_id'] = $user['id'];
         $data['created_date'] = $data['updated_date'] = date('Y-m-d H:i:s');
         if($this->db->insert('consumer_feedback', $data)){
+            $qtype = strtolower($questionQuery->$questionQuery);
+            if(strstr($qtype,'audio')){
+                $transactionType = 'scan-for-genuity-and-audio-response';
+            }elseif(strstr($qtype,'video')){
+                $transactionType = 'scan-for-genuity-and-video-response';
+            }elseif(strstr($qtype,'pdf')){
+                $transactionType = 'scan-for-genuity-and-pdf-response';
+            }elseif(strstr($qtype,'image')){
+                $transactionType = 'scan-for-genuity-and-pdf-response';
+            }else{
+                $transactionType = 'scan-for-genuity-and-pdf-response';
+            }
+            $params = ['product_id'=>$data['product_id'],'question_id'=>$questionQuery->question_id];
+            $this->ProductModel->saveLoylty($transactionType,$user['id'],$params);
             Utils::response(['status'=>true,'message'=>'Feedback answer has been saved successfully.','data'=>$data]);
         }else{
             Utils::response(['status'=>false,'message'=>'System failed to proccess the request.'],200);
@@ -543,6 +560,22 @@ class Consumer extends ApiController {
         $data = $this->ConsumerModel->loylty();
                 if(!empty($data)){
             Utils::response(['status'=>true,'message'=>'List of loylties.','data'=>$data]);
+        }else{
+            Utils::response(['status'=>false,'message'=>'There is no record found.'],200);
+        }
+    }
+    public function consumerLoylty(){
+        $user = $this->auth();
+        if(empty($this->auth())){
+            Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        if(($this->input->method() != 'get')){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $data = [];
+        $data = $this->ProductModel->userLoylty($user['id']);
+        if(!empty($data)){
+            Utils::response(['status'=>true,'message'=>'User gain loylties.','data'=>$data]);
         }else{
             Utils::response(['status'=>false,'message'=>'There is no record found.'],200);
         }

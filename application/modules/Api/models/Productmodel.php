@@ -434,5 +434,64 @@ class ProductModel extends CI_Model {
         return $query;
         
     }
+    
+    public function findLoylityBySlug($slug = null){
+        $items = [];
+        if(empty($slug)){
+           return false; 
+        }
+        $query = $this->db->get_where('loylties',['transaction_type_slug'=>$slug]);
+        if( $query->num_rows() <= 0 ){
+            return false;
+        }else{
+            return $query->row_array();
+        }
+    }
+    public function saveLoylty($transactionType = null,$userId = null,$params = []){
+        if( empty($transactionType) || empty($userId) ){
+            return false;
+        }
+        
+        $loylty = $this->findLoylityBySlug($transactionType);
+        if(empty($loylty)){
+            return false;
+        }
+        $date = new DateTime();
+        $now = $date->format('Y-m-d H:i:s');
+        $date->modify('+3    month');
+        $input = [
+            'user_id' => $userId,
+            'points' => $loylty['points'],
+            'transaction_type' => $loylty['transaction_type'],
+            'params' => json_encode($params),
+            'status' => 1,
+            'modified_at' => $now,
+            'created_at' => $now,
+            'date_expire' => $date->format('Y-m-d H:i:s')
+        ];
+        
+        return $this->db->insert('loylty_points',$input);
+    }
+    
+    public function userLoylty($userId=null){
+        if(empty($userId)){
+            return [];
+        }
+        $query = $this->db->select('id,user_id,points,transaction_type,params,date_expire,created_at,modified_at')
+                ->from('loylty_points')
+                ->where('user_id ="'.$userId.'"')
+                ->where('status =1')
+                ->get();
+        if( $query->num_rows() <= 0 ){
+            return [];
+        }
+        $result = $query->result();
+        $items = array_map(function($obj){
+            $obj->params = json_decode($obj->params);
+            return $obj;
+        }, $result);
+        return $items;
+        
+    }
 
 }

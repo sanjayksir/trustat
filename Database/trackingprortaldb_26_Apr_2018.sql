@@ -12395,34 +12395,34 @@ INSERT INTO `user_log` (`id`, `consumer_id`, `customer_id`, `token`, `plain_toke
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 
-
+drop table loylties;
 CREATE TABLE `loylties` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `transaction_type` varchar(100) NOT NULL,
+  `transaction_type_slug` varchar(200) DEFAULT NULL,
   `points` int(20) NOT NULL,
   `customer` varchar(100) DEFAULT NULL,
   `product` varchar(100) DEFAULT NULL,
   `status` tinyint(3) NOT NULL DEFAULT '1',
   `created_at` datetime NOT NULL,
   `modified_at` datetime NOT NULL,
-  PRIMARY KEY (`id`) 
+   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `loylties`
 --
 
-INSERT INTO `loylties` (`id`, `transaction_type`, `points`, `customer`, `product`, `status`, `created_at`, `modified_at`) VALUES
-(1, 'User Registration', 100, NULL, NULL, 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(2, 'Family Group Addition', 21, NULL, NULL, 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(3, 'Scan for Genuity and Video Response', 2, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(4, 'Scan for Genuity and pdf Response', 6, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(5, 'Product Registration with Warranty', 8, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(6, 'Product Registration without Warranty', 10, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(7, 'Survey Response', 12, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(8, 'Advt1', 14, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(9, 'Advt2', 16, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00');
-
+INSERT INTO `loylties` (`id`, `transaction_type`, `transaction_type_slug`, `points`, `customer`, `product`, `status`, `created_at`, `modified_at`) VALUES
+(1, 'User Registration', 'user-registration', 100, NULL, NULL, 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(2, 'Family Group Addition', 'family-group-addition', 21, NULL, NULL, 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(3, 'Scan for Genuity and Video Response', 'scan-for-genuity-and-video-response', 2, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(4, 'Scan for Genuity and pdf Response', 'scan-for-genuity-and-pdf-response', 6, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(5, 'Product Registration with Warranty', 'product-registration-with-warranty', 8, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(6, 'Product Registration without Warranty', 'product-registration-without-warranty', 10, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(7, 'Survey Response', 'survey-response', 12, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(8, 'Advt1', 'advt1', 14, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(9, 'Advt2', 'advt2', 16, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00');
 -- --------------------------------------------------------
 
 --
@@ -12432,7 +12432,7 @@ INSERT INTO `loylties` (`id`, `transaction_type`, `points`, `customer`, `product
 CREATE TABLE `loylty_points` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL COMMENT 'The id of the user the points belong to',
-  `num_points` int(11) NOT NULL COMMENT 'The number of points in this block of points',
+  `points` int(11) NOT NULL COMMENT 'The number of points in this block of points',
   `transaction_type` varchar(200) DEFAULT NULL,
   `status` tinyint(3) NOT NULL DEFAULT '1',
   `modified_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
