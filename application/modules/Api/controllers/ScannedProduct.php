@@ -37,9 +37,9 @@ class ScannedProduct extends ApiController {
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
-		$bar_code_data = $data['bar_code'];
+        $bar_code_data = $data['bar_code'];
 		// function to get product registration status
-		$isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);
+        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);
         //echo $isRegistered;
         if(empty($result)){
             $data['user_id'] = $user['id'];
@@ -59,15 +59,13 @@ class ScannedProduct extends ApiController {
         if(!empty($result->product_pdf)){
             $result->product_pdf = Utils::setFileUrl($result->product_pdf);
         }
-		
-		
-		$result->product_registration_status = $isRegistered;
+	$result->product_registration_status = $isRegistered;
 		
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
         $data['created_at'] = date("Y-m-d H:i:s");
         if($this->db->insert($this->ScannedproductsModel->table, $data)){
-            $this->response(['status'=>true,'message'=>'Scanned product details.','data'=>$result]);
+            $this->response(['status'=>true,'message'=>'Scanned product details for lavel '.$result->pack_level.'.','data'=>$result]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to scan the record.'],200); 
         }
@@ -112,7 +110,6 @@ class ScannedProduct extends ApiController {
             //['field' =>'invoice_image','label'=>'Invoice image','rules' => [['file',[$this->ScannedproductsModel,'validFile']]]],
             ['field' =>'expiry_date','label'=>'Expiry date','rules' => ['',['date',[$this->ScannedproductsModel,'validDate']]]],
         ];
-        
         $errors = $this->ScannedproductsModel->validate($data,$validate);
         /*
         if(is_array($errors) || empty($data['invoice_image'])){
@@ -128,12 +125,14 @@ class ScannedProduct extends ApiController {
         if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found'],200);
         }
-        if(!empty($data['invoice_image'])){
+        $data['invoice_image'] = null;
+        if(!empty($data['invoice_image'])){die("END");
             $this->load->library('upload', [
                 'upload_path'=>'./uploads/invoice/',
                 'allowed_types'=>'gif|jpg|png|pdf',
                 'max_size'=>'5120',
             ]);
+            
             if(!$this->upload->do_upload('invoice_image')){
                 $this->response(['status'=>false,'message'=> Utils::errors($this->upload->display_errors())]);
             }
@@ -147,9 +146,10 @@ class ScannedProduct extends ApiController {
         unset($data['purchase_date']);
         //echo "<pre>";print_r($data);die;        
         if($this->db->insert('purchased_product', $data)){
+            $data['pack_level'] = $result->pack_level;
             $data['id'] = $this->db->insert_id();
-            $data['invoice_image'] = base_url($data['invoice_image']);
-            $this->response(['status'=>true,'message'=>'Product has been registered.','data'=>$data]);
+            //$data['invoice_image'] = base_url($data['invoice_image']);
+            $this->response(['status'=>true,'message'=>'Product has been registered for pack level '.$result->pack_level.'.','data'=>$data]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to register the product.']);
         }

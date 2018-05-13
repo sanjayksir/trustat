@@ -44,7 +44,7 @@ class ScannedproductsModel extends CI_Model {
             return false;
         }
         $items = [];
-        $query = $this->db->select('p.*')
+        $query = $this->db->select('p.*,pbq.pack_level')
                 ->from('printed_barcode_qrcode AS pbq')
                 ->join('products AS p', 'p.id=pbq.product_id')
                 ->where(['pbq.barcode_qr_code_no' => $barcode,'pbq.active_status'=>1])
@@ -66,24 +66,17 @@ class ScannedproductsModel extends CI_Model {
         return $items;
     }
 	// check if the product code is registered or not 
-	public function isProductRegistered($bar_code_data) {
-		
-		 $query = $this->db->get_where('purchased_product', array('bar_code' => $bar_code_data)); 
+    public function isProductRegistered($bar_code_data) {
 
-                if ($query->num_rows() == 0 )
-                {
-                     return FALSE;
-                }
-                else
-                {
-                      return TRUE;
-                }
-				
-		
-                
+        $query = $this->db->get_where('purchased_product', array('bar_code' => $bar_code_data));
+
+        if ($query->num_rows() == 0) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
     }
-	
-    
+
     public function findScannedProducts($userid = null){
         if($userid == null){
             return false;
