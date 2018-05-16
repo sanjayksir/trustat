@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /**
  * Description of Api
  *
- * @author subhash
+ * @author Sanjay
  */
 class ApiController extends MX_Controller {
     public $request = null;
