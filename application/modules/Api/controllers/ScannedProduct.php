@@ -69,14 +69,14 @@ class ScannedProduct extends ApiController {
         if($this->db->insert($this->ScannedproductsModel->table, $data)){
             if( $result->pack_level == 0 ){
                 if( $isRegistered ){
-                    $result['message'] = 'This product is already sold, please contact your retailer for further details';
+                    $result->message1 = 'This product is already sold, please contact your retailer for further details';
                 }else{
-                    $result['message'] = 'Thank You for buying this, Please click ok to register this product';
+                    $result->message1 = 'Thank You for buying this, Please click ok to register this product';
                 }
             }elseif( $result->pack_level == 1 ){
-                $result['message'] = 'Scanned product details for lavel '.$result->pack_level.'.';
+                $result->message1 = 'Scanned product details for lavel '.$result->pack_level.'.';
             }elseif($result->pack_level > 1){
-                $result['message'] = 'This is not Retailer Barcode, Please scan product barcode, placed on the product box or product';
+                $result->message1 = 'This is not Retailer Barcode, Please scan product barcode, placed on the product box or product';
             }
             $this->response(['status'=>true,'message'=>'Scanned product details for lavel '.$result->pack_level.'.','data'=>$result]);
         }else{
@@ -170,14 +170,14 @@ class ScannedProduct extends ApiController {
             $this->ProductModel->saveLoylty($transactionType,$user['id'],['product_id'=>$data['id']]);
             if( $result->pack_level == 0 ){
                 if($isRegistered){
-                    $data['message'] = 'This product is already sold, please contact your retailer for further details';
+                    $data['message1'] = 'This product is already sold, please contact your retailer for further details';
                 }else{
-                    $data['message'] = 'Thank You for buying this, Please click ok to proceed';
+                    $data['message1'] = 'Thank You for buying this, Please click ok to proceed';
                 }
             }elseif( $result->pack_level == 1 ){
-                $data['message'] = 'This is not Product Registration Barcode, Please scan product as shown in the picture below/above';
+                $data['message1'] = 'This is not Product Registration Barcode, Please scan product as shown in the picture below/above';
             }elseif($result->pack_level > 1){
-                $data['message'] = 'This is not Retailer Barcode, Please scan product barcode, placed on the product';
+                $data['message1'] = 'This is not Retailer Barcode, Please scan product barcode, placed on the product';
             }
             //$data['invoice_image'] = base_url($data['invoice_image']);
             $this->response(['status'=>true,'message'=>'Product has been registered for pack level '.$result->pack_level.'.','data'=>$data]);

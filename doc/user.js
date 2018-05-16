@@ -365,3 +365,65 @@ function postUploadAvatar() { return; }
   @apiUse UserError
 */
 function getLoylties() { return; }
+/**
+ @api {get} /consumer-loylty Consumer loylties
+  @apiVersion 0.1.0
+  @apiName getConsumerLoylty
+  @apiGroup Product
+  @apiPermission Private user
+ 
+  @apiDescription List of consumer earn loylties.
+
+  @apiHeader {String} token token must be set in header. 
+ 
+ 
+  @apiSuccess {String} status true.
+  @apiSuccess {String} message User gain loylties.
+  @apiSuccessExample {json} Success-Response: 
+    HTTP/1.1 200 OK
+{
+    "status": true,
+    "message": "List of loylties.",
+    "data": [
+        {
+            "id": "1",
+            "user_id": "2",
+            "points": "8",
+            "transaction_type": "Product Registration with Warranty",
+            "params": {
+                "product_id": 21
+            },
+            "date_expire": "2018-08-13 13:09:44",
+            "created_at": "2018-05-13 13:09:44",
+            "modified_at": "2018-05-13 13:09:44"
+        },
+        {
+            "id": "2",
+            "user_id": "2",
+            "points": "6",
+            "transaction_type": "Scan for Genuity and pdf Response",
+            "params": {
+                "product_id": 142,
+                "question_id": "2"
+            },
+            "date_expire": "2018-08-13 13:13:36",
+            "created_at": "2018-05-13 13:13:36",
+            "modified_at": "2018-05-13 13:13:36"
+        },
+        {
+            "id": "3",
+            "user_id": "2",
+            "points": "8",
+            "transaction_type": "Product Registration with Warranty",
+            "params": {
+                "product_id": 22
+            },
+            "date_expire": "2018-08-14 08:57:18",
+            "created_at": "2018-05-14 08:57:18",
+            "modified_at": "2018-05-14 08:57:18"
+        }
+    ]
+}
+  @apiUse UserError
+*/
+function getConsumerLoylty() { return; }

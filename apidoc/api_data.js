@@ -1475,6 +1475,98 @@ define({ "api": [
   },
   {
     "type": "get",
+    "url": "/consumer-loylty",
+    "title": "Consumer loylties",
+    "version": "0.1.0",
+    "name": "getConsumerLoylty",
+    "group": "Product",
+    "permission": [
+      {
+        "name": "Private user"
+      }
+    ],
+    "description": "<p>List of consumer earn loylties.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token must be set in header.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>true.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>User gain loylties.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response: ",
+          "content": "    HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"List of loylties.\",\n    \"data\": [\n        {\n            \"id\": \"1\",\n            \"user_id\": \"2\",\n            \"points\": \"8\",\n            \"transaction_type\": \"Product Registration with Warranty\",\n            \"params\": {\n                \"product_id\": 21\n            },\n            \"date_expire\": \"2018-08-13 13:09:44\",\n            \"created_at\": \"2018-05-13 13:09:44\",\n            \"modified_at\": \"2018-05-13 13:09:44\"\n        },\n        {\n            \"id\": \"2\",\n            \"user_id\": \"2\",\n            \"points\": \"6\",\n            \"transaction_type\": \"Scan for Genuity and pdf Response\",\n            \"params\": {\n                \"product_id\": 142,\n                \"question_id\": \"2\"\n            },\n            \"date_expire\": \"2018-08-13 13:13:36\",\n            \"created_at\": \"2018-05-13 13:13:36\",\n            \"modified_at\": \"2018-05-13 13:13:36\"\n        },\n        {\n            \"id\": \"3\",\n            \"user_id\": \"2\",\n            \"points\": \"8\",\n            \"transaction_type\": \"Product Registration with Warranty\",\n            \"params\": {\n                \"product_id\": 22\n            },\n            \"date_expire\": \"2018-08-14 08:57:18\",\n            \"created_at\": \"2018-05-14 08:57:18\",\n            \"modified_at\": \"2018-05-14 08:57:18\"\n        }\n    ]\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "doc/user.js",
+    "groupTitle": "Product",
+    "sampleRequest": [
+      {
+        "url": "http://innovigents.com/api/consumer-loylty"
+      }
+    ],
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "status",
+            "description": "<p>false.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "message",
+            "description": "<p>api error as per request.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "errors",
+            "description": "<p>validation errors.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response (example):",
+          "content": "HTTP/1.1 400 Bad Request\n{\n   \"status\":false,\n   \"message\": \"Bad request\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "get",
     "url": "/feedback-question/(:product_id)",
     "title": "Feedback Question",
     "version": "0.1.0",
