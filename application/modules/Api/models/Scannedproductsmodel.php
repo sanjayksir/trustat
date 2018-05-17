@@ -81,6 +81,7 @@ class ScannedproductsModel extends CI_Model {
         if($userid == null){
             return false;
         }
+        
         $query = $this->db->select("sp.bar_code,sp.latitude,sp.longitude,sp.created_at,pr.*")
                 ->from($this->table.' AS sp')
                 ->join('products AS pr', 'pr.id=sp.product_id')
@@ -102,6 +103,7 @@ class ScannedproductsModel extends CI_Model {
                 'product_name' => $row->product_name,
                 'product_sku' => $row->product_sku,
                 'product_description' => $row->product_description,
+                'purchased' => Utils::exists('purchased_product', ['product_id'=>$row->id,'consumer_id'=>$userid]),
             ];
             if (!empty($row->attribute_list)) {
                 $attributesids = implode(',', json_decode($row->attribute_list, true));
