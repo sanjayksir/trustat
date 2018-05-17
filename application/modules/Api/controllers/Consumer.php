@@ -200,7 +200,7 @@ class Consumer extends ApiController {
     // add Consumer Family Details function 
 	public function addConsumerRelative(){
         $user = $this->auth();
-		 //$data = $this->getInput();
+		 $data = $this->getInput();
         if(empty($user)){
             Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
         }
@@ -244,9 +244,6 @@ class Consumer extends ApiController {
             $this->signupMail($data);
             $smstext = 'You have added '.$mobile_no.' as '.$data['relation'].' relation with you.';
             Utils::sendSMS($data['phone_number'],$smstext);
-			
-			$data['member_profile'] = $this->getInput('member_name');
-			
 			
             Utils::response(['status'=>true,'message'=>'Your Family member has been added successfully.','data'=>$data],200);	
 			
