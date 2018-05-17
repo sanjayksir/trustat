@@ -2275,7 +2275,6 @@ define({ "api": [
         ]
       }
     },
-
     "parameter": {
       "fields": {
         "Parameter": [
@@ -2369,6 +2368,135 @@ define({ "api": [
       ]
     }
   },
+  
+  {
+    "type": "post",
+    "url": "/user/add_consumer_relative",
+    "title": "Add Family Member",
+    "version": "0.1.0",
+    "name": "PostAddFamilyMember",
+    "group": "User",
+    "permission": [
+      {
+        "name": "Only logged in user"
+      }
+    ],
+    "description": "<p>Add Family Member details.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>Token must be in header.</p>"
+          }
+        ]
+      }
+    },
+	"examples": [
+      {
+        "title": "Example usage: ",
+        "content": "{\n   \"member_name\": \"Amit Kumar\",\n   \"relation\": \"Brother\",\n   \"phone_number\":\"7678665539\"\n}",
+        "type": "json"
+      }
+    ],
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "member_name",
+            "description": "<p>member name (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "relation",
+            "description": "<p>relation with the menber(Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "phone_number",
+            "description": "<p>Phone number of the family member(Required).</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>true.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Your Family member has been added successfully.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response: ",
+          "content": "HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"Your Family member has been added successfully.\",\n    \"data\": {\n        \"member_name\": \"Amit Kumar\",\n        \"relation\": \"Brother\",\n        \"phone_number\": \"1234567890\",\n  	\"howzzt_member\": \"yes\",\n	\"consumer_id\": \"14\",\n  	\"status\": \"1\",\n	\"ip\": \"103.201.141.106\"\n     }\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "doc/user.js",
+    "groupTitle": "User",
+    "sampleRequest": [
+      {
+        "url": "http://innovigents.com/api/user/add_consumer_relative"
+      }
+    ],
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "status",
+            "description": "<p>false.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "message",
+            "description": "<p>api error as per request.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "errors",
+            "description": "<p>validation errors.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response (example):",
+          "content": "HTTP/1.1 400 Bad Request\n{\n   \"status\":false,\n   \"message\": \"Bad request\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  
+  
   {
     "type": "post",
     "url": "/login",
