@@ -197,7 +197,66 @@ class Consumer extends ApiController {
      * @param string $password_confirmation repeat the original password
      * @return json  json object of api response.
      */
-    
+    // add Consumer Family Details function 
+	public function addConsumerRelative(){
+        $user = $this->auth();
+		 //$data = $this->getInput();
+        if(empty($user)){
+            Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        
+        $input = $this->getInput();
+        if(($this->input->method() != 'post') || empty($input)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
+            ['field' =>'member_name','label'=>'Member Name','rules' => 'min_length[2]' ],
+			['field' =>'relation','label'=>'Relation','rules' => 'min_length[2]' ],
+            ['field' =>'phone_number','label'=>'Phone Number','rules' => 'trim|required|integer|exact_length[10]' ],
+            ['field' =>'howzzt_member','label'=>'howzzt member','rules' => 'trim|in_list[yes,no]' ],
+        ];
+        $errors = $this->ConsumerModel->validate($input,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+		
+		$phone_number = $this->getInput('phone_number');
+		
+		//$emailid = $this->getInput('email');
+		$phone_numberr = $phone_number['phone_number'];
+		
+		$isRegistered = $this->ConsumerModel->isHowzztMember($phone_numberr);
+		
+		if ($isRegistered==TRUE){
+			
+			$data['howzzt_member'] = "yes";
+		} else {
+			
+			$data['howzzt_member'] = "no";
+		}
+		
+        $data['consumer_id'] = $user['id']; 
+		
+		$data['status'] =  "1";
+		$data['ip'] =  $this->input->ip_address();    
+		
+        if($this->db->insert('consumer_family_details', $data)){            
+            $this->signupMail($data);
+            $smstext = 'You have added '.$mobile_no.' as '.$data['relation'].' relation with you.';
+            Utils::sendSMS($data['phone_number'],$smstext);
+			
+			$data['member_profile'] = $this->getInput('member_name');
+			
+			
+            Utils::response(['status'=>true,'message'=>'Your Family member has been added successfully.','data'=>$data],200);	
+			
+        }else{
+            Utils::response(['status'=>false,'message'=>'Adding relative failed.'],200);
+        }
+    }
+	
+	
+	
     public function changePassword(){
         $user = $this->auth();
         if(empty($user)){

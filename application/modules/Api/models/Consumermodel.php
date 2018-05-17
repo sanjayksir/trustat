@@ -159,5 +159,21 @@ class ConsumerModel extends CI_Model {
         }
         return $query->result_array();
     }
+	
+	
+	public function isHowzztMember($phone_numberr) {
+		
+		 $query = $this->db->get_where('consumers', array('mobile_no' => $phone_numberr)); 
+
+                if ($query->num_rows() == 0 )
+                {
+                     return FALSE;
+                }
+                else
+                {
+                      return TRUE;
+                }          
+    }
+	
 
 }
