@@ -7,7 +7,7 @@ require 'ApiController.php';
 /**
  * Description of BarCodeController
  *
- * @author subhash
+ * @author Sanjay
  */
 class ScannedProduct extends ApiController {
     public function __construct() {

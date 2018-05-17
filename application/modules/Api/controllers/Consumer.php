@@ -54,7 +54,7 @@ class Consumer extends ApiController {
 			//$data['password2'] = $checkmobileno[mobile_no];
 			//$data['token'] = $data['token'];
             $this->signupMail($data);
-            $smstext = 'Your OTP for mobile verifivation is '.$data['verification_code'].', please enter the OTP to complete the signup proccess.';
+            $smstext = 'Welcome to howzzt. Your OTP for mobile verification is '.$data['verification_code'].', please enter the OTP to complete the signup proccess.';
             Utils::sendSMS($data['mobile_no'],$smstext);
             Utils::response(['status'=>true,'message'=>'You are re-registered with this device.','data'=>$data]);
         }else{
@@ -90,7 +90,7 @@ class Consumer extends ApiController {
 			*/
 			//$data['password1'] = $checkmobileno;
             $this->signupMail($data);
-            $smstext = 'Your OTP for mobile verifivation is '.$data['verification_code'].', please enter the OTP to complete the signup proccess.';
+            $smstext = 'Welcome to howzzt. Your OTP for mobile verification is '.$data['verification_code'].', please enter the OTP to complete the signup proccess.';
             Utils::sendSMS($data['mobile_no'],$smstext);
             Utils::response(['status'=>true,'message'=>'Your account has been registered.','data'=>$data],200);
 			

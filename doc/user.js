@@ -107,7 +107,7 @@ function postLogin() { return; }
  
   @apiExample Example usage: 
     {
-        "mobile_no":"9716322021",
+        "mobile_no":"7678665537",
         "otp":"819124"
     } 
  
