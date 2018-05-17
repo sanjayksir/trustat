@@ -291,5 +291,10 @@ class Utils {
         ini_set('display_errors', 1);
         error_reporting(E_ALL);
     }
+    
+    public static function exists($table,$conditions){
+        $query = self::$ci->db->get_where($table,$conditions);
+        return (bool) $query->num_rows();
+    }
 
 }
