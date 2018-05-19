@@ -577,7 +577,7 @@ class Consumer extends ApiController {
         if(empty($productQuery)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'Invalid product id.']);
         }
-       
+        //Utils::debug();
         $data['user_id'] = $user['id'];
         $data['created_date'] = $data['updated_date'] = date('Y-m-d H:i:s');
         if($this->db->insert('consumer_feedback', $data)){
@@ -594,7 +594,7 @@ class Consumer extends ApiController {
                 $transactionType = 'scan-for-genuity-and-pdf-response';
             }
             $params = ['product_id'=>$data['product_id'],'question_id'=>$questionQuery->question_id];
-            $this->ProductModel->saveLoylty($transactionType,$user['id'],$params);
+            $this->ProductModel->feedbackLoylity($data['product_id'],$user['id'],$transactionType,$user['id'],$params);
             Utils::response(['status'=>true,'message'=>'Feedback answer has been saved successfully.','data'=>$data]);
         }else{
             Utils::response(['status'=>false,'message'=>'System failed to proccess the request.'],200);
