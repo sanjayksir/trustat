@@ -124,6 +124,8 @@ $route['api/feedback-answer'] = 'Api/Consumer/feedbackAnswer';
 $route['api/loylties'] = 'Api/Consumer/loylty';
 $route['api/consumer-loylty'] = 'Api/Consumer/consumerLoylty';
 
+$route['api/user/add_consumer_relative'] = 'Api/Consumer/addConsumerRelative';
+
 $route['api/scan-product'] = 'Api/ScannedProduct/productScanning';
 $route['api/view-scanned-product'] = 'Api/ScannedProduct/viewScannedProduct';
 $route['api/register-product'] = 'Api/ScannedProduct/registerProduct';
