@@ -71,14 +71,16 @@ class ScannedProduct extends ApiController {
                 if( $isRegistered ){
                     $result->message1 = 'This product is already sold, please contact your retailer for further details';
                 }else{
-                    $result->message1 = 'Thank You for buying this, Please click ok to register this product';
+                    $result->message1 = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
                 }
             }elseif( $result->pack_level == 1 ){
-                $result->message1 = 'Scanned product details for lavel '.$result->pack_level.'.';
+                //$result->message1 = 'Scanned product details for lavel '.$result->pack_level.'.';
+				$result->message1 = 'Thanks for scanning the product';
             }elseif($result->pack_level > 1){
                 $result->message1 = 'This is not Retailer Barcode, Please scan product barcode, placed on the product box or product';
             }
-            $this->response(['status'=>true,'message'=>'Scanned product details for lavel '.$result->pack_level.'.','data'=>$result]);
+            //$this->response(['status'=>true,'message'=>'Scanned product details for lavel '.$result->pack_level.'.','data'=>$result]);
+			$this->response(['status'=>true,'message'=>'Thanks for scanning the product','data'=>$result]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to scan the record.'],200); 
         }
