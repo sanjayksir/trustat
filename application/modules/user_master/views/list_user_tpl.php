@@ -50,34 +50,43 @@
 						<?php //echo '<pre>';print_r($userListing);?>
  						<div class="row">
 							<div class="col-xs-12">
- 								<div class="row">
-									<div class="col-xs-12">
-										<h3 class="header smaller lighter blue">List <?php echo $label;?></h3>
- 										<div style="clear:both;height:40px;"><a href="<?php echo base_url()?>user_master/add_user" class="btn btn-primary pull-right" title="Add  User">Add <?php echo $label;?> </a></div>
-										<!-- div.table-responsive -->
- 										<!-- div.dataTables_borderWrap -->
+ 								<div class="widget-box widget-color-blue">
+                                                                    <div class="widget-header widget-header-flat">
+                                                                    <h5 class="widget-title bigger lighter">List <?php echo $label;?></h5>
+                                                                    <div class="widget-toolbar">
+                                                                        <a href="<?php echo base_url('user_master/add_user') ?>" class="btn btn-xs btn-warning" title="Add User">Add <?php echo $label; ?> </a>
+                                                                    </div>
+                                                                </div>
+									<div class="widget-body">
+										
+										
 										<?php 
 										$label = 'Assigned'; 
 										if($this->session->userdata('admin_user_id')==1){
 											$label = 'Created';
 										}?>
 										<!--------------- Search Tab start----------------->
-                            <div class="row"><form id="form-filter" action="" method="post" class="form-horizontal" onsubmit="return validateSrch();">
-                                <table id="search" class="table table-hover display">
-                                    
-                                        <tbody>
-                                        	<tr>
-                                            	<td><input name="search" value="<?php if(!empty($this->input->post('search'))){echo $this->input->post('search');}?>" id="searchStr" placeholder="Search Records" class="form-control" type="text"></td>
-                                            	<td>
-                                                	<input type="submit" id="btn-filter" value="Search" name="Search" class="btn btn-primary btn-search">&nbsp;
-                                                	<button type="button" id="btn-reset" class="btn btn-default btn-search">Reset</button>
-                                            	</td>
-                                         	</tr>
-                                 		 </tbody>
-                                   	
-                                 </table></form>
-                            </div>
-                      <!--------------- Search Tab start----------------->
+                           <div class="row filter-box">
+            <form id="form-filter" action="" method="get" class="form-horizontal" >
+                <div class="col-sm-6">
+                    <label>Display
+                        <select name="page_limit" id="page_limit" class="form-control" onchange="this.form.submit()">
+                        <?php echo Utils::selectOptions('pagelimit',['options'=>$this->config->item('pageOption'),'value'=>$this->config->item('pageLimit')]) ?>
+                        </select>
+                    Records
+                    </label>
+                </div>
+                <div class="col-sm-6">
+                    <div class="input-group">
+                        <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Type your query">
+                        <span class="input-group-btn">
+                            <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
+                            <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
 					  
 					  
 					  
@@ -96,6 +105,8 @@
 												<tbody>
 
                                         <?php $i = 0;
+                                        $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+        $sno =  $page + 1;
 										if(count($userListing)>0){
                                         foreach ($userListing as $listData){
 										$i++;
@@ -108,7 +119,7 @@
 												$colorStyle="style='color:black;border-radius:10px;background-color:red;border:none;'";
 											}?>
                                                <tr id="show<?php echo $listData['user_id']; ?>">
-											   <td><?php echo $i; ?></td>
+											   <td><?php echo $sno;$sno++; ?></td>
 												<td><?php echo $listData['f_name'].' '. $listData['l_name']; ?></td>
 												<td><?php echo $listData['user_name']; ?></td>
 												<td><?php echo $listData['email_id']; ?></td>
@@ -141,11 +152,12 @@
 										}else{ ?>
 										<tr><td align="center" colspan="8" class="color error">No Records Founds</td></tr>
 										<?php }?>
-									<tr><td align="right" colspan="10" class="color"><?php if (isset($links)) { ?>
-                <?php echo $links ?>
-            <?php } ?></td></tr>
+									
                                     </tbody>
 											</table>
+                                                                                <div class="row paging-box">
+<?php echo $links ?>
+</div>
   								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
 						</div><!-- /.row -->

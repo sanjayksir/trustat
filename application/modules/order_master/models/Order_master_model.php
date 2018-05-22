@@ -641,7 +641,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
  		$user_id 	= $this->session->userdata('admin_user_id');
  
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(PP.user_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%')");
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
 		}
 		 
  		$this->db->select('PP.*, P.product_name, P.product_sku, B.user_name, Ppp.plant_name',false);
@@ -673,7 +673,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$result_data = 0;
 		$user_id 	= $this->session->userdata('admin_user_id');
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(PP.product_name LIKE '%$srch_string%' OR PP.plant_name LIKE '%$srch_string%' OR PP.user_name LIKE '%$srch_string%')");
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
 		}
  		$this->db->select('count(1) as total_rows');
 		$this->db->from('printed_barcode_qrcode PP');
@@ -692,12 +692,31 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 	 
 	 
 	 
+	 function count_scanned_barqrcodelist($srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");                    
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('consumers C');
+		$this->db->join('scanned_products S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = S.product_id');
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
 	 function get_scanned_barqrcodelist($limit,$start,$srch_string=''){
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
  
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')");
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");              
 		}
 		 
  		$this->db->select(' C.*, S.*, P.product_name, P.product_sku',false);

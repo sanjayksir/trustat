@@ -173,7 +173,7 @@
         if (empty($srch_string)) {
             $srch_string = '';
         }
-        $total_records = $this->order_master_model->get_barcode_total_order_list_all($srch_string);
+        $total_records = $this->order_master_model->count_scanned_barqrcodelist($srch_string);
 
         $params["ScanedCodeListing"] = $this->order_master_model->get_scanned_barqrcodelist($limit_per_page, $start_index, $srch_string);
         $params["links"] = Utils::pagination('order_master/barcode/list_scanned_report', $total_records,null,4);

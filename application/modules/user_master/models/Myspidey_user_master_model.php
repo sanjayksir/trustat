@@ -379,17 +379,7 @@ class Myspidey_user_master_model extends CI_Model {
     function get_total_user_list_all($srch_string = '') {
         $result_data = 0;
         $user_id = $this->session->userdata('admin_user_id');
-        /* if(!empty($srch_string) && $user_id==1){ 
-          $this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%') and (is_parent=$user_id)");
-          }
-          if($user_id>1){
-          if(!empty($srch_string)){
-          $this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%') and (is_parent=$user_id)");
-          }else{
-          $this->db->where(array('is_parent'=>$user_id));
-          }
-          } */
-
+        
         if (!empty($srch_string)) {
             $this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR f_name LIKE '%$srch_string%' OR l_name LIKE '%$srch_string%') and (is_parent=$user_id)");
         } else {
@@ -405,6 +395,31 @@ class Myspidey_user_master_model extends CI_Model {
         if ($query->num_rows() > 0) {
             $result = $query->result_array();
             $result_data = $result[0]['total_rows'];
+        }
+        return $result_data;
+    }
+    function get_user_list_all($limit,$start,$srch_string = '') {
+        $result_data = 0;
+        $user_id = $this->session->userdata('admin_user_id');
+        
+        if (!empty($srch_string)) {
+            $this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR f_name LIKE '%$srch_string%' OR l_name LIKE '%$srch_string%') and (is_parent=$user_id)");
+        } else {
+            if (empty($user_id)) {
+                $user_id = 1;
+            }
+            $this->db->where(array('is_parent' => $user_id));
+        }
+
+        $this->db->select('*');
+        $this->db->from('backend_user');
+        $this->db->order_by('user_id', 'desc');
+        if (empty($srch_string)) {
+            $this->db->limit($limit, $start);
+        }
+        $query = $this->db->get(); //echo '***'.$this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result_data = $query->result_array();
         }
         return $result_data;
     }

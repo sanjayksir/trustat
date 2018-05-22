@@ -487,7 +487,7 @@ class ProductModel extends CI_Model {
         if(empty($userId)){
             return [];
         }
-        $query = $this->db->select('id,user_id,points,transaction_type,params,date_expire,created_at,modified_at')
+        $query = $this->db->select('id,id AS transaction_type_id,user_id,points,transaction_type,transaction_type AS transaction_type_name,params,date_expire,created_at,modified_at')
                 ->from('loylty_points')
                 ->where('user_id ="'.$userId.'"')
                 ->where('status =1')

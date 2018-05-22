@@ -1036,5 +1036,5 @@ $config['sms'] = [
     'from' => 'STDOTP'
 ];
 $config['pageLimit'] = 15;
-$config['pageOption'] = [15=>15,25=>25,50=>50,100=>100];
+$config['pageOption'] = [10=>10,15=>15,25=>25,50=>50,100=>100];
 

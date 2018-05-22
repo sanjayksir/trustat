@@ -29,9 +29,15 @@ class User_master extends MX_Controller {
         ##--------------- pagination start ----------------##
         // init params
         $params = array();
-        $limit_per_page = 20;
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        
+        $this->config->set_item('pageLimit', $limit_per_page);
         $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $srch_string = $this->input->post('search');
+        $srch_string = $this->input->get('search');
         if (empty($srch_string)) {
             $srch_string = '';
         }
@@ -40,35 +46,9 @@ class User_master extends MX_Controller {
         if ($total_records > 0) {
             // get current page records
             $params['userListing'] = $this->myspidey_user_master_model->get_user_list_all($limit_per_page, $start_index, $srch_string);
-            //$params["orderListing"] = $this->order_master_model->get_order_list_all($limit_per_page, $start_index,$srch_string);
-
-            $config['base_url'] = base_url() . 'user_master/list_user';
-            $config['total_rows'] = $total_records;
-            $config['per_page'] = $limit_per_page;
-            $config["uri_segment"] = 3;
-            $config["full_tag_open"] = '<ul class="pagination">';
-            $config["full_tag_close"] = '</ul>';
-            $config["first_link"] = "&laquo;";
-            $config["first_tag_open"] = "<li>";
-            $config["first_tag_close"] = "</li>";
-            $config["last_link"] = "&raquo;";
-            $config["last_tag_open"] = "<li>";
-            $config["last_tag_close"] = "</li>";
-            $config['next_link'] = '&gt;';
-            $config['next_tag_open'] = '<li>';
-            $config['next_tag_close'] = '<li>';
-            $config['prev_link'] = '&lt;';
-            $config['prev_tag_open'] = '<li>';
-            $config['prev_tag_close'] = '<li>';
-            $config['cur_tag_open'] = '<li class="active"><a href="#">';
-            $config['cur_tag_close'] = '</a></li>';
-            $config['num_tag_open'] = '<li>';
-            $config['num_tag_close'] = '</li>';
-
-            ## paging style configuration End 
-            $this->pagination->initialize($config);
+            
             // build paging links
-            $params["links"] = $this->pagination->create_links();
+            $params["links"] = Utils::pagination('user_master/list_user', $total_records);;
         }
         ##--------------- pagination End ----------------##
 
