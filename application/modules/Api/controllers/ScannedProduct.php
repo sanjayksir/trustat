@@ -114,7 +114,7 @@ class ScannedProduct extends ApiController {
     }
     
     /**
-     * registerProduct to order the product
+     * registerProduct to order the product....
      */
     public function registerProduct(){
         $data = $this->getInput();
