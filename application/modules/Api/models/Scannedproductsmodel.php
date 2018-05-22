@@ -66,17 +66,40 @@ class ScannedproductsModel extends CI_Model {
         return $items;
     }
 	// check if the product code is registered or not 
+	
+				Public function isProductRegistered($bar_code_data) {
+				$this->db->from('purchased_product');
+				$this->db->where('bar_code', $bar_code_data);
+				$query = $this->db->get();
+				if($query->num_rows()>0) {
+				$data = $query->row_array();
+				$value = $data['registration_process'];
+				return $value;
+				} else {
+				return false;
+				}
+				}
+	
+	/*
     public function isProductRegistered($bar_code_data) {
 
         $query = $this->db->get_where('purchased_product', array('bar_code' => $bar_code_data));
 
-        if ($query->num_rows() == 0) {
-            return FALSE;
+        if ($query->num_rows() > 0) {
+			
+			$data = $query->row_array();
+
+			$value = $data['status'];
+
+			return $value
+			
+			//return r;
+            //return TRUE;
         } else {
-            return TRUE;
+            return FALSE;
         }
     }
-
+*/
     public function findScannedProducts($userid = null){
         if($userid == null){
             return false;

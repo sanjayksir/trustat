@@ -1,0 +1,1 @@
+ALTER TABLE  `purchased_product` ADD  `registration_process` VARCHAR( 10 ) NOT NULL DEFAULT  'pending' AFTER  `expiry_date` ;

@@ -46,7 +46,7 @@ class ScannedProduct extends ApiController {
             $data['user_id'] = $user['id'];
             $data['created'] = date('Y-m-d H:i:s');
             $this->db->insert('scanned_product_logs', $data);
-            $this->response(['status'=>false,'message'=>'This is not a valid howzzt product'],200);
+            $this->response(['status'=>false,'message'=>'This product and barcode is not supported by howzzt .'],200);
         }
         if(!empty($result->product_images)){
             $result->product_images = Utils::setFileUrl($result->product_images);
@@ -60,7 +60,7 @@ class ScannedProduct extends ApiController {
         if(!empty($result->product_pdf)){
             $result->product_pdf = Utils::setFileUrl($result->product_pdf);
         }
-	$result->product_registration_status = $isRegistered;
+		$result->product_registration_status = $isRegistered;
 		
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
@@ -69,15 +69,23 @@ class ScannedProduct extends ApiController {
         if($this->db->insert($this->ScannedproductsModel->table, $data)){
             if( $result->pack_level == 0 ){
                 if( $isRegistered ){
-                    $result->message1 = 'This product is already sold, please contact your retailer for further details';
-                }else{
+					
+					if( $isRegistered == completed ){
+					
+                    $result->message1 = 'This product is already registered, please contact your retailer/manufacturer for further details';
+                }else {
+					$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process';
+				}
+				
+				
+				}else{
                     $result->message1 = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
                 }
             }elseif( $result->pack_level == 1 ){
                 //$result->message1 = 'Scanned product details for lavel '.$result->pack_level.'.';
-				$result->message1 = 'Thanks for scanning the product';
+				$result->message1 = 'You can earn loyalty rewards by watching the full product video and answering few simple questions appearing at the end of the video';
             }elseif($result->pack_level > 1){
-                $result->message1 = 'This is not Retailer Barcode, Please scan product barcode, placed on the product box or product';
+                $result->message1 = 'This is not a product barcode for consumer, Please scan barcode placed on consumer pack';
             }
             //$this->response(['status'=>true,'message'=>'Scanned product details for lavel '.$result->pack_level.'.','data'=>$result]);
 			$this->response(['status'=>true,'message'=>'Thanks for scanning the product','data'=>$result]);
@@ -125,6 +133,7 @@ class ScannedProduct extends ApiController {
             //['field' =>'invoice_image','label'=>'Invoice image','rules' => [['file',[$this->ScannedproductsModel,'validFile']]]],
             ['field' =>'expiry_date','label'=>'Expiry date','rules' => ['',['date',[$this->ScannedproductsModel,'validDate']]]],
         ];
+        
         $errors = $this->ScannedproductsModel->validate($data,$validate);
         /*
         if(is_array($errors) || empty($data['invoice_image'])){
@@ -140,7 +149,8 @@ class ScannedProduct extends ApiController {
         if(empty($result)){
             $this->response(['status'=>false,'message'=>'This is not a valid howzzt product'],200);
         }
-        $isRegistered = $this->ScannedproductsModel->isProductRegistered($data['bar_code']);        
+		$bar_code_data = $data['bar_code'];
+        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);        
         $data['invoice_image'] = null;
         if(!empty($data['invoice_image'])){
             $this->load->library('upload', [
@@ -172,9 +182,16 @@ class ScannedProduct extends ApiController {
             $this->ProductModel->saveLoylty($transactionType,$user['id'],['product_id'=>$data['id']]);
             if( $result->pack_level == 0 ){
                 if($isRegistered){
-                    $data['message1'] = 'This product is already sold, please contact your retailer for further details';
-                }else{
-                    $data['message1'] = 'Thank You for buying this, Please click ok to proceed';
+					
+					if( $isRegistered == pending ){
+					
+                    $result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process.';
+							}else{
+						$result->message1 = 'This product is already registered, please contact your retailer/manufacturer for further details';
+								}				
+				
+				}else{
+                    $data['message1'] = 'Thank you for uploading the invoice, your product warranty will be activated and (nn) loyalty points will be added to your loyalty account after validation of uploaded invoice.';
                 }
             }elseif( $result->pack_level == 1 ){
                 $data['message1'] = 'This is not Product Registration Barcode, Please scan product as shown in the picture below/above';
@@ -187,6 +204,7 @@ class ScannedProduct extends ApiController {
             $this->response(['status'=>false,'message'=>'System failed to register the product.']);
         }
     } 
+    
     
     public function purchasedProduct(){
         if(($this->input->method() != 'get')){ 
