@@ -191,7 +191,7 @@ class ScannedProduct extends ApiController {
 								}				
 				
 				}else{
-                    $data['message1'] = 'Thank you for uploading the invoice, your product warranty will be activated and (nn) loyalty points will be added to your loyalty account after validation of uploaded invoice.';
+                    $data['message1'] = 'Thank you for uploading the invoice, your product warranty will be activated and 10 loyalty points will be added to your loyalty account after validation of uploaded invoice.';
                 }
             }elseif( $result->pack_level == 1 ){
                 $data['message1'] = 'This is not Product Registration Barcode, Please scan product as shown in the picture below/above';
@@ -204,6 +204,7 @@ class ScannedProduct extends ApiController {
             $this->response(['status'=>false,'message'=>'System failed to register the product.']);
         }
     } 
+    
     
     
     public function purchasedProduct(){
