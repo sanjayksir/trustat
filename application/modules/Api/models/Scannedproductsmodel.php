@@ -67,20 +67,19 @@ class ScannedproductsModel extends CI_Model {
     }
 	// check if the product code is registered or not 
 	
-				Public function isProductRegistered($bar_code_data) {
-				$this->db->from('purchased_product');
-				$this->db->where('bar_code', $bar_code_data);
-				$query = $this->db->get();
-				if($query->num_rows()>0) {
-				$data = $query->row_array();
-				$value = $data['registration_process'];
-				return $value;
-				} else {
-				return false;
-				}
-				}
-	
-	/*
+    Public function isProductRegistered($barCode,$consumerId) {
+        $this->db->from('purchased_product');
+        $this->db->where(['bar_code' => $barCode,'consumer_id'=>$consumerId]);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            $data = $query->row_array();            
+            return $data;
+        } else {
+            return false;
+        }
+    }
+
+    /*
     public function isProductRegistered($bar_code_data) {
 
         $query = $this->db->get_where('purchased_product', array('bar_code' => $bar_code_data));
