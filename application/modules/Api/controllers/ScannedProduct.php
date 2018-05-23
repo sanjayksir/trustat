@@ -151,7 +151,7 @@ class ScannedProduct extends ApiController {
         }
         
         $bar_code_data = $data['bar_code'];
-        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data); 
+        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data,$user['id']); 
         if( $result->pack_level == 1 ){
             $data['message1'] = 'This is not Product Registration Barcode, Please scan product as shown in the picture below/above';
             $this->response(['status'=>true,'message'=>'Product registration failed for pack level '.$result->pack_level.'.','data'=>$data]);
@@ -165,7 +165,7 @@ class ScannedProduct extends ApiController {
             }elseif($isRegistered['status'] == 1){
                 $data['message1'] = 'This product is already registered, please contact your retailer/manufacturer for further details';
             }
-            $this->response(['status'=>true,'message'=>'Product has been registered for pack level '.$result->pack_level.'.','data'=>$data]);
+            $this->response(['status'=>true,'message'=>'Product has been all ready registered for pack level '.$result->pack_level.'.','data'=>$data]);
         }
         $data['invoice_image'] = null;
         if(!empty($data['invoice_image'])){
