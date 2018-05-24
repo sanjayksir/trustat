@@ -251,7 +251,67 @@ class Consumer extends ApiController {
             Utils::response(['status'=>false,'message'=>'Adding relative failed.'],200);
         }
     }
+// edit Consumer Family Member function
+	public function editConsumerRelative($relation_id){
+        $user = $this->auth();
+        if(empty($user)){
+            Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        
+        $input = $this->getInput();
+        if(($this->input->method() != 'post') || empty($input)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
+            ['field' =>'member_name','label'=>'Member Name','rules' => 'min_length[2]' ],
+			['field' =>'relation','label'=>'Relation','rules' => 'min_length[2]' ],
+            ['field' =>'phone_number','label'=>'Phone Number','rules' => 'trim|required|integer|exact_length[10]' ],
+            ['field' =>'howzzt_member','label'=>'howzzt member','rules' => 'trim|in_list[yes,no]' ],
+        ];
+        $errors = $this->ConsumerModel->validate($input,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+		
+		$phone_number = $this->getInput('phone_number');
+		
+		//$emailid = $this->getInput('email');
+		$phone_numberr = $phone_number['phone_number'];
+		
+		$isRegistered = $this->ConsumerModel->isHowzztMember($phone_numberr);
+		
+		if ($isRegistered==TRUE){
+			
+			$howzzt_member = "yes";
+		} else {
+			
+			$howzzt_member = "no";
+		}
+		
+        $this->db->set('modified_at', date("Y-m-d H:i:s"));
+        $this->db->set('member_name',Utils::getVar('member_name', $input));
+		$this->db->set('relation',Utils::getVar('relation', $input));
+        $this->db->set('phone_number', Utils::getVar('phone_number', $input));
+        $this->db->set('howzzt_member', $howzzt_member);
+        $this->db->where('relation_id', $relation_id);
+		 if($this->db->update('consumer_family_details')){
+            Utils::response(['status'=>true,'message'=>'Your Family Member details have been updated.','data'=>$input]);
+        }else{
+            Utils::response(['status'=>false,'message'=>'System failed to update.'],200);
+        }
+    }
 	
+	/* Post man
+	http://localhost/trackingportal27/api/user/edit_consumer_relative/3
+	user token inserted in header
+	{
+    "member_name":"sssss",
+    "relation":"Cusion..sss",
+    "phone_number":"7678665539"
+	}
+	================
+	if give the $relation_id hard code its working but not coming from the URL
+	*/	
 	
 	
     public function changePassword(){
