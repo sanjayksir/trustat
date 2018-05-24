@@ -293,7 +293,7 @@ class Consumer extends ApiController {
 		$this->db->set('relation',Utils::getVar('relation', $input));
         $this->db->set('phone_number', Utils::getVar('phone_number', $input));
         $this->db->set('howzzt_member', $howzzt_member);
-        $this->db->where('relation_id', $relation_id);
+        $this->db->where('relation_id', 1);
 		 if($this->db->update('consumer_family_details')){
             Utils::response(['status'=>true,'message'=>'Your Family Member details have been updated.','data'=>$input]);
         }else{
