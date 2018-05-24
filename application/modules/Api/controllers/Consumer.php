@@ -301,8 +301,8 @@ class Consumer extends ApiController {
         }
     }
 	
-	/* Post man
-	http://localhost/trackingportal27/api/user/edit_consumer_relative/3
+	/* Postman
+	http://localhost/trackingportal/api/user/edit_consumer_relative/3
 	user token inserted in header
 	{
     "member_name":"sssss",
