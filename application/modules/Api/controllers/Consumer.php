@@ -211,7 +211,7 @@ class Consumer extends ApiController {
         }
         $validate = [
             ['field' =>'member_name','label'=>'Member Name','rules' => 'min_length[2]' ],
-			['field' =>'relation','label'=>'Relation','rules' => 'min_length[2]' ],
+            ['field' =>'relation','label'=>'Relation','rules' => 'min_length[2]' ],
             ['field' =>'phone_number','label'=>'Phone Number','rules' => 'trim|required|integer|exact_length[10]' ],
             ['field' =>'howzzt_member','label'=>'howzzt member','rules' => 'trim|in_list[yes,no]' ],
         ];
@@ -236,10 +236,9 @@ class Consumer extends ApiController {
 		}
 		
         $data['consumer_id'] = $user['id']; 
-		
-		$data['status'] =  "1";
-		$data['ip'] =  $this->input->ip_address();    
-		
+        $data['status'] =  "1";
+        $data['ip'] =  $this->input->ip_address();    
+        
         if($this->db->insert('consumer_family_details', $data)){            
             $this->signupMail($data);
             $smstext = 'You have added '.$mobile_no.' as '.$data['relation'].' relation with you.';
@@ -264,7 +263,7 @@ class Consumer extends ApiController {
         }
         $validate = [
             ['field' =>'member_name','label'=>'Member Name','rules' => 'min_length[2]' ],
-			['field' =>'relation','label'=>'Relation','rules' => 'min_length[2]' ],
+            ['field' =>'relation','label'=>'Relation','rules' => 'min_length[2]' ],
             ['field' =>'phone_number','label'=>'Phone Number','rules' => 'trim|required|integer|exact_length[10]' ],
             ['field' =>'howzzt_member','label'=>'howzzt member','rules' => 'trim|in_list[yes,no]' ],
         ];
