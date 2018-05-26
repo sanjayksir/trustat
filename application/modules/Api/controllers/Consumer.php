@@ -304,22 +304,23 @@ class Consumer extends ApiController {
     }
 	
 // Delete Consumer Family Member function
+/*
 	public function DeleteConsumerRelative($relation_id){
         $user = $this->auth();
         if(empty($user)){
             Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
         }
-		$this->db->delete(); 
-		$this->db->where('relation_id', $relation_id);  
+		//$this->db->delete(); 
+		//$this->db->where('relation_id', $relation_id);  
 
-		 if($this->db->delete(‘consumer_family_details’);  ){
+		 if($this->db->delete(‘consumer_family_details’, array('relation_id' => $relation_id))){
             Utils::response(['status'=>true,'message'=>'Your Family Member Deleted Successfully.');
         }else{
             Utils::response(['status'=>false,'message'=>'System failed to delete.'],200);
         }
     }	
 	
-	
+*/
 	
     public function changePassword(){
         $user = $this->auth();
