@@ -314,12 +314,7 @@ class Consumer extends ApiController {
 		if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-		//$this->db->delete(); 
-		//$this->db->where('relation_id', $relation_id);  
-		//$this->db->delete('consumer_family_details', array('relation_id' => $relation_id));
-	
-	//Utils::response(['status'=>true,'message'=>'Your Family Member Deleted Successfully.');
-	
+		
 		 if($this->db->delete('consumer_family_details', array('relation_id' => $relation_id))){
             Utils::response(['status'=>true,'message'=>'Your Family Member Deleted Successfully.']);
         }else{
