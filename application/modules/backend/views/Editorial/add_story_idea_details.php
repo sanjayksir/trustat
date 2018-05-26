@@ -9,7 +9,7 @@
                 <ul class="breadcrumb">
                     <li> <i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a> </li>
                     
-                    <li class="active">Product Details</li>
+                    <li class="active">Add Product Media</li>
                 </ul>
                 <!-- /.breadcrumb -->
 
@@ -22,7 +22,7 @@
                     <div class="col-xs-12">
                         <div class="row">
                             <div class="col-xs-12">
-                                <h3 class="header smaller lighter blue">Product Details</h3>
+                                <h3 class="header smaller lighter blue">Add Product Media</h3>
                                 <?php if ($feedback = $this->session->flashdata('feedback')) { ?>
                                     <div class="alert alert-dismissible <?php echo $this->session->flashdata('feedback_class') ?>">
                                         <strong><?php echo $feedback; ?></strong>
@@ -54,7 +54,7 @@
  														.video-container input{position:absolute; opacity: 0; cursor:pointer;	overflow: hidden;z-index:99; height:150px; background: #fff;}
  														</style>
                                                         <div class="add-spidey">
-                                                            <label><strong>Images &nbsp;(<span style="color:grey;font-size:10px;">Jpg/Png only</span>):-</strong></label>
+                                                            <label><strong>Images Product Media &nbsp;(<span style="color:grey;font-size:10px;">Jpg/Png only</span>):-</strong></label>
                                                              <div class="row">
                                                                 <div class="col-xs-12">  
                                                                     <div class="col-xs-3 col-sm-3">
@@ -63,59 +63,79 @@
                                                                 </div>
 																</div>
 																<br /><br />
-																 <div class="row">
-                                                                <div class="col-xs-12"> 
-                                                                    <div class="col-xs-3 col-sm-3">
-																	<label><strong>Video &nbsp;(<span style="color:grey;font-size:10px;">Mp4 Only</span>):-</strong></label>
-                                                                    	<div class="video-container ace-file-container">
-                                                                        <!------------- Video Container start --------------->
-                                                                        <input type="file" name="videoFile"class="form-control input_hiden" id="videoFile" onChange="return ajaxuploadFile('mp4');" />
-                                                                        <span></span>
-                                                                        <div class="left"><span class="play"></span><span id="filename"></span></div>
-                                                                        <input type="hidden" name="token" id="token" value="12">
-                                                                        <input type="hidden" name="savetoken" id="savetoken" value="">
-                                                                        <input type="hidden" name="videonewfile" id="videonewfile" value="">
-                                                                        <input type="hidden" name="videosupload" id="videosupload" value="">
-                                                                        <input type="hidden" name="offStart" id="offStart" value="0">
-                                                                         <!------------- Video Container start --------------->
-                                                                      <div class="right"  style="margin-top:172px;">
-                                                                            <div class="progress" id="progressHide" style="display:none;">
-                                                                            <p id="ugc_video_size"></p>
-                                                                            <div class="bar " style="float:left;width:100%;position:absolute;top:0px;">
-                                                                            <span id="video_progBar" style="margin-top:172px;" class="progress-bar progress-bar-info progress-bar-striped active" > </span>
-    																		</div>
-                                                                            </div>
-                                                                            <div class="uploaded" id="videoupload" style="display:none;"></div>
-                                                                            </div>  </div> 
-                                                                         <div id="progress-div"><div id="progress-bar"></div></div>
-                                                                         
-                                                                         
-                                                                         
-                                                                         <div style="display:none;" id="extra-progress-wrapperID" class="extra-progress-wrapper"><div class="progress error-progress-2" style="width: 300px; margin: 20px 0px 0px;"><div id="videoFile_err" class="progress-bar progress-bar-danger progress-bar-striped" style="width:100%"></div></div> </div> <div id="targetLayer"></div>
-                                                                     </div>
-                                                                     </div></div><br /><br />
-																	  <div class="row">
-                                                                <div class="col-xs-12"> 
-                                                                     
-                                                                    <div class="col-xs-3 col-sm-3">
-																	<label><strong>Attachment &nbsp;(<span style="color:grey;font-size:10px;">PDF Only</span>):-</strong></label>
-                                                                    	<div class="dropzoneAttachment"></div>                                                             
-                                                                    </div>
-                                                                    </div></div><br /><br />
-																	
-																	 <div class="row">
-                                                                <div class="col-xs-12"> 
+		 <!-------------Product Media Video Container Start --------------->
+		 <div class="row">
+          <div class="col-xs-12"> 
+             <div class="col-xs-3 col-sm-3">
+			<label><strong>Video Product Media&nbsp;(<span style="color:grey;font-size:10px;">Mp4 Only</span>):-</strong></label>
+                 <div class="video-container ace-file-container">
+                     
+                 <input type="file" name="videoFile"class="form-control input_hiden" id="videoFile" onChange="return ajaxuploadFile('mp4');" />
+                            <span></span>
+                          <div class="left"><span class="play"></span><span id="filename"></span></div>
+                                       <input type="hidden" name="token" id="token" value="12">
+                                     <input type="hidden" name="savetoken" id="savetoken" value="">
+                       <input type="hidden" name="videonewfile" id="videonewfile" value="">
+                              <input type="hidden" name="videosupload" id="videosupload" value="">
+                                     <input type="hidden" name="offStart" id="offStart" value="0">
+                                     
+                                     <div class="right"  style="margin-top:172px;">
+                                       <div class="progress" id="progressHide" style="display:none;">
+                                          <p id="ugc_video_size"></p>
+                            <div class="bar " style="float:left;width:100%;position:absolute;top:0px;">
+    <span id="video_progBar" style="margin-top:172px;" class="progress-bar progress-bar-info progress-bar-striped active" > </span>
+    					   </div>
+                                          </div>
+                                     <div class="uploaded" id="videoupload" style="display:none;"></div>
+                                           </div>  
+										   </div> 
+                                           <div id="progress-div"><div id="progress-bar"></div></div>
+                             
+							 <div style="display:none;" id="extra-progress-wrapperID" class="extra-progress-wrapper">
+							   <div class="progress error-progress-2" style="width: 300px; margin: 20px 0px 0px;">
+							   <div id="videoFile_err" class="progress-bar progress-bar-danger progress-bar-striped" style="width:100%"></div>
+							   </div> 
+							   </div> 
+							   <div id="targetLayer"></div>
                                                                     
+								</div>
+                                 </div>
+																	 
+																	 
+								</div>
+								 <!-------------/ Product Media Video Container end --------------->
+								<br /><br />
+				 <!-------------Product Media Brochure Container Start  --------------->				
+					<div class="row">
+                      <div class="col-xs-12"> 
+                        <div class="col-xs-3 col-sm-3">
+						<label><strong>Brochure for Product Media &nbsp;(<span style="color:grey;font-size:10px;">PDF Only</span>):-</strong></label>
+                      <div class="dropzoneAttachment">
+					  </div>
+					  </div>
+					  </div>
+					  </div>
+					<!-------------/Product Media Brochure Container end  ---------------> 
+					  <br /><br />
+				<!-------------Product Media Audio Container Start  --------------->			
+							<div class="row">
+                                                                <div class="col-xs-12"> 
                                                                     <div class="col-xs-3 col-sm-3">
-																	<label><strong>Audio &nbsp;(<span style="color:grey;font-size:10px;">Mp3 Only</span>):-</strong></label>
+																	<label><strong>Audio for Product Media&nbsp;(<span style="color:grey;font-size:10px;">Mp3 Only</span>):-</strong></label>
                                                                     	<div class="dropzoneAudio">
                                                                     	<br></div>  
                                                                     </div> 
                                                                 </div>
-                                                            </div><div class="form-group">
+                                                            </div>
+						<!-------------/Product Media Audio Container end  --------------->								
+									<br />					
+					<!-------------/Product Demo Containers end  --------------->					
+															
+															<br /><br />
+															<div class="form-group">
                                                          
                                                          <div class="add-spidey">
-                                                            <label><strong>Product Details</strong></label>
+                                                            <label><strong>Product Description</strong></label>
                                                             <textarea name="pickDesc" id="pickDesc" cols="40" rows="10" class="form-control"><?php echo $buzz[0]['pickDesc']; ?></textarea>  
                                                         </div>
                                                         </div>
