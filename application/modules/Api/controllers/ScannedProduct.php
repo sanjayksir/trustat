@@ -83,7 +83,7 @@ class ScannedProduct extends ApiController {
                 }
             }elseif( $result->pack_level == 1 ){
                 //$result->message1 = 'Scanned product details for lavel '.$result->pack_level.'.';
-				$result->message1 = 'You can earn loyalty rewards by watching the full product video and answering few simple questions appearing at the end of the video';
+				$result->message1 = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration.';
             }elseif($result->pack_level > 1){
                 $result->message1 = 'This is not a product barcode for consumer, Please scan barcode placed on consumer pack';
             }
