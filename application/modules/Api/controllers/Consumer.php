@@ -665,7 +665,7 @@ class Consumer extends ApiController {
                 $transactionType = 'scan-for-genuity-and-pdf-response';
             }
             $params = ['product_id'=>$data['product_id'],'question_id'=>$questionQuery->question_id];
-            $this->ProductModel->feedbackLoylity($data['product_id'],$user['id'],$transactionType,$user['id'],$params);
+            $this->ProductModel->feedbackLoylity($data['product_id'],$user['id'],$transactionType,$params);
             Utils::response(['status'=>true,'message'=>'Feedback answer has been saved successfully.','data'=>$data]);
         }else{
             Utils::response(['status'=>false,'message'=>'System failed to proccess the request.'],200);

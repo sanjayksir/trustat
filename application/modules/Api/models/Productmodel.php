@@ -437,7 +437,6 @@ class ProductModel extends CI_Model {
     
     
     public function feedbackLoylity($productId,$userId,$transactionType,$params){
-        Utils::debug();
         $productQuestion = $this->feedbackQuestion($productId);
         $answerQuery = $this->db->get_where('consumer_feedback',['product_id'=>$productId,'user_id'=>$userId]);
         if(count($productQuestion) == $answerQuery->num_rows()){
