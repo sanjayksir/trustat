@@ -171,7 +171,7 @@ class ScannedproductsModel extends CI_Model {
         if(!empty($productId)){
             $conditions['pp.product_id'] = $productId;
         }
-        $query = $this->db->select("pp.id AS purchased_id,pp.bar_code,pp.ordered_date,pp.invoice,pp.invoice_image,pp.expiry_date,pp.warranty_start-date,pp.warranty_end_date,pr.*")
+        $query = $this->db->select("pp.id AS purchased_id,pp.bar_code,pp.ordered_date,pp.invoice,pp.invoice_image,pp.expiry_date,pp.warranty_start_date,pp.warranty_end_date,pr.*")
                 ->from('purchased_product AS pp')
                 ->join('products AS pr', 'pr.id=pp.product_id')
                 ->where($conditions)
@@ -189,8 +189,11 @@ class ScannedproductsModel extends CI_Model {
                 'ordered_date' => $row->ordered_date,
                 'invoice' => $row->invoice,
                 'expiry_date' => $row->expiry_date,
-				'warranty_start-date' => $row->warranty_start-date,
+				'warranty_start_date' => $row->warranty_start_date,
 				'warranty_end_date' => $row->warranty_end_date,
+				'product_demo_video' => $row->product_demo_video,
+				'product_demo_audio' => $row->product_demo_audio,
+				'product_user_manual' => $row->product_user_manual,
                 'invoice_image' => (!empty($row->invoice_image))?base_url($row->invoice_image):"",
                 'product_id' => $row->id,
                 'product_name' => $row->product_name,

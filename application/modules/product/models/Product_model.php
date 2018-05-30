@@ -96,6 +96,7 @@
 		$industry 				=  json_encode(array_filter($this->input->post('industry')));
 		
 		$product_name 			= $this->input->post('product_name');
+		$brand_name 			= $this->input->post('brand_name');
 		$product_sku  			= $this->input->post('product_sku');
 		$product_attr 			= json_encode($this->input->post('product_attr'));
 		
@@ -149,6 +150,7 @@
 		 }else{
  			 $insertData=array(
 					"product_name"		  => $product_name,
+					"brand_name"		  => $brand_name,
 					"attribute_list"	  => $product_attr,
 					"industry_data"		  => $industry,
 					"product_sku"		  => $product_sku,

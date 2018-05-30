@@ -109,7 +109,7 @@
 					<div class="row">
                       <div class="col-xs-12"> 
                         <div class="col-xs-3 col-sm-3">
-						<label><strong>Brochure for Product Media &nbsp;(<span style="color:grey;font-size:10px;">PDF Only</span>):-</strong></label>
+						<label><strong>PDF Brochure for Product description &nbsp;(<span style="color:grey;font-size:10px;">PDF Only</span>):-</strong></label>
                       <div class="dropzoneAttachment">
 					  </div>
 					  </div>
@@ -127,7 +127,77 @@
                                                                     </div> 
                                                                 </div>
                                                             </div>
-						<!-------------/Product Media Audio Container end  --------------->								
+						<!-------------/Product Media Audio Container end  --------------->
+
+<br /><br /><br />
+	<!-------------Product Demo Video Container Start --------------->
+		 <div class="row">
+          <div class="col-xs-12"> 
+             <div class="col-xs-3 col-sm-3">
+			<label><strong> Product Demo Video&nbsp;(<span style="color:grey;font-size:10px;">Mp4 Only</span>):-</strong></label>
+                 <div class="video-container ace-file-container">
+                     
+                 <input type="file" name="videoFile"class="form-control input_hiden" id="videoFile" onChange="return ajaxuploadFile('mp4');" />
+                            <span></span>
+                          <div class="left"><span class="play"></span><span id="filename"></span></div>
+                                       <input type="hidden" name="token" id="token" value="12">
+                                     <input type="hidden" name="savetoken" id="savetoken" value="">
+                       <input type="hidden" name="videonewfile" id="videonewfile" value="">
+                              <input type="hidden" name="videosupload" id="videosupload" value="">
+                                     <input type="hidden" name="offStart" id="offStart" value="0">
+                                     
+                                     <div class="right"  style="margin-top:172px;">
+                                       <div class="progress" id="progressHide" style="display:none;">
+                                          <p id="ugc_video_size"></p>
+                            <div class="bar " style="float:left;width:100%;position:absolute;top:0px;">
+    <span id="video_progBar" style="margin-top:172px;" class="progress-bar progress-bar-info progress-bar-striped active" > </span>
+    					   </div>
+                                          </div>
+                                     <div class="uploaded" id="videoupload" style="display:none;"></div>
+                                           </div>  
+										   </div> 
+                                           <div id="progress-div"><div id="progress-bar"></div></div>
+                             
+							 <div style="display:none;" id="extra-progress-wrapperID" class="extra-progress-wrapper">
+							   <div class="progress error-progress-2" style="width: 300px; margin: 20px 0px 0px;">
+							   <div id="videoFile_err" class="progress-bar progress-bar-danger progress-bar-striped" style="width:100%"></div>
+							   </div> 
+							   </div> 
+							   <div id="targetLayer"></div>
+                                                                    
+								</div>
+                                 </div>
+																	 
+																	 
+								</div>
+								 <!-------------/ Product Demo Video Container end --------------->
+								<br /><br />
+				 <!-------------Product User Manual Container Start  --------------->				
+					<div class="row">
+                      <div class="col-xs-12"> 
+                        <div class="col-xs-3 col-sm-3">
+						<label><strong>PDF User Manual of Product &nbsp;(<span style="color:grey;font-size:10px;">PDF Only</span>):-</strong></label>
+                      <div class="dropzoneAttachment">
+					  </div>
+					  </div>
+					  </div>
+					  </div>
+					<!-------------/Product User Manual Container end  ---------------> 
+					  <br /><br />
+				<!-------------Product Demo Audio Container Start  --------------->			
+							<div class="row">
+                                                                <div class="col-xs-12"> 
+                                                                    <div class="col-xs-3 col-sm-3">
+																	<label><strong>Product  Audio for Demo&nbsp;(<span style="color:grey;font-size:10px;">Mp3 Only</span>):-</strong></label>
+                                                                    	<div class="dropzoneAudio">
+                                                                    	<br></div>  
+                                                                    </div> 
+                                                                </div>
+                                                            </div>
+						<!-------------/Product Demo Audio Container end  --------------->
+
+
+						
 									<br />					
 					<!-------------/Product Demo Containers end  --------------->					
 															

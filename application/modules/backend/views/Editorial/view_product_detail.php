@@ -66,11 +66,17 @@
 															<div class="row">
 																		<div class="col-xs-12"> 
 																			<div class="col-xs-3 col-sm-3">
+																			 <label><strong>Brand Name:-</strong></label></div>
+																			 <div class="col-xs-3 col-sm-3"><?php echo $details['brand_name'];?></div>
+																		</div>
+																</div>
+															<div class="row">
+																		<div class="col-xs-12"> 
+																			<div class="col-xs-3 col-sm-3">
 																			 <label><strong>Product Name:-</strong></label></div>
 																			 <div class="col-xs-3 col-sm-3"><?php echo $details['product_name'];?></div>
-																	
 																		</div>
-																		</div>
+																</div>
 															<div class="row">
 																<div class="col-xs-12"> 
 																	<div class="col-xs-3 col-sm-3">

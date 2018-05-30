@@ -711,14 +711,9 @@ if(isset($_FILES["files"]))
     }
 
     echo $NewImageName;exit;
-
- 
-
 }
-
- 	
-
 }	
+
 
 }
 

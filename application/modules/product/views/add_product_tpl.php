@@ -49,6 +49,17 @@
  			</div> 
 		</div>
         
+		
+		<div class="form-group row">
+			<div class="col-sm-4">
+			<label for="form-field-8">Brand Name</label>
+			<input name="brand_name" id="brand_name" type="text" class="form-control" >
+ 			</div>
+             
+            
+           
+  		</div>
+		
         
 		<div class="form-group row">
 			<div class="col-sm-3 ind_1">
