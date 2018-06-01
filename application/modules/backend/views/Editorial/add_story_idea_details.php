@@ -137,7 +137,7 @@
 			<label><strong> Product Demo Video&nbsp;(<span style="color:grey;font-size:10px;">Mp4 Only</span>):-</strong></label>
                  <div class="video-container ace-file-container">
                      
-                 <input type="file" name="videoFile"class="form-control input_hiden" id="videoFile" onChange="return ajaxuploadFile('mp4');" />
+                 <input type="file" name="videoDemoFile"class="form-control input_hiden" id="videoDemoFile" onChange="return ajaxuploadFile('mp4');" />
                             <span></span>
                           <div class="left"><span class="play"></span><span id="filename"></span></div>
                                        <input type="hidden" name="token" id="token" value="12">
@@ -160,7 +160,7 @@
                              
 							 <div style="display:none;" id="extra-progress-wrapperID" class="extra-progress-wrapper">
 							   <div class="progress error-progress-2" style="width: 300px; margin: 20px 0px 0px;">
-							   <div id="videoFile_err" class="progress-bar progress-bar-danger progress-bar-striped" style="width:100%"></div>
+							   <div id="videoDemoFile_err" class="progress-bar progress-bar-danger progress-bar-striped" style="width:100%"></div>
 							   </div> 
 							   </div> 
 							   <div id="targetLayer"></div>

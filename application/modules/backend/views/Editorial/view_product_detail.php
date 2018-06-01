@@ -177,6 +177,7 @@
 															</div>
 															<?php }?>
 															<br />
+															<!-- Product Video -->
 															<?php if($details['product_video']!=''){?>
 															<div class="row">
 																<div class="col-xs-12"> 
@@ -203,8 +204,9 @@
   																</div>
 															</div>
 															<?php }?>
-															
+															<!-- /Product Video -->
 															<br />
+															<!-- Product Audio -->
 															<?php if($details['product_audio']!=''){?>
 															<div class="row">
 																<div class="col-xs-12"> 
@@ -231,7 +233,9 @@ Your browser does not support audio in video tag.
   																</div>
 															</div>
 															<?php }?>
+															<!-- /Product Audio -->
 															<br />
+															<!-- Product PDF -->
 															<?php if($details['product_pdf']!=''){?>
 															<div class="row">
 																<div class="col-xs-12"> 
@@ -253,6 +257,93 @@ Your browser does not support audio in video tag.
   																</div>
 															</div>
 															<?php }?>
+															<!-- /Product PDF -->
+															<!-- Product Demo Items  -->
+															<br />
+															<!-- Product Demo Video -->
+															<?php if($details['product_demo_video']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product Demo Video</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	<?php $arrVid= explode(',',$details['product_demo_video']);
+ 																	if(count($arrVid)>0){
+																		foreach($arrVid as $recs){	
+																			if(file_exists('./uploads/temp/'.$recs)){//echo '***'.$recs;exit;
+																	?>
+																	   <video width="320" height="240" controls>
+																		  <source src="<?php echo base_url().'/uploads/temp/'.$recs;?>" type="video/mp4">
+																		  
+																		  Your browser does not support the video tag.
+																		</video> 
+																	
+																		 
+																		  <?php }
+																			}
+																		}?>
+																	</div>
+  																</div>
+															</div>
+															<?php }?>
+															<!-- /Product Demo Video -->
+															<br />
+															<!-- Product Demo Audio -->
+															<?php if($details['product_demo_audio']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product Demo Audio</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	<?php $arAud = explode(',',$details['product_demo_audio']);
+																	
+																	//echo '***'.count($arAud);
+ 																	if(count($arAud)>0){
+																		foreach($arAud as $recs){	
+																			if(file_exists('./uploads/temp/'.$recs)){//echo '***'.$recs;exit;
+																	?>
+																		 
+																		 <audio width="320" height="240" controls>
+  <source src="<?php echo base_url().'/uploads/temp/'.$recs;?>" type="audio/mpeg">
+Your browser does not support audio in video tag.
+</audio>
+																		  <?php }
+																			}
+																		}?>
+																	</div>
+  																</div>
+															</div>
+															<?php }?>
+															<!-- /Product Audio -->
+															<br />
+															<!-- Product User Manual -->
+															<?php if($details['product_user_manual']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product User Manual</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	<?php $arrPDF = array_filter(explode(',',$details['product_user_manual']));
+ 																	if(count($arrPDF)>0){
+																	$i=1;
+																		foreach($arrPDF as $recs){	
+																			if(file_exists('./uploads/temp/'.$recs)){//echo '***'.$recs;exit;
+																	?>
+																		<a href="<?php echo base_url().'/uploads/temp/'.$recs;?>" target="_blank" /><?php echo $i;?> PDF</a>
+																		  <?php }
+																			$i++;}
+																		}?>
+																	</div>
+  																</div>
+															</div>
+															<?php }?>
+															<!-- /Product User Manual -->
+															
+															<!-- /Product Demo Items  -->
+															
 														</div>
                                                          <br />
                                                         <h3> Essential Attribute</h3>

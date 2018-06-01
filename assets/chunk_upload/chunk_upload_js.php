@@ -144,7 +144,7 @@ function uploadFile(blobFile, part,fsize,name,totalChunk,end) {
 	var chunktime = chunkdate.getTime();
 	 $('#videoProgBar, #progressHide').show();	
 	$.ajax({
-		url:"<?php echo base_url();?>uploads/product/upload_ProductMediafiles/"+chunktime,
+		url:"<?php echo base_url();?>backend/upload_file/upload/"+chunktime,
 		 data: fd,
 		 processData: false,
 		 contentType: false,

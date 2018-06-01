@@ -175,5 +175,35 @@ class ConsumerModel extends CI_Model {
                 }          
     }
 	
+	
+	
+	public function findConsumerRelatives($userid){
+        if($userid == null){
+            return false;
+        }
+        
+        $query = $this->db->select('member_name,relation,phone_number,howzzt_member')
+                ->from('consumer_family_details')               
+                ->where_in('consumer_id', $userid)
+                ->get()
+                ->result();
+        if(empty($query)){
+            return false;
+        }
+        //echo "<pre>";print_r($query);die;
+        $items = [];
+        foreach($query as $row){
+            $item = [
+                'member_name' => $row->member_name,
+                'relation' => $row->relation,
+                'phone_number' => $row->phone_number,
+                'howzzt_member' => $row->howzzt_member,
+            ];
+                       
+            $items[] = $item;
+        }
+        return $items;
+    }	
+
 
 }

@@ -323,7 +323,23 @@ class Consumer extends ApiController {
 		
     }	
 	
-
+public function ListConsumerRelatives(){
+        if(($this->input->method() != 'get')){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $user = $this->auth();
+        if(empty($this->auth())){
+            Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+		$userid = $user['id'];
+        $result = $this->ConsumerModel->findConsumerRelatives($userid);
+        if(empty($result)){
+            $this->response(['status'=>false,'message'=>'Record not found'],200);
+        }
+        $this->response(['status'=>true,'message'=>'Relative are-','data'=>$result]);
+    }
+	
+	
 	
     public function changePassword(){
         $user = $this->auth();

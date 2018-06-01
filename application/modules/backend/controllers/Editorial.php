@@ -212,11 +212,23 @@ class Editorial extends MX_Controller {
 			
 			$allAttachment_arr 	= $this->input->post('all_attachments_list');
 			$allAttachmentList = $allAttachment_arr[0];
+			
+			$all_product_demo_video_list_arr= $this->input->post('all_product_demo_video_list');
+			$allProductDemoVideoList 		= $all_product_demo_video_list_arr[0];
+			
+			$all_product_demo_audio_list_arr= $this->input->post('all_product_demo_audio_list');
+			$allProductDemoAudioList 		= $all_product_demo_audio_list_arr[0];
+			
+			$all_product_user_manual_list_arr= $this->input->post('all_product_user_manual_list');
+			$allProductUserManualList 		= $all_product_user_manual_list_arr[0];
 			## Media Files
 			$data['images']		= $allImageList;
 			$data['videos']		= $allVideoList;
 			$data['audios']		= $allAudioList;
 			$data['attachments']= $allAttachmentList;
+			$data['productdemovideo']= $allProductDemoVideoList;
+			$data['productdemoaudio']= $allProductDemoAudioList;
+			$data['productusermanual']= $allProductUserManualList;
 			$data['storyId']	= $spidey_id;
 			//echo '<pre>';print_r($data);exit;
 			if($this->input->post('clickedBtn')=='Submit' || $this->input->post('clickedBtn')=='Save'){

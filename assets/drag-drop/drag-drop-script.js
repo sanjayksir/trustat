@@ -4,7 +4,7 @@
  allids3=[];
  allids4=[];
   $(".dropzoneImg").dropzone({
-    url: '/uploads/upload_ProductMediafiles/ProductImages/', //url for the ajax to post
+    url: '/backend/upload_file/uploadImages/', //url for the ajax to post
     width: 300, //width of the div
     height: 152, //height of the div
     progressBarWidth: 300, //width of the progress bars
@@ -48,7 +48,7 @@
      }});
 	
 	$(".dropzoneImg22").dropzone({
-        url: '/uploads/upload_ProductMediafiles/ProductImages/', //url for the ajax to post
+        url: '/backend/upload_file/uploadImages/', //url for the ajax to post
         margin: 20,
 		filesName: 'files',
         success: function(res, responseText){
@@ -67,7 +67,7 @@
  
  <!-------------- For Video Drap drop upload start------------------>
  $(".dropzoneVideo").dropzone({
-    url: '/uploads/upload_ProductMediafiles/ProductVideo/', //url for the ajax to post
+    url: '/backend/upload_file/uploadDone/', //url for the ajax to post
     width: 300, //width of the div
     height: 152, //height of the div
     progressBarWidth: 300, //width of the progress bars
@@ -106,7 +106,7 @@
 
 <!-------------- For Audio Drap drop upload start------------------>
 /*$('.dropzone22').dropzone ({
-        url: '/uploads/upload_ProductMediafiles/uploadAttachment/',
+        url: '/spideybuzz/backend/upload_file/uploadAttachment/',
         init: function() {
             this.on("sending", function(file, xhr, formData){
                 formData.append("fpos", 777)
@@ -118,7 +118,7 @@
 });
 */
  $(".dropzoneAudio").dropzone({
-    url: '/uploads/upload_ProductMediafiles/ProductAudio/', //url for the ajax to post
+    url: '/backend/upload_file/uploadAudio/', //url for the ajax to post
     width: 300, //width of the div
     height: 152, //height of the div
     progressBarWidth: 300, //width of the progress bars
@@ -160,7 +160,7 @@
 
 <!-------------- For Attachment Drap drop upload start------------------>
  $(".dropzoneAttachment").dropzone({
-     url: '/uploads/upload_ProductMediafiles/PDFBrochure_Product_description/', //url for the ajax to post
+     url: '/backend/upload_file/uploadAttachment/', //url for the ajax to post
     width: 300, //width of the div
     height: 152, //height of the div
     progressBarWidth: 300, //width of the progress bars
