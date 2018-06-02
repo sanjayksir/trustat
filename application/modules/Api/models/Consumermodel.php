@@ -182,7 +182,7 @@ class ConsumerModel extends CI_Model {
             return false;
         }
         
-        $query = $this->db->select('member_name,relation,phone_number,howzzt_member')
+   $query = $this->db->select('relation_id,consumer_id,member_name,relation,phone_number,howzzt_member')
                 ->from('consumer_family_details')               
                 ->where_in('consumer_id', $userid)
                 ->get()
@@ -194,6 +194,8 @@ class ConsumerModel extends CI_Model {
         $items = [];
         foreach($query as $row){
             $item = [
+				'relative_member_id' => $row->relation_id,
+				'consumer_id' => $row->consumer_id,
                 'member_name' => $row->member_name,
                 'relation' => $row->relation,
                 'phone_number' => $row->phone_number,

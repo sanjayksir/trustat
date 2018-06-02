@@ -233,6 +233,22 @@ class ScannedproductsModel extends CI_Model {
             }else{
                 $item['product_pdf'] = '';
             }
+			if(!empty($row->product_demo_video)){
+                $item['product_demo_video'] = Utils::setFileUrl($row->product_demo_video);
+            }else{
+                $item['product_demo_video'] = '';
+            }
+			if(!empty($row->product_demo_audio)){
+                $item['product_demo_audio'] = Utils::setFileUrl($row->product_demo_audio);
+            }else{
+                $item['product_demo_audio'] = '';
+            }
+			if(!empty($row->product_user_manual)){
+                $item['product_user_manual'] = Utils::setFileUrl($row->product_user_manual);
+            }else{
+                $item['product_user_manual'] = '';
+            }
+			
             $items[] = $item;
         }
         if(!empty($productId)){

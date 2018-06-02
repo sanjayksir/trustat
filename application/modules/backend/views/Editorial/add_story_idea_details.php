@@ -44,6 +44,9 @@
                                                     <input type="hidden" name="all_videos_list[]" id="all_videos_list" value="" />
                                                     <input type="hidden" name="all_audios_list[]" id="all_audios_list" value="" />
                                                     <input type="hidden" name="all_attachments_list[]" id="all_attachments_list" value="" />
+													<input type="hidden" name="all_product_demo_video_list[]" id="all_product_demo_video_list" value="" />
+                                                    <input type="hidden" name="all_product_demo_audio_list[]" id="all_product_demo_audio_list" value="" />
+                                                    <input type="hidden" name="all_product_user_manual_list[]" id="all_product_user_manual_list" value="" />
                                                     <div class="space"></div>
                                                     <div class="form-group">
                                                          
@@ -137,7 +140,7 @@
 			<label><strong> Product Demo Video&nbsp;(<span style="color:grey;font-size:10px;">Mp4 Only</span>):-</strong></label>
                  <div class="video-container ace-file-container">
                      
-                 <input type="file" name="videoDemoFile"class="form-control input_hiden" id="videoDemoFile" onChange="return ajaxuploadFile('mp4');" />
+                 <input type="file" name="videoDemoFile"class="form-control input_hiden" id="videoDemoFile" onChange="return ajaxuploadDemoFile('mp4');" />
                             <span></span>
                           <div class="left"><span class="play"></span><span id="filename"></span></div>
                                        <input type="hidden" name="token" id="token" value="12">

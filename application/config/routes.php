@@ -135,6 +135,7 @@ $route['api/register-product'] = 'Api/ScannedProduct/registerProduct';
 $route['api/purchased-product'] = 'Api/ScannedProduct/purchasedProduct';
 $route['api/product-details/(:any)'] = 'Api/ScannedProduct/purchasedProductDetails/$1';
 $route['api/complaint'] = 'Api/ScannedProduct/complaint';
+$route['api/feedback-on-product'] = 'Api/ScannedProduct/FeedbackOnProduct';
 
 $route['api/customer/login'] = 'Api/Customer/login';
 $route['api/customer/logout'] = 'Api/Customer/logout';
