@@ -140,17 +140,17 @@
 			<label><strong> Product Demo Video&nbsp;(<span style="color:grey;font-size:10px;">Mp4 Only</span>):-</strong></label>
                  <div class="video-container ace-file-container">
                      
-                 <input type="file" name="videoDemoFile"class="form-control input_hiden" id="videoDemoFile" onChange="return ajaxuploadDemoFile('mp4');" />
+                 <input type="file" name="demovideoFile"class="form-control input_hiden" id="demovideoFile" onChange="return ajaxuploadDemoFile('mp4');" />
                             <span></span>
-                          <div class="left"><span class="play"></span><span id="filename"></span></div>
+                          <div class="left"><span class="play"></span><span id="demofilename"></span></div>
                                        <input type="hidden" name="token" id="token" value="12">
-                                     <input type="hidden" name="savetoken" id="savetoken" value="">
-                       <input type="hidden" name="videonewfile" id="videonewfile" value="">
-                              <input type="hidden" name="videosupload" id="videosupload" value="">
-                                     <input type="hidden" name="offStart" id="offStart" value="0">
+                                     <input type="hidden" name="demosavetoken" id="demosavetoken" value="">
+                       <input type="hidden" name="demovideonewfile" id="demovideonewfile" value="">
+                              <input type="hidden" name="demovideosupload" id="demovideosupload" value="">
+                                     <input type="hidden" name="demooffStart" id="offStart" value="0">
                                      
                                      <div class="right"  style="margin-top:172px;">
-                                       <div class="progress" id="progressHide" style="display:none;">
+                                       <div class="demoprogress" id="demoprogressHide" style="display:none;">
                                           <p id="ugc_video_size"></p>
                             <div class="bar " style="float:left;width:100%;position:absolute;top:0px;">
     <span id="video_progBar" style="margin-top:172px;" class="progress-bar progress-bar-info progress-bar-striped active" > </span>
@@ -163,7 +163,7 @@
                              
 							 <div style="display:none;" id="extra-progress-wrapperID" class="extra-progress-wrapper">
 							   <div class="progress error-progress-2" style="width: 300px; margin: 20px 0px 0px;">
-							   <div id="videoDemoFile_err" class="progress-bar progress-bar-danger progress-bar-striped" style="width:100%"></div>
+							   <div id="demovideoFile_err" class="progress-bar progress-bar-danger progress-bar-striped" style="width:100%"></div>
 							   </div> 
 							   </div> 
 							   <div id="targetLayer"></div>

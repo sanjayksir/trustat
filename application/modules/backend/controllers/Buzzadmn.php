@@ -540,7 +540,7 @@ class Buzzadmn extends MX_Controller
 		   if ($fileName){
 			$file =  'uploads/temp/'.$fileName;
 			// check file exists    
-			if (file_exists ( $file )) {//echo 'kamalssssssssssss';exit;
+			if (file_exists ( $file )) {//echo 'test';exit;
 			 // get file content
 			 $data = file_get_contents ( $file );
 			 //force download

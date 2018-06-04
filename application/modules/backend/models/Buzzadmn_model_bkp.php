@@ -433,7 +433,10 @@ class Buzzadmn_model extends CI_Model {
             "product_images" => trim($data['images']),
             "product_video" => trim($data['videos']),
             "product_audio" => trim($data['audios']),
-            "product_pdf" => trim($data['attachments'])
+            "product_pdf" => trim($data['attachments']),
+			"product_demo_video" => trim($data['product_demo_video']),
+			"product_demo_audio" => trim($data['product_demo_audio']),
+			"product_user_manual" => trim($data['product_user_manual'])
         );
         if ($checkStoryUpdate == '1') {
             $update_array = array();

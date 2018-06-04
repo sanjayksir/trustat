@@ -3618,7 +3618,7 @@ function getBuzzUserNameById($id){
 
 
 
-			$ci->db->select('images, videos, audios, attachments');
+			$ci->db->select('images, videos, audios, attachments, demovideos, demoaudios, demoattachments');
 
 
 

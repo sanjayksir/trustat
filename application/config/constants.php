@@ -184,7 +184,7 @@ define("ASSETS_PATH", BASE_URL . "assets/");
 
 $img_file_path=$_SERVER['DOCUMENT_ROOT'].'/';
 
-define('VIDEO_FILE_PATH',$img_file_path.'/uploadVideo/');
+define('VIDEO_FILE_PATH',$img_file_path.'/uploads/temp/');
 
 define('TEMP_DIR',$img_file_path.'/uploads/temp/');
 

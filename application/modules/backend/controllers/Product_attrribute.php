@@ -54,9 +54,9 @@ class Product_attrribute extends MX_Controller {
 			$data['videos']		= $allVideoList;
 			$data['audios']		= $allAudioList;
 			$data['attachments']= $allAttachmentList;
-			$data['product_demo_video']= $allProductDemoVideoList;
-			$data['product_demo_audio']= $allProductDemoAudioList;
-			$data['product_user_manual']= $allProductUserManualList;
+			$data['demovideo']= $allProductDemoVideoList;
+			$data['demoaudio']= $allProductDemoAudioList;
+			$data['demoattachments']= $allProductUserManualList;
 			$data['product_id']	= $spidey_id;
 			//echo '<pre>';print_r($data);exit;
 			if($this->input->post('clickedBtn')=='Submit' || $this->input->post('clickedBtn')=='Save'){

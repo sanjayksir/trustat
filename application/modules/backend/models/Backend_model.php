@@ -981,6 +981,9 @@ class Backend_model extends CI_Model {
 				"audios"=>trim($data['audios']),
 
 				"attachments"=>trim($data['attachments']),
+				"demovideos"=>trim($data['demovideos']),
+				"demoaudios"=>trim($data['demoaudios']),
+				"demoattachments"=>trim($data['demoattachments']),
 
 				"status"=>'1' 
 

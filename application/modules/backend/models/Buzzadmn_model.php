@@ -434,9 +434,9 @@ class Buzzadmn_model extends CI_Model {
             "product_video" => trim($data['videos']),
             "product_audio" => trim($data['audios']),
             "product_pdf" => trim($data['attachments']),
-            "product_demo_video" => trim($data['product_demo_video']),
-            "product_demo_audio" => trim($data['product_demo_audio']),
-            "product_user_manual" => trim($data['product_user_manual'])
+            "product_demo_video" => trim($data['demovideo']),
+            "product_demo_audio" => trim($data['demoaudio']),
+            "product_user_manual" => trim($data['demoattachments'])
         );
         if ($checkStoryUpdate == '1') {
             $update_array = array();
@@ -467,6 +467,21 @@ class Buzzadmn_model extends CI_Model {
                 $arr = array("product_pdf" => trim($data['attachments']));
                 $update_array = array_merge($update_array, $arr);
             }
+			if ($data['demovideos'] != '') {
+                $checker = 1;
+                $arr = array("product_demo_video" => trim($data['demovideos']));
+                $update_array = array_merge($update_array, $arr);
+            }
+            if ($data['demoaudios'] != '') {
+                $checker = 1;
+                $arr = array("product_demo_audio" => trim($data['demoaudios']));
+                $update_array = array_merge($update_array, $arr);
+            }
+            if ($data['demoattachments'] != '') {
+                $checker = 1;
+                $arr = array("product_user_manual" => trim($data['demoattachments']));
+                $update_array = array_merge($update_array, $arr);
+            }
 
             //echo '<pre>';print_r($update_array);exit;
             if ($checker == 1) {
@@ -492,9 +507,9 @@ class Buzzadmn_model extends CI_Model {
             "product_video" => trim($data['videos']),
             "product_audio" => trim($data['audios']),
             "product_pdf" => trim($data['attachments']),
-            "product_demo_video" => trim($data['product_demo_video']),
-            "product_demo_audio" => trim($data['product_demo_audio']),
-            "product_user_manual" => trim($data['product_user_manual'])
+            "product_demo_video" => trim($data['demovideo']),
+            "product_demo_audio" => trim($data['demoaudio']),
+            "product_user_manual" => trim($data['demoattachments'])
         );
             if ($this->db->insert("products", $insertData)) {
                 return '0';

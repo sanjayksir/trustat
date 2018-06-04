@@ -1,5 +1,5 @@
 <script>
-//========= js code ===========
+//========= js Chunk upload code ===========
 
 function filesValidation(type){
 	$('#extra-progress-wrapperID').hide();
@@ -53,6 +53,8 @@ function filesValidation(type){
 	
 	return validateFlag;	
 }
+
+
 var closeStatus = 0;
 function ajaxuploadFile(type){
 	$('#video_progBar').css('width','0%');
@@ -71,22 +73,7 @@ function ajaxuploadFile(type){
 	}
 }
 
-function ajaxuploadDemoFile(type){
-	$('#video_progBar').css('width','0%');
-	document.getElementById("videosupload").value="";
-	document.getElementById("offStart").value=0;
-	document.getElementById("videosupload").value="";
-	document.getElementById("ugc_video_size").value="";
-	$("#videoupload").hide();
-	var counter = 1;
-	var fileFlag = filesValidation(type);
-	if(fileFlag){
-    closeStatus = 0;
-	readBlob('videoFile');
-	$("#hideBrowseButton").hide();
-	$("#removeFade").hide();
-	}
-}
+
 var counter = 1;
 var start = 0;
 var end = 2*1024*1024;
@@ -332,5 +319,4 @@ if(length <= maxVideoLength) {
 }
 
 });
-//========== End Code =========
-</script>
+//========== End Chunk Code =========

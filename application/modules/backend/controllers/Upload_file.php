@@ -712,6 +712,153 @@ if(isset($_FILES["files"]))
 
     echo $NewImageName;exit;
 }
+}
+
+
+###----------------PDF Upload Start -------------------##	
+
+ function uploadUserManual(){
+ 	$output_dir = "./uploads/temp/";
+ 	if(isset($_FILES["files"]))
+ 	{
+ 		$ret = array();
+ 		$error =$_FILES["files"]["error"];
+    	if(!is_array($_FILES["files"]['name'])) //single file
+   		{
+             $RandomNum   = time();
+             $ImageName      = str_replace(' ','-',strtolower($_FILES['files']['name']));
+             $ImageType      = $_FILES['files']['type']; //"image/png", image/jpeg etc.
+  			//echo '<pre>===';print_r($ImageType);exit;
+             $ImageExt = substr($ImageName, strrpos($ImageName, '.'));
+             $ImageExt       = str_replace('.','',$ImageExt);
+             $ImageName      = preg_replace("/\.[^.\s]{3,4}$/", "", $ImageName);
+             $NewImageName = $ImageName.'-'.$RandomNum.'.'.$ImageExt;
+        	 	move_uploaded_file($_FILES["files"]["tmp_name"],$output_dir. $NewImageName);
+        	 	 //echo "<br> Error: ".$_FILES["myfile"]["error"];
+ 	       	 	 $ret[$fileName]= $output_dir.$NewImageName;
+     	}else
+    	{	
+  			$ImageType      = $_FILES['files']['type']; //"image/png", image/jpeg etc.
+ 			  //echo '<pre>=www==';print_r( $_FILES);exit;
+ 			if($ImageType[0]=='application/pdf'){
+            	$fileCount = count($_FILES["files"]['name']);
+     			for($i=0; $i < $fileCount; $i++)
+     			{
+					$RandomNum   = time();
+  					$ImageName      = str_replace(' ','-',strtolower($_FILES['files']['name'][$i]));
+ 					$ImageType      = $_FILES['files']['type'][$i]; //"image/png", image/jpeg etc.
+  					$ImageExt = substr($ImageName, strrpos($ImageName, '.'));
+ 					$ImageExt       = str_replace('.','',$ImageExt);
+ 					$ImageName      = preg_replace("/\.[^.\s]{3,4}$/", "", $ImageName);
+ 					$NewImageName = $ImageName.'-'.$RandomNum.'.'.$ImageExt;
+ 					$ret[$NewImageName]= $output_dir.$NewImageName;
+ 					move_uploaded_file($_FILES["files"]["tmp_name"][$i],$output_dir.$NewImageName );
+     			}
+ 			}
+
+    	}
+    	echo $NewImageName;exit;
+ 	}
+ }
+
+###----------------PDF Upload End -------------------##		
+
+function uploadDemoAudio(){
+
+	$output_dir = "./uploads/temp/";
+
+ 
+
+if(isset($_FILES["files"]))
+
+{
+
+	$ret = array();
+
+ 
+
+	$error =$_FILES["files"]["error"];
+
+   {
+
+ 
+
+    	if(!is_array($_FILES["files"]['name'])) //single file
+
+    	{
+
+            $RandomNum   = time();
+
+ 
+
+            $ImageName      = str_replace(' ','-',strtolower($_FILES['files']['name']));
+
+            $ImageType      = $_FILES['files']['type']; //"image/png", image/jpeg etc.
+
+ 			
+
+            $ImageExt = substr($ImageName, strrpos($ImageName, '.'));
+
+            $ImageExt       = str_replace('.','',$ImageExt);
+
+            $ImageName      = preg_replace("/\.[^.\s]{3,4}$/", "", $ImageName);
+
+            $NewImageName = $ImageName.'-'.$RandomNum.'.'.$ImageExt;
+
+ 
+
+       	 	move_uploaded_file($_FILES["files"]["tmp_name"],$output_dir. $NewImageName);
+
+       	 	 //echo "<br> Error: ".$_FILES["myfile"]["error"];
+
+ 
+
+	       	 	 $ret[$fileName]= $output_dir.$NewImageName;
+
+    	}
+
+    	else
+
+    	{
+
+            $fileCount = count($_FILES["files"]['name']);
+
+    		for($i=0; $i < $fileCount; $i++)
+
+    		{
+
+                $RandomNum   = time();
+
+ 
+
+                $ImageName      = str_replace(' ','-',strtolower($_FILES['files']['name'][$i]));
+
+                $ImageType      = $_FILES['files']['type'][$i]; //"image/png", image/jpeg etc.
+
+ 
+
+                $ImageExt = substr($ImageName, strrpos($ImageName, '.'));
+
+                $ImageExt       = str_replace('.','',$ImageExt);
+
+                $ImageName      = preg_replace("/\.[^.\s]{3,4}$/", "", $ImageName);
+
+                $NewImageName = $ImageName.'-'.$RandomNum.'.'.$ImageExt;
+
+ 
+
+                $ret[$NewImageName]= $output_dir.$NewImageName;
+
+    		    move_uploaded_file($_FILES["files"]["tmp_name"][$i],$output_dir.$NewImageName );
+
+    		}
+
+    	}
+
+    }
+
+    echo $NewImageName;exit;
+}
 }	
 
 

@@ -2179,7 +2179,7 @@ function getBuzzUserNameById($id){
 
 			$ci 	= & get_instance();
 
-			$ci->db->select('images, videos, audios, attachments');
+			$ci->db->select('images, videos, audios, attachments, demovideos, demoaudios, demoattachments');
 
 			$ci->db->where_in('story_id',$storyid);
 
