@@ -294,13 +294,13 @@ function GetProductDetails() { return; }
  *
  * @apiHeader {String} token token must be set in header. 
  * 
- * @apiParam {Integer} product_id Purchased product id. (Required).
+ * @apiParam {Integer} bar_code product bar code. (Required).
  * @apiParam {String} type Complaint type. (Required).
  * @apiParam {String} description Describe the message want to convey (Required).
  * 
  * @apiExample Example usage:
     {
-        "product_id":"72",
+        "bar_code":"lifehinc-7034-0000-64-2",
         "type":"complaint type",
         "description":"Product is not working."
     }
@@ -314,7 +314,7 @@ function GetProductDetails() { return; }
     "status": true,
     "message": "Your complain has been logged successfully.",
     "data": {
-        "product_id": "72",
+        "bar_code": "lifehinc-7034-0000-64-2",
         "type": "product related",
         "description": "one two",
         "created_at": "2018-03-02 07:58:29",

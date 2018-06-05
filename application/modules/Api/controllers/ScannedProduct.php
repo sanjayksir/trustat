@@ -257,7 +257,7 @@ class ScannedProduct extends ApiController {
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
         $validate = [
-            ['field' =>'product_id','label'=>'Product id','rules' => 'trim|required'],
+            ['field' =>'bar_code','label'=>'Bar code','rules' => 'trim|required'],
             ['field' =>'type','label'=>'Latitude','rules' => 'required'],
             ['field' =>'description','label'=>'Longitude','rules' => 'trim|required' ],
         ];
@@ -265,10 +265,11 @@ class ScannedProduct extends ApiController {
         if(is_array($errors)){
             $this->response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-        $result = $this->ScannedproductsModel->findPurchasedProducts($user['id'],$data['product_id']);
-        if(empty($result)){
+        $result = $this->ScannedproductsModel->findPurchasedProducts($user['id'],null,$data['bar_code']);
+        if(empty($result[0])){
             $this->response(['status'=>false,'message'=>'Record not found'],200);
         }
+        $data['product_id'] = $result[0]['product_id'];
         $data['created_at'] = date("Y-m-d H:i:s");
         $data['consumer_id'] = $user['id'];
         $data['complain_code']= Utils::randomNumber(5);

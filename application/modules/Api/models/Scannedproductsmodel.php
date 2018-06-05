@@ -163,13 +163,15 @@ class ScannedproductsModel extends CI_Model {
         }
         return $items;
     }
-    public function findPurchasedProducts($userId = null,$productId = null){
+    public function findPurchasedProducts($userId = null,$productId = null,$barCode=null){
         if($userId == null){
             return false;
         }
         $conditions = ['pp.consumer_id' => $userId];
         if(!empty($productId)){
             $conditions['pp.product_id'] = $productId;
+        }elseif(!empty($barCode)){
+            $conditions['pp.bar_code'] = $barCode;
         }
         $query = $this->db->select("pp.id AS purchased_id,pp.bar_code,pp.ordered_date,pp.invoice,pp.invoice_image,pp.expiry_date,pp.warranty_start_date,pp.warranty_end_date,pr.*")
                 ->from('purchased_product AS pp')

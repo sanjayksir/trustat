@@ -967,8 +967,8 @@
             "group": "Parameter",
             "type": "Integer",
             "optional": false,
-            "field": "product_id",
-            "description": "<p>Purchased product id. (Required).</p>"
+            "field": "bar_code",
+            "description": "<p>product bar code. (Required).</p>"
           },
           {
             "group": "Parameter",
@@ -990,7 +990,7 @@
     "examples": [
       {
         "title": "Example usage:",
-        "content": "{\n    \"product_id\":\"72\",\n    \"type\":\"complaint type\",\n    \"description\":\"Product is not working.\"\n}",
+        "content": "{\n    \"bar_code\":\"lifehinc-7034-0000-64-2\",\n    \"type\":\"complaint type\",\n    \"description\":\"Product is not working.\"\n}",
         "type": "json"
       }
     ],
@@ -1023,7 +1023,7 @@
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "     HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"Your complain has been logged successfully.\",\n    \"data\": {\n        \"product_id\": \"72\",\n        \"type\": \"product related\",\n        \"description\": \"one two\",\n        \"created_at\": \"2018-03-02 07:58:29\",\n        \"consumer_id\": \"9\",\n        \"complain_code\": \"085374\",\n        \"status\": \"pending\"\n    }\n}",
+          "content": "     HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"Your complain has been logged successfully.\",\n    \"data\": {\n        \"bar_code\": \"lifehinc-7034-0000-64-2\",\n        \"type\": \"product related\",\n        \"description\": \"one two\",\n        \"created_at\": \"2018-03-02 07:58:29\",\n        \"consumer_id\": \"9\",\n        \"complain_code\": \"085374\",\n        \"status\": \"pending\"\n    }\n}",
           "type": "json"
         }
       ]
