@@ -158,7 +158,7 @@ class ScannedProduct extends ApiController {
         if(empty($result)){
             $this->response(['status'=>false,'message'=>'This product and barcode is not supported by howzzt.'],200);
         }
-        
+        //echo "<pre>";print_r($result);die;
         $bar_code_data = $data['bar_code'];
         $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data,$user['id']); 
         if( $result->pack_level == 1 ){
@@ -189,9 +189,18 @@ class ScannedProduct extends ApiController {
             }
             $data['invoice_image'] = 'uploads/invoice/'.$this->upload->data('file_name');
         }
+        $warrenty = null;
+        foreach($result->attribute_list as $list){
+            if(strstr(strtolower($list->name), 'warranty')){
+                $warrenty = $list->value;
+                break;
+            }else{
+                continue;
+            }
+        }
         $data['purchase_date'] = $data['purchase_date'];
-		$data['warranty_start_date'] = '0000-00-00';
-		$data['warranty_end_date'] = '0000-00-00';
+       // $data['warranty_start_date'] = '0000-00-00';
+	//$data['warranty_end_date'] = '0000-00-00';
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
         $data['modified'] = date('Y-m-d H:i:s');
@@ -201,16 +210,20 @@ class ScannedProduct extends ApiController {
         if($this->db->insert('purchased_product', $data)){
             $data['pack_level'] = $result->pack_level;
             $data['id'] = $this->db->insert_id();
-            if(!empty($data['expiry_date'])){
-                $transactionType = 'product-registration-with-warranty';
+            if(is_null($warrenty)){
+                $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();
+                $message = 'Thank You for Product Registration. '.$loyltyPoints->points.' loyalty points will be added to your howzzt loyalty account';
+                $transactionType = 'product-registration-without-warranty';                
             }else{
-                $transactionType = 'product-registration-without-warranty';
+                $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-with-warranty'])->row();
+                $message = 'Thank you for uploading the invoice, your product warranty will be activated and '.$loyltyPoints->points.' loyalty points will be added to your loyalty account after validation of uploaded invoice';
+                $transactionType = 'product-registration-with-warranty';
             }
 			// Loyality will be given on confirmation of the invoice from the backend 
             //$this->ProductModel->saveLoylty($transactionType,$user['id'],['product_id'=>$data['id']]);
             $data['message1'] = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
             //$data['invoice_image'] = base_url($data['invoice_image']);
-            $this->response(['status'=>true,'message'=>'Thanks for registering the Product.'/*.$result->pack_level.'.'*/,'data'=>$data]);
+            $this->response(['status'=>true,'message'=>$message,'data'=>$data]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to register the product.']);
         }
