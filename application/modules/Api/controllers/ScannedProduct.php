@@ -199,8 +199,8 @@ class ScannedProduct extends ApiController {
             }
         }
         $data['purchase_date'] = $data['purchase_date'];
-       // $data['warranty_start_date'] = '0000-00-00';
-	//$data['warranty_end_date'] = '0000-00-00';
+        $data['warranty_start_date'] = '0000-00-00';
+	$data['warranty_end_date'] = '0000-00-00';
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
         $data['modified'] = date('Y-m-d H:i:s');
@@ -306,7 +306,7 @@ class ScannedProduct extends ApiController {
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
         $validate = [
-            ['field' =>'product_code','label'=>'Product Code','rules' => 'trim|required'],
+            ['field' =>'bar_code','label'=>'Product Code','rules' => 'trim|required'],
             ['field' =>'rating','label'=>'Product Rating','rules' => 'required'],
 			//['field' =>'type','label'=>'Latitude','rules' => 'required'],
             ['field' =>'description','label'=>'Product Description','rules' => 'trim|required' ],
@@ -315,12 +315,12 @@ class ScannedProduct extends ApiController {
         if(is_array($errors)){
             $this->response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-		/*
-        $result = $this->ScannedproductsModel->findPurchasedProducts($user['id'],$data['product_code']);
-        if(empty($result)){
+		
+        $result = $this->ScannedproductsModel->findPurchasedProducts($user['id'],null,$data['bar_code']);
+        if(empty($result[0])){
             $this->response(['status'=>false,'message'=>'Record not found'],200);
         }
-		*/
+		
         $data['created_at'] = date("Y-m-d H:i:s");
         $data['consumer_id'] = $user['id'];
 		$data['ip_address'] =  $this->input->ip_address();
