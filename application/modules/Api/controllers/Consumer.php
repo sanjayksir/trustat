@@ -655,27 +655,34 @@ public function ListConsumerRelatives(){
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-        $questionQuery = $this->db->get_where('feedback_question_bank',['question_id'=>$data['question_id']])->row();
+        $productQuestion = $this->ProductModel->feedbackQuestion($data['product_id']);
         
-        $productQuery = $this->db->get_where('products',['id'=>$data['product_id']])->row();
-        if(empty($questionQuery)){
-            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'Invalid question id.']);
+        if(empty($productQuestion)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'Invalid question id or product id.']);
         }
-        if(empty($productQuery)){
-            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'Invalid product id.']);
+        $allQuestionIds = [];
+        foreach($productQuestion as $row){
+            array_push($allQuestionIds, $row->question_id);
+        }
+        if(!in_array($data['question_id'],$allQuestionIds)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'Invalid product id or question id.']);
+        }
+        $alreadyAnswered = $this->db->get_where('consumer_feedback',['product_id'=>$data['product_id'],'user_id'=>$user['id'],'question_id'=>$data['question_id']])->row();
+        if(count($alreadyAnswered) > 0){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'You have already answered of this question.']);
         }
         //Utils::debug();
         $data['user_id'] = $user['id'];
         $data['created_date'] = $data['updated_date'] = date('Y-m-d H:i:s');
         if($this->db->insert('consumer_feedback', $data)){
             $qtype = strtolower($questionQuery->$questionQuery);
-            if(strstr($qtype,'audio')){
+            if(strstr(strtolower($qtype),'audio')){
                 $transactionType = 'scan-for-genuity-and-audio-response';
-            }elseif(strstr($qtype,'video')){
+            }elseif(strstr(strtolower($qtype),'video')){
                 $transactionType = 'scan-for-genuity-and-video-response';
-            }elseif(strstr($qtype,'pdf')){
+            }elseif(strstr(strtolower($qtype),'pdf')){
                 $transactionType = 'scan-for-genuity-and-pdf-response';
-            }elseif(strstr($qtype,'image')){
+            }elseif(strstr(strtolower($qtype),'image')){
                 $transactionType = 'scan-for-genuity-and-pdf-response';
             }else{
                 $transactionType = 'scan-for-genuity-and-pdf-response';
