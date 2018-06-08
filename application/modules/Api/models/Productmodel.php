@@ -439,9 +439,15 @@ class ProductModel extends CI_Model {
     public function feedbackLoylity($productId,$userId,$transactionType,$params){
         $productQuestion = $this->feedbackQuestion($productId);
         $answerQuery = $this->db->get_where('consumer_feedback',['product_id'=>$productId,'user_id'=>$userId]);
-        if(count($productQuestion) == $answerQuery->num_rows()){
-            $this->saveLoylty($transactionType,$userId,$params);
-        }
+        if(count($productQuestion) <= 3){
+            if(count($productQuestion) == $answerQuery->num_rows()){
+                $this->saveLoylty($transactionType,$userId,$params);
+            }            
+        }else{
+            if(3 == $answerQuery->num_rows()){
+                $this->saveLoylty($transactionType,$userId,$params);
+            }
+        }    
     }
     
     public function findLoylityBySlug($slug = null){
