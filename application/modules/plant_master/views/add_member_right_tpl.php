@@ -18,11 +18,11 @@
       </div>
 		<?php
 		// MySQL connect info
-			//mysql_connect("localhost", "tpdbuser", "india@123");
-			//mysql_select_db("trackingprortaldb21");
+			mysql_connect("localhost", "tpdbuser", "india@123");
+			mysql_select_db("trackingprortaldb");
 			
 			//mysql_connect("localhost", "root", "");
-			//mysql_select_db("trackingprortaldb20");
+			//mysql_select_db("trackingportaldb");
 			
 			
 			//$query = mysql_query("SELECT MAX( plant_id ) FROM plant_master;");
