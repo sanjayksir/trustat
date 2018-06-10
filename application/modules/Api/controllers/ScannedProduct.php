@@ -174,7 +174,7 @@ class ScannedProduct extends ApiController {
             }elseif($isRegistered['status'] == 1){
                 $data['message1'] = 'This product is already registered, please contact your retailer/manufacturer for further details';
             }
-            $this->response(['status'=>true,'message'=>'This product is already registered'/*.$result->pack_level.'.'*/,'data'=>$data]);
+            $this->response(['status'=>true,'message'=>'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process.'/*.$result->pack_level.'.'*/,'data'=>$data]);
         }
         $data['invoice_image'] = null;
         if(!empty($data['invoice_image'])){
