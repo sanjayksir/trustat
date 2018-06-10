@@ -655,39 +655,43 @@ public function ListConsumerRelatives(){
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
+        $alreadyAnswered = $this->db->get_where('consumer_feedback',['product_id'=>$data['product_id'],'user_id'=>$user['id'],'question_id'=>$data['question_id']])->row();
+        if(count($alreadyAnswered) > 0){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'You have already answered of this question.']);
+        }
         $productQuestion = $this->ProductModel->feedbackQuestion($data['product_id']);
-        
         if(empty($productQuestion)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'Invalid question id or product id.']);
         }
         $allQuestionIds = [];
+        $questionType = null;
         foreach($productQuestion as $row){
+            if($row->question_id == $data['question_id']){
+                $questionType = strtolower($row->question_type);
+            }
             array_push($allQuestionIds, $row->question_id);
         }
         if(!in_array($data['question_id'],$allQuestionIds)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'Invalid product id or question id.']);
         }
-        $alreadyAnswered = $this->db->get_where('consumer_feedback',['product_id'=>$data['product_id'],'user_id'=>$user['id'],'question_id'=>$data['question_id']])->row();
-        if(count($alreadyAnswered) > 0){
-            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'You have already answered of this question.']);
-        }
+        
         //Utils::debug();
         $data['user_id'] = $user['id'];
         $data['created_date'] = $data['updated_date'] = date('Y-m-d H:i:s');
         if($this->db->insert('consumer_feedback', $data)){
-            $qtype = strtolower($questionQuery->$questionQuery);
-            if(strstr(strtolower($qtype),'audio')){
+        //if(1){            
+            if(strstr($questionType,'audio')){
                 $transactionType = 'scan-for-genuity-and-audio-response';
-            }elseif(strstr(strtolower($qtype),'video')){
+            }elseif(strstr($questionType,'video')){
                 $transactionType = 'scan-for-genuity-and-video-response';
-            }elseif(strstr(strtolower($qtype),'pdf')){
+            }elseif(strstr($questionType,'pdf')){
                 $transactionType = 'scan-for-genuity-and-pdf-response';
-            }elseif(strstr(strtolower($qtype),'image')){
-                $transactionType = 'scan-for-genuity-and-pdf-response';
+            }elseif(strstr($questionType,'image')){
+                $transactionType = 'scan-for-genuity-and-image-response';
             }else{
-                $transactionType = 'scan-for-genuity-and-pdf-response';
+                $transactionType = 'scan-for-genuity-and-description-response';
             }
-            $params = ['product_id'=>$data['product_id'],'question_id'=>$questionQuery->question_id];
+            $params = ['product_id'=>$data['product_id'],'question_id'=>$data['question_id']];
             $this->ProductModel->feedbackLoylity($data['product_id'],$user['id'],$transactionType,$params);
             Utils::response(['status'=>true,'message'=>'Feedback answer has been saved successfully.','data'=>$data]);
         }else{

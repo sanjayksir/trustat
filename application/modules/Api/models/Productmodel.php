@@ -438,16 +438,32 @@ class ProductModel extends CI_Model {
     
     public function feedbackLoylity($productId,$userId,$transactionType,$params){
         $productQuestion = $this->feedbackQuestion($productId);
-        $answerQuery = $this->db->get_where('consumer_feedback',['product_id'=>$productId,'user_id'=>$userId]);
-        if(count($productQuestion) <= 3){
-            if(count($productQuestion) == $answerQuery->num_rows()){
-                $this->saveLoylty($transactionType,$userId,$params);
-            }            
-        }else{
-            if(3 == $answerQuery->num_rows()){
+        $typeGroup = [];$questionType = null;
+        foreach($productQuestion as $row){
+            if($row->question_id == $params['question_id']){
+                $questionType = $row->question_type;
+            }
+            $typeGroup[$row->question_type][] = $row->question_id;
+        }
+        $questionTypeIds = $typeGroup[$questionType];
+        if(!empty($questionTypeIds)){
+            $answerQuery = $this->db->get_where('consumer_feedback','question_id IN ('.implode(',',$questionTypeIds).') AND user_id="'.$userId.'"');
+            if(count($questionTypeIds) == $answerQuery->num_rows()){
                 $this->saveLoylty($transactionType,$userId,$params);
             }
-        }    
+        }else{
+            $answerQuery = $this->db->get_where('consumer_feedback',['product_id'=>$productId,'user_id'=>$userId]);
+            if(count($productQuestion) <= 3){
+                if(count($productQuestion) == $answerQuery->num_rows()){
+                    $this->saveLoylty($transactionType,$userId,$params);
+                }            
+            }else{
+                if(3 == $answerQuery->num_rows()){
+                    $this->saveLoylty($transactionType,$userId,$params);
+                }
+            }    
+        }
+        
     }
     
     public function findLoylityBySlug($slug = null){
