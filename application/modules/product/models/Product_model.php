@@ -322,6 +322,7 @@
  		}
 		
 		function save_feedback($postData){
+			 $product_id  	 = $postData['ProductID'];
 			 $question_type  = $postData['QuestionType'];
 			 $question 		 = $postData['Question'];
 			 $answer1 		 = $postData['answer1'];
@@ -331,6 +332,7 @@
 			 $correct_answer = $postData['correctAns'];
 			 
 			 $insertData=array(
+					"product_id"	  => $product_id,
 					"question_type"	  => $question_type,
 					"question"		  => $question,
 					"answer1"	 	  => $answer1,
@@ -349,26 +351,30 @@
 		}
 		
 		// Product Description Feedback Questions
-		function feedback_listing($limit,$start,$srch_string='') {
+		function feedback_listing($limit,$start,$srch_string='', $id) {
 			$user_id 	= $this->session->userdata('admin_user_id');
 			if(!empty($srch_string)){ 
 					$this->db->where("(question LIKE '%$srch_string%')");
 			} 
 			$this->db->select("*");
 			$this->db->from("feedback_question_bank");
-			$this->db->where("question_type","Product Description Feedback");
+			//$this->db->where("question_type","Product Description Feedback");
+			$where = array('question_type ' => "Product Description Feedback" , 'product_id ' => $id);
+			$this->db->where($where);
 			$this->db->order_by("question_id", " desc");
 			$this->db->limit($limit, $start);
 			$resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 			return $resultDt ;
 		}
-		function total_feedback_listing($srch_string='') {
+		function total_feedback_listing($srch_string='', $id) {
 			$user_id 	= $this->session->userdata('admin_user_id');
 			if(!empty($srch_string)){ 
 					$this->db->where("(question LIKE '%$srch_string%')");
 			} 
 			$this->db->select('count(1) as total_rows');
 			$this->db->from('feedback_question_bank');
+			$where = array('question_type ' => "Product Description Feedback" , 'product_id ' => $id);
+			$this->db->where($where);
 				$query = $this->db->get(); //echo '***'.$this->db->last_query();
 			if ($query->num_rows() > 0) {
 				$result = $query->result_array();
@@ -378,26 +384,30 @@
 		}
 		
 		// Product Image Feedback Questions
-		function image_feedback_listing($limit,$start,$srch_string='') {
+		function image_feedback_listing($limit,$start,$srch_string='', $id) {
 			$user_id 	= $this->session->userdata('admin_user_id');
 			if(!empty($srch_string)){ 
 					$this->db->where("(question LIKE '%$srch_string%')");
 			} 
 			$this->db->select("*");
 			$this->db->from("feedback_question_bank");
-			$this->db->where("question_type","Product Image Feedback"); 
+			//$this->db->where("question_type","Product Image Feedback"); 
+			$where = array('question_type ' => "Product Image Feedback" , 'product_id ' => $id);
+			$this->db->where($where);
 			$this->db->order_by("question_id", " desc");
 			$this->db->limit($limit, $start);
 			$resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 			return $resultDt ;
 		}
-		function total_image_feedback_listing($srch_string='') {
+		function total_image_feedback_listing($srch_string='', $id) {
 			$user_id 	= $this->session->userdata('admin_user_id');
 			if(!empty($srch_string)){ 
 					$this->db->where("(question LIKE '%$srch_string%')");
 			} 
 			$this->db->select('count(1) as total_rows');
 			$this->db->from('feedback_question_bank');
+			$where = array('question_type ' => "Product Image Feedback" , 'product_id ' => $id);
+			$this->db->where($where);
 				$query = $this->db->get(); //echo '***'.$this->db->last_query();
 			if ($query->num_rows() > 0) {
 				$result = $query->result_array();
@@ -407,26 +417,30 @@
 		}
 		
 		// Product Video Feedback Questions
-		function video_feedback_listing($limit,$start,$srch_string='') {
+		function video_feedback_listing($limit,$start,$srch_string='', $id) {
 			$user_id 	= $this->session->userdata('admin_user_id');
 			if(!empty($srch_string)){ 
 					$this->db->where("(question LIKE '%$srch_string%')");
 			} 
 			$this->db->select("*");
 			$this->db->from("feedback_question_bank");
-			$this->db->where("question_type","Product Video Feedback"); 
+			//$this->db->where("question_type","Product Video Feedback"); 
+			$where = array('question_type ' => "Product Video Feedback" , 'product_id ' => $id);
+			$this->db->where($where);
 			$this->db->order_by("question_id", " desc");
 			$this->db->limit($limit, $start);
 			$resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 			return $resultDt ;
 		}
-		function total_video_feedback_listing($srch_string='') {
+		function total_video_feedback_listing($srch_string='', $id) {
 			$user_id 	= $this->session->userdata('admin_user_id');
 			if(!empty($srch_string)){ 
 					$this->db->where("(question LIKE '%$srch_string%')");
 			} 
 			$this->db->select('count(1) as total_rows');
 			$this->db->from('feedback_question_bank');
+			$where = array('question_type ' => "Product Video Feedback" , 'product_id ' => $id);
+			$this->db->where($where);
 				$query = $this->db->get(); //echo '***'.$this->db->last_query();
 			if ($query->num_rows() > 0) {
 				$result = $query->result_array();
@@ -437,26 +451,30 @@
 		
 		
 		// Product Audio Feedback Questions
-		function audio_feedback_listing($limit,$start,$srch_string='') {
+		function audio_feedback_listing($limit,$start,$srch_string='', $id) {
 			$user_id 	= $this->session->userdata('admin_user_id');
 			if(!empty($srch_string)){ 
 					$this->db->where("(question LIKE '%$srch_string%')");
 			} 
 			$this->db->select("*");
 			$this->db->from("feedback_question_bank");
-			$this->db->where("question_type","Product Audio Feedback"); 
+			//$this->db->where("question_type","Product Audio Feedback");
+			$where = array('question_type ' => "Product Audio Feedback" , 'product_id ' => $id);
+			$this->db->where($where);			
 			$this->db->order_by("question_id", " desc");
 			$this->db->limit($limit, $start);
 			$resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 			return $resultDt ;
 		}
-		function total_audio_feedback_listing($srch_string='') {
+		function total_audio_feedback_listing($srch_string='', $id) {
 			$user_id 	= $this->session->userdata('admin_user_id');
 			if(!empty($srch_string)){ 
 					$this->db->where("(question LIKE '%$srch_string%')");
 			} 
 			$this->db->select('count(1) as total_rows');
 			$this->db->from('feedback_question_bank');
+			$where = array('question_type ' => "Product Audio Feedback" , 'product_id ' => $id);
+			$this->db->where($where);
 				$query = $this->db->get(); //echo '***'.$this->db->last_query();
 			if ($query->num_rows() > 0) {
 				$result = $query->result_array();
@@ -467,26 +485,30 @@
 		
 		
 		// Product PDF Feedback Questions
-		function pdf_feedback_listing($limit,$start,$srch_string='') {
+		function pdf_feedback_listing($limit,$start,$srch_string='', $id) {
 			$user_id 	= $this->session->userdata('admin_user_id');
 			if(!empty($srch_string)){ 
 					$this->db->where("(question LIKE '%$srch_string%')");
 			} 
 			$this->db->select("*");
 			$this->db->from("feedback_question_bank");
-			$this->db->where("question_type","Product PDF Feedback"); 
+			//$this->db->where("question_type","Product PDF Feedback"); 
+			$where = array('question_type ' => "Product PDF Feedback" , 'product_id ' => $id);
+			$this->db->where($where);	
 			$this->db->order_by("question_id", " desc");
 			$this->db->limit($limit, $start);
 			$resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 			return $resultDt ;
 		}
-		function total_pdf_feedback_listing($srch_string='') {
+		function total_pdf_feedback_listing($srch_string='', $id) {
 			$user_id 	= $this->session->userdata('admin_user_id');
 			if(!empty($srch_string)){ 
 					$this->db->where("(question LIKE '%$srch_string%')");
 			} 
 			$this->db->select('count(1) as total_rows');
 			$this->db->from('feedback_question_bank');
+			$where = array('question_type ' => "Product PDF Feedback" , 'product_id ' => $id);
+			$this->db->where($where);
 				$query = $this->db->get(); //echo '***'.$this->db->last_query();
 			if ($query->num_rows() > 0) {
 				$result = $query->result_array();

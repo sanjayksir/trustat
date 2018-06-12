@@ -441,7 +441,10 @@ function list_assigned_products() {
 	}
 	
 	// Product Description Feedback Questions
- function ask_feedback(){
+ function ask_feedback($id=''){
+		if(empty($id)){
+			redirect('product/list_product');
+		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
 		 // init params
@@ -452,14 +455,14 @@ function list_assigned_products() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Product_model->total_feedback_listing($srch_string);
+        $total_records = $this->Product_model->total_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["product_list"] = $this->Product_model->feedback_listing($limit_per_page, $start_index,$srch_string);
+            $params["product_list"] = $this->Product_model->feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'product/ask_feedback';
+            $config['base_url'] = base_url() . 'product/ask_feedback_tpl';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -487,6 +490,7 @@ function list_assigned_products() {
             $this->pagination->initialize($config);
              // build paging links
             $params["links"] = $this->pagination->create_links();
+			$params["product_id"] = $id;
         }
 		##--------------- pagination End ----------------##
 		
@@ -496,23 +500,26 @@ function list_assigned_products() {
 	}
 	
 	// Product Image Feedback Questions
-	function ask_image_feedback(){
+	function ask_image_feedback($id=''){
+		if(empty($id)){
+			redirect('product/list_product');
+		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
 		 // init params
         $params = array();
-        $limit_per_page = 20;
+        $limit_per_page = 10;
         $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
 		$srch_string =  $this->input->post('search'); 
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Product_model->total_image_feedback_listing($srch_string);
+        $total_records = $this->Product_model->total_image_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["product_list"] = $this->Product_model->image_feedback_listing($limit_per_page, $start_index,$srch_string);
+            $params["product_list"] = $this->Product_model->image_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
             $config['base_url'] = base_url() . 'product/ask_feedback';
             $config['total_rows'] = $total_records;
@@ -550,7 +557,10 @@ function list_assigned_products() {
      
 	}
 	// Product Video Feedback Questions
-	function ask_video_feedback(){
+	function ask_video_feedback($id=''){
+		if(empty($id)){
+			redirect('product/list_product');
+		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
 		 // init params
@@ -561,12 +571,12 @@ function list_assigned_products() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Product_model->total_video_feedback_listing($srch_string);
+        $total_records = $this->Product_model->total_video_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["product_list"] = $this->Product_model->video_feedback_listing($limit_per_page, $start_index,$srch_string);
+            $params["product_list"] = $this->Product_model->video_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
             $config['base_url'] = base_url() . 'product/ask_feedback';
             $config['total_rows'] = $total_records;
@@ -604,7 +614,10 @@ function list_assigned_products() {
      
 	}
 	// Product Audio Feedback Questions
-	function ask_audio_feedback(){
+	function ask_audio_feedback($id=''){
+		if(empty($id)){
+			redirect('product/list_product');
+		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
 		 // init params
@@ -615,12 +628,12 @@ function list_assigned_products() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Product_model->total_audio_feedback_listing($srch_string);
+        $total_records = $this->Product_model->total_audio_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["product_list"] = $this->Product_model->audio_feedback_listing($limit_per_page, $start_index,$srch_string);
+            $params["product_list"] = $this->Product_model->audio_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
             $config['base_url'] = base_url() . 'product/ask_feedback';
             $config['total_rows'] = $total_records;
@@ -658,7 +671,10 @@ function list_assigned_products() {
      
 	}
 	// Product PDF Feedback Questions
-	function ask_pdf_feedback(){
+	function ask_pdf_feedback($id=''){
+		if(empty($id)){
+			redirect('product/list_product');
+		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
 		 // init params
@@ -669,12 +685,12 @@ function list_assigned_products() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Product_model->total_pdf_feedback_listing($srch_string);
+        $total_records = $this->Product_model->total_pdf_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["product_list"] = $this->Product_model->pdf_feedback_listing($limit_per_page, $start_index,$srch_string);
+            $params["product_list"] = $this->Product_model->pdf_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
             $config['base_url'] = base_url() . 'product/ask_feedback';
             $config['total_rows'] = $total_records;

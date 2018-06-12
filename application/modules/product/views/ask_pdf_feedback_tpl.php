@@ -106,7 +106,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                  		 </tbody>
                                    	
                                  </table></form>
-                                 </div> <div class="col-sm-2 pull-right"><?php echo anchor('product/add_feedback', 'Add New Question',array('class' => 'btn btn-primary pull-right')); ?></div>
+								  <?php $product_id = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)); ?>
+                                 </div> <div class="col-sm-2 pull-right"><?php echo anchor('product/add_feedback/'.$product_id.'/', 'Add New Question',array('class' => 'btn btn-primary pull-right')); ?></div>
                                 
                             </div> 
                       <!--------------- Search Tab start----------------->
