@@ -180,9 +180,9 @@ if(!empty($isOtherIndustry)){
  		
 		<div class="form-group row" >
 			<div class="col-sm-3 ind_9">
-			<label for="form-field-8">Industry (Level-9)</label>
+			<label for="form-field-8">Industry (Level-8)</label>
 			<select  name="industry[]" id="industry_9" class="form-control" onchange="get_sub_industry(this.value,'10');">
-            <option value="">-Select Industry (Level-9)-</option>
+            <option value="">-Select Industry-</option>
             <option selected="selected" value="<?php echo $industry_arr[8];?>"><?php $result = get_industry_by_id($industry_arr[8]);echo $result[0]['categoryName'];?></option> 
              </select>
               <?php  if($dropDown_position_str==10){?>
@@ -192,9 +192,9 @@ if(!empty($isOtherIndustry)){
 			</div>
 		
 			<div class="col-sm-3 ind_10">
-			<label for="form-field-8">Industry (Level-10)</label>
+			<label for="form-field-8">Industry (Level-9)</label>
 			<select  name="industry[]" id="industry_10" class="form-control" onchange="get_sub_industry(this.value,'11');">
-            <option value="">-Select Industry (Level-10)-</option>
+            <option value="">-Select Industry-</option>
             <option selected="selected" value="<?php echo $industry_arr[9];?>"><?php $result = get_industry_by_id($industry_arr[9]);echo $result[0]['categoryName'];?></option> 
              </select>
               <?php  if($dropDown_position_str==11){?>
@@ -204,9 +204,9 @@ if(!empty($isOtherIndustry)){
 			</div>
             
             <div class="col-sm-3 ind_11">
-			<label for="form-field-8">Industry (Level-11)</label>
+			<label for="form-field-8">Industry (Level-10)</label>
 			<select  name="industry[]" id="industry_11" class="form-control" onchange="get_sub_industry(this.value,'12');">
-            <option value="">-Select Industry (Level-11)-</option>
+            <option value="">-Select Industry-</option>
             <option selected="selected" value="<?php echo $industry_arr[10];?>"><?php $result = get_industry_by_id($industry_arr[10]);echo $result[0]['categoryName'];?></option> 
              </select>
               <?php  if($dropDown_position_str==12){?>
@@ -216,9 +216,9 @@ if(!empty($isOtherIndustry)){
 			</div>
 			
 			<div class="col-sm-3 ind_12">
-			  <label for="form-field-8">Industry (Level-12)</label>
+			  <label for="form-field-8">Industry (Level-11)</label>
              <select name="industry[]" id="industry_12" class="form-control" onchange="get_sub_industry(this.value,'13');">
-            <option value="">-Select Industry(Level-12)-</option>
+            <option value="">-Select Industry-</option>
             <option selected="selected" value="<?php echo $industry_arr[11];?>"><?php $result = get_industry_by_id($industry_arr[11]);echo $result[0]['categoryName'];?></option> 
              </select>
               <?php  if($dropDown_position_str==13){?>
@@ -230,9 +230,9 @@ if(!empty($isOtherIndustry)){
  		
 		<div class="form-group row">
 			<div class="col-sm-3 ind_13">
-			<label for="form-field-8">Industry (Level-13)</label>
+			<label for="form-field-8">Industry (Level-12)</label>
 			<select  name="industry[]" id="industry_13" class="form-control" onchange="get_sub_industry(this.value,'14');">
-            <option value="">-Select Industry (Level-13)-</option>
+            <option value="">-Select Industry-</option>
             <option selected="selected" value="<?php echo $industry_arr[12];?>"><?php $result = get_industry_by_id($industry_arr[12]);echo $result[0]['categoryName'];?></option> 
              </select>
               <?php  if($dropDown_position_str==14){?>
@@ -242,9 +242,9 @@ if(!empty($isOtherIndustry)){
 			</div>
 			
 			<div class="col-sm-3 ind_14">
-			<label for="form-field-8">Industry (Level-14)</label>
+			<label for="form-field-8">Industry (Level-13)</label>
 			<select  name="industry[]" id="industry_14" class="form-control" onchange="get_sub_industry(this.value,'15');">
-            <option value="">-Select Industry (Level-14)-</option>
+            <option value="">-Select Industry-</option>
             <option selected="selected" value="<?php echo $industry_arr[13];?>"><?php $result = get_industry_by_id($industry_arr[13]);echo $result[0]['categoryName'];?></option> 
              </select>
               <?php  if($dropDown_position_str==15){?>
@@ -254,9 +254,9 @@ if(!empty($isOtherIndustry)){
 			</div>
 		
 			<div class="col-sm-3 ind_15">
-			<label for="form-field-8">Industry (Level-15)</label>
+			<label for="form-field-8">Industry (Level-14)</label>
 			<select  name="industry[]" id="industry_15" class="form-control" onchange="get_sub_industry(this.value,'16');">
-            <option value="">-Select Industry (Level-15)-</option>
+            <option value="">-Select Industry-</option>
             <option selected="selected" value="<?php echo $industry_arr[14];?>"><?php $result = get_industry_by_id($industry_arr[14]);echo $result[0]['categoryName'];?></option> 
              </select>
               <?php  if($dropDown_position_str==16){?>
@@ -266,9 +266,9 @@ if(!empty($isOtherIndustry)){
 			</div>
             
             <div class="col-sm-3 ind_16">
-			<label for="form-field-8">Industry (Level-16)</label>
+			<label for="form-field-8">Industry (Level-15)</label>
 			<select  name="industry[]" id="industry_16" class="form-control" onchange="get_sub_industry(this.value,'17');">
-            <option value="">-Select Industry (Level-16)-</option>
+            <option value="">-Select Industry-</option>
             <option selected="selected" value="<?php echo $industry_arr[15];?>"><?php $result = get_industry_by_id($industry_arr[15]);echo $result[0]['categoryName'];?></option> 
              </select>
               <?php  if($dropDown_position_str==17){?>
@@ -283,9 +283,9 @@ if(!empty($isOtherIndustry)){
  		
 		<div class="form-group row">
 			<div class="col-sm-3 ind_17">
-			  <label for="form-field-8">Industry (Level-17)</label>
+			  <label for="form-field-8">Industry (Level-16)</label>
              <select name="industry[]" id="industry_17" class="form-control" onchange="get_sub_industry(this.value,'18');">
-            <option value="">-Select Industry(Level-17)-</option>
+            <option value="">-Select Industry-</option>
             <option selected="selected" value="<?php echo $industry_arr[16];?>"><?php $result = get_industry_by_id($industry_arr[16]);echo $result[0]['categoryName'];?></option> 
              </select>
               <?php  if($dropDown_position_str==18){?>
@@ -295,9 +295,9 @@ if(!empty($isOtherIndustry)){
 			</div>
 			
 			<div class="col-sm-3 ind_18">
-			  <label for="form-field-8">Industry (Level-18)</label>
+			  <label for="form-field-8">Industry (Level-17)</label>
              <select name="industry[]" id="industry_18" class="form-control" onchange="get_sub_industry(this.value,'19');">
-            <option value="">-Select Industry(Level-18)-</option>
+            <option value="">-Select Industry-</option>
             <option selected="selected" value="<?php echo $industry_arr[17];?>"><?php $result = get_industry_by_id($industry_arr[17]);echo $result[0]['categoryName'];?></option> 
              </select>
               <?php  if($dropDown_position_str==19){?>
@@ -307,9 +307,9 @@ if(!empty($isOtherIndustry)){
 			</div>
 			
 			<div class="col-sm-3  ind_19">
-			<label for="form-field-8">Industry (Level-19)</label>
+			<label for="form-field-8">Industry (Level-18)</label>
 			<select  name="industry[]" id="industry_19" class="form-control" onchange="get_sub_industry(this.value,'20');">
-            <option value="">-Select Industry (Level-19)-</option>
+            <option value="">-Select Industry-</option>
             <option selected="selected" value="<?php echo $industry_arr[18];?>"><?php $result = get_industry_by_id($industry_arr[18]);echo $result[0]['categoryName'];?></option> 
             
             </select> 
@@ -320,9 +320,9 @@ if(!empty($isOtherIndustry)){
 			</div>
             
             <div class="col-sm-3 ind_20">
-			<label for="form-field-8">Industry (Level-20)</label>
+			<label for="form-field-8">Industry (Level-19)</label>
 			<select  name="industry[]" id="industry_20" class="form-control" >
-            <option value="">-Select Industry (Level-20)-</option>
+            <option value="">-Select Industry-</option>
             <option selected="selected" value="<?php echo $industry_arr[19];?>"><?php $result = get_industry_by_id($industry_arr[19]);echo $result[0]['categoryName'];?></option> 
              </select>
               <?php  if($dropDown_position_str==21){?>
