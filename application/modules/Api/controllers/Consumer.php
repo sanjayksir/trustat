@@ -425,8 +425,12 @@ public function ListConsumerRelatives(){
         if(!$data){
             Utils::response(['status'=>false,'message'=>'Record not found from given mobile no.']);
         }
-        $data->verification_code = Utils::randomNumber(5);
-        $smstext = 'Your OTP to complete the signup proccess is '.$data->verification_code.'. OTP is valid for 15 mins. Please do not share this to anyone.';
+		$genRandomNo = Utils::randomNumber(5);
+        $data->verification_code = $genRandomNo;
+		$data->password = md5($genRandomNo);
+				
+	$smstext = 'Welcome to howzzt. Your OTP for mobile verification is '.$data->verification_code.', please enter the OTP to complete the signup proccess.';
+		
         if(Utils::sendSMS($data->mobile_no,$smstext)){
             if ($this->db->update($this->ConsumerModel->table,$data,['mobile_no'=>$data->mobile_no])) {
                 Utils::response(['status'=>true,'message'=>'OTP has been sent successfully.']);

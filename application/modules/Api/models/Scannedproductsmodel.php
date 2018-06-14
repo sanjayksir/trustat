@@ -108,6 +108,7 @@ class ScannedproductsModel extends CI_Model {
                 ->from($this->table.' AS sp')
                 ->join('products AS pr', 'pr.id=sp.product_id')
                 ->where(['sp.consumer_id' => $userid])
+				->order_by('created_at', 'desc')
                 ->get()
                 ->result();
         if(empty($query)){
@@ -177,6 +178,7 @@ class ScannedproductsModel extends CI_Model {
                 ->from('purchased_product AS pp')
                 ->join('products AS pr', 'pr.id=pp.product_id')
                 ->where($conditions)
+				->order_by('modified', 'desc')
                 ->get()
                 ->result();
         //echo $this->db->last_query();die;
