@@ -420,6 +420,21 @@ class ProductModel extends CI_Model {
                 ->result();
         return $query;
     }
+    public function questionSets($product=null,$userId=null){
+        if(is_null($product)){
+            return [];
+        }
+        $query = $this->db->select('q.question_id,q.question,q.question_type,q.answer1,q.answer2,q.answer3,q.answer4,q.correct_answer')
+                ->from('feedback_question_bank AS q')
+                ->join('product_feedback_questions AS pq', 'pq.question_id=q.question_id','INNER')
+                ->where('pq.product_id ="'.$product.'"')                
+                ->where('q.status =1')
+                ->where('q.question_id NOT IN (SELECT question_id FROM consumer_feedback as cf WHERE cf.user_id = "'.$userId.'")')
+                ->get()
+                ->result();
+        return $query;
+        
+    }
     public function feedbackQuestion($product=null,$type=null){
         if(is_null($product)){
             return [];
@@ -436,34 +451,11 @@ class ProductModel extends CI_Model {
     }
     
     
-    public function feedbackLoylity($productId,$userId,$transactionType,$params){
-        $productQuestion = $this->feedbackQuestion($productId);
-        $typeGroup = [];$questionType = null;
-        foreach($productQuestion as $row){
-            if($row->question_id == $params['question_id']){
-                $questionType = $row->question_type;
-            }
-            $typeGroup[$row->question_type][] = $row->question_id;
+    public function feedbackLoylity($userId,$transactionType,$params){
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$userId."' AND JSON_EXTRACT(params,'$.question_id')='".$params['question_id']."' AND JSON_EXTRACT(params,'$.product_qr_code')='".$params['product_qr_code']."'");
+        if($answerQuery->num_rows() <= 0){
+            $this->saveLoylty($transactionType,$userId,$params);
         }
-        $questionTypeIds = $typeGroup[$questionType];
-        if(!empty($questionTypeIds)){
-            $answerQuery = $this->db->get_where('consumer_feedback','question_id IN ('.implode(',',$questionTypeIds).') AND user_id="'.$userId.'"');
-            if(count($questionTypeIds) == $answerQuery->num_rows()){
-                $this->saveLoylty($transactionType,$userId,$params);
-            }
-        }else{
-            $answerQuery = $this->db->get_where('consumer_feedback',['product_id'=>$productId,'user_id'=>$userId]);
-            if(count($productQuestion) <= 3){
-                if(count($productQuestion) == $answerQuery->num_rows()){
-                    $this->saveLoylty($transactionType,$userId,$params);
-                }            
-            }else{
-                if(3 == $answerQuery->num_rows()){
-                    $this->saveLoylty($transactionType,$userId,$params);
-                }
-            }    
-        }
-        
     }
     
     public function findLoylityBySlug($slug = null){

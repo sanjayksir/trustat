@@ -1037,4 +1037,5 @@ $config['sms'] = [
 ];
 $config['pageLimit'] = 15;
 $config['pageOption'] = [10=>10,15=>15,25=>25,50=>50,100=>100];
+$config['media_location'] = 'mediastore';
 

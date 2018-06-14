@@ -648,21 +648,23 @@ public function ListConsumerRelatives(){
         
         $validate = [
             ['field' =>'product_id','label'=>'Product','rules' => 'trim|required|integer'],
-            ['field' =>'question_id','label'=>'Question','rules' => 'trim|required|integer'],
+            ['field' =>'product_qr_code','label'=>'Product QR Code','rules' => 'trim|required'],
+            ['field' =>'question_id','label'=>'Question','rules' => 'trim|required|integer'],            
             ['field' =>'selected_answer','label'=>'User answer','rules' => 'trim|required'],
         ];
         $errors = $this->ConsumerModel->validate($data,$validate);
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-        $alreadyAnswered = $this->db->get_where('consumer_feedback',['product_id'=>$data['product_id'],'user_id'=>$user['id'],'question_id'=>$data['question_id']])->row();
+        $alreadyAnswered = $this->db->get_where('consumer_feedback',['product_qr_code'=>$data['product_qr_code'],'user_id'=>$user['id'],'question_id'=>$data['question_id']])->row();
         if(count($alreadyAnswered) > 0){
-            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'You have already answered of this question.']);
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'You have already answered of this question for code.']);
         }
         $productQuestion = $this->ProductModel->feedbackQuestion($data['product_id']);
         if(empty($productQuestion)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'Invalid question id or product id.']);
         }
+        
         $allQuestionIds = [];
         $questionType = null;
         foreach($productQuestion as $row){
@@ -691,8 +693,8 @@ public function ListConsumerRelatives(){
             }else{
                 $transactionType = 'scan-for-genuity-and-description-response';
             }
-            $params = ['product_id'=>$data['product_id'],'question_id'=>$data['question_id']];
-            $this->ProductModel->feedbackLoylity($data['product_id'],$user['id'],$transactionType,$params);
+            $data['transaction_type'] = $questionType;
+            $this->ProductModel->feedbackLoylity($user['id'],$transactionType,$data);
             Utils::response(['status'=>true,'message'=>'Feedback answer has been saved successfully.','data'=>$data]);
         }else{
             Utils::response(['status'=>false,'message'=>'System failed to proccess the request.'],200);
