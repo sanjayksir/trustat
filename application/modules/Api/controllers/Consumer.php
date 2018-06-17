@@ -660,10 +660,10 @@ public function ListConsumerRelatives(){
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-        $alreadyAnswered = $this->db->get_where('consumer_feedback',['product_qr_code'=>$data['product_qr_code'],'user_id'=>$user['id'],'question_id'=>$data['question_id']])->row();
+        /*$alreadyAnswered = $this->db->get_where('consumer_feedback',['product_qr_code'=>$data['product_qr_code'],'user_id'=>$user['id'],'question_id'=>$data['question_id']])->row();
         if(count($alreadyAnswered) > 0){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'You have already answered of this question for code.']);
-        }
+        }*/
         $productQuestion = $this->ProductModel->feedbackQuestion($data['product_id']);
         if(empty($productQuestion)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'Invalid question id or product id.']);

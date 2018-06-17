@@ -1,6 +1,12 @@
 <?php $this->load->view('../includes/admin_header'); ?>
 <?php $this->load->view('../includes/admin_top_navigation'); ?>
+<?php
+$medisUrl = $this->config->item('media_location');
+?>
 <div class="main-container ace-save-state" id="main-container">
+    <style type="text/css">
+        .media-info {width: auto;font-weight: 600;font-size: 14px;}
+    </style>
  <?php $this->load->view('../includes/admin_sidebar');// echo '***<pre>';print_r($storyIdea);?>
  
     <div class="main-content">
@@ -38,16 +44,83 @@
                                             <a href="<?php echo base_url();?>product/list_product" class="btn btn-primary pull-right">List Product SKUs</a>
                                         </div>
                                         <div class="widget-body">
-                                            <a href="" id="thumb-image" data-toggle="image" class="img-thumbnail ace-icon fa-file-image-o"></a>
-                                            <input type="hidden" name="image" value="<?php echo $image; ?>" id="input-image" />
-                                            </div>
-
-                                            <div>
-                                                <a href="" id="profile-image" data-toggle="image" class="img-thumbnail">
-                                                    <img src="<?php echo $thumb; ?>" alt="" title="" data-placeholder="<?php echo $placeholder; ?>" />
+                                            <form name="media-form" class="form-horizontal" id ="media-form" action="" method="POST" enctype="multipart/form-data">
+                                                <input type="hidden" name="product_id" value="<?php echo $id ?>" />
+                                            <div class="row media-addon">
+                                            <div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_images)? site_url($medisUrl.'/'.$product_images):"#"; ?>" id="thumb-image" data-toggle="image" class="img-thumbnail" mime-type="image">
+                                                    <img src="<?php echo !empty($product_images)? site_url($medisUrl.'/'.$product_images):site_url('assets/images/upload_img.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/upload_img.png'); ?>" />
+                                                    <span class="media-info">Upload Image</span>
                                                 </a>
-                                                <input type="hidden" name="profile" value="<?php echo $image; ?>" id="input-image" />
+                                                <input type="hidden" name="product_images" value="<?php echo $product_images; ?>" id="input-image" />
+                                                </div>
                                             </div>
+                                            <div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_video)? site_url($medisUrl.'/'.$product_video):"#"; ?>" id="thumb-video" data-toggle="image" class="img-thumbnail" mime-type="video">
+                                                    <img src="<?php echo !empty($product_video)? site_url('assets/images/mp4.jpg'):site_url('assets/images/mp4-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp4-upload.png'); ?>" />
+                                                    <span class="media-info">Upload Video</span>
+                                                </a>
+                                                    <input type="hidden" name="product_video" value="<?php echo $product_video; ?>" id="input-video" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_audio)? site_url($medisUrl.'/'.$product_audio):"#"; ?>" id="thumb-audio" data-toggle="image" class="img-thumbnail" mime-type="audio">
+                                                    <img src="<?php echo !empty($product_audio)? site_url('assets/images/mp3.jpg'):site_url('assets/images/mp3-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp3-upload.png'); ?>" />
+                                                    <span class="media-info">Upload Audio</span>
+                                                </a>
+                                                    <input type="hidden" name="product_audio" value="<?php echo $product_audio; ?>" id="input-audio" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_pdf)? site_url($medisUrl.'/'.$product_pdf):"#"; ?>" id="thumb-pdf" data-toggle="image" class="img-thumbnail" mime-type="document">
+                                                    <img src="<?php echo !empty($product_pdf)? site_url('assets/images/pdf.jpg'):site_url('assets/images/pdf-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/pdf-upload.png'); ?>" />
+                                                    <span class="media-info">Upload PDF file</span>
+                                                </a>
+                                                    <input type="hidden" name="product_pdf" value="<?php echo $product_pdf; ?>" id="input-pdf" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                    <a href="<?php echo !empty($product_demo_video)?site_url($medisUrl.'/'.$product_demo_video):"#"; ?>" id="thumb-demo-video" data-toggle="image" class="img-thumbnail" mime-type="video">
+                                                    <img src="<?php echo !empty($product_demo_video)? site_url('assets/images/mp4.jpg'):site_url('assets/images/mp4-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp4-upload.png'); ?>" />
+                                                    <span class="media-info">Upload demo video file</span>
+                                                </a>
+                                                    <input type="hidden" name="product_demo_video" value="<?php echo $product_demo_video; ?>" id="input-demo-video" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_demo_audio)? site_url($medisUrl.'/'.$product_demo_audio):"#"; ?>" id="thumb-demo-audio" data-toggle="image" class="img-thumbnail" mime-type="audio">
+                                                    <img src="<?php echo !empty($product_demo_audio)? site_url('assets/images/mp3.jpg'):site_url('assets/images/mp3-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp3-upload.png'); ?>" />
+                                                    <span class="media-info">Upload demo audio file</span>
+                                                </a>
+                                                    <input type="hidden" name="product_demo_audio" value="<?php echo $product_demo_audio; ?>" id="input-demo-audio" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_user_manual)? site_url($medisUrl.'/'.$product_user_manual):"#"; ?>" id="thumb-user-manual" data-toggle="image" class="img-thumbnail">
+                                                    <img src="<?php echo !empty($product_user_manual)? site_url("assets/images/pdf.jpg"):site_url('assets/images/pdf-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/pdf-upload.png'); ?>" />
+                                                    <span class="media-info">Upload product user manual file</span>
+                                                </a>
+                                                    <input type="hidden" name="product_user_manual" value="<?php echo $product_user_manual; ?>" id="input-user-manual" />
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Product Media Description</label>
+                                                    <textarea class="form-control" name="product_description" id="product-description" placeholder="Product description" rows="6"><?php echo $product_description; ?></textarea>
+                                                </div>
+                                            </div>    
+                                            </div>
+                                            <div class="form-actions center">
+                                                <button type="submit" class="btn btn-sm btn-success" id="media-btn">Submit<i class="ace-icon fa fa-arrow-right icon-on-right bigger-110"></i></button>
+                                            </div>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
@@ -62,6 +135,30 @@
             <!-- /.main-content -->
 
     <?php $this->load->view('../includes/admin_footer'); ?>
-    <script type="text/javascript" src="<?php echo site_url('asssets');?>/js/media.js"></script>
+    <script type="text/javascript" src="<?php echo site_url('assets');?>/js/media.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(document).on('click','#media-btn',function(e){
+                e.preventDefault();
+                $("#media-btn").addClass('disabled');
+                $.ajax({
+                    url: site_url+"backend/product_attrribute/media_attribute",
+                    type: "POST",
+                    data: $("#media-form").serialize(),
+                    dataType:"json"
+                }).done(function( data ) {
+                    $("#media-btn").removeClass('disabled');
+                    if(data.status){
+                        $("#ajax_msg").removeClass('alert-danger').addClass('alert-success').show().html(data.message);
+                    }else{
+                        $("#ajax_msg").removeClass('alert-success').addClass('alert-danger').show().html(data.message);
+                    }
+                  console.log(data);
+                  //Perform ANy action after successfuly post data
+
+                });
+            });
+        });
+    </script>
     
    

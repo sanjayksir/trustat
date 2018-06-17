@@ -21,6 +21,9 @@ function getURLVar(key) {
         }
     }
 }
+function getToken() {
+    return Math.floor((Math.random() * 99990) + 1);
+}   
 
 $(document).ready(function () {
     //Form Submit for IE Browser
@@ -119,7 +122,7 @@ $(document).ready(function () {
         if ($popover) {
             return;
         }
-
+        
         $element.popover({
             html: true,
             placement: 'right',
@@ -134,13 +137,14 @@ $(document).ready(function () {
         $('#button-image').on('click', function () {
             var $button = $(this);
             var $icon = $button.find('> i');
-
+            var $mediaType = $element.attr('mime-type');
             $('#modal-image').remove();
-            var url = 'common/filemanager?token=' + getURLVar('token') + '&target=' + $element.parent().find('input').attr('id') + '&thumb=' + $element.attr('id');
+            var url = site_url+'media?token=' + getToken() + '&target=' + $element.parent().find('input').attr('id') + '&thumb=' + $element.attr('id')+'&media_type='+$mediaType;
 //alert(url);
             $.ajax({
                 url: url,
                 dataType: 'html',
+                XMLHttpRequest:true,
                 beforeSend: function () {
                     $button.prop('disabled', true);
                     if ($icon.length) {

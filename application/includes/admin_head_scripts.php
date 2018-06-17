@@ -117,6 +117,7 @@
 
 
 		<script type="text/javascript">
+                    var site_url = '<?php echo site_url(); ?>';
 
 			if('ontouchstart' in document.documentElement) document.write("<script src='<?php echo ASSETS_PATH;?>js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
 

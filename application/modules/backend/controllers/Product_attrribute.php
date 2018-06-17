@@ -71,10 +71,30 @@ class Product_attrribute extends MX_Controller {
 
     ## OPen Story Details=== DONE
 
-    function att_detail($spidey_id = '') {
-        //echo "dfsdf"; die();
-        //$data['storyIdea']  = $this->Buzzadmn_model->fetchStoryIdea($spidey_id);		
+    function att_detail($productId = null) {
+        if(is_null($productId)){
+            throw new Exception('Ivalid product id.');
+        }
+        $data = $this->db->get_where('products',['id'=>$productId])->row();
+        if(empty($data)){
+            throw new Exception('Ivalid product id.');
+        }
         $this->load->view('Editorial/add_story_idea_details', $data);
+    }
+    
+    public function media_attribute(){
+        if($this->input->method() == 'post'){
+            $data = $this->input->post(null,true);
+            $id = $data['product_id'];
+            unset($data['product_id']);
+            if($this->db->update('products',$data,['id'=>$id])){
+                $response = ['status'=>true,'message'=>'Media attributes have been updated successfully.'];
+            }else{
+                $response = ['status'=>false,'message'=>'Media attributes failed to update.'];
+            }
+            $this->output->set_content_type('application/json')->set_output(json_encode($response));
+        }
+        
     }
 
     ### =========================EDITORIAL FUNCTIONS STARTS==================================##

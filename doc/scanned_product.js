@@ -340,11 +340,13 @@ function PostComplaint() { return; }
  * 
  * @apiParam {Integer} product_id Purchased product id. (Required).
  * @apiParam {Integer} question_id Purchased product id. (Required).
+ * @apiParam {String} product_qr_code product qr code. (Required).
  * @apiParam {String} selected_answer answer selected by consumer. (Required).
  * 
  * @apiExample Example usage:
 {
 	"product_id":142,
+        "product_qr_code":"8767yttrerr142",
 	"question_id":223,
 	"selected_answer":"answer3"
 }

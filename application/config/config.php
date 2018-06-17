@@ -1038,4 +1038,8 @@ $config['sms'] = [
 $config['pageLimit'] = 15;
 $config['pageOption'] = [10=>10,15=>15,25=>25,50=>50,100=>100];
 $config['media_location'] = 'mediastore';
+$config['image_type']='jpeg|jpg|png|gif';
+$config['video_type']='mp4|avi';
+$config['media_allowed_types'] = $config['image_type'].'|'.$config['video_type'].'|pdf|mp3';
+
 

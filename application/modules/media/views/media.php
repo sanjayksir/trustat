@@ -1,82 +1,252 @@
-<p></p>
-<table cellpadding="0" cellspacing="0" style="font-size: 0px; width: 100%; background: #ffffff; border-top: 3px solid #fead0d;" align="center" border="0">
-   <tbody>
-      <tr>
-         <td style="text-align: center; vertical-align: top; font-size: 0px; padding: 40px 30px 30px 30px;">
-            <div style="vertical-align: top; display: inline-block; font-size: 13px; text-align: left; width: 100%;">
-               <table cellpadding="0" cellspacing="0" width="100%" border="0">
-                  <tbody>
-                     <tr>
-                        <td style="word-break: break-word; font-size: 0px; padding: 0px; padding-bottom: 30px;" align="center">
-                           <table cellpadding="0" cellspacing="0" style="border-collapse: collapse; border-spacing: 0px;" align="center" border="0">
-                              <tbody>
-                                 <tr>
-                                    <td style="width: 250px;">
-                                       <h2>Tracking Portal</h2>
-                                    </td>
-                                 </tr>
-                              </tbody>
-                           </table>
-                        </td>
-                     </tr>
-                     <tr>
-                        <td style="padding: 0px; padding: 10px 10px;" align="left">
-                           <div style="color: #55575d; font-family: Open Sans,Helvetica,Arial,sans-serif; font-size: 15px; font-weight:600; line-height: 22px;">
-                              <ul style="list-style:none;">
-                                 <li>User Name: <?= $user_name ?></li>
-                                 <li>Email: <?= $email ?></li>
-                                 <li>MObile No: <?= $mobile_no ?></li>
-                                 <li>Gender: <?= $gender ?></li>
-                                 <li>Date of birth: <?= $dob ?></li>
-                              </ul>
-                           </div>
-                        </td>
-                     </tr>
-                     <tr>
-                        <td style="word-break: break-word; font-size: 0px; padding: 0px; padding-bottom: 35px;" align="center">
-                           <div style="color: #8c8c8c; font-family: Roboto,Helvetica,Arial,sans-serif; font-size: 14px; line-height: 22px;">We just need to validate your email address to activate your Tracking Portal account. Simply click the following button:</div>
-                        </td>
-                     </tr>
-                     <tr>
-                        <td style="word-break: break-word; font-size: 0px; padding: 0px;" align="center">
-                           <div style="color: #8c8c8c; font-family: Roboto,Helvetica,Arial,sans-serif; font-size: 14px; line-height: 22px;"></div>
-                        </td>
-                     </tr>
-                     <tr>
-                        <td style="word-break: break-word; font-size: 0px; padding: 0px; padding-bottom: 40px;" align="center">
-                           <table cellpadding="0" cellspacing="0" style="border-collapse: separate;" align="center" border="0">
-                              <tbody>
-                                 <tr>
-                                    <td style="border-radius: 2px; color: #fff; padding: 10px 25px;" align="center" valign="middle" bgcolor="#fead0d"><a href="<?= site_url('/emailverify/'.urlencode(md5($email)).'/'. urlencode($email)); ?>" style="display: inline-block; text-decoration: none; background: #fead0d; color: #fff; font-family: Roboto,Helvetica,Arial,sans-serif,Helvetica,Arial,sans-serif; font-size: 14px; font-weight: normal; margin: 0px;" target="_blank" rel="noopener"> Activate my account </a></td>
-                                 </tr>
-                              </tbody>
-                           </table>
-                        </td>
-                     </tr>
-                     <tr>
-                        <td style="word-break: break-word; font-size: 0px; padding: 0px; padding-bottom: 8px;" align="center">
-                           <div style="color: #8c8c8c; font-family: Roboto,Helvetica,Arial,sans-serif; font-size: 14px; line-height: 22px;">If the link doesn't work, copy this URL into your browser:</div>
-                        </td>
-                     </tr>
-                     <tr>
-                        <td style="word-break: break-word; font-size: 0px; padding: 0px; padding-bottom: 35px;" align="center">
-                            <div style="color: #3586ff; font-family: Roboto,Helvetica,Arial,sans-serif; font-size: 14px; line-height: 22px;"><a href="<?= site_url('/emailverify/'. urlencode(md5($email)).'/'. urlencode($email)); ?>" style="text-decoration: none; color: inherit;" target="_blank" ><?= site_url('/emailverify/'.urlencode(md5($email)).'/'. urlencode($email)); ?></a></div>
-                        </td>
-                     </tr>
-                     <tr>
-                        <td style="word-break: break-word; font-size: 0px; padding: 0px;" align="left">
-                           <div style="color: #8c8c8c; font-family: Roboto,Helvetica,Arial,sans-serif; font-size: 14px; line-height: 22px;">Regards!</div>
-                        </td>
-                     </tr>
-                     <tr>
-                        <td style="word-break: break-word; font-size: 0px; padding: 0px;" align="left">
-                           <div style="color: #8c8c8c; font-family: Roboto,Helvetica,Arial,sans-serif; font-size: 14px; line-height: 22px;">Tracking Portal Team</div>
-                        </td>
-                     </tr>
-                  </tbody>
-               </table>
-            </div>
-         </td>
-      </tr>
-   </tbody>
-</table>
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div id="filemanager" class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title"><?php echo $heading_title; ?></h4>
+                            </div>
+                            <div class="modal-body">
+                                <div id="msg"></div>
+                                <div class="row">
+                                    <div class="col-sm-5"><a href="<?php echo $parent; ?>" data-toggle="tooltip" title="<?php echo $button_parent; ?>" id="button-parent" class="btn btn-default"><i class="fa fa-level-up"></i></a> <a href="<?php echo $refresh; ?>" data-toggle="tooltip" title="<?php echo $button_refresh; ?>" id="button-refresh" class="btn btn-default"><i class="fa fa-refresh"></i></a>
+                                        <button type="button" data-toggle="tooltip" title="<?php echo $button_upload; ?>" id="button-upload" class="btn btn-primary"><i class="fa fa-upload"></i></button>
+                                        <button type="button" data-toggle="tooltip" title="<?php echo $button_folder; ?>" id="button-folder" class="btn btn-default"><i class="fa fa-folder"></i></button>
+                                        <button type="button" data-toggle="tooltip" title="<?php echo $button_delete; ?>" id="button-delete" class="btn btn-danger"><i class="fa fa-trash-o"></i></button>
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <div class="input-group">
+                                            <input type="text" name="search" value="<?php echo $filter_name; ?>" placeholder="<?php echo $entry_search; ?>" class="form-control">
+                                            <span class="input-group-btn">
+                                                <button type="button" data-toggle="tooltip" title="<?php echo $button_search; ?>" id="button-search" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                                            </span></div>
+                                    </div>
+                                </div>
+                                <hr />
+                                <?php foreach (array_chunk($images, 4) as $image) { ?>
+                                    <div class="row">
+                                        <?php foreach ($image as $image) { ?>
+                                            <div class="col-sm-3 col-xs-6 text-center">
+                                                <?php if ($image['type'] == 'directory') { ?>
+                                                    <div class="text-center"><a href="<?php echo $image['href']; ?>" class="directory" style="vertical-align: middle;"><i class="fa fa-folder fa-5x"></i></a></div>
+                                                    <label>
+                                                        <input type="checkbox" name="path[]" value="<?php echo $image['path']; ?>" />
+                                                        <?php echo $image['name']; ?></label>
+                                                <?php } ?>
+                                                <?php if ($image['type'] == 'image') { ?>
+                                                    <a href="<?php echo $image['href']; ?>" class="thumbnail"><img src="<?php echo $image['thumb']; ?>" alt="<?php echo $image['name']; ?>" title="<?php echo $image['name']; ?>" /></a>
+                                                    <label>
+                                                        <input type="checkbox" name="path[]" value="<?php echo $image['path']; ?>" />
+                                                        <?php echo $image['name']; ?></label>
+                                                <?php } ?>
+                                            </div>
+                                        <?php } ?>
+                                    </div>
+                                    <br />
+                                <?php } ?>
+                            </div>
+                            <div class="modal-footer"><?php echo $pagination; ?></div>
+                        </div>
+                    </div>
+                        <script type="text/javascript"><!--
+<?php if ($target) { ?>
+    $('a.thumbnail').on('click', function (e) {
+        e.preventDefault();
+
+    <?php if ($thumb) { ?>
+            $('#<?php echo $thumb; ?>').find('img').attr('src', $(this).find('img').attr('src'));
+    <?php } ?>
+
+        $('#<?php echo $target; ?>').val($(this).parent().find('input').val());
+
+        $('#modal-image').modal('hide');
+    });
+<?php } ?>
+
+$('a.directory').on('click', function (e) {
+    e.preventDefault();
+    $('#modal-image').load($(this).attr('href'));
+});
+
+$('.pagination a').on('click', function (e) {
+    e.preventDefault();
+
+    $('#modal-image').load($(this).attr('href'));
+});
+
+$('#button-parent').on('click', function (e) {
+    e.preventDefault();
+
+    $('#modal-image').load($(this).attr('href'));
+});
+
+$('#button-refresh').on('click', function (e) {
+    e.preventDefault();
+
+    $('#modal-image').load($(this).attr('href'));
+});
+
+$('input[name=\'search\']').on('keydown', function (e) {
+    if (e.which == 13) {
+        $('#button-search').trigger('click');
+    }
+});
+
+$('#button-search').on('click', function (e) {
+    var url = '<?php echo site_url("media"); ?>?token=<?php echo $token; ?>&directory=<?php echo $directory; ?>';
+
+            var filter_name = $('input[name=\'search\']').val();
+
+            if (filter_name) {
+                url += '&filter_name=' + encodeURIComponent(filter_name);
+            }
+
+<?php if ($thumb) { ?>
+                url += '&thumb=' + '<?php echo $thumb; ?>';
+<?php } ?>
+
+<?php if ($target) { ?>
+                url += '&target=' + '<?php echo $target; ?>';
+<?php } ?>
+
+            $('#modal-image').load(url);
+        });
+        //--></script>
+<script type="text/javascript"><!--
+        $('#button-upload').on('click', function () {
+        $('#form-upload').remove();
+
+        $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file[]" value="" multiple="multiple" /></form>');
+
+        $('#form-upload input[name=\'file[]\']').trigger('click');
+
+        if (typeof timer != 'undefined') {
+            clearInterval(timer);
+        }
+
+        timer = setInterval(function () {
+            if ($('#form-upload input[name=\'file[]\']').val() != '') {
+                clearInterval(timer);
+
+                $.ajax({
+                    url: '<?php echo site_url("media"); ?>/upload?directory=<?php echo $directory; ?>',
+                                        type: 'post',
+                                        dataType: 'json',
+                                        data: new FormData($('#form-upload')[0]),
+                                        cache: false,
+                                        contentType: false,
+                                        processData: false,
+                                        beforeSend: function () {
+                                            $('#button-upload i').replaceWith('<i class="fa fa-circle-o-notch fa-spin"></i>');
+                                            $('#button-upload').prop('disabled', true);
+                                        },
+                                        complete: function () {
+                                            $('#button-upload i').replaceWith('<i class="fa fa-upload"></i>');
+                                            $('#button-upload').prop('disabled', false);
+                                        },
+                                        success: function (json) {
+                                            $('#msg').html(json);
+                                            if (json['error']) {
+                                                //alert(json['error']);
+                                            }
+
+                                            if (json['success']) {
+                                                alert(json['success']);
+
+                                                $('#button-refresh').trigger('click');
+                                            }
+                                        },
+                                        error: function (xhr, ajaxOptions, thrownError) {
+                                            alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                                        }
+                                    });
+                                }
+                            }, 500);
+                        });
+
+                        $('#button-folder').popover({
+                            html: true,
+                            placement: 'bottom',
+                            trigger: 'click',
+                            title: '<?php echo $entry_folder; ?>',
+                            content: function () {
+                                html = '<div class="input-group">';
+                                html += '  <input type="text" name="folder" value="" placeholder="<?php echo $entry_folder; ?>" class="form-control">';
+                                html += '  <span class="input-group-btn"><button type="button" title="<?php echo $button_folder; ?>" id="button-create" class="btn btn-primary"><i class="fa fa-plus-circle"></i></button></span>';
+                                html += '</div>';
+
+                                return html;
+                            }
+                        });
+
+                        $('#button-folder').on('shown.bs.popover', function () {
+                            $('#button-create').on('click', function () {
+                                $.ajax({
+                                    url: '<?php echo site_url("media"); ?>/folder?token=<?php echo $token; ?>&directory=<?php echo $directory; ?>',
+                                                    type: 'post',
+                                                    dataType: 'json',
+                                                    data: 'folder=' + encodeURIComponent($('input[name=\'folder\']').val()),
+                                                    beforeSend: function () {
+                                                        $('#button-create').prop('disabled', true);
+                                                    },
+                                                    complete: function () {
+                                                        $('#button-create').prop('disabled', false);
+                                                    },
+                                                    success: function (json) {
+                                                        if (json['error']) {
+                                                            alert(json['error']);
+                                                        }
+
+                                                        if (json['success']) {
+                                                            alert(json['success']);
+
+                                                            $('#button-refresh').trigger('click');
+                                                        }
+                                                    },
+                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                                                    }
+                                                });
+                                            });
+                                        });
+
+                                        $('#modal-image #button-delete').on('click', function (e) {
+                                            var checkedItems = [];
+                                            $('input[name^="path"]:checked').each(function () {
+                                                checkedItems.push($(this).val());
+                                            });
+                                            if (confirm('Are you sure want to delete '+checkedItems.join(', ')+' ?')) {
+                                                $.ajax({
+                                                    url: '<?php echo site_url("media"); ?>/delete?token=<?php echo $token; ?>',
+                                                                    type: 'post',
+                                                                    dataType: 'json',
+                                                                    data: $('input[name^=\'path\']:checked'),
+                                                                    beforeSend: function () {
+                                                                        $('#button-delete').prop('disabled', true);
+                                                                    },
+                                                                    complete: function () {
+                                                                        $('#button-delete').prop('disabled', false);
+                                                                    },
+                                                                    success: function (json) {
+                                                                        if (json['error']) {
+                                                                            alert(json['error']);
+                                                                        }
+
+                                                                        if (json['success']) {
+                                                                            alert(json['success']);
+
+                                                                            $('#button-refresh').trigger('click');
+                                                                        }
+                                                                    },
+                                                                    error: function (xhr, ajaxOptions, thrownError) {
+                                                                        alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
+//--></script>
+
+                        </div>
+                    </div>
+                </div>

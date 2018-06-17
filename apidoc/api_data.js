@@ -52,7 +52,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/customer.js",
+    "filename": "/var/www/html/trackingportal/doc/customer.js",
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
@@ -210,7 +210,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/customer.js",
+    "filename": "/var/www/html/trackingportal/doc/customer.js",
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
@@ -330,7 +330,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/customer.js",
+    "filename": "/var/www/html/trackingportal/doc/customer.js",
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
@@ -450,7 +450,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/customer.js",
+    "filename": "/var/www/html/trackingportal/doc/customer.js",
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
@@ -505,7 +505,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/customer.js",
+    "filename": "/var/www/html/trackingportal/doc/customer.js",
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
@@ -629,7 +629,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/customer.js",
+    "filename": "/var/www/html/trackingportal/doc/customer.js",
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
@@ -697,7 +697,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/scanned_product.js",
+    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -796,7 +796,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/scanned_product.js",
+    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -895,7 +895,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/scanned_product.js",
+    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1028,7 +1028,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/scanned_product.js",
+    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1114,6 +1114,13 @@ define({ "api": [
             "group": "Parameter",
             "type": "String",
             "optional": false,
+            "field": "product_qr_code",
+            "description": "<p>product qr code. (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
             "field": "selected_answer",
             "description": "<p>answer selected by consumer. (Required).</p>"
           }
@@ -1123,7 +1130,7 @@ define({ "api": [
     "examples": [
       {
         "title": "Example usage:",
-        "content": "{\n\t\"product_id\":142,\n\t\"question_id\":223,\n\t\"selected_answer\":\"answer3\"\n}",
+        "content": "{\n\t\"product_id\":142,\n        \"product_qr_code\":\"8767yttrerr142\",\n\t\"question_id\":223,\n\t\"selected_answer\":\"answer3\"\n}",
         "type": "json"
       }
     ],
@@ -1161,7 +1168,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/scanned_product.js",
+    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1301,7 +1308,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/scanned_product.js",
+    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1434,7 +1441,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/scanned_product.js",
+    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1526,7 +1533,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/user.js",
+    "filename": "/var/www/html/trackingportal/doc/user.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1631,7 +1638,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/scanned_product.js",
+    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1723,7 +1730,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/user.js",
+    "filename": "/var/www/html/trackingportal/doc/user.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1815,7 +1822,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/user.js",
+    "filename": "/var/www/html/trackingportal/doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -1907,7 +1914,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/user.js",
+    "filename": "/var/www/html/trackingportal/doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -1999,7 +2006,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/user.js",
+    "filename": "/var/www/html/trackingportal/doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2091,7 +2098,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/user.js",
+    "filename": "/var/www/html/trackingportal/doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2210,7 +2217,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/user.js",
+    "filename": "/var/www/html/trackingportal/doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2329,7 +2336,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/user.js",
+    "filename": "/var/www/html/trackingportal/doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2487,7 +2494,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/user.js",
+    "filename": "/var/www/html/trackingportal/doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2548,7 +2555,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/user.js",
+    "filename": "/var/www/html/trackingportal/doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2689,7 +2696,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/user.js",
+    "filename": "/var/www/html/trackingportal/doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2795,7 +2802,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/user.js",
+    "filename": "/var/www/html/trackingportal/doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2900,7 +2907,7 @@ define({ "api": [
         }
       ]
     },
-    "filename": "doc/user.js",
+    "filename": "/var/www/html/trackingportal/doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {

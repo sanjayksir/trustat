@@ -12,6 +12,7 @@ class Media extends MX_Controller {
     public function index() {
         #Utils::debug();
         $server = site_url();
+        $token = time();
         $mediaLocation = $this->config->item('media_location');
         if(empty($mediaLocation)){
             die("Define the media location directory.");
@@ -31,7 +32,6 @@ class Media extends MX_Controller {
         } else {            
             $directory = $mediaStore;
         }
-
         $page = $this->input->get('page');
         if (isset($page)) {
             $page = $page;
@@ -48,8 +48,23 @@ class Media extends MX_Controller {
             $directories = array();
         }
         // Get files
-        $files = glob($directory . $filter_name . '*.{jpg,jpeg,png,gif,JPG,JPEG,PNG,GIF}', GLOB_BRACE);
-
+        $filterMediayType = $this->input->get('media_type');
+        if(!empty($filterMediayType)){
+            if(strtolower($filterMediayType) == 'video'){
+                $allowedMediaTypes = str_replace('|', ',', $this->config->item('video_type'));
+            }elseif(strtolower($filterMediayType) == 'audio'){
+                $allowedMediaTypes = 'mp3';
+            }elseif(strtolower($filterMediayType) == 'image'){
+                $allowedMediaTypes = str_replace('|', ',', $this->config->item('image_type'));
+            }elseif(strtolower($filterMediayType) == 'document'){
+                $allowedMediaTypes = 'pdf,docx,doc,txt,text';
+            }
+        }else{
+            $allowedMediaTypes = str_replace('|', ',', $this->config->item('media_allowed_types'));
+        }
+        
+        $mediaTypes = $allowedMediaTypes.','.strtoupper($allowedMediaTypes);
+        $files = glob(rtrim($directory . $filter_name,'/'). '/*.{'.$mediaTypes.'}', GLOB_BRACE);
         if (!$files) {
             $files = array();
         }
@@ -66,7 +81,6 @@ class Media extends MX_Controller {
 
         foreach ($images as $image) {
             $name = str_split(basename($image), 14);
-
             if (is_dir($image)) {
                 $url = '';
 
@@ -88,7 +102,7 @@ class Media extends MX_Controller {
                 );
             } elseif (is_file($image)) {
                 $data['images'][] = array(                    
-                    'thumb' => $this->Mediamodel->resize(substr($image, strlen($mediaStore)), 100, 100),
+                    'thumb' => $this->getThumb($image),
                     'name' => implode(' ', $name),
                     'type' => 'image',
                     'path' => substr($image, strlen($mediaStore)),
@@ -112,7 +126,7 @@ class Media extends MX_Controller {
         $data['button_delete'] = 'button_delete';
         $data['button_search'] = 'button_search';
 
-        $data['token'] = 'token';
+        $data['token'] = $token;
 
         $directory = $this->input->get('directory');
         if (isset($directory)) {
@@ -166,7 +180,7 @@ class Media extends MX_Controller {
             $url .= '&thumb=' . $thumb;
         }
 
-        $data['parent'] = site_url('media') . '?token=token' . $url;
+        $data['parent'] = site_url('media') . '?token='.$token . $url;
 
         // Refresh
         $url = '';
@@ -186,7 +200,7 @@ class Media extends MX_Controller {
             $url .= '&thumb=' . $thumb;
         }
 
-        $data['refresh'] = site_url('media') . '?token=token' . $url;
+        $data['refresh'] = site_url('media') . '?token='.$token . $url;
 
         $url = '';
 
@@ -222,23 +236,45 @@ class Media extends MX_Controller {
         $config['url'] = $url;
         $data['pagination'] = $this->pagination($config);
         //echo "<pre>";print_r($data);die;
-        $this->load->view('layout', $data);
+        $this->load->view('media', $data);
+    }
+    
+    public function getThumb($file){
+        $fileExt = pathinfo($file,PATHINFO_EXTENSION);
+        $mediaLocation = $this->config->item('media_location');        
+        $imageType = explode('|',$this->config->item('image_type'));        
+        $videoType = explode('|',$this->config->item('video_type'));        
+        $mediaStore = FCPATH.$mediaLocation.'/';
+        if(in_array($fileExt,$imageType)){
+            $thumb = $this->Mediamodel->resize(substr($file, strlen($mediaStore)), 100, 90);
+        }elseif(in_array($fileExt, $videoType)){
+            $thumb = site_url('assets/images/mp4.jpg');
+        }elseif(in_array($fileExt, ['mp3'])){
+            $thumb = site_url('assets/images/mp3.jpg');
+        }elseif(in_array($fileExt, ['pdf'])){
+            $thumb = site_url('assets/images/pdf.jpg');
+        }
+        return $thumb;
     }
 
     public function upload() {
 
         $json = array();
-
+        $mediaLocation = $this->config->item('media_location');
+        if(empty($mediaLocation)){
+            die("Define the media location directory.");
+        }
+        $mediaStore = FCPATH.$mediaLocation.'/';
         $directory = $this->input->get('directory');
         if (isset($directory)) {
-            $directory = rtrim(DIR_IMAGE . 'catalog/' . $directory, '/');
+            $directory = rtrim($mediaStore . $directory, '/');
         } else {
-            $directory = DIR_IMAGE . 'catalog';
+            $directory = rtirm($mediaStore,'/');
         }
 
         $config = array();
         $config['upload_path'] = $directory;
-        $config['allowed_types'] = 'gif|jpg|png';
+        $config['allowed_types'] = $this->config->item('media_allowed_types');
         //$config['max_size']      = '0';
         $config['overwrite'] = FALSE;
 
@@ -276,15 +312,20 @@ class Media extends MX_Controller {
         //	$json['error'] = 'error_permission';
         //}
         // Make sure we have the correct directory
+        $mediaLocation = $this->config->item('media_location');
+        if(empty($mediaLocation)){
+            die("Define the media location directory.");
+        }
+        $mediaStore = FCPATH.$mediaLocation.'/';
         $directory = $this->input->get('directory');
         if (isset($directory)) {
-            $directory = rtrim(DIR_IMAGE . 'catalog/' . $directory, '/');
+            $directory = rtrim($mediaStore. $directory, '/');
         } else {
-            $directory = DIR_IMAGE . 'catalog';
+            $directory = rtrim($mediaStore,'/');
         }
-
+        
         // Check its a directory
-        if (!is_dir($directory) || substr(str_replace('\\', '/', realpath($directory)), 0, strlen(DIR_IMAGE . 'catalog')) != DIR_IMAGE . 'catalog') {
+        if (!is_dir($directory)) {
             $json['error'] = 'error_directory';
         }
 
@@ -304,7 +345,6 @@ class Media extends MX_Controller {
                 $json['error'] = 'error_exists';
             }
         }
-
         if (!isset($json['error'])) {
             mkdir($directory . '/' . $folder, 0777);
             chmod($directory . '/' . $folder, 0777);
@@ -313,7 +353,6 @@ class Media extends MX_Controller {
 
             $json['success'] = 'Direcory created';
         }
-
         //$this->response->addHeader('Content-Type: application/json');
         //$this->response->setOutput(json_encode($json));
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
@@ -330,71 +369,65 @@ class Media extends MX_Controller {
         //}
 
         $path = $this->input->post('path');
+        
         if (isset($path)) {
             $paths = $path;
         } else {
             $paths = array();
         }
-
-        // Loop through each path to run validations
-        foreach ($paths as $path) {
-            // Check path exsists
-            if ($path == DIR_IMAGE . 'catalog' || substr(str_replace('\\', '/', realpath(DIR_IMAGE . $path)), 0, strlen(DIR_IMAGE . 'catalog')) != DIR_IMAGE . 'catalog') {
-                $json['error'] = 'error_delete';
-
-                break;
-            }
+        $mediaLocation = $this->config->item('media_location');
+        if(empty($mediaLocation)){
+            die("Define the media location directory.");
         }
+        $mediaStore = FCPATH.$mediaLocation.'/';
+        
+        // Loop through each path
+        foreach ($paths as $path) {
+            $path = rtrim($mediaStore . $path, '/');
+            
+            // If path is just a file delete it
+            if (is_file($path)) {
+                unlink($path);
 
-        if (!$json) {
-            // Loop through each path
-            foreach ($paths as $path) {
-                $path = rtrim(DIR_IMAGE . $path, '/');
+                // If path is a directory beging deleting each file and sub folder
+            } elseif (is_dir($path)) {
+                $files = array();
 
-                // If path is just a file delete it
-                if (is_file($path)) {
-                    unlink($path);
+                // Make path into an array
+                $path = array($path . '*');
 
-                    // If path is a directory beging deleting each file and sub folder
-                } elseif (is_dir($path)) {
-                    $files = array();
+                // While the path array is still populated keep looping through
+                while (count($path) != 0) {
+                    $next = array_shift($path);
 
-                    // Make path into an array
-                    $path = array($path . '*');
-
-                    // While the path array is still populated keep looping through
-                    while (count($path) != 0) {
-                        $next = array_shift($path);
-
-                        foreach (glob($next) as $file) {
-                            // If directory add to path array
-                            if (is_dir($file)) {
-                                $path[] = $file . '/*';
-                            }
-
-                            // Add the file to the files to be deleted array
-                            $files[] = $file;
+                    foreach (glob($next) as $file) {
+                        // If directory add to path array
+                        if (is_dir($file)) {
+                            $path[] = $file . '/*';
                         }
+
+                        // Add the file to the files to be deleted array
+                        $files[] = $file;
                     }
+                }
 
-                    // Reverse sort the file array
-                    rsort($files);
+                // Reverse sort the file array
+                rsort($files);
 
-                    foreach ($files as $file) {
-                        // If file just delete
-                        if (is_file($file)) {
-                            unlink($file);
+                foreach ($files as $file) {
+                    // If file just delete
+                    if (is_file($file)) {
+                        unlink($file);
 
-                            // If directory use the remove directory function
-                        } elseif (is_dir($file)) {
-                            rmdir($file);
-                        }
+                        // If directory use the remove directory function
+                    } elseif (is_dir($file)) {
+                        rmdir($file);
                     }
                 }
             }
-
-            $json['success'] = 'text_delete';
         }
+        $json['success'] = implode(",",$path).' deleted successfully.';
+        
 
         $this->output->set_content_type('application/json')->set_output(json_encode($json));
     }
@@ -414,6 +447,21 @@ class Media extends MX_Controller {
             $p .= '<a class="btn directory" href="' . $base_url . '?page=' . $i . $url . '" >' . $i . '</a>';
         }
         return $p;
+    }
+    public function directoryIterator($path){
+        $objects = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path), \RecursiveIteratorIterator::SELF_FIRST);
+        
+        $imgFiles = [];
+        foreach($objects as $name => $object){
+            $mimeType = mime_content_type($object->getPathname());
+            if($object->getSize() <= 800000){
+                continue;
+            }
+            if(in_array($mimeType,['image/png','image/jpeg','image/jpg'])){
+                array_push($imgFiles, $object);
+            }
+        }
+        return $imgFiles;
     }
 
 }

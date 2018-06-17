@@ -15,7 +15,6 @@ class MediaModel extends CI_model {
         $image_old = $filename;
         $image_new = 'cache/' . substr($filename, 0, strrpos($filename, '.')) . '-' . $width . 'x' . $height . '.' . $extension;
         if (!is_file($mediaStore . $image_new) || (filectime($mediaStore . $image_old) > filectime($mediaStore . $image_new))) {
-            die("ENSDF");
             list($width_orig, $height_orig, $image_type) = getimagesize($mediaStore . $image_old);
 
             if (!in_array($image_type, array(IMAGETYPE_PNG, IMAGETYPE_JPEG, IMAGETYPE_GIF))) {
