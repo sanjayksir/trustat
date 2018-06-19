@@ -204,11 +204,16 @@ class ScannedProduct extends ApiController {
         }
         $data['purchase_date'] = $data['purchase_date'];
         $data['warranty_start_date'] = '0000-00-00';
-		$data['warranty_end_date'] = '0000-00-00';
+        $data['warranty_end_date'] = '0000-00-00';
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
         $data['modified'] = date('Y-m-d H:i:s');
-        $data['status'] = 0;
+        if(!empty($warrenty)){
+            $data['status'] = 0;
+        }else{
+            $data['status'] = 1;
+        }
+        
         unset($data['purchase_date']);
         //echo "<pre>";print_r($data);die;        
         if($this->db->insert('purchased_product', $data)){
