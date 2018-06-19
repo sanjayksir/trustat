@@ -39,9 +39,12 @@ class ScannedProduct extends ApiController {
         }
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
         $bar_code_data = $data['bar_code'];
+		$consumerId = $user['id'];
 		// function to get product registration status
-        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);        
-        //echo $isRegistered;
+        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);   
+		
+		$isLoyaltyForVideoFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForVideoFBQuesGiven($bar_code_data, $consumerId);
+        //echo $isLoyaltyForVideoFBQuesGiven;
         if(empty($result)){
             $data['user_id'] = $user['id'];
             $data['created'] = date('Y-m-d H:i:s');
@@ -70,6 +73,7 @@ class ScannedProduct extends ApiController {
             $result->product_user_manual = Utils::setFileUrl($result->product_user_manual);
         }
 		$result->product_registration_status = $isRegistered;
+		$result->LoyaltyForVideoFBQuesGiven = $isLoyaltyForVideoFBQuesGiven;
 		
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
@@ -160,7 +164,7 @@ class ScannedProduct extends ApiController {
         }
         //echo "<pre>";print_r($result);die;
         $bar_code_data = $data['bar_code'];
-        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data,$user['id']); 
+        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data); 
         if( $result->pack_level == 1 ){
             $data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
             $this->response(['status'=>true,'message'=>'Product registration failed for pack level '.$result->pack_level.'.','data'=>$data]);
@@ -200,7 +204,7 @@ class ScannedProduct extends ApiController {
         }
         $data['purchase_date'] = $data['purchase_date'];
         $data['warranty_start_date'] = '0000-00-00';
-	$data['warranty_end_date'] = '0000-00-00';
+		$data['warranty_end_date'] = '0000-00-00';
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
         $data['modified'] = date('Y-m-d H:i:s');

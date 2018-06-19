@@ -153,7 +153,7 @@ class ConsumerModel extends CI_Model {
      */
     public function loylty(){
         $items = [];
-        $query = $this->db->select('*')->from('loylties')->get();
+        $query = $this->db->select('*')->from('loylties')->order_by('created_at', 'desc')->get();
         if($query->num_rows() <= 0){
             return false;
         }
