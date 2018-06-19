@@ -454,10 +454,17 @@ class ProductModel extends CI_Model {
     
     
     public function feedbackLoylity($userId,$transactionType,$params){
-        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$userId."' AND JSON_EXTRACT(params,'$.question_id')='".$params['question_id']."' AND JSON_EXTRACT(params,'$.product_qr_code')='".$params['product_qr_code']."'");
-        if($answerQuery->num_rows() <= 0){
-            $this->saveLoylty($transactionType,$userId,$params);
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$userId."'");
+        if($answerQuery->num_rows() >= 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                if(($paramsValue['question_id'] == $params['question_id']) && ($paramsValue['product_qr_code'] == $params['product_qr_code'])){
+                    return false;
+                }                
+            }
         }
+        $this->saveLoylty($transactionType,$userId,$params);
     }
     
     public function findLoylityBySlug($slug = null){
