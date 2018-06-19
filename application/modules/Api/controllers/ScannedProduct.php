@@ -39,8 +39,11 @@ class ScannedProduct extends ApiController {
         }
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
         $bar_code_data = $data['bar_code'];
+		$consumerId = $user['id'];
 		// function to get product registration status
-        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);        
+        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);   
+		
+		//$isLoyaltyForVideoFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForVideoFBQuesGiven($bar_code_data, $consumerId);
         //echo $isRegistered;
         if(empty($result)){
             $data['user_id'] = $user['id'];
@@ -160,7 +163,7 @@ class ScannedProduct extends ApiController {
         }
         //echo "<pre>";print_r($result);die;
         $bar_code_data = $data['bar_code'];
-        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data,$user['id']); 
+        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data); 
         if( $result->pack_level == 1 ){
             $data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
             $this->response(['status'=>true,'message'=>'Product registration failed for pack level '.$result->pack_level.'.','data'=>$data]);

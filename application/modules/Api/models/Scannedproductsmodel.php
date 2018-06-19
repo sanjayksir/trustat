@@ -67,7 +67,19 @@ class ScannedproductsModel extends CI_Model {
     }
 	// check if the product code is registered or not 
 	
-    Public function isProductRegistered($barCode,$consumerId) {
+    Public function isProductRegistered($bar_code_data) {
+        $query = $this->db->get_where('purchased_product', array('bar_code' => $bar_code_data));
+        if ($query->num_rows() > 0) {
+            $data = $query->row_array();            
+            return $data;
+        } else {
+            return false;
+        }
+    }
+
+	// checking if the Loyalty given to the user on Video type questions on code 
+	/*
+    Public function isLoyaltyForVideoFBQuesGiven($bar_code_data, $userId) {
         $this->db->from('purchased_product');
         $this->db->where(['bar_code' => $barCode,'consumer_id'=>$consumerId]);
         $query = $this->db->get();
@@ -78,7 +90,7 @@ class ScannedproductsModel extends CI_Model {
             return false;
         }
     }
-
+	*/
     /*
     public function isProductRegistered($bar_code_data) {
 
