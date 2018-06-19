@@ -43,8 +43,8 @@ class ScannedProduct extends ApiController {
 		// function to get product registration status
         $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);   
 		
-		//$isLoyaltyForVideoFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForVideoFBQuesGiven($bar_code_data, $consumerId);
-        //echo $isRegistered;
+		$isLoyaltyForVideoFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForVideoFBQuesGiven($bar_code_data, $consumerId);
+        //echo $isLoyaltyForVideoFBQuesGiven;
         if(empty($result)){
             $data['user_id'] = $user['id'];
             $data['created'] = date('Y-m-d H:i:s');
@@ -73,6 +73,7 @@ class ScannedProduct extends ApiController {
             $result->product_user_manual = Utils::setFileUrl($result->product_user_manual);
         }
 		$result->product_registration_status = $isRegistered;
+		$result->product_vvv_status = $isLoyaltyForVideoFBQuesGiven;
 		
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
@@ -203,7 +204,7 @@ class ScannedProduct extends ApiController {
         }
         $data['purchase_date'] = $data['purchase_date'];
         $data['warranty_start_date'] = '0000-00-00';
-	$data['warranty_end_date'] = '0000-00-00';
+		$data['warranty_end_date'] = '0000-00-00';
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
         $data['modified'] = date('Y-m-d H:i:s');
