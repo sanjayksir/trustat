@@ -81,9 +81,8 @@ class ScannedproductsModel extends CI_Model {
 	
     Public function isLoyaltyForVideoFBQuesGiven($bar_code_data, $consumerId) {
 		
-		
-		//$array0 = array('product_qr_code' => $bar_code_data);
-		$array1 = array('params' => array('product_qr_code' => $bar_code_data), 'transaction_type' => "Scan for Genuity and Video Response", 'user_id' => $consumerId);
+		//$array2 = "JSON_EXTRACT(params,'$.product_qr_code')='".$bar_code_data."'";
+		$array1 = array("JSON_EXTRACT(params,'$.product_qr_code')='".$bar_code_data."'", 'transaction_type' => "Scan for Genuity and Video Response", 'user_id' => $consumerId);
         $query = $this->db->get_where('loylty_points', $array1);
         if ($query->num_rows() > 0) {
             $data = $query->row_array();            

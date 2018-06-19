@@ -73,7 +73,7 @@ class ScannedProduct extends ApiController {
             $result->product_user_manual = Utils::setFileUrl($result->product_user_manual);
         }
 		$result->product_registration_status = $isRegistered;
-		$result->product_vvv_status = $isLoyaltyForVideoFBQuesGiven;
+		$result->LoyaltyForVideoFBQuesGiven = $isLoyaltyForVideoFBQuesGiven;
 		
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
