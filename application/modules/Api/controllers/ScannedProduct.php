@@ -44,6 +44,9 @@ class ScannedProduct extends ApiController {
         $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);   
 		
 		$isLoyaltyForVideoFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForVideoFBQuesGiven($bar_code_data, $consumerId);
+		$isLoyaltyForAudioFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForAudioFBQuesGiven($bar_code_data, $consumerId);
+		$isLoyaltyForImageFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForImageFBQuesGiven($bar_code_data, $consumerId);
+		$isLoyaltyForPDFFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForPDFFBQuesGiven($bar_code_data, $consumerId);
         //echo $isLoyaltyForVideoFBQuesGiven;
         if(empty($result)){
             $data['user_id'] = $user['id'];
@@ -74,6 +77,9 @@ class ScannedProduct extends ApiController {
         }
 		$result->product_registration_status = $isRegistered;
 		$result->LoyaltyForVideoFBQuesGiven = $isLoyaltyForVideoFBQuesGiven;
+		$result->isLoyaltyForAudioFBQuesGiven = $isLoyaltyForAudioFBQuesGiven;
+		$result->isLoyaltyForImageFBQuesGiven = $isLoyaltyForImageFBQuesGiven;
+		$result->isLoyaltyForPDFFBQuesGiven = $isLoyaltyForPDFFBQuesGiven;
 		
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
