@@ -356,7 +356,7 @@ Your browser does not support audio in video tag.
                                                                 <div class="col-xs-3 col-sm-3 form-control"><?php echo $details['code_type'];?></div>
                                                                 
                                                                 <div class="col-xs-3 col-sm-3"><label><strong>Code Activation Type:-</strong></label></div>
-                                                                <div class="col-xs-3 col-sm-3 form-control"><?php echo $details['code_activation_type'];?></div>
+                                                                <div class="col-xs-3 col-sm-3 form-control"><?php if($details['code_activation_type']==1) { echo "Pre-Activated";} else echo "Post-Activated"; ?></div>
                                                                 
                                                                 <div class="col-xs-3 col-sm-3"><label><strong>Delivery Method:-</strong></label></div>
                                                                 <div class="col-xs-3 col-sm-3 form-control"><?php echo product_delivery_method($details['delivery_method']);?></div>
