@@ -77,13 +77,13 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="col-xs-12">
 
                         <div class="widget-box widget-color-blue">
-                            <div class="widget-header widget-header-flat">
+                            <!--<div class="widget-header widget-header-flat">
                                 <h5 class="widget-title bigger lighter">MANAGE PRODUCTS</h5>
                                 <div class="widget-toolbar">
                                     <a href="<?php echo base_url('product/add_product') ?>" class="btn btn-xs btn-warning" title="Add Product">Add <?php echo $label; ?> </a>
                                 </div>
                             </div>
-
+							-->
                             <div class="widget-body">
                                 <div class="row filter-box">
                                     <form id="form-filter" action="" method="get" class="form-horizontal" >
@@ -116,10 +116,10 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th class="hidden-480">Product SKU</th>
                                     <th class="hidden-480">Product Industry</th>
                                     <th>Created By</th>
-                                    <th>CreatedDate</th>
-                                    <th>Action</th>
-                                    <th>Add Media</th>
-                                    <th>Feedback Questions</th>
+                                    <th>Creation Date</th>
+                                    <th>Edit/Delete Product </th>
+                                    <th>Product Review (View/Edit/Add)</th>
+                                    <th>Feedback Questions (View/Edit/Add)</th>
                                 </tr>
                             </thead>
                             <tbody>
