@@ -446,6 +446,8 @@ class ProductModel extends CI_Model {
                 ->join('product_feedback_questions AS pq', 'pq.question_id=q.question_id','INNER')
                 ->where('pq.product_id ="'.$product.'"')
                 ->where('q.status =1')
+				->order_by('rand()')
+				->limit(3)
                 ->get()
                 ->result();
         return $query;

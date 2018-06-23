@@ -8,7 +8,7 @@ class MediaModel extends CI_model {
             die("Define the media location directory.");
         }
         $mediaStore = FCPATH.$mediaLocation.'/';
-        if (!is_file($mediaStore . $filename) || substr(str_replace('\\', '/', realpath($mediaStore . $filename)), 0, strlen($mediaStore)) != $mediaStore) {
+        if (!is_file($mediaStore . $filename)) {
             return;
         }
         $extension = pathinfo($filename, PATHINFO_EXTENSION);

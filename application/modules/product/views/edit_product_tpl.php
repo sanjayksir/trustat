@@ -69,6 +69,21 @@ if(!empty($isOtherIndustry)){
 
  			</div> 
 		</div>
+		
+		<div class="form-group row">
+			<div class="col-sm-4">
+			<label for="form-field-8">Brand Name</label>
+			<input value="<?php echo $dt['brand_name'];?>" type="text" name="brand_name" id="brand_name" class="form-control" >
+ 			</div>
+             <!--
+            <div class="col-sm-4">
+            <label for="form-field-8">Product SKU</label>
+         		<input value="<?php //echo $dt['product_sku'];?>" readonly="readonly" class="form-control" maxlength="100" type="text">
+			</div>
+           -->
+     
+ 		</div>
+		
 		<div class="form-group row">
 			<div class="col-sm-3">
 			<label for="form-field-8">Industry</label>

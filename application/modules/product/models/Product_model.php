@@ -129,7 +129,7 @@
 		
 		 if(!empty($id)){
 		 	 $updateArr=array(
-					 
+					"brand_name"=>$brand_name,
 					"attribute_list"=>$product_attr,
 					"industry_data"=>$industry,
 					"code_type"			  => $code_type,
