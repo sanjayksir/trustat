@@ -39,14 +39,15 @@ class ScannedProduct extends ApiController {
         }
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
         $bar_code_data = $data['bar_code'];
+		$product_id = $result->id;;
 		$consumerId = $user['id'];
 		// function to get product registration status
         $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);   
 		
-		$isLoyaltyForVideoFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForVideoFBQuesGiven($bar_code_data, $consumerId);
-		$isLoyaltyForAudioFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForAudioFBQuesGiven($bar_code_data, $consumerId);
-		$isLoyaltyForImageFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForImageFBQuesGiven($bar_code_data, $consumerId);
-		$isLoyaltyForPDFFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForPDFFBQuesGiven($bar_code_data, $consumerId);
+		$isLoyaltyForVideoFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForVideoFBQuesGiven($bar_code_data, $consumerId,$product_id);
+		$isLoyaltyForAudioFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForAudioFBQuesGiven($bar_code_data, $consumerId,$product_id);
+		$isLoyaltyForImageFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForImageFBQuesGiven($bar_code_data, $consumerId,$product_id);
+		$isLoyaltyForPDFFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForPDFFBQuesGiven($bar_code_data, $consumerId,$product_id);
         //echo $isLoyaltyForVideoFBQuesGiven;
         if(empty($result)){
             $data['user_id'] = $user['id'];
@@ -80,6 +81,7 @@ class ScannedProduct extends ApiController {
 		$result->isLoyaltyForAudioFBQuesGiven = $isLoyaltyForAudioFBQuesGiven;
 		$result->isLoyaltyForImageFBQuesGiven = $isLoyaltyForImageFBQuesGiven;
 		$result->isLoyaltyForPDFFBQuesGiven = $isLoyaltyForPDFFBQuesGiven;
+
 		
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;

@@ -78,13 +78,13 @@ class ScannedproductsModel extends CI_Model {
     }
 
 	// checking if the Loyalty given to the user on Video type questions on code 
-    Public function isLoyaltyForVideoFBQuesGiven($bar_code_data, $consumerId) {
+    Public function isLoyaltyForVideoFBQuesGiven($consumerId, $product_id) {
         $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='Scan for Genuity and Video Response'");
         if($answerQuery->num_rows() >= 0){
             $dataItems = $answerQuery->result();
             foreach($dataItems as $row){
                 $paramsValue = json_decode($row->params,true);                
-                if(($paramsValue['product_qr_code'] == $bar_code_data)){
+                if(($paramsValue['product_id'] == $product_id)){
                     $row->params = $paramsValue;
                     return $row;
                 }                
@@ -94,13 +94,13 @@ class ScannedproductsModel extends CI_Model {
     }
 	
 		// checking if the Loyalty given to the user on Audio type questions on code 
-    Public function isLoyaltyForAudioFBQuesGiven($bar_code_data, $consumerId) {
+    Public function isLoyaltyForAudioFBQuesGiven($product_id, $consumerId) {
         $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='Scan for Genuity and Audio Response'");
         if($answerQuery->num_rows() >= 0){
             $dataItems = $answerQuery->result();
             foreach($dataItems as $row){
                 $paramsValue = json_decode($row->params,true);                
-                if(($paramsValue['product_qr_code'] == $bar_code_data)){
+                if(($paramsValue['product_id'] == $product_id)){
                     $row->params = $paramsValue;
                     return $row;
                 }                
@@ -110,13 +110,13 @@ class ScannedproductsModel extends CI_Model {
     }
 	
 		// checking if the Loyalty given to the user on Image type questions on code 
-    Public function isLoyaltyForImageFBQuesGiven($bar_code_data, $consumerId) {
+    Public function isLoyaltyForImageFBQuesGiven($product_id, $consumerId) {
         $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='Scan for Genuity and Video Response'");
         if($answerQuery->num_rows() >= 0){
             $dataItems = $answerQuery->result();
             foreach($dataItems as $row){
                 $paramsValue = json_decode($row->params,true);                
-                if(($paramsValue['product_qr_code'] == $bar_code_data)){
+                if(($paramsValue['product_id'] == $product_id)){
                     $row->params = $paramsValue;
                     return $row;
                 }                
@@ -126,13 +126,13 @@ class ScannedproductsModel extends CI_Model {
     }
 	
 			// checking if the Loyalty given to the user on PDF type questions on code 
-    Public function isLoyaltyForPDFFBQuesGiven($bar_code_data, $consumerId) {
+    Public function isLoyaltyForPDFFBQuesGiven($product_id, $consumerId) {
         $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='Scan for Genuity and pdf Response'");
         if($answerQuery->num_rows() >= 0){
             $dataItems = $answerQuery->result();
             foreach($dataItems as $row){
                 $paramsValue = json_decode($row->params,true);                
-                if(($paramsValue['product_qr_code'] == $bar_code_data)){
+                if(($paramsValue['product_id'] == $product_id)){
                     $row->params = $paramsValue;
                     return $row;
                 }                
