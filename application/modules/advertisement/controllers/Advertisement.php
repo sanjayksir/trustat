@@ -1,8 +1,8 @@
 <?php
- class Product extends MX_Controller {
+ class Advertisement extends MX_Controller {
      function __construct() {
          parent::__construct();
-         $this->load->model('Product_model');
+         $this->load->model('Advertisement_model');
 		 $this->load->helper('common_functions_helper');
 		 $this->load->library('pagination');
      }
@@ -12,9 +12,9 @@
 		 
 		 if($this->input->post('hidden_field')=='1'){
 		 	//echo '<pre>';print_r($this->input->post());exit;
-			 $this->Product_model->saveAttributeList($this->input->post());
+			 $this->Advertisement_model->saveAttributeList($this->input->post());
 		 }
-         $data['get_attr'] = $this->Product_model->getAttributeList();
+         $data['get_attr'] = $this->Advertisement_model->getAttributeList();
  		$this->load->view('attribute_list', $data);
      }
 
@@ -28,12 +28,12 @@
 
      function update_attributes($id) {
 		 $this->checklogin();
-	 	$data['listData']=$this->Product_model->getOptionList($id);
+	 	$data['listData']=$this->Advertisement_model->getOptionList($id);
 	 	if($this->input->post('submit')){
-			 $this->Product_model->update_attribute_val($this->input->post());
+			 $this->Advertisement_model->update_attribute_val($this->input->post());
 		}
          // check if the unitofarea exists before trying to edit it
-       //  $data['unitofarea'] = $this->Product_model->getOptionList($id);
+       //  $data['unitofarea'] = $this->Advertisement_model->getOptionList($id);
          $this->load->view('attribute_add', $data);
      }
 	 
@@ -43,29 +43,29 @@
  
     
  
- 	function add_product(){
+ 	function add_Advertisement(){
 		$user_id 	= $this->session->userdata('admin_user_id');
 		if(empty($user_id)){
  			redirect(base_url().'login');	exit;
  		}
 		$data = array();
 		
-		$data['product_attr'] = $this->Product_model->get_all_attrs();
-		$this->load->view('add_product_tpl', $data);
+		$data['Advertisement_attr'] = $this->Advertisement_model->get_all_attrs();
+		$this->load->view('add_Advertisement_tpl', $data);
 		
 	}
 	
 	
-	function update_product(){
+	function update_Advertisement(){
 		$user_id 	= $this->session->userdata('admin_user_id');
 		if(empty($user_id)){
  			redirect(base_url().'login');	exit;
  		}
 		$data = array();
 		
-		//$data['product_attr'] = $this->Product_model->get_all_attrs();
-		$data['product_data'] = $this->Product_model->fetch_product_detail($this->uri->segment(3));
-		$this->load->view('edit_product_tpl', $data);
+		//$data['Advertisement_attr'] = $this->Advertisement_model->get_all_attrs();
+		$data['Advertisement_data'] = $this->Advertisement_model->fetch_Advertisement_detail($this->uri->segment(3));
+		$this->load->view('edit_Advertisement_tpl', $data);
 		
 	}
  
@@ -79,7 +79,7 @@
 	//print_r($this->input->post());
 	$result = '<option value="0">-Select Industry (Level-1)-</option>';
 	if(!empty($id)){
- 	$this->db->select('product_id, name');
+ 	$this->db->select('Advertisement_id, name');
  	$this->db->from('attribute_name');
  	$this->db->where('parent',$id);
   	$query = $this->db->get();  //echo $this->db->last_query();exit;
@@ -87,7 +87,7 @@
 			$res = $query->result_array();
 			
 			foreach($res as $val){
-				$result .= '<option value="'.$val['product_id'].'">'.$val['name'].'</option>';
+				$result .= '<option value="'.$val['Advertisement_id'].'">'.$val['name'].'</option>';
 			}
 			
  		}
@@ -126,23 +126,23 @@
  }
  
  
-  function checkProductExists($id=''){
+  function checkAdvertisementExists($id=''){
   $user_id 	= $this->session->userdata('admin_user_id');
 		if(empty($user_id)){
  			redirect(base_url().'login');	exit;
  		}
-	   $name = $this->input->post('product_name');
+	   $name = $this->input->post('Advertisement_name');
 	   
 	   
- 	  echo $this->Product_model->IsExistsProduct($name,$id='');exit;
+ 	  echo $this->Advertisement_model->IsExistsAdvertisement($name,$id='');exit;
   }
   
-  function save_product($id='') {
+  function save_Advertisement($id='') {
   $user_id 	= $this->session->userdata('admin_user_id');
 		if(empty($user_id)){
  			redirect(base_url().'login');	exit;
  		}
-  		$res = $this->Product_model->save_product($id);
+  		$res = $this->Advertisement_model->save_Advertisement($id);
 		if($res=='1'){
 			echo '1';
 		}else{
@@ -159,11 +159,11 @@
 		exit;
    }
    
-   public function list_product() {
+   public function list_advertisement() {
         $this->checklogin();
         if (!empty($this->input->post('del_submit'))) {
-            if ($this->db->query("delete from products where id='" . $this->input->post('del_submit') . "'")) {
-                $this->session->set_flashdata('success', 'Product Deleted Successfully!');
+            if ($this->db->query("delete from Advertisements where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Advertisement Deleted Successfully!');
             }
         }
         ##--------------- pagination start ----------------##
@@ -181,18 +181,18 @@
         if (empty($srch_string)) {
             $srch_string = '';
         }
-        $total_records = $this->Product_model->total_product_listing($srch_string);
-        $params["product_list"] = $this->Product_model->product_listing($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('product/list_product', $total_records);
-        $this->load->view('product_list', $params);
+        $total_records = $this->Advertisement_model->total_product_listing($srch_string);
+        $params["product_list"] = $this->Advertisement_model->product_listing($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('advertisement/list_advertisement', $total_records);
+        $this->load->view('advertisement_list', $params);
     }
-// list assigned products to Plant controller 
+// list assigned Advertisements to Plant controller 
 
-function list_assigned_products() {
+function list_assigned_Advertisements() {
 		 $this->checklogin();
 		 if(!empty($this->input->post('del_submit'))){
-		 	if($this->db->query("delete from products where id='".$this->input->post('del_submit')."'")){
-				$this->session->set_flashdata('success', 'Product Deleted Successfully!');	
+		 	if($this->db->query("delete from Advertisements where id='".$this->input->post('del_submit')."'")){
+				$this->session->set_flashdata('success', 'Advertisement Deleted Successfully!');	
 			}
 		 }
 		 ##--------------- pagination start ----------------##
@@ -204,14 +204,14 @@ function list_assigned_products() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Product_model->total_product_listing($srch_string);
+        $total_records = $this->Advertisement_model->total_Advertisement_listing($srch_string);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["product_list"] = $this->Product_model->assigned_product_listing($limit_per_page, $start_index,$srch_string);
+            $params["Advertisement_list"] = $this->Advertisement_model->assigned_Advertisement_listing($limit_per_page, $start_index,$srch_string);
              
-            $config['base_url'] = base_url() . 'product/list_assigned_products';
+            $config['base_url'] = base_url() . 'Advertisement/list_assigned_Advertisements';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -242,8 +242,8 @@ function list_assigned_products() {
         }
 		##--------------- pagination End ----------------##
 		
-       //  $data['product_list'] = $this->Product_model->product_listing();
- 		$this->load->view('list_assigned_products', $params);
+       //  $data['Advertisement_list'] = $this->Advertisement_model->Advertisement_listing();
+ 		$this->load->view('list_assigned_Advertisements', $params);
      }
 	 
 	 
@@ -252,15 +252,15 @@ function list_assigned_products() {
 	 	$id 	= $this->input->post('id');
 		$parent =  explode(',',$this->input->post('child'));
 	 	if($id!=''){
-			$data = json_decode(getAllProductName($id),true);//print_r($data);exit;
+			$data = json_decode(getAllAdvertisementName($id),true);//print_r($data);exit;
 			$options = ""; 
-			$dd =  '<select class="form-control" name="product_attr[]" multiple="multiple"><option>select Child Product</option>';
+			$dd =  '<select class="form-control" name="Advertisement_attr[]" multiple="multiple"><option>select Child Advertisement</option>';
 			foreach($data as $rec){
 				$selected = '';
-				if(in_array($rec['product_id'],$parent)){
+				if(in_array($rec['Advertisement_id'],$parent)){
 					$selected = 'selected="selected"';
 				}
-				$dd .= '<option '.$selected.'value="'.$rec['product_id'].'">'.$rec['name'].'</option>';
+				$dd .= '<option '.$selected.'value="'.$rec['Advertisement_id'].'">'.$rec['name'].'</option>';
 			}
  			$dd .=  '</select>';
 			echo $dd;exit;
@@ -268,11 +268,11 @@ function list_assigned_products() {
 	 }
 	 
 	 function delete_attribute($id){//echo '**'.$id;exit;
-	 	$data = $this->Product_model->delete_attr($id);
+	 	$data = $this->Advertisement_model->delete_attr($id);
 	 }
 	 
 	 function add_description(){
-		$this->load->view('product_media_add');
+		$this->load->view('Advertisement_media_add');
 	}
 	
 	
@@ -281,7 +281,7 @@ function list_assigned_products() {
 		//echo '<pre>';print_r($_FILES);exit;
 		if(isset($_POST) && $_SERVER['REQUEST_METHOD'] == "POST")
 		{
-			$res = $this->upload_File('upload_file', array('jpg','JPEG','png'), 'uploads/product_media' ,'500','500','2000');
+			$res = $this->upload_File('upload_file', array('jpg','JPEG','png'), 'uploads/Advertisement_media' ,'500','500','2000');
 			if($res){
 				echo '<pre>';print_r($res);exit;	
 			}else{
@@ -335,12 +335,12 @@ function list_assigned_products() {
 			case'400x400':
 			  $w=400;
 			  //$h=169;
-			  $file_path='./uploads/product_media/thumb/'.$file['file_name'];
+			  $file_path='./uploads/Advertisement_media/thumb/'.$file['file_name'];
 			  break;
 			case'222x190':
 			  $w=222;
 			  //$h=190;
-			  $file_path='./uploads/product_media/thumb/'.$file['file_name'];
+			  $file_path='./uploads/Advertisement_media/thumb/'.$file['file_name'];
 			 break;	
 		 }
 		 $config['image_library'] 	= 'gd2';
@@ -457,13 +457,13 @@ function list_assigned_products() {
 		$data					= array();
 		$data = $this->input->post();
 		//print_r($data);exit;
-		echo $data = $this->Product_model->save_feedback($data);exit;
+		echo $data = $this->Advertisement_model->save_feedback($data);exit;
 	}
 	
-	// Product Description Feedback Questions
+	// Advertisement Description Feedback Questions
  function ask_feedback($id=''){
 		if(empty($id)){
-			redirect('product/list_product');
+			redirect('Advertisement/list_Advertisement');
 		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
@@ -475,14 +475,14 @@ function list_assigned_products() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Product_model->total_feedback_listing($srch_string, $id);
+        $total_records = $this->Advertisement_model->total_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["product_list"] = $this->Product_model->feedback_listing($limit_per_page, $start_index,$srch_string, $id);
+            $params["Advertisement_list"] = $this->Advertisement_model->feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'product/ask_feedback_tpl';
+            $config['base_url'] = base_url() . 'Advertisement/ask_feedback_tpl';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -510,19 +510,19 @@ function list_assigned_products() {
             $this->pagination->initialize($config);
              // build paging links
             $params["links"] = $this->pagination->create_links();
-			$params["product_id"] = $id;
+			$params["Advertisement_id"] = $id;
         }
 		##--------------- pagination End ----------------##
 		
-       //  $data['product_list'] = $this->Product_model->product_listing();
+       //  $data['Advertisement_list'] = $this->Advertisement_model->Advertisement_listing();
  		$this->load->view('ask_feedback_tpl', $params);
      
 	}
 	
-	// Product Image Feedback Questions
+	// Advertisement Image Feedback Questions
 	function ask_image_feedback($id=''){
 		if(empty($id)){
-			redirect('product/list_product');
+			redirect('Advertisement/list_Advertisement');
 		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
@@ -534,14 +534,14 @@ function list_assigned_products() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Product_model->total_image_feedback_listing($srch_string, $id);
+        $total_records = $this->Advertisement_model->total_image_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["product_list"] = $this->Product_model->image_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
+            $params["Advertisement_list"] = $this->Advertisement_model->image_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'product/ask_feedback';
+            $config['base_url'] = base_url() . 'Advertisement/ask_feedback';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -572,14 +572,14 @@ function list_assigned_products() {
         }
 		##--------------- pagination End ----------------##
 		
-       //  $data['product_list'] = $this->Product_model->product_listing();
+       //  $data['Advertisement_list'] = $this->Advertisement_model->Advertisement_listing();
  		$this->load->view('ask_image_feedback_tpl', $params);
      
 	}
-	// Product Video Feedback Questions
+	// Advertisement Video Feedback Questions
 	function ask_video_feedback($id=''){
 		if(empty($id)){
-			redirect('product/list_product');
+			redirect('Advertisement/list_Advertisement');
 		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
@@ -591,14 +591,14 @@ function list_assigned_products() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Product_model->total_video_feedback_listing($srch_string, $id);
+        $total_records = $this->Advertisement_model->total_video_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["product_list"] = $this->Product_model->video_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
+            $params["Advertisement_list"] = $this->Advertisement_model->video_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'product/ask_feedback';
+            $config['base_url'] = base_url() . 'Advertisement/ask_feedback';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -629,14 +629,14 @@ function list_assigned_products() {
         }
 		##--------------- pagination End ----------------##
 		
-       //  $data['product_list'] = $this->Product_model->product_listing();
+       //  $data['Advertisement_list'] = $this->Advertisement_model->Advertisement_listing();
  		$this->load->view('ask_video_feedback_tpl', $params);
      
 	}
-	// Product Audio Feedback Questions
+	// Advertisement Audio Feedback Questions
 	function ask_audio_feedback($id=''){
 		if(empty($id)){
-			redirect('product/list_product');
+			redirect('Advertisement/list_Advertisement');
 		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
@@ -648,14 +648,14 @@ function list_assigned_products() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Product_model->total_audio_feedback_listing($srch_string, $id);
+        $total_records = $this->Advertisement_model->total_audio_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["product_list"] = $this->Product_model->audio_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
+            $params["Advertisement_list"] = $this->Advertisement_model->audio_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'product/ask_feedback';
+            $config['base_url'] = base_url() . 'Advertisement/ask_feedback';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -686,14 +686,14 @@ function list_assigned_products() {
         }
 		##--------------- pagination End ----------------##
 		
-       //  $data['product_list'] = $this->Product_model->product_listing();
+       //  $data['Advertisement_list'] = $this->Advertisement_model->Advertisement_listing();
  		$this->load->view('ask_audio_feedback_tpl', $params);
      
 	}
-	// Product PDF Feedback Questions
+	// Advertisement PDF Feedback Questions
 	function ask_pdf_feedback($id=''){
 		if(empty($id)){
-			redirect('product/list_product');
+			redirect('Advertisement/list_Advertisement');
 		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
@@ -705,14 +705,14 @@ function list_assigned_products() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Product_model->total_pdf_feedback_listing($srch_string, $id);
+        $total_records = $this->Advertisement_model->total_pdf_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["product_list"] = $this->Product_model->pdf_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
+            $params["Advertisement_list"] = $this->Advertisement_model->pdf_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'product/ask_feedback';
+            $config['base_url'] = base_url() . 'Advertisement/ask_feedback';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -743,18 +743,18 @@ function list_assigned_products() {
         }
 		##--------------- pagination End ----------------##
 		
-       //  $data['product_list'] = $this->Product_model->product_listing();
+       //  $data['Advertisement_list'] = $this->Advertisement_model->Advertisement_listing();
  		$this->load->view('ask_pdf_feedback_tpl', $params);
      
 	}
 	
 	
-	function save_product_question(){
+	function save_Advertisement_question(){
 	 	$this->checklogin();
-		$product_id	=$this->input->post('p_id');
+		$Advertisement_id	=$this->input->post('p_id');
 		$question_id=$this->input->post('q_id');
 		$Chk = $this->input->post('Chk');
-		echo $this->Product_model->save_product_question($product_id,$question_id,$Chk);exit;
+		echo $this->Advertisement_model->save_Advertisement_question($Advertisement_id,$question_id,$Chk);exit;
  	}
 }
 
