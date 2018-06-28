@@ -66,45 +66,52 @@
 															<div class="row">
 																		<div class="col-xs-12"> 
 																			<div class="col-xs-3 col-sm-3">
-																			 <label><strong>Brand Name:-</strong></label></div>
+																			 <label><strong>Brand Name :</strong></label></div>
 																			 <div class="col-xs-3 col-sm-3"><?php echo $details['brand_name'];?></div>
 																		</div>
 																</div>
+																<br /><br />
 															<div class="row">
 																		<div class="col-xs-12"> 
 																			<div class="col-xs-3 col-sm-3">
-																			 <label><strong>Product Name:-</strong></label></div>
+																			 <label><strong>Product Name :</strong></label></div>
 																			 <div class="col-xs-3 col-sm-3"><?php echo $details['product_name'];?></div>
 																		</div>
 																</div>
+																<br /><br />
 															<div class="row">
 																<div class="col-xs-12"> 
 																	<div class="col-xs-3 col-sm-3">
-																	 	<label><strong>Industry:-</strong></label>
+																	 	<label><strong>Industry :</strong></label>
 																	</div>
-																	<div class="col-xs-3 col-sm-3"> 
-																		<?php $industryList =  get_industry_by_id(implode(',',json_decode($details['industry_data'],true)));
-																		$indus='';
-																		$i=0;
-																		foreach($industryList as $rec){
-																			if($i>0){
- 																				$indus.='<br>&nbsp;&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>';
-																			}
-																			$indus.=$rec['categoryName'];
-																			$i++;
-																		}
-																		echo $indus;
+									<div class="col-xs-3 col-sm-3"> 
+									<?php $industryList =  get_industry_by_id(implode(',',json_decode($details['industry_data'],true)));
+												$indus='';
+												$i=0;
+										foreach($industryList as $rec){
+											
+										if($i>0){
+											//$spaced = 
+											$space == 1;
+											$space++;
+ 											$indus.=' <br /><i class="fa fa-long-arrow-right" aria-hidden="true" style="margin-left:'.$space.'em"> </i> ';
+														}
+												$indus.=$rec['categoryName'];
+													$i++;
+														}
+
+													echo $indus;
 																		?>
 																		<hr />
 																	</div>
   																</div>
 															</div>
-															
+															<br /><br />
 															
 															<div class="row">
 																<div class="col-xs-12"> 
 																	<div class="col-xs-3 col-sm-3">
-																	 	<label><strong>Product SKU</strong></label>
+																	 	<label><strong>Product SKU :</strong></label>
 																	</div>
 																	<div class="col-xs-3 col-sm-3">
 																	<?php echo $details['product_sku'];
@@ -112,24 +119,24 @@
 																	</div>
   																</div>
 															</div>
+															<br />
 															
-															
-															<div class="row">
-																<div class="col-xs-12"> 
-																	<div class="col-xs-3 col-sm-3">
-																	 	<label><strong>Product Attributes</strong></label>
-																	</div>
-																	<div class="col-xs-3 col-sm-3">
-																	<?php foreach($array_attribute as $parent=>$child_arr){
+							<div class="row">
+								<div class="col-xs-12"> 
+									<div class="col-xs-3 col-sm-3">
+								 	<label><strong><br />Product Attributes :</strong></label>
+									</div>
+								<div class="col-xs-3 col-sm-3">
+								<?php foreach($array_attribute as $parent=>$child_arr){
 																	 
-																			 echo '<br><u>'.getAttrNameFromID($parent).'</u>';
-																				$res = explode(',',$child_arr);
-																				$i=0;
-																				foreach(array_filter($res) as $rec){$i++;
-																				if($i>0){
-																				echo '<br>&nbsp;&nbsp;<i class="fa fa-arrow-right" aria-hidden="true"></i>';
-																				}
-																					echo getAttrNameFromID($rec);
+									echo '<br /><u>'.getAttrNameFromID($parent).'</u>';
+									$res = explode(',',$child_arr);
+									$i=0;
+									foreach(array_filter($res) as $rec){$i++;
+										if($i>0){
+			echo '&nbsp;&nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"> </i> ';
+										        }
+									echo getAttrNameFromID($rec);
 																				}
 																		}	
 																		?>
@@ -138,16 +145,16 @@
 															</div>
 															
 															
+													<br /><br />		
 															
 															
 															
 															
-															
-															<?php if($details['product_description']!=''){?>
-															<div class="row">
-																<div class="col-xs-12"> 
-																	<div class="col-xs-3 col-sm-3">
-																	 	<label><strong>Product Description</strong></label>
+						<?php if($details['product_description']!=''){?>
+								<div class="row">
+									<div class="col-xs-12"> 
+										<div class="col-xs-3 col-sm-3">
+											<label><strong>Product Description</strong></label>
 																	</div>
 																	<div class="col-xs-3 col-sm-3">
 																	<?php echo $details['product_description'];
@@ -155,6 +162,7 @@
 																	</div>
   																</div>
 															</div>
+															<br /><br />
 															<?php }?>
 															<?php if($details['product_images']!=''){?>
 															<div class="row">
@@ -175,6 +183,7 @@
 																	</div>
   																</div>
 															</div>
+															<br /><br />
 															<?php }?>
 															<br />
 															<!-- Product Video -->
@@ -203,6 +212,7 @@
 																	</div>
   																</div>
 															</div>
+															<br /><br />
 															<?php }?>
 															<!-- /Product Video -->
 															<br />
@@ -232,6 +242,7 @@ Your browser does not support audio in video tag.
 																	</div>
   																</div>
 															</div>
+															<br /><br />
 															<?php }?>
 															<!-- /Product Audio -->
 															<br />
@@ -249,13 +260,15 @@ Your browser does not support audio in video tag.
 																		foreach($arrPDF as $recs){	
 																			if(file_exists('./uploads/temp/'.$recs)){//echo '***'.$recs;exit;
 																	?>
-																		<a href="<?php echo base_url().'/uploads/temp/'.$recs;?>" target="_blank" /><?php echo $i;?> PDF</a>
+																	
+					<a href="<?php echo base_url().'/uploads/temp/'.$recs;?>" target="_blank" /><?php //echo $i;?> <img src="<?php echo base_url();?>/assets/images/pdf-preview.png" alt="<?php echo $recs;?>" width = "200"><br /><?php //echo $recs;?>Please click here to Open the File</a>
 																		  <?php }
 																			$i++;}
 																		}?>
 																	</div>
   																</div>
 															</div>
+															<br /><br />
 															<?php }?>
 															<!-- /Product PDF -->
 															<!-- Product Demo Items  -->
@@ -286,6 +299,7 @@ Your browser does not support audio in video tag.
 																	</div>
   																</div>
 															</div>
+															<br /><br />
 															<?php }?>
 															<!-- /Product Demo Video -->
 															<br />
@@ -315,6 +329,7 @@ Your browser does not support audio in video tag.
 																	</div>
   																</div>
 															</div>
+															<br /><br />
 															<?php }?>
 															<!-- /Product Audio -->
 															<br />
@@ -332,13 +347,14 @@ Your browser does not support audio in video tag.
 																		foreach($arrPDF as $recs){	
 																			if(file_exists('./uploads/temp/'.$recs)){//echo '***'.$recs;exit;
 																	?>
-																		<a href="<?php echo base_url().'/uploads/temp/'.$recs;?>" target="_blank" /><?php echo $i;?> PDF</a>
+		<a href="<?php echo base_url().'/uploads/temp/'.$recs;?>" target="_blank" /><?php //echo $i;?> <img src="<?php echo base_url();?>/assets/images/pdf-preview.png" alt="<?php echo $recs;?>" width = "200"><br /><?php //echo $recs;?>Please click here to Open the file</a>
 																		  <?php }
 																			$i++;}
 																		}?>
 																	</div>
   																</div>
 															</div>
+															<br /><br />
 															<?php }?>
 															<!-- /Product User Manual -->
 															
@@ -346,32 +362,27 @@ Your browser does not support audio in video tag.
 															
 														</div>
                                                          <br />
-                                                        <h3> Essential Attribute</h3>
+														 <hr />
+                                                        <h3> Essential Attributes</h3>
                                                          <hr />
                                                          
-                                                         <!-------------- Essential attributes-------------------->
-                                                         <div class="row">
-                                                            <div class="col-xs-12"> 
-                                                                <div class="col-xs-3 col-sm-3"><label><strong>Code Type:-</strong></label></div>
-                                                                <div class="col-xs-3 col-sm-3 form-control"><?php echo $details['code_type'];?></div>
-                                                                
-                                                                <div class="col-xs-3 col-sm-3"><label><strong>Code Activation Type:-</strong></label></div>
-                                                                <div class="col-xs-3 col-sm-3 form-control"><?php if($details['code_activation_type']==1) { echo "Pre-Activated";} else echo "Post-Activated"; ?></div>
-                                                                
-                                                                <div class="col-xs-3 col-sm-3"><label><strong>Delivery Method:-</strong></label></div>
-                                                                <div class="col-xs-3 col-sm-3 form-control"><?php echo product_delivery_method($details['delivery_method']);?></div>
+                           <!-------------- Essential attributes-------------------->
+            <div class="row">
+              <div class="col-xs-12" style="margin-left:25px"> 
+                
+					<label><strong>Code Type : </strong> <?php echo $details['code_type'];?></label><br />
+					<label><strong>Code Activation Type : </strong> <?php if($details['code_activation_type']==1) { echo "Pre-Activated";} else echo "Post-Activated"; ?>
+										   </label><br />
+					<label><strong>Delivery Method : </strong> <?php echo product_delivery_method($details['delivery_method']);?></label><br />
+					<label><strong>Code Key Type : </strong><?php echo $details['code_key_type'];?></label><br />
+					<label><strong>Code Size : </strong><?php echo getProductSize($details['code_size']);?></label>
+					
+				<br /><br /><br /><br />
+            
                                                             </div>
                                                          </div>
                                                             
-                                                         <div class="row">
-                                                            <div class="col-xs-12"> 
-                                                                <div class="col-xs-3 col-sm-3"><label><strong>Code Key Type:-</strong></label></div>
-                                                                <div class="col-xs-3 col-sm-3 form-control"><?php echo $details['code_key_type'];?></div>
-                                                                
-                                                                <div class="col-xs-3 col-sm-3 form-control"><label><strong>Code Size:-</strong></label></div>
-                                                                <div class="col-xs-3 col-sm-3 form-control"><?php echo getProductSize($details['code_size']);?></div>
-                                                             </div>
-                                                         </div>
+                                                         
                                                        <!-------------- ASsential attributes-------------------->
                                                     
                                                  </div>
