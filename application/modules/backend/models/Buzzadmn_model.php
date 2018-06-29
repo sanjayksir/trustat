@@ -435,6 +435,8 @@ class Buzzadmn_model extends CI_Model {
             "product_audio" => trim($data['audios']),
             "product_pdf" => trim($data['attachments']),
             "product_demo_video" => trim($data['demovideo']),
+			"product_push_ad_video" => trim($data['push_advideo']),
+			"product_survey_video" => trim($data['surveyvideo']),
             "product_demo_audio" => trim($data['demoaudio']),
             "product_user_manual" => trim($data['demoattachments'])
         );
@@ -470,6 +472,16 @@ class Buzzadmn_model extends CI_Model {
 			if ($data['demovideos'] != '') {
                 $checker = 1;
                 $arr = array("product_demo_video" => trim($data['demovideos']));
+                $update_array = array_merge($update_array, $arr);
+            }
+			if ($data['push_advideos'] != '') {
+                $checker = 1;
+                $arr = array("product_push_ad_video" => trim($data['push_advideos']));
+                $update_array = array_merge($update_array, $arr);
+            }
+			if ($data['surveyvideos'] != '') {
+                $checker = 1;
+                $arr = array("product_survey_video" => trim($data['surveyvideos']));
                 $update_array = array_merge($update_array, $arr);
             }
             if ($data['demoaudios'] != '') {

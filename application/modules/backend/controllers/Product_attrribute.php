@@ -49,12 +49,20 @@ class Product_attrribute extends MX_Controller {
 
             $allProductUserManual_arr = $this->input->post('all_product_user_manual_list');
             $allProductUserManualList = $allProductUserManual_arr[0];
+			
+			$allProductPushAdVideo_arr = $this->input->post('all_product_push_ad_video_list');
+            $allProductPushAdVideoList = $allProductPushAdVideo_arr[0];
+			
+			$allProductSurveyVideo_arr = $this->input->post('all_product_survey_video_list');
+            $allProductSurveyVideoList = $allProductSurveyVideo_arr[0];
             ## Media Files
             $data['images'] = $allImageList;
             $data['videos'] = $allVideoList;
             $data['audios'] = $allAudioList;
             $data['attachments'] = $allAttachmentList;
             $data['demovideo'] = $allProductDemoVideoList;
+			$data['push_advideo'] = $allProductPushAdVideoList;
+			$data['surveyvideo'] = $allProductSurveyVideoList;
             $data['demoaudio'] = $allProductDemoAudioList;
             $data['demoattachments'] = $allProductUserManualList;
             $data['product_id'] = $spidey_id;

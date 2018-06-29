@@ -137,6 +137,7 @@
 			echo '&nbsp;&nbsp;<i class="fa fa-long-arrow-right" aria-hidden="true"> </i> ';
 										        }
 									echo getAttrNameFromID($rec);
+									echo "<br />";
 																				}
 																		}	
 																		?>
@@ -171,15 +172,9 @@
 																	 	<label><strong>Product Images</strong></label>
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
-																	<?php $arrImg = explode(',',$details['product_images']);
- 																	if(count($arrImg)>0){
-																		foreach($arrImg as $recs){	
-																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
-																	?>
-																		<img style="border:1px solid grey;"  src="<?php echo base_url().'/uploads/'.$recs;?>" width="100px" height="100px;" />
-																		  <?php }
-																			}
-																		}?>
+																	
+																		<img style="border:1px solid grey;"  src="<?php echo base_url().'uploads/'.$details['product_images'];?>" width="100px" height="100px;" />
+																		  
 																	</div>
   																</div>
 															</div>
@@ -187,28 +182,21 @@
 															<?php }?>
 															<br />
 															<!-- Product Video -->
-															<?php if($details['product_video']!=''){?>
-															<div class="row">
+									<?php if($details['product_video']!=''){?>
+										<div class="row">
 																<div class="col-xs-12"> 
 																	<div class="col-xs-3 col-sm-3">
 																	 	<label><strong>Product Video</strong></label>
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
-																	<?php $arrVid= explode(',',$details['product_video']);
- 																	if(count($arrVid)>0){
-																		foreach($arrVid as $recs){	
-																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
-																	?>
+																	
 																	   <video width="320" height="240" controls>
-																		  <source src="<?php echo base_url().'/uploads/'.$recs;?>" type="video/mp4">
+																		  <source src="<?php echo base_url().'uploads/'.$details['product_video'];?>" type="video/mp4">
 																		  
 																		  Your browser does not support the video tag.
 																		</video> 
 																	
 																		 
-																		  <?php }
-																			}
-																		}?>
 																	</div>
   																</div>
 															</div>
@@ -224,21 +212,13 @@
 																	 	<label><strong>Product Audio</strong></label>
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
-																	<?php $arAud = explode(',',$details['product_audio']);
 																	
-																	//echo '***'.count($arAud);
- 																	if(count($arAud)>0){
-																		foreach($arAud as $recs){	
-																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
-																	?>
 																		 
 																		 <audio width="320" height="240" controls>
-  <source src="<?php echo base_url().'/uploads/'.$recs;?>" type="audio/mpeg">
+  <source src="<?php echo base_url().'uploads/'.$details['product_audio'];?>" type="audio/mpeg">
 Your browser does not support audio in video tag.
 </audio>
-																		  <?php }
-																			}
-																		}?>
+																		  
 																	</div>
   																</div>
 															</div>
@@ -254,17 +234,10 @@ Your browser does not support audio in video tag.
 																	 	<label><strong>Product PDF</strong></label>
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
-																	<?php $arrPDF = array_filter(explode(',',$details['product_pdf']));
- 																	if(count($arrPDF)>0){
-																	$i=1;
-																		foreach($arrPDF as $recs){	
-																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
-																	?>
 																	
-					<a href="<?php echo base_url().'/uploads/'.$recs;?>" target="_blank" /><?php //echo $i;?> <img src="<?php echo base_url();?>/assets/images/pdf-preview.png" alt="<?php echo $recs;?>" width = "200"><br /><?php //echo $recs;?>Please click here to Open the File</a>
-																		  <?php }
-																			$i++;}
-																		}?>
+																	
+					<a href="<?php echo base_url().'uploads/'.$details['product_pdf'];?>" target="_blank" /><?php //echo $i;?> <img src="<?php echo base_url();?>/assets/images/pdf-preview.png" alt="<?php echo $recs;?>" width = "200"><br /><?php //echo $recs;?>Please click here to Open the File</a>
+																		  
 																	</div>
   																</div>
 															</div>
@@ -281,21 +254,13 @@ Your browser does not support audio in video tag.
 																	 	<label><strong>Product Demo Video</strong></label>
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
-																	<?php $arrVid= explode(',',$details['product_demo_video']);
- 																	if(count($arrVid)>0){
-																		foreach($arrVid as $recs){	
-																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
-																	?>
-																	   <video width="320" height="240" controls>
-																		  <source src="<?php echo base_url().'/uploads/'.$recs;?>" type="video/mp4">
+																	
+										<video width="320" height="240" controls>
+								<source src="<?php echo base_url().'uploads/'.$details['product_demo_video'];?>" type="video/mp4">
 																		  
 																		  Your browser does not support the video tag.
 																		</video> 
-																	
-																		 
-																		  <?php }
-																			}
-																		}?>
+																	<?php //echo base_url().'uploads/'.$details['product_demo_video'];?>
 																	</div>
   																</div>
 															</div>
@@ -311,21 +276,13 @@ Your browser does not support audio in video tag.
 																	 	<label><strong>Product Demo Audio</strong></label>
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
-																	<?php $arAud = explode(',',$details['product_demo_audio']);
 																	
-																	//echo '***'.count($arAud);
- 																	if(count($arAud)>0){
-																		foreach($arAud as $recs){	
-																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
-																	?>
 																		 
 																		 <audio width="320" height="240" controls>
-  <source src="<?php echo base_url().'/uploads/'.$recs;?>" type="audio/mpeg">
+  <source src="<?php echo base_url().'uploads/'.$details['product_demo_audio'];?>" type="audio/mpeg">
 Your browser does not support audio in video tag.
 </audio>
-																		  <?php }
-																			}
-																		}?>
+																		  
 																	</div>
   																</div>
 															</div>
@@ -341,16 +298,9 @@ Your browser does not support audio in video tag.
 																	 	<label><strong>Product User Manual</strong></label>
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
-																	<?php $arrPDF = array_filter(explode(',',$details['product_user_manual']));
- 																	if(count($arrPDF)>0){
-																	$i=1;
-																		foreach($arrPDF as $recs){	
-																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
-																	?>
-		<a href="<?php echo base_url().'/uploads/'.$recs;?>" target="_blank" /><?php //echo $i;?> <img src="<?php echo base_url();?>/assets/images/pdf-preview.png" alt="<?php echo $recs;?>" width = "200"><br /><?php //echo $recs;?>Please click here to Open the file</a>
-																		  <?php }
-																			$i++;}
-																		}?>
+																	
+		<a href="<?php echo base_url().'uploads/'.$details['product_user_manual'];?>" target="_blank" /><?php //echo $i;?> <img src="<?php echo base_url();?>/assets/images/pdf-preview.png" alt="<?php echo $recs;?>" width = "200"><br /><?php //echo $recs;?>Please click here to Open the file</a>
+																		  
 																	</div>
   																</div>
 															</div>
@@ -359,7 +309,54 @@ Your browser does not support audio in video tag.
 															<!-- /Product User Manual -->
 															
 															<!-- /Product Demo Items  -->
+														
+<br />
+															<!-- Product Push Ad Video -->
+															<?php if($details['product_push_ad_video']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product Push Ad Video</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	
+										<video width="320" height="240" controls>
+								<source src="<?php echo base_url().'uploads/'.$details['product_push_ad_video'];?>" type="video/mp4">
+																		  
+																		  Your browser does not support the video tag.
+																		</video> 
+																	<?php //echo base_url().'uploads/'.$details['product_demo_video'];?>
+																	</div>
+  																</div>
+															</div>
+															<br /><br />
+															<?php }?>
+															<!-- /Product Push Ad Video -->
 															
+												<br />
+															<!-- Product Survey Video -->
+															<?php if($details['product_survey_video']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product Survey Video</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	
+										<video width="320" height="240" controls>
+								<source src="<?php echo base_url().'uploads/'.$details['product_survey_video'];?>" type="video/mp4">
+																		  
+																		  Your browser does not support the video tag.
+																		</video> 
+																	<?php //echo base_url().'uploads/'.$details['product_demo_video'];?>
+																	</div>
+  																</div>
+															</div>
+															<br /><br />
+															<?php }?>
+															<!-- /Product Survey Video -->			
+
+														
 														</div>
                                                          <br />
 														 <hr />

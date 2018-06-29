@@ -216,6 +216,12 @@ class Editorial extends MX_Controller {
 			$all_product_demo_video_list_arr= $this->input->post('all_product_demo_video_list');
 			$allProductDemoVideoList 		= $all_product_demo_video_list_arr[0];
 			
+			$all_product_push_ad_video_list_arr= $this->input->post('all_product_push_ad_video_list');
+			$allProductPushAdVideoList 		= $all_product_push_ad_video_list_arr[0];
+			
+			$all_product_survey_video_list_arr= $this->input->post('all_product_survey_video_list');
+			$allProductSurveyVideoList 		= $all_product_survey_video_list_arr[0];
+			
 			$all_product_demo_audio_list_arr= $this->input->post('all_product_demo_audio_list');
 			$allProductDemoAudioList 		= $all_product_demo_audio_list_arr[0];
 			
@@ -229,6 +235,8 @@ class Editorial extends MX_Controller {
 			$data['productdemovideo']= $allProductDemoVideoList;
 			$data['productdemoaudio']= $allProductDemoAudioList;
 			$data['productusermanual']= $allProductUserManualList;
+			$data['productpush_advideo']= $allProductPushAdVideoList;
+			$data['productsurveyvideo']= $allProductSurveyVideoList;
 			$data['storyId']	= $spidey_id;
 			//echo '<pre>';print_r($data);exit;
 			if($this->input->post('clickedBtn')=='Submit' || $this->input->post('clickedBtn')=='Save'){

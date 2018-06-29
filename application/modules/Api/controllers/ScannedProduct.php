@@ -114,7 +114,105 @@ class ScannedProduct extends ApiController {
             $this->response(['status'=>false,'message'=>'System failed to scan the record.'],200); 
         }
     }
-    
+   
+/**
+     * productAdvertisement List the products with the Product id.
+     */
+    public function productAdvertisement(){
+        $user = $this->auth();
+        if(empty($this->auth())){
+            Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        $data = $this->getInput();
+        if(($this->input->method() != 'post') || empty($data)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
+            ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
+            ['field' =>'latitude','label'=>'Latitude','rules' => ''],
+            ['field' =>'longitude','label'=>'Longitude','rules' => '' ],
+        ];
+        $errors = $this->ScannedproductsModel->validate($data,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+        $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
+        $bar_code_data = $data['bar_code'];
+		$product_id = $result->id;;
+		$consumerId = $user['id'];
+		// function to get product registration status
+        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);   
+		
+		$isLoyaltyForVideoFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForVideoFBQuesGiven($bar_code_data, $consumerId,$product_id);
+		$isLoyaltyForAudioFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForAudioFBQuesGiven($bar_code_data, $consumerId,$product_id);
+		$isLoyaltyForImageFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForImageFBQuesGiven($bar_code_data, $consumerId,$product_id);
+		$isLoyaltyForPDFFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForPDFFBQuesGiven($bar_code_data, $consumerId,$product_id);
+        //echo $isLoyaltyForVideoFBQuesGiven;
+        if(empty($result)){
+            $data['user_id'] = $user['id'];
+            $data['created'] = date('Y-m-d H:i:s');
+            $this->db->insert('scanned_product_logs', $data);
+            $this->response(['status'=>false,'message'=>'This product and barcode is not supported by howzzt .'],200);
+        }
+        if(!empty($result->product_images)){
+            $result->product_images = Utils::setFileUrl($result->product_images);
+        }
+        if(!empty($result->product_video)){
+            $result->product_video = Utils::setFileUrl($result->product_video);
+        }
+        if(!empty($result->product_audio)){
+            $result->product_audio = Utils::setFileUrl($result->product_audio);
+        }
+        if(!empty($result->product_pdf)){
+            $result->product_pdf = Utils::setFileUrl($result->product_pdf);
+        }
+		if(!empty($result->product_demo_video)){
+            $result->product_demo_video = Utils::setFileUrl($result->product_demo_video);
+        }
+		if(!empty($result->product_demo_audio)){
+            $result->product_demo_audio = Utils::setFileUrl($result->product_demo_audio);
+        }
+		if(!empty($result->product_user_manual)){
+            $result->product_user_manual = Utils::setFileUrl($result->product_user_manual);
+        }
+		$result->product_registration_status = $isRegistered;
+		$result->LoyaltyForVideoFBQuesGiven = $isLoyaltyForVideoFBQuesGiven;
+		$result->isLoyaltyForAudioFBQuesGiven = $isLoyaltyForAudioFBQuesGiven;
+		$result->isLoyaltyForImageFBQuesGiven = $isLoyaltyForImageFBQuesGiven;
+		$result->isLoyaltyForPDFFBQuesGiven = $isLoyaltyForPDFFBQuesGiven;
+
+		
+        $data['consumer_id'] = $user['id'];
+        $data['product_id'] = $result->id;
+        $data['created_at'] = date("Y-m-d H:i:s");
+        
+        if($this->db->insert($this->ScannedproductsModel->table, $data)){
+            if( $result->pack_level == 0 ){
+                if( $isRegistered ){
+					
+					if( $isRegistered == completed ){
+					
+                    $result->message1 = 'This product is already registered, please contact your retailer/manufacturer for further details';
+                }else {
+					$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process';
+				}
+				
+				
+				}else{
+                    $result->message1 = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
+                }
+            }elseif( $result->pack_level == 1 ){
+                //$result->message1 = 'Scanned product details for lavel '.$result->pack_level.'.';
+				$result->message1 = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration.';
+            }elseif($result->pack_level > 1){
+                $result->message1 = 'This is not a product barcode for consumer, Please scan barcode placed on consumer pack';
+            }
+            //$this->response(['status'=>true,'message'=>'Scanned product details for lavel '.$result->pack_level.'.','data'=>$result]);
+			$this->response(['status'=>true,'message'=>'Thanks for scanning the product','data'=>$result]);
+        }else{
+            $this->response(['status'=>false,'message'=>'System failed to scan the record.'],200); 
+        }
+    }   
     /**
      * viewScannedProduct method to show the product which has been scanned by the user
      */

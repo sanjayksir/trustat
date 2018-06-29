@@ -1,5 +1,5 @@
 <?php
- class Advertisement extends MX_Controller {
+ class Surveys extends MX_Controller {
      function __construct() {
          parent::__construct();
          $this->load->model('Advertisement_model');
@@ -159,7 +159,7 @@
 		exit;
    }
    
-   public function launch_advertisement() {
+   public function launch_survey() {
         $this->checklogin();
         if (!empty($this->input->post('del_submit'))) {
             if ($this->db->query("delete from Advertisements where id='" . $this->input->post('del_submit') . "'")) {
@@ -183,8 +183,8 @@
         }
         $total_records = $this->Advertisement_model->total_product_listing($srch_string);
         $params["product_list"] = $this->Advertisement_model->product_listing($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('advertisement/launch_advertisement', $total_records);
-        $this->load->view('launch_advertisement', $params);
+        $params["links"] = Utils::pagination('surveys/launch_survey', $total_records);
+        $this->load->view('launch_survey', $params);
     }
 	
 	public function create_advertisement() {

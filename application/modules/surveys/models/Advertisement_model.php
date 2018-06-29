@@ -1,5 +1,5 @@
 <?php
- class Product_model extends CI_Model {
+ class Advertisement_model extends CI_Model {
      function __construct() {
          parent::__construct();
 		 $this->load->helper('common_functions_helper');
@@ -164,8 +164,6 @@
 					"product_demo_video"	      => '',
 					"product_demo_audio"		  => '',
 					"product_user_manual"         => '',
-					"product_push_ad_video"	      => '',
-					"product_survey_video"	      => '',
 					"code_type"			  => $code_type,
 					"code_activation_type"=> $code_activation_type,
 					"delivery_method"	  => $delivery_method,
