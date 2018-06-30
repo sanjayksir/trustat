@@ -93,7 +93,7 @@ class Utils {
        $files = explode(',',$files);
        $fileWithPath = [];
        for($i = 0;$i< count($files); $i++){
-           $fileUrl = site_url('uploads/temp/'.$files[$i]);
+           $fileUrl = site_url('uploads/'.$files[$i]);
            array_push($fileWithPath, $fileUrl);
        }
        return $fileWithPath;

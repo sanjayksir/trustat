@@ -432,6 +432,26 @@ function list_assigned_products() {
    		 $this->load->view('add_feedback', $data); 
 	}
 	
+	function add_image_feedback(){
+		 $data					= array();
+   		 $this->load->view('add_image_feedback', $data); 
+	}
+	
+	function add_video_feedback(){
+		 $data					= array();
+   		 $this->load->view('add_video_feedback', $data); 
+	}
+	
+	function add_audio_feedback(){
+		 $data					= array();
+   		 $this->load->view('add_audio_feedback', $data); 
+	}
+	
+	function add_pdf_feedback(){
+		 $data					= array();
+   		 $this->load->view('add_pdf_feedback', $data); 
+	}
+	
 	
 	function save_feedback(){
 		$data					= array();

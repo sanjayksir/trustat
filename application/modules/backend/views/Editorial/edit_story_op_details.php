@@ -44,7 +44,7 @@
                                                     <input type="hidden" name="all_Images_list[]" id="all_Images_list" value="" />
                                                     <input type="hidden" name="all_videos_list[]" id="all_videos_list" value="" />
                                                     <input type="hidden" name="all_audios_list[]" id="all_audios_list" value="" />
-                                                    <input type="hidden" name="all_attachments_list[]" id="all_attachments_list" value="" />																										<input type="hidden" name="all_product_demo_video_list[]" id="all_product_demo_video_list" value="" />                                                    <input type="hidden" name="all_product_demo_audio_list[]" id="all_product_demo_audio_list" value="" />                                                    <input type="hidden" name="all_product_user_manual_list[]" id="all_product_user_manual_list" value="" />
+                                                    <input type="hidden" name="all_attachments_list[]" id="all_attachments_list" value="" />																										<input type="hidden" name="all_product_demo_video_list[]" id="all_product_demo_video_list" value="" />																										<input type="hidden" name="all_product_push_ad_video_list[]" id="all_product_push_ad_video_list" value="" />																										<input type="hidden" name="all_product_survey_video_list[]" id="all_product_survey_video_list" value="" />                                                    <input type="hidden" name="all_product_demo_audio_list[]" id="all_product_demo_audio_list" value="" />                                                    <input type="hidden" name="all_product_user_manual_list[]" id="all_product_user_manual_list" value="" />
                                                      <div class="form-group">
                                                         <div class="add-spidey">
                                                             <label>Story Title: </label>
@@ -81,8 +81,8 @@
 																foreach(explode(',',$getMediaData['images']) as $k1=>$v){
 																 ?>
                                                      <div class="col-md-2 media-box" >
-                                                    	<a href="<?php echo base_url();?>uploads/temp/<?php echo trim($v);?>" class="flipLightBox">
-                                                      	<img src="<?php echo base_url();?>uploads/temp/<?php echo trim($v);?>" width="100%" height="125" alt="<?php echo $v;?>" />
+                                                    	<a href="<?php echo base_url();?>uploads/<?php echo trim($v);?>" class="flipLightBox">
+                                                      	<img src="<?php echo base_url();?>uploads/<?php echo trim($v);?>" width="100%" height="125" alt="<?php echo $v;?>" />
                                                         <span class="media-span"><?php echo $v; ?></span>
                                                       	</a>
 													  <?php echo '&nbsp;<a href="'.base_url().'buzzadmn/editorial/single_file_dwld/'.trim($v).'"><span class="dwnld-cls">&nbsp;&nbsp;<i class="fa fa-download pull-right icon-dwnld" aria-hidden="true" ></i>

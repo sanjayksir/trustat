@@ -216,6 +216,12 @@ class Editorial extends MX_Controller {
 			$all_product_demo_video_list_arr= $this->input->post('all_product_demo_video_list');
 			$allProductDemoVideoList 		= $all_product_demo_video_list_arr[0];
 			
+			$all_product_push_ad_video_list_arr= $this->input->post('all_product_push_ad_video_list');
+			$allProductPushAdVideoList 		= $all_product_push_ad_video_list_arr[0];
+			
+			$all_product_survey_video_list_arr= $this->input->post('all_product_survey_video_list');
+			$allProductSurveyVideoList 		= $all_product_survey_video_list_arr[0];
+			
 			$all_product_demo_audio_list_arr= $this->input->post('all_product_demo_audio_list');
 			$allProductDemoAudioList 		= $all_product_demo_audio_list_arr[0];
 			
@@ -229,6 +235,8 @@ class Editorial extends MX_Controller {
 			$data['productdemovideo']= $allProductDemoVideoList;
 			$data['productdemoaudio']= $allProductDemoAudioList;
 			$data['productusermanual']= $allProductUserManualList;
+			$data['productpush_advideo']= $allProductPushAdVideoList;
+			$data['productsurveyvideo']= $allProductSurveyVideoList;
 			$data['storyId']	= $spidey_id;
 			//echo '<pre>';print_r($data);exit;
 			if($this->input->post('clickedBtn')=='Submit' || $this->input->post('clickedBtn')=='Save'){
@@ -701,7 +709,7 @@ class Editorial extends MX_Controller {
 			 // "bill"
 			//echo $this->uri->segment(4);exit;
 			 $file = $this->uri->segment(4);//$_GET['filename'];
-			$download_path = 'uploads/temp/'.$file;
+			$download_path = 'uploads/'.$file;
 			
 			$path_info = pathinfo($file_to_download);
 			$mimetype = 'file';
@@ -725,7 +733,7 @@ class Editorial extends MX_Controller {
 		
 		function single_file_dwld($file){ 
 		$file = trim($file);
- 			$filename = 'uploads/temp/'.trim($this->uri->segment(4)); 
+ 			$filename = 'uploads/'.trim($this->uri->segment(4)); 
 			ob_clean();
 			$ctype="application/[extension]";
 			// required for IE, otherwise Content-disposition is ignored

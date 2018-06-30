@@ -1042,4 +1042,3 @@ $config['image_type']='jpeg|jpg|png|gif';
 $config['video_type']='mp4|avi';
 $config['media_allowed_types'] = $config['image_type'].'|'.$config['video_type'].'|pdf|mp3';
 
-

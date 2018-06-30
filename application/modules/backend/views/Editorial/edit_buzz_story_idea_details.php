@@ -51,7 +51,13 @@
                                                     <input type="hidden" name="all_videos_list[]" id="all_videos_list" value="" />
                                                     <input type="hidden" name="all_audios_list[]" id="all_audios_list" value="" />
                                                     <input type="hidden" name="all_attachments_list[]" id="all_attachments_list" value="" />
+													
 													<input type="hidden" name="all_product_demo_video_list[]" id="all_product_demo_video_list" value="" />
+													
+													<input type="hidden" name="all_product_push_ad_video_list[]" id="all_product_push_ad_video_list" value="" />
+													
+													<input type="hidden" name="all_product_survey_video_list[]" id="all_product_survey_video_list" value="" />
+													
                                                     <input type="hidden" name="all_product_demo_audio_list[]" id="all_product_demo_audio_list" value="" />
                                                     <input type="hidden" name="all_product_user_manual_list[]" id="all_product_user_manual_list" value="" />
                                                      <div class="form-group">

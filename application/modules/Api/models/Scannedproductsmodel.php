@@ -78,32 +78,70 @@ class ScannedproductsModel extends CI_Model {
     }
 
 	// checking if the Loyalty given to the user on Video type questions on code 
-	
-    Public function isLoyaltyForVideoFBQuesGiven($bar_code_data, $consumerId) {
+    Public function isLoyaltyForVideoFBQuesGiven($consumerId, $product_id) {
         $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='Scan for Genuity and Video Response'");
-        if($answerQuery->num_rows() >= 0){
+		//print $answerQuery;
+        if($answerQuery->num_rows() > 0){
             $dataItems = $answerQuery->result();
             foreach($dataItems as $row){
                 $paramsValue = json_decode($row->params,true);                
-                if(($paramsValue['product_qr_code'] == $bar_code_data)){
+                if(($paramsValue['product_id'] == $product_id)){
                     $row->params = $paramsValue;
                     return $row;
                 }                
             }
         }
         return false;
-		
-		//$array2 = "JSON_EXTRACT(params,'$.product_qr_code')='".$bar_code_data."'";
-		$array1 = array("JSON_EXTRACT(params,'$.product_qr_code')='".$bar_code_data."'", 'transaction_type' => "Scan for Genuity and Video Response", 'user_id' => $consumerId);
-        $query = $this->db->get_where('loylty_points', $array1);
-        if ($query->num_rows() > 0) {
-            $data = $query->row_array();            
-            return $data;
-        } else {
-            return false;
-        }
     }
 	
+		// checking if the Loyalty given to the user on Audio type questions on code 
+    Public function isLoyaltyForAudioFBQuesGiven($consumerId, $product_id) {
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='Scan for Genuity and Audio Response'");
+		
+        if($answerQuery->num_rows() > 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                if(($paramsValue['product_id'] == $product_id)){
+                    $row->params = $paramsValue;
+                    return $row;
+                }                
+            }
+        }
+        return false;
+    }
+	
+		// checking if the Loyalty given to the user on Image type questions on code 
+    Public function isLoyaltyForImageFBQuesGiven($consumerId, $product_id) {
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='Scan for Genuity and Image Response'");
+        if($answerQuery->num_rows() > 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                if(($paramsValue['product_id'] == $product_id)){
+                    $row->params = $paramsValue;
+                    return $row;
+                }                
+            }
+        }
+        return false;
+    }
+	
+			// checking if the Loyalty given to the user on PDF type questions on code 
+    Public function isLoyaltyForPDFFBQuesGiven($consumerId, $product_id) {
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='Scan for Genuity and pdf Response'");
+        if($answerQuery->num_rows() > 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                if(($paramsValue['product_id'] == $product_id)){
+                    $row->params = $paramsValue;
+                    return $row;
+                }                
+            }
+        }
+        return false;
+    }
     /*
     public function isProductRegistered($bar_code_data) {
 

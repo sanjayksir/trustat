@@ -571,7 +571,7 @@ function get_upload_error($err_no){
 ###----------------PDF Upload Start -------------------##	
 
  function uploadAttachment(){
- 	$output_dir = "./uploads/temp/";
+ 	$output_dir = "./uploads/";
  	if(isset($_FILES["files"]))
  	{
  		$ret = array();
@@ -618,7 +618,7 @@ function get_upload_error($err_no){
 
 function uploadAudio(){
 
-	$output_dir = "./uploads/temp/";
+	$output_dir = "./uploads/";
 
  
 
@@ -718,7 +718,7 @@ if(isset($_FILES["files"]))
 ###----------------PDF Upload Start -------------------##	
 
  function uploadUserManual(){
- 	$output_dir = "./uploads/temp/";
+ 	$output_dir = "./uploads/";
  	if(isset($_FILES["files"]))
  	{
  		$ret = array();
@@ -765,7 +765,7 @@ if(isset($_FILES["files"]))
 
 function uploadDemoAudio(){
 
-	$output_dir = "./uploads/temp/";
+	$output_dir = "./uploads/";
 
  
 

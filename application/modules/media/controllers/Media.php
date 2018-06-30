@@ -241,13 +241,16 @@ class Media extends MX_Controller {
     }
     
     public function getThumb($file){
+		
         $fileExt = pathinfo($file,PATHINFO_EXTENSION);
+		//print_r($fileExt); die;
         $mediaLocation = $this->config->item('media_location');        
         $imageType = explode('|',$this->config->item('image_type'));        
         $videoType = explode('|',$this->config->item('video_type'));        
         $mediaStore = FCPATH.$mediaLocation.'/';
         if(in_array($fileExt,$imageType)){
             $thumb = $this->Mediamodel->resize(substr($file, strlen($mediaStore)), 100, 90);
+			//die($thumb);
         }elseif(in_array($fileExt, $videoType)){
             $thumb = site_url('assets/images/mp4.jpg');
         }elseif(in_array($fileExt, ['mp3'])){
