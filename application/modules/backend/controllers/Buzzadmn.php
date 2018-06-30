@@ -538,7 +538,7 @@ class Buzzadmn extends MX_Controller
 		$this->load->helper('download');  
 		$fileName = "video_12_1500104173344.MP4";
 		   if ($fileName){
-			$file =  'uploads/temp/'.$fileName;
+			$file =  'uploads/'.$fileName;
 			// check file exists    
 			if (file_exists ( $file )) {//echo 'test';exit;
 			 // get file content

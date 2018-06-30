@@ -169,7 +169,7 @@ class Product_attrribute extends MX_Controller {
         // "bill"
         //echo $this->uri->segment(4);exit;
         $file = $this->uri->segment(4); //$_GET['filename'];
-        $download_path = 'uploads/temp/' . $file;
+        $download_path = 'uploads/' . $file;
 
         $path_info = pathinfo($file_to_download);
         $mimetype = 'file';
@@ -193,7 +193,7 @@ class Product_attrribute extends MX_Controller {
 
     function single_file_dwld($file) {
         $file = trim($file);
-        $filename = 'uploads/temp/' . trim($this->uri->segment(4));
+        $filename = 'uploads/' . trim($this->uri->segment(4));
         ob_clean();
         $ctype = "application/[extension]";
         // required for IE, otherwise Content-disposition is ignored

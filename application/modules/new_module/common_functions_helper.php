@@ -2109,7 +2109,7 @@ function getBuzzUserNameById($id){
 
  			$getMediaData = getMediaData($storyid);
 
-  			$file_path = './uploads/temp/';
+  			$file_path = './uploads/';
 
 			$files = array_filter($getMediaData);
 

@@ -81,8 +81,8 @@
 																foreach(explode(',',$getMediaData['images']) as $k1=>$v){
 																 ?>
                                                      <div class="col-md-2 media-box" >
-                                                    	<a href="<?php echo base_url();?>uploads/temp/<?php echo trim($v);?>" class="flipLightBox">
-                                                      	<img src="<?php echo base_url();?>uploads/temp/<?php echo trim($v);?>" width="100%" height="125" alt="<?php echo $v;?>" />
+                                                    	<a href="<?php echo base_url();?>uploads/<?php echo trim($v);?>" class="flipLightBox">
+                                                      	<img src="<?php echo base_url();?>uploads/<?php echo trim($v);?>" width="100%" height="125" alt="<?php echo $v;?>" />
                                                         <span class="media-span"><?php echo $v; ?></span>
                                                       	</a>
 													  <?php echo '&nbsp;<a href="'.base_url().'buzzadmn/editorial/single_file_dwld/'.trim($v).'"><span class="dwnld-cls">&nbsp;&nbsp;<i class="fa fa-download pull-right icon-dwnld" aria-hidden="true" ></i>

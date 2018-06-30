@@ -184,19 +184,19 @@ define("ASSETS_PATH", BASE_URL . "assets/");
 
 $img_file_path=$_SERVER['DOCUMENT_ROOT'].'/';
 
-define('VIDEO_FILE_PATH',$img_file_path.'/uploads/temp/');
+define('VIDEO_FILE_PATH',$img_file_path.'/uploadVideo/');
 
-define('TEMP_DIR',$img_file_path.'/uploads/temp/');
+define('TEMP_DIR',$img_file_path.'/uploads/');
 
-define('IMAGEDISKPATH', $img_file_path.'/uploads/temp/');
+define('IMAGEDISKPATH', $img_file_path.'/uploads/');
 
-define("VIDEO_URL", BASE_URL . "uploads/temp/");
+define("VIDEO_URL", BASE_URL . "uploads/");
 
 define('INBRIEF_DIR',$img_file_path.'/uploads/spidey/thumb_300x149/');
 
 define("INBRIEF_URL", BASE_URL . "uploads/spidey/thumb_300x149/");
 
-define('TEMP_URL',BASE_URL .'/uploads/temp/');
+define('TEMP_URL',BASE_URL .'/uploads/');
 
 define('DASH_B',BASE_URL .'backend/dashboard'); 
 

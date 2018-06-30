@@ -3406,7 +3406,7 @@ function getBuzzUserNameById($id){
 
 
 
-			$file =  'uploads/temp/'.$fileName;
+			$file =  'uploads/'.$fileName;
 
 
 
@@ -3478,7 +3478,7 @@ function getBuzzUserNameById($id){
 
 
 
-  			$file_path = './uploads/temp/';
+  			$file_path = './uploads/';
 
 
 

@@ -162,9 +162,9 @@
 																	<?php $arrImg = explode(',',$get_detail['product_images']);
  																	if(count($arrImg)>0){
 																		foreach($arrImg as $recs){	
-																			if(file_exists('./uploads/temp/'.$recs)){//echo '***'.$recs;exit;
+																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
 																	?>
-																		<img style="border:1px solid grey;"  src="<?php echo base_url().'/uploads/temp/'.$recs;?>" width="100px" height="100px;" />
+																		<img style="border:1px solid grey;"  src="<?php echo base_url().'/uploads/'.$recs;?>" width="100px" height="100px;" />
 																		  <?php }
 																			}
 																		}?>
@@ -183,10 +183,10 @@
 																	<?php $arrVid= explode(',',$get_detail['product_video']);
  																	if(count($arrVid)>0){
 																		foreach($arrVid as $recs){	
-																			if(file_exists('./uploads/temp/'.$recs)){//echo '***'.$recs;exit;
+																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
 																	?>
 																	   <video width="320" height="240" controls>
-																		  <source src="<?php echo base_url().'/uploads/temp/'.$recs;?>" type="video/mp4">
+																		  <source src="<?php echo base_url().'/uploads/'.$recs;?>" type="video/mp4">
 																		  
 																		  Your browser does not support the video tag.
 																		</video> 
@@ -213,11 +213,11 @@
 																	//echo '***'.count($arAud);
  																	if(count($arAud)>0){
 																		foreach($arAud as $recs){	
-																			if(file_exists('./uploads/temp/'.$recs)){//echo '***'.$recs;exit;
+																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
 																	?>
 																		 
 																		 <audio width="320" height="240" controls>
-  <source src="<?php echo base_url().'/uploads/temp/'.$recs;?>" type="audio/mpeg">
+  <source src="<?php echo base_url().'/uploads/'.$recs;?>" type="audio/mpeg">
 Your browser does not support audio in video tag.
 </audio>
 																		  <?php }
@@ -239,9 +239,9 @@ Your browser does not support audio in video tag.
  																	if(count($arrPDF)>0){
 																	$i=1;
 																		foreach($arrPDF as $recs){	
-																			if(file_exists('./uploads/temp/'.$recs)){//echo '***'.$recs;exit;
+																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
 																	?>
-																		<a href="<?php echo base_url().'/uploads/temp/'.$recs;?>" target="_blank" /><?php echo $i;?> PDF</a>
+																		<a href="<?php echo base_url().'/uploads/'.$recs;?>" target="_blank" /><?php echo $i;?> PDF</a>
 																		  <?php }
 																			$i++;}
 																		}?>
