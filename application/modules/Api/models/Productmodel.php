@@ -447,7 +447,7 @@ class ProductModel extends CI_Model {
                 ->where('pq.product_id ="'.$product.'"')
                 ->where('q.status =1')
 				->order_by('rand()')
-				->limit(3)
+				//->limit(3)
                 ->get()
                 ->result();
         return $query;

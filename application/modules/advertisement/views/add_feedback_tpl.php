@@ -17,7 +17,7 @@
 		 <div class="form-group row">
 			<div class="col-sm-12">
 			<label for="form-field-8">Question Type</label> <?php //echo basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)); ?>
-			<select name="QuestionType" id="questiontype" class="form-control" disabled="true">
+			<select name="QuestionType" id="questiontype" class="form-control">
               <option value="0">-Select Question Type</option>
 				           
                     <option value="Product Description Feedback" selected>Product Description Feedback</option>
