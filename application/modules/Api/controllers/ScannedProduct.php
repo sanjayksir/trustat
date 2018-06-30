@@ -43,21 +43,12 @@ class ScannedProduct extends ApiController {
 		$consumerId = $user['id'];
 		// function to get product registration status
         $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);   
-		
-<<<<<<< HEAD
-		$isLoyaltyForVideoFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForVideoFBQuesGiven($bar_code_data, $consumerId);
-		$isLoyaltyForAudioFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForAudioFBQuesGiven($bar_code_data, $consumerId);
-		$isLoyaltyForImageFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForImageFBQuesGiven($bar_code_data, $consumerId);
-		$isLoyaltyForPDFFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForPDFFBQuesGiven($bar_code_data, $consumerId);
-        //echo $isLoyaltyForVideoFBQuesGiven;
-=======
-		$isLoyaltyForVideoFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForVideoFBQuesGiven($consumerId,$product_id);
-		$isLoyaltyForAudioFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForAudioFBQuesGiven($consumerId,$product_id);
-		$isLoyaltyForImageFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForImageFBQuesGiven($consumerId,$product_id);
-		$isLoyaltyForPDFFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForPDFFBQuesGiven($consumerId,$product_id);
+	
+        $isLoyaltyForVideoFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForVideoFBQuesGiven($consumerId,$product_id);
+        $isLoyaltyForAudioFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForAudioFBQuesGiven($consumerId,$product_id);
+        $isLoyaltyForImageFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForImageFBQuesGiven($consumerId,$product_id);
+        $isLoyaltyForPDFFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForPDFFBQuesGiven($consumerId,$product_id);
         
-		
->>>>>>> 49331df5522db99e72316d29c261b846981dda9e
         if(empty($result)){
             $data['user_id'] = $user['id'];
             $data['created'] = date('Y-m-d H:i:s');
@@ -86,18 +77,12 @@ class ScannedProduct extends ApiController {
             $result->product_user_manual = Utils::setFileUrl($result->product_user_manual);
         }
 		$result->product_registration_status = $isRegistered;
-<<<<<<< HEAD
-		$result->LoyaltyForVideoFBQuesGiven = $isLoyaltyForVideoFBQuesGiven;
-		$result->isLoyaltyForAudioFBQuesGiven = $isLoyaltyForAudioFBQuesGiven;
-		$result->isLoyaltyForImageFBQuesGiven = $isLoyaltyForImageFBQuesGiven;
-		$result->isLoyaltyForPDFFBQuesGiven = $isLoyaltyForPDFFBQuesGiven;
-=======
+
 		$result->isLoyaltyForVideoFBQuesGiven = $isLoyaltyForVideoFBQuesGiven;
 		$result->isLoyaltyForAudioFBQuesGiven = $isLoyaltyForAudioFBQuesGiven;
 		$result->isLoyaltyForImageFBQuesGiven = $isLoyaltyForImageFBQuesGiven;
 		$result->isLoyaltyForPDFFBQuesGiven = $isLoyaltyForPDFFBQuesGiven;
 
->>>>>>> 49331df5522db99e72316d29c261b846981dda9e
 		
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
