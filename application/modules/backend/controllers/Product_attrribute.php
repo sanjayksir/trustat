@@ -11,8 +11,8 @@ class Product_attrribute extends MX_Controller {
         $user_name = $this->session->userdata('user_name');
 
         if (empty($user_id) || empty($user_name)) {
-            redirect('backend/login');
-            exit;
+//            redirect('backend/login');
+//            exit;
         }
     }
 

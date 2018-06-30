@@ -44,6 +44,9 @@ class ScannedProduct extends ApiController {
         $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);   
 		
 		$isLoyaltyForVideoFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForVideoFBQuesGiven($bar_code_data, $consumerId);
+		$isLoyaltyForAudioFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForAudioFBQuesGiven($bar_code_data, $consumerId);
+		$isLoyaltyForImageFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForImageFBQuesGiven($bar_code_data, $consumerId);
+		$isLoyaltyForPDFFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForPDFFBQuesGiven($bar_code_data, $consumerId);
         //echo $isLoyaltyForVideoFBQuesGiven;
         if(empty($result)){
             $data['user_id'] = $user['id'];
@@ -74,6 +77,9 @@ class ScannedProduct extends ApiController {
         }
 		$result->product_registration_status = $isRegistered;
 		$result->LoyaltyForVideoFBQuesGiven = $isLoyaltyForVideoFBQuesGiven;
+		$result->isLoyaltyForAudioFBQuesGiven = $isLoyaltyForAudioFBQuesGiven;
+		$result->isLoyaltyForImageFBQuesGiven = $isLoyaltyForImageFBQuesGiven;
+		$result->isLoyaltyForPDFFBQuesGiven = $isLoyaltyForPDFFBQuesGiven;
 		
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
@@ -174,11 +180,11 @@ class ScannedProduct extends ApiController {
         }
         if(!empty($isRegistered)){
             if($isRegistered['status'] == 0){
-                $data['message1'] = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process.';
+                $data['message1'] = $message = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process.';
             }elseif($isRegistered['status'] == 1){
-                $data['message1'] = 'This product is already registered, please contact your retailer/manufacturer for further details';
+                $data['message1']  = $message = 'This product is already registered, please contact your retailer/manufacturer for further details';
             }
-            $this->response(['status'=>true,'message'=>'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process.'/*.$result->pack_level.'.'*/,'data'=>$data]);
+            $this->response(['status'=>true,'message'=>$message,'data'=>$data]);
         }
         $data['invoice_image'] = null;
         if(!empty($data['invoice_image'])){
@@ -227,11 +233,8 @@ class ScannedProduct extends ApiController {
                 $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-with-warranty'])->row();
                 $message = 'Thank you for uploading the invoice, your product warranty will be activated and '.$loyltyPoints->points.' loyalty points will be added to your loyalty account after validation of uploaded invoice';
                 $transactionType = 'product-registration-with-warranty';
+                $data['message1'] = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
             }
-			// Loyality will be given on confirmation of the invoice from the backend 
-            //$this->ProductModel->saveLoylty($transactionType,$user['id'],['product_id'=>$data['id']]);
-            $data['message1'] = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
-            //$data['invoice_image'] = base_url($data['invoice_image']);
             $this->response(['status'=>true,'message'=>$message,'data'=>$data]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to register the product.']);

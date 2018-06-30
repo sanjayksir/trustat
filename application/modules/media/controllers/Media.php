@@ -39,14 +39,14 @@ class Media extends MX_Controller {
             $page = 1;
         }
         
-        $directories = array();
+        $directories = [];
         $files = array();
 
         $data['images'] = array();
-        $directories = glob($directory. $filter_name . '[^cache]*', GLOB_ONLYDIR);
-        if (!$directories) {
-            $directories = array();
-        }
+//        $directories = glob($directory. $filter_name . '[^cache]*', GLOB_ONLYDIR);
+//        if (!$directories) {
+//            $directories = array();
+//        }
         // Get files
         $filterMediayType = $this->input->get('media_type');
         if(!empty($filterMediayType)){
@@ -103,6 +103,7 @@ class Media extends MX_Controller {
             } elseif (is_file($image)) {
                 $data['images'][] = array(                    
                     'thumb' => $this->getThumb($image),
+                    'time' => filectime($image),
                     'name' => implode(' ', $name),
                     'type' => 'image',
                     'path' => substr($image, strlen($mediaStore)),
@@ -110,7 +111,7 @@ class Media extends MX_Controller {
                 );
             }
         }
-
+        $this->sortBy('time', $data['images'],'desc');
         $data['heading_title'] = 'heading_title';
 
         $data['text_no_results'] = 'text_no_results';
@@ -258,7 +259,9 @@ class Media extends MX_Controller {
     }
 
     public function upload() {
-
+        ini_set("memory_limit", "256M");
+        ini_set("max_execution_time", 30000);        
+        
         $json = array();
         $mediaLocation = $this->config->item('media_location');
         if(empty($mediaLocation)){
@@ -462,6 +465,20 @@ class Media extends MX_Controller {
             }
         }
         return $imgFiles;
+    }
+    public function sortBy($field, &$array, $direction = 'asc') {
+        usort($array, create_function('$a, $b', '
+        $a = $a["' . $field . '"];
+        $b = $b["' . $field . '"];
+
+        if ($a == $b) return 0;
+
+        $direction = strtolower(trim($direction));
+
+        return ($a ' . ($direction == 'desc' ? '>' : '<') . ' $b) ? -1 : 1;
+    '));
+
+        return true;
     }
 
 }
