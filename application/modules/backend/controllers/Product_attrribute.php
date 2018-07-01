@@ -90,19 +90,165 @@ class Product_attrribute extends MX_Controller {
         $this->load->view('Editorial/add_story_idea_details', $data);
     }
     
-    public function media_attribute(){
-        if($this->input->method() == 'post'){
-            $data = $this->input->post(null,true);
-            $id = $data['product_id'];
-            unset($data['product_id']);
-            if($this->db->update('products',$data,['id'=>$id])){
-                $response = ['status'=>true,'message'=>'Media attributes have been updated successfully.'];
+    public function media_attribute($fileName,$productId= null){        
+        if(is_null($fileName) || is_null($productId)){
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status'=>false,'message'=>'Invalid request.']));
+        }
+        $data[$fileName] = $this->mediaUpload($fileName);
+        if(is_array($data[$fileName])){
+            $data[$fileName] = implode(',', $data[$fileName]);
+        }else{
+            $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status'=>false,
+                'message'=>$data[$fileName]               
+            ]));
+        }
+        $pId = base64_decode($productId);
+        $product = $this->db->get_where('products',['id'=>$pId])->row_array();
+        if(!empty($product[$fileName])){
+            $data[$fileName] = $data[$fileName].','.$product[$fileName];
+        }
+        if($this->db->update('products',$data,['id'=>$pId])){
+            $response = ['status'=>true,'message'=>'Media file have been updated successfully.'];
+        }else{
+            $response = ['status'=>false,'message'=>'Media file failed to update.'];
+        }
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
+        
+        
+    }
+    
+    public function view_media_file($fileName,$productId= null){
+        if(is_null($fileName) || is_null($productId)){
+            $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status'=>false,'message'=>'Invalid request.'
+                ]));
+        }
+        $pId = base64_decode($productId);
+        $mediaLocation = $this->config->item('media_location');
+        if(empty($mediaLocation)){
+            die("Define the media location directory.");
+        }
+        $mediaStore = FCPATH.$mediaLocation;
+        $product = $this->db->get_where('products',['id'=>$pId])->row_array();
+        $fItems = [];
+        if(!empty($product[$fileName])){
+            $productItem = explode(',',$product[$fileName]);
+            foreach($productItem as $key => $value){
+                $fItems[] = [
+                    'name'=> end(explode('/',$value)),
+                    'path'=> $this->getThumb($value),
+                    'size'=> filesize($mediaStore.'/'.$value)
+                ];
+            }            
+        }
+        //echo "<pre>";print_r($fItems);die;
+        $this->output->set_content_type('application/json')->set_output(json_encode($fItems));
+        
+    }
+    
+    public function delete_media_file($fileName,$productId= null){
+        $file = $this->input->post('file');        
+        if(is_null($fileName) || is_null($productId) || !empty($file)){
+            $this->output->set_content_type('application/json')->set_output(json_encode([
+                'status'=>false,'message'=>'Invalid request.'
+                ]));
+        }
+        $pId = base64_decode($productId);
+        $mediaLocation = $this->config->item('media_location');
+        if(empty($mediaLocation)){
+            die("Define the media location directory.");
+        }
+        $mediaStore = FCPATH.$mediaLocation;
+        $product = $this->db->get_where('products',['id'=>$pId])->row_array();        
+        $fItems = null;
+        if(!empty($product[$fileName])){
+            $productItem = explode(',',$product[$fileName]);            
+            $index = array_search($file,$productItem );
+            if($index !== false){
+                unlink($mediaStore.'/'.$file);
+                unset($productItem[$index]);
+            }
+            if(!empty($productItem)){
+                $fItems = implode(',',$productItem);
             }else{
-                $response = ['status'=>false,'message'=>'Media attributes failed to update.'];
+                $fItems = '';
+            }
+            if($this->db->update('products',[$fileName =>$fItems],['id'=>$pId])){
+                $response = ['status'=>true,'message'=>'Deleted successfully.'];
+            }else{
+                $response = ['status'=>false,'message'=>'Failed to delete file.'];
             }
             $this->output->set_content_type('application/json')->set_output(json_encode($response));
         }
         
+    }
+    
+    public function mediaUpload($fileName) {
+        ini_set("memory_limit", "256M");
+        ini_set("max_execution_time", 30000);        
+        
+        $json = array();
+        $mediaLocation = $this->config->item('media_location');
+        if(empty($mediaLocation)){
+            die("Define the media location directory.");
+        }
+        $mediaStore = FCPATH.$mediaLocation;        
+        $fileItems = [];
+        if(is_array($files[$fileName]['name'])){
+            $files = $_FILES;
+            $total = count($files[$fileName]['name']);        
+            unset($_FILES);
+            for ($i = 0; $i < $total; $i++) {
+                $_FILES[$fileName]['name'] = $files[$fileName]['name'][$i];
+                $_FILES[$fileName]['type'] = $files[$fileName]['type'][$i];
+                $_FILES[$fileName]['tmp_name'] = $files[$fileName]['tmp_name'][$i];
+                $_FILES[$fileName]['error'] = $files[$fileName]['error'][$i];
+                $_FILES[$fileName]['size'] = $files[$fileName]['size'][$i];
+                //echo $mediaStore.'/';die;
+                $this->load->library('upload', [
+                    'upload_path'=>'./'.$mediaLocation.'/',
+                    'allowed_types'=>$this->config->item('media_allowed_types'),
+                    'overwrite'=>false
+                ]);
+                if($this->upload->do_upload($fileName)){
+                    $fileItems [] = $this->upload->data('file_name');                
+                }else{
+                    echo $this->upload->display_errors();die;
+                }            
+            }
+        }else{
+            $this->load->library('upload', [
+                'upload_path'=>'./'.$mediaLocation.'/',
+                'allowed_types'=>$this->config->item('media_allowed_types'),
+                'max_size'=>'5120',
+                'overwrite'=>false
+            ]);
+            
+            if($this->upload->do_upload($fileName)){
+                $fileItems [] = $this->upload->data('file_name');                
+            }else{
+                echo $this->upload->display_errors();die;
+            }            
+        }
+        return $fileItems ;
+    }
+    
+    public function getThumb($file){		
+        $fileExt = pathinfo($file,PATHINFO_EXTENSION);
+        $mediaLocation = $this->config->item('media_location');        
+        $imageType = explode('|',$this->config->item('image_type'));        
+        $videoType = explode('|',$this->config->item('video_type'));        
+        if(in_array($fileExt,$imageType)){
+            $thumb =site_url($mediaLocation.'/'.$file);
+        }elseif(in_array($fileExt, $videoType)){
+            $thumb = site_url('assets/images/mp4.jpg');
+        }elseif(in_array($fileExt, ['mp3'])){
+            $thumb = site_url('assets/images/mp3.jpg');
+        }elseif(in_array($fileExt, ['pdf'])){
+            $thumb = site_url('assets/images/pdf.jpg');
+        }
+        return $thumb;
     }
 
     ### =========================EDITORIAL FUNCTIONS STARTS==================================##
