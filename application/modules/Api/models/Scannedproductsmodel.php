@@ -123,7 +123,8 @@ class ScannedproductsModel extends CI_Model {
         foreach($query as $row){
             $item = [
                 'product_id' => $row->id,
-                'ad_push_date' => Utils::exists('push_advertisements', ['product_id'=>$row->id,'consumer_id'=>$consumer_id]),
+				'product_name' => $row->product_name,
+               // 'ad_active' => Utils::exists('push_advertisements', ['product_id'=>$row->id,'consumer_id'=>$consumer_id]),
             ];
            
             
@@ -133,7 +134,6 @@ class ScannedproductsModel extends CI_Model {
             }else{
                 $item['product_push_ad_video'] = '';
             }
-            
             
             $items[] = $item;
         }
