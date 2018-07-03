@@ -128,6 +128,8 @@ $route['api/user/add_consumer_relative'] = 'Api/Consumer/addConsumerRelative';
 $route['api/user/edit_consumer_relative/(:any)'] = 'Api/Consumer/editConsumerRelative/$1';
 $route['api/user/delete_consumer_relative/(:any)'] = 'Api/Consumer/DeleteConsumerRelative/$1';
 $route['api/user/list_consumer_relatives'] = 'Api/Consumer/ListConsumerRelatives';
+$route['api/products-advertisements'] = 'Api/ScannedProduct/productsAdvertisements';
+
 
 $route['api/scan-product'] = 'Api/ScannedProduct/productScanning';
 $route['api/view-scanned-product'] = 'Api/ScannedProduct/viewScannedProduct';

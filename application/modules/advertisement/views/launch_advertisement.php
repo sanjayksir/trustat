@@ -142,7 +142,16 @@ $this->load->view('../includes/admin_top_navigation'); ?>
  															</a> </td>
 												                                <td><input type="checkbox" name="vehicle" value="Bike"></td>
                                                  <td><input type="checkbox" name="vehicle" value="Bike"></td>
-                                                  <td><input type="checkbox" name="vehicle" value="Bike"></td>
+                                       <td><?php echo $attr['created_by'];?>, <?php echo $attr['id'];?>
+									 
+<input <?php 
+	$answerQuery = $this->db->get_where('push_advertisements',"product_id='".$attr['id']."' AND consumer_id='16'");
+	if($answerQuery->num_rows() > 0){
+	?>checked="checked"<?php } ?> id="product_<?php echo $attr['id'];?>"name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $attr['created_by'];?>','<?php echo $attr['id'];?>');" type="checkbox">
+                                                <span class="lbl"></span> 
+								
+												  
+												  </td>
                                                   <td> 
  														<input type="checkbox" name="vehicle" value="Bike">						  </td>
                                                     <td> 
@@ -229,22 +238,30 @@ function validateSrch(){
 		return false;
 	}
 }	
-function assignProduct(){
-	 $('#save_value').click(function(){
-    var arr = $('.ads_Checkbox:checked').map(function(){
-        return this.value;
-    }).get();
-}); 
-}
 
-
-function delete_attr(id){  if (confirm("Sure to Delete SKU") == true) {
-       window.location.href="<?php echo base_url();?>product/delete_attribute/"+id;
-    } else {
-        return false;
-    }
+function add_question_to_product(created_by, id){
+	var r = confirm("Are Sure to Push the ad for this product?");
+	if (r == true) {
+		if ($("#product_"+id).prop('checked')==true){ 
+			var Chk =1; 
+		}else{
+			var Chk =0;
+		}
 	
+		$.ajax({
+			dataType:'html',
+			type:'POST',
+			url:'<?php echo base_url().'advertisement/save_push_advertisement/';?>',
+			data:{c_id:created_by,p_id:id,Chk :Chk},
+			success:function (msg){
+			}
+		
+		});
+	} else{
+		return false;
+	} 
 }
+ 
 </script>
 
             <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
