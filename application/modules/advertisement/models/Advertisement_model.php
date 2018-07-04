@@ -517,12 +517,12 @@
 			return $result_data;
 		}
 		
-		function IsProductFeedback($pid,$qid='') {
+		function IsProductAdvertisementOn($cid,$pid='') {
 			$rows 		= 0;
 			$result 	= 'true';
 			$this->db->select("id");
-			$this->db->from("product_feedback_questions");
-			$this->db->where(array("product_id"=> $pid,"question_id"=> $qid));
+			$this->db->from("push_advertisements");
+			$this->db->where(array("product_id"=> $pid));
 			//if(!empty($id)){
 				//$this->db->where("id", $id);
 			//}
@@ -533,24 +533,45 @@
 			} return $result;
 		}
 		
-		function save_product_question($pid,$qid,$Chk){
+		function save_push_advertisement($cid,$pid,$Chk){
  			if($Chk=='0'){
-				$this->db->query("delete from product_feedback_questions where question_id='".$qid."' and  product_id='".$pid."' ");
+				$this->db->query("delete from push_advertisements where product_id='".$pid."' ");
+				$this->session->set_flashdata('success', 'Add un-Pushed Successfully!');
 				//echo $this->db->last_query();exit;
 				return true;
 			}else{
-				$isExists=$this->IsProductFeedback($pid,$qid); 
+				$isExists=$this->IsProductAdvertisementOn($cid,$pid); 
 				if($isExists=='false'){
 					return false;
 				}
+				
+				/*  new work */
+				
+				$query = $this->db->query("SELECT * FROM consumers;");
+				
+				foreach ($query->result() as $user)  
+				{  
+				//$consumer_ida = $user->id; 
+				//echo $consumer_ida; exit;
 				$insertData=array(
-					"question_id"	 => $qid,
-					"product_id"	 => $pid 
-					);  
-				if($this->db->insert("product_feedback_questions", $insertData)) {// echo '===query===='.$this->db->last_query();
-					$this->session->set_flashdata('success', 'Question Added Successfully!');
+					"customer_id"	 => $cid,
+					"consumer_id"	 => $user->id,
+					"product_id"	 => $pid,
+					"media_type"	 => "Video",
+					"ad_push_date"	 => date(),
+					"media_play_date"	 => date(),
+					"ad_feedback_response"	 => "",
+					"ad_active"	 => "1"
+					
+					);
+				  
+				  $this->db->insert("push_advertisements", $insertData);
+				  
+				  
+				} 
+				
+					$this->session->set_flashdata('success', 'Add Pushed Successfully!');
 					return true;
-				}
 			}
 			return false; 
 		}

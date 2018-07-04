@@ -779,12 +779,12 @@ function list_assigned_Advertisements() {
 	}
 	
 	
-	function save_Advertisement_question(){
-	 	$this->checklogin();
-		$Advertisement_id	=$this->input->post('p_id');
-		$question_id=$this->input->post('q_id');
+	function save_push_advertisement(){
+	 	$this->checklogin();		
+		$customer_id=$this->input->post('c_id');
+		$product_id	=$this->input->post('p_id');
 		$Chk = $this->input->post('Chk');
-		echo $this->Advertisement_model->save_Advertisement_question($Advertisement_id,$question_id,$Chk);exit;
+		echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$Chk);exit;
  	}
 }
 

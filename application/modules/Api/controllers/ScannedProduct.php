@@ -116,7 +116,45 @@ class ScannedProduct extends ApiController {
         }
     }
    
+   // Advertisement API  
    
+   public function productsAdvertisements(){
+        $user = $this->auth();
+        if(empty($this->auth())){
+            Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        $data = $this->getInput();
+        if(($this->input->method() != 'post') || empty($data)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
+            ['field' =>'consumer_id','label'=>'Consumer ID','rules' => 'required' ],
+        ];
+        $errors = $this->ScannedproductsModel->validate($data,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+		$consumer_id = $data['consumer_id']; 
+		//echo $consumer_id; exit;
+        $result = $this->ScannedproductsModel->findProductForConsumer($consumer_id);
+		//echo $result;
+		/* 
+        if(!empty($result->product_video)){
+             $result->product_video = Utils::setFileUrl($result->product_video);
+			echo $result->product_video;
+			
+        }*/
+		
+		if(empty($result)){
+            $this->response(['status'=>false,'message'=>'Record not found'],200);
+        }
+        $this->response(['status'=>true,'message'=>'Push Advertisements','data'=>$result]);
+		
+		
+        
+    }
+   
+   //   \Advertisement
     /**
      * viewScannedProduct method to show the product which has been scanned by the user
      */
