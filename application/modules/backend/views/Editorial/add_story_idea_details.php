@@ -30,10 +30,9 @@ $medisUrl = $this->config->item('media_location');
                 <div class="widget-box">
                     <div class="widget-header widget-header-flat">
                         <h4 class="widget-title smaller">Media Type</h4>
-                        <div class="widget-toolbar">
-                            <label>
-                                <small class="blue"><a href="<?php echo base_url();?>product/list_product" class="btn btn-info btn-sm">List Product SKUs</a></small>
-                            </label>
+                        <div class="widget-toolbar no-border">
+                            <a href="#description-modal" class="btn btn-success btn-sm" data-toggle="modal">Add Description</a>
+                            <a href="<?php echo base_url();?>product/list_product" class="btn btn-info btn-sm">List Product SKUs</a>
                         </div>
                     </div>
                     <div class="widget-body">
@@ -104,7 +103,39 @@ $medisUrl = $this->config->item('media_location');
             </div>
         </div>
     </div>
-
+    <div id="description-modal" class="modal" tabindex="-1" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">×</button>
+                    <h4 class="blue bigger">Product Media Description</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="alert alert-media-box hidden">
+                            <button type="button" class="close" data-dismiss="alert"><i class="ace-icon fa fa-times"></i></button>
+                        </div>
+                        <div class="col-xs-12 col-sm-12">
+                            <div class="form-group">
+                                <label for="form-field-description">Add Description</label>
+                                <div>
+                                    <textarea class="form-control" name="product_description" id="product-description" placeholder="Product description" rows="6"><?php echo $product_description; ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-sm" data-dismiss="modal">
+                        <i class="ace-icon fa fa-times"></i>Cancel
+                    </button>
+                    <button class="btn btn-sm btn-primary" id="media-description">
+                        <i class="ace-icon fa fa-check"></i>Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
     <?php $this->load->view('../includes/admin_footer'); ?>
     <link href="<?php echo site_url('assets');?>/css/uploadfile.css" rel="stylesheet">
     <script type="text/javascript" src="<?php echo site_url('assets');?>/js/jquery.uploadfile.min.js"></script>
@@ -265,7 +296,32 @@ $medisUrl = $this->config->item('media_location');
                     }
                     pd.statusbar.hide(); //You choice.
                 }
-            }); 
+            });
+            $(document).on('click','#media-description',function(e){
+                e.preventDefault();
+                $("#media-description").addClass('disabled');
+                $(".alert-media-box").removeClass('alert-success').removeClass('alert-danger');
+                $.ajax({
+                    url:site_url+"backend/product_attrribute/media_description/<?php echo base64_encode($id); ?>",
+                    type: "POST",
+                    data: {"product_description":$("#product-description").val()},
+                    dataType:"json"
+                }).done(function( data ) {
+                    $("#media-description").removeClass('disabled');
+                    if(data.status){ 
+                        $(".alert-media-box").removeClass('hidden').addClass('alert-success').html('<p>'+data.message+'</p>');
+                    }else{
+                        $(".alert-media-box").removeClass('hidden').addClass('alert-danger').html('<p>'+data.message+'</p>');
+                    }
+                    setTimeout(function() { 
+                        $('#description-modal').modal('toggle');
+                        $(".alert-media-box").addClass('hidden')
+                    }, 3000);
+                  
+                  //Perform ANy action after successfuly post data
+
+                });
+            });
         });
     </script>
     

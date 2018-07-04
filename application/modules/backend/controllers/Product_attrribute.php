@@ -90,6 +90,22 @@ class Product_attrribute extends MX_Controller {
         $this->load->view('Editorial/add_story_idea_details', $data);
     }
     
+    public function media_description($productId= null){        
+        if(is_null($productId)){
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status'=>false,'message'=>'Invalid request.']));
+        }        
+        $pId = base64_decode($productId);
+        $product = $this->db->get_where('products',['id'=>$pId])->row_array();
+        if(empty($product)){
+            $this->output->set_content_type('application/json')->set_output(json_encode(['status'=>false,'message'=>'Invalid product.']));
+        }
+        if($this->db->update('products',$this->input->post(),['id'=>$pId])){
+            $response = ['status'=>true,'message'=>'Media description have been updated successfully.'];
+        }else{
+            $response = ['status'=>false,'message'=>'Failed to add/edit description.'];
+        }
+        $this->output->set_content_type('application/json')->set_output(json_encode($response));
+    }
     public function media_attribute($fileName,$productId= null){        
         if(is_null($fileName) || is_null($productId)){
             $this->output->set_content_type('application/json')->set_output(json_encode(['status'=>false,'message'=>'Invalid request.']));
