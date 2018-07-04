@@ -172,9 +172,15 @@
 																	 	<label><strong>Product Images</strong></label>
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
-																	
-																		<img style="border:1px solid grey;"  src="<?php echo base_url().'uploads/'.$details['product_images'];?>" width="100px" height="100px;" />
-																		  
+																	<?php $arrImg = explode(',',$details['product_images']);
+ 																	if(count($arrImg)>0){
+																		foreach($arrImg as $recs){	
+																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
+																	?>
+																		<img style="border:1px solid grey;"  src="<?php echo base_url().'/uploads/'.$recs;?>" width="100px" height="100px;" />
+																		  <?php }
+																			}
+																		}?>
 																	</div>
   																</div>
 															</div>

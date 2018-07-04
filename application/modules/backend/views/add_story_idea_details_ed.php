@@ -65,6 +65,33 @@ $medisUrl = $this->config->item('media_location');
                                                     <input type="hidden" name="product_video" value="<?php echo $product_video; ?>" id="input-video" />
                                                 </div>
                                             </div>
+											<div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_demo_video)? site_url($medisUrl.'/'.$product_demo_video):"#"; ?>" id="thumb-video" data-toggle="image" class="img-thumbnail" mime-type="video">
+                                                    <img src="<?php echo !empty($product_demo_video)? site_url('assets/images/mp4.jpg'):site_url('assets/images/mp4-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp4-upload.png'); ?>" />
+                                                    <span class="media-info">Product Demo Video</span>
+                                                </a>
+                                                    <input type="hidden" name="product_demo_video" value="<?php echo $product_demo_video; ?>" id="input-video" />
+                                                </div>
+                                            </div>
+											<div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_push_ad_video)? site_url($medisUrl.'/'.$product_push_ad_video):"#"; ?>" id="thumb-video" data-toggle="image" class="img-thumbnail" mime-type="video">
+                                                    <img src="<?php echo !empty($product_push_ad_video)? site_url('assets/images/mp4.jpg'):site_url('assets/images/mp4-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp4-upload.png'); ?>" />
+                                                    <span class="media-info">Product Push Ad Video</span>
+                                                </a>
+                                                    <input type="hidden" name="product_push_ad_video" value="<?php echo $product_push_ad_video; ?>" id="input-video" />
+                                                </div>
+                                            </div>
+											<div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_survey_video)? site_url($medisUrl.'/'.$product_survey_video):"#"; ?>" id="thumb-video" data-toggle="image" class="img-thumbnail" mime-type="video">
+                                                    <img src="<?php echo !empty($product_survey_video)? site_url('assets/images/mp4.jpg'):site_url('assets/images/mp4-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp4-upload.png'); ?>" />
+                                                    <span class="media-info">Product Survey Video</span>
+                                                </a>
+                                                    <input type="hidden" name="product_survey_video" value="<?php echo $product_survey_video; ?>" id="input-video" />
+                                                </div>
+                                            </div>
                                             <div class="col-sm-2">
                                                 <div class="thumbnail">
                                                 <a href="<?php echo !empty($product_audio)? site_url($medisUrl.'/'.$product_audio):"#"; ?>" id="thumb-audio" data-toggle="image" class="img-thumbnail" mime-type="audio">

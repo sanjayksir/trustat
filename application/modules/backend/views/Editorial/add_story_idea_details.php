@@ -31,7 +31,7 @@ $medisUrl = $this->config->item('media_location');
                     <div class="widget-header widget-header-flat">
                         <h4 class="widget-title smaller">Media Type</h4>
                         <div class="widget-toolbar no-border">
-                            <a href="#description-modal" class="btn btn-success btn-sm" data-toggle="modal">Add Description</a>
+                            <a href="#description-modal" class="btn btn-success btn-sm" data-toggle="modal">Add Product Description</a>
                             <a href="<?php echo base_url();?>product/list_product" class="btn btn-info btn-sm">List Product SKUs</a>
                         </div>
                     </div>
@@ -66,9 +66,51 @@ $medisUrl = $this->config->item('media_location');
                                         </div>
                                     </div>
                                 </div>
+								<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+                                    <div class="widget-header widget-header-small">
+                                        <h6 class="widget-title smaller lighter">Product Demo Video</h6>
+                                    </div>
+                                    <div class="widget-body">                                        
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_demo_video"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+                                    <div class="widget-header widget-header-small">
+                                        <h6 class="widget-title smaller lighter">Product Push Ad Video</h6>
+                                    </div>
+                                    <div class="widget-body">                                        
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_push_ad_video"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+                                    <div class="widget-header widget-header-small">
+                                        <h6 class="widget-title smaller lighter">Product Survey Video</h6>
+                                    </div>
+                                    <div class="widget-body">                                        
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_survey_video"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="col-xs-12 col-sm-4 widget-box transparent text-center">
                                     <div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Video</h6>
+                                        <h6 class="widget-title smaller lighter">Product Audio</h6>
                                     </div>
                                     <div class="widget-body">                                        
                                         <div class="widget-main">
@@ -180,7 +222,7 @@ $medisUrl = $this->config->item('media_location');
                     }
                     pd.statusbar.hide(); //You choice.
                 }
-            }); 
+            }); // upload product images 
             $("#product_video").uploadFile({
                 uploadStr:"Product Video",
                 url:site_url+"backend/product_attrribute/media_attribute/product_video/<?php echo base64_encode($id); ?>",
@@ -218,7 +260,121 @@ $medisUrl = $this->config->item('media_location');
                     }
                     pd.statusbar.hide(); //You choice.
                 }
-            }); 
+            }); // upload product video
+			$("#product_demo_video").uploadFile({
+                uploadStr:"Product Demo Video",
+                url:site_url+"backend/product_attrribute/media_attribute/product_demo_video/<?php echo base64_encode($id); ?>",
+                fileName:"product_demo_video",
+                showDelete: true,
+                acceptFiles:"video/*",
+                showPreview:true,
+                previewHeight: "100px",
+                previewWidth: "100px",
+                onLoad:function(obj){
+                    $.ajax({
+                        cache: false,
+                        url:site_url+"backend/product_attrribute/view_media_file/product_demo_video/<?php echo base64_encode($id); ?>",
+                        dataType: "json",
+                        success: function(data){
+                            for(var i=0;i<data.length;i++){
+                                obj.createProgress(data[i]["name"],data[i]["path"],data[i]["size"]);
+                            }
+                        } 
+                    });
+                },
+                deleteCallback: function (data, pd) {
+                    $(".alert-box").removeClass('alert-success').removeClass('alert-danger');
+                    for (var i = 0; i < data.length; i++) {
+                        $.post(site_url+"backend/product_attrribute/delete_media_file/product_demo_video/<?php echo base64_encode($id); ?>", {
+                            file: data[i]
+                        },function (resp,textStatus, jqXHR) {
+                            if(resp.status){
+                                $(".alert-box").addClass('alert-success').html('<p>'+resp.message+'</p>');
+                            }else{
+                                $(".alert-box").addClass('alert-danger').html('<p>'+resp.message+'</p>');
+                            }
+                            
+                        });
+                    }
+                    pd.statusbar.hide(); //You choice.
+                }
+            }); // upload product video
+			$("#product_push_ad_video").uploadFile({
+                uploadStr:"Product Push Ad Video",
+                url:site_url+"backend/product_attrribute/media_attribute/product_push_ad_video/<?php echo base64_encode($id); ?>",
+                fileName:"product_push_ad_video",
+                showDelete: true,
+                acceptFiles:"video/*",
+                showPreview:true,
+                previewHeight: "100px",
+                previewWidth: "100px",
+                onLoad:function(obj){
+                    $.ajax({
+                        cache: false,
+                        url:site_url+"backend/product_attrribute/view_media_file/product_push_ad_video/<?php echo base64_encode($id); ?>",
+                        dataType: "json",
+                        success: function(data){
+                            for(var i=0;i<data.length;i++){
+                                obj.createProgress(data[i]["name"],data[i]["path"],data[i]["size"]);
+                            }
+                        } 
+                    });
+                },
+                deleteCallback: function (data, pd) {
+                    $(".alert-box").removeClass('alert-success').removeClass('alert-danger');
+                    for (var i = 0; i < data.length; i++) {
+                        $.post(site_url+"backend/product_attrribute/delete_media_file/product_push_ad_video/<?php echo base64_encode($id); ?>", {
+                            file: data[i]
+                        },function (resp,textStatus, jqXHR) {
+                            if(resp.status){
+                                $(".alert-box").addClass('alert-success').html('<p>'+resp.message+'</p>');
+                            }else{
+                                $(".alert-box").addClass('alert-danger').html('<p>'+resp.message+'</p>');
+                            }
+                            
+                        });
+                    }
+                    pd.statusbar.hide(); //You choice.
+                }
+            });  // product_push_ad_video
+			$("#product_survey_video").uploadFile({
+                uploadStr:"Product Survey Video",
+                url:site_url+"backend/product_attrribute/media_attribute/product_survey_video/<?php echo base64_encode($id); ?>",
+                fileName:"product_survey_video",
+                showDelete: true,
+                acceptFiles:"video/*",
+                showPreview:true,
+                previewHeight: "100px",
+                previewWidth: "100px",
+                onLoad:function(obj){
+                    $.ajax({
+                        cache: false,
+                        url:site_url+"backend/product_attrribute/view_media_file/product_survey_video/<?php echo base64_encode($id); ?>",
+                        dataType: "json",
+                        success: function(data){
+                            for(var i=0;i<data.length;i++){
+                                obj.createProgress(data[i]["name"],data[i]["path"],data[i]["size"]);
+                            }
+                        } 
+                    });
+                },
+                deleteCallback: function (data, pd) {
+                    $(".alert-box").removeClass('alert-success').removeClass('alert-danger');
+                    for (var i = 0; i < data.length; i++) {
+                        $.post(site_url+"backend/product_attrribute/delete_media_file/product_survey_video/<?php echo base64_encode($id); ?>", {
+                            file: data[i]
+                        },function (resp,textStatus, jqXHR) {
+                            if(resp.status){
+                                $(".alert-box").addClass('alert-success').html('<p>'+resp.message+'</p>');
+                            }else{
+                                $(".alert-box").addClass('alert-danger').html('<p>'+resp.message+'</p>');
+                            }
+                            
+                        });
+                    }
+                    pd.statusbar.hide(); //You choice.
+                }
+            }); // product_survey_video
             $("#product_audio").uploadFile({
                 uploadStr:"Product Audio",
                 url:site_url+"backend/product_attrribute/media_attribute/product_audio/<?php echo base64_encode($id); ?>",

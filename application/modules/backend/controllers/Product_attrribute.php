@@ -130,8 +130,7 @@ class Product_attrribute extends MX_Controller {
             $response = ['status'=>false,'message'=>'Media file failed to update.'];
         }
         $this->output->set_content_type('application/json')->set_output(json_encode($response));
-        
-        
+      
     }
     
     public function view_media_file($fileName,$productId= null){
