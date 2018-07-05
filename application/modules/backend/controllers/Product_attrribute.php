@@ -236,7 +236,7 @@ class Product_attrribute extends MX_Controller {
             $this->load->library('upload', [
                 'upload_path'=>'./'.$mediaLocation.'/',
                 'allowed_types'=>$this->config->item('media_allowed_types'),
-                'max_size'=>'5120',
+                //'max_size'=>'5120',
                 'overwrite'=>false
             ]);
             
