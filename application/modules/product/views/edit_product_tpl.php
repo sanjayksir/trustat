@@ -409,12 +409,12 @@ if(!empty($isOtherIndustry)){
 				</select>
  		    </div>
             <div class="col-sm-4">
-				<label for="form-field-8">Method of Delivery</label>
+				<label for="form-field-8">Methods of Delivery</label>
 				<select name="delivery_method" id="delivery_method" class="form-control">
 				 <option value="1"  <?php echo ($dt['delivery_method']=='1')?'selected':'';?>> Physically Printing by Super Admin</option>
 				 <option value="2"  <?php echo ($dt['delivery_method']=='2')?'selected':'';?>>Physically Printing by CCC Admin</option>
 				 <option value="3"  <?php echo ($dt['delivery_method']=='3')?'selected':'';?>> Physically Printing by Designated Plant Controller </option>
-				 <option value="4"  <?php echo ($dt['delivery_method']=='4')?'selected':'';?>> Deliver By E-Mode  </option>
+				<!-- <option value="4"  <?php //echo ($dt['delivery_method']=='4')?'selected':'';?>> Deliver By E-Mode  </option> -->
 				</select>
  		    </div> 
           </div>   

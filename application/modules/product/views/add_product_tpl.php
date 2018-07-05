@@ -297,10 +297,10 @@
             <div class="col-sm-4">
 				<label for="form-field-8">Method of Delivery</label>
 				<select name="delivery_method" id="delivery_method" class="form-control">
-				 <option value="1"> Physically Printing by Super Admin</option>
-				 <option value="2">Physically Printing by CCC Admin</option>
-				 <option value="3"> Physically Printing by Designated Plant Controller </option>
-				<!-- <option value="4"> Deliver By E-Mode  </option> -->
+				 <option value="1">Physical Printing by Super Admin</option>
+				 <option value="2">Physical Printing by CCC Admin</option>
+				 <option value="3">E-Mode Deliver by Printing to Designated Plant Controller</option>
+				 <!--<option value="4">E-Mode Deliver</option>-->
 				</select>
  		    </div> 
           </div>   
