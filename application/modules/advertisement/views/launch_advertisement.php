@@ -38,7 +38,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                     </li>
 
-                    <li class="active">MANAGE ATTRIBUTES</li>
+                    <li class="active">Manage Advertisements</li>
 
                 </ul><!-- /.breadcrumb -->
 
@@ -80,7 +80,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                             <!--<div class="widget-header widget-header-flat">
                                 <h5 class="widget-title bigger lighter">MANAGE PRODUCTS</h5>
                                 <div class="widget-toolbar">
-                                    <a href="<?php echo base_url('product/add_product') ?>" class="btn btn-xs btn-warning" title="Add Product">Add <?php echo $label; ?> </a>
+                                    <a href="<?php //echo base_url('product/add_product') ?>" class="btn btn-xs btn-warning" title="Add Product">Add <?php //echo $label; ?> </a>
                                 </div>
                             </div>
 							-->
@@ -142,7 +142,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
  															</a> </td>
 												                                <td><input type="checkbox" name="vehicle" value="Bike"></td>
                                                  <td><input type="checkbox" name="vehicle" value="Bike"></td>
-                                       <td><?php echo $attr['created_by'];?>, <?php echo $attr['id'];?>
+                                       <td><?php //echo $attr['created_by'];?> <?php //echo $attr['id'];?>
 									 
 <input <?php 
 	$answerQuery = $this->db->get_where('push_advertisements',"product_id='".$attr['id']."' AND consumer_id='16'");

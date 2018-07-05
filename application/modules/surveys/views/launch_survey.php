@@ -38,7 +38,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                     </li>
 
-                    <li class="active">MANAGE ATTRIBUTES</li>
+                    <li class="active">Manage Survey</li>
 
                 </ul><!-- /.breadcrumb -->
 
@@ -80,7 +80,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                             <!--<div class="widget-header widget-header-flat">
                                 <h5 class="widget-title bigger lighter">MANAGE PRODUCTS</h5>
                                 <div class="widget-toolbar">
-                                    <a href="<?php echo base_url('product/add_product') ?>" class="btn btn-xs btn-warning" title="Add Product">Add <?php echo $label; ?> </a>
+                                    <a href="<?php //echo base_url('product/add_product') ?>" class="btn btn-xs btn-warning" title="Add Product">Add <?php //echo $label; ?> </a>
                                 </div>
                             </div>
 							-->
@@ -115,11 +115,11 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th class="hidden-480">Product Name</th>
                                     <th class="hidden-480">Product SKU</th>
                                     <th class="hidden-480">View Product Media</th>
-                                    <th>Advertisement on Product Description <a title="Product Description Feedback" href="#" class="btn btn-xs btn-info"><i class="fa 	fa-barcode" aria-hidden="true"></i></a></th>
-                                    <th>Advertisement on Product Image <a title="Product Image Feedback" href="#" class="btn btn-xs btn-info"><i class="glyphicon-picture" aria-hidden="true"></i></a></th>
-                                    <th>Advertisement on Product Video <a title="Product Video Feedback" href="#" class="btn btn-xs btn-info"><i class="fa fa-video-camera" aria-hidden="true"></i> </a></th>
-                                    <th>Advertisement on Product Audio <a title="Product Audio Feedback" href="#" class="btn btn-xs btn-info"><i class="fa fa-bullhorn" aria-hidden="true"></i> </a></th>
-                                    <th>Advertisement on Product PDF <a title="Advertisement on Product PDF" href="#" class="btn btn-xs btn-info"><i class="fa fa-book" aria-hidden="true"></i> </a>  </th>
+                                    <th>Survey on Product Description <a title="Product Description Feedback" href="#" class="btn btn-xs btn-info"><i class="fa 	fa-barcode" aria-hidden="true"></i></a></th>
+                                    <th>Survey on Product Image <a title="Product Image Feedback" href="#" class="btn btn-xs btn-info"><i class="glyphicon-picture" aria-hidden="true"></i></a></th>
+                                    <th>Survey on Product Video <a title="Product Video Feedback" href="#" class="btn btn-xs btn-info"><i class="fa fa-video-camera" aria-hidden="true"></i> </a></th>
+                                    <th>Survey on Product Audio <a title="Product Audio Feedback" href="#" class="btn btn-xs btn-info"><i class="fa fa-bullhorn" aria-hidden="true"></i> </a></th>
+                                    <th>Survey on Product PDF <a title="Survey on Product PDF" href="#" class="btn btn-xs btn-info"><i class="fa fa-book" aria-hidden="true"></i> </a>  </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -142,7 +142,16 @@ $this->load->view('../includes/admin_top_navigation'); ?>
  															</a> </td>
 												                                <td><input type="checkbox" name="vehicle" value="Bike"></td>
                                                  <td><input type="checkbox" name="vehicle" value="Bike"></td>
-                                                  <td><input type="checkbox" name="vehicle" value="Bike"></td>
+                                       <td><?php //echo $attr['created_by'];?> <?php //echo $attr['id'];?>
+									 
+<input <?php 
+	$answerQuery = $this->db->get_where('push_surveys',"product_id='".$attr['id']."' AND consumer_id='16'");
+	if($answerQuery->num_rows() > 0){
+	?>checked="checked"<?php } ?> id="product_<?php echo $attr['id'];?>"name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $attr['created_by'];?>','<?php echo $attr['id'];?>');" type="checkbox">
+                                                <span class="lbl"></span> 
+								
+												  
+												  </td>
                                                   <td> 
  														<input type="checkbox" name="vehicle" value="Bike">						  </td>
                                                     <td> 
@@ -229,22 +238,30 @@ function validateSrch(){
 		return false;
 	}
 }	
-function assignProduct(){
-	 $('#save_value').click(function(){
-    var arr = $('.ads_Checkbox:checked').map(function(){
-        return this.value;
-    }).get();
-}); 
-}
 
-
-function delete_attr(id){  if (confirm("Sure to Delete SKU") == true) {
-       window.location.href="<?php echo base_url();?>product/delete_attribute/"+id;
-    } else {
-        return false;
-    }
+function add_question_to_product(created_by, id){
+	var r = confirm("Are Sure to Push the Survey for this product?");
+	if (r == true) {
+		if ($("#product_"+id).prop('checked')==true){ 
+			var Chk =1; 
+		}else{
+			var Chk =0;
+		}
 	
+		$.ajax({
+			dataType:'html',
+			type:'POST',
+			url:'<?php echo base_url().'surveys/save_push_survey/';?>',
+			data:{c_id:created_by,p_id:id,Chk :Chk},
+			success:function (msg){
+			}
+		
+		});
+	} else{
+		return false;
+	} 
 }
+ 
 </script>
 
             <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">

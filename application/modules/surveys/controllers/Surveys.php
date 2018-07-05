@@ -2,7 +2,7 @@
  class Surveys extends MX_Controller {
      function __construct() {
          parent::__construct();
-         $this->load->model('Advertisement_model');
+         $this->load->model('Survey_model');
 		 $this->load->helper('common_functions_helper');
 		 $this->load->library('pagination');
      }
@@ -12,9 +12,9 @@
 		 
 		 if($this->input->post('hidden_field')=='1'){
 		 	//echo '<pre>';print_r($this->input->post());exit;
-			 $this->Advertisement_model->saveAttributeList($this->input->post());
+			 $this->Survey_model->saveAttributeList($this->input->post());
 		 }
-         $data['get_attr'] = $this->Advertisement_model->getAttributeList();
+         $data['get_attr'] = $this->Survey_model->getAttributeList();
  		$this->load->view('attribute_list', $data);
      }
 
@@ -28,12 +28,12 @@
 
      function update_attributes($id) {
 		 $this->checklogin();
-	 	$data['listData']=$this->Advertisement_model->getOptionList($id);
+	 	$data['listData']=$this->Survey_model->getOptionList($id);
 	 	if($this->input->post('submit')){
-			 $this->Advertisement_model->update_attribute_val($this->input->post());
+			 $this->Survey_model->update_attribute_val($this->input->post());
 		}
          // check if the unitofarea exists before trying to edit it
-       //  $data['unitofarea'] = $this->Advertisement_model->getOptionList($id);
+       //  $data['unitofarea'] = $this->Survey_model->getOptionList($id);
          $this->load->view('attribute_add', $data);
      }
 	 
@@ -43,29 +43,29 @@
  
     
  
- 	function add_Advertisement(){
+ 	function add_Survey(){
 		$user_id 	= $this->session->userdata('admin_user_id');
 		if(empty($user_id)){
  			redirect(base_url().'login');	exit;
  		}
 		$data = array();
 		
-		$data['Advertisement_attr'] = $this->Advertisement_model->get_all_attrs();
-		$this->load->view('add_Advertisement_tpl', $data);
+		$data['Survey_attr'] = $this->Survey_model->get_all_attrs();
+		$this->load->view('add_Survey_tpl', $data);
 		
 	}
 	
 	
-	function update_Advertisement(){
+	function update_Survey(){
 		$user_id 	= $this->session->userdata('admin_user_id');
 		if(empty($user_id)){
  			redirect(base_url().'login');	exit;
  		}
 		$data = array();
 		
-		//$data['Advertisement_attr'] = $this->Advertisement_model->get_all_attrs();
-		$data['Advertisement_data'] = $this->Advertisement_model->fetch_Advertisement_detail($this->uri->segment(3));
-		$this->load->view('edit_Advertisement_tpl', $data);
+		//$data['Survey_attr'] = $this->Survey_model->get_all_attrs();
+		$data['Survey_data'] = $this->Survey_model->fetch_Survey_detail($this->uri->segment(3));
+		$this->load->view('edit_Survey_tpl', $data);
 		
 	}
  
@@ -79,7 +79,7 @@
 	//print_r($this->input->post());
 	$result = '<option value="0">-Select Industry (Level-1)-</option>';
 	if(!empty($id)){
- 	$this->db->select('Advertisement_id, name');
+ 	$this->db->select('Survey_id, name');
  	$this->db->from('attribute_name');
  	$this->db->where('parent',$id);
   	$query = $this->db->get();  //echo $this->db->last_query();exit;
@@ -87,7 +87,7 @@
 			$res = $query->result_array();
 			
 			foreach($res as $val){
-				$result .= '<option value="'.$val['Advertisement_id'].'">'.$val['name'].'</option>';
+				$result .= '<option value="'.$val['Survey_id'].'">'.$val['name'].'</option>';
 			}
 			
  		}
@@ -126,23 +126,23 @@
  }
  
  
-  function checkAdvertisementExists($id=''){
+  function checkSurveyExists($id=''){
   $user_id 	= $this->session->userdata('admin_user_id');
 		if(empty($user_id)){
  			redirect(base_url().'login');	exit;
  		}
-	   $name = $this->input->post('Advertisement_name');
+	   $name = $this->input->post('Survey_name');
 	   
 	   
- 	  echo $this->Advertisement_model->IsExistsAdvertisement($name,$id='');exit;
+ 	  echo $this->Survey_model->IsExistsSurvey($name,$id='');exit;
   }
   
-  function save_Advertisement($id='') {
+  function save_Survey($id='') {
   $user_id 	= $this->session->userdata('admin_user_id');
 		if(empty($user_id)){
  			redirect(base_url().'login');	exit;
  		}
-  		$res = $this->Advertisement_model->save_Advertisement($id);
+  		$res = $this->Survey_model->save_Survey($id);
 		if($res=='1'){
 			echo '1';
 		}else{
@@ -162,8 +162,8 @@
    public function launch_survey() {
         $this->checklogin();
         if (!empty($this->input->post('del_submit'))) {
-            if ($this->db->query("delete from Advertisements where id='" . $this->input->post('del_submit') . "'")) {
-                $this->session->set_flashdata('success', 'Advertisement Deleted Successfully!');
+            if ($this->db->query("delete from Surveys where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Survey Deleted Successfully!');
             }
         }
         ##--------------- pagination start ----------------##
@@ -181,17 +181,17 @@
         if (empty($srch_string)) {
             $srch_string = '';
         }
-        $total_records = $this->Advertisement_model->total_product_listing($srch_string);
-        $params["product_list"] = $this->Advertisement_model->product_listing($limit_per_page, $start_index, $srch_string);
+        $total_records = $this->Survey_model->total_product_listing($srch_string);
+        $params["product_list"] = $this->Survey_model->product_listing($limit_per_page, $start_index, $srch_string);
         $params["links"] = Utils::pagination('surveys/launch_survey', $total_records);
         $this->load->view('launch_survey', $params);
     }
 	
-	public function create_advertisement() {
+	public function create_Survey() {
         $this->checklogin();
         if (!empty($this->input->post('del_submit'))) {
-            if ($this->db->query("delete from Advertisements where id='" . $this->input->post('del_submit') . "'")) {
-                $this->session->set_flashdata('success', 'Advertisement Deleted Successfully!');
+            if ($this->db->query("delete from Surveys where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Survey Deleted Successfully!');
             }
         }
         ##--------------- pagination start ----------------##
@@ -209,20 +209,20 @@
         if (empty($srch_string)) {
             $srch_string = '';
         }
-        $total_records = $this->Advertisement_model->total_product_listing($srch_string);
-        $params["product_list"] = $this->Advertisement_model->product_listing($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('advertisement/create_advertisement', $total_records);
-        $this->load->view('create_advertisement', $params);
+        $total_records = $this->Survey_model->total_product_listing($srch_string);
+        $params["product_list"] = $this->Survey_model->product_listing($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('Survey/create_Survey', $total_records);
+        $this->load->view('create_Survey', $params);
     }	
 	
 	
-// list assigned Advertisements to Plant controller 
+// list assigned Surveys to Plant controller 
 
-function list_assigned_Advertisements() {
+function list_assigned_Surveys() {
 		 $this->checklogin();
 		 if(!empty($this->input->post('del_submit'))){
-		 	if($this->db->query("delete from Advertisements where id='".$this->input->post('del_submit')."'")){
-				$this->session->set_flashdata('success', 'Advertisement Deleted Successfully!');	
+		 	if($this->db->query("delete from Surveys where id='".$this->input->post('del_submit')."'")){
+				$this->session->set_flashdata('success', 'Survey Deleted Successfully!');	
 			}
 		 }
 		 ##--------------- pagination start ----------------##
@@ -234,14 +234,14 @@ function list_assigned_Advertisements() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Advertisement_model->total_Advertisement_listing($srch_string);
+        $total_records = $this->Survey_model->total_Survey_listing($srch_string);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["Advertisement_list"] = $this->Advertisement_model->assigned_Advertisement_listing($limit_per_page, $start_index,$srch_string);
+            $params["Survey_list"] = $this->Survey_model->assigned_Survey_listing($limit_per_page, $start_index,$srch_string);
              
-            $config['base_url'] = base_url() . 'Advertisement/list_assigned_Advertisements';
+            $config['base_url'] = base_url() . 'Survey/list_assigned_Surveys';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -272,8 +272,8 @@ function list_assigned_Advertisements() {
         }
 		##--------------- pagination End ----------------##
 		
-       //  $data['Advertisement_list'] = $this->Advertisement_model->Advertisement_listing();
- 		$this->load->view('list_assigned_Advertisements', $params);
+       //  $data['Survey_list'] = $this->Survey_model->Survey_listing();
+ 		$this->load->view('list_assigned_Surveys', $params);
      }
 	 
 	 
@@ -282,15 +282,15 @@ function list_assigned_Advertisements() {
 	 	$id 	= $this->input->post('id');
 		$parent =  explode(',',$this->input->post('child'));
 	 	if($id!=''){
-			$data = json_decode(getAllAdvertisementName($id),true);//print_r($data);exit;
+			$data = json_decode(getAllSurveyName($id),true);//print_r($data);exit;
 			$options = ""; 
-			$dd =  '<select class="form-control" name="Advertisement_attr[]" multiple="multiple"><option>select Child Advertisement</option>';
+			$dd =  '<select class="form-control" name="Survey_attr[]" multiple="multiple"><option>select Child Survey</option>';
 			foreach($data as $rec){
 				$selected = '';
-				if(in_array($rec['Advertisement_id'],$parent)){
+				if(in_array($rec['Survey_id'],$parent)){
 					$selected = 'selected="selected"';
 				}
-				$dd .= '<option '.$selected.'value="'.$rec['Advertisement_id'].'">'.$rec['name'].'</option>';
+				$dd .= '<option '.$selected.'value="'.$rec['Survey_id'].'">'.$rec['name'].'</option>';
 			}
  			$dd .=  '</select>';
 			echo $dd;exit;
@@ -298,11 +298,11 @@ function list_assigned_Advertisements() {
 	 }
 	 
 	 function delete_attribute($id){//echo '**'.$id;exit;
-	 	$data = $this->Advertisement_model->delete_attr($id);
+	 	$data = $this->Survey_model->delete_attr($id);
 	 }
 	 
 	 function add_description(){
-		$this->load->view('Advertisement_media_add');
+		$this->load->view('Survey_media_add');
 	}
 	
 	
@@ -311,7 +311,7 @@ function list_assigned_Advertisements() {
 		//echo '<pre>';print_r($_FILES);exit;
 		if(isset($_POST) && $_SERVER['REQUEST_METHOD'] == "POST")
 		{
-			$res = $this->upload_File('upload_file', array('jpg','JPEG','png'), 'uploads/Advertisement_media' ,'500','500','2000');
+			$res = $this->upload_File('upload_file', array('jpg','JPEG','png'), 'uploads/Survey_media' ,'500','500','2000');
 			if($res){
 				echo '<pre>';print_r($res);exit;	
 			}else{
@@ -365,12 +365,12 @@ function list_assigned_Advertisements() {
 			case'400x400':
 			  $w=400;
 			  //$h=169;
-			  $file_path='./uploads/Advertisement_media/thumb/'.$file['file_name'];
+			  $file_path='./uploads/Survey_media/thumb/'.$file['file_name'];
 			  break;
 			case'222x190':
 			  $w=222;
 			  //$h=190;
-			  $file_path='./uploads/Advertisement_media/thumb/'.$file['file_name'];
+			  $file_path='./uploads/Survey_media/thumb/'.$file['file_name'];
 			 break;	
 		 }
 		 $config['image_library'] 	= 'gd2';
@@ -487,13 +487,13 @@ function list_assigned_Advertisements() {
 		$data					= array();
 		$data = $this->input->post();
 		//print_r($data);exit;
-		echo $data = $this->Advertisement_model->save_feedback($data);exit;
+		echo $data = $this->Survey_model->save_feedback($data);exit;
 	}
 	
-	// Advertisement Description Feedback Questions
+	// Survey Description Feedback Questions
  function ask_feedback($id=''){
 		if(empty($id)){
-			redirect('Advertisement/list_Advertisement');
+			redirect('Survey/list_Survey');
 		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
@@ -505,14 +505,14 @@ function list_assigned_Advertisements() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Advertisement_model->total_feedback_listing($srch_string, $id);
+        $total_records = $this->Survey_model->total_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["Advertisement_list"] = $this->Advertisement_model->feedback_listing($limit_per_page, $start_index,$srch_string, $id);
+            $params["Survey_list"] = $this->Survey_model->feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'Advertisement/ask_feedback_tpl';
+            $config['base_url'] = base_url() . 'Survey/ask_feedback_tpl';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -540,19 +540,19 @@ function list_assigned_Advertisements() {
             $this->pagination->initialize($config);
              // build paging links
             $params["links"] = $this->pagination->create_links();
-			$params["Advertisement_id"] = $id;
+			$params["Survey_id"] = $id;
         }
 		##--------------- pagination End ----------------##
 		
-       //  $data['Advertisement_list'] = $this->Advertisement_model->Advertisement_listing();
+       //  $data['Survey_list'] = $this->Survey_model->Survey_listing();
  		$this->load->view('ask_feedback_tpl', $params);
      
 	}
 	
-	// Advertisement Image Feedback Questions
+	// Survey Image Feedback Questions
 	function ask_image_feedback($id=''){
 		if(empty($id)){
-			redirect('Advertisement/list_Advertisement');
+			redirect('Survey/list_Survey');
 		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
@@ -564,14 +564,14 @@ function list_assigned_Advertisements() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Advertisement_model->total_image_feedback_listing($srch_string, $id);
+        $total_records = $this->Survey_model->total_image_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["Advertisement_list"] = $this->Advertisement_model->image_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
+            $params["Survey_list"] = $this->Survey_model->image_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'Advertisement/ask_feedback';
+            $config['base_url'] = base_url() . 'Survey/ask_feedback';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -602,14 +602,14 @@ function list_assigned_Advertisements() {
         }
 		##--------------- pagination End ----------------##
 		
-       //  $data['Advertisement_list'] = $this->Advertisement_model->Advertisement_listing();
+       //  $data['Survey_list'] = $this->Survey_model->Survey_listing();
  		$this->load->view('ask_image_feedback_tpl', $params);
      
 	}
-	// Advertisement Video Feedback Questions
+	// Survey Video Feedback Questions
 	function ask_video_feedback($id=''){
 		if(empty($id)){
-			redirect('Advertisement/list_Advertisement');
+			redirect('Survey/list_Survey');
 		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
@@ -621,14 +621,14 @@ function list_assigned_Advertisements() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Advertisement_model->total_video_feedback_listing($srch_string, $id);
+        $total_records = $this->Survey_model->total_video_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["Advertisement_list"] = $this->Advertisement_model->video_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
+            $params["Survey_list"] = $this->Survey_model->video_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'Advertisement/ask_feedback';
+            $config['base_url'] = base_url() . 'Survey/ask_feedback';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -659,14 +659,14 @@ function list_assigned_Advertisements() {
         }
 		##--------------- pagination End ----------------##
 		
-       //  $data['Advertisement_list'] = $this->Advertisement_model->Advertisement_listing();
+       //  $data['Survey_list'] = $this->Survey_model->Survey_listing();
  		$this->load->view('ask_video_feedback_tpl', $params);
      
 	}
-	// Advertisement Audio Feedback Questions
+	// Survey Audio Feedback Questions
 	function ask_audio_feedback($id=''){
 		if(empty($id)){
-			redirect('Advertisement/list_Advertisement');
+			redirect('Survey/list_Survey');
 		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
@@ -678,14 +678,14 @@ function list_assigned_Advertisements() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Advertisement_model->total_audio_feedback_listing($srch_string, $id);
+        $total_records = $this->Survey_model->total_audio_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["Advertisement_list"] = $this->Advertisement_model->audio_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
+            $params["Survey_list"] = $this->Survey_model->audio_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'Advertisement/ask_feedback';
+            $config['base_url'] = base_url() . 'Survey/ask_feedback';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -716,14 +716,14 @@ function list_assigned_Advertisements() {
         }
 		##--------------- pagination End ----------------##
 		
-       //  $data['Advertisement_list'] = $this->Advertisement_model->Advertisement_listing();
+       //  $data['Survey_list'] = $this->Survey_model->Survey_listing();
  		$this->load->view('ask_audio_feedback_tpl', $params);
      
 	}
-	// Advertisement PDF Feedback Questions
+	// Survey PDF Feedback Questions
 	function ask_pdf_feedback($id=''){
 		if(empty($id)){
-			redirect('Advertisement/list_Advertisement');
+			redirect('Survey/list_Survey');
 		}	
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
@@ -735,14 +735,14 @@ function list_assigned_Advertisements() {
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-        $total_records = $this->Advertisement_model->total_pdf_feedback_listing($srch_string, $id);
+        $total_records = $this->Survey_model->total_pdf_feedback_listing($srch_string, $id);
 		
 		if ($total_records > 0) 
         {
             // get current page records
-            $params["Advertisement_list"] = $this->Advertisement_model->pdf_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
+            $params["Survey_list"] = $this->Survey_model->pdf_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'Advertisement/ask_feedback';
+            $config['base_url'] = base_url() . 'Survey/ask_feedback';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -773,18 +773,18 @@ function list_assigned_Advertisements() {
         }
 		##--------------- pagination End ----------------##
 		
-       //  $data['Advertisement_list'] = $this->Advertisement_model->Advertisement_listing();
+       //  $data['Survey_list'] = $this->Survey_model->Survey_listing();
  		$this->load->view('ask_pdf_feedback_tpl', $params);
      
 	}
 	
 	
-	function save_Advertisement_question(){
-	 	$this->checklogin();
-		$Advertisement_id	=$this->input->post('p_id');
-		$question_id=$this->input->post('q_id');
+	function save_push_survey(){
+	 	$this->checklogin();		
+		$customer_id=$this->input->post('c_id');
+		$product_id	=$this->input->post('p_id');
 		$Chk = $this->input->post('Chk');
-		echo $this->Advertisement_model->save_Advertisement_question($Advertisement_id,$question_id,$Chk);exit;
+		echo $this->Survey_model->save_push_Survey($customer_id,$product_id,$Chk);exit;
  	}
 }
 

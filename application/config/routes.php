@@ -129,6 +129,7 @@ $route['api/user/edit_consumer_relative/(:any)'] = 'Api/Consumer/editConsumerRel
 $route['api/user/delete_consumer_relative/(:any)'] = 'Api/Consumer/DeleteConsumerRelative/$1';
 $route['api/user/list_consumer_relatives'] = 'Api/Consumer/ListConsumerRelatives';
 $route['api/products-advertisements'] = 'Api/ScannedProduct/productsAdvertisements';
+$route['api/products-surveys'] = 'Api/ScannedProduct/productsSurveys';
 
 
 $route['api/scan-product'] = 'Api/ScannedProduct/productScanning';

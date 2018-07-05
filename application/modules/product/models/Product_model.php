@@ -519,6 +519,74 @@
 			return $result_data;
 		}
 		
+		
+		// Product Push Ad Feedback Questions
+		function pushed_ad_feedback_listing($limit,$start,$srch_string='', $id) {
+			$user_id 	= $this->session->userdata('admin_user_id');
+			if(!empty($srch_string)){ 
+					$this->db->where("(question LIKE '%$srch_string%')");
+			} 
+			$this->db->select("*");
+			$this->db->from("feedback_question_bank");
+			//$this->db->where("question_type","Product PDF Feedback"); 
+			$where = array('question_type ' => "Product Pushed Ad Feedback" , 'product_id ' => $id);
+			$this->db->where($where);	
+			$this->db->order_by("question_id", " desc");
+			$this->db->limit($limit, $start);
+			$resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+			return $resultDt ;
+		}
+		function total_pushed_ad_feedback_listing($srch_string='', $id) {
+			$user_id 	= $this->session->userdata('admin_user_id');
+			if(!empty($srch_string)){ 
+					$this->db->where("(question LIKE '%$srch_string%')");
+			} 
+			$this->db->select('count(1) as total_rows');
+			$this->db->from('feedback_question_bank');
+			$where = array('question_type ' => "Product Pushed Ad Feedback" , 'product_id ' => $id);
+			$this->db->where($where);
+				$query = $this->db->get(); //echo '***'.$this->db->last_query();
+			if ($query->num_rows() > 0) {
+				$result = $query->result_array();
+				$result_data = $result[0]['total_rows'];
+			}
+			return $result_data;
+		}
+		
+		
+		// Product Survey Feedback Questions
+		function survey_feedback_listing($limit,$start,$srch_string='', $id) {
+			$user_id 	= $this->session->userdata('admin_user_id');
+			if(!empty($srch_string)){ 
+					$this->db->where("(question LIKE '%$srch_string%')");
+			} 
+			$this->db->select("*");
+			$this->db->from("feedback_question_bank");
+			//$this->db->where("question_type","Product PDF Feedback"); 
+			$where = array('question_type ' => "Product Survey Feedback" , 'product_id ' => $id);
+			$this->db->where($where);	
+			$this->db->order_by("question_id", " desc");
+			$this->db->limit($limit, $start);
+			$resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+			return $resultDt ;
+		}
+		function total_survey_feedback_listing($srch_string='', $id) {
+			$user_id 	= $this->session->userdata('admin_user_id');
+			if(!empty($srch_string)){ 
+					$this->db->where("(question LIKE '%$srch_string%')");
+			} 
+			$this->db->select('count(1) as total_rows');
+			$this->db->from('feedback_question_bank');
+			$where = array('question_type ' => "Product Survey Feedback" , 'product_id ' => $id);
+			$this->db->where($where);
+				$query = $this->db->get(); //echo '***'.$this->db->last_query();
+			if ($query->num_rows() > 0) {
+				$result = $query->result_array();
+				$result_data = $result[0]['total_rows'];
+			}
+			return $result_data;
+		}
+		
 		function IsProductFeedback($pid,$qid='') {
 			$rows 		= 0;
 			$result 	= 'true';

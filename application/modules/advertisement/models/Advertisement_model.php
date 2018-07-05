@@ -570,7 +570,7 @@
 				  
 				} 
 				
-					$this->session->set_flashdata('success', 'Add Pushed Successfully!');
+					$this->session->set_flashdata('success', 'Ad Pushed Successfully!');
 					return true;
 			}
 			return false; 

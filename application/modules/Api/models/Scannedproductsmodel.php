@@ -68,40 +68,6 @@ class ScannedproductsModel extends CI_Model {
 	
 	
 	// find ad pushed 
-	/*
-	public function findProductForConsumer($consumer_id = null) {
-        if ($consumer_id == null) {
-            return false;
-        }
-        $items = [];
-        $query = $this->db->select('p.*,pbq.product_id')
-                ->from('push_advertisements AS pbq')
-                ->join('products AS p', 'p.id=pbq.product_id')
-                ->where(['pbq.consumer_id' => $consumer_id,'pbq.ad_active'=>1])
-                ->get();
-        //echo $this->db->last_query();die;
-        //echo "<pre>";print_r($query);die;
-        if ($query->num_rows() <= 0) {
-            return false;
-        }
-        foreach($query as $row){
-            $item = [
-                'product_id' => $row->product_id,
-            ];
-            
-            if(!empty($row->product_video)){
-                $item['product_video'] = Utils::setFileUrl($row->product_video);
-            }else{
-                $item['product_video'] = '';
-            }
-           
-            
-            $items[] = $item;
-        }
-        return $items;
-    }
-	*/
-	
 	
 	public function findProductForConsumer($consumer_id = null){
         if($consumer_id == null){
@@ -127,7 +93,11 @@ class ScannedproductsModel extends CI_Model {
                // 'ad_active' => Utils::exists('push_advertisements', ['product_id'=>$row->id,'consumer_id'=>$consumer_id]),
             ];
            
-            
+            if(!empty($row->product_images)){
+                $item['product_images'] = Utils::setFileUrl($row->product_images);
+            }else{
+                $item['product_images'] = '';
+            }
             
             if(!empty($row->product_push_ad_video)){
                 $item['product_push_ad_video'] = Utils::setFileUrl($row->product_push_ad_video);
@@ -139,6 +109,54 @@ class ScannedproductsModel extends CI_Model {
         }
         return $items;
     }
+	
+	// \find ad pushed
+	
+	
+	// find Survey pushed 
+	
+	public function findProductForConsumerSurvey($consumer_id = null){
+        if($consumer_id == null){
+            return false;
+        }
+        
+        $query = $this->db->select("pr.*")
+                ->from('push_surveys AS sp')
+                ->join('products AS pr', 'pr.id=sp.product_id')
+                ->where(['sp.consumer_id' => $consumer_id])
+				//->order_by('created_at', 'desc')
+                ->get()
+                ->result();
+        if(empty($query)){
+            return false;
+        }
+        //echo "<pre>";print_r($query);die;
+        $items = [];
+        foreach($query as $row){
+            $item = [
+                'product_id' => $row->id,
+				'product_name' => $row->product_name,
+               // 'ad_active' => Utils::exists('push_advertisements', ['product_id'=>$row->id,'consumer_id'=>$consumer_id]),
+            ];
+           
+            if(!empty($row->product_images)){
+                $item['product_images'] = Utils::setFileUrl($row->product_images);
+            }else{
+                $item['product_images'] = '';
+            }
+            
+            if(!empty($row->product_survey_video)){
+                $item['product_survey_video'] = Utils::setFileUrl($row->product_survey_video);
+            }else{
+                $item['product_survey_video'] = '';
+            }
+            
+            $items[] = $item;
+        }
+        return $items;
+    }
+	
+	// \find Survey pushed
 	
 	// check if the product code is registered or not 
 	

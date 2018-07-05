@@ -452,6 +452,15 @@ function list_assigned_products() {
    		 $this->load->view('add_pdf_feedback', $data); 
 	}
 	
+	function add_pushed_ad_feedback(){
+		 $data					= array();
+   		 $this->load->view('add_pushed_ad_feedback', $data); 
+	}
+	
+	function add_survey_feedback(){
+		 $data					= array();
+   		 $this->load->view('add_survey_feedback', $data); 
+	}
 	
 	function save_feedback(){
 		$data					= array();
@@ -541,7 +550,7 @@ function list_assigned_products() {
             // get current page records
             $params["product_list"] = $this->Product_model->image_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'product/ask_feedback';
+            $config['base_url'] = base_url() . 'product/ask_image_feedback';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -598,7 +607,7 @@ function list_assigned_products() {
             // get current page records
             $params["product_list"] = $this->Product_model->video_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'product/ask_feedback';
+            $config['base_url'] = base_url() . 'product/ask_video_feedback';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -655,7 +664,7 @@ function list_assigned_products() {
             // get current page records
             $params["product_list"] = $this->Product_model->audio_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'product/ask_feedback';
+            $config['base_url'] = base_url() . 'product/ask_audio_feedback';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -712,7 +721,7 @@ function list_assigned_products() {
             // get current page records
             $params["product_list"] = $this->Product_model->pdf_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
              
-            $config['base_url'] = base_url() . 'product/ask_feedback';
+            $config['base_url'] = base_url() . 'product/ask_pdf_feedback';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;
@@ -748,6 +757,121 @@ function list_assigned_products() {
      
 	}
 	
+	// Product Push Ad Feedback Questions
+	function ask_pushed_ad_feedback($id=''){
+		if(empty($id)){
+			redirect('product/list_product');
+		}	
+ 		 $this->checklogin();
+ 		 ##--------------- pagination start ----------------##
+		 // init params
+        $params = array();
+        $limit_per_page = 20;
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$srch_string =  $this->input->post('search'); 
+		if(empty($srch_string)){
+			$srch_string ='';
+		}
+        $total_records = $this->Product_model->total_pushed_ad_feedback_listing($srch_string, $id);
+		
+		if ($total_records > 0) 
+        {
+            // get current page records
+            $params["product_list"] = $this->Product_model->pushed_ad_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
+             
+            $config['base_url'] = base_url() . 'product/ask_pushed_ad_feedback';
+            $config['total_rows'] = $total_records;
+            $config['per_page'] = $limit_per_page;
+            $config["uri_segment"] = 3;
+             
+ 			$config["full_tag_open"] = '<ul class="pagination">';
+			$config["full_tag_close"] = '</ul>';	
+			$config["first_link"] = "&laquo;";
+			$config["first_tag_open"] = "<li>";
+			$config["first_tag_close"] = "</li>";
+			$config["last_link"] = "&raquo;";
+			$config["last_tag_open"] = "<li>";
+			$config["last_tag_close"] = "</li>";
+			$config['next_link'] = '&gt;';
+			$config['next_tag_open'] = '<li>';
+			$config['next_tag_close'] = '<li>';
+			$config['prev_link'] = '&lt;';
+			$config['prev_tag_open'] = '<li>';
+			$config['prev_tag_close'] = '<li>';
+			$config['cur_tag_open'] = '<li class="active"><a href="#">';
+			$config['cur_tag_close'] = '</a></li>';
+			$config['num_tag_open'] = '<li>';
+			$config['num_tag_close'] = '</li>';
+ 
+			## paging style configuration End 
+            $this->pagination->initialize($config);
+             // build paging links
+            $params["links"] = $this->pagination->create_links();
+        }
+		##--------------- pagination End ----------------##
+		
+       //  $data['product_list'] = $this->Product_model->product_listing();
+ 		$this->load->view('ask_pushed_ad_feedback_tpl', $params);
+     
+	}
+	
+	// Product Survey Feedback Questions
+	function ask_survey_feedback($id=''){
+		if(empty($id)){
+			redirect('product/list_product');
+		}	
+ 		 $this->checklogin();
+ 		 ##--------------- pagination start ----------------##
+		 // init params
+        $params = array();
+        $limit_per_page = 20;
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$srch_string =  $this->input->post('search'); 
+		if(empty($srch_string)){
+			$srch_string ='';
+		}
+        $total_records = $this->Product_model->total_survey_feedback_listing($srch_string, $id);
+		
+		if ($total_records > 0) 
+        {
+            // get current page records
+            $params["product_list"] = $this->Product_model->survey_feedback_listing($limit_per_page, $start_index,$srch_string, $id);
+             
+            $config['base_url'] = base_url() . 'product/ask_survey_feedback';
+            $config['total_rows'] = $total_records;
+            $config['per_page'] = $limit_per_page;
+            $config["uri_segment"] = 3;
+             
+ 			$config["full_tag_open"] = '<ul class="pagination">';
+			$config["full_tag_close"] = '</ul>';	
+			$config["first_link"] = "&laquo;";
+			$config["first_tag_open"] = "<li>";
+			$config["first_tag_close"] = "</li>";
+			$config["last_link"] = "&raquo;";
+			$config["last_tag_open"] = "<li>";
+			$config["last_tag_close"] = "</li>";
+			$config['next_link'] = '&gt;';
+			$config['next_tag_open'] = '<li>';
+			$config['next_tag_close'] = '<li>';
+			$config['prev_link'] = '&lt;';
+			$config['prev_tag_open'] = '<li>';
+			$config['prev_tag_close'] = '<li>';
+			$config['cur_tag_open'] = '<li class="active"><a href="#">';
+			$config['cur_tag_close'] = '</a></li>';
+			$config['num_tag_open'] = '<li>';
+			$config['num_tag_close'] = '</li>';
+ 
+			## paging style configuration End 
+            $this->pagination->initialize($config);
+             // build paging links
+            $params["links"] = $this->pagination->create_links();
+        }
+		##--------------- pagination End ----------------##
+		
+       //  $data['product_list'] = $this->Product_model->product_listing();
+ 		$this->load->view('ask_survey_feedback_tpl', $params);
+     
+	}
 	
 	function save_product_question(){
 	 	$this->checklogin();
