@@ -173,10 +173,10 @@
 
                                                         ##-----------------------------------##
                                                         if($user_id==1 && $essentialAttributeArr['delivery_method']==2 ){
-                                                                $lable = 'Print By CCC-Admin';
+                                                                $lable = 'Print By CCC Admin';
                                                         }
                                                         if($user_id==1 && $essentialAttributeArr['delivery_method']==3 ){
-                                                                $lable = 'Print By CCC-Admin';
+                                                                $lable = 'Print By CCC Admin';
                                                         }
 
                                                         if($user_id>1 && $get_parent_id==1  && $essentialAttributeArr['delivery_method']==1){
@@ -190,7 +190,7 @@
                                                                 $lable='Print By Super Admin';
                                                         }
                                                         if($user_id>1 && $get_parent_id>1 && $essentialAttributeArr['delivery_method']==2){
-                                                                $lable='Print By CCC-Admin';
+                                                                $lable='Print By CCC Admin';
                                                         }
 
                                                         if($essentialAttributeArr['delivery_method']==4){

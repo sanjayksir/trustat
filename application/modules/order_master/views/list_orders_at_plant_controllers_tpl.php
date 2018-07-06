@@ -139,7 +139,7 @@
  												<thead>
 													<tr>
 														<th>#</th>
-														
+														<th>Order Number</th>
 														<th>Tracking Number</th>
  														<th>Product Code</th>
  														<th>Product Name</th>
@@ -153,7 +153,7 @@
 												</thead>
 												<tbody>
 
-                                        <?php $i = 0; // echo '***';print_r($orderListing);
+                                        <?php $i = 0;   //echo '***<pre>';print_r($orderListing);
 										if(count($orderListing)>0){
                                         foreach ($orderListing as $listData){
 										$i++;
@@ -169,6 +169,7 @@
 											}?>
                                                <tr id="show<?php echo $listData['order_id']; ?>">
 											   <td><?php echo $i; ?></td>
+											   <td><?php echo $listData['order_no']; ?></td>
 											   <td><?php echo $listData['order_tracking_number']; ?></td>
 												<td><?php echo $listData['product_sku']; ?></td>
 												<td><?php echo $listData['product_name']; ?></td>
@@ -187,41 +188,67 @@
 												 <td><?php echo order_status($listData['order_status']); ?></td>
 												<?php }?>
 												<td>
-                                                <!--<a class="btn btn-primary pull-right modellink" data-toggle="modal" href="#printMyModal" id="" onclick="return print_order('<?php echo $listData['order_id'];?>');">Print</a>-->
+                                                 
 												<?php
+												 
 												$get_parent_id 	= get_parent_id($user_id);
 												$lable='';
 												$lable1='';
 												$lable2='';
 												$display		= "none;";
-												 if($essentialAttributeArr['delivery_method']==3 && $listData['order_status']=='1'){
+												if($listData['order_status']==1){
+												 if($user_id==1 && $essentialAttributeArr['delivery_method']==1){
+												 	$display	= "block;";
+ 												 }else if($user_id>1 && $get_parent_id==1 && $essentialAttributeArr['delivery_method']==2){
+												 	$display	= "block;";
+ 												 }else if($user_id>1 && $get_parent_id>1 && $essentialAttributeArr['delivery_method']==3){
 												 	$display	= "block;";
 												 }
-												// echo var_dump($listData['order_status']);
-												 
-												if($essentialAttributeArr['delivery_method']==2 ){
-													$lable = 'Print By CCC Admin';
+												}else{
+													$display	= "none;";
 												}
-												if($essentialAttributeArr['delivery_method']==1){
-													$lable='Print By Admin';
+												 
+												 ###---------- show print option ------------------##
+												 
+												
+												if( $essentialAttributeArr['delivery_method']==4){
+													$display	= "none;";
+												}
+												###---------- show print option ------------------##
+												
+												
+												##-----------------------------------##
+												if($user_id==1 && $essentialAttributeArr['delivery_method']==2 ){
+													$lable = 'Print By CCC-Admin';
+												}
+												if($user_id==1 && $essentialAttributeArr['delivery_method']==3 ){
+													$lable = 'Print By CCC-Admin';
+												}
+												
+												if($user_id>1 && $get_parent_id==1  && $essentialAttributeArr['delivery_method']==1){
+													$lable='Print By Super Admin';
+												}
+												if($user_id>1 && $get_parent_id==1  && $essentialAttributeArr['delivery_method']==3){
+													$lable='Print By Plant Controller';
 												} 
 												
-												if($essentialAttributeArr['delivery_method']==3){
-													$lable='Print By Plant Cont.';
+												if($user_id>1 && $get_parent_id>1 && $essentialAttributeArr['delivery_method']==1){
+													$lable='Print By Super Admin';
 												}
+												if($user_id>1 && $get_parent_id>1 && $essentialAttributeArr['delivery_method']==2){
+													$lable='Print By CCC-Admin';
+												}
+												
 												if($essentialAttributeArr['delivery_method']==4){
 													$lable='E-Mode Print';
 												}
-												//echo '**'.$listData['order_status'].'@@@'.$essentialAttributeArr['delivery_method'];
+												##-----------------------------------##
 												?>
                                                 <span id="order_status_<?php echo $listData['order_id'];?>" style="display:<?php echo $display;?>"> 
-												
-												<a class="btn btn-primary pull-right modellink" data-toggle="modal" href="#printMyModal" id="" onclick="return print_order('<?php echo $listData['order_id'];?>');"><i style="cursor:pointer" title="print Order" class="fa fa-print icon-2x"></i></a>
-												
-												</span>
-                                                 <?php echo $lable;?>
-                                                
-                                                </td>
+ 												<a class="btn btn-primary pull-right modellink" data-toggle="modal" href="#printMyModal" id="" onclick="return print_order('<?php echo $listData['order_id'];?>');"><i style="cursor:pointer" title="print Order" class="fa fa-print icon-2x"></i></a>
+ 												</span>
+                                                 <?php if($display	!= "block;"){echo $lable;}?>
+                                                 </td>
                                                   <td>
                                                      <div class="hidden-sm hidden-xs action-buttons">
                                                          <a href="<?php  echo base_url().'order_master/view_order/'.$listData['order_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>

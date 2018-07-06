@@ -49,6 +49,33 @@
         $this->load->view('list_order_tpl', $params);
     }
 
+	
+	public function list_orders_at_plant_controllers() {
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->get_total_order_list_all($srch_string);
+
+        $params["orderListing"] = $this->order_master_model->get_order_list_all($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/list_orders_at_plant_controllers', $total_records);
+
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_orders_at_plant_controllers_tpl', $params);
+    }
+	
     ## For Plant Controllers
 	 public function list_orders_plant_controlllers() {
  		##--------------- pagination start ----------------##
@@ -100,7 +127,7 @@
   		 $data					= array();
   		 $user_id 	= $this->session->userdata('admin_user_id');		
 		 //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
-   		 $this->load->view('list_order_plabnt_ctrl_tpl', $params);
+   		 $this->load->view('list_order_plant_ctrl_tpl', $params);
      }
 	 
 	 
