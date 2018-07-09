@@ -38,7 +38,15 @@
 				  
 				  <div class="form-group">
 					<label for="message-text">Print Quantity:</label>
-					<input type="text" class="form-control" name="qty" id="qty" value="1">
+					<select name="qty" id="qty" class="form-control">
+ 						<option value="10">10</option>	
+						<option value="100">100</option>
+						<option value="1000">1,000</option>
+						<option value="10000">10,000</option>
+						<option value="100000">1,00,000</option>
+						<option value="1000000">10,00,000</option>
+					</select>
+					<!--<input type="text" class="form-control" name="qty" id="qty" value="1"> -->
 				  </div>
                   
                   <div class="form-group">
@@ -73,7 +81,7 @@ function print_option(){
 	var restQty = $("#rest_qty").val();
 	var qty = parseInt($("#qty").val());
 	if(qty==0 || qty>parseInt(restQty)){
-		$("#msgError").html('Wrond Quantity Entered').addClass('error').fadeIn('slow');
+		$("#msgError").html('Wrong Quantity Entered, Please check.').addClass('error').fadeIn('slow');
 		return false;
 	}else{
 		$('#print_form').attr('action', url).submit();

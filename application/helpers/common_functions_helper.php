@@ -6121,6 +6121,21 @@ function get_assigned_plant_user_list($user_id){
  	return $res_arr[0]['plant_id'];
  } 
  
+ 
+ function get_assigned_plant_user_list2($user_id){
+	$res='0';
+	$ci = & get_instance();
+	 //$admin_id 				= $ci->session->userdata('admin_user_id');	
+ 		if(!empty($user_id)){ 
+			$ci->db->select('group_concat(plant_id) as plant_id');
+			$ci->db->from('assign_plants_to_users');
+			$ci->db->where(array('user_id'=>$user_id));
+			$query= $ci->db->get();//echo '***'. $ci->db->last_query();exit;
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['plant_id'];
+ }
+ 
  function get_plants_name_by_id($id){ 
 	$res='0';
 	$ci = & get_instance();
@@ -6537,8 +6552,6 @@ function get_user_email_name($userid){
   
     function get_parent_id($user_id){
 	$ci = & get_instance();
-	 
-	
 	$ci->db->select('is_parent');
 	$ci->db->from('backend_user');
 	$ci->db->where(array('status'=>'1','user_id'=>$user_id));

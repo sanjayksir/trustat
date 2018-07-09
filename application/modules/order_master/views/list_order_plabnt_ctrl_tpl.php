@@ -86,15 +86,23 @@
 															
 															<div class="form-group row">
 															<div class="col-sm-12">
-															<label for="form-field-8">Quantity</label>
-															<input name="quantity" id="quantity" type="text" class="form-control" placeholder="Quantity" >
+						<label for="form-field-8">Quantity</label>
+					<select name="quantity" id="quantity" class="form-control">
+ 						<option value="10">10</option>	
+						<option value="100">100</option>
+						<option value="1000">1,000</option>
+						<option value="10000">10,000</option>
+						<option value="100000">1,00,000</option>
+						<option value="1000000">10,00,000</option>
+					</select>								
+					<!--<input name="quantity" id="quantity" type="text" class="form-control" placeholder="Quantity" >-->
 															</div>
 															</div>
 															
 															
 															<div class="form-group row">
 															<div class="col-sm-12">
-															<label for="form-field-8">Expected Date</label>
+															<label for="form-field-8">ssExpected Date</label>
 															<div class="input-group date" data-provide="datepicker">
 															<input type="text" name="deliverydate" id="deliverrydate" readonly="readonly" class="form-control">
 															<div class="input-group-addon">

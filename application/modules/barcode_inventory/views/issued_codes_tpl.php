@@ -4,7 +4,7 @@
             <script type="text/javascript">
                     try{ace.settings.loadState('main-container')}catch(e){}
             </script>
-            <?php $label = 'Issued Codes';?>
+            <?php $label = 'Issued Codes Transuctions';?>
 
             <?php $this->load->view('../includes/admin_sidebar');?>
 
@@ -70,11 +70,13 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
+                                                                <th>Trax Number</th>
                                                                 <th>Plant Code</th>
-                                                                <th>Issue Trx Number</th>
+																<th>Product SKU</th>
+																<th>From-to Code Number</th>
+																<th>Quantity</th>
+																<th>Issued to</th>
                                                                 <th>Issue Date</th>
-                                                               
-                                                                
                                                                 <th>Action</th>
                                                             </tr>
                                                         </thead>

@@ -94,7 +94,7 @@
             // get current page records
             $params["orderListing"] = $this->order_master_model->get_order_list_all($limit_per_page, $start_index,$srch_string);
              
-            $config['base_url'] = base_url() . 'order_master/list_orders';
+            $config['base_url'] = base_url() . 'order_master/list_orders_plant_controlllers';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;

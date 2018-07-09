@@ -272,11 +272,7 @@
 		$this->db->select('count(1) as total_rows');
 		$this->db->from('order_master O');
 		//$this->db->join('print_orders_history P', 'O.order_id= P.order_id');
-		
-		
-		
-		
-   		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
 			$result_data = $result[0]['total_rows'];
