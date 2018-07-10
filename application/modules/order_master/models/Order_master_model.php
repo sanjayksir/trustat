@@ -600,6 +600,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 				"print_user_id"			=>$user_id,
 				"active_status"			=>$active_status,
 				"customer_id"			=>'0',
+				"stock_status"			=>'Not Received',
 				"modified_at"			=>'0000-00-00 00:00:00'
 			 ); 
 		 
