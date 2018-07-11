@@ -175,6 +175,7 @@ class ScannedProduct extends ApiController {
 		$consumer_id = $data['consumer_id']; 
 		//echo $consumer_id; exit;
         $result = $this->ScannedproductsModel->findProductForConsumerSurvey($consumer_id);
+		
 		//echo $result;
 		/* 
         if(!empty($result->product_video)){

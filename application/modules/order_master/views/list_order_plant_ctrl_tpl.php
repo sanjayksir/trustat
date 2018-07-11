@@ -46,38 +46,37 @@
 											<div id="myModal" class="modal fade" role="dialog">
 											  <div class="modal-dialog">
 												<!-- Modal content-->
-												<div class="modal-content">
-												  <div class="modal-header">
-													<button type="button" class="close" data-dismiss="modal">&times;</button>
-													<h4 class="modal-title">Make Order</h4>
-												  </div>
-												  <div class="modal-body">
-														<form name="frm" id="frm" action="#" method="POST">
-															<!--<input name="menu_id" id="menu_id" type="hidden" value="">-->
- 															<div class="form-group row">
-															<div class="col-sm-12">
-															<label for="form-field-8">Product Name/SKU</label>
-															<?php 
-															$user_id 		= $this->session->userdata('admin_user_id');
-															$parentId 		= getParentIdFromUserId();
-															if($parentId==0 || $parentId==1){
-																$product_list = get_all_products_sku($user_id);
-																//echo '-1111-';
-																//echo '<pre>';print_r($product_list);
-															}else{
-																$plant_list 	= list_assigned_plants_of_plant_ctrl($user_id);
-																$product_list 	= get_products_name_by_id(explode(',',$plant_list));
-																//echo '-222-';
-																//echo '<pre>';print_r($product_list);
-															}
-															?>
-															<select name="product[]" id="product" class="form-control" Multiple>
- 															<?php if(count($product_list)>0){
-																		foreach($product_list as $product){?>
-																		<option  value="<?php echo $product['id'];?>"><?php echo $product['product_name'];?></option>
-															
-															<?php 		}
-																	}else{?><option value="0">-No Product-</option>
+		<div class="modal-content">
+		  <div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal">&times;</button>
+			<h4 class="modal-title">Make Order</h4>
+		  </div>
+		  <div class="modal-body">
+			<form name="frm" id="frm" action="#" method="POST">
+			<!--<input name="menu_id" id="menu_id" type="hidden" value="">-->
+ 		<div class="form-group row">
+		<div class="col-sm-12">
+		<label for="form-field-8">Product Name/SKU</label>
+		<?php 
+			$user_id 		= $this->session->userdata('admin_user_id');
+			$parentId 		= getParentIdFromUserId();
+			if($parentId==0 || $parentId==1){
+			$product_list = get_all_products_sku($user_id);
+			//echo '-1111-';
+			//echo '<pre>';print_r($product_list);
+			}else{
+			$product_list 	= get_all_products_sku_plant_ctrl($user_id);
+			//$product_list 	= get_products_name_by_id(explode(',',$plant_list));
+			//echo '-222-';
+			//echo '<pre>';print_r($product_list);
+				}
+					?>
+			<select name="product[]" id="product" class="form-control" Multiple>
+ 				<?php if(count($product_list)>0){
+							foreach($product_list as $product){?>
+				<option  value="<?php echo $product['id'];?>"><?php echo $product['product_name'];?></option>
+					<?php 		}
+					}else{?><option value="0">-No Product-</option>
 															<?php }?>
 															</select>
 															</div>
@@ -86,8 +85,16 @@
 															
 															<div class="form-group row">
 															<div class="col-sm-12">
-															<label for="form-field-8">Quantity</label>
-															<input name="quantity" id="quantity" type="text" class="form-control" placeholder="Quantity" >
+					<label for="form-field-8">Quantity</label>
+					<select name="quantity" id="quantity" class="form-control">
+ 						<option value="10">10</option>	
+						<option value="100">100</option>
+						<option value="1000">1,000</option>
+						<option value="10000">10,000</option>
+						<option value="100000">1,00,000</option>
+						<option value="1000000">10,00,000</option>
+					</select>									
+			<!--	<input name="quantity" id="quantity" type="text" class="form-control" placeholder="Quantity" >-->
 															</div>
 															</div>
 															
@@ -143,7 +150,7 @@
 														<th>Tracking Number</th>
  														<th>Product Code</th>
  														<th>Product Name</th>
-														<th>Quantity</th>
+														<th>Qty</th>
 														<th>Delivery Date</th>
                                                         <th>Order Date</th>
                                                         <th>Status</th>
@@ -153,10 +160,12 @@
 												</thead>
 												<tbody>
 
-                                        <?php $i = 0; // echo '***';print_r($orderListing);
+                                        <?php $i = 0;   //echo '***<pre>';print_r($orderListing);
 										if(count($orderListing)>0){
                                         foreach ($orderListing as $listData){
 										$i++;
+											$essentialAttributeArr = array();
+											$essentialAttributeArr = getEssentialAttributes($listData['product_id']);// echo '***<pre>';print_r($essentialAttributeArr);
 											$status = $listData['status'];
                                             if($status ==1){
 											$status ='Active';
@@ -172,8 +181,8 @@
 												<td><?php echo $listData['product_sku']; ?></td>
 												<td><?php echo $listData['product_name']; ?></td>
 												<td><?php echo $listData['quantity']; ?></td>
-												<td><?php echo date('d/M/Y',strtotime($listData['delivery_date'])); ?></td>
-												<td><?php echo $listData['created_date']; ?></td>
+												<td><?php  if($listData['delivery_date']!='0000-00-00'){echo date('d/M/Y',strtotime($listData['delivery_date']));}else{echo '';}; ?></td>
+												<td><?php  if($listData['created_date']!='0000-00-00'){echo date('d/M/Y',strtotime($listData['created_date']));}else{echo '';}; ?></td>
 												<?php if($this->session->userdata('admin_user_id')==1){?>
                                                
 												 <td><select name="change_order_status" id="change_order_status" onchange="return change_order_status('<?php echo $listData['order_id'];?>',this.value);">
@@ -183,30 +192,77 @@
 													</select>
 												</td> 
 												<?php }else{?>
-												 <td><?php echo order_status($listData['status']); ?></td>
+												 <td><?php echo order_status($listData['order_status']); ?></td>
 												<?php }?>
 												<td>
-                                                <!--<a class="btn btn-primary pull-right modellink" data-toggle="modal" href="#printMyModal" id="" onclick="return print_order('<?php echo $listData['order_id'];?>');">Print</a>-->
-                                                <span id="order_status_<?php echo $listData['order_id'];?>"> 
-												<?php if($listData['order_status']==1){?>
- 												<!--<select name="print_order" id="print_order_<?php echo $listData['order_id'];?>">
- 													<option value="1">Bar Code</option>
-													<option value="2">Q.R Code</option>
-											    </select>
-                                                <i style="cursor:pointer" title="print Order" class="fa fa-print" onclick="return print_option('<?php echo $listData['order_id'];?>');"></i>-->
-												<a class="btn btn-primary pull-right modellink" data-toggle="modal" href="#printMyModal" id="" onclick="return print_order('<?php echo $listData['order_id'];?>');"><i style="cursor:pointer" title="print Order" class="fa fa-print icon-2x"></i></a>
+                                                 
+												<?php
+												 
+												$get_parent_id 	= get_parent_id($user_id);
+												$lable='';
+												$lable1='';
+												$lable2='';
+												$display		= "none;";
+												if($listData['order_status']==1){
+												 if($user_id==1 && $essentialAttributeArr['delivery_method']==1){
+												 	$display	= "block;";
+ 												 }else if($user_id>1 && $get_parent_id==1 && $essentialAttributeArr['delivery_method']==2){
+												 	$display	= "block;";
+ 												 }else if($user_id>1 && $get_parent_id>1 && $essentialAttributeArr['delivery_method']==3){
+												 	$display	= "block;";
+												 }
+												}else{
+													$display	= "none;";
+												}
+												 
+												 ###---------- show print option ------------------##
+												 
 												
-												<?php }?></span>
-                                                
-                                                
-                                                </td>
+												if( $essentialAttributeArr['delivery_method']==4){
+													$display	= "none;";
+												}
+												###---------- show print option ------------------##
+												
+												
+												##-----------------------------------##
+												if($user_id==1 && $essentialAttributeArr['delivery_method']==2 ){
+													$lable = 'Print By CCC-Admin';
+												}
+												if($user_id==1 && $essentialAttributeArr['delivery_method']==3 ){
+													$lable = 'Print By CCC-Admin';
+												}
+												
+												if($user_id>1 && $get_parent_id==1  && $essentialAttributeArr['delivery_method']==1){
+													$lable='Print By Super Admin';
+												}
+												if($user_id>1 && $get_parent_id==1  && $essentialAttributeArr['delivery_method']==3){
+													$lable='Print By Plant Controller';
+												} 
+												
+												if($user_id>1 && $get_parent_id>1 && $essentialAttributeArr['delivery_method']==1){
+													$lable='Print By Super Admin';
+												}
+												if($user_id>1 && $get_parent_id>1 && $essentialAttributeArr['delivery_method']==2){
+													$lable='Print By CCC-Admin';
+												}
+												
+												if($essentialAttributeArr['delivery_method']==4){
+													$lable='E-Mode Print';
+												}
+												##-----------------------------------##
+												?>
+                                                <span id="order_status_<?php echo $listData['order_id'];?>" style="display:<?php echo $display;?>"> 
+ 												<a class="btn btn-primary pull-right modellink" data-toggle="modal" href="#printMyModal" id="" onclick="return print_order('<?php echo $listData['order_id'];?>');"><i style="cursor:pointer" title="print Order" class="fa fa-print icon-2x"></i></a>
+ 												</span>
+                                                 <?php if($display	!= "block;"){echo $lable;}?>
+                                                 </td>
                                                   <td>
                                                      <div class="hidden-sm hidden-xs action-buttons">
-                                                         <a href="<?php  echo base_url().'order_master/view_order/'.$listData['order_id'];?>" class="blue" target="_blank" title="View"><i class="fa fa-eye"></i></a>
+                                                         <a href="<?php  echo base_url().'order_master/view_order/'.$listData['order_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>
 														
 												 
-                                                         <?php echo anchor("order_master/edit_product/" . $listData['order_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green','title'=>'Edit')); ?>
-                                                         <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['order_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['order_id'];?>',this.value);" />
+                                                         <?php echo anchor("order_master/edit_product/" . $listData['order_id'], '<i class="ace-icon fa fa-pencil"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>
+                                                        <!-- <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['order_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['order_id'];?>',this.value);" />-->
 
                                                     </div>
 
@@ -214,7 +270,7 @@
                                              </tr>
                                          <?php }
 										}else{ ?>
-										<tr><td align="center" colspan="8" class="color">No Records Founds</td></tr>
+										<tr><td align="center" colspan="8" class="color error">No Records Founds</td></tr>
 										<?php }?>
                                         <tr><td align="right" colspan="10" class="color"><?php if (isset($links)) { ?>
                 <?php echo $links ?>
@@ -371,7 +427,7 @@ $('.datepicker').datepicker({format:'yyyy-mm-dd', startDate: today,minDate: new 
  						//$('#ajax_msg').text("User Added Successfully!").css("color","green").show();
  						$('.alert-success').show();
  						$('#frm')[0].reset(); 
-						window.location="<?php echo base_url(); ?>order_master/list_orders/";
+						window.location="<?php echo base_url(); ?>order_master/list_orders_plant_controlllers/";
  						 					
  					}
  				}

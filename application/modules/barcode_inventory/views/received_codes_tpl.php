@@ -4,7 +4,7 @@
             <script type="text/javascript">
                     try{ace.settings.loadState('main-container')}catch(e){}
             </script>
-            <?php $label = 'Received Codes';?>
+            <?php $label = 'Transaction of the Received Codes';?>
 
             <?php $this->load->view('../includes/admin_sidebar');?>
 
@@ -70,13 +70,16 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th>
+                                                                <th>Trax Number</th>
                                                                 <th>Plant Code</th>
-                                                                <th>Order Number</th>
+																<th>Product SKU</th>
+																<th>From-to Code Number</th>
+																<th>Quantity</th>
+																<th>Order Number</th>
                                                                 <th>Order Date</th>
+																<th>Print Date</th>
+																<th>Source Received From</th>
                                                                 <th>Receive Date</th>
-                                                                <th>Order Status</th>
-                                                                <th>Delivery Date</th>
-                                                                
                                                                 <th>Action</th>
                                                             </tr>
                                                         </thead>
@@ -190,7 +193,7 @@
                                                                 $lable='Print By Super Admin';
                                                         }
                                                         if($user_id>1 && $get_parent_id>1 && $essentialAttributeArr['delivery_method']==2){
-                                                                $lable='Print By CCC Admin';
+                                                                $lable='Print By CCCAdmin';
                                                         }
 
                                                         if($essentialAttributeArr['delivery_method']==4){
@@ -274,7 +277,7 @@
           <div class="modal-content">
             <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Make Order</h4>
+                  <h4 class="modal-title">Receive Codes</h4>
             </div>
             <div class="modal-body">
 <?php 
@@ -288,18 +291,25 @@
 <input name="order_no" id="order_no" type="hidden" value="<?php $datecodedno; ?>">
 <div class="form-group row">
 <div class="col-sm-12">
-<label for="form-field-8">Plant Name</label>
+<label for="form-field-8">
+<?php //$plants = get_assigned_plant_user_list2($listData['user_id']);
+//echo get_plants_name_by_id($plants);
+
+                                                ?>Plant Name<?php //echo $listData['user_id']; ?></label>
 <select class="form-control" name="plant_id" id="plant_id" onchange="return get_products(this.value);">
-<option value="">-Select Plant-</option>
+<option value="">-Select Plant-</option><?php echo $listData['order_id'];?>
 <?php 
-$user_id 	= $this->session->userdata('admin_user_id');
-$plant_data = get_all_active_plants($user_id);
-foreach($plant_data as $res){?>
-<option value="<?php echo $res['plant_id'];?>" <?php if($this->uri->segment(3)==$res['plant_id']){echo 'selected';}?>><?php echo $res['plant_name'];?></option>
+$user_id 	= $listData['user_id'];
+$plantsId = explode(',',get_assigned_plant_user_list2($listData['user_id']));
+//$arrImg = explode(',',$plants);
+//echo $plantsId;
+foreach($plantsId as $res){?>
+<?php //echo $res;?>
+<option value="<?php echo $res;?>" <?php if($this->uri->segment(3)==$res){echo 'selected';}?>><?php echo get_plants_name_by_id($res);?></option>
 <?php }?>
 </select>
 <br />
-<label for="form-field-8">SKU/Product Name</label>
+<label for="form-field-8">Select Received Order</label>
 <select class="form-control" name="product[]" id="product" >
 
 </select>			

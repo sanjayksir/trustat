@@ -93,6 +93,8 @@ class ScannedproductsModel extends CI_Model {
                // 'ad_active' => Utils::exists('push_advertisements', ['product_id'=>$row->id,'consumer_id'=>$consumer_id]),
             ];
            
+		   $consumerId = $row->id;
+	$item['isGiven'] = $this->isLoyaltyForProductPushedAdFeedbackQuesGiven($consumerId, $product_id);
             if(!empty($row->product_images)){
                 $item['product_images'] = Utils::setFileUrl($row->product_images);
             }else{
@@ -100,9 +102,9 @@ class ScannedproductsModel extends CI_Model {
             }
             
             if(!empty($row->product_push_ad_video)){
-                $item['product_push_ad_video'] = Utils::setFileUrl($row->product_push_ad_video);
+                $item['product_video'] = Utils::setFileUrl($row->product_push_ad_video);
             }else{
-                $item['product_push_ad_video'] = '';
+                $item['product_video'] = '';
             }
             
             $items[] = $item;
@@ -138,6 +140,13 @@ class ScannedproductsModel extends CI_Model {
 				'product_name' => $row->product_name,
                // 'ad_active' => Utils::exists('push_advertisements', ['product_id'=>$row->id,'consumer_id'=>$consumer_id]),
             ];
+			
+			
+	$consumerId = $row->id;
+	$item['isGiven'] = $this->isLoyaltyForProductSurveyFeedbackQuesGiven($consumerId, $product_id);
+			
+			
+		
            
             if(!empty($row->product_images)){
                 $item['product_images'] = Utils::setFileUrl($row->product_images);
@@ -146,9 +155,9 @@ class ScannedproductsModel extends CI_Model {
             }
             
             if(!empty($row->product_survey_video)){
-                $item['product_survey_video'] = Utils::setFileUrl($row->product_survey_video);
+                $item['product_video'] = Utils::setFileUrl($row->product_survey_video);
             }else{
-                $item['product_survey_video'] = '';
+                $item['product_video'] = '';
             }
             
             $items[] = $item;
@@ -235,6 +244,47 @@ class ScannedproductsModel extends CI_Model {
         }
         return false;
     }
+	
+	// checking if the Loyalty given to the user on on Survey Product Pushed Ad Feedback type questions on code 
+    Public function isLoyaltyForProductPushedAdFeedbackQuesGiven($consumerId, $product_id) {
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='Product Pushed Ad Feedback'");
+        if($answerQuery->num_rows() > 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                if(($paramsValue['product_id'] == $product_id)){
+                    $row->params = $paramsValue;
+                    if($paramsValue != ''){
+						//return $row;
+						return "Given";
+					} else {return "Not Given";}
+                }                
+            }
+        }
+        return "Not Given";
+    }
+	
+	// checking if the Loyalty given to the user on on Product Survey Feedback type questions on code 
+    Public function isLoyaltyForProductSurveyFeedbackQuesGiven($consumerId, $product_id) {
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='Product Survey Feedback'");
+        if($answerQuery->num_rows() > 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                if(($paramsValue['product_id'] == $product_id)){
+                    $row->params = $paramsValue;
+					if($paramsValue != ''){
+						//return $row;
+						return "Given";
+					} else {return "Not Given";}
+					
+                    
+                }                
+            }
+        }
+        return "Not Given";
+    }
+	
     /*
     public function isProductRegistered($bar_code_data) {
 
