@@ -296,5 +296,25 @@ class Utils {
         $query = self::$ci->db->get_where($table,$conditions);
         return (bool) $query->num_rows();
     }
+    
+    public static function renderBreadCrumb($items=[]){
+        $view = '<ul class="breadcrumb">';        
+        if(!empty($items)){
+            $view .= '<li><i class="ace-icon fa fa-home home-icon"></i><a href="'. site_url('/').'">Home</a></li>';
+            foreach($items as $key => $item){
+                if(count($items) == ($key+1)){
+                    $view .= '<li class="active">'.$item['title'].'</li>';
+                }else{
+                    $view .= '<li><a href="'. site_url($item['url']).'">'.$item['title'].'</a></li>';
+                }
+                
+            }
+        }else{
+            $view .= '<li class="active"><i class="ace-icon fa fa-home home-icon"></i><a href="'. site_url('/').'">Home</a></li>';
+        }
+        
+        $view .= '</ul>';
+        return $view;
+    }
 
 }

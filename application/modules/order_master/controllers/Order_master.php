@@ -45,6 +45,7 @@
         ##--------------- pagination End ----------------##
         $data = array();
         $user_id = $this->session->userdata('admin_user_id');
+        $params['user_id'] = $user_id;
         //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
         $this->load->view('list_order_tpl', $params);
     }

@@ -122,17 +122,12 @@
             <div class="main-content">
                 <div class="main-content-inner">
                     <div class="breadcrumbs ace-save-state" id="breadcrumbs">
-                        <ul class="breadcrumb">
-                            <li>
-                                <i class="ace-icon fa fa-home home-icon"></i>
-                                <a href="#">Home</a>
-                            </li>
-
-                            <li>
-                                <a href="#">Tables</a>
-                            </li>
-                            <li class="active">Simple &amp; Dynamic</li>
-                        </ul><!-- /.breadcrumb -->
+                        <?php
+                        if(empty($breadcrumb)){
+                           $breadcrumb = [] ;
+                        }
+                        echo Utils::renderBreadCrumb($breadcrumb);                         
+                        ?>
                     </div>
 
                     <div class="page-content">
