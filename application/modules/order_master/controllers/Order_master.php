@@ -525,6 +525,7 @@
 				}
 				
 				$this->insert_print_order_in_table($post,'Qrcode');
+				$this->insert_order_print_listing_table($post,'Qrcode');
  			}
  			##----------------------------------------------------------------------------------##
  			// ---------------------------------------------------------
@@ -704,6 +705,7 @@
  				}
 				
 				$this->insert_print_order_in_table($post,'barcode');
+				$this->insert_order_print_listing_table($post,'barcode');
  			}
 			 // $pdf->Ln();
  			// ---------------------------------------------------------
@@ -923,6 +925,16 @@
 			 
 		 }
 		 return $resultSet;
+	 }
+	 
+	 
+	 function insert_order_print_listing_table($post,$code_type){## code type is barcode, QR code
+		 $order_id 				= base64_decode($post['order_id']);
+		 //$resultSet=0;
+		
+			 	$resultSet= $this->order_master_model->insert_order_print_listing($post,$code_type);	
+			 
+		// return $resultSet;
 	 }
 	 
 	 function print_box(){
