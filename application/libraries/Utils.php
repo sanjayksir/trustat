@@ -35,8 +35,8 @@ class Utils {
         }
     }
 
-    public static function response($message, $code = 200) {
-        self::$ci->output->set_content_type('application/json')
+    public static function response($message, $code = 200,$contentType='application/json') {
+        self::$ci->output->set_content_type($contentType)
                 ->set_status_header($code)
                 ->set_output(json_encode($message))
                 ->_display();
@@ -224,6 +224,7 @@ class Utils {
         return $value;
     }
     public static function pagination($url,$totalRecords,$limit = null,$segment=3){
+        self::$ci->load->library("pagination");
         if(is_null($limit)){
             $limit = self::$ci->config->item('pageLimit');
         }
