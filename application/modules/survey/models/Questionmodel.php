@@ -33,7 +33,7 @@ class QuestionModel extends CI_Model {
         return $query;
     }
     
-    function getAllQuestions($limit,$offset,$keyword = null) {        
+    public function getAllQuestions($limit,$offset,$keyword = null) {        
         $condition = [];
         if(!empty($keyword)){
             $condition[] = sprintf('question_type LIKE "%%%1$s%%" OR question_text LIKE "%%%1$s%%"',$keyword);            
