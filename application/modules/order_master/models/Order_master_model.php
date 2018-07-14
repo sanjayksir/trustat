@@ -613,7 +613,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 				"active_status"			=> $active_status,
 				"customer_id"			=> '0',
 				"stock_status"			=> 'Not Received',
-				"modified_at"			=> '0000-00-00 00:00:00'
+				"modified_at"			=> date('Y-m-d H:i:s')
 			 ); 
 		 
 		if($this->db->insert("printed_barcode_qrcode", $insertData)){
