@@ -9,8 +9,12 @@
             </div>
             <div class="form-group">
                 <label>Order</label>
-                <select class="form-control" name="order_id" id="order_id">
-                    
+                <select class="form-control" name="order_id" id="order_id" onchange="barcode.orderHistory(this,'order_history')">                    
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Order History</label>
+                <select class="form-control" name="order_history" id="order_history">                    
                 </select>
             </div>
            
@@ -34,5 +38,15 @@
 		$("#"+targetElem).html(data);
             }
 	});
-    }
+    };
+    barcode.orderHistory = function(obj,targetElem){
+        $.ajax({
+            type: "POST",
+            url: "<?php echo site_url('barcode_inventory/get_order_history') ?>",
+            data:'order_id='+obj.value,
+            success: function(data){
+		$("#"+targetElem).html(data);
+            }
+	});
+    };
 </script>

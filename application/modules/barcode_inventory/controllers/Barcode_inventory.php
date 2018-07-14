@@ -56,6 +56,18 @@ class Barcode_inventory extends MX_Controller {
         $orders = array_column($result, 'order_tracking_number','order_id');
         Utils::response([Utils::selectOptions('order_id',['options'=>$orders,'empty'=>'Select Order'])]);
     }
+    public function get_order_history(){
+        $plantId = $this->input->post('order_id',null);
+        if(is_null($plantId)){
+            Utils::response(['options'=>'']);
+        }
+        $result = $this->db->get_where('order_master',['plant_id'=>$plantId])->result_array();
+        if(empty($result)){
+            Utils::response(['options'=>'']);
+        }
+        $orders = array_column($result, 'order_tracking_number','order_id');
+        Utils::response([Utils::selectOptions('order_id',['options'=>$orders,'empty'=>'Select Order'])]);
+    }
 
     public function received_codes() {
         $params = array();
