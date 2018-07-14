@@ -83,7 +83,7 @@ class plant_master_model extends CI_Model {
                 $plant_code = $frmData['plant_code'];
                 $plant_name = $frmData['plant_name'];
                 // echo $this->db->last_query();exit;
-                //$this->user_registration_mail($plant_code, $plant_name, $frmData['user_email']);
+                $this->user_registration_mail($plant_code, $plant_name, $frmData['user_email']);
                 $this->session->set_flashdata('success', 'Plant Added Successfully!');
                 return 1;
             }

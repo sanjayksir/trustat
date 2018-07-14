@@ -1440,7 +1440,8 @@ $this->image_lib->initialize($config);
 		);
 		if($this->dmailer->mail_notify($mail_conf)){
 		return true;
-		}return false;//echo redirect('accounts/create');
+		}
+		return false;//echo redirect('accounts/create');
 	 }
 	 
 	 

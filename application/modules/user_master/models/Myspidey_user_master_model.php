@@ -155,6 +155,31 @@ class Myspidey_user_master_model extends CI_Model {
         }
     }
 
+	public function user_registration_mail($full_name = '', $username = '', $password = '', $email) {//echo '***'.$email;exit;
+        $link = $this->create_link($username, $password);
+        $subject = 'Admin:: Welcome to Tracking Portal';
+        $body = "<b>Hello <b>" . $username . "</b>,
+								</b><br><br><r>
+								Your registration process has been complete.
+								<br>Your login credentials are:<br />
+								<br>Your can login with the given credentials after admin approval:<br />
+								User Name:  " . $username . "<br>
+								Password is:<b>" . $password . '</b>
+								Verify your email by clicking here:' . $link . '
+								<br>Please wait for admin approval!<br><br>Thanks & Regards<br><b>Team Admin</b>';
+        $mail_conf = array(
+            'subject' => $subject,
+            'to_email' => $email,
+            'cc' => 'superadmin@innovigents.com',
+            'from_email' => 'admin@innovigents.com',
+            'from_name' => 'Admin',
+            'body_part' => $body
+        );
+        if ($this->dmailer->mail_notify($mail_conf)) {
+            return true;
+        } return false; //echo redirect('accounts/create');
+    }
+	
     function update_profile_data($frmData) {
         $user_id = $this->session->userdata('admin_user_id');
         if (!empty($user_id)) {
@@ -209,30 +234,7 @@ class Myspidey_user_master_model extends CI_Model {
         }
     }
 
-    public function user_registration_mail($full_name = '', $username = '', $password = '', $email) {//echo '***'.$email;exit;
-        $link = $this->create_link($username, $password);
-        $subject = 'Admin:: Welcome to Tracking Portal';
-        $body = "<b>Hello <b>" . $username . "</b>,
-								</b><br><br><r>
-								Your registration process has been complete.
-								<br>Your login credentials are:<br />
-								<br>Your can login with the given credentials after admin approval:<br />
-								User Name:  " . $username . "<br>
-								Password is:<b>" . $password . '</b>
-								Verify your email by clicking here:' . $link . '
-								<br>Please wait for admin approval!<br><br>Thanks & Regards<br><b>Team Admin</b>';
-        $mail_conf = array(
-            'subject' => $subject,
-            'to_email' => $email,
-            'cc' => 'superadmin@innovigents.com',
-            'from_email' => 'admin@innovigents.com',
-            'from_name' => 'Admin',
-            'body_part' => $body
-        );
-        if ($this->dmailer->mail_notify($mail_conf)) {
-            return true;
-        } return false; //echo redirect('accounts/create');
-    }
+    
 
     function checkDuplicateUser($username) {
         $result = '';
