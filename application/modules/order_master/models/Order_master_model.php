@@ -567,6 +567,9 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 	 }
 	 
 	 
+	 
+	 
+	 
 	 function updatet_print_history($post, $code_type,$last_qty){
 		 $order_id 				= base64_decode($post['order_id']);
  		 $printer_current_qty 	= $last_qty+$post['qty'];
@@ -588,20 +591,29 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 	 }
 	 
 	 
+	
+
+	 
 	 #### -----------------Printed barcode----------------#####
 	 function insert_printed_barcode_qrcode($post, $code, $code_type,$product_id='',$active_status,$plant_id,$user_id){
 		 $order_id 				= base64_decode($post['order_id']);
 		 $post_code 			= $code ;
+			//$print_id = date('YmdHis') . "" . uniqid();
+	//return $last_row=$this->db->select('id')->order_by('id',"desc")->limit(1)->get('order_print_listing')->row();
+			//$print_idb1 = $this->last_record();
+	$row = $this->db->select("*")->limit(1)->order_by('id',"DESC")->get("order_print_listing")->row();
+			$print_id =  $row->id + 1;
 		 $insertData = array(
+				"print_id"				=> $print_id,
 				"order_id"				=> $order_id,
 				"barcode_qr_code_no"	=> $post_code,
-				"product_id"			=>$product_id,
-				"plant_id"				=>$plant_id,
-				"print_user_id"			=>$user_id,
-				"active_status"			=>$active_status,
-				"customer_id"			=>'0',
-				"stock_status"			=>'Not Received',
-				"modified_at"			=>'0000-00-00 00:00:00'
+				"product_id"			=> $product_id,
+				"plant_id"				=> $plant_id,
+				"print_user_id"			=> $user_id,
+				"active_status"			=> $active_status,
+				"customer_id"			=> '0',
+				"stock_status"			=> 'Not Received',
+				"modified_at"			=> '0000-00-00 00:00:00'
 			 ); 
 		 
 		if($this->db->insert("printed_barcode_qrcode", $insertData)){
@@ -611,6 +623,25 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		}
 	 }
 	 
+	function insert_order_print_listing($post, $code_type){
+		 $order_id 				= base64_decode($post['order_id']);
+ 		 $printer_current_qty 	= $post['qty'];
+		 $print_code_type 		= $code_type;
+		 $total_quantity 		= $this->get_total_quantity_ordered($order_id) ;
+		 $insertData = array(
+				//"print_id"			=> $print_id,
+				"order_id"			=> $order_id,
+				"last_printed_rows"	=> $printer_current_qty,
+				"total_quantity"	=> $total_quantity,
+				"code_type"			=> $print_code_type
+			 ); 
+		 
+		if($this->db->insert("order_print_listing", $insertData)){
+			return true;
+		}else{
+			return false;
+		}
+	 }
 	 
 	 function get_barcode_total_order_print_list_all($srch_string=''){
 		$result_data = 0;

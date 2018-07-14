@@ -138,10 +138,8 @@
 													   
 													   <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['user_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['user_id'];?>',this.value);" />
 													   
-													  
-													   
 													   <?php }else{?>
-													   <span><a href="#" class="btn btn-xs btn-warning" title="Email Not Verified">X</a></span>
+													   <span><a href="javascript:void(0);" onclick="return confirmDelete('<?php echo base64_encode($listData['user_id']);?>');" class="btn btn-xs btn-warning" title="Email Not Verified">X</a></span>
 													   <?php }?>
 
                                                     </div>
