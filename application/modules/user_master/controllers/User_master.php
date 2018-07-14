@@ -224,7 +224,6 @@ class User_master extends MX_Controller {
         // $id 					= $this->uri->segment(3);
         // $data['ownership'] 	= $this->myspidey_user_master_model->get_ownership($id);
         //$data['ownership'] 	= $this->myspidey_user_group_permissions_model->get_ownership_user();
-
         $this->load->view('add_member', $data);
     }
 

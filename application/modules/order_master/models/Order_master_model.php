@@ -603,6 +603,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 			//$print_idb1 = $this->last_record();
 	$row = $this->db->select("*")->limit(1)->order_by('id',"DESC")->get("order_print_listing")->row();
 			$print_id =  $row->id + 1;
+			$date = date('m/d/Y h:i:s a', time());
 		 $insertData = array(
 				"print_id"				=> $print_id,
 				"order_id"				=> $order_id,
