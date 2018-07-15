@@ -110,29 +110,23 @@ class Barcode_inventory extends MX_Controller {
     }
 
     public function received_codes() {
-        $params = array();
-        if (!empty($this->input->get('page_limit'))) {
-            $limit_per_page = $this->input->get('page_limit');
-        } else {
-            $limit_per_page = $this->config->item('pageLimit');
+        $data['title'] = 'List of recieved codes';
+        $data['view'] = 'received_codes_tpl';
+        if(!empty($this->input->get('page_limit'))){
+            $limit = $this->input->get('page_limit');
+        }else{
+            $limit = $this->config->item('pageLimit');
         }
-        $this->config->set_item('pageLimit', $limit_per_page);
-        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
-        $srch_string = $this->input->get('search');
-
-        if (empty($srch_string)) {
-            $srch_string = '';
-        }
-        $total_records = $this->Barcode_inventory_model->get_total_order_list_all($srch_string);
-
-        $params["orderListing"] = $this->Barcode_inventory_model->get_order_list_all($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('Barcode_inventory_model/received_codes_tpl', $total_records);
-
-        ##--------------- pagination End ----------------##
-        $data = array();
-        $user_id = $this->session->userdata('admin_user_id');
-        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
-        $this->load->view('received_codes_tpl', $params);
+        $this->config->set_item('pageLimit', $limit);
+        $offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $query = $this->input->get('search',null);
+        list($data['total'],$data['items']) = $this->BarcodeInventoryModel->getTransactionCodes($limit,$offset,$query);
+        
+        $data["links"] = Utils::pagination('barcode_inventory/received_codes', $data['total']);
+        $data['breadcrumb'] = [
+            ['title'=>'Recieve Barcode Inventory','url'=>null]
+        ];
+        $this->load->view('template',$data);
     }
 }
 ?>

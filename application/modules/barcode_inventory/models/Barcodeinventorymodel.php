@@ -47,14 +47,14 @@ class BarcodeInventoryModel extends CI_Model {
         return $query;
     }
 
-    public function getInventory($limit, $offset, $keyword = null) {
+    public function getTransactionCodes($limit, $offset, $keyword = null) {
         $condition = [];
         if (!empty($keyword)) {
             $condition[] = sprintf(' LIKE "%%%1$s%%" OR question_text LIKE "%%%1$s%%"', $keyword);
         }
         $conditions = trim(implode(' AND ', $condition), ' AND ');
         $total = Utils::countAll('transactions_codes', $conditions);
-        $this->db->select(['tc.product_id', 'tc.product_code', 'tc.id AS transaction_id', 'tc.trax_number', 'tc.order_number', 'tc.order_date', 'tc.print_date', 'tc.plant_id', 'tc.product_sku', 'tc.quantity', 'tc.source_received_from', 'tc.receive_date', 'tc.status', 'tc.order_id', 'pbq.stock_status']);
+        $this->db->select(['tc.id','tc.trax_number','tc.product_id', 'tc.product_code', 'tc.id AS transaction_id', 'tc.trax_number', 'tc.order_number', 'tc.order_date', 'tc.print_date', 'tc.plant_id', 'tc.product_sku', 'tc.quantity', 'tc.source_received_from', 'tc.receive_date', 'tc.status', 'tc.order_id', 'pbq.stock_status']);
         $this->db->from('printed_barcode_qrcode AS pbq');
         $this->db->join('transactions_codes AS tc', 'tc.product_code=pbq.barcode_qr_code_no');
         if (!empty($conditions)) {
