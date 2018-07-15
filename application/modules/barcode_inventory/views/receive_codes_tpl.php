@@ -2,7 +2,7 @@
     <div class="widget-header widget-header-flat">
         <h5 class="widget-title bigger lighter"><?php echo $title;?></h5>
         <div class="widget-toolbar">
-            <a href="<?php echo base_url('barcode_inventory/addbarcode_transaction') ?>" class="btn btn-sm btn-success btnadd" title="Receive More Codes">Receive More Codes</a>
+            <a href="<?php echo base_url('barcode_inventory/addbarcode_transaction/Received') ?>" class="btn btn-sm btn-success btnadd" title="Receive More Codes">Receive More Codes</a>
         </div>
     </div>
     <div class="widget-body">

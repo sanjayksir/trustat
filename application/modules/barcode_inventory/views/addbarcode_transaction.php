@@ -35,7 +35,7 @@
         $.ajax({
             type: "POST",
             url: "<?php echo site_url('barcode_inventory/save_transaction') ?>",
-            data:$("#order-form").serialize()+'&status_type=Received',
+            data:$("#order-form").serialize()+'&status_type=<?php echo $this->uri->segment(3) ?>',
             success: function(data){
                 console.log(data.status);
                 if(data.status){

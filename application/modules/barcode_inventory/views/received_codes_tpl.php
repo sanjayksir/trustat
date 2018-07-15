@@ -52,24 +52,26 @@
             ?>
             <tr>
                 <td><?php echo $sno; ?></td>
+                <td><?php echo $row['trax_number'];?></td>
                 <td><?php echo $row['plant_id'];?></td>
                 <td><?php echo $row['product_sku'];?></td>
-                <td><?php echo $row['barcode_qr_code_no'];?></td>
-                <td><?php echo $row['order_no'];?></td>
-                <td><?php echo date('d/M/Y',strtotime($row['created_date'])); ?></td>
-                <td><?php echo date('d/M/Y',strtotime($row['modified_at'])); ?></td>
+                <td><?php echo $row['product_code'];?></td>
+                <td><?php echo $row['quantity'];?></td>
+                <td><?php echo $row['order_number'];?></td>
+                <td><?php echo date('d/M/Y',strtotime($row['order_date'])); ?></td>
+                <td><?php echo date('d/M/Y',strtotime($row['print_date'])); ?></td>
                 <td><?php
-                if($row['delivery_method'] == 1){
+                if($row['source_received_from'] == 1){
                     echo 'Super Admin';
-                }elseif($row['delivery_method'] ==2){
+                }elseif($row['source_received_from'] ==2){
                     echo 'Plant Controller';
-                }elseif($row['delivery_method'] == 3){
+                }elseif($row['source_received_from'] == 3){
                     echo 'CCC Admin';
                 }
                 
                 ?></td>
                 <td><?php echo date('d/M/Y',strtotime($row['receive_date'])); ?></td>
-                <td><?php echo $row['stock_status'];?></td>
+<!--                <td><?php echo $row['stock_status'];?></td>-->
                 <td>
                     <div class="form-group">
                         <?php $rowStatus = [1=>'Active',2=>'Inactive',3=>'Pending']; ?>
