@@ -18,7 +18,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="input-group">
-                        <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Type your query">
+                        <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product SKU & Product Code">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                             <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -56,20 +56,31 @@
                 <td><?php echo $sno; ?></td>
                 <td><?php echo $row['plant_id'];?></td>
                 <td><?php echo $row['product_sku'];?></td>
-                <td><?php echo $row['product_code'];?></td>
-                <td><?php echo $row['order_number'];?></td>
-                <td><?php echo date('d/M/Y',strtotime($row['order_date'])); ?></td>
-                <td><?php echo date('d/M/Y',strtotime($row['print_date'])); ?></td>
-                <td><?php echo $row['source_received_from'];?></td>
+                <td><?php echo $row['barcode_qr_code_no'];?></td>
+                <td><?php echo $row['order_no'];?></td>
+                <td><?php echo date('d/M/Y',strtotime($row['created_date'])); ?></td>
+                <td><?php echo date('d/M/Y',strtotime($row['modified_at'])); ?></td>
+                <td><?php
+                if($row['delivery_method'] == 1){
+                    echo 'Super Admin';
+                }elseif($row['delivery_method'] ==2){
+                    echo 'Plant Controller';
+                }elseif($row['delivery_method'] == 3){
+                    echo 'CCC Admin';
+                }
+                
+                ?></td>
                 <td><?php echo date('d/M/Y',strtotime($row['receive_date'])); ?></td>
                 <td><?php echo $row['stock_status'];?></td>
                 <td>
-                    <div class="hidden-sm hidden-xs action-buttons">
-                        <a href="<?php  echo site_url('question/view_question/'.$row['id']);?>" class="blue" target="_blank" title="View"><i class="fa fa-eye"></i></a>
-                        <a href="<?php  echo site_url('question/edit_question/'.$row['id']);?>" class="blue" target="_blank" title="View"><i class="ace-icon fa fa-pencil bigger-130"></i></a>
-                        <a href="<?php  echo site_url('question/change_status/'.$row['id']);?>" class="blue" target="_blank" title="View"><i class="ace-icon fa fa-pencil bigger-130"></i></a>
+                    <div class="form-group">
+                        <?php $rowStatus = [1=>'Active',2=>'Inactive',3=>'Pending']; ?>
+                        <select name="row-status" id="row-status">
+                            <?php foreach($rowStatus as $k => $value): ?>
+                            <option value="<?php echo $k; ?>" <?php echo ($k == $row['active_status'])?'selected="selected"':''; ?>><?php echo $value; ?></option>
+                            <?php endforeach; ?>
+                        </select>
                     </div>
-
                 </td>
             </tr>
             <?php $sno++; ?>
@@ -98,7 +109,7 @@
         $('.btnadd').on('click',function(e){
             e.preventDefault();
             $('.modal-body').load($(this).attr('href'),function(result){
-                $('#modalbox').modal({show:true});
+                $('#modalbox').modal('toggle');
             });
         });
     });
