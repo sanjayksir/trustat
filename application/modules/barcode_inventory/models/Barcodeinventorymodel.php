@@ -4,9 +4,8 @@ class BarcodeInventoryModel extends CI_Model {
 
     function __construct() {
         parent::__construct();
-        
     }
-    
+
     public function validate($data, $fields) {
         $this->load->library('form_validation');
         $this->form_validation->reset_validation();
@@ -19,54 +18,93 @@ class BarcodeInventoryModel extends CI_Model {
         }
         return true;
     }
-    
-    public function validDate($value){
+
+    public function validDate($value) {
         $valid = Utils::validDate($value, 'Y-m-d');
-        if(!$valid){
+        if (!$valid) {
             $this->form_validation->set_message('date', '%s is not valid.');
             return FALSE;
-        }else{ 
-            return TRUE;            
+        } else {
+            return TRUE;
         }
     }
     
-    public function findBy($table,$conditions = []){
+    public function countAll($query) {
+        $sqlString = str_replace(array("\n", "\r"), ' ', $query);
+        $query = '';
+        if (preg_match('/FROM\s(.*)\sORDER/i', $sqlString, $match) == 1) {
+            $query = $match[1];
+        }
+        $sql = $this->db->query('SELECT COUNT(*) AS numrows FROM '.$query);
+        return $sql->row()->numrows;
+    }
+
+    public function findBy($table, $conditions = []) {
         $query = $this->db->get_where($table, $conditions)->row();
         if (empty($query)) {
             return false;
         }
         return $query;
     }
-    
-    public function getInventory($limit,$offset,$keyword = null) {        
-        $condition = [];
-        if(!empty($keyword)){
-            $condition[] = sprintf(' LIKE "%%%1$s%%" OR question_text LIKE "%%%1$s%%"',$keyword);            
+
+    public function getTransactionCodes($limit, $offset, $keyword = null) {
+        $this->db->select(['tc.id','tc.trax_number','tc.product_id', 'tc.product_code', 'tc.id AS transaction_id', 'tc.trax_number', 'tc.order_number', 'tc.order_date', 'tc.print_date', 'tc.plant_id', 'tc.product_sku', 'tc.quantity', 'tc.source_received_from', 'tc.receive_date', 'tc.status', 'tc.order_id']);
+        $this->db->from('transactions_codes AS tc');
+        if (!empty($keyword)) {
+            $this->db->where('tc.product_sku LIKE "%'.$keyword.'%" OR tc.product_code LIKE "%'.$keyword.'%"');
         }
-        $conditions = trim(implode(' AND ',$condition),' AND ');
-        $total = Utils::countAll('transactions_codes', $conditions);
-        $this->db->select(['tc.product_id','tc.product_code','tc.id AS transaction_id','tc.trax_number','tc.order_number','tc.order_date','tc.print_date','tc.plant_id','tc.product_sku','tc.quantity','tc.source_received_from','tc.receive_date','tc.status','tc.order_id','pbq.stock_status']);
-        $this->db->from('printed_barcode_qrcode AS pbq');
-        $this->db->join('transactions_codes AS tc', 'tc.product_code=pbq.barcode_qr_code_no');
-        if(!empty($conditions)){
-            $this->db->where($conditions);
-        }
+        $this->db->group_by('tc.id');
         $this->db->limit($limit, $offset);
         $this->db->order_by('tc.id', 'DESC');
         $query = $this->db->get();
         $items = $query->result_array();
-        //echo $this->db->last_query();die(' END');
-        return [$total,$items];
+        $total = $this->countAll($this->db->last_query());
+        //echo "<pre>";print_r($query);die;
+        $items = $query->result_array();
+        return [$total, $items];
     }
-    
-    public function getAssignedPlant($userId=null){
-        if(is_null($userId)){
+
+    public function getBarcode($limit, $offset, $keyword = null,$status=null) {
+        $this->db->select(['pbq.plant_id', 'om.product_sku', 'pbq.barcode_qr_code_no', 'om.order_no', 'om.created_date', 'pbq.modified_at', 'p.delivery_method', 'tc.receive_date', 'pbq.stock_status', 'pbq.active_status']);
+        $this->db->from('printed_barcode_qrcode AS pbq');
+        $this->db->join('transactions_codes AS tc', 'tc.product_code=pbq.barcode_qr_code_no');
+        $this->db->join('products AS p', 'p.id=pbq.product_id');
+        $this->db->join('order_master AS om', 'om.order_id=pbq.order_id');
+        if(!empty($status)){
+            $this->db->where('pbq.stock_status="'.$status.'"');
+        }
+        if (!empty($keyword)) {
+            $this->db->where('om.product_sku LIKE "%'.$keyword.'%" OR pbq.barcode_qr_code_no LIKE "%'.$keyword.'%"');
+        }
+        
+        $this->db->limit($limit, $offset);
+        $this->db->order_by('tc.id', 'DESC');
+        $query = $this->db->get();
+        $total = $this->countAll($this->db->last_query());
+        //echo "<pre>";print_r($query);die;
+        $items = $query->result_array();
+        return [$total, $items];
+    }
+    public function barcodeDetails($orderId) {
+        $this->db->select(['pbq.plant_id','pbq.product_id', 'om.product_sku', 'pbq.barcode_qr_code_no', 'om.order_no','om.quantity', 'om.created_date', 'pbq.modified_at', 'p.delivery_method', 'pbq.stock_status', 'pbq.active_status']);
+        $this->db->from('printed_barcode_qrcode AS pbq');
+        $this->db->join('products AS p', 'p.id=pbq.product_id');
+        $this->db->join('order_master AS om', 'om.order_id=pbq.order_id');
+        $this->db->where(['pbq.order_id'=>$orderId]);
+        $query = $this->db->get();
+        $items = $query->row_array();        
+        //echo $this->db->last_query();die(' END');
+        return $items;
+    }
+
+    public function getAssignedPlant($userId = null) {
+        if (is_null($userId)) {
             $userId = $this->session->userdata('admin_user_id');
         }
-        $this->db->select(['pm.plant_id','pm.plant_code','pm.plant_name']);
+        $this->db->select(['pm.plant_id', 'pm.plant_code', 'pm.plant_name']);
         $this->db->from('plant_master AS pm');
-        $this->db->join('assign_plants_to_users AS ap','ap.plant_id=pm.plant_id');
-        $this->db->where(['ap.status'=>1,'ap.user_id'=>$userId]);
+        $this->db->join('assign_plants_to_users AS ap', 'ap.plant_id=pm.plant_id');
+        $this->db->where(['ap.status' => 1, 'ap.user_id' => $userId]);
         $sql = $this->db->get();
         $items = [];
         if ($sql->num_rows() > 0) {
@@ -75,860 +113,4 @@ class BarcodeInventoryModel extends CI_Model {
         return $items;
     }
 
-    function get_order_details($id) {
-        $this->db->select('*');
-        $this->db->from('order_master');
-        $this->db->where(array('order_id' => $id));
-        $query = $this->db->get();
-        // echo '***'.$this->db->last_query();exit;
-        if ($query->num_rows() > 0) {
-            $res = $query->result_array();
-            $res = $res[0];
-        }
-        return $res;
-    }
-
-    function check_product_order($user_id = '', $product_id = '', $order_id = '') {
-        $result = '';
-        $this->db->select('order_id');
-        $this->db->from('order_master');
-        if (!empty($order_id)) {
-            $this->db->where(array('user_id' => $user_id, 'product_id' => $product_id, 'order_id' => $order_id));
-        } else {
-            $this->db->where(array('user_id' => $user_id, 'product_id' => $product_id));
-        }
-        $query = $this->db->get();
-        // echo '***'.$this->db->last_query(); 
-        if ($query->num_rows() > 0) {
-            $res = $query->result_array();
-            $result = $res[0]['order_id'];
-        }
-        return $result;
-    }
-
-    function save_orders($frmData) { //echo '<pre>';print_r($frmData);exit;
-        $user_id = $this->session->userdata('admin_user_id');
-        //$user_exists = $this->checkDuplicateUser($frmData['user_name']);
-
-        $product_arr = $frmData['product'];
-        // echo '<pre>kam=';print_r($frmData );exit;
-        if (!empty($frmData['order_id'])) {## edit case
-            foreach ($product_arr as $product_id) {//echo '---'.$product_id;
-                $random_no = generate_password(4);
-                $product_arr = get_products_sku_by_product_id($product_id);
-                $order_tracking_no = $product_arr[0]['product_sku'];
-
-                ##------------ check exists entries--------------##
-                $check_exists_entry = $this->check_product_order($user_id, $product_id, $frmData['order_id']);
-                ##------------ check exists entries--------------##
-                if (!empty($check_exists_entry)) {
-                    if (!empty($frmData['deliverydate'])) {
-                        $date = date('Y-m-d', strtotime($frmData['deliverydate']));
-                    } else {
-                        $date = '0000-00-00';
-                    }
-                    $UpdateData = array(
-                        "quantity" => $frmData['quantity'],
-                        "delivery_date" => $date,
-                        "status" => 0,
-                        "updated_date" => date('Y-m-d'),
-                        "updated_by" => '0'
-                    );
-                    $this->db->set($UpdateData);
-                    $this->db->where(array('order_id' => $frmData['order_id']));
-                    if ($this->db->update("order_master")) {
-                        $this->session->set_flashdata('success', 'Order Updated!');
-                        $result = 1;
-                    } else {
-                        $this->session->set_flashdata('success', 'Order Not Updated!');
-                        $result = 0;
-                    }
-                } else {
-                    $this->save_order_add(json_encode($frmData));
-                    $result = 1;
-                }
-            }
-        } else {
-            $this->save_order_add(json_encode($frmData));
-            $result = 1;
-        }return $result;
-    }
-
-    function save_order_add($frmData) {//echo '33333==';print_r($frmData);exit;
-        $frmData = json_decode($frmData, true);
-        $product_arr = $frmData['product'];
-        $user_id = $this->session->userdata('admin_user_id');
-        foreach ($product_arr as $product_id) {
-            $check_exists_entry = 0;
-            //echo '<pre>';print_r($product_arr);exit;
-            $random_no = generate_password(4);
-            $product_arr = get_products_sku_by_product_id($product_id);
-            $order_tracking_no = $product_arr[0]['product_sku'];
-            $active_status = $product_arr[0]['code_activation_type'];
-            if (!empty($frmData['deliverydate'])) {
-                $date = date('Y-m-d', strtotime($frmData['deliverydate']));
-            } else {
-                $date = '0000-00-00';
-            }
-
-            ##------------ check exists entries--------------##
-            $check_exists_entry = ''; //$this->check_product_order( $user_id,$product_id);
-            ##------------ check exists entries--------------##
-            $datecodedno = date('YmdHis');
-            if (empty($check_exists_entry)) {
-                $insertData = array(
-                    "order_no" => $datecodedno,
-                    "order_tracking_number" => $order_tracking_no,
-                    "user_id" => $user_id,
-                    "product_name" => $product_arr[0]['product_name'],
-                    "product_sku" => $product_arr[0]['product_sku'],
-                    "product_id" => $product_id,
-                    "quantity" => $frmData['quantity'],
-                    "plant_id" => $frmData['plant_id'],
-                    "delivery_date" => $date,
-                    "status" => 0,
-                    "active_status" => $active_status,
-                    //"delivery_date"			=> date('Y-m-d'),
-                    "updated_date" => date('Y-m-d', strtotime('0')),
-                    "updated_by" => '0'
-                ); //echo '<pre>';print_r($insertData);exit;
-                if ($this->db->insert("order_master", $insertData)) {
-                    $get_user_detail = get_user_email_name($user_id);
-                    $last_inserted = $this->db->insert_id();
-                    if ($last_inserted) {
-                        $user_name = getUserNameById($user_id);
-                        $order_tracking_no = $order_tracking_no . '-' . str_pad($str, 4, "0", STR_PAD_LEFT) . '-' . $last_inserted;
-                        $this->db->where('order_id', $last_inserted);
-                        $this->db->set(array('order_tracking_number' => $order_tracking_no));
-                        $this->db->update('order_master');
-                    }
-                    if ($this->place_order_mail($product_arr[0]['product_sku'], $product_arr[0]['product_name'], $order_tracking_no, $get_user_detail['email_id'], $user_name)
-                    ) {
-                        $result = 1;
-                    } else {
-                        $result = 0;
-                    }
-                } else {
-                    $this->session->set_flashdata('success', 'Order Not Placed!');
-                    $result = 0;
-                }
-            } else {
-                $result = 0;
-            }
-        }
-        return $result;
-    }
-
-    function checkDuplicateUser($username) {
-        $result = '';
-        $this->db->select('plant_id');
-        $this->db->from('plant_master');
-
-        $this->db->where(array('plant_name' => $username));
-
-        $query = $this->db->get();
-
-        //echo '***'.$this->db->last_query();exit;
-
-        if ($query->num_rows() > 0) {
-            $res = $query->result_array();
-            $result = $res[0]['plant_id'];
-        }
-        return $result;
-    }
-
-    function checkEmail($email, $uid = '') {
-        $result = 'true';
-        $this->db->select('plant_id');
-        $this->db->from('plant_master');
-        if (!empty($uid)) {
-            $this->db->where(array('plant_id!=' => $uid));
-        }
-        $this->db->where(array('email_id' => $email));
-        $query = $this->db->get();
-        //echo '***'.$this->db->last_query();exit;
-        if ($query->num_rows() > 0) {
-            $res = $query->result_array();
-            $result = $res[0]['plant_id'];
-            $result = 'false';
-        }
-        return $result;
-    }
-
-    function checkPantName($plantName, $uid = '') {
-        $result = 'true';
-        $this->db->select('plant_id');
-        $this->db->from('plant_master');
-        if (!empty($uid)) {
-            $this->db->where(array('plant_id!=' => $uid));
-        }
-        $this->db->where(array('plant_name' => $plantName));
-        $query = $this->db->get();
-        //echo '***'.$this->db->last_query();exit;
-        if ($query->num_rows() > 0) {
-            $res = $query->result_array();
-            if (!empty($res[0]['plant_id'])) {
-                $result = 'false';
-            }
-        }
-        //echo '==='.$result;exit;
-        return $result;
-    }
-
-    ## List Users
-
-    function get_user_list($user_session_Id) {
-        $result = '';
-        $this->db->select('*');
-        $this->db->from('plant_master');
-
-        $this->db->where(array('created_by' => $user_session_Id));
-
-        $query = $this->db->get();
-
-        //echo '***'.$this->db->last_query();exit;
-
-        if ($query->num_rows() > 0) {
-            $result = $query->result_array();
-        }
-        return $result;
-    }
-
-    function get_total_order_list_all($srch_string = '') {
-        $result_data = 0;
-        $user_id = $this->session->userdata('admin_user_id');
-        if (!empty($srch_string) && $user_id == 1) {
-            $this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%')");
-        }
-        if ($user_id > 1) {
-            if (!empty($srch_string)) {
-                $this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%') and (user_id=$user_id)");
-            } else {
-                $this->db->where(array('user_id' => $user_id));
-            }
-        }
-        //$this->db->select('count(1) as total_rows');
-        //$this->db->from('order_master');
-
-        $this->db->select('count(1) as total_rows');
-        $this->db->from('order_master O');
-        //$this->db->join('print_orders_history P', 'O.order_id= P.order_id');
-
-
-
-
-        $query = $this->db->get(); //echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $result = $query->result_array();
-            $result_data = $result[0]['total_rows'];
-        }
-        return $result_data;
-    }
-
-    function get_order_list_all($limit, $start, $srch_string = '') {
-        $resultData = array();
-
-        $user_id = $this->session->userdata('admin_user_id');
-        /* if($user_id>1){
-          $this->db->where(array('user_id'=>$user_id));
-          } */
-        if (!empty($srch_string) && $user_id == 1) {
-            $this->db->where("(O.product_name LIKE '%$srch_string%' OR O.order_tracking_number LIKE '%$srch_string%' OR O.product_sku LIKE '%$srch_string%')");
-        }
-        if ($user_id > 1) {
-            if (!empty($srch_string)) {
-                $this->db->where("(O.product_name LIKE '%$srch_string%' OR O.order_tracking_number LIKE '%$srch_string%' OR O.product_sku LIKE '%$srch_string%') and (O.user_id=$user_id)");
-            } else {
-                $this->db->where(array('O.user_id' => $user_id));
-            }
-        }
-        /* "SELECT O.`order_tracking_number` , O.`product_name` , O.`product_sku` , O.`quantity` , O.`delivery_date` , O.`status` , P.code_type
-          FROM `order_master` O
-          LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
-         */
-
-        $this->db->select(' O.user_id,O.product_id, O.order_id, O.order_no, O.order_tracking_number , O.product_name, O.product_sku , O.quantity , O.delivery_date , O.created_date , O.order_status ', false);
-        $this->db->from('order_master O');
-        //$this->db->join('print_orders_history P', 'O.order_id= P.order_id');
-
-        $this->db->order_by('O.created_date', 'desc');
-        $this->db->limit($limit, $start);
-        $query = $this->db->get();  //echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $resultData = $query->result_array();
-        }
-        return $resultData;
-    }
-
-    ## For plnat controller
-
-    function get_total_order_list_all_plant_ctrl($srch_string = '') {
-        $result_data = 0;
-        $user_id = $this->session->userdata('admin_user_id');
-        $sql = "select count(1) as total_rows from order_master OM inner join assign_plants_to_users PL ON PL.assigned_by=OM.user_id  where PL.user_id = '" . $user_id . "'";
-        if (!empty($srch_string)) {
-            $sql .= "and (product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%')";
-        }
-
-        $query = $this->db->query($sql); //echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $result = $query->result_array();
-            $result_data = $result[0]['total_rows'];
-        }
-        return $result_data;
-    }
-
-    function get_order_list_all_plant_ctrl($limit, $start, $srch_string = '') {
-        $resultData = array();
-
-        $user_id = $this->session->userdata('admin_user_id');
-
-        $sql = "select OM.*,PL.user_id as UID from assign_plants_to_users PL right JOIN order_master OM ON PL.assigned_by=OM.user_id where PL.user_id = '" . $user_id . "'";
-        if (!empty($srch_string)) {
-            $sql .= "and (product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%')";
-        }
-        $sql .= "order by OM.created_date desc limit $start, $limit";
-        /* $this->db->select('*');
-          $this->db->from('order_master');
-          $this->db->order_by('order_id','desc');
-          $this->db->limit($limit, $start); */
-        $query = $this->db->query($sql); // echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $resultData = $query->result_array();
-        }
-        return $resultData;
-    }
-
-    ####
-
-    function change_status($id, $value) {
-        $this->db->set(array('status' => $value));
-        $this->db->where(array('order_id' => $id));
-        if ($this->db->update('order_master')) {
-            return $value;
-        } else {
-            return '';
-        }
-        // echo '***'.$this->db->last_query();exit;
-    }
-
-    function change_order_status($id, $value) {
-        $this->db->set(array('order_status' => $value));
-        $this->db->where(array('order_id' => $id));
-        if ($this->db->update('order_master')) {//echo '***'.$this->db->last_query();exit;
-            return $value;
-        } else {
-            return '';
-        }
-    }
-
-    function get_city_listing($state_id) {
-        $res = 0;
-        $this->db->select('id, ci_name');
-        $this->db->from('city');
-        $this->db->where(array('state_id' => $state_id));
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-            $res = $query->result_array();
-        }
-        return $res;
-    }
-
-    function fetch_city_name($id) {
-        $res = 0;
-        $this->db->select('id, ci_name');
-        $this->db->from('city');
-        $this->db->where(array('id' => $id));
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-            $res = $query->result_array();
-            $result = $res[0]['ci_name'];
-        }
-        return $res;
-    }
-
-    function save_assign_plants_sku($plant_array, $sku_array) {  //echo '<pre>';print_r($frmData);exit;
-        $plant_arr = json_decode($plant_array, true);
-        $sku_arr = json_decode($sku_array, true);
-        $user_id = $this->session->userdata('admin_user_id');
-        if (!empty($frmData['plant_id'])) {
-            /* $UpdateData = array(
-              "plant_id"	=> $frmData['plant_name'],
-              "product_id"		=> $frmData['user_email'],
-              "assigned_by"	=> $user_id
-              );
-
-              $whereData = array(
-              'plant_id' => $frmData['plant_id']
-              );
-
-              $this->db->set($UpdateData);
-              $this->db->where($whereData);
-              if($this->db->update('plant_master')){
-              // echo '***'.$this->db->last_query();exit;
-              $this->session->set_flashdata('success', 'Plant Assigned Successfully!');
-              return 1;
-              } */
-        } else {
-            //$password = generate_password(6);
-
-            foreach ($plant_arr as $plant) {
-                foreach ($sku_arr as $sku) {
-
-                    $insertData = array(
-                        "plant_id" => $plant,
-                        "product_id" => $sku,
-                        "assigned_by" => $user_id
-                    );
-                    if ($this->check_exists($plant, $sku) == 0) {
-                        $this->db->insert("assign_plants", $insertData);
-                    }
-                }
-            }
-            $this->session->set_flashdata('success', 'Plant Assigned Successfully!');
-            return 1;
-        }
-        return '0';
-    }
-
-    function save_assign_plants_users($plant_array, $users) {   //echo '<pre>cccccccc';print_r($plant_array);exit;
-        $plant_arr = json_decode($plant_array, true);
-        $user_id = $this->session->userdata('admin_user_id');
-        foreach ($plant_arr as $plants) {
-            $insertData = array(
-                "plant_id" => $plants,
-                "user_id" => $users,
-                "assigned_by" => $user_id
-            );
-            if ($this->check_exists_users_plant($plants, $users) == 0) {
-                $this->db->insert("assign_plants_to_users", $insertData);
-                // echo $this->db->last_query();
-            }
-        }
-        $this->session->set_flashdata('success', 'Plant Assigned Successfully!');
-        return 1;
-    }
-
-    function check_exists_users_plant($plant_id, $userid) {
-        $this->db->select('id');
-        $this->db->from('assign_plants_to_users');
-        $this->db->where(array('plant_id' => $plant_id, 'user_id' => $userid));
-        $query = $this->db->get(); //echo $this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $res = $query->result_array();
-            $result = $res[0]['id'];
-        }
-        return $result;
-    }
-
-    function check_exists($plant_id, $product_id) {
-        $this->db->select('plant_id');
-        $this->db->from('assign_plants');
-        $this->db->where(array('plant_id' => $plant_id, 'product_id' => $product_id));
-        $query = $this->db->get();
-        if ($query->num_rows() > 0) {
-            $res = $query->result_array();
-            $result = $res[0]['plant_id'];
-        }
-        return $result;
-    }
-
-    function qry_change_assign_product_status($id, $value) {//print_r($this->input->post());
-        $this->db->set(array('status' => $value));
-        $this->db->where(array('plant_id' => $id));
-        if ($this->db->update('plant_master')) {
-            //echo '***'.$this->db->last_query();exit;
-            return $value;
-        } else {
-            return '';
-        }
-    }
-
-    function qry_change_assign_plant_status($id, $value, $plant_id) {
-        $run_query = 1;
-        $plant_arr = explode(',', $plant_id);
-        // print_r($plant_arr);exit;
-        foreach ($plant_arr as $pltId) {
-            $this->db->set(array('status' => $value));
-            $this->db->where(array('plant_id' => $pltId, 'user_id' => $id));
-            if (!$this->db->update('assign_plants_to_users')) {//echo '**'.$this->db->last_query();exit;
-                $run_query = 0;
-            }
-        }return $value;
-    }
-
-    function get_total_quantity_ordered($orderId = '') {
-        $quantity = 0;
-        if (!empty($orderId)) {
-            $this->db->select('quantity');
-            $this->db->from('order_master');
-            $this->db->where(array('order_id' => $orderId));
-            $query = $this->db->get();
-            if ($query->num_rows() > 0) {
-                $res = $query->result_array();
-                $quantity = $res[0]['quantity'];
-            }
-        } return $quantity;
-    }
-
-    function get_quantity_print_order_history($orderId = '') {
-        $result = array();
-        if (!empty($orderId)) {
-            $this->db->select('last_printed_rows,total_quantity');
-            $this->db->from('print_orders_history');
-            $this->db->where(array('order_id' => $orderId));
-            $query = $this->db->get(); //echo $this->db->last_query();
-            if ($query->num_rows() > 0) {
-                $res = $query->result_array();
-                $result = $res[0];
-            }
-            return $result;
-        }
-    }
-
-    function insert_print_history($post, $code_type) {
-        $order_id = base64_decode($post['order_id']);
-        $printer_current_qty = $post['qty'];
-        $print_code_type = $code_type;
-        $total_quantity = $this->get_total_quantity_ordered($order_id);
-        $insertData = array(
-            "order_id" => $order_id,
-            "last_printed_rows" => $printer_current_qty,
-            "total_quantity" => $total_quantity,
-            "code_type" => $print_code_type
-        );
-
-        if ($this->db->insert("print_orders_history", $insertData)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function updatet_print_history($post, $code_type, $last_qty) {
-        $order_id = base64_decode($post['order_id']);
-        $printer_current_qty = $last_qty + $post['qty'];
-        $print_code_type = $code_type;
-        $total_quantity = $this->get_total_quantity_ordered($order_id);
-
-        $updateData = array(
-            "last_printed_rows" => $printer_current_qty,
-            "total_quantity" => $total_quantity,
-            "code_type" => $print_code_type
-        );
-        $this->db->set($updateData);
-        $this->db->where(array("order_id" => $order_id));
-        if ($this->db->update("print_orders_history")) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    #### -----------------Printed barcode----------------#####
-
-    function insert_printed_barcode_qrcode($post, $code, $code_type, $product_id = '', $active_status, $plant_id, $user_id) {
-        $order_id = base64_decode($post['order_id']);
-        $post_code = $code;
-        $insertData = array(
-            "order_id" => $order_id,
-            "barcode_qr_code_no" => $post_code,
-            "product_id" => $product_id,
-            "plant_id" => $plant_id,
-            "print_user_id" => $user_id,
-            "active_status" => $active_status,
-            "customer_id" => '0',
-            "modified_at" => '0000-00-00 00:00:00'
-        );
-
-        if ($this->db->insert("printed_barcode_qrcode", $insertData)) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    function get_barcode_total_order_print_list_all($srch_string = '') {
-        $result_data = 0;
-        $user_id = $this->session->userdata('admin_user_id');
-        if (!empty($srch_string) && $user_id == 1) {
-            $this->db->where("(C.email LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')");
-        }
-        $this->db->select('count(1) as total_rows');
-        $this->db->from('backend_user C');
-        //$this->db->join('printed_barcode_qrcode S', 'C.id = S.print_user_id');
-        $this->db->join('products P', 'P.id = S.product_id');
-
-        $query = $this->db->get(); //echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $result = $query->result_array();
-            $result_data = $result[0]['total_rows'];
-        }
-        return $result_data;
-    }
-
-    function get_printed_barqrcodelist($limit, $start, $srch_string = '') {
-        $resultData = array();
-        $user_id = $this->session->userdata('admin_user_id');
-
-        if (!empty($srch_string) && $user_id == 1) {
-            $this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
-        }
-
-        $this->db->select('PP.*, P.product_name, P.product_sku, B.user_name, Ppp.plant_name', false);
-        $this->db->from('printed_barcode_qrcode PP');
-        $this->db->join('backend_user B', 'B.user_id = PP.print_user_id');
-        $this->db->join('products P', 'P.id = PP.product_id');
-        $this->db->join('plant_master Ppp', 'Ppp.plant_id = Ppp.plant_id');
-        $this->db->order_by('id', 'desc');
-
-        /*
-          $this->db->select(' D.*, S.*, P.product_name, P.product_sku',false);
-          $this->db->from('backend_user D');
-          $this->db->join('printed_barcode_qrcode S', 'D.user_id = S.customer_id');
-          $this->db->join('products P', 'P.id = S.product_id');
-          $this->db->order_by('S.modified_at','desc');
-         */
-
-
-        $this->db->limit($limit, $start);
-        $query = $this->db->get(); // echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $resultData = $query->result_array();
-        }
-        return $resultData;
-    }
-
-    function get_barcode_total_order_list_all($srch_string = '') {
-        $result_data = 0;
-        $user_id = $this->session->userdata('admin_user_id');
-        if (!empty($srch_string) && $user_id == 1) {
-            $this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
-        }
-        $this->db->select('count(1) as total_rows');
-        $this->db->from('printed_barcode_qrcode PP');
-        $this->db->join('backend_user B', 'B.user_id = PP.print_user_id');
-        $this->db->join('products P', 'P.id = PP.product_id');
-        $this->db->join('plant_master Ppp', 'Ppp.plant_id = Ppp.plant_id');
-
-        $query = $this->db->get(); //echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $result = $query->result_array();
-            $result_data = $result[0]['total_rows'];
-        }
-        return $result_data;
-    }
-
-    function count_scanned_barqrcodelist($srch_string = '') {
-        $resultData = array();
-        $user_id = $this->session->userdata('admin_user_id');
-
-        if (!empty($srch_string) && $user_id == 1) {
-            $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");
-        }
-
-        $this->db->select('count(1) as total_rows');
-        $this->db->from('consumers C');
-        $this->db->join('scanned_products S', 'C.id = S.consumer_id');
-        $this->db->join('products P', 'P.id = S.product_id');
-        $query = $this->db->get(); // echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $result = $query->result_array();
-            $result_data = $result[0]['total_rows'];
-        }
-        return $result_data;
-    }
-
-    function get_scanned_barqrcodelist($limit, $start, $srch_string = '') {
-        $resultData = array();
-        $user_id = $this->session->userdata('admin_user_id');
-
-        if (!empty($srch_string) && $user_id == 1) {
-            $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");
-        }
-
-        $this->db->select(' C.*, S.*, P.product_name, P.product_sku', false);
-        $this->db->from('consumers C');
-        $this->db->join('scanned_products S', 'C.id = S.consumer_id');
-        $this->db->join('products P', 'P.id = S.product_id');
-        $this->db->order_by('S.created_at', 'desc');
-        $this->db->limit($limit, $start);
-        $query = $this->db->get(); // echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $resultData = $query->result_array();
-        }
-        return $resultData;
-    }
-
-    function get_purchsed_barqrcodelist($limit, $start, $srch_string = '') {
-        $resultData = array();
-        $user_id = $this->session->userdata('admin_user_id');
-
-        if (!empty($srch_string) && $user_id == 1) {
-            $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')");
-        }
-
-        $this->db->select(' C.*, PP.*, P.product_name, P.product_sku', false);
-        $this->db->from('consumers C');
-        $this->db->join('purchased_product PP', 'C.id = PP.consumer_id');
-        $this->db->join('products P', 'P.id = PP.product_id');
-        $this->db->order_by('PP.ordered_date', 'desc');
-        $this->db->limit($limit, $start);
-        $query = $this->db->get(); // echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $resultData = $query->result_array();
-        }
-        return $resultData;
-    }
-
-    function get_complaint_log($limit, $start, $srch_string = '') {
-        $resultData = array();
-        $user_id = $this->session->userdata('admin_user_id');
-
-        $condition = null;
-        if (!empty($srch_string) && $user_id == 1) {
-            $condition = "(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')";
-        }
-
-        $total = Utils::countAll('consumers', $condition);
-        if (!empty($condition)) {
-            $this->db->where($condition);
-        }
-        $this->db->select(' C.*, PP.*, P.product_name, P.product_sku', false);
-        $this->db->from('consumers C');
-        $this->db->join('consumer_complaint PP', 'C.id = PP.consumer_id');
-        $this->db->join('products P', 'P.id = PP.product_id');
-        $this->db->order_by('PP.created_at', 'desc');
-        $this->db->limit($limit, $start);
-        $query = $this->db->get(); // echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $resultData = $query->result_array();
-        }
-        return [$total, $resultData];
-    }
-
-    function get_warranty_claims($limit, $start, $srch_string = '') {
-        $resultData = array();
-        $user_id = $this->session->userdata('admin_user_id');
-
-        $condition = null;
-
-        if (!empty($srch_string) && $user_id == 1) {
-            $condition = "(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')";
-        }
-        $total = $this->totalWarrantyClaims($condition);
-        if (!empty($condition)) {
-            $this->db->where($condition);
-        }
-        $this->db->select(' C.*, PP.*, P.product_name, P.product_sku', false);
-        $this->db->from('consumers C');
-        $this->db->join('purchased_product PP', 'C.id = PP.consumer_id');
-        $this->db->join('products P', 'P.id = PP.product_id');
-        $this->db->order_by('PP.ordered_date', 'desc');
-
-        $this->db->limit($limit, $start);
-        $query = $this->db->get(); // echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $resultData = $query->result_array();
-        }
-        return [$total, $resultData];
-    }
-
-    function totalWarrantyClaims($condition) {
-        $resultData = array();
-        $user_id = $this->session->userdata('admin_user_id');
-
-        $condition = null;
-
-        if (!empty($srch_string) && $user_id == 1) {
-            $condition = "(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')";
-        }
-
-        if (!empty($condition)) {
-            $this->db->where($condition);
-        }
-
-        $this->db->select(' C.*, PP.*, P.product_name, P.product_sku', false);
-        $this->db->from('consumers C');
-        $this->db->join('purchased_product PP', 'C.id = PP.consumer_id');
-        $this->db->join('products P', 'P.id = PP.product_id');
-        $this->db->order_by('PP.ordered_date', 'desc');
-
-        $query = $this->db->get(); // echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $resultData = $query->result_array();
-        }
-        return count($resultData);
-    }
-
-    function get_ordered_product_detail($orderId = '') {
-        $quantity = 0;
-        if (!empty($orderId)) {
-            $this->db->select('O.*,P.barcode_qr_code_no ', false);
-            $this->db->from('order_master O');
-            $this->db->where(array('O.order_id' => $orderId));
-            $this->db->join('printed_barcode_qrcode P', 'O.order_id= P.order_id');
-
-            $query = $this->db->get();
-            if ($query->num_rows() > 0) {
-                $res = $query->result_array();
-                $result = $res[0];
-            }
-        } return $result;
-    }
-
-    function view_barcode_ordered_data($product_id, $order_id) {
-        $this->db->select('P.*, O.user_id, O.quantity, O.order_tracking_number, O.delivery_date,QR.barcode_qr_code_no', false);
-        $this->db->from('products P');
-        $this->db->join('order_master O', 'O.product_id= P.id');
-        $this->db->join('printed_barcode_qrcode QR', 'QR.order_id= O.order_id');
-        $this->db->where(array('O.order_id' => $order_id, 'O.product_id' => $product_id));
-        $query = $this->db->get();   //echo '**'.$this->db->last_query();exit;
-        if ($query->num_rows() > 0) {
-            $res = $query->result_array();
-        }
-        return json_encode($res[0]);
-    }
-
-    #### -----------------Printed barcode----------------#####
-    ##----------- getting all plant controlllers order listing----------------##
-
-    function get_total_order_list_plcrt($srch_string = '') {
-        $result_data = 0;
-        $user_id = $this->session->userdata('admin_user_id');
-        if (!empty($srch_string) && $user_id == 1) {
-            $this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%')");
-        }
-
-        $this->db->select('count(1) as total_rows');
-        $this->db->from('order_master O');
-        $this->db->join('backend_user BU', 'O.user_id= BU.user_id');
-        $this->db->where(array('BU.is_parent' => $user_id));
-        $this->db->order_by('O.created_date', 'desc');
-        $query = $this->db->get();  //echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $result = $query->result_array();
-            $result_data = $result[0]['total_rows'];
-        }
-        return $result_data;
-    }
-
-    function get_order_list_plcrt($limit, $start, $srch_string = '') {
-        $resultData = array();
-        $user_id = $this->session->userdata('admin_user_id');
-        if (!empty($srch_string) && $user_id == 1) {
-            $this->db->where("(O.product_name LIKE '%$srch_string%' OR O.order_tracking_number LIKE '%$srch_string%' OR O.product_sku LIKE '%$srch_string%')");
-        }
-        $this->db->select(' O.order_id, O.order_tracking_number , O.product_name, O.product_sku , O.quantity , O.delivery_date , O.created_date , O.order_status ', false);
-        $this->db->from('order_master O');
-        $this->db->join('backend_user BU', 'O.user_id= BU.user_id');
-        $this->db->where(array('BU.is_parent' => $user_id));
-        $this->db->order_by('O.created_date', 'desc');
-        $this->db->limit($limit, $start);
-        $query = $this->db->get();   //echo '***'.$this->db->last_query();
-        if ($query->num_rows() > 0) {
-            $resultData = $query->result_array();
-        }
-        return $resultData;
-    }
 }
