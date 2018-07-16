@@ -64,8 +64,8 @@
 		<div class="form-group row">
 			<div class="col-sm-3 ind_1">
 			<label for="form-field-8">Product Industry</label>
-			<select  name="industry[]" id="industry" class="form-control" onchange="get_sub_industry(this.value,'2');">
-            <option value="">-Select Industry-</option>
+			<select  name="industry[]" id="industry" class="form-control" onchange="get_sub_industry(this.value,'2');" required>
+           <option value="">-Select Industry-</option>
             <?php foreach(getAllCategory('0') as $val){?>
 				<option value="<?php echo $val['category_Id'];?>"><?php  echo $val['categoryName'];?></option> 
 			<?php }?>
@@ -260,7 +260,7 @@
 		<div class="form-group row" >
 				<div class="col-sm-4">
 				  <label for="form-field-8">Product Attributes (Press Ctrl key for multi-selection )<?php //echo $ParentName;?></label>
-                  <select class="form-control" name="attr_level_1" multiple="multiple" onClick="getChildAttr();">
+                  <select class="form-control" name="attr_level_1" id="attr_level_1" multiple="multiple" onClick="getChildAttr();">
 				  <option value="">-Select Product-</option> 
 				  	<?php foreach($listALLOpt as $val){?>
 					  		<option value="<?php echo $val['product_id'];?>"><?php echo $val['name'];?></option> 
@@ -416,10 +416,12 @@
 		rules: {
 			ccadmin: {
 			 	 required: true
- 			},
-		   industry: {
-						required: true
-        			 },
+						},
+			brand_name: {
+			 	 required: true
+						},
+								
+		   	 
 			
    			product_name:{
  						 required: true,
@@ -433,7 +435,11 @@
 			 product_sku: {
 						required: true
         			 },
-		},
+					 
+			attr_level_1: {
+			 	 required: true
+						}						
+				},
  			messages: {
 					ccadmin: {
 						required: "Please select ccc-admin." 
