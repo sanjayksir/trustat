@@ -254,7 +254,7 @@ function list_assigned_products() {
 	 	if($id!=''){
 			$data = json_decode(getAllProductName($id),true);//print_r($data);exit;
 			$options = ""; 
-			$dd =  '<select class="form-control" name="product_attr[]" multiple="multiple"><option>select Child Product</option>';
+			$dd =  '<select class="form-control" name="product_attr[]" multiple="multiple" required><option>select Child Product</option>';
 			foreach($data as $rec){
 				$selected = '';
 				if(in_array($rec['product_id'],$parent)){

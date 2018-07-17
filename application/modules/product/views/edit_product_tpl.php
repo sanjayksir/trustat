@@ -87,7 +87,7 @@ if(!empty($isOtherIndustry)){
 		<div class="form-group row">
 			<div class="col-sm-3">
 			<label for="form-field-8">Industry</label>
-			<select  name="industry[]" id="industry" class="form-control" onchange="get_sub_industry(this.value,'2');">
+			<select  name="industry[]" id="industry" class="form-control" onchange="get_sub_industry(this.value,'2');" required>
             <option value="">-Select Industry-</option>
             <?php foreach(getAllCategory('0') as $val){?>
 				<option <?php if($industry_arr[0]==$val['category_Id']){echo 'selected';}?> value="<?php echo $val['category_Id'];?>"><?php  echo $val['categoryName'];?></option> 
@@ -546,6 +546,13 @@ getChildAttr('<?php echo implode(',',$id_parents); ?>',$("#childs_selected").val
 		   industry: {
 						required: true
         			 },
+			brand_name: {
+			 	 required: true
+						},
+			attr_level_1: {
+			 	 required: true
+						},				
+						
   			messages: {
  					industry:    {
 						required: "Please select Industry"
