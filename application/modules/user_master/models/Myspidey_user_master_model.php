@@ -138,7 +138,8 @@ class Myspidey_user_master_model extends CI_Model {
             ); //echo '<pre>';print_r($insertData);exit;
 
             if ($this->db->insert("backend_user", $insertData)) {
-                $assignedPlant = [
+               /* I commented this to solve the email sending issue on creatting a new user
+			   $assignedPlant = [
                     "plant_id" => $frmData['plant_id'],
                     "user_id" => $this->db->insert_id(),
                     "assigned_by" => $this->session->userdata('admin_user_id')
@@ -146,8 +147,10 @@ class Myspidey_user_master_model extends CI_Model {
                 $this->db->insert("assign_plants_to_users", $assignedPlant);
                 $full_name = $frmData['f_name'] . ' ' . $frmData['l_name'];
                 $username = $frmData['user_name'];
+				*/
                 // echo $this->db->last_query();exit;
-                $this->user_registration_mail($full_name, $username, $password, $frmData['user_email']);
+				$email = $frmData['user_email']; 
+                $this->user_registration_mail($full_name, $username, $password, $email);
                 $this->session->set_flashdata('success', 'User Added Successfully!');
                 return 1;
             }
