@@ -67,7 +67,7 @@ class BarcodeInventoryModel extends CI_Model {
     public function getBarcode($limit, $offset, $keyword = null,$status=null) {
         $this->db->select(['pbq.plant_id', 'om.product_sku', 'pbq.barcode_qr_code_no', 'om.order_no', 'om.created_date', 'pbq.modified_at', 'p.delivery_method', 'tc.receive_date', 'pbq.stock_status', 'pbq.active_status']);
         $this->db->from('printed_barcode_qrcode AS pbq');
-        $this->db->join('transactions_codes AS tc', 'tc.product_code=pbq.barcode_qr_code_no');
+        $this->db->join('transactions_codes AS tc', 'tc.product_code=pbq.barcode_qr_code_no','left');
         $this->db->join('products AS p', 'p.id=pbq.product_id');
         $this->db->join('order_master AS om', 'om.order_id=pbq.order_id');
         if(!empty($status)){

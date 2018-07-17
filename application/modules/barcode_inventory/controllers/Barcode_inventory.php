@@ -59,7 +59,7 @@ class Barcode_inventory extends MX_Controller {
         Utils::response(['status' => true, 'data' => Utils::selectOptions('order_id', ['options' => $orders, 'empty' => 'Select Order'])]);
     }
 
-    public function get_order_history() {
+    public function get_printed_order() {
         $orderId = $this->input->post('order_id', null);
         if (is_null($orderId)) {
             Utils::response(['status' => false, 'message' => 'Invalid order id']);
@@ -69,21 +69,40 @@ class Barcode_inventory extends MX_Controller {
             Utils::response(['status' => false, 'message' => 'Still order is not printed.']);
         }
         //$orders = array_column($result, 'total_quantity','id');
+        $optionVal = '<option value="">Select One</option>';
+        foreach ($result as $row) {
+            $optionVal .= '<option value="'.$row['id'].'">' . 'Printed Quantity ='.$row['last_printed_rows'].' | Total Quantity ='.$row['total_quantity'] . '</option>';
+        }
+        Utils::response(['status' => true, 'data' => $optionVal]);
+    }
+    public function get_printed_code() {
+        $printId = $this->input->post('print_id', null);
+        if (is_null($printId)) {
+            Utils::response(['status' => false, 'message' => 'Invalid order id']);
+        }
+        $result = $this->db->get_where('printed_barcode_qrcode', ['print_id' => $printId])->result_array();
+        if (empty($result)) {
+            Utils::response(['status' => false, 'message' => 'Still order is not printed.']);
+        }
+        //$orders = array_column($result, 'total_quantity','id');
         $plantList = '';
         foreach ($result as $row) {
-            $plantList .= '<label><input type="checkbox" name="printed[]" value="' . $row['id'] . '">' . $row['total_quantity'] . '</label>&nbsp;';
+            $plantList .= '<label><input type="checkbox" name="printed_code[]" value="' . $row['barcode_qr_code_no'] . '" checked="checked">' . $row['barcode_qr_code_no'] . '</label>&nbsp;';
         }
         Utils::response(['status' => true, 'data' => $plantList]);
     }
 
     public function save_transaction() {
         $post = $this->input->post();
+        //echo "<pre>";print_r($post);die;
         if (empty($post['plant_id'])) {
             Utils::response(['status' => false, 'message' => 'Please select plant.']);
         } elseif (empty($post['order_id'])) {
             Utils::response(['status' => false, 'message' => 'Please select order.']);
-        } elseif (empty($post['printed'])) {
-            Utils::response(['status' => false, 'message' => 'Please select print.']);
+        } elseif (empty($post['printed_order'])) {
+            Utils::response(['status' => false, 'message' => 'Please select printed order.']);
+        }elseif (empty($post['printed_code'])) {
+            Utils::response(['status' => false, 'message' => 'Please select printed code.']);
         }
         $barcodeDetails = $this->BarcodeInventoryModel->barcodeDetails($post['order_id']);
 
@@ -100,10 +119,12 @@ class Barcode_inventory extends MX_Controller {
             'quantity' => $barcodeDetails['quantity'],
             'source_received_from' => $barcodeDetails['delivery_method'],
             'receive_date' => date("Y-m-d H:i:s"),
+            'first_code_number' => current($post['printed_code']),
+            'last_code_number' => end($post['printed_code']),
             'status' => ($post['status_type'] == 'Received')?1:2
         ];
         if ($this->db->insert('transactions_codes', $tData)) {
-            $this->db->update("printed_barcode_qrcode", ['stock_status' => $post['status_type']], 'print_id IN (' . implode(',', $post['printed']) . ')');
+            $this->db->update("printed_barcode_qrcode", ['stock_status' => $post['status_type']], 'print_id ="'.$post['printed_order'].'"');
             Utils::response(['status' => true, 'message' => 'Transaction has been received.']);
         } else {
             

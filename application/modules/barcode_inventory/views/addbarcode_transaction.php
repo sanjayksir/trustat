@@ -10,12 +10,17 @@
             </div>
             <div class="form-group">
                 <label>Order</label>
-                <select class="form-control" name="order_id" id="order_id" onchange="barcode.orderHistory(this,'print-history')">                    
+                <select class="form-control" name="order_id" id="order_id" onchange="barcode.printedOrder(this,'printed-order')">                    
                 </select>
             </div>
             <div class="form-group">
-                <label>Order History</label>
-                <div class="col-sm-12" id="print-history"></div>
+                <label>Printed Order</label>
+                <select class="form-control" name="printed_order" id="printed-order" onchange="barcode.printedCode(this,'printed-code')">                    
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Printed Code</label>
+                <div class="col-sm-12" id="printed-code"></div>
             </div>
            
 
@@ -72,11 +77,28 @@
             }
 	});
     };
-    barcode.orderHistory = function(obj,targetElem){
+    barcode.printedOrder = function(obj,targetElem){
         $.ajax({
             type: "POST",
-            url: "<?php echo site_url('barcode_inventory/get_order_history') ?>",
+            url: "<?php echo site_url('barcode_inventory/get_printed_order') ?>",
             data:'order_id='+obj.value,
+            success: function(data){
+                if(data.status){
+                    $("#"+targetElem).html(data.data);
+                }else{
+                    $('.alert-msg').addClass('alert-danger').html(data.message).fadeIn('slow');
+                }
+		setTimeout(function(){
+                    $(".alert").fadeOut('slow');
+                },2000);
+            }
+	});
+    };
+    barcode.printedCode = function(obj,targetElem){
+        $.ajax({
+            type: "POST",
+            url: "<?php echo site_url('barcode_inventory/get_printed_code') ?>",
+            data:'print_id='+obj.value,
             success: function(data){
                 if(data.status){
                     $("#"+targetElem).html(data.data);
