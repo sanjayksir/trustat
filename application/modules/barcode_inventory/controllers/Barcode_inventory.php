@@ -87,7 +87,7 @@ class Barcode_inventory extends MX_Controller {
         //$orders = array_column($result, 'total_quantity','id');
         $plantList = '';
         foreach ($result as $row) {
-            $plantList .= '<label><input type="checkbox" name="printed_code[]" value="' . $row['barcode_qr_code_no'] . '" checked="checked">' . $row['barcode_qr_code_no'] . '</label>&nbsp;';
+            $plantList .= '<label><input type="checkbox" name="printed_code[]" value="' . $row['barcode_qr_code_no'] . '" checked="checked" class="printedcode">' . $row['barcode_qr_code_no'] . '</label>&nbsp;';
         }
         Utils::response(['status' => true, 'data' => $plantList]);
     }
@@ -124,7 +124,7 @@ class Barcode_inventory extends MX_Controller {
             'status' => ($post['status_type'] == 'Received')?1:2
         ];
         if ($this->db->insert('transactions_codes', $tData)) {
-            $this->db->update("printed_barcode_qrcode", ['stock_status' => $post['status_type']], 'print_id ="'.$post['printed_order'].'"');
+            $this->db->update("printed_barcode_qrcode", ['stock_status' => $post['status_type'],'receive_date'=>date('Y-m-d H:i:s')], 'print_id ="'.$post['printed_order'].'"');
             Utils::response(['status' => true, 'message' => 'Transaction has been received.']);
         } else {
             

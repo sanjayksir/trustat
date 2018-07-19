@@ -19,7 +19,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Printed Code</label>
+                <label>Printed Code <a href="javascript:void(0);" id="checkall" class="hide checked" onclick="barcode.checkAll(this)">|&nbsp;Toggle Checkboxes</a></label>
                 <div class="col-sm-12" id="printed-code"></div>
             </div>
            
@@ -85,7 +85,7 @@
             success: function(data){
                 if(data.status){
                     $("#"+targetElem).html(data.data);
-                }else{
+                }else{                    
                     $('.alert-msg').addClass('alert-danger').html(data.message).fadeIn('slow');
                 }
 		setTimeout(function(){
@@ -101,8 +101,10 @@
             data:'print_id='+obj.value,
             success: function(data){
                 if(data.status){
+                    $("#checkall").removeClass('hide');
                     $("#"+targetElem).html(data.data);
                 }else{
+                    $("#checkall").addClass('hide');
                     $('.alert-msg').addClass('alert-danger').html(data.message).fadeIn('slow');
                 }
 		setTimeout(function(){
@@ -110,5 +112,16 @@
                 },2000);
             }
 	});
+    };
+    barcode.checkAll = function(obj){
+        if($(obj).hasClass('checked')){
+            $(obj).removeClass('checked');
+            $('.printedcode').prop('checked', false);
+        }else{
+            $(obj).addClass('checked');
+            $('.printedcode').prop('checked', true);
+        }
+        
+         
     };
 </script>
