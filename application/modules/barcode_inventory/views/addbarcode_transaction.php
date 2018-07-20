@@ -3,9 +3,9 @@
         <div class="alert alert-msg"></div>
         <form name="frm" id="order-form" action="#" method="POST">
             <div class="form-group">
-                <label>Plant Controller Name</label>
+                <label>Plant Name</label>
                 <select class="form-control" name="plant_id" id="plant_id" onchange="barcode.getOrder(this,'order_id')">
-                    <?php echo Utils::selectOptions('plant_id',['options'=>$plantcontroller,'empty'=>'Select plant controller']) ?>
+                    <?php echo Utils::selectOptions('plant_id',['options'=>$plantcontroller,'empty'=>'Select plant']) ?>
                 </select>
             </div>
             <div class="form-group">

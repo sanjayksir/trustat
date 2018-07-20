@@ -116,6 +116,9 @@ class ScannedProduct extends ApiController {
         }
     }
    
+   
+   
+   
    // Products Advertisement API  
    public function productsAdvertisements(){
         $user = $this->auth();
@@ -136,6 +139,7 @@ class ScannedProduct extends ApiController {
 		$consumer_id = $data['consumer_id']; 
 		//echo $consumer_id; exit;
         $result = $this->ScannedproductsModel->findProductForConsumer($consumer_id);
+		$result = $this->ScannedproductsModel->sendFCM($mess,$consumer_id);
 		//echo $result;
 		/* 
         if(!empty($result->product_video)){
@@ -175,6 +179,7 @@ class ScannedProduct extends ApiController {
 		$consumer_id = $data['consumer_id']; 
 		//echo $consumer_id; exit;
         $result = $this->ScannedproductsModel->findProductForConsumerSurvey($consumer_id);
+		$result = $this->ScannedproductsModel->sendFCMSurvey($mess,$consumer_id);
 		
 		//echo $result;
 		/* 
