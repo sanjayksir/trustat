@@ -1,4 +1,5 @@
 <div class="widget-box widget-color-blue">
+    <div class="alert alert-msg" style="display:none;"></div>
     <div class="widget-header widget-header-flat">
         <h5 class="widget-title bigger lighter"><?php echo $title;?></h5>
         <div class="widget-toolbar">
@@ -72,15 +73,16 @@
                 ?></td>
                 <td><?php echo date('d/M/Y',strtotime($row['receive_date'])); ?></td>
                 <td><?php echo $row['stock_status'];?></td>
-                <td>
-                    <div class="form-group">
-                        <?php $rowStatus = [1=>'Active',2=>'Inactive',3=>'Pending']; ?>
-                        <select name="row-status" id="row-status">
-                            <?php foreach($rowStatus as $k => $value): ?>
-                            <option value="<?php echo $k; ?>" <?php echo ($k == $row['active_status'])?'selected="selected"':''; ?>><?php echo $value; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
+                <td>                    
+                    <?php
+                    $sString = 'Inactive';
+                    $sClass = 'danger';
+                    if($row['active_status'] == 1){
+                        $sString = 'Active';
+                        $sClass = 'success';
+                    }
+                    ?>
+                    <a href="<?php echo site_url('barcode_inventory/barcode_order_status/'.$row['active_status']); ?>" class="label label-<?php echo $sClass; ?> bostatus"><?php echo $sString ?></a>
                 </td>
             </tr>
             <?php $sno++; ?>
@@ -111,6 +113,27 @@
             $('.modal-body').load($(this).attr('href'),function(result){
                 $('#modalbox').modal('toggle');
             });
+        });
+        $(".bostatus").on('click',function(e){
+            e.preventDefault();
+            return false;
+            var currentElem = $(this);
+            var url = $(this).attr('href');
+            $.ajax({
+            type: "POST",
+            url: url,
+            success: function(data){
+                if(data.status){
+                    currentElem.html(data.data);
+                }else{
+                    $("#checkall").addClass('hide');
+                    $('.alert-msg').addClass('alert-danger').html(data.message).fadeIn('slow');
+                }
+		setTimeout(function(){
+                    $(".alert").fadeOut('slow');
+                },2000);
+            }
+	});
         });
     });
 </script>
