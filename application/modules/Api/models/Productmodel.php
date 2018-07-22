@@ -527,5 +527,21 @@ class ProductModel extends CI_Model {
         return $items;
         
     }
+    
+    public function getRedemption($userId){
+        if(empty($userId)){
+            return false;
+        }
+        $query = $this->db->select('c.aadhaar_number,c.alternate_mobile_no,c.city,c.state,c.street_address,c.pin_code,lr.points_redeemed,lr.coupon_number,lr.coupon_type,lr.coupon_vendor,lr.courier_details')
+                ->from('loyalty_redemption AS lr')
+                ->join('consumers as c','c.id=lr.user_id')
+                ->where('user_id ="'.$userId.'"')
+                ->get();
+        if( $query->num_rows() <= 0 ){
+            return [];
+        }
+        $result = $query->result_array();
+        return $result;
+    }
 
 }

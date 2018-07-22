@@ -52,7 +52,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/customer.js",
+    "filename": "doc/customer.js",
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
@@ -210,7 +210,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/customer.js",
+    "filename": "doc/customer.js",
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
@@ -330,7 +330,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/customer.js",
+    "filename": "doc/customer.js",
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
@@ -450,7 +450,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/customer.js",
+    "filename": "doc/customer.js",
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
@@ -505,7 +505,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/customer.js",
+    "filename": "doc/customer.js",
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
@@ -629,7 +629,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/customer.js",
+    "filename": "doc/customer.js",
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
@@ -697,7 +697,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
+    "filename": "doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -796,11 +796,110 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
+    "filename": "doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
         "url": "http://innovigents.com/api/purchased-product"
+      }
+    ],
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "status",
+            "description": "<p>false.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "message",
+            "description": "<p>api error as per request like record not found or validation errors.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "errors",
+            "description": "<p>validation errors.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response (example):",
+          "content": "HTTP/1.1 400 Bad Request\n{\n   \"status\":false,\n   \"message\": \"Bad request\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "get",
+    "url": "/redemption",
+    "title": "View Redemption List",
+    "version": "0.1.0",
+    "name": "GetRedemption",
+    "group": "Product",
+    "permission": [
+      {
+        "name": "required"
+      }
+    ],
+    "description": "<p>Get the list of redemption.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token must be set in header.</p>"
+          }
+        ]
+      }
+    },
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>true.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>List of redemption.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Redemption List.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "     HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"List of redemption\",\n    \"data\": [\n        {\n            \"aadhaar_number\": \"7876543456789876\",\n            \"alternate_mobile_no\": \"8765456\",\n            \"city\": \"New Delhi\",\n            \"state\": \"Delhi\",\n            \"street_address\": \"pocket c1, Mayurvihar phase 3\",\n            \"pin_code\": \"110096\",\n            \"points_redeemed\": \"20\",\n            \"coupon_number\": \"9889\",\n            \"coupon_type\": \"xyss\",\n            \"coupon_vendor\": \"tracking\",\n            \"courier_details\": \"\"\n        },\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "doc/scanned_product.js",
+    "groupTitle": "Product",
+    "sampleRequest": [
+      {
+        "url": "http://innovigents.com/api/redemption"
       }
     ],
     "error": {
@@ -895,7 +994,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
+    "filename": "doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1028,7 +1127,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
+    "filename": "doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1168,11 +1267,200 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
+    "filename": "doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
         "url": "http://innovigents.com/api/feedback-answer"
+      }
+    ],
+    "error": {
+      "fields": {
+        "Error 4xx": [
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "status",
+            "description": "<p>false.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "message",
+            "description": "<p>api error as per request like record not found or validation errors.</p>"
+          },
+          {
+            "group": "Error 4xx",
+            "optional": false,
+            "field": "errors",
+            "description": "<p>validation errors.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Response (example):",
+          "content": "HTTP/1.1 400 Bad Request\n{\n   \"status\":false,\n   \"message\": \"Bad request\"\n}",
+          "type": "json"
+        }
+      ]
+    }
+  },
+  {
+    "type": "post",
+    "url": "/redemption/add",
+    "title": "New Redemption",
+    "version": "0.1.0",
+    "name": "PostRedemptionAdd",
+    "group": "Product",
+    "permission": [
+      {
+        "name": "required"
+      }
+    ],
+    "description": "<p>Save the consumer redemption.</p>",
+    "header": {
+      "fields": {
+        "Header": [
+          {
+            "group": "Header",
+            "type": "String",
+            "optional": false,
+            "field": "token",
+            "description": "<p>token must be set in header.</p>"
+          }
+        ]
+      }
+    },
+    "parameter": {
+      "fields": {
+        "Parameter": [
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "aadhaar_number",
+            "description": "<p>Purchased product id. (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "Integer",
+            "optional": false,
+            "field": "alternate_mobile_no",
+            "description": "<p>Purchased product id. (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "street_address",
+            "description": "<p>product qr code. (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "city",
+            "description": "<p>answer selected by consumer. (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "state",
+            "description": "<p>answer selected by consumer. (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "pin_code",
+            "description": "<p>answer selected by consumer. (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "points_redeemed",
+            "description": "<p>answer selected by consumer. (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "coupon_number",
+            "description": "<p>answer selected by consumer. (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "coupon_type",
+            "description": "<p>answer selected by consumer. (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "coupon_vendor",
+            "description": "<p>answer selected by consumer. (Required).</p>"
+          },
+          {
+            "group": "Parameter",
+            "type": "String",
+            "optional": false,
+            "field": "courier_details",
+            "description": "<p>answer selected by consumer. (Required).</p>"
+          }
+        ]
+      }
+    },
+    "examples": [
+      {
+        "title": "Example usage:",
+        "content": "{\n\t\"aadhaar_number\":\"7876543456789876\",\n\t\"alternate_mobile_no\":\"8765456\",\n\t\"street_address\":\"pocket c1, Mayurvihar phase 3\",\n\t\"city\":\"New Delhi\",\n\t\"state\":\"Delhi\",\n\t\"pin_code\":\"110096\",\n\t\"points_redeemed\":\"20\",\n\t\"coupon_number\":\"9889\",\n\t\"coupon_type\":\"xyss\",\n\t\"coupon_vendor\":\"tracking\",\n\t\"courier_details\":\"\"\n}",
+        "type": "json"
+      }
+    ],
+    "success": {
+      "fields": {
+        "Success 200": [
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "status",
+            "description": "<p>true.</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "String",
+            "optional": false,
+            "field": "message",
+            "description": "<p>Thank you for your redemption request, after validation, your request will be processed in next 7-10 Working days..</p>"
+          },
+          {
+            "group": "Success 200",
+            "type": "Object",
+            "optional": false,
+            "field": "data",
+            "description": "<p>Input details.</p>"
+          }
+        ]
+      },
+      "examples": [
+        {
+          "title": "Success-Response:",
+          "content": "     HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"Thank you for your redemption request, after validation, your request will be processed in next 7-10 Working days.\"\n}",
+          "type": "json"
+        }
+      ]
+    },
+    "filename": "doc/scanned_product.js",
+    "groupTitle": "Product",
+    "sampleRequest": [
+      {
+        "url": "http://innovigents.com/api/redemption/add"
       }
     ],
     "error": {
@@ -1308,7 +1596,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
+    "filename": "doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1441,7 +1729,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
+    "filename": "doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1533,7 +1821,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/user.js",
+    "filename": "doc/user.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1638,7 +1926,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/scanned_product.js",
+    "filename": "doc/scanned_product.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1730,7 +2018,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/user.js",
+    "filename": "doc/user.js",
     "groupTitle": "Product",
     "sampleRequest": [
       {
@@ -1822,7 +2110,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/user.js",
+    "filename": "doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -1914,7 +2202,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/user.js",
+    "filename": "doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2006,7 +2294,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/user.js",
+    "filename": "doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2098,7 +2386,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/user.js",
+    "filename": "doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2217,7 +2505,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/user.js",
+    "filename": "doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2336,7 +2624,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/user.js",
+    "filename": "doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2494,7 +2782,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/user.js",
+    "filename": "doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2555,7 +2843,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/user.js",
+    "filename": "doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2696,7 +2984,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/user.js",
+    "filename": "doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2802,7 +3090,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/user.js",
+    "filename": "doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
@@ -2907,7 +3195,7 @@
         }
       ]
     },
-    "filename": "/var/www/html/trackingportal/doc/user.js",
+    "filename": "doc/user.js",
     "groupTitle": "User",
     "sampleRequest": [
       {
