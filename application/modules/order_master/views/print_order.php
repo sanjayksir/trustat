@@ -15,6 +15,14 @@
 				 ?>
                 <input type="hidden" name="order_id" value="<?php echo base64_encode($this->uri->segment(3));?>" />
 				  <div class="form-group">
+ 				  <label for="message-text">Print Code Unity Type:</label>
+					<select name="print_order_unity" class="form-control" id="print_order_unity" disabled="disabled">
+                        <option <?php if($printEssentialAttributes['code_unity_type']=='Single'){echo 'selected';}?> value="generate_order_barcode">Single</option>
+                        <option <?php if($printEssentialAttributes['code_unity_type']=='Twin'){echo 'selected';}?> value="generate_order">Twin</option>
+                    </select>
+				  </div>
+				  
+				  <div class="form-group">
  				  <label for="message-text">Print Bar Code Type:</label>
 					<select name="print_order" class="form-control" id="print_order" disabled="disabled">
                         <option <?php if($printEssentialAttributes['code_type']=='barcode'){echo 'selected';}?> value="generate_order_barcode">Bar Code</option>
@@ -77,6 +85,7 @@
 function print_option(){
 	$("#msgError").html('').removeClass('error').fadeOut();;
 	var barcodeType	= $("#print_order").val();
+	var codeunityType	= $("#print_order_unity").val();
 	var url 		= barcodeType;
 	var restQty = $("#rest_qty").val();
 	var qty = parseInt($("#qty").val());

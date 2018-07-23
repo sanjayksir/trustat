@@ -305,7 +305,7 @@
  		    </div> 
           </div>   
           <div class="form-group row"> 
-           <div class="col-sm-6">
+           <div class="col-sm-4">
 				<label for="form-field-8">Code Key Type</label>
 				<select name="code_key_type" id="code_key_type" class="form-control">
 				 <option value="serial"> Serial Unique</option>
@@ -313,12 +313,20 @@
 				</select>
  		    </div> 
             
-            <div class="col-sm-6">
+            <div class="col-sm-4">
 				<label for="form-field-8">Size of the Code</label>
 				<select name="code_size" id="code_size" class="form-control">
 				 <option value="S">Small</option>
 				 <option value="M">Medium</option>
 				 <option value="L">Large</option>
+				</select>
+ 		    </div>
+			
+			<div class="col-sm-4">
+				<label for="form-field-8">Code Unity Type</label>
+				<select name="code_unity_type" id="code_unity_type" class="form-control">
+				 <option value="Single">Single</option>
+				 <option value="Twin">Twin</option>
 				</select>
  		    </div>
   		</div> 

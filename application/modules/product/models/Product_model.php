@@ -121,7 +121,8 @@
 		$code_activation_type   = $this->input->post('code_activation_type');
 		$delivery_method  		= ($this->input->post('delivery_method'))?$this->input->post('delivery_method'):'';
 		$code_key_type  		= ($this->input->post('code_key_type'))?$this->input->post('code_key_type'):'';
-		$code_size  			= ($this->input->post('code_size'))?$this->input->post('code_size'):'';		
+		$code_size  			= ($this->input->post('code_size'))?$this->input->post('code_size'):'';
+		$code_unity_type  			= ($this->input->post('code_unity_type'))?$this->input->post('code_unity_type'):'';			
 		## essential attributes
 		
 		$id			  = $this->input->post('id');
@@ -137,6 +138,7 @@
 					"delivery_method"	  => $delivery_method,
 					"code_key_type"		  => $code_key_type,
 					"code_size"			  => $code_size,
+					"code_unity_type"	  => $code_unity_type,
 					"created_by"		  => $is_parent,
 					"other_industry"	  => $Other_industry_val
  				);
@@ -171,6 +173,7 @@
 					"delivery_method"	  => $delivery_method,
 					"code_key_type"		  => $code_key_type,
 					"code_size"			  => $code_size,
+					"code_unity_type"	  => $code_unity_type,
 					"other_industry"	  => $Other_industry_val
 					
 				); //echo '<pre>';print_r($insertData);exit;

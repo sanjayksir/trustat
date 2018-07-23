@@ -43,7 +43,7 @@
 	 function save_orders($frmData){ //echo '<pre>';print_r($frmData);exit;
 		$user_id 	=$this->session->userdata('admin_user_id');
 		//$user_exists = $this->checkDuplicateUser($frmData['user_name']);
-	 
+		
 		$product_arr = $frmData['product'];
 		// echo '<pre>kam=';print_r($frmData );exit;
 		if(!empty($frmData['order_id'])){## edit case
@@ -97,8 +97,9 @@
 			$check_exists_entry = 0;
  			//echo '<pre>';print_r($product_arr);exit;
 						$random_no 				= generate_password(4);
+						$rnpin = mt_rand(1000, 9999);
 						$product_arr 			= get_products_sku_by_product_id($product_id);
-						$order_tracking_no 		= $product_arr[0]['product_sku'];
+						$order_tracking_no 		= $product_arr[0]['product_sku']/* .'-'.$rnpin*/;
 						$active_status			= $product_arr[0]['code_activation_type'];
 						if(!empty($frmData['deliverydate'])){
 								$date = date('Y-m-d',strtotime($frmData['deliverydate']));
@@ -132,7 +133,7 @@
 										$last_inserted = $this->db->insert_id();
 										if($last_inserted){
 											$user_name = getUserNameById($user_id);
-											$order_tracking_no = $order_tracking_no.'-'. str_pad($str,4,"0",STR_PAD_LEFT).'-'.$last_inserted;
+											$order_tracking_no = $order_tracking_no.'-'/*. str_pad($str,4,"0",STR_PAD_LEFT).'-'*/.$last_inserted;
 											$this->db->where('order_id',$last_inserted);
 											$this->db->set(array('order_tracking_number'=>$order_tracking_no));
 											$this->db->update('order_master');
@@ -595,9 +596,12 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 
 	 
 	 #### -----------------Printed barcode----------------#####
-	 function insert_printed_barcode_qrcode($post, $code, $code_type,$product_id='',$active_status,$plant_id,$user_id){
+	 function insert_printed_barcode_qrcode($post, $code, $code2, $code_type,$product_id='',$active_status,$plant_id,$user_id){
 		 $order_id 				= base64_decode($post['order_id']);
-		 $post_code 			= $code ;
+		 $post_code 			= $code;
+		 $post_code2 			= $code2;
+		 //$rnpin2 = mt_rand(1000, 9999);
+		// $barcode_qr_code_no2   =  $code . '-' . $rnpin2;
 			//$print_id = date('YmdHis') . "" . uniqid();
 	//return $last_row=$this->db->select('id')->order_by('id',"desc")->limit(1)->get('order_print_listing')->row();
 			//$print_idb1 = $this->last_record();
@@ -608,6 +612,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 				"print_id"				=> $print_id,
 				"order_id"				=> $order_id,
 				"barcode_qr_code_no"	=> $post_code,
+				"barcode_qr_code_no2"	=> $post_code2,
 				"product_id"			=> $product_id,
 				"plant_id"				=> $plant_id,
 				"print_user_id"			=> $user_id,

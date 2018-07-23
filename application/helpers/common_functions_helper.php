@@ -6451,7 +6451,7 @@ function get_user_email_name($userid){
  function getEssentialAttributes($productid=''){
   	$ci = & get_instance();
 	$result = array();
-  	$sql= "select code_type, code_activation_type,delivery_method,code_key_type, code_size from products where id ='".$productid."'";
+  	$sql= "select code_type, code_activation_type, delivery_method, code_key_type, code_unity_type, code_size from products where id ='".$productid."'";
  	$q = $ci->db->query($sql);
  	$res = array();
  	$res = $q->result_array();
@@ -6464,7 +6464,7 @@ function get_user_email_name($userid){
  function printEssentialAttributes($order_id=''){
   	$ci = & get_instance();
 	$result = array();
-	$qry = $ci->db->select('O.product_id, P.code_type,P.code_activation_type,P.delivery_method,P.code_key_type,P.code_size')
+	$qry = $ci->db->select('O.product_id, P.code_type,P.code_unity_type,P.code_activation_type,P.delivery_method,P.code_key_type,P.code_size')
 			 ->from('products P')
 			 ->join('order_master O','P.id=O.product_id', 'left')
 			 ->where('O.order_id',$order_id)

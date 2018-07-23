@@ -72,7 +72,7 @@
                                                                 <th>#</th>
                                                                 <th>Order Number</th>
                                                                 <th>Tracking Number</th>
-                                                                <th>Product Code</th>
+                                                                <th>Product SKU</th>
                                                                 <th>Product Name</th>
                                                                 <th>Qty</th>
                                                                 <th>Delivery Date</th>
