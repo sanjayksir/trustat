@@ -94,7 +94,6 @@ class Barcode_inventory extends MX_Controller {
 
     public function save_transaction() {
         $post = $this->input->post();
-        //echo "<pre>";print_r($post);die;
         if (empty($post['plant_id'])) {
             Utils::response(['status' => false, 'message' => 'Please select plant.']);
         } elseif (empty($post['order_id'])) {
@@ -104,8 +103,14 @@ class Barcode_inventory extends MX_Controller {
         }elseif (empty($post['printed_code'])) {
             Utils::response(['status' => false, 'message' => 'Please select printed code.']);
         }
+        $stExQuery = $this->db->get_where('printed_barcode_qrcode','print_id="'.$post['printed_order'].'" AND stock_status IN ("Received","Issued")');
+        if($stExQuery->num_rows()){
+            $statusExist = $stExQuery->row_array();
+            Utils::response(['status' => false, 'message' => 'This order already has been '.$statusExist['stock_status']]);
+        }
+        die("kdls");
         $barcodeDetails = $this->BarcodeInventoryModel->barcodeDetails($post['order_id']);
-
+        
         $tData = [
             'trax_number' => Utils::randomNumber(6),
             'product_id' => $barcodeDetails['product_id'],
@@ -125,7 +130,7 @@ class Barcode_inventory extends MX_Controller {
         ];
         if ($this->db->insert('transactions_codes', $tData)) {
             $this->db->update("printed_barcode_qrcode", ['stock_status' => $post['status_type'],'receive_date'=>date('Y-m-d H:i:s')], 'print_id ="'.$post['printed_order'].'"');
-            Utils::response(['status' => true, 'message' => 'Transaction has been received.']);
+            Utils::response(['status' => true, 'message' => 'Transaction has been '.$post['status_type'].'.']);
         } else {
             
         }

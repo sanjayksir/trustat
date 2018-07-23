@@ -408,3 +408,93 @@ function PostFeedbackAnswer() { return; }
   @apiUse UserError
 */
 function getFeedbackQuestion() { return; }
+/**
+ * @api {post} /redemption/add New Redemption
+ * @apiVersion 0.1.0
+ * @apiName PostRedemptionAdd
+ * @apiGroup Product
+ * @apiPermission required
+ *
+ * @apiDescription Save the consumer redemption.
+ *
+ * @apiHeader {String} token token must be set in header. 
+ * 
+ * @apiParam {Integer} aadhaar_number Purchased product id. (Required).
+ * @apiParam {Integer} alternate_mobile_no Purchased product id. (Required).
+ * @apiParam {String} street_address product qr code. (Required).
+ * @apiParam {String} city answer selected by consumer. (Required).
+ * @apiParam {String} state answer selected by consumer. (Required).
+ * @apiParam {String} pin_code answer selected by consumer. (Required).
+ * @apiParam {String} points_redeemed answer selected by consumer. (Required).
+ * @apiParam {String} city answer selected by consumer. (Required).
+ * @apiParam {String} coupon_number answer selected by consumer. (Required).
+ * @apiParam {String} coupon_type answer selected by consumer. (Required).
+ * @apiParam {String} coupon_vendor answer selected by consumer. (Required).
+ * @apiParam {String} courier_details answer selected by consumer. (Required).
+ * 
+ * @apiExample Example usage:
+{
+	"aadhaar_number":"7876543456789876",
+	"alternate_mobile_no":"8765456",
+	"street_address":"pocket c1, Mayurvihar phase 3",
+	"city":"New Delhi",
+	"state":"Delhi",
+	"pin_code":"110096",
+	"points_redeemed":"20",
+	"coupon_number":"9889",
+	"coupon_type":"xyss",
+	"coupon_vendor":"tracking",
+	"courier_details":""
+}
+
+ * @apiSuccess {String} status true.
+ * @apiSuccess {String} message Thank you for your redemption request, after validation, your request will be processed in next 7-10 Working days..
+ * @apiSuccess {Object} data Input details.
+ * @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+{
+    "status": true,
+    "message": "Thank you for your redemption request, after validation, your request will be processed in next 7-10 Working days."
+}
+ *
+ * @apiUse ProductError
+ */
+function PostRedemptionAdd() { return; }
+/**
+ * @api {get} /redemption View Redemption List
+ * @apiVersion 0.1.0
+ * @apiName GetRedemption
+ * @apiGroup Product
+ * @apiPermission required
+ *
+ * @apiDescription Get the list of redemption.
+ *
+ * @apiHeader {String} token token must be set in header. 
+ *
+ * @apiSuccess {String} status true.
+ * @apiSuccess {String} message List of redemption.
+ * @apiSuccess {Object} data Redemption List.
+ * @apiSuccessExample {json} Success-Response:
+ *      HTTP/1.1 200 OK
+{
+    "status": true,
+    "message": "List of redemption",
+    "data": [
+        {
+            "aadhaar_number": "7876543456789876",
+            "alternate_mobile_no": "8765456",
+            "city": "New Delhi",
+            "state": "Delhi",
+            "street_address": "pocket c1, Mayurvihar phase 3",
+            "pin_code": "110096",
+            "points_redeemed": "20",
+            "coupon_number": "9889",
+            "coupon_type": "xyss",
+            "coupon_vendor": "tracking",
+            "courier_details": ""
+        },
+}
+ *
+ * @apiUse ProductError
+ */
+function GetRedemption() { return; }

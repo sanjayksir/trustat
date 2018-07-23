@@ -71,7 +71,7 @@ class BarcodeInventoryModel extends CI_Model {
         $this->db->join('transactions_codes AS tc', 'tc.product_code=pbq.barcode_qr_code_no','left');
         $this->db->join('products AS p', 'p.id=pbq.product_id');
         $this->db->join('order_master AS om', 'om.order_id=pbq.order_id');
-        $this->db->where(array('om.user_id'=>$user_id));
+        $this->db->where('pbq.plant_id in (SELECT plant_id from assign_plants_to_users WHERE user_id="'.$user_id.'")');
         if(!empty($status)){
             $this->db->where('pbq.stock_status="'.$status.'"');
         }

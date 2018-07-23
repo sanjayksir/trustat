@@ -19,7 +19,7 @@
                 </select>
             </div>
             <div class="form-group">
-                <label>Printed Code <a href="javascript:void(0);" id="checkall" class="hide checked" onclick="barcode.checkAll(this)">|&nbsp;Toggle Checkboxes</a></label>
+                <label>Printed Code <a href="javascript:void(0);" id="checkall" class="hide checked" onclick="barcode.checkAll(this)">|&nbsp;Toggle Selection</a></label>
                 <div class="col-sm-12" id="printed-code"></div>
             </div>
            
