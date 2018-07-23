@@ -516,10 +516,22 @@
 					// The width is set to the the same as the cell containing the name.  
 					// The Y position is also adjusted slightly.
 					//$pdf->Text(20, 25, $qrcode.'-'.$i);
-					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
-					$pdf->Text(110, $y, 'This is First Code');
+					$getEssentialAttributes = getEssentialAttributes($product_id);
+					if($getEssentialAttributes['code_unity_type']=='Twin'){
+						
+						$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
+					$pdf->Text(110, $y, 'Primary Code');
+					
 					$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
-					$pdf->Text(150, $y, 'This is Second Code');
+					$pdf->Text(150, $y, 'Secondary Code');
+					
+					} 
+					
+					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
+					$pdf->Text(110, $y, '');
+					
+					
+					
 					//$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 80, 150, $y, $barcodesize, $style, 'N');
 					//$pdf->write2DBarcode($qrcode.'_'.$i, 'C128B,L',  $Y, 105, 18, 0.4, $style, 'M');
 					//Reset X,Y so wrapping cell wraps around the barcode's cell.
@@ -702,8 +714,14 @@
 					//$style['position'] = 'R';
 					//$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 110, $y, $barcodesize, 10, $style, 'L');
 					//$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 150, $y, $barcodesize, 10, $style, 'L');
+					
+					
+					$getEssentialAttributes = getEssentialAttributes($product_id);
+					if($getEssentialAttributes['code_unity_type']=='Twin'){
 					$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 60, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
 					$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 140, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
+					}
+					$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 60, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
 					//$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
 					//$pdf->Text(110, $y, 'This is First Code');
 					//$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
@@ -891,26 +909,27 @@
 	
 	// QRCODE,L : QR-CODE Low error correction
 	 
-		for($i=1;$i<=25;$i++){
+		for($i=1;$i<=50;$i++){
 				 	$x = $pdf->GetX();
 					$y = $pdf->GetY();
 					//$style['position'] = 'R';
-					//$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,L', $y-8.5, 105, 50, 50, $style, 'N');
-					//$pdf->write1DBarcode('Sanjay123'.'-'.$i, 'C128B', '', $y-18.5, 50, $barcodesize, 50, $style, 'M');
-					//$pdf->write1DBarcode('Sanjay123'.'-'.$i, 'C128B', '', $y-18.6, 50, $barcodesize, 50, $style, 'M');
-					//$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, $style, 'N');
-
-					// QRCODE,L : QR-CODE Low error correction
-
-					// QRCODE,Q : QR-CODE Better error correction
-					$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,L', 20, 150, 50, 50, $style, 'N');
-					$pdf->Text(20, 145, 'QRCODE Q-Sanjay');
+					
+					//$pdf->write1DBarcode('Sanjay1234'.'-'.$i, 'C128B', 60, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
+					//$pdf->write1DBarcode('Sanjay56789'.'-'.$i, 'C128B', 140, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
+					
+					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
+					$pdf->Text(110, $y, 'This is First Code');
+					$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
+					$pdf->Text(150, $y, 'This is Second Code');
+					
+					//$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,L', 20, 150, 50, 50, $style, 'N');
+					//$pdf->Text(20, 145, 'QRCODE Q-Sanjay');
 
 					// -------------------------------------------------------------------
 					// DATAMATRIX (ISO/IEC 16022:2006)
 
-					$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,L', 80, 150, 50, 50, $style, 'N');
-					$pdf->Text(80, 145, 'DATAMATRIX-Sanjay (ISO/IEC 16022:2006)');
+					//$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,L', 80, 150, 50, 50, $style, 'N');
+					//$pdf->Text(80, 145, 'DATAMATRIX-Sanjay (ISO/IEC 16022:2006)');
 
 // -------------------------------------------------------------------
 					
