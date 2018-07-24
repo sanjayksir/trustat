@@ -890,7 +890,7 @@ define({ "api": [
       "examples": [
         {
           "title": "Success-Response:",
-          "content": "     HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"List of redemption\",\n    \"data\": [\n        {\n            \"aadhaar_number\": \"7876543456789876\",\n            \"alternate_mobile_no\": \"8765456\",\n            \"city\": \"New Delhi\",\n            \"state\": \"Delhi\",\n            \"street_address\": \"pocket c1, Mayurvihar phase 3\",\n            \"pin_code\": \"110096\",\n            \"points_redeemed\": \"20\",\n            \"coupon_number\": \"9889\",\n            \"coupon_type\": \"xyss\",\n            \"coupon_vendor\": \"tracking\",\n            \"courier_details\": \"\"\n        },\n}",
+          "content": "     HTTP/1.1 200 OK\n{\n    \"status\": true,\n    \"message\": \"List of redemption\",\n    \"data\": [\n        {\n            \"aadhaar_number\": \"7876543456789876\",\n            \"alternate_mobile_no\": \"8765456\",\n            \"city\": \"New Delhi\",\n            \"state\": \"Delhi\",\n            \"street_address\": \"pocket c1, Mayurvihar phase 3\",\n            \"pin_code\": \"110096\",\n            \"points_redeemed\": \"20\",\n            \"coupon_number\": \"9889\",\n            \"coupon_type\": \"xyss\",\n            \"coupon_vendor\": \"tracking\",\n            \"courier_details\": \"\"\n        }\n    ]    \n}",
           "type": "json"
         }
       ]

@@ -761,7 +761,7 @@ class Consumer extends ApiController {
 
     }
     public function redemption() {
-        Utils::debug();
+        //Utils::debug();
         $user = $this->auth();
         if (empty($this->auth())) {
             Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);

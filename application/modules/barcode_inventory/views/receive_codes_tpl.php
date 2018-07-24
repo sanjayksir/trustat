@@ -82,7 +82,7 @@
                         $sClass = 'success';
                     }
                     ?>
-                    <a href="<?php echo site_url('barcode_inventory/barcode_order_status/'.$row['active_status']); ?>" class="label label-<?php echo $sClass; ?> bostatus"><?php echo $sString ?></a>
+                    <a href="<?php echo site_url('barcode_inventory/barcode_order_status/'.$row['id'].'/barcode'); ?>" class="label label-<?php echo $sClass; ?> bostatus"><?php echo $sString ?></a>
                 </td>
             </tr>
             <?php $sno++; ?>
@@ -116,24 +116,34 @@
         });
         $(".bostatus").on('click',function(e){
             e.preventDefault();
-            return false;
             var currentElem = $(this);
             var url = $(this).attr('href');
-            $.ajax({
-            type: "POST",
-            url: url,
-            success: function(data){
-                if(data.status){
-                    currentElem.html(data.data);
-                }else{
-                    $("#checkall").addClass('hide');
-                    $('.alert-msg').addClass('alert-danger').html(data.message).fadeIn('slow');
+            bootbox.confirm("Are you sure want to change the status?", function(result){
+                if(!result){
+                    return;
                 }
-		setTimeout(function(){
-                    $(".alert").fadeOut('slow');
-                },2000);
-            }
-	});
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    success: function(data){
+                        if(data.status){
+                            if(currentElem.hasClass('label-danger')){
+                                currentElem.removeClass('label-danger').addClass('label-success').text('Active');
+                            }else{
+                                currentElem.removeClass('label-success').addClass('label-danger').text('Inactive');
+                            }                            
+                            $('.alert-msg').removeClass('alert-danger').addClass('alert-success');
+                        }else{
+                            $('.alert-msg').addClass('alert-danger').removeClass('alert-success');
+                        }
+                        $('.alert-msg').html(data.message).fadeIn('slow');
+                        setTimeout(function(){
+                            $(".alert").fadeOut('slow');
+                        },2000);
+                    }
+                });
+            });
+            //return false;
         });
     });
 </script>

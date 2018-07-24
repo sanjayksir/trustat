@@ -199,6 +199,7 @@
         <script src="<?php echo site_url(); ?>assets/js/buttons.print.min.js"></script>
         <script src="<?php echo site_url(); ?>assets/js/buttons.colVis.min.js"></script>
         <script src="<?php echo site_url(); ?>assets/js/dataTables.select.min.js"></script>
+        <script src="<?php echo site_url(); ?>assets/js/bootbox.js"></script>
 
         <!-- ace scripts -->
         <script src="<?php echo site_url(); ?>assets/js/ace-elements.min.js"></script>

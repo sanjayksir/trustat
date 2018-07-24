@@ -72,15 +72,16 @@
                 ?></td>
                 <td><?php echo date('d/M/Y',strtotime($row['receive_date'])); ?></td>
 <!--                <td><?php echo $row['stock_status'];?></td>-->
-                <td>
-                    <div class="form-group">
-                        <?php $rowStatus = [1=>'Active',2=>'Inactive',3=>'Pending']; ?>
-                        <select name="row-status" id="row-status">
-                            <?php foreach($rowStatus as $k => $value): ?>
-                            <option value="<?php echo $k; ?>" <?php echo ($k == $row['active_status'])?'selected="selected"':''; ?>><?php echo $value; ?></option>
-                            <?php endforeach; ?>
-                        </select>
-                    </div>
+                <td>                    
+                    <?php
+                    $sString = 'Inactive';
+                    $sClass = 'danger';
+                    if($row['status'] == 1){
+                        $sString = 'Active';
+                        $sClass = 'success';
+                    }
+                    ?>
+                    <a href="<?php echo site_url('barcode_inventory/barcode_order_status/'.$row['id'].'/transactions'); ?>" class="label label-<?php echo $sClass; ?> bostatus"><?php echo $sString ?></a>
                 </td>
             </tr>
             <?php $sno++; ?>
@@ -93,3 +94,38 @@
         </div>
     </div>
 </div>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $(".bostatus").on('click',function(e){
+            e.preventDefault();
+            var currentElem = $(this);
+            var url = $(this).attr('href');
+            bootbox.confirm("Are you sure want to change the status?", function(result){
+                if(!result){
+                    return;
+                }
+                $.ajax({
+                    type: "POST",
+                    url: url,
+                    success: function(data){
+                        if(data.status){
+                            if(currentElem.hasClass('label-danger')){
+                                currentElem.removeClass('label-danger').addClass('label-success').text('Active');
+                            }else{
+                                currentElem.removeClass('label-success').addClass('label-danger').text('Inactive');
+                            }                            
+                            $('.alert-msg').removeClass('alert-danger').addClass('alert-success');
+                        }else{
+                            $('.alert-msg').addClass('alert-danger').removeClass('alert-success');
+                        }
+                        $('.alert-msg').html(data.message).fadeIn('slow');
+                        setTimeout(function(){
+                            $(".alert").fadeOut('slow');
+                        },2000);
+                    }
+                });
+            });
+            //return false;
+        });
+    });
+</script>

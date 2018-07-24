@@ -492,7 +492,8 @@ function PostRedemptionAdd() { return; }
             "coupon_type": "xyss",
             "coupon_vendor": "tracking",
             "courier_details": ""
-        },
+        }
+    ]    
 }
  *
  * @apiUse ProductError

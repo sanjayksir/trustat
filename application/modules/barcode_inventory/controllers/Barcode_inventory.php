@@ -195,6 +195,19 @@ class Barcode_inventory extends MX_Controller {
         ];
         $this->load->view('template', $data);
     }
+    
+    public function barcode_order_status($id =null,$modal=null){
+        if(is_null($id) || is_null($modal)){
+            Utils::response(['status' => false, 'message' => 'Invalid request']);
+        }
+        
+        if(strtolower($modal) == 'transactions' ){
+            $this->db->query('UPDATE transactions_codes SET status = NOT status WHERE id='.trim($id));
+        }elseif(strtolower($modal) == 'transactions' ){
+            $this->db->query('UPDATE printed_barcode_qrcode SET active_status = NOT active_status WHERE id='.trim($id));
+        }
+        Utils::response(['status' => true, 'message' => 'Status changed successfully.']);
+    }
 
 }
 ?>
