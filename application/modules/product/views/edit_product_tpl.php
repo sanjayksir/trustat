@@ -419,7 +419,7 @@ if(!empty($isOtherIndustry)){
  		    </div> 
           </div>   
           <div class="form-group row"> 
-           <div class="col-sm-6">
+           <div class="col-sm-4">
 				<label for="form-field-8">Code Key Type</label>
 				<select name="code_key_type" id="code_key_type" class="form-control">
 				 <option value="serial"  <?php echo ($dt['code_key_type']=='serial')?'selected':'';?>> Serial Unique</option>
@@ -427,7 +427,7 @@ if(!empty($isOtherIndustry)){
 				</select>
  		    </div> 
             
-            <div class="col-sm-6">
+            <div class="col-sm-4">
 				<label for="form-field-8">Size of the Code</label>
 				<select name="code_size" id="code_size" class="form-control">
 				 <option value="S"  <?php echo ($dt['code_size']=='S')?'selected':'';?>>Small</option>
@@ -435,6 +435,14 @@ if(!empty($isOtherIndustry)){
 				 <option value="L"  <?php echo ($dt['code_size']=='L')?'selected':'';?>>Large</option>
 				</select>
  		    </div>
+			<div class="col-sm-4">
+				<label for="form-field-8">Code Unity Type</label>
+				<select name="code_unity_type" id="code_unity_type" class="form-control">
+				 <option value="Single"  <?php echo ($dt['code_unity_type']=='Single')?'selected':'';?>>Single</option>
+				 <option value="Twin"  <?php echo ($dt['code_unity_type']=='Twin')?'selected':'';?>>Twin</option>
+				</select>
+ 		    </div>
+			
   		</div> 
 		<!--------------------------------- Essential attributes-----------------------------------> 
          

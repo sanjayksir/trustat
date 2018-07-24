@@ -372,7 +372,7 @@ Your browser does not support audio in video tag.
                            <!-------------- Essential attributes-------------------->
             <div class="row">
               <div class="col-xs-12" style="margin-left:25px"> 
-                
+					<label><strong>Code Unity Type : </strong> <?php echo $details['code_unity_type'];?></label><br />
 					<label><strong>Code Type : </strong> <?php echo $details['code_type'];?></label><br />
 					<label><strong>Code Activation Type : </strong> <?php if($details['code_activation_type']==1) { echo "Pre-Activated";} else echo "Post-Activated"; ?>
 										   </label><br />

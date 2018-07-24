@@ -153,7 +153,17 @@
 	
 	
  function genate_sku(){
-		$name = $this->input->post('name');
+		//$name = $this->input->post('name');
+		$string = $this->input->post('name');
+		function initials($str) {
+				$ret = '';
+				foreach (explode(' ', $str) as $word)
+					$ret .= strtoupper($word[0]);
+				return $ret;
+			}
+		//echo initials($string);
+		
+		$name = initials($string);
 		$pin = mt_rand(1000, 9999);
  		echo $res =  slugify2($name).'-'.$pin;
 		exit;
