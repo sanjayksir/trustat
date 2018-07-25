@@ -3,7 +3,7 @@
   <div class="widget-box">
 
     <div class="widget-header">
-		<?php $type = "Admin";
+		<?php $type = "CCC Admin";
 								if($this->session->userdata('admin_user_id')>1 || $this->uri->segment(2)=='add_plant_controller'){
 									$type = "Plant Controller";
 								}?>
@@ -65,8 +65,15 @@
 		<?php if($this->session->userdata('admin_user_id')==1){?>
 		<div class="form-group row">
 			<div class="col-sm-6">
-			<label for="form-field-8">Industry</label>
-			<input name="industry" id="industry" type="text" class="form-control" placeholder="Industry Name"  maxlength="100">
+			<label for="form-field-8">Select your Industry name</label>
+			<!--<input name="industry" id="industry" type="text" class="form-control" placeholder="Industry Name"  maxlength="100">-->
+		   <select  name="industry" id="industry" class="form-control" required>
+           <option value="">-Select Industry-</option>
+            <?php foreach(getAllCategory('0') as $val){?>
+				<option value="<?php echo $val['categoryName'];?>"><?php  echo $val['categoryName'];?></option> 
+			<?php }?>
+            <option value="other">Other</option>
+            </select>
 			</div>
 			
 			<div class="col-sm-6">

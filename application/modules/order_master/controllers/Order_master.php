@@ -523,7 +523,7 @@
 					$pdf->Text(110, $y, 'Scan & Check Genuinity');
 					
 					$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
-					$pdf->Text(150, $y, 'Dont buy if Scratched');
+					$pdf->Text(150, $y, 'Need to Scratch');
 					
 					} 
 					

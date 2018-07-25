@@ -145,9 +145,10 @@ class Myspidey_user_master_model extends CI_Model {
                     "assigned_by" => $this->session->userdata('admin_user_id')
                 ];
                 $this->db->insert("assign_plants_to_users", $assignedPlant);
+				*/
                 $full_name = $frmData['f_name'] . ' ' . $frmData['l_name'];
                 $username = $frmData['user_name'];
-				*/
+				
                 // echo $this->db->last_query();exit;
 				$email = $frmData['user_email']; 
                 $this->user_registration_mail($full_name, $username, $password, $email);
@@ -161,7 +162,7 @@ class Myspidey_user_master_model extends CI_Model {
 	public function user_registration_mail($full_name = '', $username = '', $password = '', $email) {//echo '***'.$email;exit;
         $link = $this->create_link($username, $password);
         $subject = 'Admin:: Welcome to Tracking Portal';
-        $body = "<b>Hello <b>" . $username . "</b>,
+        $body = "<b>Hello <b>" . $full_name . "</b>,
 								</b><br><br><r>
 								Your registration process has been complete.
 								<br>Your login credentials are:<br />
@@ -553,17 +554,17 @@ class Myspidey_user_master_model extends CI_Model {
         } return false; //echo redirect('accounts/create');
     }
 
-    function create_link($username, $pass) {
+    function create_link($username, $password) {
         $username = base64_encode($username);
-        $pass = base64_encode($pass);
-        $url = base_url() . 'user_master/verify/' . $username . '/' . $pass;
+        $password = base64_encode($password);
+        $url = base_url() . 'user_master/verify/' . $username . '/' . $password;
 
         return $url;
     }
 
-    function link_verification($username, $pass) {
+    function link_verification($username, $password) {
         $UpdateData = array("is_verified" => 1, "status" => '0');
-        $whereData = array('user_name' => $username, 'password' => md5($pass));
+        $whereData = array('user_name' => $username, 'password' => md5($password));
 
         $this->db->set($UpdateData);
         $this->db->where($whereData);

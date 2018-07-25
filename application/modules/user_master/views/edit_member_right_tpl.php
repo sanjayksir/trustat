@@ -62,8 +62,18 @@
 		<?php if($this->session->userdata('admin_user_id')==1){?>
 		<div class="form-group row">
 			<div class="col-sm-6">
-			<label for="form-field-8">Industry</label>
-			<input name="industry" id="industry" type="text" class="form-control" placeholder="Industry Name" value="<?php echo $get_user_details[0]['industry'];?>"  maxlength="100">
+			<label for="form-field-8">Your Industry</label>
+			<!--<input name="industry" id="industry" type="text" class="form-control" placeholder="Industry Name" value="<?php //echo $get_user_details[0]['industry'];?>"  maxlength="100">-->
+			
+			<select  name="industry" id="industry" class="form-control" required>
+			<option value="<?php echo $get_user_details[0]['industry'];?>" selected><?php echo $get_user_details[0]['industry'];?></option>
+            <?php foreach(getAllCategory('0') as $val){?>
+				<option value="<?php echo $val['categoryName'];?>"><?php  echo $val['categoryName'];?></option> 
+			<?php }?>
+            <option value="Other">Other</option>
+            </select>
+			
+			
 			</div>
 			
 			<div class="col-sm-6">
@@ -119,14 +129,14 @@
 			  <textarea  class="form-control" name="remark" placeholder="Write your remark..."  maxlength="500"><?php echo $get_user_details[0]['remark'];?></textarea>
  			</div>  
 		</div>
-            <div class="form-group row">
+          <!--  <div class="form-group row">
                 <div class="col-sm-6">
                     <label for="form-field-8">Select Plant</label>
                     <select name="plant_id" id="plant_id" class="form-control" required="required">
                         <?php echo Utils::selectOptions('plant_id', ['options' => $plants, 'empty' => 'Select Plant', 'value' => Utils::elemValue('plant_id', $get_user_details[0])]) ?>
                     </select>
                 </div> 
-            </div>
+            </div>-->
 		 <?php if($this->uri->segment(2)=='edit_plant_controller'){?>
 		 <div class="form-group row">
 		     <div class="col-sm-6">

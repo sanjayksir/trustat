@@ -4,7 +4,7 @@
   <div class="widget-box">
 
     <div class="widget-header">
-		<?php $type = "Admin";
+		<?php $type = "CCC Admin";
 								if($this->session->userdata('admin_user_id')>1 || $this->uri->segment(2)=='add_customer_app_user'){
 									$type = "Customer App User";
 								}?>

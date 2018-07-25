@@ -26,7 +26,7 @@
 			
 		 				<?php 
 								$urlredirect 		= 'list_user';
-								$type 				= "Admin";
+								$type 				= "CCC Admin";
 								if($this->session->userdata('admin_user_id')>1 || $this->uri->segment(2)=='add_plant_controller' || $this->uri->segment(2)=='edit_plant_controller'){
 									$type 			= "Plant Controller";
 									$urlredirect 	= 'list_plant_controllers';
