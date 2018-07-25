@@ -103,10 +103,10 @@ class Barcode_inventory extends MX_Controller {
         }elseif (empty($post['printed_code'])) {
             Utils::response(['status' => false, 'message' => 'Please select printed code.']);
         }
-        $stExQuery = $this->db->get_where('printed_barcode_qrcode','print_id="'.$post['printed_order'].'" AND stock_status IN ("Received","Issued")');
+        $stExQuery = $this->db->get_where('printed_barcode_qrcode','print_id="'.$post['printed_order'].'" AND stock_status ="'.trim($post['status_type']).'"');
         if($stExQuery->num_rows()){
             $statusExist = $stExQuery->row_array();
-            Utils::response(['status' => false, 'message' => 'This order already has been '.$statusExist['stock_status']]);
+            Utils::response(['status' => false, 'message' => 'This order already has been '.trim($post['status_type'])]);
         }
         
         $barcodeDetails = $this->BarcodeInventoryModel->barcodeDetails($post['order_id']);
