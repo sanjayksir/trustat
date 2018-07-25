@@ -520,10 +520,10 @@
 					if($getEssentialAttributes['code_unity_type']=='Twin'){
 						
 						$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
-					$pdf->Text(110, $y, 'Primary Code');
+					$pdf->Text(110, $y, 'Scan & Check Genuinity');
 					
 					$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
-					$pdf->Text(150, $y, 'Secondary Code');
+					$pdf->Text(150, $y, 'Dont buy if Scratched');
 					
 					} 
 					
