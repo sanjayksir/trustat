@@ -158,7 +158,7 @@ class Barcode_inventory extends MX_Controller {
 
     public function issue_codes() {
         #Utils::debug();
-        $data['title'] = 'List of recieve codes';
+        $data['title'] = 'List of issue codes';
         $data['view'] = 'issue_codes_tpl';
         if (!empty($this->input->get('page_limit'))) {
             $limit = $this->input->get('page_limit');
@@ -172,12 +172,12 @@ class Barcode_inventory extends MX_Controller {
 
         $data["links"] = Utils::pagination('barcode_inventory/receive_codes', $data['total']);
         $data['breadcrumb'] = [
-            ['title' => 'Recieve Barcode Inventory', 'url' => null]
+            ['title' => 'Issued Barcode Inventory', 'url' => null]
         ];
         $this->load->view('template', $data);
     }
     public function issued_codes() {
-        $data['title'] = 'List of recieved codes';
+        $data['title'] = 'List of Issued codes';
         $data['view'] = 'issued_codes_tpl';
         if (!empty($this->input->get('page_limit'))) {
             $limit = $this->input->get('page_limit');
@@ -191,7 +191,7 @@ class Barcode_inventory extends MX_Controller {
         //echo "<pre>";print_r($data['items']);die;
         $data["links"] = Utils::pagination('barcode_inventory/received_codes', $data['total']);
         $data['breadcrumb'] = [
-            ['title' => 'Recieve Barcode Inventory', 'url' => null]
+            ['title' => 'Issued Barcode Inventory', 'url' => null]
         ];
         $this->load->view('template', $data);
     }

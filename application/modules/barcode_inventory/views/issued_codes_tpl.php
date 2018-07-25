@@ -37,7 +37,7 @@
                     <th>Order Date</th>
                     <th>Print Date</th>
                     <th>Source From</th>
-                    <th>Recieve Date</th>
+                    <th>Issue Date</th>
                     <th>Action</th>
                 </tr>
             </thead>

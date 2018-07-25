@@ -2,7 +2,7 @@
     <div class="widget-header widget-header-flat">
         <h5 class="widget-title bigger lighter"><?php echo $title;?></h5>
         <div class="widget-toolbar">
-            <a href="<?php echo base_url('barcode_inventory/addbarcode_transaction/Issued') ?>" class="btn btn-sm btn-success btnadd" title="Receive More Codes">Issue More Codes</a>
+            <a href="<?php echo base_url('barcode_inventory/addbarcode_transaction/Issued') ?>" class="btn btn-sm btn-success btnadd" title="Issue More Codes">Issue More Codes</a>
         </div>
     </div>
     <div class="widget-body">
@@ -38,7 +38,7 @@
                     <th>Order Date</th>
                     <th>Print Date</th>
                     <th>Source From</th>
-                    <th>Recieve Date</th>
+                    <th>Issue Date</th>
                     <th>Code Status</th>
                     <th>Action</th>
                 </tr>
@@ -98,7 +98,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Recieve Code</h4>
+                <h4 class="modal-title">Issue Code</h4>
             </div>
             <div class="modal-body"></div>
         </div>
