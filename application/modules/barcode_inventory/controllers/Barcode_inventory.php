@@ -203,9 +203,10 @@ class Barcode_inventory extends MX_Controller {
         
         if(strtolower($modal) == 'transactions' ){
             $this->db->query('UPDATE transactions_codes SET status = NOT status WHERE id='.trim($id));
-        }elseif(strtolower($modal) == 'transactions' ){
+        }elseif(strtolower($modal) == 'barcode' ){
             $this->db->query('UPDATE printed_barcode_qrcode SET active_status = NOT active_status WHERE id='.trim($id));
         }
+        //echo $this->db->last_query();die;
         Utils::response(['status' => true, 'message' => 'Status changed successfully.']);
     }
 

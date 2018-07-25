@@ -90,41 +90,41 @@
 					  
 					  
 					  
- 											<table id="missing_people" class="table table-striped table-bordered table-hover">
- 												<thead>
-													<tr>
-														<th>#</th>
- 														<th>Full Name</th>
- 														<th>User Name</th>
-														<th>Email ID</th>
-														<th>Phone</th>
-  														<th><?php echo $label;?> Plants</th>
- 														<th>Action</th>
- 													</tr>
-												</thead>
-												<tbody>
+                        <table id="missing_people" class="table table-striped table-bordered table-hover">
+                            <thead>
+                                    <tr>
+                                            <th>#</th>
+                                            <th>Full Name</th>
+                                            <th>User Name</th>
+                                            <th>Email ID</th>
+                                            <th>Phone</th>
+                                            <th><?php echo $label;?> Plants</th>
+                                            <th>Action</th>
+                                    </tr>
+                            </thead>
+                            <tbody>
 
                                         <?php $i = 0;
                                         $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
         $sno =  $page + 1;
-										if(count($userListing)>0){
+                                    if(count($userListing)>0){
                                         foreach ($userListing as $listData){
-										$i++;
-											$status = $listData['status'];
-                                            if($status ==1){
-											$status ='Active';
- 												$colorStyle="style='color:white;border-radius:10px;background-color:green;border:none;'";
-											}else{
-											$status ='Inactive';
-												$colorStyle="style='color:black;border-radius:10px;background-color:red;border:none;'";
-											}?>
-                                               <tr id="show<?php echo $listData['user_id']; ?>">
-											   <td><?php echo $sno;$sno++; ?></td>
-												<td><?php echo $listData['f_name'].' '. $listData['l_name']; ?></td>
-												<td><?php echo $listData['user_name']; ?></td>
-												<td><?php echo $listData['email_id']; ?></td>
-												<td><?php echo $listData['mobile_no']; ?></td>
- 												<td><?php echo assigned_plants($listData['user_id']); ?></td>
+                                $i++;
+                                        $status = $listData['status'];
+if($status ==1){
+                                        $status ='Active';
+                                                $colorStyle="style='color:white;border-radius:10px;background-color:green;border:none;'";
+                                        }else{
+                                        $status ='Inactive';
+                                                $colorStyle="style='color:black;border-radius:10px;background-color:red;border:none;'";
+                                        }?>
+<tr id="show<?php echo $listData['user_id']; ?>">
+                                           <td><?php echo $sno;$sno++; ?></td>
+                                                <td><?php echo $listData['f_name'].' '. $listData['l_name']; ?></td>
+                                                <td><?php echo $listData['user_name']; ?></td>
+                                                <td><?php echo $listData['email_id']; ?></td>
+                                                <td><?php echo $listData['mobile_no']; ?></td>
+                                                <td><?php echo assigned_plants($listData['user_id']); ?></td>
                                                  <td>
 
                                                     <div class="hidden-sm hidden-xs action-buttons">
