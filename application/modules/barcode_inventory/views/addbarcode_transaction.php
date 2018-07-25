@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-sm-12">
-        <div class="alert alert-msg"></div>
+        <div class="alert mdl-alert-msg"></div>
         <form name="frm" id="order-form" action="#" method="POST">
             <div class="form-group">
                 <label>Plant Name</label>
@@ -44,7 +44,7 @@
             success: function(data){
                 console.log(data.status);
                 if(data.status){
-                    $('.alert-msg').removeClass('alert-danger').addClass('alert-success').html(data.message).fadeIn('slow');
+                    $('.mdl-alert-msg').removeClass('alert-danger').addClass('alert-success').html(data.message).fadeIn('slow');
                     setTimeout(function(){
                         $(".alert").fadeOut('slow');
                         $('#modalbox').modal('toggle');
@@ -52,7 +52,7 @@
                     },2000);
                     
                 }else{
-                    $('.alert-msg').addClass('alert-danger').html(data.message).fadeIn('slow');
+                    $('.mdl-alert-msg').addClass('alert-danger').html(data.message).fadeIn('slow');
                 }
                 setTimeout(function(){
                     $(".alert").fadeOut('slow');
@@ -69,7 +69,7 @@
                 if(data.status){
                     $("#"+targetElem).html(data.data);
                 }else{
-                    $('.alert-msg').addClass('alert-danger').html(data.message).fadeIn('slow');
+                    $('.mdl-alert-msg').addClass('alert-danger').html(data.message).fadeIn('slow');
                 }
                 setTimeout(function(){
                     $(".alert").fadeOut('slow');
@@ -86,7 +86,7 @@
                 if(data.status){
                     $("#"+targetElem).html(data.data);
                 }else{                    
-                    $('.alert-msg').addClass('alert-danger').html(data.message).fadeIn('slow');
+                    $('.mdl-alert-msg').addClass('alert-danger').html(data.message).fadeIn('slow');
                 }
 		setTimeout(function(){
                     $(".alert").fadeOut('slow');
@@ -105,7 +105,7 @@
                     $("#"+targetElem).html(data.data);
                 }else{
                     $("#checkall").addClass('hide');
-                    $('.alert-msg').addClass('alert-danger').html(data.message).fadeIn('slow');
+                    $('.mdl-alert-msg').addClass('alert-danger').html(data.message).fadeIn('slow');
                 }
 		setTimeout(function(){
                     $(".alert").fadeOut('slow');

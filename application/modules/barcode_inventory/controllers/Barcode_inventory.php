@@ -108,7 +108,7 @@ class Barcode_inventory extends MX_Controller {
             $statusExist = $stExQuery->row_array();
             Utils::response(['status' => false, 'message' => 'This order already has been '.$statusExist['stock_status']]);
         }
-        die("kdls");
+        
         $barcodeDetails = $this->BarcodeInventoryModel->barcodeDetails($post['order_id']);
         
         $tData = [
