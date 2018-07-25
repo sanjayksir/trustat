@@ -386,7 +386,7 @@ class Myspidey_user_master_model extends CI_Model {
         $user_id = $this->session->userdata('admin_user_id');
         
         if (!empty($srch_string)) {
-            $this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR f_name LIKE '%$srch_string%' OR l_name LIKE '%$srch_string%') and (is_parent=$user_id)");
+            $this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR CONCAT(f_name, ' ', l_name) LIKE '%$srch_string%' OR f_name LIKE '%$srch_string%' OR l_name LIKE '%$srch_string%') and (is_parent=$user_id)");
         } else {
             if (empty($user_id)) {
                 $user_id = 1;
@@ -408,7 +408,7 @@ class Myspidey_user_master_model extends CI_Model {
         $user_id = $this->session->userdata('admin_user_id');
         
         if (!empty($srch_string)) {
-            $this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR f_name LIKE '%$srch_string%' OR l_name LIKE '%$srch_string%') and (is_parent=$user_id)");
+            $this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR CONCAT(f_name, ' ', l_name) LIKE '%$srch_string%' OR f_name LIKE '%$srch_string%' OR l_name LIKE '%$srch_string%') and (is_parent=$user_id)");
         } else {
             if (empty($user_id)) {
                 $user_id = 1;
@@ -422,6 +422,7 @@ class Myspidey_user_master_model extends CI_Model {
         if (empty($srch_string)) {
             $this->db->limit($limit, $start);
         }
+        //echo $this->db->last_query();die;
         $query = $this->db->get(); //echo '***'.$this->db->last_query();
         if ($query->num_rows() > 0) {
             $result_data = $query->result_array();

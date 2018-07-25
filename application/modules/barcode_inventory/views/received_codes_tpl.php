@@ -44,7 +44,7 @@
             <tbody>            
             <?php
             if(empty($items)):
-                echo '<tr><td colspan="11"><h3 class="text-center">There is no record.</h3></td></tr>';
+                echo '<tr><td colspan="12"><h3 class="text-center">There is no record.</h3></td></tr>';
             endif;
             $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
             $sno =  $page + 1;            

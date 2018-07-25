@@ -103,12 +103,12 @@ class Barcode_inventory extends MX_Controller {
         }elseif (empty($post['printed_code'])) {
             Utils::response(['status' => false, 'message' => 'Please select printed code.']);
         }
-        $stExQuery = $this->db->get_where('printed_barcode_qrcode','print_id="'.$post['printed_order'].'" AND stock_status IN ("Received","Issued")');
+        $stExQuery = $this->db->get_where('printed_barcode_qrcode','print_id="'.$post['printed_order'].'" AND stock_status ="'.trim($post['status_type']).'"');
         if($stExQuery->num_rows()){
             $statusExist = $stExQuery->row_array();
-            Utils::response(['status' => false, 'message' => 'This order already has been '.$statusExist['stock_status']]);
+            Utils::response(['status' => false, 'message' => 'This order already has been '.trim($post['status_type'])]);
         }
-        die("kdls");
+        
         $barcodeDetails = $this->BarcodeInventoryModel->barcodeDetails($post['order_id']);
         
         $tData = [
@@ -203,9 +203,10 @@ class Barcode_inventory extends MX_Controller {
         
         if(strtolower($modal) == 'transactions' ){
             $this->db->query('UPDATE transactions_codes SET status = NOT status WHERE id='.trim($id));
-        }elseif(strtolower($modal) == 'transactions' ){
+        }elseif(strtolower($modal) == 'barcode' ){
             $this->db->query('UPDATE printed_barcode_qrcode SET active_status = NOT active_status WHERE id='.trim($id));
         }
+        //echo $this->db->last_query();die;
         Utils::response(['status' => true, 'message' => 'Status changed successfully.']);
     }
 
