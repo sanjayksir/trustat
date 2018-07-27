@@ -97,7 +97,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="input-group">
-                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Type your query">
+                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Name,Product SKU">
                                                 <span class="input-group-btn">
                                                     <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                     <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -132,25 +132,25 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                         foreach ($product_list as $attr){
                         $i++;
                          ?>
-                            <tr id="show<?php echo $attr['id'];?>">
+                                <tr id="show<?php echo $attr['id'];?>">
                                 <td><?php echo $sno; ?></td>
                                 <td><?php echo $attr['product_name']; ?></td>
-                                                                                <td><?php echo $attr['product_sku']; ?></td>
-												 <td><div style="word-wrap:break-word; width:200px;"> 
-												 <?php $industryList =  get_industry_by_id(implode(',',json_decode($attr['industry_data'],true)));
-																		$indus='';
-																		$i=0;
-																		foreach($industryList as $rec){
-																			if($i>0){
-																				$indus.="/&nbsp;";
-																			}
-																			$indus.=$rec['categoryName'];
-																			$i++;
-																		}
-																		echo $indus;
-																		?></div>
-												 </td>
-												 <td><?php echo getUserFullNameById($attr['created_by']);?></td>
+                                <td><?php echo $attr['product_sku']; ?></td>
+                                <td><div style="word-wrap:break-word; width:200px;"> 
+                                <?php $industryList =  get_industry_by_id(implode(',',json_decode($attr['industry_data'],true)));
+                                   $indus='';
+                                   $i=0;
+                                   foreach($industryList as $rec){
+                                        if($i>0){
+                                                $indus.="/&nbsp;";
+                                        }
+                                        $indus.=$rec['categoryName'];
+                                        $i++;
+                                   }
+                                   echo $indus;
+                                   ?></div>
+                                </td>
+                                             <td><?php echo getUserFullNameById($attr['created_by']);?></td>
                                                  <td><?php echo $attr['created_date']; ?></td>
                                                   <td><form name="frm_<?php echo $attr['id'];?>" id="frm_<?php echo $attr['id'];?>" method="post" action="">
  														<div class="hidden-sm hidden-xs btn-group">
