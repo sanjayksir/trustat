@@ -88,6 +88,7 @@ class Myspidey_user_master_model extends CI_Model {
                     "last_updated_on" => date('Y-m-d H:i:s')
                 );
             }
+			/*
             $assignedPlant = [
                 "plant_id" => $frmData['plant_id'],
                 "assigned_by" => $this->session->userdata('admin_user_id')
@@ -100,7 +101,8 @@ class Myspidey_user_master_model extends CI_Model {
             }else{
                 $assignedPlant['user_id'] = $frmData['user_id'];
                 $this->db->insert("assign_plants_to_users", $assignedPlant);
-            }            
+            } 
+				*/
             //$this->db->insert("assign_plants_to_users", $insertData);
             $whereData = array(
                 'user_id' => $frmData['user_id']
