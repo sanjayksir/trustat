@@ -498,8 +498,8 @@ class User_master extends MX_Controller {
 
     public function verify() {
         $username = base64_decode($this->uri->segment(3));
-        $pass = base64_decode($this->uri->segment(4));
-        $returnData = $this->myspidey_user_master_model->link_verification($username, $pass);
+        $password = base64_decode($this->uri->segment(4));
+        $returnData = $this->myspidey_user_master_model->link_verification($username, $password);
         if ($returnData == 1) {
             $this->session->set_flashdata('success', 'Email verified successfully!  Please Wait for admin approval!.');
         } else {

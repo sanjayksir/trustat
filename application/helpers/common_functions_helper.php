@@ -4007,61 +4007,18 @@ function get_story_idea_detail( $story_id ) {
 
 
 function get_story_details( $story_id ) {
-
-
-
 	$ci = & get_instance();
-
-
-
 	$res = array();
-
-
-
-
-
-
-
 	$ci->db->select('*');
-
-
-
 	$ci->db->from('spidypick');
-
-
-
 	$ci->db->where( array( 'spidypickId' => $story_id ) );
-
-
-
-
-
-
-
 	$query = $ci->db->get();
-
-
-
 	$query->num_rows();
-
-
-
 	if ($query->num_rows() > 0) { 
-
-
-
 		$res = $query->result_array();
-
-
-
 	}
 
-
-
 	return $res[0];
-
-
-
 }
 
 
@@ -6228,6 +6185,8 @@ function get_assigned_plants_list($id){
   		}
  		return $res; 
  }
+ 
+ 
   
  function get_active_users($id)
   {
