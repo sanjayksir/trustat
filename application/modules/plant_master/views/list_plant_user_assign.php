@@ -44,7 +44,7 @@
                             <div class="widget-header widget-header-flat">
                                 <h5 class="widget-title bigger lighter">List / Assign Plant to Plant Controllers</h5>
                                 <div class="widget-toolbar">
-                                    <a href="<?php echo base_url('plant_master/assign_plant_to_users') ?>" class="btn btn-xs btn-warning" title="Assign Plant">Assign Plant </a>
+                                    <a href="<?php echo base_url('plant_master/assign_plant_to_users') ?>" class="btn btn-xs btn-warning" title="Assign Plant to Plant Controller">Assign Plant to Plant Controller</a>
                                 </div>
                             </div>
                             <div class="widget-body">
@@ -73,7 +73,7 @@
                                     <thead>
                                         <tr>
                                             <th>Sno</th>
-                                            <th>Plant User Name</th>
+                                            <th>Plant Controller Name</th>
                                             <th>Email ID</th>
                                             <th>Phone</th>
                                             <th>Plant Name</th>

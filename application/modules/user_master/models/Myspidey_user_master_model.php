@@ -148,12 +148,13 @@ class Myspidey_user_master_model extends CI_Model {
                 ];
                 $this->db->insert("assign_plants_to_users", $assignedPlant);
 				*/
+				$first_name = $frmData['f_name'];
                 $full_name = $frmData['f_name'] . ' ' . $frmData['l_name'];
                 $username = $frmData['user_name'];
 				
                 // echo $this->db->last_query();exit;
 				$email = $frmData['user_email']; 
-                $this->user_registration_mail($full_name, $username, $password, $email);
+                $this->user_registration_mail($first_name, $full_name, $username, $password, $email);
                 $this->session->set_flashdata('success', 'User Added Successfully!');
                 return 1;
             }
@@ -161,24 +162,31 @@ class Myspidey_user_master_model extends CI_Model {
         }
     }
 
-	public function user_registration_mail($full_name = '', $username = '', $password = '', $email) {//echo '***'.$email;exit;
+	public function user_registration_mail($first_name = '', $full_name = '', $username = '', $password = '', $email) {//echo '***'.$email;exit;
         $link = $this->create_link($username, $password);
-        $subject = 'Admin:: Welcome to Tracking Portal';
-        $body = "<b>Hello <b>" . $full_name . "</b>,
-								</b><br><br><r>
-								Your registration process has been complete.
-								<br>Your login credentials are:<br />
-								<br>Your can login with the given credentials after admin approval:<br />
-								User Name:  " . $username . "<br>
-								Password is:<b>" . $password . '</b>
-								Verify your email by clicking here:' . $link . '
-								<br>Please wait for admin approval!<br><br>Thanks & Regards<br><b>Team Admin</b>';
+        $subject = $first_name . '; Welcome to your new Tracek Account';
+        $body = "<b>Greetings!!! from Innovigent Solutions,</b><br />
+								<br />
+								Your registration process has been initiated at our end.<br />
+								<br />
+								Your login user id and password are as under:<br />
+								<br />
+								User Name:  " . $username . "<br />
+								Password is:<b>" . $password . '</b><br /><br />
+								Please click on below link to activate your <b>“Tracek”</b> account:<br />
+								' . $link . ' <br /><br />
+								Post email verification, you can update your account profile. In case of any assistance, please send us an email CustomerSupport@innovigents.com or call at +91-9899703291. <br /><br />				
+								
+								
+								Regards <br />
+								<b>Team Admin</b><br /> 
+								<img src="http://innovigents.com/uploads/rwaprofilesettings/thumb/thumb_tlogo_1523866687.jpg" alt="ISPL Admin" height="40" width="80">';
         $mail_conf = array(
             'subject' => $subject,
             'to_email' => $email,
             'cc' => 'superadmin@innovigents.com',
             'from_email' => 'admin@innovigents.com',
-            'from_name' => 'Admin',
+            'from_name' => 'ISPL Admin',
             'body_part' => $body
         );
         if ($this->dmailer->mail_notify($mail_conf)) {

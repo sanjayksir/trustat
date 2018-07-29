@@ -501,7 +501,7 @@ class User_master extends MX_Controller {
         $password = base64_decode($this->uri->segment(4));
         $returnData = $this->myspidey_user_master_model->link_verification($username, $password);
         if ($returnData == 1) {
-            $this->session->set_flashdata('success', 'Email verified successfully!  Please Wait for admin approval!.');
+            $this->session->set_flashdata('success', 'Email verification of your account is successful!  Please Wait for admin approval!.');
         } else {
             $this->session->set_flashdata('success', 'Registration not Approved!');
         }

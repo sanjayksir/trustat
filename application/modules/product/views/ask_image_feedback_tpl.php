@@ -223,7 +223,8 @@ function validateSrch(){
 }	
 
 function add_question_to_product(product_id, quest_id){
-	var r = confirm("Sure to add this question as product feedback?");
+	//var r = confirm("Sure to add this question as product feedback?");
+	var r = true;
 	if (r == true) {
 		if ($("#quest_"+quest_id).prop('checked')==true){ 
 			var Chk =1; 

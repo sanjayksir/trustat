@@ -83,11 +83,12 @@
                                 <thead>
                                     <tr>
                                         <th>SNo.</th>
+										<th><?php //echo $label; ?> Customer</th>
                                         <th>Full Name</th>
                                         <th>User Name</th>
                                         <th>Email ID</th>
                                         <th>Phone</th>
-                                        <th><?php echo $label; ?> By</th>
+                                        
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -109,11 +110,12 @@
                                     ?>
                                     <tr id="show<?php echo $listData['user_id']; ?>">
                                     <td><?php echo $sno; ?></td>
+									<td><?php echo getUserNameById($listData['is_parent']); ?></td>
                                     <td><?php echo $listData['f_name'] . ' ' . $listData['l_name']; ?></td>
                                     <td><?php echo $listData['user_name']; ?></td>
                                     <td><?php echo $listData['email_id']; ?></td>
                                     <td><?php echo $listData['mobile_no']; ?></td>
-                                    <td><?php echo getUserNameById($listData['is_parent']); ?></td>
+                                    
                                     <td>
                                         <div class="hidden-sm hidden-xs action-buttons">
                                             <a href="<?php echo base_url() . 'user_master/view_user/' . $listData['user_id']; ?>" class="btn btn-xs btn-success"  target="_blank" title="View"><i class="fa fa-eye"></i></a>
