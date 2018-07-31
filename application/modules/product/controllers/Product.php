@@ -446,7 +446,25 @@ function list_assigned_products() {
 		 $data					= array();
    		 $this->load->view('add_image_feedback', $data);
 	}
-
+	
+	function edit_image_feedback(){
+		 $data					= array();
+		 $data['product_image_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+   		 $this->load->view('edit_image_feedback', $data);
+	}
+   /*
+	function delete_attribute($id){//echo '**'.$id;exit;
+	 	$data = $this->Product_model->delete_attr($id);
+	 }
+	 */
+	 
+	 function delete_feedback_question($question_id){//echo '**'.$id;exit;
+	 	$data = $this->Product_model->delete_feedback_question($question_id);
+	 }
+	
+	
+	
+	
 	function add_video_feedback(){
 		 $data					= array();
    		 $this->load->view('add_video_feedback', $data);

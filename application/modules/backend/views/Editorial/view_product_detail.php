@@ -63,6 +63,15 @@
                                                     <div class="space"></div>
                                                     <div class="form-group">
 														<div class="add-spidey">
+														<div class="row">
+																		<div class="col-xs-12"> 
+																			<div class="col-xs-3 col-sm-3">
+																			 <label><strong>Company Name :</strong></label></div>
+																			 <div class="col-xs-3 col-sm-3">
+														<?php echo getUserFullNameById($details['created_by'])?></div>
+																		</div>
+																</div>
+																<br /><br />
 															<div class="row">
 																		<div class="col-xs-12"> 
 																			<div class="col-xs-3 col-sm-3">

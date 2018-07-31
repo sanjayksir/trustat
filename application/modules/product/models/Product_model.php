@@ -272,6 +272,13 @@
         return $this->db->get()->result_array();
     }
 	
+	function fetch_feedback_question_detail($id) {
+		$this->db->select("*");
+		$this->db->from("feedback_question_bank");
+		$this->db->where("question_id", $id);
+        return $this->db->get()->result_array();
+    }
+	
 	
 	function saveAttributeList(){
 	$level = getAttrDepth($this->input->post('parent'),1);
@@ -308,6 +315,12 @@
 			redirect('product/list_product');
 		}
 		
+		function delete_feedback_question($question_id){
+			$this->db->query("delete from feedback_question_bank where question_id='".$question_id."'");
+			$this->session->set_flashdata('success', 'Feedback Question Deleted Successfully!');
+			redirect('product/list_product');
+		}
+		
 		function checkExistsOtherIndustry($indName='',$remark){
 			$returnId=0;
 			
@@ -325,7 +338,7 @@
 				}
 			}
  		}
-		
+		// Sanjay
 		function save_feedback($postData){
 			 $product_id  	 = $postData['ProductID'];
 			 $question_type  = $postData['QuestionType'];
@@ -336,6 +349,27 @@
 			 $answer4 		 = $postData['answer4'];
 			 $correct_answer = $postData['correctAns'];
 			 
+			 $question_id = $postData['QuestionID'];
+			 if(!empty($question_id)){
+		 	 $updateArr=array(
+					//"product_id"	  => $product_id,
+					//"question_type"	  => $question_type,
+					"question"		  => $question,
+					"answer1"	 	  => $answer1,
+					"answer2"		  => $answer2,
+					"answer3"		  => $answer3,
+					"answer4"		  => $answer4,
+					"correct_answer"  => $correct_answer,
+					"status" 		  => 1
+ 				);
+				//echo '<pre>';print_r($insertData);exit;
+				$this->db->where('question_id', $question_id);
+				if($this->db->update("feedback_question_bank", $updateArr)) {// echo '===query===='.$this->db->last_query();
+					$this->session->set_flashdata('success', 'Question Updated Successfully!');
+					return true;
+	
+				}return false; 
+		 }else{
 			 $insertData=array(
 					"product_id"	  => $product_id,
 					"question_type"	  => $question_type,
@@ -354,6 +388,7 @@
 					return true;
 				}return false; 
 		}
+ }
 		
 		// Product Description Feedback Questions
 		function feedback_listing($limit,$start,$srch_string='', $id) {

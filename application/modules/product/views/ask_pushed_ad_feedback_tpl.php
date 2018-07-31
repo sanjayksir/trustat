@@ -122,6 +122,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                              <th class="hidden-480">Option 3</th>
                                              <th class="hidden-480">Option 4</th>
                                              <th class="hidden-480">Answer</th>
+											 <th class="hidden-480">Edit/Delete</th>
                                             <!-- <th>Status</th>-->
                                           </tr>
                                      </thead>
@@ -148,7 +149,19 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                                 <td><?php echo $attr['answer3']; ?></td>
                                                 <td><?php echo $attr['answer4']; ?></td>
                                                 <td><?php if(!empty($attr['correct_answer'])){echo 'Option-'.$attr['correct_answer'];}; ?></td>
-                                               <!-- <td><input ty<?php echo $attr['status']; ?></td>-->
+                                               <td>
+											   <form name="frm_<?php echo $attr['question_id'];?>" id="frm_<?php echo $attr['question_id'];?>" method="post" action="">
+ 														<div class="hidden-sm hidden-xs btn-group">
+   															<a href="<?php echo base_url();?>product/edit_image_feedback/<?php echo $attr['question_id'];?>" class="btn btn-xs btn-info">
+ 																<i class="ace-icon fa fa-pencil bigger-120"></i>
+ 															</a>
+  															<a href="javascript:void(0);" class="btn btn-xs btn-danger" onclick="delete_feedback_question('<?php echo $attr['question_id'];?>');">
+ 																<i class="ace-icon fa fa-trash-o bigger-120"></i>
+ 															</a>
+                                                            <input type="hidden" name="del_submit" value="<?php echo $attr['question_id'];?>" />
+														</div>
+														</form>
+												 </td>
                                               </tr>
                                          <?php } ?>
                                      </tbody>
@@ -245,6 +258,13 @@ function add_question_to_product(product_id, quest_id){
 	} 
 }
  
+ 
+ function delete_feedback_question(question_id){  if (confirm("Sure to Delete this feedback question?") == true) {
+       window.location.href="<?php echo base_url();?>product/delete_feedback_question/"+question_id;
+    } else {
+        return false;
+    }
+}
 </script>
 
             <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">

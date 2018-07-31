@@ -284,7 +284,6 @@ function delete_attr(id){  if (confirm("Sure to Delete SKU") == true) {
     } else {
         return false;
     }
-	
 }
 </script>
 
