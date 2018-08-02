@@ -194,6 +194,8 @@ class Customer extends ApiController {
         }else{
             $userPlant = $this->db->get_where('assign_plants_to_users',['user_id'=>$user->user_id])->row();
             $user->plant_id = $userPlant->plant_id;
+			$user->designation_name_slug = getRoleSlugById($user->designation_id);
+			$user->designation_name_value = getRoleNameById($user->designation_id);
             $this->response(['status'=>true,'message'=>'Login done successfully.','data'=>$user]);
         }
         

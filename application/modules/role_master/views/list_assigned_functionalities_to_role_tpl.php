@@ -7,7 +7,7 @@
         } catch (e) {
         }
     </script>
-    <?php $label = '/ Assign Plant to Plant Controllers'; ?>
+    <?php $label = '/ Assigned Functionalities to Role'; ?>
 
     <?php $this->load->view('../includes/admin_sidebar'); ?>
 
@@ -42,9 +42,9 @@
                     <div class="col-xs-12">
                         <div class="widget-box widget-color-blue">
                             <div class="widget-header widget-header-flat">
-                                <h5 class="widget-title bigger lighter">List / Assign Plant to Plant Controllers</h5>
+                                <h5 class="widget-title bigger lighter">List Assigned Functionalities to Role </h5>
                                 <div class="widget-toolbar">
-                                    <a href="<?php echo base_url('plant_master/assign_plant_to_users') ?>" class="btn btn-xs btn-warning" title="Assign Plant to Plant Controller">Assign Plant to Plant Controller</a>
+                                    <a href="<?php echo base_url('role_master/assign_functionalities_to_role') ?>" class="btn btn-xs btn-warning" title="Assign Plant to Plant Controller"> Assign Functionalities to Role </a>
                                 </div>
                             </div>
                             <div class="widget-body">
@@ -73,12 +73,10 @@
                                     <thead>
                                         <tr>
                                             <th>Sno</th>
-                                            <th>Plant Controller Name</th>
-                                            <th>Email ID</th>
-                                            <th>Phone</th>
-                                            <th>Plant Name</th>
-                                            <th>Created on</th>
-                                            <th>Action</th>
+                                            <th>Role Name</th>
+                                            <th>Assign Functionalities</th>
+                                            <th>Updated on</th>
+                                           <!-- <th>Action</th>-->
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -99,27 +97,25 @@
                                                     $colorStyle = "style='color:black;border-radius:10px;background-color:red;border:none;'";
                                                 }
                                                 ?>
-                                                <tr id="show<?php echo $listData['plant_id']; ?>">
+                                                <tr id="show<?php echo $listData['id']; ?>">
                                                     <td><?php echo $sno; ?></td>
-                                                    <td><?php echo $listData['user_name']; ?></td>
-                                                    <td><?php echo $listData['email_id']; ?></td>
-                                                    <td><?php echo $listData['mobile_no']; ?></td>
-                                                    <td><?php $plants = get_assigned_plant_user_list($listData['user_id']);
+                                                    <td><?php echo $listData['role_name_value']; ?></td>
+                                                    <td><?php $plants = get_assigned_functionalities_to_role_list($listData['id']);
 
-
-                                                echo get_plants_name_by_id($plants);
+//echo $listData['id'];
+                                                echo get_functionality_name_by_id($plants);
                                                 ?></td>
 
                                                     <td><?php echo date('d/M/Y', strtotime($listData['created_on'])); ?></td>
-                                                    <td>
+                                                   <!-- <td>
                                                         <div class="hidden-sm hidden-xs action-buttons">
-                                                            <!--<a href="<?php echo base_url() . 'plant_master/view_plant/' . $listData['user_id']; ?>" class="blue" target="_blank" title="View"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>-->
+                                                            <!--<a href="<?php echo base_url() . 'plant_master/view_plant/' . $listData['user_id']; ?>" class="blue" target="_blank" title="View"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>
         <?php echo anchor("plant_master/assign_plant_to_users/" . $listData['user_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green', 'title' => 'Edit')); ?>
                                                             <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['user_id']; ?>" value="<?php echo $status; ?>" onclick="return change_status('<?php echo $listData['user_id']; ?>', this.value, '<?php echo $plants; ?>');" />
 
                                                         </div>
 
-                                                    </td>
+                                                    </td>-->
                                                 </tr>
                                             <?php $sno++; 
                                                 }

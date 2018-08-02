@@ -278,9 +278,6 @@ function getChildFromParent_ATTR($id){
 
 
 function getUserNameById($id){
-
-
-
 	$res = 0;
 
 
@@ -5400,39 +5397,12 @@ function get_city_id($cityname)
 
 
 function truncateString($str, $chars, $to_space, $replacement="..") {
-
-
-
    if($chars > strlen($str)) return $str;
-
-
-
-
-
-
-
    $str = substr($str, 0, $chars);
-
-
-
-
-
-
-
    $space_pos = strrpos($str, " ");
-
-
-
    if($to_space && $space_pos >= 0) {
-
-
-
        $str = substr($str, 0, strrpos($str, " "));
-
-
-
    }
- 
    return($str . $replacement);
  }
  
@@ -5667,6 +5637,64 @@ function getAllCategory($parent=''){
 
 
 }
+
+
+function getAllRoles(){
+	
+ 	$res 		= '';
+
+ 	$ci 		= & get_instance();
+
+	$ci->db->select('id, role_name_slug, role_name_value');
+
+	$ci->db->from('role_master');
+	
+		$ci->db->where(array('status'=>'1','id!='=>'2'));
+		//$ci->db->where('status',1);
+	
+	
+	//$ci->db->where(array('status'=>'1','spideyImage!='=>''));	
+	$query = $ci->db->get();  echo $ci->db->last_query(); 
+
+	if ($query->num_rows() > 0) {
+
+ 		$res = $query->result_array();
+
+ 	//	$res = $res[0]['categoryName'];
+
+	}		
+ 	return $res;
+}
+
+
+function getRoleNameById($id){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('role_name_value');
+	$ci->db->from('role_master');
+	$ci->db->where(array('status'=>'1', 'id'=>$id));
+ 	$query = $ci->db->get();
+	if ($query->num_rows() > 0) {
+		$res = $query->result_array();
+		$res = ucfirst($res[0]['role_name_value']);
+ 	}
+	return $res;
+}
+
+function getRoleSlugById($id){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('role_name_slug');
+	$ci->db->from('role_master');
+	$ci->db->where(array('status'=>'1', 'id'=>$id));
+ 	$query = $ci->db->get();
+	if ($query->num_rows() > 0) {
+		$res = $query->result_array();
+		$res = ucfirst($res[0]['role_name_slug']);
+ 	}
+	return $res;
+}
+
 
 function getAllCategory_ATTR($parent=''){
 
@@ -5991,6 +6019,37 @@ function getParentUsers($id='',$status=''){
 	return($res);
  }
  
+ //Sanjay
+ function get_all_active_functionalities($user_id){
+	$res='0';
+	$ci = & get_instance();
+	$admin_id 				= $ci->session->userdata('admin_user_id');	
+	if(!empty($user_id)){
+ 		$ci->db->select('id,functionality_name_slug,functionality_name_value,status');
+		$ci->db->from('functionality_master');
+		$ci->db->where(array('status'=>'1'));
+		
+		$query= $ci->db->get();
+		$res = $query->result_array();
+	}
+	return($res);
+ }
+ 
+ function get_active_roles()
+  {
+ 		$res = 0;
+ 		$ci = & get_instance();
+ 		$ci->db->select('*');
+   		$ci->db->from('role_master');
+ 		$ci->db->where(array('status'=>'1'));
+   		$query = $ci->db->get();//echo $ci->db->last_query();
+  		if ($query->num_rows() > 0) {
+  			$res = $query->result_array();
+  		}
+ 		return $res; 
+ } 
+ 
+ 
  function get_all_products_sku($user_id){
 	$res='0';
 	if(!empty($user_id)){
@@ -6078,6 +6137,19 @@ function get_assigned_plant_user_list($user_id){
  	return $res_arr[0]['plant_id'];
  } 
  
+ function get_assigned_functionalities_to_role_list($user_id){
+	$res='0';
+	$ci = & get_instance();
+	 $admin_id 				= $ci->session->userdata('admin_user_id');	
+ 		if(!empty($user_id)){ 
+			$ci->db->select('group_concat(functionality_id) as functionality_id');
+			$ci->db->from('assign_functionalities_to_role');
+			$ci->db->where(array('role_id'=>$user_id, 'assigned_by'=>$admin_id));
+			$query= $ci->db->get();//echo '***'. $ci->db->last_query();exit;
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['functionality_id'];
+ }
  
  function get_assigned_plant_user_list2($user_id){
 	$res='0';
@@ -6107,6 +6179,20 @@ function get_assigned_plant_user_list($user_id){
  	return $res_arr[0]['name'];
  }
 
+  function get_functionality_name_by_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$ci->db->select('group_concat(functionality_name_value) as name');
+			$ci->db->from('functionality_master');
+			$ci->db->where_in('id',explode(',',$id));
+			$query= $ci->db->get();//echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['name'];
+ }
+ 
  
  function checkProductsId_having_other_industry($product_id){
 	 $ci = & get_instance();

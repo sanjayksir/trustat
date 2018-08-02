@@ -1,6 +1,6 @@
 <?php
 
-class plant_master_model extends CI_Model {
+class role_master_model extends CI_Model {
 
     function __construct() {
         parent::__construct();
@@ -329,11 +329,11 @@ class plant_master_model extends CI_Model {
         return '0';
     }
 
-    function save_assign_plants_users($plant_array, $plant_controller_user, $assigned_by, $is_edit = '') {  // echo '<pre>cccccccc';print_r($this->uri->segment(3));exit;
+    function save_assign_plants_users($plant_array, $users, $is_edit = '') {  // echo '<pre>cccccccc';print_r($this->uri->segment(3));exit;
         $plant_arr = json_decode($plant_array, true);
         $user_id = $this->session->userdata('admin_user_id');
         if ($this->input->post('is_edit') == 1) {
-            $this->db->query('delete from assign_plants_to_users where user_id="' . $plant_controller_user . '" and assigned_by="' . $assigned_by . '"');
+            $this->db->query('delete from assign_functionalities_to_role where user_id="' . $users . '" and assigned_by="' . $user_id . '"');
         }
         foreach ($plant_arr as $plants) {###ediiit case
             //if($this->input->post('is_edit')==1){
@@ -346,17 +346,17 @@ class plant_master_model extends CI_Model {
 
             //}else{###add case
             $insertData = array(
-                "plant_id" => $plants,
-                "user_id" => $plant_controller_user,
-                "assigned_by" => $assigned_by
+                "functionality_id" => $plants,
+                "role_id" => $users,
+                "assigned_by" => $user_id
             );
             if ($this->check_exists_users_plant($plants, $users) == 0) {
-                $this->db->insert("assign_plants_to_users", $insertData);
-                 // echo $this->db->last_query();
+                $this->db->insert("assign_functionalities_to_role", $insertData);
+                // echo $this->db->last_query();
             }
             //}
         }
-        $this->session->set_flashdata('success', 'Plant Assigned Successfully!');
+        $this->session->set_flashdata('success', 'Functionality Assigned Successfully!');
         return 1;
     }
 

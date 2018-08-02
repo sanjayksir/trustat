@@ -50,22 +50,36 @@
 			</div>
 		</div>
 		<div class="form-group row">
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			  <label for="form-field-8">First Name</label>
 			<input name="f_name" id="f_name" type="text" class="form-control" placeholder="First Name"  maxlength="30">
 			</div>
 			 
 			
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			  <label for="form-field-8">Last Name</label>
 			 <input name="l_name" id="l_name" type="text" class="form-control" placeholder="Last Name"  maxlength="30">
+			</div>
+			<div class="col-sm-4">
+			<label for="form-field-8">Select Role of user-</label>
+		   <select  name="role" id="role" class="form-control" required>
+           <option value="">-Select Role-</option>
+		   <?php if($this->session->userdata('admin_user_id')==1){?>
+		   <option value="2">CCC Admin</option>
+		   <?php } ?>
+            <?php foreach(getAllRoles('0') as $val){?>
+				<option value="<?php echo $val['id'];?>"><?php  echo $val['role_name_value'];?></option> 
+			<?php }?>
+            <option value="other">Other</option>
+			 
+            </select>
 			</div>
 		</div>
 		
 		<?php if($this->session->userdata('admin_user_id')==1){?>
 		<div class="form-group row">
 			<div class="col-sm-6">
-			<label for="form-field-8">Select your Industry name</label>
+			<label for="form-field-8">Select the Industry of user</label>
 			<!--<input name="industry" id="industry" type="text" class="form-control" placeholder="Industry Name"  maxlength="100">-->
 		   <select  name="industry" id="industry" class="form-control" required>
            <option value="">-Select Industry-</option>
@@ -75,6 +89,9 @@
             <option value="other">Other</option>
             </select>
 			</div>
+			
+			
+			
 			
 			<div class="col-sm-6">
 			  <label for="form-field-8">Pan</label>

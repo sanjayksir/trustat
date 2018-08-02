@@ -46,15 +46,26 @@
 		</div>
 		
 		<div class="form-group row">
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			  <label for="form-field-8">First Name</label>
 			<input name="f_name" id="f_name" type="text" value="<?php echo $get_user_details[0]['f_name'];?>" class="form-control" placeholder="First Name"  maxlength="30">
 			</div>
 			 
 			
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			  <label for="form-field-8">Last Name</label>
 			 <input name="l_name" id="l_name" type="text" value="<?php echo $get_user_details[0]['l_name'];?>" class="form-control" placeholder="Last Name"  maxlength="30">
+			</div>
+			
+			<div class="col-sm-4">
+			<label for="form-field-8">Select Role of user</label>
+		   <select  name="role" id="role" class="form-control" required>
+           <option value="<?php echo $get_user_details[0]['designation_id'];?>" selected><?php echo getRoleNameById($get_user_details[0]['designation_id']);?></option>
+            <?php foreach(getAllRoles('0') as $val){?>
+				<option value="<?php echo $val['id'];?>"><?php  echo $val['role_name_value'];?></option> 
+			<?php }?>
+            <option value="other">Other</option>
+            </select>
 			</div>
 		</div>
 		

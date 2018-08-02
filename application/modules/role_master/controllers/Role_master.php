@@ -1,9 +1,9 @@
 <?php defined('BASEPATH') OR exit('No direct script access allowed');
 
-  class Plant_master extends MX_Controller {
+  class role_master extends MX_Controller {
       public function __construct() { 
         parent::__construct();
- 		$this->load->model(array('plant_master_model','myspidey_user_group_permissions_model'));
+ 		$this->load->model(array('role_master_model','myspidey_user_group_permissions_model'));
   		$this->load->helper(array('common_functions_helper'));
    		$user_id 	= $this->session->userdata('admin_user_id');
 		$this->load->library('pagination');
@@ -162,14 +162,12 @@
 	
 		 }
 		 
-		public function save_assign_user_to_pant() {
+		public function save_assigned_functionalities_to_role() {
 			$result = '';
-            //echo '<pre>';print_r($_POST);exit;
 			$plant_array = json_encode($this->input->post('plants'));
-		    $assigned_by		         = $this->input->post('user'); 
-            $plant_controller_user		 = $this->input->post('plant_controller_val'); 
- 			if(count($this->input->post('plants'))>0 && count($plant_controller_user)>0){
-				$result = $this->plant_master_model->save_assign_plants_users($plant_array, $plant_controller_user, $assigned_by);	
+		    $user		 = $this->input->post('user'); 
+ 			if(count($this->input->post('plants'))>0 && count($user)>0){
+				$result = $this->role_master_model->save_assign_plants_users($plant_array, $user);	
 			}
 			echo  $result;exit;
  		 } 
@@ -232,10 +230,10 @@
      }
 	 
 	 
-	  public function assign_plant_to_users() {
+	  public function assign_functionalities_to_role() {
  		 $data						= array();
- 		 $data['get_user_details'] 	= $this->plant_master_model->get_plant_details();
-   		 $this->load->view('assign_plant_to_users_tpl', $data); 
+ 		 $data['get_user_details'] 	= $this->role_master_model->get_plant_details();
+   		 $this->load->view('assign_functionalities_to_role_tpl', $data); 
      }
 	 
 	 public function getPlantList() {
@@ -269,28 +267,29 @@
           <?php }
 			return $result;
 	 }	
-      
-      
-      public function getActivePlantControllerList() {
-			$result = '';
-			$user_id 			= $this->input->post('id');
-			 
- 			$plant_controller_list 	= get_active_users($user_id,1);
-			 foreach($plant_controller_list as $res){?>
-				<option value="<?php echo $res['user_id'];?>" <?php if($this->uri->segment(3)==$res['user_id']){echo 'selected';}?>><?php echo ucfirst($res['user_name']);?></option>
-          <?php }
-           
-			return $result;
-	 }	
-      
-      
-      
 	
-	  public function list_assigned_plants_user() {
+	public function getActiveFunctionalitiestList() {
+			$result = '';
+			$id 			= $this->input->post('id');
+			$user_id 		= $this->session->userdata('admin_user_id');
+			## assigned plants array
+ 			$assigned_arr = explode(',',get_assigned_active_plants_list($id));
+			
+			//print_r($assigned_arr);exit;
+			
+ 			$product_data 	= get_all_active_functionalities($user_id);
+			 foreach($product_data as $res){?>
+				<option value="<?php echo $res['id'];?>" <?php if(in_array($res['id'],$assigned_arr )){echo 'selected';}?>><?php echo $res['functionality_name_value'];?></option>
+          <?php }
+			return $result;
+	 }
+	
+	
+	  public function list_assigned_functionalities_to_role() {
 			 $data					= array();
 			 $parent_id				= $this->session->userdata('admin_user_id');		
-			 $data['plant_data'] 	= get_all_users($parent_id);
-			 $this->load->view('list_plant_user_assign', $data);
+			 $data['plant_data'] 	= get_active_roles($parent_id);
+			 $this->load->view('list_assigned_functionalities_to_role_tpl', $data);
      	}
 		
 		

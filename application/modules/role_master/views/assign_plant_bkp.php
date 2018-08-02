@@ -23,7 +23,7 @@
         <ul class="breadcrumb">
 
           <li> <i class="ace-icon fa fa-home home-icon"></i> <a href="<?php echo site_url(); ?>">Home</a> </li>
-				<?php  $constant = "Assign Plant to Plant Controller" ;?>
+				<?php  $constant = "Assign Plant" ;?>
           <li class="active">Administration</li><li class="active"><?php echo $constant;?></li>
 
         </ul>
@@ -76,7 +76,7 @@
 
                     <!--left end---->
 
-                    <div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/list_assigned_plants_user" class="btn btn-primary pull-right" title="List Assign Plant to Plant Controllers">List Assign Plant to Plant Controllers</a></div>
+                    
 
                     <div class="col-xs-12">
 
@@ -96,7 +96,7 @@
 
     <div class="widget-header">
 
-      <h4 class="widget-title">Assign Plant to Plant Controller</h4>
+      <h4 class="widget-title">Assign Plant</h4>
 
       <div class="widget-toolbar"> <a href="#" data-action="collapse"> <i class="ace-icon fa fa-chevron-up"></i> </a> <a href="#" data-action="close"> <i class="ace-icon fa fa-times"></i> </a> <a href="#" class="show_loader"  data-action="reload" style="display:none;"><i class="ace-icon fa fa-refresh"></i></a> </div>
 
@@ -107,93 +107,40 @@
     <div id="ajax_msg"></div>
 
       </div>
-<?php 
-$user_id 	= $this->session->userdata('admin_user_id');//echo '<pre>';print_r($this->session->userdata('admin_user_id'));
 
-if( $this->uri->segment(3)!=''){
-	$user_id=	$this->uri->segment(3);
-	$UserData = get_parent_user($user_id,'1'); 
-	$SelectDD='';
-}else{
-	$SelectDD='1';
-	$UserData = get_active_users($user_id,'1');
-}
-   //echo '<pre>';print_r($UserData) ;
-
-//echo '<pre>';print_r($UserData);?>
       <form name="user_frm" id="user_frm" action="#" method="POST" onsubmit="return saved_assigned_data();">
-<input type="hidden" name="is_edit" value="<?php echo ($this->uri->segment(3))?1:0;?>" />
+
         <div class="widget-main">
 		 
 		<div class="form-group row">
-			<div class="col-sm-4">
-			<label for="form-field-8">Select CCC admin User</label>
-            <select class="form-control" name="user" id="user" onchange="return get_plants_controller(this.value);">
-			<?php if($SelectDD!=''){?><option value="">-Select Plant Controller-</option>
-            <?php }
- 			//$plant_data = get_all_plants($user_id);
- 			foreach($UserData as $res){?>
-            <option value="<?php echo $res['user_id'];?>" <?php if($this->uri->segment(3)==$res['user_id']){echo 'selected';}?>><?php echo ucfirst($res['user_name']);?></option>
- 			<?php }?>
-            </select> 
+			<div class="col-sm-6">
+			<label for="form-field-8">Plant Name</label>
+            <select class="form-control" name="plants[]" id="plants" multiple="multiple">
+            <?php 
+			$user_id 	= $this->session->userdata('admin_user_id');
+			$plant_data = get_all_plants($user_id);
+			foreach($plant_data as $res){?>
+            <option value="<?php echo $res['plant_id'];?>"><?php echo $res['plant_name'];?></option>
+            <?php }?>
+            </select>
+			 
+			 
 			</div>
 			
-			<!--------------------------------- Plant Controller DD ------------------------ -->
-			<div class="col-sm-4">
-                <label for="form-field-8">Select Plant Controller User</label>
-                <select class="form-control" name="plant_controller_val" id="plant_controller_val" onchange="return get_plants(this.value);">
-                    <option value="">Select Plant Controller</option>
-                </select> 
-			</div>
-			<!--------------------------------- Plant Controller DD ------------------------ -->
-			
-			
-			
-			
-			
-			<div class="col-sm-4">
-			  <label for="form-field-8">Select Plant(Press Ctrl to Select Multiple plants)</label>
-             <select class="form-control" name="plants[]" id="plants" multiple="multiple" >
-             
+			<div class="col-sm-6">
+			  <label for="form-field-8">SKU/Product Name</label>
+             <select class="form-control" name="sku_product[]" id="sku_product" multiple="multiple">
+             <?php 
+				$user_id 	= $this->session->userdata('admin_user_id');
+				$product_data = get_all_products_sku($user_id);
+				foreach($product_data as $res){?>
+            <option value="<?php echo $res['id'];?>"><?php echo $res['product_name'];?></option>
+            <?php }?>
              </select>
 			</div>
 		</div>
 		 
-		 <script>
-		 function get_plants(id){
-		 	if(id!=''){
-				$.ajax({
-				type:'POST',
-				url:'<?php echo base_url().'plant_master/getActivePlantList'?>',
-				data:{id:id},
-				success:function(msg){
-					$("#plants").html(msg);
-				}
-				})
-		 	}
-		 }
-             
-             
-        
-        function get_plants_controller(id){
-            $('#plants').find('option').remove().end().append('<option value="0"></option>');
-		 	if(id!=''){
-				$.ajax({
-				type:'POST',
-				url:'<?php echo base_url().'plant_master/getActivePlantControllerList'?>',
-				data:{id:id},
-				success:function(msg){
-					$("#plant_controller_val").html(msg);
-				}
-				})
-		 	}
-		 }     
-             
-             
-		 </script>
-		 <?php if(!empty($this->uri->segment(3))){?>
-		 <script>get_plants(<?php echo $this->uri->segment(3);?>);</script>
-		 <?php }?>
+		 
  		 
             <hr>
 
@@ -377,14 +324,14 @@ $.ajax({
 				$(".show_loader").show();
 				$(".show_loader").click();
 		},
-		url: "<?php echo base_url(); ?>plant_master/save_assign_user_to_pant/",
+		url: "<?php echo base_url(); ?>plant_master/save_assign_plant/",
 		data: dataSend,
-		success: function (msg) { 
+		success: function (msg) {
 			if(parseInt(msg)==1){
-				$('#ajax_msg').text("Plant Assigned Successfully!").css("color","green").show();
+				$('#ajax_msg').text("Plant Added Successfully!").css("color","green").show();
 				$('#blah').attr('src', '').hide();
 				$('#user_frm')[0].reset(); 
-				 window.location.href="<?php echo base_url(); ?>plant_master//list_assigned_plants_user";						
+				// window.location.href="<?php echo base_url(); ?>plant_master/list_plants/";						
 			}
 			 
 		},
