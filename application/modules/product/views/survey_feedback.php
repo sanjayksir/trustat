@@ -98,11 +98,11 @@
 
                             <div class="row" id="add_edit_div">
 
-                              <?php if($this->uri->segment(2)=='edit_feedback'){
+                              <?php if($this->uri->segment(2)=='edit_survey_feedback'){
 
-								  	$this->load->view('edit_feedback'); 
+								  	$this->load->view('edit_survey_feedback_tpl'); 
 
-                              }else{  $this->load->view('add_pdf_feedback_tpl'); 
+                              }else{  $this->load->view('add_survey_feedback_tpl'); 
 
 					 			}?>
 

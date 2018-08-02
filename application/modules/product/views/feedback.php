@@ -100,9 +100,9 @@
 
                               <?php if($this->uri->segment(2)=='edit_feedback'){
 
-								  	$this->load->view('edit_feedback'); 
+								  	$this->load->view('edit_feedback_tpl'); 
 
-                              }else{  $this->load->view('add_audio_feedback_tpl'); 
+                              }else{  $this->load->view('add_feedback_tpl'); 
 
 					 			}?>
 

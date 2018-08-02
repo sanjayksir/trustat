@@ -152,7 +152,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                                <td>
 											   <form name="frm_<?php echo $attr['question_id'];?>" id="frm_<?php echo $attr['question_id'];?>" method="post" action="">
  														<div class="hidden-sm hidden-xs btn-group">
-   															<a href="<?php echo base_url();?>product/edit_image_feedback/<?php echo $attr['question_id'];?>" class="btn btn-xs btn-info">
+   															<a href="<?php echo base_url();?>product/edit_pushed_ad_feedback/<?php echo $attr['question_id'];?>" class="btn btn-xs btn-info">
  																<i class="ace-icon fa fa-pencil bigger-120"></i>
  															</a>
   															<a href="javascript:void(0);" class="btn btn-xs btn-danger" onclick="delete_feedback_question('<?php echo $attr['question_id'];?>');">

@@ -439,18 +439,52 @@ function list_assigned_products() {
 
 	function add_feedback(){
 		 $data					= array();
-   		 $this->load->view('add_feedback', $data);
+   		 $this->load->view('feedback', $data);
 	}
 
 	function add_image_feedback(){
 		 $data					= array();
-   		 $this->load->view('add_image_feedback', $data);
+   		 $this->load->view('image_feedback', $data);
+	}
+	
+	function edit_feedback(){
+		 $data					= array();
+		 $data['product_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+   		 $this->load->view('feedback', $data);
 	}
 	
 	function edit_image_feedback(){
 		 $data					= array();
 		 $data['product_image_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
-   		 $this->load->view('edit_image_feedback', $data);
+   		 $this->load->view('image_feedback', $data);
+	}
+	
+	function edit_video_feedback(){
+		 $data					= array();
+		 $data['product_video_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+   		 $this->load->view('video_feedback', $data);
+	}
+	
+	function edit_audio_feedback(){
+		 $data					= array();
+		 $data['product_audio_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+   		 $this->load->view('audio_feedback', $data);
+	}
+	
+	function edit_pdf_feedback(){
+		 $data					= array();
+		 $data['product_pdf_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+   		 $this->load->view('pdf_feedback', $data);
+	}
+	function edit_pushed_ad_feedback(){
+		 $data					= array();
+		 $data['product_pushed_ad_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+   		 $this->load->view('pushed_ad_feedback', $data);
+	}
+	function edit_survey_feedback(){
+		 $data					= array();
+		 $data['product_survey_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+   		 $this->load->view('survey_feedback', $data);
 	}
    /*
 	function delete_attribute($id){//echo '**'.$id;exit;
@@ -467,27 +501,27 @@ function list_assigned_products() {
 	
 	function add_video_feedback(){
 		 $data					= array();
-   		 $this->load->view('add_video_feedback', $data);
+   		 $this->load->view('video_feedback', $data);
 	}
 
 	function add_audio_feedback(){
 		 $data					= array();
-   		 $this->load->view('add_audio_feedback', $data);
+   		 $this->load->view('audio_feedback', $data);
 	}
 
 	function add_pdf_feedback(){
 		 $data					= array();
-   		 $this->load->view('add_pdf_feedback', $data);
+   		 $this->load->view('pdf_feedback', $data);
 	}
 
 	function add_pushed_ad_feedback(){
 		 $data					= array();
-   		 $this->load->view('add_pushed_ad_feedback', $data);
+   		 $this->load->view('pushed_ad_feedback', $data);
 	}
 
 	function add_survey_feedback(){
 		 $data					= array();
-   		 $this->load->view('add_survey_feedback', $data);
+   		 $this->load->view('survey_feedback', $data);
 	}
 
 	function save_feedback(){
