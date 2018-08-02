@@ -196,6 +196,10 @@ class Customer extends ApiController {
             $user->plant_id = $userPlant->plant_id;
 			$user->designation_name_slug = getRoleSlugById($user->designation_id);
 			$user->designation_name_value = getRoleNameById($user->designation_id);
+			$functionalities = get_assigned_functionalities_to_role_list($user->designation_id);
+			//$user->userid = $user->user_id;
+			$user->assigned_functionalities_slug = get_functionality_slug_by_id($functionalities);
+			$user->assigned_functionalities_name = get_functionality_name_by_id($functionalities);
             $this->response(['status'=>true,'message'=>'Login done successfully.','data'=>$user]);
         }
         

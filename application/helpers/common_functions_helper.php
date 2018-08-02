@@ -6144,7 +6144,8 @@ function get_assigned_plant_user_list($user_id){
  		if(!empty($user_id)){ 
 			$ci->db->select('group_concat(functionality_id) as functionality_id');
 			$ci->db->from('assign_functionalities_to_role');
-			$ci->db->where(array('role_id'=>$user_id, 'assigned_by'=>$admin_id));
+			//$ci->db->where(array('role_id'=>$user_id, 'assigned_by'=>$admin_id));
+			$ci->db->where(array('role_id'=>$user_id));
 			$query= $ci->db->get();//echo '***'. $ci->db->last_query();exit;
 			$res_arr = $query->result_array();
  		}
@@ -6193,6 +6194,19 @@ function get_assigned_plant_user_list($user_id){
  	return $res_arr[0]['name'];
  }
  
+ function get_functionality_slug_by_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$ci->db->select('group_concat(functionality_name_slug) as slug');
+			$ci->db->from('functionality_master');
+			$ci->db->where_in('id',explode(',',$id));
+			$query= $ci->db->get();//echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['slug'];
+ }
  
  function checkProductsId_having_other_industry($product_id){
 	 $ci = & get_instance();
