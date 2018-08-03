@@ -329,33 +329,41 @@ class plant_master_model extends CI_Model {
         return '0';
     }
 
-    function save_assign_plants_users($plant_array, $plant_controller_user, $assigned_by, $is_edit = '') {  // echo '<pre>cccccccc';print_r($this->uri->segment(3));exit;
-        $plant_arr = json_decode($plant_array, true);
+    function save_assign_plants_users($plant_array, $plant_controller_user, $assigned_by, $is_edit = '') {  
         $user_id = $this->session->userdata('admin_user_id');
-        if ($this->input->post('is_edit') == 1) {
-            $this->db->query('delete from assign_plants_to_users where user_id="' . $plant_controller_user . '" and assigned_by="' . $assigned_by . '"');
-        }
-        foreach ($plant_arr as $plants) {###ediiit case
-            //if($this->input->post('is_edit')==1){
-            /* 		$updatedData = array("plant_id"		=> $plants);				 
-              $whereData = array('user_id' => $users,"assigned_by"	=> $user_id);
-              $this->db->set($updatedData);
-              $this->db->where($whereData);
-              $this->db->update("assign_plants_to_users", $insertData);
-              echo '***'.$this->db->last_query(); */
-
-            //}else{###add case
-            $insertData = array(
-                "plant_id" => $plants,
-                "user_id" => $plant_controller_user,
-                "assigned_by" => $assigned_by
-            );
-            if ($this->check_exists_users_plant($plants, $users) == 0) {
-                $this->db->insert("assign_plants_to_users", $insertData);
-                 // echo $this->db->last_query();
+        $plant_arr = json_decode($plant_array, true); 
+       if($user_id==1){
+                   
+            if ($this->input->post('is_edit') == 1) {
+                $this->db->query('delete from assign_plants_to_users where user_id="' . $plant_controller_user . '" and assigned_by="' . $assigned_by . '"');
             }
-            //}
-        }
+            foreach ($plant_arr as $plants) { 
+                $insertData = array(
+                    "plant_id" => $plants,
+                    "user_id" => $plant_controller_user,
+                    "assigned_by" => $assigned_by
+                );
+                if ($this->check_exists_users_plant($plants, $users) == 0) {
+                    $this->db->insert("assign_plants_to_users", $insertData);
+                     // echo $this->db->last_query();
+                } 
+            }
+       }else{ 
+           $users =$plant_controller_user;
+            if ($this->input->post('is_edit') == 1) {
+                $this->db->query('delete from assign_plants_to_users where user_id="' . $users . '" and assigned_by="' . $user_id . '"');
+            }
+            foreach ($plant_arr as $plants) { 
+                $insertData = array(
+                    "plant_id" => $plants,
+                    "user_id" => $users,
+                    "assigned_by" => $user_id
+                );
+                if ($this->check_exists_users_plant($plants, $users) == 0) {
+                    $this->db->insert("assign_plants_to_users", $insertData); 
+                } 
+            } 
+       } 
         $this->session->set_flashdata('success', 'Plant Assigned Successfully!');
         return 1;
     }

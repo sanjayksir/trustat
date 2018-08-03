@@ -163,15 +163,24 @@
 		 }
 		 
 		public function save_assign_user_to_pant() {
-			$result = '';
-            //echo '<pre>';print_r($_POST);exit;
-			$plant_array = json_encode($this->input->post('plants'));
-		    $assigned_by		         = $this->input->post('user'); 
-            $plant_controller_user		 = $this->input->post('plant_controller_val'); 
- 			if(count($this->input->post('plants'))>0 && count($plant_controller_user)>0){
-				$result = $this->plant_master_model->save_assign_plants_users($plant_array, $plant_controller_user, $assigned_by);	
-			}
-			echo  $result;exit;
+            $user_id 	= $this->session->userdata('admin_user_id');
+            if($user_id==1){
+                $result = '';
+                //echo '<pre>';print_r($_POST);exit;
+                $plant_array = json_encode($this->input->post('plants'));
+                $assigned_by		         = $this->input->post('user'); 
+                $plant_controller_user		 = $this->input->post('plant_controller_val'); 
+                if(count($this->input->post('plants'))>0 && count($plant_controller_user)>0){
+                    $result = $this->plant_master_model->save_assign_plants_users($plant_array, $plant_controller_user, $assigned_by);	
+                }
+            }else{
+                $plant_array = json_encode($this->input->post('plants'));
+                $user		 = $this->input->post('user'); 
+                if(count($this->input->post('plants'))>0 && count($user)>0){
+                    $result = $this->plant_master_model->save_assign_plants_users($plant_array, $user);	
+                }
+            }
+            echo  $result;exit;
  		 } 
 		 
 		 
@@ -235,7 +244,13 @@
 	  public function assign_plant_to_users() {
  		 $data						= array();
  		 $data['get_user_details'] 	= $this->plant_master_model->get_plant_details();
-   		 $this->load->view('assign_plant_to_users_tpl', $data); 
+          $user_id 		= $this->session->userdata('admin_user_id');
+          if($user_id==1){
+              $this->load->view('assign_plant_to_users_ccadmin_tpl', $data);  
+          }else{
+            $this->load->view('assign_plant_to_users_tpl', $data);   
+          }
+   		 
      }
 	 
 	 public function getPlantList() {
@@ -257,13 +272,17 @@
 		public function getActivePlantList() {
 			$result = '';
 			$id 			= $this->input->post('id');
-			$user_id 		= $this->session->userdata('admin_user_id');
+            $user_id 		= $this->session->userdata('admin_user_id');
+            if(empty($user_id)){
+                //$user_id			= $this->input->post('ccadminId');
+            }
+			
 			## assigned plants array
- 			$assigned_arr = explode(',',get_assigned_active_plants_list($id));
+ 			$assigned_arr = explode(',',get_assigned_active_plants_list($user_id));
 			
 			//print_r($assigned_arr);exit;
 			
- 			$product_data 	= get_all_active_plants($user_id);
+ 			$product_data 	= get_all_active_plants($id  );
 			 foreach($product_data as $res){?>
 				<option value="<?php echo $res['plant_id'];?>" <?php if(in_array($res['plant_id'],$assigned_arr )){echo 'selected';}?>><?php echo $res['plant_name'];?></option>
           <?php }

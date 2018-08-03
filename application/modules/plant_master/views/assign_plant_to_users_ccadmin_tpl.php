@@ -109,7 +109,7 @@
       </div>
 <?php 
 $user_id 	= $this->session->userdata('admin_user_id');//echo '<pre>';print_r($this->session->userdata('admin_user_id'));
-//echo '****'.$this->uri->segment(3);
+
 if( $this->uri->segment(3)!=''){
 	$user_id=	$this->uri->segment(3);
 	$UserData = get_parent_user($user_id,'1'); 
@@ -126,21 +126,32 @@ if( $this->uri->segment(3)!=''){
         <div class="widget-main">
 		 
 		<div class="form-group row">
-			<div class="col-sm-6">
-			<label for="form-field-8">Select Plant Controller User</label>
-            <select class="form-control" name="user" id="user">
+			<div class="col-sm-4">
+			<label for="form-field-8">Select CCC admin User</label>
+            <select class="form-control" name="user" id="user" onchange="return get_plants_controller(this.value),get_plants(this.value);;">
 			<?php if($SelectDD!=''){?><option value="">-Select Plant Controller-</option>
             <?php }
  			//$plant_data = get_all_plants($user_id);
  			foreach($UserData as $res){?>
             <option value="<?php echo $res['user_id'];?>" <?php if($this->uri->segment(3)==$res['user_id']){echo 'selected';}?>><?php echo ucfirst($res['user_name']);?></option>
  			<?php }?>
-            </select>
-			 
-			 
+            </select> 
 			</div>
 			
-			<div class="col-sm-6">
+			<!--------------------------------- Plant Controller DD ------------------------ -->
+			<div class="col-sm-4">
+                <label for="form-field-8">Select Plant Controller User</label>
+                <select class="form-control" name="plant_controller_val" id="plant_controller_val">
+                    <option value="">Select Plant Controller</option>
+                </select> 
+			</div>
+			<!--------------------------------- Plant Controller DD ------------------------ -->
+			
+			
+			
+			
+			
+			<div class="col-sm-4">
 			  <label for="form-field-8">Select Plant(Press Ctrl to Select Multiple plants)</label>
              <select class="form-control" name="plants[]" id="plants" multiple="multiple" >
              
@@ -154,13 +165,31 @@ if( $this->uri->segment(3)!=''){
 				$.ajax({
 				type:'POST',
 				url:'<?php echo base_url().'plant_master/getActivePlantList'?>',
-				data:{id:id},
+				data:{id:id,  ccadminId: $('#user').val()},
 				success:function(msg){
 					$("#plants").html(msg);
 				}
 				})
 		 	}
 		 }
+             
+             
+        
+        function get_plants_controller(id){
+            $('#plants').find('option').remove().end().append('<option value="0"></option>');
+		 	if(id!=''){
+				$.ajax({
+				type:'POST',
+				url:'<?php echo base_url().'plant_master/getActivePlantControllerList'?>',
+				data:{id:id},
+				success:function(msg){
+					$("#plant_controller_val").html(msg);
+				}
+				})
+		 	}
+		 }     
+             
+             
 		 </script>
 		 <?php if(!empty($this->uri->segment(3))){?>
 		 <script>get_plants(<?php echo $this->uri->segment(3);?>);</script>
@@ -173,7 +202,7 @@ if( $this->uri->segment(3)!=''){
             <input class="btn btn-info" type="submit" name="submit" value="Assign" id="savemenu" />
 
           </div>
-         <script>get_plants('<?php echo $user_id;?>')</script> 
+          
 
         </div>
 
@@ -351,11 +380,11 @@ $.ajax({
 		url: "<?php echo base_url(); ?>plant_master/save_assign_user_to_pant/",
 		data: dataSend,
 		success: function (msg) { 
-			if(parseInt(msg)==1){ 
+			if(parseInt(msg)==1){
 				$('#ajax_msg').text("Plant Assigned Successfully!").css("color","green").show();
 				$('#blah').attr('src', '').hide();
 				$('#user_frm')[0].reset(); 
-				 window.location.href="<?php echo base_url(); ?>plant_master/list_assigned_plants_user";						
+				  window.location.href="<?php echo base_url(); ?>plant_master//list_assigned_plants_user";						
 			}
 			 
 		},
