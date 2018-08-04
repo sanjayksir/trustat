@@ -6182,6 +6182,7 @@ function get_assigned_plant_user_list($user_id){
  	return $res_arr[0]['created_uq_r'];
  }
  
+
  function get_assigned_plant_user_list2($user_id){
 	$res='0';
 	$ci = & get_instance();

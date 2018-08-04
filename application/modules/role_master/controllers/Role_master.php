@@ -275,17 +275,24 @@
 			$user_id 		= $this->session->userdata('admin_user_id');
 			## assigned plants array
  			$assigned_arr = explode(',',get_assigned_active_functionalities_list($id));
-			
-			//print_r($assigned_arr);exit;
-			
- 			$product_data 	= get_all_active_functionalities($user_id);
+			$product_data 	= get_all_active_functionalities($user_id);
 			 foreach($product_data as $res){?>
 				<option value="<?php echo $res['id'];?>" <?php if(in_array($res['id'],$assigned_arr )){echo 'selected';}?>><?php echo $res['functionality_name_value'];?></option>
           <?php }
 			return $result;
 	 }
 	 
-	 
+	  function get_created_users_for_the_rolejs(){
+			$result = '';
+			$roleId 			= $this->input->post('id');
+			$user_id 		= $this->session->userdata('admin_user_id');
+ 		   $role_quantity = get_required_users_for_the_role($roleId);
+		   ?>
+		   <input name="role_quantity" id="role_quantity" type="number" value="<?php echo $role_quantity;?>"/>
+		<?php 
+			return $result;
+ }
+ 
 	
 	
 	  public function list_assigned_functionalities_to_role() {

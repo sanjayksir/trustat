@@ -128,7 +128,7 @@ $ActiveRoles = get_active_roles($user_id,'1');
 		<div class="form-group row">
 			<div class="col-sm-6">
 			<label for="form-field-8">Select Role from the list</label>
-            <select class="form-control" name="role" id="role" onchange="return get_functionalities(this.value);">
+            <select class="form-control" name="role" id="role" onchange="return created_users_for_the_role(this.value), get_functionalities(this.value);">
 			<?php if($SelectDD!=''){?><option value="">-Select a Role-</option>
             <?php }
  			//$plant_data = get_all_plants($user_id);
@@ -136,26 +136,11 @@ $ActiveRoles = get_active_roles($user_id,'1');
             <option value="<?php echo $res['id'];?>" <?php if($this->uri->segment(3)==$res['id']){echo 'selected';}?>><?php echo ucfirst($res['role_name_value']);?></option>
  			<?php }?>
             </select>
-			
-			<?php echo '<div id="results"></div>';
-					//get_required_users_for_the_role('<div id="results"></div>');
-					echo get_required_users_for_the_role('<div id="results"></div>');
-
-			?>
-
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-    <script>
-      $("#role").on("change", function(){
-        var selected = $(this).val();
-        $("#results").html("role id is: " + selected);
-      })
-    </script>
-			
-			
 			<br /><br />
-			 <label for="form-field-8">How many users you need of this Role?</label><br />
-			 <?php $role = get_required_users_for_the_role('<div id="results"></div>'); echo $role; ?>
-			 <input name="role_quantity" id="role_quantity" type="number" value="1" />
+			<label for="form-field-8">How many users you need of this Role?</label><br />
+			
+			<div id="role_quantity"></div>
+			
 			</div>
 			
 			<div class="col-sm-6">
@@ -175,6 +160,18 @@ $ActiveRoles = get_active_roles($user_id,'1');
 				data:{id:id},
 				success:function(msg){
 					$("#functionalities").html(msg);
+				}
+				})
+		 	}
+		 }
+		 
+		 function created_users_for_the_role(id){
+		 	if(id!=''){
+				$.ajax({
+				type:'POST',
+				url:'<?php echo base_url().'role_master/get_created_users_for_the_rolejs'?>',
+				data:{id:id},
+				success:function(msg){
 					$("#role_quantity").html(msg);
 				}
 				})
@@ -184,7 +181,7 @@ $ActiveRoles = get_active_roles($user_id,'1');
 		 </script>
 		 <?php if(!empty($this->uri->segment(3))){?>
 		 <script>get_functionalities(<?php echo $this->uri->segment(3);?>);</script>
-		 
+		  <script>created_users_for_the_role(<?php echo $this->uri->segment(3);?>);</script>
 		 <?php }?>
  		 
             <hr>
