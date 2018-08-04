@@ -164,10 +164,11 @@
 		 
 		public function save_assigned_functionalities_to_role() {
 			$result = '';
-			$plant_array = json_encode($this->input->post('plants'));
-		    $user		 = $this->input->post('user'); 
- 			if(count($this->input->post('plants'))>0 && count($user)>0){
-				$result = $this->role_master_model->save_assign_plants_users($plant_array, $user);	
+			$functionality_array = json_encode($this->input->post('functionalities'));
+		    $role		 = $this->input->post('role');
+			$role_quantity		 = $this->input->post('role_quantity');			
+ 			if(count($this->input->post('functionalities'))>0 && count($role)>0){
+				$result = $this->role_master_model->save_assigned_functionalities_to_role($functionality_array, $role, $role_quantity);	
 			}
 			echo  $result;exit;
  		 } 
@@ -273,7 +274,7 @@
 			$id 			= $this->input->post('id');
 			$user_id 		= $this->session->userdata('admin_user_id');
 			## assigned plants array
- 			$assigned_arr = explode(',',get_assigned_active_plants_list($id));
+ 			$assigned_arr = explode(',',get_assigned_active_functionalities_list($id));
 			
 			//print_r($assigned_arr);exit;
 			
@@ -283,6 +284,8 @@
           <?php }
 			return $result;
 	 }
+	 
+	 
 	
 	
 	  public function list_assigned_functionalities_to_role() {

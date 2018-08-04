@@ -3,9 +3,9 @@
   <div class="widget-box">
 
     <div class="widget-header">
-		<?php $type = "CCC Admin";
+		<?php $type = "User";
 								if($this->session->userdata('admin_user_id')>1 || $this->uri->segment(2)=='add_plant_controller'){
-									$type = "Plant Controller";
+									$type = "User";
 								}?>
       <h4 class="widget-title">Add <?php echo $type;?></h4>
 

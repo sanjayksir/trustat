@@ -6,7 +6,7 @@
 			</script>
 			<?php 
 			 
-				$label = 'Plant Controller';
+				$label = 'User';
 			 
 			?>
 
@@ -51,9 +51,9 @@
                     <div class="col-xs-12">
                         <div class="widget-box widget-color-blue">
                             <div class="widget-header widget-header-flat">
-                                <h5 class="widget-title bigger lighter">Manage Plant Controller</h5>
+                                <h5 class="widget-title bigger lighter">Manage Users</h5>
                                 <div class="widget-toolbar">
-                                    <a href="<?php echo base_url('user_master/add_plant_controller/') ?>" class="btn btn-xs btn-warning" title="Add PLant Controller">Add <?php echo $label; ?> </a>
+                                    <a href="<?php echo base_url('user_master/add_plant_controller/') ?>" class="btn btn-xs btn-warning" title="Add Users">Add <?php echo $label; ?> </a>
                                 </div>
                             </div>
                         <div class="widget-body">

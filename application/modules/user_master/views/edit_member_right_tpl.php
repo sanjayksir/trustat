@@ -7,7 +7,7 @@
 				<div class="widget-header">
 						<?php $type = "Admin";
 								if($this->session->userdata('admin_user_id')>1 || $this->uri->segment(2)=='edit_plant_controller'){
-									$type = "Plant Controller";
+									$type = "User";
 								}?>
       <h4 class="widget-title">Edit <?php echo $type;?></h4>
 						<div class="widget-toolbar"> <a href="#" data-action="collapse"> <i class="ace-icon fa fa-chevron-up"></i> </a> <a href="#" data-action="close"> <i class="ace-icon fa fa-times"></i> </a> <a href="#" class="show_loader" data-action="reload" style="display:none;"><i class="ace-icon fa fa-refresh"></i></a> </div>

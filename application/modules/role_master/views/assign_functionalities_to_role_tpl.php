@@ -116,10 +116,10 @@ if( $this->uri->segment(3)!=''){
 	$SelectDD='';
 }else{
 	$SelectDD='1';
-	$UserData = get_active_roles($user_id,'1');
+	$UserData = get_active_users($user_id,'1');
 }
    //echo '<pre>';print_r($UserData) ;
-
+$ActiveRoles = get_active_roles($user_id,'1');
 //echo '<pre>';print_r($UserData);?>
       <form name="user_frm" id="user_frm" action="#" method="POST" onsubmit="return saved_assigned_data();">
 <input type="hidden" name="is_edit" value="<?php echo ($this->uri->segment(3))?1:0;?>" />
@@ -128,42 +128,63 @@ if( $this->uri->segment(3)!=''){
 		<div class="form-group row">
 			<div class="col-sm-6">
 			<label for="form-field-8">Select Role from the list</label>
-            <select class="form-control" name="user" id="user" onchange="return get_roles(this.value);">
+            <select class="form-control" name="role" id="role" onchange="return get_functionalities(this.value);">
 			<?php if($SelectDD!=''){?><option value="">-Select a Role-</option>
             <?php }
  			//$plant_data = get_all_plants($user_id);
- 			foreach($UserData as $res){?>
+ 			foreach($ActiveRoles as $res){?>
             <option value="<?php echo $res['id'];?>" <?php if($this->uri->segment(3)==$res['id']){echo 'selected';}?>><?php echo ucfirst($res['role_name_value']);?></option>
  			<?php }?>
             </select>
-			 
-			 
+			
+			<?php echo '<div id="results"></div>';
+					//get_required_users_for_the_role('<div id="results"></div>');
+					echo get_required_users_for_the_role('<div id="results"></div>');
+
+			?>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script>
+      $("#role").on("change", function(){
+        var selected = $(this).val();
+        $("#results").html("role id is: " + selected);
+      })
+    </script>
+			
+			
+			<br /><br />
+			 <label for="form-field-8">How many users you need of this Role?</label><br />
+			 <?php $role = get_required_users_for_the_role('<div id="results"></div>'); echo $role; ?>
+			 <input name="role_quantity" id="role_quantity" type="number" value="1" />
 			</div>
 			
 			<div class="col-sm-6">
 			  <label for="form-field-8">Select Functionality(Press Ctrl to Select Multiple Functionalities)</label>
-             <select class="form-control" name="plants[]" id="plants" multiple="multiple" >
+            <select class="form-control" name="functionalities[]" id="functionalities" multiple="multiple" size="11">
              
              </select>
 			</div>
 		</div>
 		 
 		 <script>
-		 function get_roles(id){
+		 function get_functionalities(id){
 		 	if(id!=''){
 				$.ajax({
 				type:'POST',
 				url:'<?php echo base_url().'role_master/getActiveFunctionalitiestList'?>',
 				data:{id:id},
 				success:function(msg){
-					$("#plants").html(msg);
+					$("#functionalities").html(msg);
+					$("#role_quantity").html(msg);
 				}
 				})
 		 	}
 		 }
+		 
 		 </script>
 		 <?php if(!empty($this->uri->segment(3))){?>
-		 <script>get_plants(<?php echo $this->uri->segment(3);?>);</script>
+		 <script>get_functionalities(<?php echo $this->uri->segment(3);?>);</script>
+		 
 		 <?php }?>
  		 
             <hr>

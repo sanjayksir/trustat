@@ -329,13 +329,13 @@ class role_master_model extends CI_Model {
         return '0';
     }
 
-    function save_assign_plants_users($plant_array, $users, $is_edit = '') {  // echo '<pre>cccccccc';print_r($this->uri->segment(3));exit;
-        $plant_arr = json_decode($plant_array, true);
+    function save_assigned_functionalities_to_role($functionality_array, $roles, $role_quantity, $is_edit = '') {  // echo '<pre>cccccccc';print_r($this->uri->segment(3));exit;
+        $functionality_arr = json_decode($functionality_array, true);
         $user_id = $this->session->userdata('admin_user_id');
-        if ($this->input->post('is_edit') == 1) {
-            $this->db->query('delete from assign_functionalities_to_role where user_id="' . $users . '" and assigned_by="' . $user_id . '"');
-        }
-        foreach ($plant_arr as $plants) {###ediiit case
+       // if ($this->input->post('is_edit') == 1) {
+            $this->db->query('delete from assign_functionalities_to_role where role_id="' . $roles . '" and assigned_by="' . $user_id . '"');
+        //}
+        foreach ($functionality_arr as $functionalities) {###ediiit case
             //if($this->input->post('is_edit')==1){
             /* 		$updatedData = array("plant_id"		=> $plants);				 
               $whereData = array('user_id' => $users,"assigned_by"	=> $user_id);
@@ -346,24 +346,25 @@ class role_master_model extends CI_Model {
 
             //}else{###add case
             $insertData = array(
-                "functionality_id" => $plants,
-                "role_id" => $users,
+                "functionality_id" => $functionalities,
+                "role_id" => $roles,
+				"role_quantity" => $role_quantity,
                 "assigned_by" => $user_id
             );
-            if ($this->check_exists_users_plant($plants, $users) == 0) {
+           // if ($this->check_exists_users_role($roles, $user_id) == 0) {
                 $this->db->insert("assign_functionalities_to_role", $insertData);
                 // echo $this->db->last_query();
-            }
+           // }
             //}
         }
         $this->session->set_flashdata('success', 'Functionality Assigned Successfully!');
         return 1;
     }
 
-    function check_exists_users_plant($plant_id, $userid) {
+    function check_exists_users_role($roles, $user_id) {
         $this->db->select('id');
-        $this->db->from('assign_plants_to_users');
-        $this->db->where(array('plant_id' => $plant_id, 'user_id' => $userid));
+        $this->db->from('assign_functionalities_to_role');
+        $this->db->where(array('role_id' => $roles, 'assigned_by' => $user_id));
         $query = $this->db->get(); //echo $this->db->last_query();
         if ($query->num_rows() > 0) {
             $res = $query->result_array();

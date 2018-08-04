@@ -34,7 +34,7 @@
                       <div class="tab-pane fade active in">
 
                         <?php //echo '<pre>';print_r($get_user_details);exit;//$this->load->view('add_menu_form_tpl');?>
-							<div style="clear:both;height:40px;"><a href="<?php echo base_url()?>user_master/list_user/" class="btn btn-primary pull-right" title="List Plant Controller">List Plant Controller </a></div>
+							<div style="clear:both;height:40px;"><a href="<?php echo base_url()?>user_master/list_user/" class="btn btn-primary pull-right" title="List Users">List Users </a></div>
                         <div class="row">
 
                           <div class="col-xs-12">

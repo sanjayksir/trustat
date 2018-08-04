@@ -8,7 +8,7 @@
 			if($this->session->userdata('admin_user_id')==1){
 				$label = 'CCC Admin';
 			}else{
-				$label = 'Plant Controller';
+				$label = 'User';
 			}
 			?>
 

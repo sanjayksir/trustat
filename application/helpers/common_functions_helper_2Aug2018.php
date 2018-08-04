@@ -6010,9 +6010,9 @@ function getParentUsers($id='',$status=''){
  		$ci->db->select('plant_id,plant_name,plant_code,email_id,phone,created_date,status');
 		$ci->db->from('plant_master');
 		$ci->db->where(array('status'=>'1'));
-		//if($admin_id>1){
+		if($admin_id>1){
 			$ci->db->where('created_by',$user_id);
-		//}
+		}
 		$query= $ci->db->get();
 		$res = $query->result_array();
 	}
@@ -6041,7 +6041,7 @@ function getParentUsers($id='',$status=''){
  		$ci = & get_instance();
  		$ci->db->select('*');
    		$ci->db->from('role_master');
- 		$ci->db->where(array('status'=>'1', 'id!='=>'2'));
+ 		$ci->db->where(array('status'=>'1'));
    		$query = $ci->db->get();//echo $ci->db->last_query();
   		if ($query->num_rows() > 0) {
   			$res = $query->result_array();
@@ -6137,49 +6137,19 @@ function get_assigned_plant_user_list($user_id){
  	return $res_arr[0]['plant_id'];
  } 
  
- function get_assigned_functionalities_to_role_list($roleId){
+ function get_assigned_functionalities_to_role_list($user_id){
 	$res='0';
 	$ci = & get_instance();
 	 $admin_id 				= $ci->session->userdata('admin_user_id');	
- 		if(!empty($roleId)){ 
+ 		if(!empty($user_id)){ 
 			$ci->db->select('group_concat(functionality_id) as functionality_id');
 			$ci->db->from('assign_functionalities_to_role');
 			//$ci->db->where(array('role_id'=>$user_id, 'assigned_by'=>$admin_id));
-			$ci->db->where(array('role_id'=>$roleId));
+			$ci->db->where(array('role_id'=>$user_id));
 			$query= $ci->db->get();//echo '***'. $ci->db->last_query();exit;
 			$res_arr = $query->result_array();
  		}
  	return $res_arr[0]['functionality_id'];
- }
- 
-  function get_required_users_for_the_role($roleId){
-	$res='0';
-	$ci = & get_instance();
-	 $admin_id 				= $ci->session->userdata('admin_user_id');	
- 		if(!empty($roleId)){ 
-			$ci->db->select('concat(role_quantity) as role_quantity');
-			$ci->db->from('assign_functionalities_to_role');
-			//$ci->db->where(array('role_id'=>$user_id, 'assigned_by'=>$admin_id));
-			$ci->db->where(array('role_id'=>$roleId, 'assigned_by'=>$admin_id));
-			$query= $ci->db->get();//echo '***'. $ci->db->last_query();exit;
-			$res_arr = $query->result_array();
- 		}
- 	return $res_arr[0]['role_quantity'];
- }
- 
- function get_created_users_for_the_role($roleId){
-	$res='0';
-	$ci = & get_instance();
-	 $admin_id 				= $ci->session->userdata('admin_user_id');	
- 		if(!empty($roleId)){ 
-			$ci->db->select('concat(created_uq_r) as created_uq_r');
-			$ci->db->from('assign_functionalities_to_role');
-			//$ci->db->where(array('role_id'=>$user_id, 'assigned_by'=>$admin_id));
-			$ci->db->where(array('role_id'=>$roleId, 'assigned_by'=>$admin_id));
-			$query= $ci->db->get();//echo '***'. $ci->db->last_query();exit;
-			$res_arr = $query->result_array();
- 		}
- 	return $res_arr[0]['created_uq_r'];
  }
  
  function get_assigned_plant_user_list2($user_id){
@@ -6299,20 +6269,6 @@ function get_assigned_plants_list($id){
 			$res_arr = $query->result_array();
  		}
  	return $res_arr[0]['plantId'];
- }
- 
- function get_assigned_active_functionalities_list($id){
-	$res='0';
-	$ci = & get_instance();
-	 $user_id 				= $ci->session->userdata('admin_user_id');	
- 		if(!empty($id)){
-			$ci->db->select('group_concat(functionality_id) as functionalityId');
-			$ci->db->from('assign_functionalities_to_role');
-			$ci->db->where(array('role_id'=>$id, 'assigned_by'=>$user_id,'status'=>'1'));
-			$query= $ci->db->get();//echo $ci->db->last_query();
-			$res_arr = $query->result_array();
- 		}
- 	return $res_arr[0]['functionalityId'];
  }
  
  
@@ -6489,10 +6445,10 @@ function get_user_email_name($userid){
 		$title = "User Listing";
         break;
     case "add_user": 
-		 $title =  ($user_id>1)?"User:Add":"CCC Admin:Add";
+		 $title =  ($user_id>1)?"Plant Controller:Add":"CCC Admin:Add";
         break;
 	 case "view_user": 
-		 $title =  ($user_id>1)?"View User":"View CCC Admin";
+		 $title =  ($user_id>1)?"View Plant Controller":"View CCC Admin";
         break;	
 		
 	case "list_user": 

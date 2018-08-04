@@ -74,9 +74,12 @@
                                         <tr>
                                             <th>Sno</th>
                                             <th>Role Name</th>
+											 <th>Total Users</th>
+											 <th>Created</th>
+											 <th>Remained</th>
                                             <th>Assign Functionalities</th>
                                             <th>Updated on</th>
-                                           <!-- <th>Action</th>-->
+                                           <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -100,6 +103,10 @@
                                                 <tr id="show<?php echo $listData['id']; ?>">
                                                     <td><?php echo $sno; ?></td>
                                                     <td><?php echo $listData['role_name_value']; ?></td>
+													<td><?php $required_users_for_the_role = get_required_users_for_the_role($listData['id']); echo $required_users_for_the_role; ?>
+													</td>
+													<td><?php $get_created_users_for_the_role = get_created_users_for_the_role($listData['id']); echo $get_created_users_for_the_role; ?></td>
+													<td><?php echo $remained = $required_users_for_the_role-$get_created_users_for_the_role; ?></td>
                                                     <td><?php $plants = get_assigned_functionalities_to_role_list($listData['id']);
 
 //echo $listData['id'];
@@ -107,15 +114,15 @@
                                                 ?></td>
 
                                                     <td><?php echo date('d/M/Y', strtotime($listData['created_on'])); ?></td>
-                                                   <!-- <td>
+                                                   <td>
                                                         <div class="hidden-sm hidden-xs action-buttons">
-                                                            <!--<a href="<?php echo base_url() . 'plant_master/view_plant/' . $listData['user_id']; ?>" class="blue" target="_blank" title="View"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>
-        <?php echo anchor("plant_master/assign_plant_to_users/" . $listData['user_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green', 'title' => 'Edit')); ?>
-                                                            <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['user_id']; ?>" value="<?php echo $status; ?>" onclick="return change_status('<?php echo $listData['user_id']; ?>', this.value, '<?php echo $plants; ?>');" />
+                                                            <!--<a href="<?php echo base_url() . 'plant_master/view_plant/' . $listData['user_id']; ?>" class="blue" target="_blank" title="View"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>-->
+        <?php echo anchor("role_master/assign_functionalities_to_role/" . $listData['id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green', 'title' => 'Edit')); ?>
+                                                           <!-- <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['user_id']; ?>" value="<?php echo $status; ?>" onclick="return change_status('<?php echo $listData['user_id']; ?>', this.value, '<?php echo $plants; ?>');" />-->
 
                                                         </div>
 
-                                                    </td>-->
+                                                    </td>
                                                 </tr>
                                             <?php $sno++; 
                                                 }

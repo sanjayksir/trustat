@@ -557,9 +557,9 @@ class User_master extends MX_Controller {
             //print_r($childIds);exit;
 
             if ($result == 1) {
-                $this->session->set_flashdata('success', 'Plant Controller deleted successfully!.');
+                $this->session->set_flashdata('success', 'User deleted successfully!.');
             } else {
-                $this->session->set_flashdata('success', 'Plant Controller deleted!');
+                $this->session->set_flashdata('success', 'User deleted!');
             }
             redirect(base_url() . 'user_master/list_user/');
         }
