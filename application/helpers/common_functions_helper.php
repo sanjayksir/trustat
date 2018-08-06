@@ -6172,15 +6172,16 @@ function get_assigned_plant_user_list($user_id){
 	$ci = & get_instance();
 	 $admin_id 				= $ci->session->userdata('admin_user_id');	
  		if(!empty($roleId)){ 
-			$ci->db->select('concat(created_uq_r) as created_uq_r');
-			$ci->db->from('assign_functionalities_to_role');
+			$ci->db->select('*');
+			$ci->db->from('backend_user');
 			//$ci->db->where(array('role_id'=>$user_id, 'assigned_by'=>$admin_id));
-			$ci->db->where(array('role_id'=>$roleId, 'assigned_by'=>$admin_id));
+			$ci->db->where(array('designation_id'=>$roleId, 'is_parent'=>$admin_id));
 			$query= $ci->db->get();//echo '***'. $ci->db->last_query();exit;
-			$res_arr = $query->result_array();
+			$res_arr = $query->num_rows();
  		}
- 	return $res_arr[0]['created_uq_r'];
+ 	return $res_arr;
  }
+ 
  
 
  function get_assigned_plant_user_list2($user_id){

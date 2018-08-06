@@ -105,8 +105,8 @@
                                                     <td><?php echo $listData['role_name_value']; ?></td>
 													<td><?php $required_users_for_the_role = get_required_users_for_the_role($listData['id']); echo $required_users_for_the_role; ?>
 													</td>
-													<td><?php $get_created_users_for_the_role = get_created_users_for_the_role($listData['id']); echo $get_created_users_for_the_role; ?></td>
-													<td><?php echo $remained = $required_users_for_the_role-$get_created_users_for_the_role; ?></td>
+													<td><?php echo get_created_users_for_the_role($listData['id']); ?></td>
+													<td><?php echo $remained = $required_users_for_the_role-get_created_users_for_the_role($listData['id']); ?></td>
                                                     <td><?php $plants = get_assigned_functionalities_to_role_list($listData['id']);
 
 //echo $listData['id'];
