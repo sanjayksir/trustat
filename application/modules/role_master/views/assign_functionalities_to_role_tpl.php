@@ -108,6 +108,7 @@
 
       </div>
 <?php 
+
 $user_id 	= $this->session->userdata('admin_user_id');//echo '<pre>';print_r($this->session->userdata('admin_user_id'));
 
 if( $this->uri->segment(3)!=''){

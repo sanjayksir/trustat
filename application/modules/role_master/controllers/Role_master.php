@@ -166,6 +166,7 @@
 			$result = '';
 			$functionality_array = json_encode($this->input->post('functionalities'));
 		    $role		 = $this->input->post('role');
+			//$user_id		 = $this->input->post('role');
 			$role_quantity		 = $this->input->post('role_quantity');			
  			if(count($this->input->post('functionalities'))>0 && count($role)>0){
 				$result = $this->role_master_model->save_assigned_functionalities_to_role($functionality_array, $role, $role_quantity);	
@@ -301,6 +302,8 @@
 			 $data['plant_data'] 	= get_active_roles($parent_id);
 			 $this->load->view('list_assigned_functionalities_to_role_tpl', $data);
      	}
+		
+		
 		
 		
 		public function change_assign_plant_status() {
