@@ -90,7 +90,8 @@ class Myspidey_user_master_model extends CI_Model {
                     "last_updated_on" => date('Y-m-d H:i:s')
                 );
             }
-			/*
+			
+			if($frmData['plant_id']!=''){
             $assignedPlant = [
                 "plant_id" => $frmData['plant_id'],
                 "assigned_by" => $this->session->userdata('admin_user_id')
@@ -104,7 +105,8 @@ class Myspidey_user_master_model extends CI_Model {
                 $assignedPlant['user_id'] = $frmData['user_id'];
                 $this->db->insert("assign_plants_to_users", $assignedPlant);
             } 
-				*/
+			}
+				
             //$this->db->insert("assign_plants_to_users", $insertData);
             $whereData = array(
                 'user_id' => $frmData['user_id']
@@ -143,14 +145,16 @@ class Myspidey_user_master_model extends CI_Model {
             ); //echo '<pre>';print_r($insertData);exit;
 
             if ($this->db->insert("backend_user", $insertData)) {
-               /* I commented this to solve the email sending issue on creatting a new user
-			   $assignedPlant = [
+				if($frmData['plant_id']!=''){
+              $assignedPlant = [
                     "plant_id" => $frmData['plant_id'],
                     "user_id" => $this->db->insert_id(),
                     "assigned_by" => $this->session->userdata('admin_user_id')
                 ];
                 $this->db->insert("assign_plants_to_users", $assignedPlant);
-				*/
+				}
+				
+				
 				$first_name = $frmData['f_name'];
                 $full_name = $frmData['f_name'] . ' ' . $frmData['l_name'];
                 $username = $frmData['user_name'];

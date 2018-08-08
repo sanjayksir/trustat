@@ -105,9 +105,9 @@
 
                             <div class="row" id="add_edit_div">
 
-                              <?php if($this->uri->segment(2)=='edit_plevel_user' || $this->uri->segment(2)=='edit_plant_controller'){
+                              <?php if($this->uri->segment(2)=='edit_plevel_user'){
 
-								  	$this->load->view('edit_member_right_tpl'); 
+								  	$this->load->view('edit_customer_app_user_right_tpl'); 
 
                               }else{  $this->load->view('add_customer_app_user_right_tpl'); 
 

@@ -41,6 +41,7 @@
                                                 <div class="widget-toolbar">
                                                    <a href="<?php echo base_url('order_master/list_orders_plant_controlllers_CC') ?>" class="btn btn-xs btn-warning" title="List Plant Controllers Orders">List Plant Controllers Orders </a>
                                                     <a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Make Order" data-toggle="modal" data-target="#myModal">Make Order</a>
+													<a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Upload Codes" data-toggle="modal" data-target="#myUploadModal">Upload Codes</a>
                                                 </div>
                                             </div>
                                             <div class="widget-body">
@@ -269,7 +270,9 @@
         <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
                 <i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
         </a>
-</div><!-- /.main-container -->
+</div>
+<!-- /.main-container -->
+<!-- myModal Div -->
 <div id="myModal" class="modal fade" role="dialog">
     <div class="modal-dialog">
           <!-- Modal content-->
@@ -370,8 +373,112 @@ $("#product").html(msg);
           </div>
     </div>
   </div>
+<!--/ myModal Div -->  
   
-  
+
+<!-- myUploadModal Div -->
+<div id="myUploadModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Upload Codes</h4>
+            </div>
+            <div class="modal-body">
+<?php 
+//$datecodedno = date('YmdHis');
+//$date = date('Y-m-d H:i:s');
+//echo $datecodedno;
+
+?>
+<form name="frm" id="frm" action="#" method="POST">
+<!--<input name="menu_id" id="menu_id" type="hidden" value="">-->
+<input name="order_no" id="order_no" type="hidden" value="<?php $datecodedno; ?>">
+<div class="form-group row">
+<div class="col-sm-12">
+<label for="form-field-8">Plant Name</label>
+<select class="form-control" name="plant_id" id="plant_id" onchange="return get_products(this.value);">
+<option value="">-Select Plant-</option>
+<?php 
+$user_id 	= $this->session->userdata('admin_user_id');
+$plant_data = get_all_active_plants($user_id);
+foreach($plant_data as $res){?>
+<option value="<?php echo $res['plant_id'];?>" <?php if($this->uri->segment(3)==$res['plant_id']){echo 'selected';}?>><?php echo $res['plant_name'];?></option>
+<?php }?>
+</select>
+<br />
+<label for="form-field-8">SKU/Product Name</label>
+<select class="form-control" name="product[]" id="product" >
+
+</select>			
+<?php if(!empty($this->uri->segment(3))){?>
+<script>get_products(<?php echo $this->uri->segment(3);?>);</script>
+<?php }?>						
+
+
+<script>
+function get_products(id){
+if(id!=''){
+$.ajax({
+type:'POST',
+url:'<?php echo base_url().'plant_master/getAssignedProductList'?>',
+data:{id:id},
+success:function(msg){
+$("#product").html(msg);
+}
+})
+}
+}
+</script>
+
+
+                                  </div>
+                                  </div>
+
+
+                                  <div class="form-group row">
+                                  <div class="col-sm-12">
+                                  <label for="form-field-8">Quantity</label>
+								  <select name="quantity" id="quantity" class="form-control">
+										<option value="10">10</option>	
+										<option value="100">100</option>
+										<option value="1000">1,000</option>
+										<option value="10000">10,000</option>
+										<option value="100000">1,00,000</option>
+										<option value="1000000">10,00,000</option>
+									</select>
+					
+                                  <!--<input name="quantity" id="quantity" type="text" class="form-control" placeholder="Quantity" >-->
+                                  </div>
+                                  </div>
+
+
+                                  <div class="form-group row">
+                                  <div class="col-sm-12">
+                                  <label for="form-field-8">Expected Date</label>
+                                  <div class="input-group date" data-provide="datepicker">
+                                  <input type="text" name="deliverydate" id="deliverrydate" readonly="readonly" class="form-control">
+                                  <div class="input-group-addon">
+                                  <span class="glyphicon glyphicon-th"></span>
+                                  </div>
+                                  </div>
+                                  </div>
+                                  </div>
+
+                                  <div class="form-group row">
+                                  <div class="col-sm-12">
+                                  <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
+                                  <input class="btn btn-info" type="submit" name="submit" value="Submit" id="savemenu" />
+                                  </div></div></div>
+
+                          </form>
+            </div>
+          </div>
+    </div>
+  </div>
+<!--/ myUploadModal Div --> 
+
   
   
     <?php $this->load->view('../includes/admin_footer');?>
@@ -460,12 +567,14 @@ $("#product").html(msg);
 
     $("form#frm").validate({
     rules: {
+			plant_id: {required: true},
             "product[]":{required: true},
         quantity: {required: true,number: true}
             } ,
 
     messages: {
-            "product[]": {required: "Please enter Product Name/SKU Code" } , 
+			plant_id: {	required: "Please Select a Plant"} ,
+            "product[]": {required: "Please Select Product Name/SKU Code" } , 
             quantity: {	required: "Please enter quantity"} 
     },
     submitHandler: function(form) {
@@ -512,5 +621,67 @@ $("#product").html(msg);
     });
     </script>
 <?php }?>
+
+
+    <script>$(function () {
+    
+    $("form#frm").validate({
+    rules: {
+			plant_id: {required: true},
+            "product[]":{required: true},
+        quantity: {required: true,number: true}
+            } ,
+
+    messages: {
+			plant_id: {	required: "Please Select a Plant"} ,
+            "product[]": {required: "Please Select Product Name/SKU Code" } , 
+            quantity: {	required: "Please enter quantity"} 
+    },
+    submitHandler: function(form) {
+            var dataSend;
+            var dataSend 	= $("#frm").serialize();
+            $.ajax({
+                    type: "POST",
+                    dataType:"json",
+                    beforeSend: function(){
+                    $('.alert-success').hide();
+                                    //$(".show_loader").show();
+                                    //$(".show_loader").click();
+                    },
+                    url: "<?php echo base_url(); ?>order_master/save_upload_codes/",
+                    data: dataSend,
+                    success: function (msg) {
+
+                            if(parseInt(msg)==1){
+                            $('#myModal').modal('hide');
+                                    //$('#ajax_msg').text("User Added Successfully!").css("color","green").show();
+                                    $('.alert-success').show();
+                                    $('#frm')[0].reset(); 
+                                    window.location="<?php echo base_url(); ?>order_master/list_orders/";
+
+                            }
+                    }
+
+            });
+
+             return false;
+
+    }
+
+    });
+
+
+
+
+    </script>
+
+<?php if($this->uri->segment(3)=='upload_codes'){?>
+    <script type="text/javascript">
+    $(window).on('load',function(){
+    $('#myUploadModal').modal('show');
+    });
+    </script>
+<?php }?>
+
  
 <?php $this->load->view('../includes/admin_footer');?>
