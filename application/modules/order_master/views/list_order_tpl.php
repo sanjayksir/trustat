@@ -33,6 +33,12 @@
                                                     </button>
                                                     <i class="ace-icon fa fa-check green"></i>Order Placed Successfully!!
                              </div>
+							 <div class="alert alert-block alert-success2" style='display:none;'>
+                                                    <button type="button" class="close" data-dismiss="alert">
+                                                            <i class="ace-icon fa fa-times"></i>
+                                                    </button>
+                                                    <i class="ace-icon fa fa-check green"></i>Codes Upoaded Successfully!2
+                             </div>
                             <div class="row">
                                     <div class="col-xs-12">
                                         <div class="widget-box widget-color-blue">
@@ -392,13 +398,13 @@ $("#product").html(msg);
 //echo $datecodedno;
 
 ?>
-<form name="frm" id="frm" action="#" method="POST">
+<form name="frmup" id="frmup" action="#" method="POST">
 <!--<input name="menu_id" id="menu_id" type="hidden" value="">-->
 <input name="order_no" id="order_no" type="hidden" value="<?php $datecodedno; ?>">
 <div class="form-group row">
 <div class="col-sm-12">
 <label for="form-field-8">Plant Name</label>
-<select class="form-control" name="plant_id" id="plant_id" onchange="return get_products(this.value);">
+<select class="form-control" name="plant_id2" id="plant_id2" onchange="return get_products2(this.value);">
 <option value="">-Select Plant-</option>
 <?php 
 $user_id 	= $this->session->userdata('admin_user_id');
@@ -409,23 +415,23 @@ foreach($plant_data as $res){?>
 </select>
 <br />
 <label for="form-field-8">SKU/Product Name</label>
-<select class="form-control" name="product[]" id="product" >
+<select class="form-control" name="product2[]" id="product2" >
 
 </select>			
 <?php if(!empty($this->uri->segment(3))){?>
-<script>get_products(<?php echo $this->uri->segment(3);?>);</script>
+<script>get_products2(<?php echo $this->uri->segment(3);?>);</script>
 <?php }?>						
 
 
 <script>
-function get_products(id){
+function get_products2(id){
 if(id!=''){
 $.ajax({
 type:'POST',
 url:'<?php echo base_url().'plant_master/getAssignedProductList'?>',
 data:{id:id},
 success:function(msg){
-$("#product").html(msg);
+$("#product2").html(msg);
 }
 })
 }
@@ -435,36 +441,23 @@ $("#product").html(msg);
 
                                   </div>
                                   </div>
-
+								<div class="form-group row">
+                                  <div class="col-sm-12">
+                                  <label for="form-field-8">Upload Code</label>
+								  				
+                                  <input name="upload_code" id="upload_code" type="text" class="form-control" placeholder="Upload Code" >
+                                  </div>
+                                  </div>
 
                                   <div class="form-group row">
                                   <div class="col-sm-12">
                                   <label for="form-field-8">Quantity</label>
-								  <select name="quantity" id="quantity" class="form-control">
-										<option value="10">10</option>	
-										<option value="100">100</option>
-										<option value="1000">1,000</option>
-										<option value="10000">10,000</option>
-										<option value="100000">1,00,000</option>
-										<option value="1000000">10,00,000</option>
-									</select>
-					
-                                  <!--<input name="quantity" id="quantity" type="text" class="form-control" placeholder="Quantity" >-->
+								  				
+                                  <input name="quantity2" id="quantity2" type="text" class="form-control" placeholder="Quantity" >
                                   </div>
                                   </div>
 
 
-                                  <div class="form-group row">
-                                  <div class="col-sm-12">
-                                  <label for="form-field-8">Expected Date</label>
-                                  <div class="input-group date" data-provide="datepicker">
-                                  <input type="text" name="deliverydate" id="deliverrydate" readonly="readonly" class="form-control">
-                                  <div class="input-group-addon">
-                                  <span class="glyphicon glyphicon-th"></span>
-                                  </div>
-                                  </div>
-                                  </div>
-                                  </div>
 
                                   <div class="form-group row">
                                   <div class="col-sm-12">
@@ -624,27 +617,35 @@ $("#product").html(msg);
 
 
     <script>$(function () {
+		
+		var nowDate = new Date();
+    var today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
+    //initializing datepicker
+    $('.datepicker').datepicker({format:'yyyy-mm-dd', startDate: today,minDate: new Date()  });
+    });
     
-    $("form#frm").validate({
+    $("form#frmup").validate({
     rules: {
-			plant_id: {required: true},
-            "product[]":{required: true},
-        quantity: {required: true,number: true}
+			plant_id2: {required: true},
+            "product2[]":{required: true},
+			upload_code: {required: true},
+			quantity2: {required: true, number: true}
             } ,
 
     messages: {
-			plant_id: {	required: "Please Select a Plant"} ,
-            "product[]": {required: "Please Select Product Name/SKU Code" } , 
-            quantity: {	required: "Please enter quantity"} 
+			plant_id2: {	required: "Please Select a Plant"} ,
+            "product2[]": {required: "Please Select Product Name/SKU Code" } , 
+			upload_code: {	required: "Please provide the upload code"} ,
+            quantity2: {	required: "Please enter quantity"} 
     },
     submitHandler: function(form) {
             var dataSend;
-            var dataSend 	= $("#frm").serialize();
+            var dataSend 	= $("#frmup").serialize();
             $.ajax({
                     type: "POST",
                     dataType:"json",
                     beforeSend: function(){
-                    $('.alert-success').hide();
+                    $('.alert-success2').hide();
                                     //$(".show_loader").show();
                                     //$(".show_loader").click();
                     },
@@ -653,10 +654,10 @@ $("#product").html(msg);
                     success: function (msg) {
 
                             if(parseInt(msg)==1){
-                            $('#myModal').modal('hide');
-                                    //$('#ajax_msg').text("User Added Successfully!").css("color","green").show();
-                                    $('.alert-success').show();
-                                    $('#frm')[0].reset(); 
+                            $('#myUploadModal').modal('hide');
+                                    $('#ajax_msg').text("Codes Upoaded Successfully!").css("color","green").show();
+                                    $('.alert-success2').show();
+                                    $('#frmup')[0].reset(); 
                                     window.location="<?php echo base_url(); ?>order_master/list_orders/";
 
                             }

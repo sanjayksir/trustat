@@ -747,6 +747,58 @@
  	 }
 	 
 	 
+	 //Upload Code 
+	function save_upload_codes(){ 
+			
+			
+			
+			// print a message
+			//$userid 				= base64_decode($this->input->post('order_id')); 
+			$barcodesize 			= $this->input->post('barcodesize'); 
+			 $user_id 	= $this->session->userdata('admin_user_id');
+			
+  			$userOrderData 			= view_order_data($userid);
+			//echo '<pre>';print_r($userOrderData);exit;
+			//$select_product=$this->input->post('product2');
+			//$data['product_id'] = get_products_name_by_id($select_product);
+			
+			
+			$product_id 			= "kk";
+			$plant_id 				= $this->input->post('plant_id2');
+			$active_status 			= 1;
+			$barcode_no 			= $userOrderData['order_tracking_number'];
+   			$username				= getUserFullNameById($userOrderData['user_id']);
+			//$user_id				= $userOrderData['user_id'];
+ 			$product_name			= $userOrderData['product_name'];
+			$product_sku			= $userOrderData['product_sku'];
+			$quantity				= $userOrderData['quantity'];
+			$delivery_date			= date('Y-m-d',strtotime($userOrderData['delivery_date']));
+			$order_created_date     = date('Y-m-d',strtotime($userOrderData['created_date']));
+			$status					= $userOrderData['status'];
+ 			$qrcode 				= $this->input->post('upload_code');	
+			$qrcode2				= $product_id .'-'. mt_rand(1000, 9999);		
+ 			
+			
+			//echo '<pre>';print_r($this->input->post());exit;
+			// PRINT VARIOUS 1D BARCODES
+			
+			 $post = $this->input->post();
+				for($i=1;$i<=$this->input->post('quantity2');$i++){
+				 	
+					
+		$this->order_master_model->insert_printed_barcode_qrcode($post, $qrcode.'-'.$i, $qrcode2.'-'.$i, 'barcode', $product_id, $active_status, $plant_id, $user_id);
+					
+ 				}
+				
+				
+			 // $pdf->Ln();
+ 			// ---------------------------------------------------------
+			//Close and output PDF document
+			//ob_end_clean();
+			//============================================================+
+ 	 } 
+	 
+	 
 	 
 	 ###------------------------ Testing -------------------------------###
 	  function generate_order_barcode2(){

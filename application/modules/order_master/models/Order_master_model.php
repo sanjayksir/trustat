@@ -596,7 +596,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 
 	 
 	 #### -----------------Printed barcode----------------#####
-	 function insert_printed_barcode_qrcode($post, $code, $code2, $code_type,$product_id='',$active_status,$plant_id,$user_id){
+	 function insert_printed_barcode_qrcode($post, $code, $code2, $product_id='',$active_status,$plant_id,$user_id){
 		 $order_id 				= base64_decode($post['order_id']);
 		 $post_code 			= $code;
 		 $post_code2 			= $code2;
@@ -610,7 +610,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 			$date = date('m/d/Y h:i:s a', time());
 		 $insertData = array(
 				"print_id"				=> $print_id,
-				"order_id"				=> $order_id,
+				//"order_id"				=> $order_id,
 				"barcode_qr_code_no"	=> $post_code,
 				"barcode_qr_code_no2"	=> $post_code2,
 				"product_id"			=> $product_id,
