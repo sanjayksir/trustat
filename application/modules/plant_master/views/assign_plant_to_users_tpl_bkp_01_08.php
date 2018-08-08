@@ -128,7 +128,7 @@ if( $this->uri->segment(3)!=''){
 		<div class="form-group row">
 			<div class="col-sm-4">
 			<label for="form-field-8">Select CCC admin User</label>
-            <select class="form-control" name="user" id="user" onchange="return get_plants_controller(this.value),get_plants(this.value);;">
+            <select class="form-control" name="user" id="user" onchange="return get_plants_controller(this.value);">
 			<?php if($SelectDD!=''){?><option value="">-Select Plant Controller-</option>
             <?php }
  			//$plant_data = get_all_plants($user_id);
@@ -141,7 +141,7 @@ if( $this->uri->segment(3)!=''){
 			<!--------------------------------- Plant Controller DD ------------------------ -->
 			<div class="col-sm-4">
                 <label for="form-field-8">Select Plant Controller User</label>
-                <select class="form-control" name="plant_controller_val" id="plant_controller_val">
+                <select class="form-control" name="plant_controller_val" id="plant_controller_val" onchange="return get_plants(this.value);">
                     <option value="">Select Plant Controller</option>
                 </select> 
 			</div>
@@ -164,7 +164,7 @@ if( $this->uri->segment(3)!=''){
 		 	if(id!=''){
 				$.ajax({
 				type:'POST',
-				url:'<?php echo base_url().'plant_master/getActivePlantListSA'?>',
+				url:'<?php echo base_url().'plant_master/getActivePlantList'?>',
 				data:{id:id},
 				success:function(msg){
 					$("#plants").html(msg);
@@ -384,7 +384,7 @@ $.ajax({
 				$('#ajax_msg').text("Plant Assigned Successfully!").css("color","green").show();
 				$('#blah').attr('src', '').hide();
 				$('#user_frm')[0].reset(); 
-				  window.location.href="<?php echo base_url(); ?>plant_master//list_assigned_plants_user";						
+				 window.location.href="<?php echo base_url(); ?>plant_master//list_assigned_plants_user";						
 			}
 			 
 		},

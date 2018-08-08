@@ -128,7 +128,7 @@ if( $this->uri->segment(3)!=''){
 		<div class="form-group row">
 			<div class="col-sm-6">
 			<label for="form-field-8">Select Plant Controller User</label>
-            <select class="form-control" name="user" id="user">
+            <select class="form-control" name="user" id="user" onchange="return get_plants(this.value);">
 			<?php if($SelectDD!=''){?><option value="">-Select Plant Controller-</option>
             <?php }
  			//$plant_data = get_all_plants($user_id);

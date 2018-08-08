@@ -79,12 +79,16 @@
 		</div>
 		<div class="form-group row">
 			<div class="col-sm-6">
-			  <label for="form-field-8">First Name</label>
+			  <label for="form-field-8">Full Name</label>
 			<div class="form-control"><?php echo $get_user_details[0]['f_name'];?></div>
 			</div>
  			<div class="col-sm-6">
-			  <label for="form-field-8">Last Name</label>
+			  <label for="form-field-8">Packing Level(Number)</label>
 			 <div class="form-control"><?php echo $get_user_details[0]['l_name'];?></div>
+			</div>
+			<div class="col-sm-6">
+			  <label for="form-field-8">Assigned Role to the user</label>
+			 <div class="form-control"><?php echo $get_user_details[0]['designation_id'];?></div>
 			</div>
 		</div>
 		<?php if($this->session->userdata('admin_user_id')==1){?>
@@ -141,7 +145,15 @@
 			 
 		</div>
 		 
-		     
+		 <div class="form-group row">
+                <div class="col-sm-6">
+                    <label for="form-field-8">Assigned Plant</label> - 
+					 
+					<?php echo assigned_plants($get_user_details[0]['user_id']);?>
+					
+                   
+                </div>
+            </div>    
 
            <hr>
  

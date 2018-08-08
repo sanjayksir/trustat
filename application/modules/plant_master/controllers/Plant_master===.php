@@ -274,41 +274,20 @@
 			$id 			= $this->input->post('id');
             $user_id 		= $this->session->userdata('admin_user_id');
             if(empty($user_id)){
-                //$user_id			= $this->input->post('ccadminId');
+                $user_id			= $this->input->post('ccadminId');
             }
 			
 			## assigned plants array
- 			$assigned_arr = explode(',',get_assigned_active_plants_list($id));
+ 			$assigned_arr = explode(',',get_assigned_active_plants_list($user_id));
 			
 			//print_r($assigned_arr);exit;
 			
- 			$product_data 	= get_all_active_plants($user_id);
+ 			$product_data 	= get_all_active_plants($user_id );
 			 foreach($product_data as $res){?>
 				<option value="<?php echo $res['plant_id'];?>" <?php if(in_array($res['plant_id'],$assigned_arr )){echo 'selected';}?>><?php echo $res['plant_name'];?></option>
           <?php }
 			return $result;
 	 }	
-	 
-	 
-	 public function getActivePlantListSA() {
-			$result = '';
-			$id 			= $this->input->post('id');
-            $user_id 		= $this->session->userdata('admin_user_id');
-            if(empty($user_id)){
-                //$user_id			= $this->input->post('ccadminId');
-            }
-			
-			## assigned plants array
- 			$assigned_arr = explode(',',get_assigned_active_plants_list($id));
-			
-			//print_r($assigned_arr);exit;
-			
- 			$product_data 	= get_all_active_plants($id);
-			 foreach($product_data as $res){?>
-				<option value="<?php echo $res['plant_id'];?>" <?php if(in_array($res['plant_id'],$assigned_arr )){echo 'selected';}?>><?php echo $res['plant_name'];?></option>
-          <?php }
-			return $result;
-	 }
       
       
       public function getActivePlantControllerList() {
