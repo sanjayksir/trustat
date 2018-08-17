@@ -83,7 +83,8 @@ class ScannedProduct extends ApiController {
 		$result->isLoyaltyForImageFBQuesGiven = $isLoyaltyForImageFBQuesGiven;
 		$result->isLoyaltyForPDFFBQuesGiven = $isLoyaltyForPDFFBQuesGiven;
 
-		
+		$result->Scanned_Code = $data['bar_code']; 
+		                   
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
         $data['created_at'] = date("Y-m-d H:i:s");
@@ -139,7 +140,7 @@ class ScannedProduct extends ApiController {
 		$consumer_id = $data['consumer_id']; 
 		//echo $consumer_id; exit;
         $result = $this->ScannedproductsModel->findProductForConsumer($consumer_id);
-		$result = $this->ScannedproductsModel->sendFCM($mess,$consumer_id);
+		//$result = $this->ScannedproductsModel->sendFCM($mess,$consumer_id);
 		//echo $result;
 		/* 
         if(!empty($result->product_video)){
@@ -179,7 +180,7 @@ class ScannedProduct extends ApiController {
 		$consumer_id = $data['consumer_id']; 
 		//echo $consumer_id; exit;
         $result = $this->ScannedproductsModel->findProductForConsumerSurvey($consumer_id);
-		$result = $this->ScannedproductsModel->sendFCMSurvey($mess,$consumer_id);
+		//$result = $this->ScannedproductsModel->sendFCMSurvey($mess,$consumer_id);
 		
 		//echo $result;
 		/* 
@@ -254,8 +255,10 @@ class ScannedProduct extends ApiController {
             $this->response(['status'=>false,'message'=>'This product and barcode is not supported by howzzt.'],200);
         }
         //echo "<pre>";print_r($result);die;
-        $bar_code_data = $data['bar_code'];
-        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data); 
+        $bar_code_data = $result->barcode_qr_code_no;
+		$bar_code2_data = $result->barcode_qr_code_no2;
+        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data, $bar_code2_data); 
+		if($result->barcode_qr_code_no == $data['bar_code']){
         if( $result->pack_level == 1 ){
             $data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
             $this->response(['status'=>true,'message'=>'Product registration failed for pack level '.$result->pack_level.'.','data'=>$data]);
@@ -263,6 +266,18 @@ class ScannedProduct extends ApiController {
             $data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
             $this->response(['status'=>true,'message'=>'Product registration failed for pack level '.$result->pack_level.'.','data'=>$data]);
         }
+		} else {
+		if( $result->pack_level2 == 1 ){
+            $data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
+            $this->response(['status'=>true,'message'=>'Product registration failed for pack level '.$result->pack_level2.'.','data'=>$data]);
+        }elseif($result->pack_level2 > 1){
+            $data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
+            $this->response(['status'=>true,'message'=>'Product registration failed for pack level '.$result->pack_level2.'.','data'=>$data]);
+        }	
+			
+		}	
+		
+		if($result->stock_status!='Customer_Code'){
         if(!empty($isRegistered)){
             if($isRegistered['status'] == 0){
                 $data['message1'] = $message = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process.';
@@ -271,6 +286,8 @@ class ScannedProduct extends ApiController {
             }
             $this->response(['status'=>true,'message'=>$message,'data'=>$data]);
         }
+		}
+		
         $data['invoice_image'] = null;
         if(!empty($data['invoice_image'])){
             $this->load->library('upload', [

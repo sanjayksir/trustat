@@ -44,10 +44,12 @@ class ScannedproductsModel extends CI_Model {
             return false;
         }
         $items = [];
-        $query = $this->db->select('p.*,pbq.pack_level')
+        $query = $this->db->select('p.*,pbq.barcode_qr_code_no,pbq.pack_level,pbq.barcode_qr_code_no2,pbq.pack_level2,pbq.stock_status')
                 ->from('printed_barcode_qrcode AS pbq')
                 ->join('products AS p', 'p.id=pbq.product_id')
                 ->where(['pbq.barcode_qr_code_no' => $barcode,'pbq.active_status'=>1])
+				->or_where(['pbq.barcode_qr_code_no2' => $barcode])
+				// ->or_where('library.available_until =', "00-00-00 00:00:00")
                 ->get();
         //echo $this->db->last_query();die;
         //echo "<pre>";print_r($query);die;
@@ -233,8 +235,9 @@ return $result;
 	
 	// check if the product code is registered or not 
 	
-    Public function isProductRegistered($bar_code_data) {
-        $query = $this->db->get_where('purchased_product', array('bar_code' => $bar_code_data));
+    Public function isProductRegistered($bar_code_data, $bar_code2_data) {
+       // $query = $this->db->get_where('purchased_product', array('bar_code' => $bar_code_data));
+	   $query = $this->db->get_where('purchased_product',"bar_code='".$bar_code_data."' OR bar_code='".$bar_code2_data."'");
         if ($query->num_rows() > 0) {
             $data = $query->row_array();            
             return $data;

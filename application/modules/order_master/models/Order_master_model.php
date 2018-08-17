@@ -596,7 +596,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 
 	 
 	 #### -----------------Printed barcode----------------#####
-	 function insert_printed_barcode_qrcode($post, $code, $code2, $product_id='',$active_status,$plant_id,$user_id){
+	 function insert_printed_barcode_qrcode($post, $code, $code2, $code_type,$product_id='',$active_status,$plant_id,$user_id){
 		 $order_id 				= base64_decode($post['order_id']);
 		 $post_code 			= $code;
 		 $post_code2 			= $code2;
@@ -610,7 +610,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 			$date = date('m/d/Y h:i:s a', time());
 		 $insertData = array(
 				"print_id"				=> $print_id,
-				//"order_id"				=> $order_id,
+				"order_id"				=> $order_id,
 				"barcode_qr_code_no"	=> $post_code,
 				"barcode_qr_code_no2"	=> $post_code2,
 				"product_id"			=> $product_id,
@@ -628,6 +628,50 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 			return false;
 		}
 	 }
+	 
+	 
+	 function insert_upload_bulk_codes($post, $code, $code2, $active_status, $plant_id, $user_id, $product2_array){
+		 $product2_arr = json_decode($product2_array, true); 
+		 
+		// $order_id 				= base64_decode($post['order_id']);
+		 $post_code 			= $code;
+		 $post_code2 			= $code2;
+		 //$rnpin2 = mt_rand(1000, 9999);
+		// $barcode_qr_code_no2   =  $code . '-' . $rnpin2;
+			//$print_id = date('YmdHis') . "" . uniqid();
+	//return $last_row=$this->db->select('id')->order_by('id',"desc")->limit(1)->get('order_print_listing')->row();
+			//$print_idb1 = $this->last_record();
+	//$row = $this->db->select("*")->limit(1)->order_by('id',"DESC")->get("order_print_listing")->row();
+			//$print_id =  $row->id + 1;
+			$date = date('m/d/Y h:i:s a', time());
+			foreach ($product2_arr as $product2s) {
+		 $insertData = array(
+				"print_id"				=> 1,
+				"order_id"				=> 1,
+				"barcode_qr_code_no"	=> $post_code,
+				"barcode_qr_code_no2"	=> get_product_sku_by_id($product2s) . '-' . $post_code2,
+				"pack_level"			=> 0,
+				"pack_level2"			=> 0,
+				"product_id"			=> $product2s,
+				"plant_id"				=> $plant_id,
+				"print_user_id"			=> $user_id,
+				"active_status"			=> 1,
+				"customer_id"			=> 0,
+				"stock_status"			=> 'Customer_Code',
+				"modified_at"			=> date('Y-m-d H:i:s'),
+				"receive_date"			=> date('Y-m-d H:i:s')
+			 ); 
+		 
+		if($this->db->insert("printed_barcode_qrcode", $insertData)){
+			$this->session->set_flashdata('success', 'Order Updated!');
+ 			return true;
+		}else{
+			$this->session->set_flashdata('success', 'Error!');
+ 			return false;
+		}
+	}
+ }
+	 
 	 
 	function insert_order_print_listing($post, $code_type){
 		 $order_id 				= base64_decode($post['order_id']);

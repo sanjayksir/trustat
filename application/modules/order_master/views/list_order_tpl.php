@@ -47,7 +47,7 @@
                                                 <div class="widget-toolbar">
                                                    <a href="<?php echo base_url('order_master/list_orders_plant_controlllers_CC') ?>" class="btn btn-xs btn-warning" title="List Plant Controllers Orders">List Plant Controllers Orders </a>
                                                     <a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Make Order" data-toggle="modal" data-target="#myModal">Make Order</a>
-													<a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Upload Codes" data-toggle="modal" data-target="#myUploadModal">Upload Codes</a>
+													<a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Upload Customer Codes" data-toggle="modal" data-target="#myUploadModal">Upload Customer Codes</a>
                                                 </div>
                                             </div>
                                             <div class="widget-body">
@@ -389,7 +389,7 @@ $("#product").html(msg);
           <div class="modal-content">
             <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Upload Codes</h4>
+                  <h4 class="modal-title">Upload Customer Codes</h4>
             </div>
             <div class="modal-body">
 <?php 
@@ -430,8 +430,8 @@ $.ajax({
 type:'POST',
 url:'<?php echo base_url().'plant_master/getAssignedProductList'?>',
 data:{id:id},
-success:function(msg){
-$("#product2").html(msg);
+success:function(msg2){
+$("#product2").html(msg2);
 }
 })
 }
@@ -453,7 +453,7 @@ $("#product2").html(msg);
                                   <div class="col-sm-12">
                                   <label for="form-field-8">Quantity</label>
 								  				
-                                  <input name="quantity2" id="quantity2" type="text" class="form-control" placeholder="Quantity" >
+                                  <input name="quantity2" id="quantity2" type="text" class="form-control" placeholder="Quantity" value="1" readonly>
                                   </div>
                                   </div>
 
@@ -562,7 +562,7 @@ $("#product2").html(msg);
     rules: {
 			plant_id: {required: true},
             "product[]":{required: true},
-        quantity: {required: true,number: true}
+        quantity: {required: true, number: true}
             } ,
 
     messages: {
@@ -634,7 +634,7 @@ $("#product2").html(msg);
 
     messages: {
 			plant_id2: {	required: "Please Select a Plant"} ,
-            "product2[]": {required: "Please Select Product Name/SKU Code" } , 
+           "product2[]": {required: "Please Select Product Name/SKU Code" } , 
 			upload_code: {	required: "Please provide the upload code"} ,
             quantity2: {	required: "Please enter quantity"} 
     },
@@ -645,30 +645,30 @@ $("#product2").html(msg);
                     type: "POST",
                     dataType:"json",
                     beforeSend: function(){
-                    $('.alert-success2').hide();
+                    $('.alert-success').hide();
                                     //$(".show_loader").show();
                                     //$(".show_loader").click();
                     },
-                    url: "<?php echo base_url(); ?>order_master/save_upload_codes/",
-                    data: dataSend,
-                    success: function (msg) {
-
-                            if(parseInt(msg)==1){
-                            $('#myUploadModal').modal('hide');
-                                    $('#ajax_msg').text("Codes Upoaded Successfully!").css("color","green").show();
-                                    $('.alert-success2').show();
-                                    $('#frmup')[0].reset(); 
-                                    window.location="<?php echo base_url(); ?>order_master/list_orders/";
-
+         url: "<?php echo base_url(); ?>order_master/save_upload_bulk_codes/",
+         data: dataSend,
+         success: function (msg) {
+			
+			if(parseInt(msg)==1){
+                    $('#myUploadModal').modal('hide');
+                  //$('#ajax_msg').text("Codes Upoaded Successfully!").css("color","green").show();
+                    $('.alert-success').show();
+                    $('#frmup')[0].reset(); 
+                    window.location="<?php echo base_url(); ?>order_master/list_orders/";
+					
                             }
                     }
 
             });
-
-             return false;
-
+			
+				alert("Codes Upoaded!");
+				window.location.href = "<?php echo base_url(); ?>order_master/list_orders/";
+             return false; 
     }
-
     });
 
 

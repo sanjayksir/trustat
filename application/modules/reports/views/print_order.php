@@ -25,12 +25,12 @@
 				   <div class="form-group">
 					<label for="message-text">Print Size:</label>
 					<div class="form-control"><?php if( strtolower($printEssentialAttributes['code_size'])=='s'){
-													$size = 20;
+													$size = 30;
 													echo 'Small';
 													}else if(strtolower($printEssentialAttributes['code_size'])=='m'){
-													$size = 30;
-													echo 'Medium';}else{
 													$size = 40;
+													echo 'Medium';}else{
+													$size = 50;
 													echo 'Large';
 													};?></div>
 				  </div>

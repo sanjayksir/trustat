@@ -763,7 +763,7 @@ class Consumer extends ApiController {
         $redemtionData['user_id'] = $user['id'];
         if ($this->db->insert('loyalty_redemption', $redemtionData)) {
             $redemptionId = $this->db->insert_id();
-            $this->db->update('consumers',$consumerData,['id'=>$user['id']]);
+            //$this->db->update('consumers',$consumerData,['id'=>$user['id']]);
             //$this->ProductModel->saveLoylty('loyalty-redemption', $user['id'], ['user_id' => $user['id'],'redemption_id'=>$redemptionId]);
             Utils::response(['status'=>true,'message'=>'Thank you for your redemption request, after validation, your request will be processed in next 7-10 Working days.']);
         }else{

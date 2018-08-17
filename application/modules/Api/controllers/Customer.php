@@ -136,7 +136,7 @@ class Customer extends ApiController {
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
         $result = $this->ProductModel->barcodeProducts($data['bar_code']);
-        if(empty($result)){
+		 if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
         }        
         $this->db->set('active_status',1);
@@ -149,7 +149,7 @@ class Customer extends ApiController {
         }
         if($this->db->update('printed_barcode_qrcode')){
             //echo $this->db->last_query();die;
-            $this->response(['status'=>true,'message'=>'Level has been added.','data'=>$result]);
+            $this->response(['status'=>true,'message'=>'Level has been added.','new_pack_level'=>$data['pack_level'],'data'=>$result]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to add level.'],200); 
         }

@@ -400,6 +400,8 @@
 			// set image scale factor
 			$pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
 			
+			
+			
 			// set some language-dependent strings (optional)
 			if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
 				require_once(dirname(__FILE__).'/lang/eng.php');
@@ -408,7 +410,7 @@
  			// ---------------------------------------------------------
  			// NOTE: 2D barcode algorithms must be implemented on 2dbarcode.php class file.
  			// set font
-			$pdf->SetFont('', '', 9);
+			$pdf->SetFont('', '', 7);
  			$pdf->setPrintHeader(false);
  			// add a page
 			$pdf->AddPage();
@@ -427,7 +429,7 @@
 			$delivery_date			= date('Y-m-d',strtotime($userOrderData['delivery_date']));
 			$order_created_date     = date('Y-m-d',strtotime($userOrderData['created_date']));
 			$status					= $userOrderData['status'];
- 			$qrcode 				= $barcode_no;
+ 			$qrcode 				= $barcode_no .'-'. mt_rand(1000, 9999);
 			$qrcode2				= $barcode_no .'-'. mt_rand(1000, 9999);
 			//$qrcode2 				= $barcode_no2;			
  			
@@ -439,8 +441,15 @@
 								'fgcolor' => array(0,0,0), 
 								'bgcolor' => false, //array(255,255,255)
 								'module_width' => 1, // width of a single module in points
-								'module_height' => 1 // height of a single module in points
+								'module_height' => 1, // height of a single module in points
+								'text' => true,
+								'font' => 'helvetica',
+								'fontsize' => 8,
+								'stretchtext' => 4
 						  ); 
+						  
+						  
+						  
  			$html='';
 			$html = '<!DOCTYPE html>
 						<html>
@@ -519,24 +528,22 @@
 					$getEssentialAttributes = getEssentialAttributes($product_id);
 					if($getEssentialAttributes['code_unity_type']=='Twin'){
 						
-						$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
-					$pdf->Text(110, $y, 'Scan & Check Genuinity');
-					
-					$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
-					$pdf->Text(150, $y, 'Need to Scratch');
-					
-					} 
-					
-					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
-					$pdf->Text(110, $y, '');
+					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 100, $y, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->Text(101, $y, 'Scan to Check Product');
+					$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
+				  	$pdf->Text(140, $y+18, "Do Not Buy! If already Scratched ^ ");
 					
 					
+					//$pdf->Cell(287,50, 'If already Scratched ^', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
 					
-					//$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 80, 150, $y, $barcodesize, $style, 'N');
-					//$pdf->write2DBarcode($qrcode.'_'.$i, 'C128B,L',  $Y, 105, 18, 0.4, $style, 'M');
-					//Reset X,Y so wrapping cell wraps around the barcode's cell.
+					} else {
+					
+					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->Text(115, $y, $qrcode.'-'.$i);
+					}
+					
 					$pdf->SetXY($x,$y);
-					$pdf->Cell(105,32, $qrcode.'-'.$i, 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
+					$pdf->Cell(287,50, '', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
 					$pdf->Ln();
 			$this->order_master_model->insert_printed_barcode_qrcode($post,$qrcode.'-'.$i,$qrcode2.'-'.$i,'Qrcode',$product_id,$active_status,$plant_id,$user_id);
 				}
@@ -580,8 +587,8 @@
 			$pdf->setBarcode(date('Y-m-d H:i:s'));
 			
 			// set font
-			$pdf->SetFont('helvetica', '', 11);
-			
+			//$pdf->SetFont('helvetica', '', 11);
+			$pdf->SetFont('', '', 7);
 			// add a page
 			$pdf->AddPage();
 			
@@ -604,7 +611,7 @@
 			$delivery_date			= date('Y-m-d',strtotime($userOrderData['delivery_date']));
 			$order_created_date     = date('Y-m-d',strtotime($userOrderData['created_date']));
 			$status					= $userOrderData['status'];
- 			$qrcode 				= $barcode_no;	
+ 			$qrcode 				= $barcode_no .'-'. mt_rand(1000, 9999);
 			$qrcode2				= $barcode_no .'-'. mt_rand(1000, 9999);		
  			
 			// set style for barcode
@@ -615,7 +622,11 @@
 								'fgcolor' => array(0,0,0), 
 								'bgcolor' => false, //array(255,255,255)
 								'module_width' => 1, // width of a single module in points
-								'module_height' => 1 // height of a single module in points
+								'module_height' => 1, // height of a single module in points
+								'text' => true,
+								'font' => 'helvetica',
+								'fontsize' => 8,
+								'stretchtext' => 4
 						  ); 
  			$html='';
 			$html = '<!DOCTYPE html>
@@ -683,25 +694,22 @@
  						</body>
 						</html>';
 			// -----------------------------------------------------------------------------
- 			$pdf->SetFont('helvetica', '', 10);
+ 			$pdf->SetFont('helvetica', '', 7);
 			
  			// define barcode style
 			$style = array(
-				'position' => '',
-				'align' => 'L',
-				'stretch' => false,
-				'fitwidth' => false,
-				'cellfitalign' => '',
-				'border' => true,
-				'hpadding' => 'auto',
-				'vpadding' => 'auto',
-				'fgcolor' => array(0,0,0),
-				'bgcolor' => false, //array(255,255,255),
-				'text' => true,
-				'font' => 'helvetica',
-				'fontsize' => 8,
-				'stretchtext' => 2
-			);
+								'border' => true,
+								'vpadding' => 'auto',
+								'hpadding' => 'auto',
+								'fgcolor' => array(0,0,0), 
+								'bgcolor' => false, //array(255,255,255)
+								'module_width' => 1, // width of a single module in points
+								'module_height' => 1, // height of a single module in points
+								'text' => true,
+								'font' => 'helvetica',
+								'fontsize' => 8,
+								'stretchtext' => 4
+						  ); 
 			//echo '<pre>';print_r($this->input->post());exit;
 			// PRINT VARIOUS 1D BARCODES
 			$pdf->writeHTML($html, false, 0, false, 0);
@@ -718,17 +726,31 @@
 					
 					$getEssentialAttributes = getEssentialAttributes($product_id);
 					if($getEssentialAttributes['code_unity_type']=='Twin'){
-					$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 60, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
-					$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 140, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
-					}
-					$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 60, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
+					//$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 60, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
+					//$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 125, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
+					
+					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 100, $y, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->Text(101, $y, 'Scan to Check Product');
+					$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 140, $y, 50, 15, 0.4, $style, 'N');
+				  	$pdf->Text(140, $y+18, "Do Not Buy! If already Scratched ^ ");
+					
+					
+					} else {
+					$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 100, $y, 50, 15, 0.3, $style, 'N');
 					//$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
 					//$pdf->Text(110, $y, 'This is First Code');
 					//$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
 					//$pdf->Text(150, $y, 'This is Second Code');
             		//Reset X,Y so wrapping cell wraps around the barcode's cell.
-           			 $pdf->SetXY($x,$y);
+           			 /* old
+					 $pdf->SetXY($x,$y);
 					 $pdf->Cell(50, 42, '', 0, 1);
+					 */
+					}
+					 $pdf->SetXY($x,$y);
+					$pdf->Cell(287,50, '', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
+					$pdf->Ln();
+					
 					// $pdf->Cell(105, 21, "", 1, 2, 'C', FALSE, '', 0, FALSE, 'C', 'B');
 		$this->order_master_model->insert_printed_barcode_qrcode($post, $qrcode.'-'.$i, $qrcode2.'-'.$i, 'barcode',$product_id,$active_status,$plant_id,$user_id);
 					
@@ -748,35 +770,45 @@
 	 
 	 
 	 //Upload Code 
-	function save_upload_codes(){ 
+	function save_upload_bulk_codes(){ 
 			
 			
+			//ob_clean();
 			
 			// print a message
 			//$userid 				= base64_decode($this->input->post('order_id')); 
-			$barcodesize 			= $this->input->post('barcodesize'); 
+			//$barcodesize 			= $this->input->post('barcodesize'); 
 			 $user_id 	= $this->session->userdata('admin_user_id');
 			
   			$userOrderData 			= view_order_data($userid);
 			//echo '<pre>';print_r($userOrderData);exit;
 			//$select_product=$this->input->post('product2');
 			//$data['product_id'] = get_products_name_by_id($select_product);
+			//$product_arr = $frmData['product2'];
+			
+			//$product_idr 			= $this->input->post('product2');
+			
+			$product2_array = json_encode($this->input->post('product2'));
 			
 			
-			$product_id 			= "kk";
+			//$product_arr[1]			= $this->input->post('product2');
+			
+			//$productidr				= $product_arr['product_name'];
+			
+			//$product_id 			= "111";
 			$plant_id 				= $this->input->post('plant_id2');
 			$active_status 			= 1;
-			$barcode_no 			= $userOrderData['order_tracking_number'];
-   			$username				= getUserFullNameById($userOrderData['user_id']);
+			//$barcode_no 			= $userOrderData['order_tracking_number'];
+   			//$username				= getUserFullNameById($userOrderData['user_id']);
 			//$user_id				= $userOrderData['user_id'];
- 			$product_name			= $userOrderData['product_name'];
-			$product_sku			= $userOrderData['product_sku'];
-			$quantity				= $userOrderData['quantity'];
-			$delivery_date			= date('Y-m-d',strtotime($userOrderData['delivery_date']));
-			$order_created_date     = date('Y-m-d',strtotime($userOrderData['created_date']));
-			$status					= $userOrderData['status'];
+ 			//$product_name			= $userOrderData['product_name'];
+			//$product_sku			= $userOrderData['product_sku'];
+			//$quantity				= $userOrderData['quantity'];
+			//$delivery_date			= date('Y-m-d',strtotime($userOrderData['delivery_date']));
+			//$order_created_date     = date('Y-m-d',strtotime($userOrderData['created_date']));
+			//$status					= $userOrderData['status'];
  			$qrcode 				= $this->input->post('upload_code');	
-			$qrcode2				= $product_id .'-'. mt_rand(1000, 9999);		
+			$qrcode2				= mt_rand(1000, 9999);		
  			
 			
 			//echo '<pre>';print_r($this->input->post());exit;
@@ -786,11 +818,18 @@
 				for($i=1;$i<=$this->input->post('quantity2');$i++){
 				 	
 					
-		$this->order_master_model->insert_printed_barcode_qrcode($post, $qrcode.'-'.$i, $qrcode2.'-'.$i, 'barcode', $product_id, $active_status, $plant_id, $user_id);
+		$this->order_master_model->insert_upload_bulk_codes($post, $qrcode, $qrcode2.'-'.$i, $active_status, $plant_id, $user_id, $product2_array);
+					
+					
+					
 					
  				}
 				
 				
+				//return $this->session->set_flashdata('success', 'Order Updated!');
+				//exit;
+				//echo redirect('order_master/list_orders/');
+				 //echo 'window.location= "www.gmail.com"';
 			 // $pdf->Ln();
  			// ---------------------------------------------------------
 			//Close and output PDF document
@@ -1063,7 +1102,7 @@ $txt = "You can also export 2D barcodes in other formats (PNG, SVG, HTML). Check
 $pdf->MultiCell(70, 50, $txt, 0, 'J', false, 1, 125, 30, true, 0, false, true, 0, 'T', false);
 
 
-$pdf->SetFont('helvetica', '', 10);
+$pdf->SetFont('helvetica', '', 9);
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -1080,12 +1119,12 @@ $style = array(
 
 // write RAW 2D Barcode
 
-$code = '111011101110111,010010001000010,010011001110010,010010000010010,010011101110010';
-$pdf->write2DBarcode($code, 'RAW', 80, 30, 30, 20, $style, 'N');
+//$code = '111011101110111,010010001000010,010011001110010,010010000010010,010011101110010';
+//$pdf->write2DBarcode($code, 'RAW', 80, 30, 30, 20, $style, 'N');
 
 // write RAW2 2D Barcode
-$code = '[111011101110111][010010001000010][010011001110010][010010000010010][010011101110010]';
-$pdf->write2DBarcode($code, 'RAW2', 80, 60, 30, 20, $style, 'N');
+//$code = '[111011101110111][010010001000010][010011001110010][010010000010010][010011101110010]';
+//$pdf->write2DBarcode($code, 'RAW2', 80, 60, 30, 20, $style, 'N');
 
 // - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -1101,29 +1140,29 @@ $style = array(
 );
 
 // QRCODE,L : QR-CODE Low error correction
-$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,L', 20, 30, 50, 50, $style, 'N');
-$pdf->Text(20, 25, 'QRCODE L');
+//$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,L', 20, 30, 50, 50, $style, 'N');
+//$pdf->Text(20, 25, 'QRCODE L');
 
 // QRCODE,M : QR-CODE Medium error correction
-$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,M', 20, 90, 50, 50, $style, 'N');
-$pdf->Text(20, 85, 'QRCODE M');
+//$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,M', 20, 90, 50, 50, $style, 'N');
+//$pdf->Text(20, 85, 'QRCODE M');
 
 // QRCODE,Q : QR-CODE Better error correction
-$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,Q', 20, 150, 50, 50, $style, 'N');
+$pdf->write2DBarcode('Sanjay Testing Code 1', 'QRCODE,Q', 20, 150, 50, 50, $style, 'N');
 $pdf->Text(20, 145, 'QRCODE Q-Sanjay');
 
 // -------------------------------------------------------------------
 // DATAMATRIX (ISO/IEC 16022:2006)
 
-$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,Q', 80, 150, 50, 50, $style, 'N');
-$pdf->Text(80, 145, 'DATAMATRIX-Sanjay (ISO/IEC 16022:2006)');
+$pdf->write2DBarcode('Sanjay Testing Code 2', 'QRCODE,Q', 80, 150, 50, 50, $style, 'N');
+$pdf->Text(80, 145, 'DATAMATRIX-Sanjay');
 
 // -------------------------------------------------------------------
 
 
 // QRCODE,H : QR-CODE Best error correction
-$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,H', 20, 210, 50, 50, $style, 'N');
-$pdf->Text(20, 205, 'QRCODE H');
+//$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,H', 20, 210, 50, 50, $style, 'N');
+//$pdf->Text(20, 205, 'QRCODE H');
 
 // -------------------------------------------------------------------
 // PDF417 (ISO/IEC 15438:2006)
@@ -1158,8 +1197,8 @@ $pdf->Text(20, 205, 'QRCODE H');
 
 */
 
-$pdf->write2DBarcode('www.tcpdf.org', 'PDF417', 80, 90, 0, 30, $style, 'N');
-$pdf->Text(80, 85, 'PDF417 (ISO/IEC 15438:2006)');
+//$pdf->write2DBarcode('www.tcpdf.org', 'PDF417', 80, 90, 0, 30, $style, 'N');
+//$pdf->Text(80, 85, 'PDF417 (ISO/IEC 15438:2006)');
 
 
 // new style
@@ -1171,8 +1210,8 @@ $style = array(
 );
 
 // QRCODE,H : QR-CODE Best error correction
-$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,H', 80, 210, 50, 50, $style, 'N');
-$pdf->Text(80, 205, 'QRCODE H - COLORED');
+//$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,H', 80, 210, 50, 50, $style, 'N');
+//$pdf->Text(80, 205, 'QRCODE H - COLORED');
 
 // new style
 $style = array(
@@ -1183,8 +1222,8 @@ $style = array(
 );
 
 // QRCODE,H : QR-CODE Best error correction
-$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,H', 140, 210, 50, 50, $style, 'N');
-$pdf->Text(140, 205, 'QRCODE H - NO PADDING');
+//$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,H', 140, 210, 50, 50, $style, 'N');
+//$pdf->Text(140, 205, 'QRCODE H - NO PADDING');
 
 // ---------------------------------------------------------
 
