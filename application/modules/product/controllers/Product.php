@@ -942,5 +942,35 @@ function list_assigned_products() {
 		$Chk = $this->input->post('Chk');
 		echo $this->Product_model->save_product_question($product_id,$question_id,$Chk);exit;
  	}
+	
+
+
+public function list_registered_products_by_consumers() {
+ 		##--------------- pagination start ----------------##
+		 // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if(empty($srch_string)){
+                $srch_string ='';
+        }
+        $total_records = $this->Product_model->count_registered_products_by_consumers($srch_string);
+	$params["ScanedCodeListing"] = $this->Product_model->list_registered_products_by_consumers($limit_per_page, $start_index,$srch_string);
+        $params["links"] = Utils::pagination('product/list_registered_products_by_consumers', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+         $data					= array();
+         $user_id 	= $this->session->userdata('admin_user_id');		
+         //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+         $this->load->view('list_registered_products_by_consumers_tpl', $params);
+     }	
+	
 }
 

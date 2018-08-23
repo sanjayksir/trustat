@@ -662,5 +662,51 @@
 			}
 			return false; 
 		}
+		
+	
+	
+	function list_registered_products_by_consumers($limit,$start,$srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')");
+		}
+		 
+ 		$this->db->select(' C.*, PP.*, P.product_name, P.product_sku',false);
+		$this->db->from('consumers C');
+		$this->db->join('purchased_product PP', 'C.id = PP.consumer_id');
+		$this->db->join('products P', 'P.id = PP.product_id');
+   		$this->db->order_by('PP.ordered_date','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	
+	function count_registered_products_by_consumers($srch_string=''){
+		$result_data = 0;
+		$user_id 	= $this->session->userdata('admin_user_id');
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
+		}
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('printed_barcode_qrcode PP');
+		$this->db->join('backend_user B', 'B.user_id = PP.print_user_id');
+		$this->db->join('products P', 'P.id = PP.product_id');
+		$this->db->join('plant_master Ppp', 'Ppp.plant_id = Ppp.plant_id');
+ 		
+   		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+		
 }
 

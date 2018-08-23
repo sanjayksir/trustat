@@ -83,13 +83,23 @@ class ScannedProduct extends ApiController {
 		$result->isLoyaltyForImageFBQuesGiven = $isLoyaltyForImageFBQuesGiven;
 		$result->isLoyaltyForPDFFBQuesGiven = $isLoyaltyForPDFFBQuesGiven;
 
-		$result->Scanned_Code = $data['bar_code']; 
-		                   
+		$result->scanned_code = $data['bar_code']; 
+		if($data['bar_code'] == $result->barcode_qr_code_no) {
+			
+		$result->activation_level = $result->pack_level; 
+		
+		
+		} else {
+			
+		$result->activation_level = $result->pack_level2; 
+			
+		}                 
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
         $data['created_at'] = date("Y-m-d H:i:s");
-        
+        //$result->pack_level = $result->pack_level;
         if($this->db->insert($this->ScannedproductsModel->table, $data)){
+			if($result->barcode_qr_code_no == $data['bar_code']) {
             if( $result->pack_level == 0 ){
                 if( $isRegistered ){
 					
@@ -99,8 +109,6 @@ class ScannedProduct extends ApiController {
                 }else {
 					$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process';
 				}
-				
-				
 				}else{
                     $result->message1 = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
                 }
@@ -110,6 +118,28 @@ class ScannedProduct extends ApiController {
             }elseif($result->pack_level > 1){
                 $result->message1 = 'This is not a product barcode for consumer, Please scan barcode placed on consumer pack';
             }
+			} else {
+				
+			if( $result->pack_level2 == 0 ){
+                if( $isRegistered ){
+					
+					if( $isRegistered == completed ){
+					
+                    $result->message1 = 'This product is already registered, please contact your retailer/manufacturer for further details';
+                }else {
+					$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process';
+				}
+				}else{
+                    $result->message1 = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
+                }
+            }elseif( $result->pack_level2 == 1 ){
+                //$result->message1 = 'Scanned product details for lavel '.$result->pack_level.'.';
+				$result->message1 = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration.';
+            }elseif($result->pack_level2 > 1){
+                $result->message1 = 'This is not a product barcode for consumer, Please scan barcode placed on consumer pack';
+            }	
+			}
+			
             //$this->response(['status'=>true,'message'=>'Scanned product details for lavel '.$result->pack_level.'.','data'=>$result]);
 			$this->response(['status'=>true,'message'=>'Thanks for scanning the product','data'=>$result]);
         }else{
@@ -325,17 +355,34 @@ class ScannedProduct extends ApiController {
         unset($data['purchase_date']);
         //echo "<pre>";print_r($data);die;        
         if($this->db->insert('purchased_product', $data)){
-            $data['pack_level'] = $result->pack_level;
+            $data['pack_level'] = $result->pack_level2;
             $data['id'] = $this->db->insert_id();
             if(is_null($warrenty)){
+				if($result->stock_status!='Customer_Code'){
                 $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();
                 $message = 'Thank You for Product Registration. '.$loyltyPoints->points.' loyalty points will be added to your howzzt loyalty account';
-                $transactionType = 'product-registration-without-warranty';                
+                $transactionType = 'product-registration-without-warranty';   
+				}else{
+				// $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();
+                $message = 'Thank You for Product Registration.';
+                $transactionType = 'product-registration-without-warranty';  	
+					
+				}
+				
             }else{
+				if($result->stock_status!='Customer_Code'){
                 $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-with-warranty'])->row();
                 $message = 'Thank you for uploading the invoice, your product warranty will be activated and '.$loyltyPoints->points.' loyalty points will be added to your loyalty account after validation of uploaded invoice';
                 $transactionType = 'product-registration-with-warranty';
                 $data['message1'] = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
+				}else {
+				//$loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-with-warranty'])->row();
+                $message = 'Thank you for uploading the invoice, your product warranty will be activated and after validation of uploaded invoice';
+                $transactionType = 'product-registration-with-warranty';
+                $data['message1'] = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';	
+					
+					
+				}
             }
             $this->response(['status'=>true,'message'=>$message,'data'=>$data]);
         }else{
@@ -359,6 +406,7 @@ class ScannedProduct extends ApiController {
         }
         $this->response(['status'=>true,'message'=>'List of purchased products.','data'=>$result]);
     }
+	
     public function purchasedProductDetails($productId = null){
         if(($this->input->method() != 'get') || empty($productId)){ 
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);

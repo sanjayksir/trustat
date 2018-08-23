@@ -51,6 +51,9 @@
     }
 
 	
+	
+	
+	
 	public function list_orders_at_plant_controllers() {
         $params = array();
         if(!empty($this->input->get('page_limit'))){
@@ -529,9 +532,12 @@
 					if($getEssentialAttributes['code_unity_type']=='Twin'){
 						
 					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 100, $y, $barcodesize, $barcodesize, $style, 'N');
-					$pdf->Text(101, $y, 'Scan to Check Product');
+					$pdf->Text(105, $y+0.5, $qrcode.'-'.$i);
+					$pdf->Text(101, $y+31, 'Scan to Check Product');
 					$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
-				  	$pdf->Text(140, $y+18, "Do Not Buy! If already Scratched ^ ");
+					$pdf->SetFont('','B');
+				  	$pdf->Text(144, $y+18, "^^Do Not Buy!! If already Scratched^^");
+					$pdf->Text(150, $y+22, "Scratch to register product");
 					
 					
 					//$pdf->Cell(287,50, 'If already Scratched ^', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
@@ -1267,5 +1273,86 @@ $pdf->Output('example_050.pdf', 'I');
 			$this->load->view('print_order',$data);
 		 }
 	 }
+	 
+	 
+	 public function list_customer_codes() {
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->get_total_customer_codes_all($srch_string);
+
+        $params["orderListing"] = $this->order_master_model->get_customer_codes_list_all($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/list_customer_codes', $total_records);
+
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        $params['user_id'] = $user_id;
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_customer_codes_tpl', $params);
+    }
+	
+	
+	 function delete_customer_code($id) {
+        //$id = $this->uri->segment(3);
+        if (!empty($id)) {
+            $id = base64_decode($id);
+            $result = $this->order_master_model->delete_customer_code($id);
+            
+            if ($result == 1) {
+                $this->session->set_flashdata('success', 'Code deleted successfully!.');
+            } else {
+                $this->session->set_flashdata('success', 'Code not deleted!');
+            }
+            redirect(base_url() . 'order_master/list_customer_codes/');
+        }
+    }
+	
+	
+	public function change_customer_code_status() {
+        $id = $this->input->post('id');
+        $status = $this->input->post('value');
+        if (strtolower($status) == 'inactive') {
+            $status = '1'; # Now it will be active
+        } else {
+            $status = '0'; # Now it will be inactive
+        }
+        //$user_id 	= $this->session->userdata('admin_user_id');		
+        echo $status = $this->order_master_model->change_customer_code_status($id, $status);
+        exit;
+    }
+	
+	
+	public function edit_customer_code() {
+		
+		$data = array();
+        $id = $this->uri->segment(3);
+		
+
+        $data['get_customer_code_details'] = $this->order_master_model->get_customer_code_details($id);
+        $this->load->view('edit_customer_code_tpl', $data);
+    }
+	
+	
+	 
+	 
+	 public function update_customer_code() {
+        $data					= array();
+		$data = $this->input->post();
+		//print_r($data);exit;
+		echo $data = $this->order_master_model->update_customer_code($data);exit;
+		
+    }
+	 
    }?>
 

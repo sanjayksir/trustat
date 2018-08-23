@@ -118,9 +118,7 @@
 
                                                     <div class="hidden-sm hidden-xs action-buttons">
 
-												 
-
-                                                        <a href="<?php  echo base_url().'user_master/view_plevel_user/'.$listData['user_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>
+												   <a href="<?php  echo base_url().'user_master/view_plevel_user/'.$listData['user_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>
                                                          <?php echo anchor("user_master/edit_plevel_user/" . $listData['user_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>
                                                        <?php if($listData['is_verified']==1){?>  
 													    <a title="Delete User" href="javascript:void(0);" onclick="return confirmDelete('<?php echo base64_encode($listData['user_id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>

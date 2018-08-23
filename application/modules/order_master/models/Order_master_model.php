@@ -281,6 +281,9 @@
 		return $result_data;
 	 }
 	 
+	 
+	 
+	 
 	 function get_order_list_all($limit,$start,$srch_string=''){
 		$resultData = array();
 		
@@ -315,6 +318,9 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
  		}
 		return $resultData;
 	 }
+	 
+	 
+	 
 	 
 	 
 	 ## For plnat controller
@@ -994,4 +1000,123 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 			LIMIT 20 ";
 	 }*/
 	 ##----------- getting all plant controlllers order listing----------------##
+	 
+	 
+	 function get_customer_codes_list_all($limit,$start,$srch_string=''){
+		$resultData = array();
+		
+		$user_id 	= $this->session->userdata('admin_user_id');
+		/*if($user_id>1){
+			$this->db->where(array('user_id'=>$user_id));
+	 	}*/
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(barcode_qr_code_no LIKE '%$srch_string%' OR barcode_qr_code_no2 LIKE '%$srch_string%')");
+		}
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+				$this->db->where("(barcode_qr_code_no LIKE '%$srch_string%' OR barcode_qr_code_no2 LIKE '%$srch_string%') and (user_id=$user_id)");
+			}else{
+				$this->db->where(array('stock_status'=>"Customer_Code"));
+			}
+	 	}
+		
+		
+		$this->db->select('id, product_id, barcode_qr_code_no, barcode_qr_code_no2, active_status, modified_at');
+		$this->db->from('printed_barcode_qrcode');
+		//$this->db->join('print_orders_history P', 'O.order_id= P.order_id');
+		$this->db->where(array('stock_status'=>"Customer_Code", 'print_user_id'=>$user_id));
+ 		$this->db->order_by('modified_at','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get();  //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 function get_total_customer_codes_all($srch_string=''){
+		$result_data = 0;
+		$user_id 	= $this->session->userdata('admin_user_id');
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(barcode_qr_code_no LIKE '%$srch_string%' OR barcode_qr_code_no2 LIKE '%$srch_string%' OR product_id LIKE '%$srch_string%')");
+		}
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+				$this->db->where("(barcode_qr_code_no LIKE '%$srch_string%' OR barcode_qr_code_no2 LIKE '%$srch_string%' OR product_id LIKE '%$srch_string%') and (user_id=$user_id)");
+			}else{
+				$this->db->where(array('stock_status'=>"Customer_Code", 'print_user_id'=>$user_id));
+			}
+	 	}
+		$this->db->select('count(1) as total_rows');
+		$this->db->from('printed_barcode_qrcode');
+		//$this->db->where(array('user_id'=>$user_id 'stock_status'=>"Customer_Code"));
+		$this->db->where(array('stock_status'=>"Customer_Code", 'print_user_id'=>$user_id));
+		//$this->db->join('print_orders_history P', 'O.order_id= P.order_id');
+		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function delete_customer_code($id) {
+        $this->db->where('id', $id);
+        if ($this->db->delete('printed_barcode_qrcode')) {
+            return '1';
+        }
+    }
+	
+	
+	function change_customer_code_status($id, $status) {
+        $this->db->set(array('active_status' => $status));
+        $this->db->where(array('id' => $id));
+        if ($this->db->update('printed_barcode_qrcode')) {
+            
+            return $status;
+        } else {
+            return '';
+        }
+    }
+	
+	
+	function get_customer_code_details($id) {
+
+        $this->db->select('id, barcode_qr_code_no, barcode_qr_code_no2, active_status, modified_at');
+        $this->db->from('printed_barcode_qrcode');
+        //$this->db->join('assign_plants_to_users AS ap', 'ap.user_id = bu.user_id','LEFT');
+        $this->db->where(array('id' => $id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            //$res = $res[0];
+        }
+        return $res;
+    }
+	
+	
+	function update_customer_code($data) {
+        $user_id = $this->session->userdata('admin_user_id');
+			$id = $data['code_id'];
+               // $this->db->set('profile_photo', $frmData['profile_photo']);
+                $UpdateData = array(
+                    "barcode_qr_code_no" => $data['barcode_qr_code_no']
+                );
+             
+            $whereData = array(
+                'id' => $id
+            );
+
+            $this->db->where('id', $id);
+				if($this->db->update('printed_barcode_qrcode', $UpdateData)) {// echo '===query===='.$this->db->last_query();
+					$this->session->set_flashdata('success', 'Codes Updated Successfully!');
+					return true;
+	
+				}return false; 
+        
+    }
+	 
+	 
   }
