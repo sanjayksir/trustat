@@ -532,9 +532,9 @@
 					if($getEssentialAttributes['code_unity_type']=='Twin'){
 						
 					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 100, $y, $barcodesize, $barcodesize, $style, 'N');
-					$pdf->Text(105, $y+0.5, $qrcode.'-'.$i);
+					$pdf->Text(101, $y+0.2, $qrcode.'-'.$i);
 					$pdf->Text(101, $y+31, 'Scan to Check Product');
-					$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
+					$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
 					$pdf->SetFont('','B');
 				  	$pdf->Text(144, $y+18, "^^Do Not Buy!! If already Scratched^^");
 					$pdf->Text(150, $y+22, "Scratch to register product");
@@ -732,13 +732,14 @@
 					
 					$getEssentialAttributes = getEssentialAttributes($product_id);
 					if($getEssentialAttributes['code_unity_type']=='Twin'){
-					//$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 60, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
-					//$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 125, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
 					
 					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 100, $y, $barcodesize, $barcodesize, $style, 'N');
-					$pdf->Text(101, $y, 'Scan to Check Product');
-					$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 140, $y, 50, 15, 0.4, $style, 'N');
-				  	$pdf->Text(140, $y+18, "Do Not Buy! If already Scratched ^ ");
+					$pdf->Text(101, $y+0.5, $qrcode.'-'.$i);
+					$pdf->Text(101, $y+31, 'Scan to Check Product');
+					$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
+					$pdf->SetFont('','B');
+				  	$pdf->Text(144, $y+18, "^^Do Not Buy!! If already Scratched^^");
+					$pdf->Text(150, $y+22, "Scratch to register product");
 					
 					
 					} else {

@@ -4,7 +4,7 @@
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
-			<?php $label = 'Purchased Products';?>
+			<?php $label = 'Registered Products';?>
 
 			<?php $this->load->view('../includes/admin_sidebar');?>
 			
@@ -39,7 +39,7 @@
 							<div class="col-xs-12">
  								<div class="widget-box widget-color-blue">
                                                                     <div class="widget-header widget-header-flat">
-                                                                        <h5 class="widget-title bigger lighter">List <?php echo $label;?></h5>
+                                                                        <h5 class="widget-title bigger lighter"><?php echo $label;?></h5>
                                                                         
                                                                     </div>
 									<div class="widget-body">
@@ -70,12 +70,13 @@
  												<thead>
 													<tr>
 														<th>#</th>
-														<th>Purchased Product Code</th>
+														<th>Registered Product Code</th>
+														<th>Invoice Image</th>
 														<th>Product Name</th>
 														<th>Consumer Name</th>
- 														<th>Location-latitude/longitude</th>
-														<th>Scanned date time</th>
-                                                       <!-- <th>Action</th> -->
+ 														<th>Product Registration Address</th>
+														<th>Purchase Date</th>
+                                                       <th>Action</th>
   													</tr>
 												</thead>
 												<tbody>
@@ -91,6 +92,7 @@
                                                <tr id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['bar_code']; ?></td>
+											   <td><img src="http://innovigents.com/uploads/noimage.png" alt="Invoice Image" height="42" width="42"></td>
 												<td><?php echo $listData['product_name']; ?></td>
 												<td><?php echo $listData['user_name']; ?></td>
 												<td>
@@ -98,6 +100,7 @@
 												<?php echo $listData['latitude']. " / "; ?><?php echo $listData['longitude']; ?>
 												</td>
 												<td><?php echo $listData['created_at']; ?></td>
+												<td><?php //echo $listData['created_at']; ?>Pending/accepted/rejected</td>
  												 
                                               </tr>
                                          <?php }
