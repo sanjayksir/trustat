@@ -686,7 +686,7 @@
 		return $resultData;
 	 }
 	 
-	
+		
 	function count_registered_products_by_consumers($srch_string=''){
 		$result_data = 0;
 		$user_id 	= $this->session->userdata('admin_user_id');
