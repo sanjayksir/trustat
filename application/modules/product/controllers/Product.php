@@ -970,7 +970,26 @@ public function list_registered_products_by_consumers() {
          $user_id 	= $this->session->userdata('admin_user_id');		
          //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
          $this->load->view('list_registered_products_by_consumers_tpl', $params);
-     }	
+     }
+
+		public function verity_registered_products_by_consumers() {
+		
+		$data = array();
+        $id = $this->uri->segment(3);
+		
+
+        $data['get_registered_products_by_consumers_details'] = $this->Product_model->get_registered_products_by_consumers_details($id);
+        $this->load->view('verity_registered_products_by_consumers_tpl', $data);
+    }
+	 
+	 public function update_registered_products_by_consumers() {
+        $data					= array();
+		$data = $this->input->post();
+		//print_r($data);exit;
+		echo $data = $this->Product_model->update_registered_products_by_consumers($data);exit;
+		
+    }
+	
 	
 }
 

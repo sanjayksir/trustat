@@ -707,6 +707,43 @@
 		return $result_data;
 	 }
 	 
+	 
+	 function get_registered_products_by_consumers_details($id) {
+
+        $this->db->select('*');
+        $this->db->from('purchased_product');
+        //$this->db->join('assign_plants_to_users AS ap', 'ap.user_id = bu.user_id','LEFT');
+        $this->db->where(array('id' => $id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            //$res = $res[0];
+        }
+        return $res;
+    }
+	
+	
+	function update_registered_products_by_consumers($data) {
+        $user_id = $this->session->userdata('admin_user_id');
+			$id = $data['code_id'];
+               // $this->db->set('profile_photo', $frmData['profile_photo']);
+                $UpdateData = array(
+                    "barcode_qr_code_no" => $data['barcode_qr_code_no']
+                );
+             
+            $whereData = array(
+                'id' => $id
+            );
+
+            $this->db->where('id', $id);
+				if($this->db->update('printed_barcode_qrcode', $UpdateData)) {// echo '===query===='.$this->db->last_query();
+					$this->session->set_flashdata('success', 'Codes Updated Successfully!');
+					return true;
+	
+				}return false; 
+        
+    }
 		
 }
 

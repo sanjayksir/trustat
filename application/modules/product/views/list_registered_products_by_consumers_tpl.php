@@ -4,7 +4,7 @@
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
-			<?php $label = 'Registered Products';?>
+			<?php $label = 'Registered Products - Verify invoice';?>
 
 			<?php $this->load->view('../includes/admin_sidebar');?>
 			
@@ -74,7 +74,7 @@
 														<th>Invoice Image</th>
 														<th>Product Name</th>
 														<th>Consumer Name</th>
- 														<th>Product Registration Address</th>
+ 														<!--<th>Product Registration Address</th>-->
 														<th>Purchase Date</th>
                                                        <th>Action</th>
   													</tr>
@@ -92,15 +92,18 @@
                                                <tr id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['bar_code']; ?></td>
-											   <td><img src="http://innovigents.com/uploads/noimage.png" alt="Invoice Image" height="42" width="42"></td>
+											   <td>
+<a href="http://innovigents.com/uploads/noimage.png" onclick="window.open (this.href, 'child', 'height=800,width=900'); return false"><img alt="Invoice Image" src="http://innovigents.com/uploads/noimage.png" height="50" width="50"></a>
+
+	</td>
 												<td><?php echo $listData['product_name']; ?></td>
 												<td><?php echo $listData['user_name']; ?></td>
-												<td>
+												<!--<td>
 																								
-												<?php echo $listData['latitude']. " / "; ?><?php echo $listData['longitude']; ?>
-												</td>
+												<?php //echo $listData['latitude']. " / "; ?><?php //echo $listData['longitude']; ?>
+												</td>-->
 												<td><?php echo $listData['created_at']; ?></td>
-												<td><?php //echo $listData['created_at']; ?>Pending/accepted/rejected</td>
+												<td><?php echo anchor("product/verity_registered_products_by_consumers/" . $listData['id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>Pending/accepted/rejected</td>
  												 
                                               </tr>
                                          <?php }

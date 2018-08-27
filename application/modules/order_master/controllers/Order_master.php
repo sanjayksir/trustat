@@ -1343,9 +1343,6 @@ $pdf->Output('example_050.pdf', 'I');
         $data['get_customer_code_details'] = $this->order_master_model->get_customer_code_details($id);
         $this->load->view('edit_customer_code_tpl', $data);
     }
-	
-	
-	 
 	 
 	 public function update_customer_code() {
         $data					= array();
