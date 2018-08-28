@@ -729,7 +729,17 @@
 			$id = $data['code_id'];
                // $this->db->set('profile_photo', $frmData['profile_photo']);
                 $UpdateData = array(
-                    "barcode_qr_code_no" => $data['barcode_qr_code_no']
+                    "modified" 				=> date("Y-m-d H:i:s"),
+					"invoice" 				=> $data['invoice_number'],
+					"purchase_date" 		=> $data['purchase_date'],
+					"warranty_start_date" 	=> $data['warranty_start_date'],
+					"warranty_end_date" 	=> $data['warranty_end_date'],
+					"expiry_date" 			=> $data['expiry_date'],
+					"status" 				=> $data['status'],
+					"seller_name" 			=> $data['seller_name'],
+					"seller_gst" 			=> $data['seller_gst'],
+					"selling_price" 		=> $data['selling_price'],
+					"discount" 				=> $data['discount']
                 );
              
             $whereData = array(
@@ -737,8 +747,8 @@
             );
 
             $this->db->where('id', $id);
-				if($this->db->update('printed_barcode_qrcode', $UpdateData)) {// echo '===query===='.$this->db->last_query();
-					$this->session->set_flashdata('success', 'Codes Updated Successfully!');
+				if($this->db->update('purchased_product', $UpdateData)) {// echo '===query===='.$this->db->last_query();
+					$this->session->set_flashdata('success', 'Verification Status Updated Successfully!');
 					return true;
 	
 				}return false; 

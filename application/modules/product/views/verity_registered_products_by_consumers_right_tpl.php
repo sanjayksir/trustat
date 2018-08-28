@@ -3,7 +3,7 @@
 <div class="col-xs-12">
 		<div class="widget-box">
 				<div class="widget-header">
-						<h4 class="widget-title">Edit Customer Code</h4>
+						<h4 class="widget-title">Registered Product - Verify invoice</h4>
 						<div class="widget-toolbar"> <a href="#" data-action="collapse"> <i class="ace-icon fa fa-chevron-up"></i> </a> <a href="#" data-action="close"> <i class="ace-icon fa fa-times"></i> </a> <a href="#" class="show_loader" data-action="reload" style="display:none;"><i class="ace-icon fa fa-refresh"></i></a> </div>
 				</div>
 				<div class="widget-body">
@@ -14,58 +14,86 @@
         <div class="widget-main">
 		
 		<div class="form-group row">
-			<div class="col-sm-6">
-			<label for="form-field-8"><b>Printed Code</b> : <?php echo $get_registered_products_by_consumers_details[0]['bar_code'];?></label>
+			<div class="col-sm-6" style="">
+			<label for="form-field-8"><b>Consumer Name</b> : <?php echo getConsumerNameById($get_registered_products_by_consumers_details[0]['consumer_id']); ?></label>
 			</div>
 			
 			<div class="col-sm-6">
-			  <label for="form-field-8"><b>Product Name</b> : <?php echo $get_registered_products_by_consumers_details[0]['bar_code'];?></label>
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6">
-			<label for="form-field-8"><b>Product Image</b> : <?php echo $get_registered_products_by_consumers_details[0]['bar_code'];?></label>
-			</div>
-			
-			<div class="col-sm-6">
-			  <label for="form-field-8"><b>Date of Product Registration</b> : <?php echo date("d/m/y"); ?></label>
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6">
-			<label for="form-field-8"><b>Printed Code</b> : <?php echo $get_registered_products_by_consumers_details[0]['bar_code'];?></label>
-			</div>
-			
-			<div class="col-sm-6">
-			  <label for="form-field-8"><b>Date of Product Registration</b> : <?php echo $get_registered_products_by_consumers_details[0]['bar_code'];?></label>
+			 
 			</div>
 		</div>
 		
+		<div class="form-group row">
+			<div class="col-sm-6">
+			<label for="form-field-8"><b>Product Code</b> : <?php echo $get_registered_products_by_consumers_details[0]['bar_code'];?></label>
+			</div>
+			
+			<div class="col-sm-6">
+			  <label for="form-field-8"><b>Product Name</b> : <?php echo get_products_name_by_id($get_registered_products_by_consumers_details[0]['product_id']);?></label>
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-6">
+			<label for="form-field-8"><b>Product Image</b> : <a href="<?php echo base_url().$get_registered_products_by_consumers_details[0]['invoice_image'];?>" onclick="window.open (this.href, 'child', 'height=800,width=900'); return false"><img alt="Invoice Image not available" src="<?php echo base_url(). $get_registered_products_by_consumers_details[0]['invoice_image'];?>" height="50" width="50"></a></label>
+			</div>
+			
+			<div class="col-sm-6">
+			  <label for="form-field-8"><b>Date of Product Registration</b> : <?php echo $get_registered_products_by_consumers_details[0]['modified'];?></label>
+			</div>
+		</div>
+				
+		<div class="form-group row">
+			<div class="col-sm-6">
+			<label for="form-field-8">Invoice Number</label>
+			<input name="invoice_number" id="invoice_number" type="text" class="form-control" placeholder="Invoice Number" value="<?php echo $get_registered_products_by_consumers_details[0]['invoice'];?>">
+			</div>
+			<div class="col-sm-6">
+			  <label for="form-field-8">Date of Purchase</label>
+             <input name="purchase_date" id="purchase_date" type="text" class="form-control" placeholder="Date of Purchase" value="<?php echo $get_registered_products_by_consumers_details[0]['purchase_date'];?>">
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-6">
+			<label for="form-field-8">Warranty Start Date</label>
+			<input name="warranty_start_date" id="warranty_start_date" type="text" class="form-control" placeholder="Warranty Start Date" value="<?php echo $get_registered_products_by_consumers_details[0]['warranty_start_date'];?>">
+			</div>
+			<div class="col-sm-6">
+			  <label for="form-field-8">Warranty End Date</label>
+             <input name="warranty_end_date" id="warranty_end_date" type="text" class="form-control" placeholder="Warranty End Date" value="<?php echo $get_registered_products_by_consumers_details[0]['warranty_end_date'];?>">
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-6">
+			<label for="form-field-8">Expiry Date</label>
+			<input name="expiry_date" id="expiry_date" type="text" class="form-control" placeholder="Expiry Date" value="<?php echo $get_registered_products_by_consumers_details[0]['expiry_date'];?>">
+			</div>
+			<div class="col-sm-6">
+			  <label for="form-field-8">Verification Status</label>
+			  
+             <input name="status" id="status" type="text" class="form-control" placeholder="Consumer Name" value="<?php echo $get_registered_products_by_consumers_details[0]['status'];?>">
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-6">
+			<label for="form-field-8">Name of Seller</label>
+			<input name="seller_name" id="seller_name" type="text" class="form-control" placeholder="Name of Seller" value="<?php echo $get_registered_products_by_consumers_details[0]['seller_name'];?>">
+			</div>
+			<div class="col-sm-6">
+			  <label for="form-field-8">GST Number of Seller</label>
+             <input name="seller_gst" id="seller_gst" type="text" class="form-control" placeholder="GST Number of Seller" value="<?php echo $get_registered_products_by_consumers_details[0]['seller_gst'];?>">
+			</div>
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-6">
+			<label for="form-field-8">Selling Price</label>
+			<input name="selling_price" id="selling_price" type="text" class="form-control" placeholder="Selling Price" value="<?php echo $get_registered_products_by_consumers_details[0]['selling_price'];?>">
+			</div>
+			<div class="col-sm-6">
+			  <label for="form-field-8">Discount</label>
+             <input name="discount" id="discount" type="text" class="form-control" placeholder="Discount" value="<?php echo $get_registered_products_by_consumers_details[0]['discount'];?>">
+			</div>
+		</div>
 		
-		<div class="form-group row">
-			<div class="col-sm-6">
-			<label for="form-field-8">Printed Code<?php //echo $get_registered_products_by_consumers_details[0]['id'];?></label>
-			<div class="form-control"><?php echo $get_registered_products_by_consumers_details[0]['bar_code'];?></div>
-			 
-			</div>
-			
-			<div class="col-sm-6">
-			  <label for="form-field-8">Customer Code</label>
-             <input name="barcode_qr_code_no" id="barcode_qr_code_no" type="text" class="form-control" placeholder="Customer Code" value="<?php echo $get_registered_products_by_consumers_details[0]['bar_code'];?>">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6">
-			<label for="form-field-8">Printed Code<?php //echo $get_registered_products_by_consumers_details[0]['id'];?></label>
-			<div class="form-control"><?php echo $get_registered_products_by_consumers_details[0]['bar_code'];?></div>
-			 
-			</div>
-			
-			<div class="col-sm-6">
-			  <label for="form-field-8">Customer Code</label>
-             <input name="barcode_qr_code_no" id="barcode_qr_code_no" type="text" class="form-control" placeholder="Customer Code" value="<?php echo $get_registered_products_by_consumers_details[0]['bar_code'];?>">
-			</div>
-		</div>
 		 
 
            <hr>

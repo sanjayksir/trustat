@@ -24,7 +24,7 @@
 
           <li> <i class="ace-icon fa fa-home home-icon"></i> <a href="<?php echo site_url(); ?>">Home</a> </li>
 			
-		 				<?php $constant = "Edit Customer Code" ; ?>	
+		 				<?php $constant = "Registered Product - Verify invoice" ; ?>	
           <li class="active">Administration</li><li class="active"><?php echo $constant;?></li>
 
         </ul>
@@ -219,24 +219,112 @@
 
 		rules: {
   			
-			 barcode_qr_code_no: {
+			 invoice_number: {
 			 	 required: true,
-                 minlength: 5,
- 				maxlength: 25 }
+                 minlength: 2,
+ 				maxlength: 25 },
+				
+			purchase_date: {
+			 	 required: true
+				 },
+				
+			warranty_start_date: {
+			 	 required: true
+				 },	
+			
+			warranty_end_date: {
+			 	 required: true
+				 },
+
+			expiry_date: {
+			 	 required: true
+				 },
+
+			status: {
+			 	 required: true
+				 },
+
+			seller_name: {
+			 	 required: true,
+                 minlength: 2,
+ 				maxlength: 100 },
+
+			seller_gst: {
+			 	 required: true,
+                 minlength: 4,
+ 				maxlength: 15 },
+
+			selling_price: {
+			 	 required: true,
+                 minlength: 1,
+ 				maxlength: 7 },
+
+			discount: {
+			 	 required: true,
+                 minlength: 1,
+ 				maxlength: 7 }	
   		},
 
 		messages: {
- 
-
+ 				invoice_number: {
+					required: "Please enter Invoice Number.",
+					minlength: "Please enter a Invoice Number" ,
+					maxlength : "Please enter a Invoice Number" 
+				}, 
 				
-
-				barcode_qr_code_no: {
-					required: "Please enter Customer Code.",
-
-					minlength: "Please enter a valid Code" ,
-					maxlength : "Please enter a valid Code" 
-
-				}  
+				purchase_date: {
+					required: "Please enter Purchase Date.",
+					minlength: "Please enter a Purchase Date" ,
+					maxlength : "Please enter a Purchase Date" 
+				},
+				
+				warranty_start_date: {
+					required: "Please enter warranty start date.",
+					minlength: "Please enter a warranty start date" ,
+					maxlength : "Please enter a warranty start date" 
+				},
+				
+				warranty_end_date: {
+					required: "Please enter warranty end date. ",
+					minlength: "Please enter a warranty end date" ,
+					maxlength : "Please enter a warranty end date" 
+				},
+				
+				expiry_date: {
+					required: "Please enter expiry date.",
+					minlength: "Please enter a expiry date." ,
+					maxlength : "Please enter a expiry date." 
+				},
+				
+				status: {
+					required: "Please enter status.",
+					minlength: "Please enter a status." ,
+					maxlength : "Please enter a status." 
+				},
+				
+				seller_name: {
+					required: "Please enter seller name.",
+					minlength: "Please enter a seller name." ,
+					maxlength : "Please enter a seller name." 
+				},
+				
+				seller_gst: {
+					required: "Please enter seller GST.",
+					minlength: "Please enter a seller GST." ,
+					maxlength : "Please enter a seller GST." 
+				},
+				
+				selling_price: {
+					required: "Please enter selling price.",
+					minlength: "Please enter a selling price." ,
+					maxlength : "Please enter a selling price." 
+				},
+				
+				discount: {
+					required: "Please enter discount.",
+					minlength: "Please enter a discount" ,
+					maxlength : "Please enter a discount" 
+				}
 
 		},
 
@@ -262,9 +350,6 @@
   		}
 		
 		
-		
-		
-
 	});
 
 });

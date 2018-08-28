@@ -93,7 +93,7 @@
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['bar_code']; ?></td>
 											   <td>
-<a href="http://innovigents.com/uploads/noimage.png" onclick="window.open (this.href, 'child', 'height=800,width=900'); return false"><img alt="Invoice Image" src="http://innovigents.com/uploads/noimage.png" height="50" width="50"></a>
+<a href="<?php echo base_url().$listData['invoice_image'];?>" onclick="window.open (this.href, 'child', 'height=800,width=900'); return false"><img alt="Invoice Image not available" src="<?php echo base_url(). $listData['invoice_image'];?>" height="50" width="50"></a>
 
 	</td>
 												<td><?php echo $listData['product_name']; ?></td>
@@ -103,7 +103,7 @@
 												<?php //echo $listData['latitude']. " / "; ?><?php //echo $listData['longitude']; ?>
 												</td>-->
 												<td><?php echo $listData['created_at']; ?></td>
-												<td><?php echo anchor("product/verity_registered_products_by_consumers/" . $listData['id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>Pending/accepted/rejected</td>
+												<td><?php echo anchor("product/verity_registered_products_by_consumers/" . $listData['id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?></td>
  												 
                                               </tr>
                                          <?php }

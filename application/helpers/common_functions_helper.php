@@ -333,6 +333,23 @@ function getUserNameById($id){
 }
 
 
+function getConsumerNameById($id){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('user_name');
+	$ci->db->from('consumers');
+	$ci->db->where(array('id'=>$id));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['user_name']);
+
+ 	}
+	return $res;
+
+}
 
 function getUserProfileById($id){
  	$image = '';
@@ -6291,6 +6308,8 @@ function get_products_name_by_id($id){
  	return $res_arr[0]['sku'];
  }
 
+ 
+ 
 
 function get_assigned_plants_list($id){
 	$res='0';

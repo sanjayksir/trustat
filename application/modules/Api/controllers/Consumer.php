@@ -42,15 +42,15 @@ class Consumer extends ApiController {
             $emailid = $this->getInput('email');
             $emailidr = $emailid['email'];
 			
-			/*$fb_token1 = $this->getInput('fb_token');
+			$fb_token1 = $this->getInput('fb_token');
             $fb_tokenr = $fb_token1['fb_token'];
 			
 			$iemi1 = $this->getInput('iemi');
             $iemir = $iemi1['iemi'];
-			*/
+			
             $this->db->set('email', $emailidr);
-			//$this->db->set('fb_token', $fb_tokenr);
-			//$this->db->set('iemi', $iemir);
+			$this->db->set('fb_token', $fb_tokenr);
+			$this->db->set('iemi', $iemir);
             $data['verification_code'] = Utils::randomNumber(5);
             $this->db->set('verification_code', $data['verification_code']);
             $this->db->set('password', md5($data['verification_code']));
@@ -78,11 +78,11 @@ class Consumer extends ApiController {
             $data['modified_at'] = date("Y-m-d H:i:s");
             //$emailid = $this->getInput('email');
 			//$data['email'] = $emailid;
-			/*$fb_tokend = $this->getInput('fb_token');
+			$fb_tokend = $this->getInput('fb_token');
 			$data['fb_token'] = $fb_tokend['fb_token'];
 			$iemid = $this->getInput('iemi');
 			$data['iemi'] = $iemid['iemi'];    
-			*/
+			
             $data['verification_code'] = Utils::randomNumber(5);
             $data['password'] = md5($data['verification_code']);
             if ($this->db->insert('consumers', $data)) {
