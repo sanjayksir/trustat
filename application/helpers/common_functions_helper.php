@@ -350,6 +350,24 @@ function getConsumerNameById($id){
 	return $res;
 
 }
+function getConsumerFb_TokenById($id){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('fb_token');
+	$ci->db->from('consumers');
+	$ci->db->where(array('id'=>$id));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['fb_token']);
+
+ 	}
+	return $res;
+
+}
+
 
 function getUserProfileById($id){
  	$image = '';
@@ -6775,5 +6793,7 @@ function getProductSize($val=''){
 	}
 	return $value;
 }
+
+
   
 ?>

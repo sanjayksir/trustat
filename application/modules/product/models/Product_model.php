@@ -668,18 +668,17 @@
 	function list_registered_products_by_consumers($limit,$start,$srch_string=''){
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
- 
-		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')");
-		}
-		 
- 		$this->db->select(' C.*, PP.*, P.product_name, P.product_sku',false);
-		$this->db->from('consumers C');
-		$this->db->join('purchased_product PP', 'C.id = PP.consumer_id');
+		
+ 		$this->db->select('PP.*, C.*, P.product_name, P.product_sku, P.created_by',false);
+		$this->db->from('purchased_product PP');
+		$this->db->join('consumers C', 'C.id = PP.consumer_id');
 		$this->db->join('products P', 'P.id = PP.product_id');
+		if($user_id!=1){ 
+			$this->db->where(array('P.created_by' => $user_id));
+		}
    		$this->db->order_by('PP.ordered_date','desc');
 		$this->db->limit($limit, $start);
-   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+   		$query = $this->db->get();  //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$resultData = $query->result_array();
  		}
@@ -694,10 +693,12 @@
  			$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
 		}
  		$this->db->select('count(1) as total_rows');
-		$this->db->from('printed_barcode_qrcode PP');
-		$this->db->join('backend_user B', 'B.user_id = PP.print_user_id');
+		$this->db->from('purchased_product PP');
+		$this->db->join('consumers C', 'C.id = PP.consumer_id');
 		$this->db->join('products P', 'P.id = PP.product_id');
-		$this->db->join('plant_master Ppp', 'Ppp.plant_id = Ppp.plant_id');
+		if($user_id!=1){ 
+			$this->db->where(array('P.created_by' => $user_id));
+		}
  		
    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
@@ -713,7 +714,7 @@
         $this->db->select('*');
         $this->db->from('purchased_product');
         //$this->db->join('assign_plants_to_users AS ap', 'ap.user_id = bu.user_id','LEFT');
-        $this->db->where(array('id' => $id));
+        $this->db->where(array('purchased_product_id' => $id));
         $query = $this->db->get();
         // echo '***'.$this->db->last_query();exit;
         if ($query->num_rows() > 0) {
@@ -743,12 +744,105 @@
                 );
              
             $whereData = array(
+                'purchased_product_id' => $id
+            );
+
+            $this->db->where('purchased_product_id', $id);
+				if($this->db->update('purchased_product', $UpdateData)) {// echo '===query===='.$this->db->last_query();
+					$this->session->set_flashdata('success', 'Verification Status Updated Successfully!');
+					return true;
+	
+				}return false; 
+        
+    }
+	
+	// ---
+	function list_loyalty_redemption_requests($limit,$start,$srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+		
+ 		$this->db->select('LR.*, C.*',false);
+		$this->db->from('loyalty_redemption LR');
+		$this->db->join('consumers C', 'C.id = LR.user_id');
+		/* $this->db->join('products P', 'P.id = PP.product_id');
+		if($user_id!=1){ 
+			$this->db->where(array('P.created_by' => $user_id));
+		} */
+   		$this->db->order_by('LR.created_at','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get();  //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+		
+	function count_loyalty_redemption_requests($srch_string=''){
+		$result_data = 0;
+		$user_id 	= $this->session->userdata('admin_user_id');
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
+		}
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('loyalty_redemption');
+		//$this->db->join('consumers C', 'C.id = LR.user_id');
+		/*
+		$this->db->join('products P', 'P.id = PP.product_id');
+		if($user_id!=1){ 
+			$this->db->where(array('P.created_by' => $user_id));
+		}
+ 		*/
+   		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function details_loyalty_redemption_requests($id) {
+
+        $this->db->select('*');
+        $this->db->from('loyalty_redemption');
+        //$this->db->join('assign_plants_to_users AS ap', 'ap.user_id = bu.user_id','LEFT');
+        $this->db->where(array('id' => $id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            //$res = $res[0];
+        }
+        return $res;
+    }
+	
+	
+	function update_loyalty_redemption_requests($data) {
+        $user_id = $this->session->userdata('admin_user_id');
+			$id = $data['code_id'];
+               // $this->db->set('profile_photo', $frmData['profile_photo']);
+                $UpdateData = array(
+                    "modified" 				=> date("Y-m-d H:i:s"),
+					"invoice" 				=> $data['invoice_number'],
+					"purchase_date" 		=> $data['purchase_date'],
+					"warranty_start_date" 	=> $data['warranty_start_date'],
+					"warranty_end_date" 	=> $data['warranty_end_date'],
+					"expiry_date" 			=> $data['expiry_date'],
+					"status" 				=> $data['status'],
+					"seller_name" 			=> $data['seller_name'],
+					"seller_gst" 			=> $data['seller_gst'],
+					"selling_price" 		=> $data['selling_price'],
+					"discount" 				=> $data['discount']
+                );
+             
+            $whereData = array(
                 'id' => $id
             );
 
             $this->db->where('id', $id);
-				if($this->db->update('purchased_product', $UpdateData)) {// echo '===query===='.$this->db->last_query();
-					$this->session->set_flashdata('success', 'Verification Status Updated Successfully!');
+				if($this->db->update('loyalty_redemption', $UpdateData)) {// echo '===query===='.$this->db->last_query();
+					$this->session->set_flashdata('success', 'loyalty redemption acceptance process Updated Successfully!');
 					return true;
 	
 				}return false; 

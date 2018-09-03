@@ -4,7 +4,7 @@
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
-			<?php $label = 'Registered Products - Verify invoice';?>
+			<?php $label = 'Loyalty Redemption Request List';?>
 
 			<?php $this->load->view('../includes/admin_sidebar');?>
 			
@@ -103,7 +103,7 @@
 												<?php //echo $listData['latitude']. " / "; ?><?php //echo $listData['longitude']; ?>
 												</td>-->
 												<td><?php echo $listData['created_at']; ?></td>
-												<td><?php echo anchor("product/verity_registered_products_by_consumers/" . $listData['purchased_product_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?></td>
+												<td><?php echo anchor("product/details_loyalty_redemption_requests/" . $listData['id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?></td>
  												 
                                               </tr>
                                          <?php }

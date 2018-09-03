@@ -3,14 +3,14 @@
 <div class="col-xs-12">
 		<div class="widget-box">
 				<div class="widget-header">
-						<h4 class="widget-title">Registered Product - Verify invoice</h4>
+						<h4 class="widget-title">Loyalty Redemption Request Details</h4>
 						<div class="widget-toolbar"> <a href="#" data-action="collapse"> <i class="ace-icon fa fa-chevron-up"></i> </a> <a href="#" data-action="close"> <i class="ace-icon fa fa-times"></i> </a> <a href="#" class="show_loader" data-action="reload" style="display:none;"><i class="ace-icon fa fa-refresh"></i></a> </div>
 				</div>
 				<div class="widget-body">
 						<div id="ajax_msg"></div>
 				</div>
 				<form name="user_frm" id="user_frm" action="#" method="POST">
-			<input type="hidden" name="code_id" id="code_id" value="<?php echo $get_registered_products_by_consumers_details[0]['purchased_product_id'];?>" /><?php echo $get_registered_products_by_consumers_details[0]['purchased_product_id']?>
+			<input type="hidden" name="code_id" id="code_id" value="<?php echo $get_registered_products_by_consumers_details[0]['id'];?>" /><?php echo $get_registered_products_by_consumers_details[0]['id']?>
         <div class="widget-main">
 		
 		<div class="form-group row">

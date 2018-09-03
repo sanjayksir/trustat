@@ -27,6 +27,34 @@ class ConsumerModel extends CI_Model {
         }
     }  
     
+    
+    public function sendFCM($mess,$id) {
+$url = 'https://fcm.googleapis.com/fcm/send';
+
+$fields = array (
+        'to' => $id,
+         
+         'notification' => array('title' => 'howzzt', 'body' =>  $mess ,'sound'=>'Default',),
+       
+);
+$fields = json_encode ( $fields );
+
+$headers = array (
+        'Authorization: key=' . "AAAA446l5pE:APA91bE3nQ0T5E9fOH-y4w_dkOLU1e9lV7Wn0OmVLaKNnE8tXcZ0eC3buduhCwHL1ICaJ882IHfLy-akAe7Nih7M1RewkO9IzAR-ELdPgmORtb7KjriRrQspVHkIb9GRZPOjXuqfPInlOAly5-65sEEUbGlcoujMgw",
+        'Content-Type: application/json'
+);
+
+$ch = curl_init ();
+curl_setopt ( $ch, CURLOPT_URL, $url );
+curl_setopt ( $ch, CURLOPT_POST, true );
+curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+
+$result = curl_exec ( $ch );
+//curl_close ( $ch );
+return $result;
+}
     public function signupValidate($data){
         $validate = [
             ['field' =>'user_name','label'=>'User Name','rules' => 'required|min_length[8]' ],
@@ -44,6 +72,8 @@ class ConsumerModel extends CI_Model {
         }
         return true;
     }
+    
+    
 	
 	public function signupValidateNew($data){
         $validate = [

@@ -17,6 +17,9 @@ class Consumer extends ApiController {
      * register to add new user api
      * @return registered user details
      */
+     
+     
+     
     public function register() {
         //$this->db->query('TRUNCATE TABLE consumers');
         $data = $this->getInput();
@@ -63,7 +66,9 @@ class Consumer extends ApiController {
                 $this->signupMail($data);
                 $smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
                 Utils::sendSMS($data['mobile_no'], $smstext);
+                // $this->ConsumerModel->sendFCM("Your account has been re-registered",$data['fb_token']);
                 Utils::response(['status' => true, 'message' => 'You are re-registered with this device.', 'data' => $data]);
+               
             } else {
                 Utils::response(['status' => false, 'message' => 'System failed to update.'], 200);
             }
@@ -104,7 +109,10 @@ class Consumer extends ApiController {
                 $this->signupMail($data);
                 $smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
                 Utils::sendSMS($data['mobile_no'], $smstext);
+               // $this->ConsumerModel->sendFCM("Your account has been registered",$data['fb_token']);
                 Utils::response(['status' => true, 'message' => 'Your account has been registered.', 'data' => $data], 200);
+                
+                
             } else {
                 Utils::response(['status' => false, 'message' => 'Registration has been failed.'], 200);
             }
