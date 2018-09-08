@@ -547,7 +547,7 @@
 				
 				/*  new work */
 				
-				$query = $this->db->query("SELECT * FROM consumers;");
+				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$cid."';");
 				
 				foreach ($query->result() as $user)  
 				{  
@@ -583,7 +583,7 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'howzzt', 'body' =>  $mess ,'sound'=>'Default',),
+		         'notification' => array('title' => 'howzzt survey', 'body' =>  $mess ,'sound'=>'Default',),
 		       
 		);
 		$fields = json_encode ( $fields );

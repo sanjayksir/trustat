@@ -83,6 +83,8 @@ class ScannedProduct extends ApiController {
 		$result->isLoyaltyForAudioFBQuesGiven = $isLoyaltyForAudioFBQuesGiven;
 		$result->isLoyaltyForImageFBQuesGiven = $isLoyaltyForImageFBQuesGiven;
 		$result->isLoyaltyForPDFFBQuesGiven = $isLoyaltyForPDFFBQuesGiven;
+		
+		
 
 		$result->scanned_code = $data['bar_code']; 
 		if($data['bar_code'] == $result->barcode_qr_code_no) {
@@ -97,9 +99,27 @@ class ScannedProduct extends ApiController {
 		}                 
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
+		$data['customer_id'] = $result->created_by;
         $data['created_at'] = date("Y-m-d H:i:s");
         //$result->pack_level = $result->pack_level;
+		
+		$consumer_id = $data['consumer_id'];
+		$customer_id = $data['customer_id'];
+		$product_id = $data['product_id'];
+		
+		
+		
+		$isConsAlreadyLinkedtoCust = $this->ScannedproductsModel->isConsAlreadyLinkedtoCust($consumer_id, $customer_id, $product_id);
+		
+		if($isConsAlreadyLinkedtoCust==false){
+		$this->db->insert('consumer_customer_link', $data);
+		}
+		
         if($this->db->insert($this->ScannedproductsModel->table, $data)){
+			
+			//$this->db->insert('consumer_customer_link', $data);
+			
+			
 			if($result->barcode_qr_code_no == $data['bar_code']) {
             if( $result->pack_level == 0 ){
                 if( $isRegistered ){
@@ -408,6 +428,8 @@ class ScannedProduct extends ApiController {
         }
         $this->response(['status'=>true,'message'=>'List of purchased products.','data'=>$result]);
     }
+	
+	
     public function purchasedProductDetails($productId = null){
         if(($this->input->method() != 'get') || empty($productId)){ 
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);

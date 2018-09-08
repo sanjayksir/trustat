@@ -245,6 +245,17 @@ return $result;
             return false;
         }
     }
+	
+	Public function isConsAlreadyLinkedtoCust($consumer_id, $customer_id, $product_id) {
+        $query = $this->db->get_where('consumer_customer_link', array("consumer_id='".$consumer_id."' AND customer_id='".$customer_id."'", 'product_id' => $product_id));
+	   //$query = $this->db->get_where('consumer_customer_link',"bar_code='".$bar_code_data."' OR bar_code='".$bar_code2_data."'");
+        if ($query->num_rows() > 0) {
+            $data = $query->row_array();            
+            return $data;
+        } else {
+            return false;
+        }
+    }
 
 	// checking if the Loyalty given to the user on Video type questions on code 
     Public function isLoyaltyForVideoFBQuesGiven($consumerId, $product_id) {
@@ -450,7 +461,7 @@ return $result;
         }elseif(!empty($barCode)){
             $conditions['pp.bar_code'] = $barCode;
         }
-        $query = $this->db->select("pp.id AS purchased_id,pp.bar_code,pp.ordered_date,pp.invoice,pp.invoice_image,pp.expiry_date,pp.warranty_start_date,pp.warranty_end_date,pr.*")
+        $query = $this->db->select("pp.purchased_product_id AS purchased_id,pp.bar_code,pp.ordered_date,pp.invoice,pp.invoice_image,pp.expiry_date,pp.warranty_start_date,pp.warranty_end_date,pr.*")
                 ->from('purchased_product AS pp')
                 ->join('products AS pr', 'pr.id=pp.product_id')
                 ->where($conditions)

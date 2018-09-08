@@ -145,7 +145,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                        <td><?php //echo $attr['created_by'];?> <?php //echo $attr['id'];?>
 									 
 <input <?php 
-	$answerQuery = $this->db->get_where('push_surveys',"product_id='".$attr['id']."' AND consumer_id='16'");
+	$answerQuery = $this->db->get_where('push_surveys',"product_id='".$attr['id']."'");
 	if($answerQuery->num_rows() > 0){
 	?>checked="checked"<?php } ?> id="product_<?php echo $attr['id'];?>"name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $attr['created_by'];?>','<?php echo $attr['id'];?>');" type="checkbox">
                                                 <span class="lbl"></span> 

@@ -547,7 +547,7 @@
 				
 				/*  new work */
 				
-				$query = $this->db->query("SELECT * FROM consumers;");
+				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$cid."';");
 				
 				foreach ($query->result() as $user)  
 				{  
@@ -555,7 +555,7 @@
 				//echo $consumer_ida; exit;
 				$insertData=array(
 					"customer_id"	 => $cid,
-					"consumer_id"	 => $user->id,
+					"consumer_id"	 => $user->consumer_id,
 					"product_id"	 => $pid,
 					"media_type"	 => "Video",
 					"ad_push_date"	 => date(),
@@ -583,7 +583,34 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'howzzt', 'body' =>  $mess ,'sound'=>'Default',),
+		         'notification' => array('title' => 'howzzt advertisement', 'body' =>  $mess ,'sound'=>'Default',),
+		       
+		);
+		$fields = json_encode ( $fields );
+		
+		$headers = array (
+		        'Authorization: key=' . "AAAA446l5pE:APA91bE3nQ0T5E9fOH-y4w_dkOLU1e9lV7Wn0OmVLaKNnE8tXcZ0eC3buduhCwHL1ICaJ882IHfLy-akAe7Nih7M1RewkO9IzAR-ELdPgmORtb7KjriRrQspVHkIb9GRZPOjXuqfPInlOAly5-65sEEUbGlcoujMgw", 'Content-Type: application/json'
+		);
+		
+		$ch = curl_init ();
+		curl_setopt ( $ch, CURLOPT_URL, $url );
+		curl_setopt ( $ch, CURLOPT_POST, true );
+		curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+		
+		$result = curl_exec ( $ch );
+		//curl_close ( $ch );
+		return $result;
+		}
+		
+		public function sendTextFCM($mess,$id) {
+		$url = 'https://fcm.googleapis.com/fcm/send';
+		
+		$fields = array (
+		        'to' => $id,
+		         
+		         'notification' => array('title' => 'howzzt text message', 'body' =>  $mess ,'sound'=>'Default',),
 		       
 		);
 		$fields = json_encode ( $fields );

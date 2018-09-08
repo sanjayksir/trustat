@@ -531,13 +531,14 @@
 					$getEssentialAttributes = getEssentialAttributes($product_id);
 					if($getEssentialAttributes['code_unity_type']=='Twin'){
 						
-					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 100, $y, $barcodesize, $barcodesize, $style, 'N');
-					$pdf->Text(101, $y+0.2, $qrcode.'-'.$i);
-					$pdf->Text(101, $y+31, 'Scan to Check Product');
-					$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
-					$pdf->SetFont('','B');
-				  	$pdf->Text(144, $y+18, "^^Do Not Buy!! If already Scratched^^");
-					$pdf->Text(150, $y+22, "Scratch to register product");
+					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 60, $y, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->Text(62, $y+0.2, $qrcode.'-'.$i);
+					$pdf->Text(62, $y+31, 'Scan to Check Product');
+					$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 120, $y-1.5, 80, $barcodesize, 0.4, $style, 'L');
+					//$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
+					//$pdf->SetFont('','B');
+				  	$pdf->Text(121, $y+30, "^^Do Not Buy!! If already Scratched^^, Scratch to register product");
+					//$pdf->Text(150, $y+30, "Scratch to register product");
 					
 					
 					//$pdf->Cell(287,50, 'If already Scratched ^', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
@@ -593,7 +594,7 @@
 			$pdf->setBarcode(date('Y-m-d H:i:s'));
 			
 			// set font
-			//$pdf->SetFont('helvetica', '', 11);
+			//$pdf->SetFont('helvetica', '', 13);
 			$pdf->SetFont('', '', 7);
 			// add a page
 			$pdf->AddPage();
@@ -700,7 +701,8 @@
  						</body>
 						</html>';
 			// -----------------------------------------------------------------------------
- 			$pdf->SetFont('helvetica', '', 7);
+ 			/*
+			$pdf->SetFont('helvetica', '', 7);
 			
  			// define barcode style
 			$style = array(
@@ -716,6 +718,7 @@
 								'fontsize' => 8,
 								'stretchtext' => 4
 						  ); 
+						  */
 			//echo '<pre>';print_r($this->input->post());exit;
 			// PRINT VARIOUS 1D BARCODES
 			$pdf->writeHTML($html, false, 0, false, 0);
@@ -733,17 +736,22 @@
 					$getEssentialAttributes = getEssentialAttributes($product_id);
 					if($getEssentialAttributes['code_unity_type']=='Twin'){
 					
-					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 100, $y, $barcodesize, $barcodesize, $style, 'N');
-					$pdf->Text(101, $y+0.5, $qrcode.'-'.$i);
-					$pdf->Text(101, $y+31, 'Scan to Check Product');
-					$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
-					$pdf->SetFont('','B');
-				  	$pdf->Text(144, $y+18, "^^Do Not Buy!! If already Scratched^^");
-					$pdf->Text(150, $y+22, "Scratch to register product");
+					
+					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 60, $y, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->Text(62, $y+0.2, $qrcode.'-'.$i);
+					$pdf->Text(62, $y+31, 'Scan to Check Product');
+					$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 120, $y-1.5, 80, $barcodesize, 0.4, $style, 'L');
+					//$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
+					//$pdf->SetFont('','B');
+				  	$pdf->Text(121, $y+30, "^^Do Not Buy!! If already Scratched^^, Scratch to register product");
+					//$pdf->Text(150, $y+30, "Scratch to register product");
+					
+					
+					//$pdf->Cell(287,50, 'If already Scratched ^', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
 					
 					
 					} else {
-					$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 100, $y, 50, 15, 0.3, $style, 'N');
+					$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 120, $y-1.5, 80, $barcodesize, 0.4, $style, 'L');
 					//$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
 					//$pdf->Text(110, $y, 'This is First Code');
 					//$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
@@ -959,7 +967,7 @@
  						</body>
 						</html>';
 			// -----------------------------------------------------------------------------
- 			$pdf->SetFont('helvetica', '', 10);
+ 			$pdf->SetFont('helvetica', '', 13);
 			
  			// define barcode style
 			$style = array(

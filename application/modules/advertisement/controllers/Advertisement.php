@@ -795,17 +795,43 @@ function list_assigned_Advertisements() {
 		$Chk = $this->input->post('Chk');
 		echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$Chk);
 		 
-		 $query = $this->db->query("SELECT * FROM consumers;");
+		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$cid."';");
 				
 				foreach ($query->result() as $user)  
 				{
-		 $customer_id = $user->id;
-		 $fb_token = getConsumerFb_TokenById($customer_id);
+		 $consumer_id = $user->consumer_id;
+		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Advertisement_model->sendFCM("An Advertisement Posted!!..", $fb_token);
 		 }
 		//echo  $this->Advertisement_model->sendFCM("Advertisement pushed!",$fb_token);
 		exit;
+ 	}
+	
+	function send_text_message(){
+	 	$this->checklogin();		
+		//$customer_id=$this->input->post('c_id');
+		//$product_id	=$this->input->post('p_id');
+		//$Chk = $this->input->post('Chk');
+		$customer_id 	= $this->session->userdata('admin_user_id');
+		$text_message	=$this->input->post('text_message');
+		if($text_message==''){
+		$this->load->view('send_text_message');
+		} else {
+		//echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$Chk);
+		 
+		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+				
+				foreach ($query->result() as $user)  
+				{
+		 $consumer_id = $user->consumer_id;
+		 $fb_token = getConsumerFb_TokenById($consumer_id);
+		 
+		 $this->Advertisement_model->sendTextFCM($text_message, $fb_token);
+		 }
+		//echo  $this->Advertisement_model->sendFCM("Advertisement pushed!",$fb_token);
+		redirect(base_url().'advertisement/send_text_message');	exit;
+		}
  	}
 }
 

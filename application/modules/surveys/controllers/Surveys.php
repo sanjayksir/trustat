@@ -786,12 +786,12 @@ function list_assigned_Surveys() {
 		$Chk = $this->input->post('Chk');
 		echo $this->Survey_model->save_push_Survey($customer_id,$product_id,$Chk);
 		
-		$query = $this->db->query("SELECT * FROM consumers;");
+		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				
 				foreach ($query->result() as $user)  
 				{
-		 $customer_id = $user->id;
-		 $fb_token = getConsumerFb_TokenById($customer_id);
+		  $consumer_id = $user->consumer_id;
+		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Survey_model->sendFCM("A Survey Posted!!", $fb_token);
 		 }

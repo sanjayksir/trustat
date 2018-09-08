@@ -145,7 +145,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                        <td><?php //echo $attr['created_by'];?> <?php //echo $attr['id'];?>
 									 
 <input <?php 
-	$answerQuery = $this->db->get_where('push_advertisements',"product_id='".$attr['id']."' AND consumer_id='16'");
+	$answerQuery = $this->db->get_where('push_advertisements',"product_id='".$attr['id']."'");
 	if($answerQuery->num_rows() > 0){
 	?>checked="checked"<?php } ?> id="product_<?php echo $attr['id'];?>"name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $attr['created_by'];?>','<?php echo $attr['id'];?>');" type="checkbox">
                                                 <span class="lbl"></span> 
@@ -165,7 +165,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 										}else{?>
 											<tr><td align="center" colspan="8" class="color error">No Records Founds</td></tr>
 										<?php }?>
-										  <!--<tr id="show<?php echo $attr['id']; ?>"><td colspan="8"><input class="btn btn-primary pull-right" type="button" id="assign" name="assign" value="Assign Product" /></td></tr>-->
+										  <!--<tr id="show<?php //echo $attr['id']; ?>"><td colspan="8"><input class="btn btn-primary pull-right" type="button" id="assign" name="assign" value="Assign Product" /></td></tr>-->
                           </tbody>
                               </table>
                             <div class="row paging-box">
