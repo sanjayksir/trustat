@@ -430,7 +430,8 @@ class Buzzadmn_model extends CI_Model {
         $insertData = array(
            // "id" => $data['product_id'],
 			"product_description" =>  trim($data['pickDesc']),
-            "product_images" => trim($data['images']),
+            "product_thumb_images" => trim($data['ptimages']),
+			"product_images" => trim($data['images']),
             "product_video" => trim($data['videos']),
             "product_audio" => trim($data['audios']),
             "product_pdf" => trim($data['attachments']),
@@ -450,6 +451,11 @@ class Buzzadmn_model extends CI_Model {
                 $update_array = array_merge($update_array, $arr);
             }
             if ($data['images'] != '') {
+                $checker = 1;
+                $arr = array("product_thumb_images" => trim($data['images']));
+                $update_array = array_merge($update_array, $arr);
+            }
+			if ($data['images'] != '') {
                 $checker = 1;
                 $arr = array("product_images" => trim($data['images']));
                 $update_array = array_merge($update_array, $arr);
@@ -515,7 +521,8 @@ class Buzzadmn_model extends CI_Model {
 			"status" => 0,
 			"product_sku" => 0,
 			"product_description" =>  trim($data['pickDesc']),
-            "product_images" => trim($data['images']),
+            "product_thumb_images" => trim($data['images']),
+			"product_images" => trim($data['images']),
             "product_video" => trim($data['videos']),
             "product_audio" => trim($data['audios']),
             "product_pdf" => trim($data['attachments']),

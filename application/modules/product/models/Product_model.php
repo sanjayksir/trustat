@@ -159,6 +159,7 @@
 					"created_by"		  => $is_parent,
 					"status"			  => 1,
 					"product_description" => '',
+					"product_thumb_images"	  => '',
 					"product_images"	  => '',
 					"product_video"	      => '',
 					"product_audio"		  => '',
@@ -669,14 +670,14 @@
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
 		
- 		$this->db->select('PP.*, C.*, P.product_name, P.product_sku, P.created_by',false);
+ 		$this->db->select('PP.*, C.*, P.product_name, P.product_sku, P.created_by, PP.status',false);
 		$this->db->from('purchased_product PP');
 		$this->db->join('consumers C', 'C.id = PP.consumer_id');
 		$this->db->join('products P', 'P.id = PP.product_id');
 		if($user_id!=1){ 
 			$this->db->where(array('P.created_by' => $user_id));
 		}
-   		$this->db->order_by('PP.ordered_date','desc');
+   		$this->db->order_by('PP.create_date','desc');
 		$this->db->limit($limit, $start);
    		$query = $this->db->get();  //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
@@ -730,7 +731,7 @@
 			$id = $data['code_id'];
                // $this->db->set('profile_photo', $frmData['profile_photo']);
                 $UpdateData = array(
-                    "modified" 				=> date("Y-m-d H:i:s"),
+                    
 					"invoice" 				=> $data['invoice_number'],
 					"purchase_date" 		=> $data['purchase_date'],
 					"warranty_start_date" 	=> $data['warranty_start_date'],
@@ -740,6 +741,8 @@
 					"seller_name" 			=> $data['seller_name'],
 					"seller_gst" 			=> $data['seller_gst'],
 					"selling_price" 		=> $data['selling_price'],
+					"vquery" 				=> $data['query'],
+					"modified" 				=> date("Y-m-d H:i:s"),
 					"discount" 				=> $data['discount']
                 );
              
@@ -848,6 +851,35 @@
 				}return false; 
         
     }
+	
+	
+	public function sendFVPNotification($mess,$id) {
+		$url = 'https://fcm.googleapis.com/fcm/send';
+		
+		$fields = array (
+		        'to' => $id,
+		         
+		         'notification' => array('title' => 'howzzt product verifiction done', 'body' =>  $mess ,'sound'=>'Default',),
+		       
+		);
+		$fields = json_encode ( $fields );
+		
+		$headers = array (
+		        'Authorization: key=' . "AAAA446l5pE:APA91bE3nQ0T5E9fOH-y4w_dkOLU1e9lV7Wn0OmVLaKNnE8tXcZ0eC3buduhCwHL1ICaJ882IHfLy-akAe7Nih7M1RewkO9IzAR-ELdPgmORtb7KjriRrQspVHkIb9GRZPOjXuqfPInlOAly5-65sEEUbGlcoujMgw", 'Content-Type: application/json'
+		);
+		
+		$ch = curl_init ();
+		curl_setopt ( $ch, CURLOPT_URL, $url );
+		curl_setopt ( $ch, CURLOPT_POST, true );
+		curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+		
+		$result = curl_exec ( $ch );
+		//curl_close ( $ch );
+		return $result;
+		}
+		
 		
 }
 

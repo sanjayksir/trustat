@@ -29,6 +29,10 @@ class Product_attrribute extends MX_Controller {
             $data['status'] = $status;
             //print_r($this->input->post());exit;
             ## Media Files
+			
+			$allPTImageList_arr = $this->input->post('all_PTImages_list');
+            $allPTImageList = $allPTImageList_arr[0];
+			
             $allImageList_arr = $this->input->post('all_Images_list');
             $allImageList = $allImageList_arr[0];
 
@@ -56,7 +60,8 @@ class Product_attrribute extends MX_Controller {
 			$allProductSurveyVideo_arr = $this->input->post('all_product_survey_video_list');
             $allProductSurveyVideoList = $allProductSurveyVideo_arr[0];
             ## Media Files
-            $data['images'] = $allImageList;
+            $data['ptimages'] = $allPTImageList;
+			$data['images'] = $allImageList;
             $data['videos'] = $allVideoList;
             $data['audios'] = $allAudioList;
             $data['attachments'] = $allAttachmentList;

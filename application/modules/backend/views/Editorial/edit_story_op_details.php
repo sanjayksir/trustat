@@ -40,7 +40,7 @@
                                             <div class="widget-body">
                                                 <div class="widget-main">
                                                 <form name="dwl_frm" id="dwl_frm" class="form-horizontal" action="<?php echo base_url();?>buzzadmn/editorial/download/<?php echo $this->uri->segment(4);?>" method="POST">
-                                                    
+                                                    <input type="hidden" name="all_PTImages_list[]" id="all_PTImages_list" value="" />
                                                     <input type="hidden" name="all_Images_list[]" id="all_Images_list" value="" />
                                                     <input type="hidden" name="all_videos_list[]" id="all_videos_list" value="" />
                                                     <input type="hidden" name="all_audios_list[]" id="all_audios_list" value="" />

@@ -4,7 +4,7 @@
 
 		<meta charset="utf-8" />
 
-		<title>Hozzt - <?php echo getSeoTitle();?></title>
+		<title>howzzt - <?php echo getSeoTitle();?></title>
 
 
 
@@ -78,7 +78,7 @@
 
         <link rel="stylesheet" href="<?php echo ASSETS_PATH;?>css/common.css" />
 
-
+		<link rel="icon" href="<?php echo base_url();?>assets/images/favicon.ico" type="image/x-icon" />
 
 		<!-- ace settings handler -->
 

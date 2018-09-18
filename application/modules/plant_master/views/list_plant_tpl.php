@@ -126,7 +126,7 @@
                                                      <div class="hidden-sm hidden-xs action-buttons">
                                                          <a href="<?php  echo base_url().'plant_master/view_plant/'.$listData['plant_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>
                                                          <?php echo anchor("plant_master/edit_plant/" . $listData['plant_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>
-                                                         <!--<a title="Delete Plant" href="javascript:void(0);" onclick="return confirmDelete('<?php echo base64_encode($listData['plant_id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>-->
+                                                         <!--<a title="Delete Plant" href="javascript:void(0);" onclick="return confirmDelete('<?php //echo base64_encode($listData['plant_id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>-->
                                                          
                                                          <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['plant_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['plant_id'];?>',this.value);" />
 

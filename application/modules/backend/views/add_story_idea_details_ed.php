@@ -49,9 +49,18 @@ $medisUrl = $this->config->item('media_location');
                                             <div class="row media-addon">
                                             <div class="col-sm-2">
                                                 <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_thumb_images)? site_url($medisUrl.'/'.$product_thumb_images):"#"; ?>" id="thumb-image" data-toggle="image" class="img-thumbnail" mime-type="image">
+       <img src="<?php echo !empty($product_thumb_images)? site_url($medisUrl.'/'.$product_thumb_images):site_url('assets/images/upload_img.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/upload_img.png'); ?>" />
+                                                    <span class="media-info">Product Thumb Image</span>
+                                                </a>
+                                                <input type="hidden" name="product_thumb_images" value="<?php echo $product_thumb_images; ?>" id="input-image" />
+                                                </div>
+                                            </div>
+											<div class="col-sm-2">
+                                                <div class="thumbnail">
                                                 <a href="<?php echo !empty($product_images)? site_url($medisUrl.'/'.$product_images):"#"; ?>" id="thumb-image" data-toggle="image" class="img-thumbnail" mime-type="image">
        <img src="<?php echo !empty($product_images)? site_url($medisUrl.'/'.$product_images):site_url('assets/images/upload_img.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/upload_img.png'); ?>" />
-                                                    <span class="media-info">Product Image</span>
+                                                    <span class="media-info">Product Ad Image</span>
                                                 </a>
                                                 <input type="hidden" name="product_images" value="<?php echo $product_images; ?>" id="input-image" />
                                                 </div>

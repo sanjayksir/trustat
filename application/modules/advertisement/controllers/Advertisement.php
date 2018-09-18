@@ -794,8 +794,13 @@ function list_assigned_Advertisements() {
 		$product_id	=$this->input->post('p_id');
 		$Chk = $this->input->post('Chk');
 		echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$Chk);
-		 
-		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$cid."';");
+		if($Chk==0){
+		$value='';
+		} else {
+			$value=1;
+		}
+		 echo $status= $this->Advertisement_model->change_status($product_id,$value);
+		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				
 				foreach ($query->result() as $user)  
 				{
@@ -833,5 +838,20 @@ function list_assigned_Advertisements() {
 		redirect(base_url().'advertisement/send_text_message');	exit;
 		}
  	}
+	
+	
+		   public function change_status() {
+ 		 $id = $this->input->post('id');
+		 $status = $this->input->post('value');
+		 if(strtolower($status)=='inactive'){
+			 $status ='1';# Now it will be active
+		 }else{
+		 	$status ='0';# Now it will be inactive
+		 }
+		 //$user_id 	= $this->session->userdata('admin_user_id');		
+		 echo $status= $this->Advertisement_model->change_status($id,$status);exit;
+   		  
+     }
+	 
 }
 

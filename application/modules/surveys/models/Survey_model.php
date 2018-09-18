@@ -533,36 +533,35 @@
 			} return $result;
 		}
 		
-		function save_push_survey($cid,$pid,$Chk){
+		function save_push_survey($customer_id,$product_id,$Chk){
  			if($Chk=='0'){
-				$this->db->query("delete from push_surveys where product_id='".$pid."' ");
+				$this->db->query("delete from push_surveys where product_id='".$product_id."' ");
 				$this->session->set_flashdata('success', 'Add un-Pushed Successfully!');
 				//echo $this->db->last_query();exit;
 				return true;
 			}else{
-				$isExists=$this->IsProductSurveyOn($cid,$pid); 
+				$isExists=$this->IsProductSurveyOn($customer_id,$product_id); 
 				if($isExists=='false'){
 					return false;
 				}
 				
 				/*  new work */
 				
-				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$cid."';");
+				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				
 				foreach ($query->result() as $user)  
 				{  
 				//$consumer_ida = $user->id; 
 				//echo $consumer_ida; exit;
 				$insertData=array(
-					"customer_id"	 => $cid,
+					"customer_id"	 => $customer_id,
 					"consumer_id"	 => $user->id,
-					"product_id"	 => $pid,
+					"product_id"	 => $product_id,
 					"media_type"	 => "Video",
-					"ad_push_date"	 => date(),
-					"media_play_date"	 => date(),
-					"ad_feedback_response"	 => "",
-					"ad_active"	 => "1"
-					
+					"survey_push_date"	 => date('Y-m-d H:i:s'),
+					"media_play_date"	 => "0000-00-00 00:00:00",
+					"survey_feedback_response"	 => "",
+					"survey_active"	 => "1"
 					);
 				  
 				  $this->db->insert("push_surveys", $insertData);
@@ -606,7 +605,16 @@
 		
 		
 		
-		
+		function change_status($id, $value) {
+        $this->db->set(array('push_survey_req' => $value));
+        $this->db->where(array('id' => $id));
+        if ($this->db->update('products')) {
+            return $value;
+        } else {
+            return '';
+        }
+        //echo '***'.$this->db->last_query();exit;
+    }
 		
 		
 		

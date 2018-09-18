@@ -1,3 +1,70 @@
+  <!-------------- For Product Thumb Image Drap drop upload start------------------>
+ allids1=[];
+ allids2=[];
+ allids3=[];
+ allids4=[];
+  $(".dropzoneImg").dropzone({
+    url: '/backend/upload_file/uploadImages/', //url for the ajax to post
+    width: 300, //width of the div
+    height: 152, //height of the div
+    progressBarWidth: 300, //width of the progress bars
+    filesName: 'files', //name for the form submit
+    margin: 0, //margin added if needed
+    border: '', //border property
+    background: '',
+    textColor: '#ccc', //text color
+    textAlign: 'center', //css style for text-align
+    lineHeight: 300, //vertical text align
+    text: '<label class="ace-file-input ace-file-multiple"><input multiple="" id="id-input-file-3" type="file"><span class="ace-file-container" data-title="Drop Image here or click to choose"><span class="ace-file-name" data-title="No File ..."><i class="ace-icon fa-file-image-o"></i></span></span><a class="remove" href="#"><i class=" ace-icon fa fa-times"></i></a></label>', //text inside the div
+    uploadMode: 'single', //upload all files at once or upload single files, options: all or single
+    progressContainer: '', //progress selector if null one will be created
+
+    dropzoneWraper: 'nniicc-dropzoneParent', //wrap the dropzone div with custom class
+    files: [], //Access to the files that are droped
+    maxFileSize: '10MB', //max file size ['bytes', 'KB', 'MB', 'GB', 'TB']
+    allowedFileTypes: 'jpg,png,gif,jpeg', //allowed files to be uploaded seperated by ',' jpg,png,gif
+    clickToUpload: true, //click on dropzone to select files old way
+    showTimer: false, //show time that has elapsed from the start of the upload,
+    removeComplete: true, //delete complete progress bars when adding new files
+    //functions
+    load: function(){
+        console.log("render done");
+    },
+	success: function(res, responseText){
+        // alert('kam'+res.responseText);
+		<!----------------Comma Separated Value--------------------->
+		var Imagefile =res.responseText;
+		allids1.push(Imagefile);
+		$('#all_PTImages_list').val(allids1.join(","));
+		//alert(allids1);
+		<!----------------Comma Separated Value--------------------->
+     },
+	//callback when the div is loaded
+	/*progress: function(percent, index){
+	console.log(percent, index);
+	$(".progress-"+index).children().css("width", percent+"%").html(percent.toFixed(0)+"%");
+	}, //callback for the files procent*/
+    uploadDone: function(){
+     }});
+	
+	$(".dropzoneImg22").dropzone({
+        url: '/backend/upload_file/uploadImages/', //url for the ajax to post
+        margin: 20,
+		filesName: 'files',
+        success: function(res, responseText){
+            //alert(res.responseText);
+			<!----------------Comma Separated Value--------------------->
+			var Imagefile =res.responseText;
+ 			allids1.push(Imagefile);
+			$('#all_PTImages_list').val(allids1.join(","));
+			//alert(allids1);
+			<!----------------Comma Separated Value--------------------->
+         }
+    });
+	
+	
+ <!-------------- For Product Thumb Image Drap drop upload End------------------>
+ 
  <!-------------- For Image Drap drop upload start------------------>
  allids1=[];
  allids2=[];

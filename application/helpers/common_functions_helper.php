@@ -348,8 +348,26 @@ function getConsumerNameById($id){
 
  	}
 	return $res;
-
 }
+
+function getConsumerMobileNumberById($id){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('mobile_no');
+	$ci->db->from('consumers');
+	$ci->db->where(array('id'=>$id));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['mobile_no']);
+
+ 	}
+	return $res;
+}
+
+
 function getConsumerFb_TokenById($id){
 	$res = 0;
 	$ci = & get_instance();
@@ -6292,6 +6310,8 @@ function get_assigned_plant_user_list($user_id){
 		 }
  		return $res; 
  }
+ 
+ 
 function get_products_name_by_id($id){ 
 	$res='0';
 	$ci = & get_instance();
@@ -6308,6 +6328,26 @@ function get_products_name_by_id($id){
  		}
  	return $res_arr[0]['name'];
  }
+ 
+ 
+ function get_products_attribute_list_by_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$id2 = checkProductsId_having_other_industry($id);
+			$ids = explode(',',$id);
+			$get_ids = array_diff($ids, $id2);
+			$ci->db->select('group_concat(attribute_list) as attributes');
+			$ci->db->from('products');
+ 			$ci->db->where_in('id',$get_ids);
+			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['attributes'];
+ }
+ 
+ 
  
  function get_product_sku_by_id($id){ 
 	$res='0';

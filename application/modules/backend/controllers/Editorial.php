@@ -201,8 +201,13 @@ class Editorial extends MX_Controller {
  			$data['status'] 	= $status;
 			
 			## Media Files
+			
+			$allPTImageList_arr 	= $this->input->post('all_PTImages_list');
+			$allPTImageList 		= $allPTImageList_arr[0];
+			
 			$allImageList_arr 	= $this->input->post('all_Images_list');
 			$allImageList 		= $allImageList_arr[0];
+			
 			
 			$all_videos_list_arr= $this->input->post('all_videos_list');
 			$allVideoList 		= $all_videos_list_arr[0];
@@ -228,6 +233,7 @@ class Editorial extends MX_Controller {
 			$all_product_user_manual_list_arr= $this->input->post('all_product_user_manual_list');
 			$allProductUserManualList 		= $all_product_user_manual_list_arr[0];
 			## Media Files
+			$data['ptimages']		= $allPTImageList;
 			$data['images']		= $allImageList;
 			$data['videos']		= $allVideoList;
 			$data['audios']		= $allAudioList;

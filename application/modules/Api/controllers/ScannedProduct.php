@@ -56,6 +56,10 @@ class ScannedProduct extends ApiController {
             $this->db->insert('scanned_product_logs', $data);
             $this->response(['status'=>false,'message'=>'This product and barcode is not supported by howzzt .'],200);
         }
+		if(!empty($result->product_thumb_images)){
+            $result->product_thumb_images = Utils::setFileUrl($result->product_thumb_images);
+        }
+		
         if(!empty($result->product_images)){
             $result->product_images = Utils::setFileUrl($result->product_images);
         }
@@ -109,7 +113,7 @@ class ScannedProduct extends ApiController {
 		
 		
 		
-		$isConsAlreadyLinkedtoCust = $this->ScannedproductsModel->isConsAlreadyLinkedtoCust($consumer_id, $customer_id, $product_id);
+		$isConsAlreadyLinkedtoCust = $this->ScannedproductsModel->isConsAlreadyLinkedtoCust($consumer_id, $customer_id);
 		
 		if($isConsAlreadyLinkedtoCust==false){
 		$this->db->insert('consumer_customer_link', $data);
@@ -288,6 +292,8 @@ class ScannedProduct extends ApiController {
             ['field' =>'invoice','label'=>'Invoice','rules' => ['trim']],
             //['field' =>'invoice_image','label'=>'Invoice image','rules' => [['file',[$this->ScannedproductsModel,'validFile']]]],
             ['field' =>'expiry_date','label'=>'Expiry date','rules' => ['',['date',[$this->ScannedproductsModel,'validDate']]]],
+			['field' =>'latitude','label'=>'Latitude','rules' => 'required'],
+			['field' =>'longitude','label'=>'Longitude','rules' => 'required'],
         ];
         
         $errors = $this->ScannedproductsModel->validate($data,$validate);
@@ -367,6 +373,7 @@ class ScannedProduct extends ApiController {
         $data['consumer_id'] = $user['id'];
         $data['product_id'] = $result->id;
         $data['modified'] = date('Y-m-d H:i:s');
+		$data['create_date'] = date('Y-m-d H:i:s');
         if(!empty($warrenty)){
             $data['status'] = 0;
         }else{

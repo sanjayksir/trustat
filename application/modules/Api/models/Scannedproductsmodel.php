@@ -22,7 +22,7 @@ class ScannedproductsModel extends CI_Model {
     }
     
     public function validDate($value){
-        $valid = Utils::validDate($value, 'Y-m-d');
+        $valid = Utils::validDate($value, 'Y-m-d');	
         if(!$valid){
             $this->form_validation->set_message('date', '%s is not valid.');
             return FALSE;
@@ -97,12 +97,16 @@ class ScannedproductsModel extends CI_Model {
            
 		   $consumerId = $row->id;
 	$item['isGiven'] = $this->isLoyaltyForProductPushedAdFeedbackQuesGiven($consumerId, $product_id);
+            if(!empty($row->product_thumb_images)){
+                $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
+            }else{
+                $item['product_thumb_images'] = '';
+            }
             if(!empty($row->product_images)){
                 $item['product_images'] = Utils::setFileUrl($row->product_images);
             }else{
                 $item['product_images'] = '';
             }
-            
             if(!empty($row->product_push_ad_video)){
                 $item['product_video'] = Utils::setFileUrl($row->product_push_ad_video);
             }else{
@@ -184,12 +188,16 @@ return $result;
 			
 		
            
+            if(!empty($row->product_thumb_images)){
+                $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
+            }else{
+                $item['product_thumb_images'] = '';
+            }
             if(!empty($row->product_images)){
                 $item['product_images'] = Utils::setFileUrl($row->product_images);
             }else{
                 $item['product_images'] = '';
             }
-            
             if(!empty($row->product_survey_video)){
                 $item['product_video'] = Utils::setFileUrl($row->product_survey_video);
             }else{
@@ -246,8 +254,9 @@ return $result;
         }
     }
 	
-	Public function isConsAlreadyLinkedtoCust($consumer_id, $customer_id, $product_id) {
-        $query = $this->db->get_where('consumer_customer_link', array("consumer_id='".$consumer_id."' AND customer_id='".$customer_id."'", 'product_id' => $product_id));
+	Public function isConsAlreadyLinkedtoCust($consumer_id, $customer_id) {
+        $query = $this->db->get_where('consumer_customer_link', array('consumer_id' => $consumer_id, 'customer_id' => $customer_id));
+		//$query = $this->db->get_where('consumer_customer_link', array("consumer_id='".$consumer_id."' AND customer_id='".$customer_id."'", 'product_id' => $product_id));
 	   //$query = $this->db->get_where('consumer_customer_link',"bar_code='".$bar_code_data."' OR bar_code='".$bar_code2_data."'");
         if ($query->num_rows() > 0) {
             $data = $query->row_array();            
@@ -424,7 +433,12 @@ return $result;
             }else{
                 $item['industry_data'] = [];
             }
-            if(!empty($row->product_images)){
+            if(!empty($row->product_thumb_images)){
+                $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
+            }else{
+                $item['product_thumb_images'] = '';
+            }
+			if(!empty($row->product_images)){
                 $item['product_images'] = Utils::setFileUrl($row->product_images);
             }else{
                 $item['product_images'] = '';
@@ -461,11 +475,11 @@ return $result;
         }elseif(!empty($barCode)){
             $conditions['pp.bar_code'] = $barCode;
         }
-        $query = $this->db->select("pp.purchased_product_id AS purchased_id,pp.bar_code,pp.ordered_date,pp.invoice,pp.invoice_image,pp.expiry_date,pp.warranty_start_date,pp.warranty_end_date,pr.*")
+        $query = $this->db->select("pp.purchased_product_id AS purchased_id,pp.bar_code,pp.purchase_date,pp.create_date,pp.invoice,pp.invoice_image,pp.expiry_date,pp.warranty_start_date,pp.warranty_end_date,pr.*")
                 ->from('purchased_product AS pp')
                 ->join('products AS pr', 'pr.id=pp.product_id')
                 ->where($conditions)
-				->order_by('modified', 'desc')
+				->order_by('create_date', 'desc')
                 ->get()
                 ->result();
         //echo $this->db->last_query();die;
@@ -477,7 +491,8 @@ return $result;
             $item = [
                 'bar_code' => $row->bar_code,
                 'purchased_id' => $row->purchased_id,
-                'ordered_date' => $row->ordered_date,
+                'purchase_date' => $row->purchase_date,
+				'product_registration_date' => $row->create_date,
                 'invoice' => $row->invoice,
                 'expiry_date' => $row->expiry_date,
 				'warranty_start_date' => $row->warranty_start_date,
@@ -498,13 +513,21 @@ return $result;
             }else{
                 $item['attribute_list'] = [];
             }
+			
+			
+			
             if (!empty($row->industry_data)) {
                 $indIds = implode(',', json_decode($row->industry_data, true));
                 $item['industry_data'] = $this->getIndustry($indIds);
             }else{
                 $item['industry_data'] = [];
             }
-            if(!empty($row->product_images)){
+            if(!empty($row->product_thumb_images)){
+                $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
+            }else{
+                $item['product_thumb_images'] = '';
+            }
+			if(!empty($row->product_images)){
                 $item['product_images'] = Utils::setFileUrl($row->product_images);
             }else{
                 $item['product_images'] = '';

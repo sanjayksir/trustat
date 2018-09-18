@@ -40,7 +40,21 @@ $medisUrl = $this->config->item('media_location');
                             <div class="row">
                                 <div class="col-xs-12 col-sm-4 widget-box transparent text-center">
                                     <div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Images</h6>
+                                        <h6 class="widget-title smaller lighter">Product Thum Image</h6>
+                                    </div>
+                                    <div class="widget-body">                                        
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_thumb_images"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+								<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+                                    <div class="widget-header widget-header-small">
+                                        <h6 class="widget-title smaller lighter">Product Ad Images</h6>
                                     </div>
                                     <div class="widget-body">                                        
                                         <div class="widget-main">
@@ -183,7 +197,47 @@ $medisUrl = $this->config->item('media_location');
     <script type="text/javascript" src="<?php echo site_url('assets');?>/js/jquery.uploadfile.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
-            $("#product_images").uploadFile({
+            $("#product_thumb_images").uploadFile({
+                uploadStr:"Select Images",
+                url:site_url+"backend/product_attrribute/media_attribute/product_thumb_images/<?php echo base64_encode($id); ?>",
+                fileName:"product_thumb_images",
+                showDelete: true,
+                sequential:true,
+                sequentialCount:1,
+                acceptFiles:"image/*",
+                showPreview:true,
+                previewHeight: "100px",
+                previewWidth: "100px",
+                onLoad:function(obj){
+                    $.ajax({
+                        cache: false,
+                        url:site_url+"backend/product_attrribute/view_media_file/product_thumb_images/<?php echo base64_encode($id); ?>",
+                        dataType: "json",
+                        success: function(data){
+                            for(var i=0;i<data.length;i++){
+                                obj.createProgress(data[i]["name"],data[i]["path"],data[i]["size"]);
+                            }
+                        } 
+                    });
+                },
+                deleteCallback: function (data, pd) {
+                    $(".alert-box").removeClass('alert-success').removeClass('alert-danger');
+                    for (var i = 0; i < data.length; i++) {
+                        $.post(site_url+"backend/product_attrribute/delete_media_file/product_thumb_images/<?php echo base64_encode($id); ?>", {
+                            file: data[i]
+                        },function (resp,textStatus, jqXHR) {
+                            if(resp.status){
+                                $(".alert-box").addClass('alert-success').html('<p>'+resp.message+'</p>');
+                            }else{
+                                $(".alert-box").addClass('alert-danger').html('<p>'+resp.message+'</p>');
+                            }
+                            
+                        });
+                    }
+                    pd.statusbar.hide(); //You choice.
+                }
+            }); // upload product thumb images 
+			$("#product_images").uploadFile({
                 uploadStr:"Select Images",
                 url:site_url+"backend/product_attrribute/media_attribute/product_images/<?php echo base64_encode($id); ?>",
                 fileName:"product_images",
@@ -222,7 +276,7 @@ $medisUrl = $this->config->item('media_location');
                     }
                     pd.statusbar.hide(); //You choice.
                 }
-            }); // upload product images 
+            }); // upload ad images
             $("#product_video").uploadFile({
                 uploadStr:"Product Video",
                 url:site_url+"backend/product_attrribute/media_attribute/product_video/<?php echo base64_encode($id); ?>",

@@ -130,8 +130,19 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                             $sno =  $page + 1;
                         $i=0;
                         foreach ($product_list as $attr){
-                        $i++;
-                         ?>
+									$i++;
+										$push_survey_req_status = $attr['push_survey_req'];
+                                            if($push_survey_req_status=='0'){
+											$push_survey_req_status ='Waiting for Survey pushed approval';
+ 												$colorStyle="style='color:white;border-radius:10px;background-color:yellow;border:none;pointer-events: none;'";
+											} elseif($push_survey_req_status ==1){
+											$push_survey_req_status ='Survey pushed successfully';
+												$colorStyle="style='color:black;border-radius:10px;background-color:green;border:none;pointer-events: none;'";
+												} else{
+											$push_survey_req_status ='Request to Push Survey';
+												$colorStyle="style='color:black;border-radius:10px;background-color:gray;border:none;'";
+												}
+												?>
                             <tr id="show<?php echo $attr['id'];?>">
                                 <td><?php echo $sno; ?></td>
                                 <td><?php echo $attr['product_name']; ?></td>
@@ -142,16 +153,27 @@ $this->load->view('../includes/admin_top_navigation'); ?>
  															</a> </td>
 												                                <td><input type="checkbox" name="vehicle" value="Bike"></td>
                                                  <td><input type="checkbox" name="vehicle" value="Bike"></td>
-                                       <td><?php //echo $attr['created_by'];?> <?php //echo $attr['id'];?>
-									 
-<input <?php 
+                                       
+												  <td>	<?php  
+	$user_id 	= $this->session->userdata('admin_user_id');
+	
+	if($user_id=='1') {
+
+		if($attr['push_survey_req']!=''){
+	?>
+	<input <?php 
 	$answerQuery = $this->db->get_where('push_surveys',"product_id='".$attr['id']."'");
-	if($answerQuery->num_rows() > 0){
-	?>checked="checked"<?php } ?> id="product_<?php echo $attr['id'];?>"name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $attr['created_by'];?>','<?php echo $attr['id'];?>');" type="checkbox">
-                                                <span class="lbl"></span> 
-								
+	if($answerQuery->num_rows() > 0){ ?>checked="checked"<?php } else {} ?> id="product_<?php echo $attr['id'];?>"name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $attr['created_by'];?>','<?php echo $attr['id'];?>');" type="checkbox">
+	<span class="lbl"></span>
+	<?php } else { echo "No Survey Push Request"; } ?>
+	
+	<?php } else { ?>
+	<input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $attr['id'];?>" value="<?php echo $push_survey_req_status ;?>"  onclick="return change_status('<?php echo $attr['id'];?>',this.value);" />
+                    	<?php } ?>		
+							  </td>
 												  
-												  </td>
+												  
+												  
                                                   <td> 
  														<input type="checkbox" name="vehicle" value="Bike">						  </td>
                                                     <td> 
@@ -252,7 +274,7 @@ function add_question_to_product(created_by, id){
 			dataType:'html',
 			type:'POST',
 			url:'<?php echo base_url().'surveys/save_push_survey/';?>',
-			data:{c_id:created_by,p_id:id,Chk :Chk},
+			data:{c_id:created_by,p_id:id,Chk:Chk},
 			success:function (msg){
 			}
 		
@@ -260,6 +282,26 @@ function add_question_to_product(created_by, id){
 	} else{
 		return false;
 	} 
+}
+
+function change_status(id,val){
+	if(confirm("Hey, this is final submission of Push survey Request, you can not cancel it, press OK to confirm or Cancel it.")){
+	$.ajax({
+				type: "POST",
+				url: "<?php echo base_url();?>surveys/change_status/",
+				data: {id:id, value:val},
+				success: function (result) {
+					if(parseInt(result)==1){
+						$('#status_'+id).val('1').css("background-color","green");
+					}else{
+						$('#status_'+id).val('Waiting for survey pushed approval').css("background-color","yellow");
+					}
+					
+				}
+			});
+}else{
+    return false;  
+}
 }
  
 </script>

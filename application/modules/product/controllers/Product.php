@@ -963,7 +963,7 @@ function list_assigned_products() {
         }
         $total_records = $this->Product_model->count_registered_products_by_consumers($srch_string);
 		$params["ScanedCodeListing"] = $this->Product_model->list_registered_products_by_consumers($limit_per_page, $start_index,$srch_string);
-        $params["links"] = Utils::pagination('product/list_registered_products_by_consumers', $total_records,null,4);
+        $params["links"] = Utils::pagination('product/list_registered_products_by_consumers',$total_records,null,4);
         
         ##--------------- pagination End ----------------##
          $data					= array();
@@ -985,8 +985,25 @@ function list_assigned_products() {
 	 public function update_registered_products_by_consumers() {
         $data					= array();
 		$data = $this->input->post();
+		$consumer_id = $data['consumer_id'];
+		
+		
+		$status = $data['status'];
+		if($status==1) {
+		$vquery = "Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in “my purchase list” in Howzzt App.";	
+		} else{
+			$vquery = $data['vquery'];
+		}
+		
 		//print_r($data);exit;
-		echo $data = $this->Product_model->update_registered_products_by_consumers($data);exit;
+		echo $data = $this->Product_model->update_registered_products_by_consumers($data);
+		
+		//$consumer_id = $user->consumer_id;
+		 $fb_token = getConsumerFb_TokenById($consumer_id);
+		 
+		 $this->Product_model->sendFVPNotification($vquery, $fb_token);
+		
+		exit;
 		
     }
 	

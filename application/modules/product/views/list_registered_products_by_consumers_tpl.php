@@ -76,6 +76,7 @@
 														<th>Consumer Name</th>
  														<!--<th>Product Registration Address</th>-->
 														<th>Purchase Date</th>
+														<th>Status</th>
                                                        <th>Action</th>
   													</tr>
 												</thead>
@@ -102,7 +103,10 @@
 																								
 												<?php //echo $listData['latitude']. " / "; ?><?php //echo $listData['longitude']; ?>
 												</td>-->
-												<td><?php echo $listData['created_at']; ?></td>
+												<td><?php echo $listData['create_date']; ?></td>
+												<td><?php //echo $listData['status']; ?><?php if($listData['status']==1){
+													echo "<font color='green'>Yes</font>";													
+												} else { echo "<font color='red'>Pending</font>"; } ?></td>
 												<td><?php echo anchor("product/verity_registered_products_by_consumers/" . $listData['purchased_product_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?></td>
  												 
                                               </tr>

@@ -46,7 +46,7 @@
                                             </div>
                                             <div class="widget-body">
                                                 <div class="widget-main">
-                                                <form name="add_story_detail" id="add_story_detail" enctype="multipart/form-data" class="form-horizontal" action="#" method="POST">
+                                                <form name="add_story_detail" id="add_story_detail" enctype="multipart/form-data" class="form-horizontal" action="#" method="POST">																									<input type="hidden" name="all_PTImages_list[]" id="all_PTImages_list" value="" />
                                                     <input type="hidden" name="all_Images_list[]" id="all_Images_list" value="" />
                                                     <input type="hidden" name="all_videos_list[]" id="all_videos_list" value="" />
                                                     <input type="hidden" name="all_audios_list[]" id="all_audios_list" value="" />

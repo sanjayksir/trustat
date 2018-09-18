@@ -604,6 +604,8 @@
 		return $result;
 		}
 		
+		
+		
 		public function sendTextFCM($mess,$id) {
 		$url = 'https://fcm.googleapis.com/fcm/send';
 		
@@ -630,6 +632,18 @@
 		//curl_close ( $ch );
 		return $result;
 		}
+		
+		
+		function change_status($id, $value) {
+        $this->db->set(array('push_ad_req' => $value));
+        $this->db->where(array('id' => $id));
+        if ($this->db->update('products')) {
+            return $value;
+        } else {
+            return '';
+        }
+        //echo '***'.$this->db->last_query();exit;
+    }
 				
 		}
 		

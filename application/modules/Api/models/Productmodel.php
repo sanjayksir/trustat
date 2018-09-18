@@ -99,7 +99,12 @@ class ProductModel extends CI_Model {
             }else{
                 $item['industry_data'] = [];
             }
-            if(!empty($row->product_images)){
+            if(!empty($row->product_thumb_images)){
+                $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
+            }else{
+                $item['product_thumb_images'] = '';
+            }
+			 if(!empty($row->product_images)){
                 $item['product_images'] = Utils::setFileUrl($row->product_images);
             }else{
                 $item['product_images'] = '';
@@ -166,7 +171,12 @@ class ProductModel extends CI_Model {
             }else{
                 $item['industry_data'] = [];
             }
-            if(!empty($row->product_images)){
+            if(!empty($row->product_thumb_images)){
+                $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
+            }else{
+                $item['product_thumb_images'] = '';
+            }
+			if(!empty($row->product_images)){
                 $item['product_images'] = Utils::setFileUrl($row->product_images);
             }else{
                 $item['product_images'] = '';
@@ -232,7 +242,12 @@ class ProductModel extends CI_Model {
             }else{
                 $item['industry_data'] = [];
             }
-            if(!empty($row->product_images)){
+            if(!empty($row->product_thumb_images)){
+                $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
+            }else{
+                $item['product_thumb_images'] = '';
+            }
+			if(!empty($row->product_images)){
                 $item['product_images'] = Utils::setFileUrl($row->product_images);
             }else{
                 $item['product_images'] = '';
@@ -296,7 +311,12 @@ class ProductModel extends CI_Model {
             }else{
                 $item['industry_data'] = [];
             }
-            if(!empty($row->product_images)){
+            if(!empty($row->product_thumb_images)){
+                $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
+            }else{
+                $item['product_thumb_images'] = '';
+            }
+			if(!empty($row->product_images)){
                 $item['product_images'] = Utils::setFileUrl($row->product_images);
             }else{
                 $item['product_images'] = '';
@@ -365,7 +385,12 @@ class ProductModel extends CI_Model {
             }else{
                 $item['industry_data'] = [];
             }
-            if(!empty($row->product_images)){
+            if(!empty($row->product_thumb_images)){
+                $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
+            }else{
+                $item['product_thumb_images'] = '';
+            }
+			if(!empty($row->product_images)){
                 $item['product_images'] = Utils::setFileUrl($row->product_images);
             }else{
                 $item['product_images'] = '';
@@ -532,10 +557,11 @@ class ProductModel extends CI_Model {
         if(empty($userId)){
             return false;
         }
-        $query = $this->db->select('c.aadhaar_number,c.alternate_mobile_no,c.city,c.state,c.street_address,c.pin_code,lr.points_redeemed,lr.coupon_number,lr.coupon_type,lr.coupon_vendor,lr.courier_details')
+        $query = $this->db->select('c.aadhaar_number,c.alternate_mobile_no,lr.city,lr.state,lr.street_address,lr.pin_code,lr.points_redeemed,lr.coupon_number,lr.coupon_type,lr.coupon_vendor,lr.courier_details,lr.created_at')
                 ->from('loyalty_redemption AS lr')
                 ->join('consumers as c','c.id=lr.user_id')
                 ->where('user_id ="'.$userId.'"')
+				->order_by('created_at', 'desc')
                 ->get();
         if( $query->num_rows() <= 0 ){
             return [];
