@@ -70,12 +70,14 @@
  												<thead>
 													<tr>
 														<th>#</th>
-														<th>Registered Product Code</th>
-														<th>Invoice Image</th>
-														<th>Product Name</th>
+														<th>Redemption Request Number</th>
 														<th>Consumer Name</th>
- 														<!--<th>Product Registration Address</th>-->
-														<th>Purchase Date</th>
+														<th>Points Redeemed</th>
+														<th>Request Date</th>
+														<th>Date Of Action</th>
+														<th>Process Status</th>
+ 														<!--<th>Product Registration Address</th>
+														<th>Purchase Date</th>-->
                                                        <th>Action</th>
   													</tr>
 												</thead>
@@ -91,19 +93,20 @@
 											?>
                                                <tr id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
-											   <td><?php echo $listData['bar_code']; ?></td>
-											   <td>
-<a href="<?php echo base_url().$listData['invoice_image'];?>" onclick="window.open (this.href, 'child', 'height=800,width=900'); return false"><img alt="Invoice Image not available" src="<?php echo base_url(). $listData['invoice_image'];?>" height="50" width="50"></a>
-
-	</td>
-												<td><?php echo $listData['product_name']; ?></td>
-												<td><?php echo $listData['user_name']; ?><?php //echo $listData['registration_process']; ?></td>
+											   <td><?php echo $listData['redemption_id']; ?></td>
+											   <td><?php echo $listData['user_name']; ?></td>
+												<td><?php echo $listData['points_redeemed']; ?></td>
+												<td><?php echo $listData['l_created_at']; ?></td>
+												<td><?php echo $listData['status_change_date']; ?></td>
 												<!--<td>
 																								
 												<?php //echo $listData['latitude']. " / "; ?><?php //echo $listData['longitude']; ?>
 												</td>-->
-												<td><?php echo $listData['created_at']; ?></td>
-												<td><?php echo anchor("product/details_loyalty_redemption_requests/" . $listData['id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?></td>
+												<td><?php if($listData['l_status']==1) {
+														echo "<font color='green'>Done</font>";
+												} else { echo "<font color='red'>Pending</font>"; }
+												?></td>
+												<td><?php echo anchor("product/details_loyalty_redemption_requests/" . $listData['lr_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?></td>
  												 
                                               </tr>
                                          <?php }

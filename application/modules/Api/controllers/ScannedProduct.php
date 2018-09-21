@@ -209,8 +209,6 @@ class ScannedProduct extends ApiController {
         }
         $this->response(['status'=>true,'message'=>'Push Advertisements','data'=>$result]);
 		
-		
-        
     }
    
    //   \Advertisement

@@ -76,7 +76,7 @@ class ScannedproductsModel extends CI_Model {
             return false;
         }
         
-        $query = $this->db->select("pr.*")
+        $query = $this->db->select("pr.*, sp.*")
                 ->from('push_advertisements AS sp')
                 ->join('products AS pr', 'pr.id=sp.product_id')
                 ->where(['sp.consumer_id' => $consumer_id])
@@ -92,11 +92,13 @@ class ScannedproductsModel extends CI_Model {
             $item = [
                 'product_id' => $row->id,
 				'product_name' => $row->product_name,
+				'push_date' => $row->ad_push_date,
+				'brand_name' => $row->brand_name,
                // 'ad_active' => Utils::exists('push_advertisements', ['product_id'=>$row->id,'consumer_id'=>$consumer_id]),
             ];
            
 		   $consumerId = $row->id;
-	$item['isGiven'] = $this->isLoyaltyForProductPushedAdFeedbackQuesGiven($consumerId, $product_id);
+			$item['isGiven'] = $this->isLoyaltyForProductPushedAdFeedbackQuesGiven($consumerId, $product_id);
             if(!empty($row->product_thumb_images)){
                 $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
             }else{
@@ -162,7 +164,7 @@ return $result;
             return false;
         }
         
-        $query = $this->db->select("pr.*")
+        $query = $this->db->select("pr.*,sp.*")
                 ->from('push_surveys AS sp')
                 ->join('products AS pr', 'pr.id=sp.product_id')
                 ->where(['sp.consumer_id' => $consumer_id])
@@ -178,6 +180,8 @@ return $result;
             $item = [
                 'product_id' => $row->id,
 				'product_name' => $row->product_name,
+				'push_date' => $row->survey_push_date,
+				'brand_name' => $row->brand_name,
                // 'ad_active' => Utils::exists('push_advertisements', ['product_id'=>$row->id,'consumer_id'=>$consumer_id]),
             ];
 			

@@ -990,9 +990,10 @@ function list_assigned_products() {
 		
 		$status = $data['status'];
 		if($status==1) {
-		$vquery = "Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in “my purchase list” in Howzzt App.";	
+		$vquery = "Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in 'my purchase list' in howzzt App.";	
 		} else{
 			$vquery = $data['vquery'];
+			$data = $this->Product_model->set_product_code_unregistered($data);
 		}
 		
 		//print_r($data);exit;
@@ -1002,6 +1003,31 @@ function list_assigned_products() {
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Product_model->sendFVPNotification($vquery, $fb_token);
+		
+		exit;
+		
+    }
+	
+	public function update_loyalty_redemption_requests() {
+        $data					= array();
+		$data = $this->input->post();
+		$consumer_id = $data['user_id'];
+		
+		
+		$l_status = $data['l_status'];
+		if($l_status==1) {
+		$vquery = "Congratulations! Your Loyalty Points redumption request is processed successfully, we will update you for further information.";	
+		} else{
+			$vquery = "Your Loyalty Points redumption request is still pending...";	
+		}
+		
+		//print_r($data);exit;
+		echo $data = $this->Product_model->update_loyalty_redemption_requests($data);
+		
+		//$consumer_id = $user->consumer_id;
+		 $fb_token = getConsumerFb_TokenById($consumer_id);
+		 
+		 $this->Product_model->sendFBLRNotification($vquery, $fb_token);
 		
 		exit;
 		
@@ -1019,7 +1045,7 @@ function list_assigned_products() {
             $limit_per_page = $this->config->item('pageLimit');
         }
         $this->config->set_item('pageLimit', $limit_per_page);
-        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
         $srch_string = $this->input->get('search');
         
         if(empty($srch_string)){
@@ -1027,7 +1053,7 @@ function list_assigned_products() {
         }
         $total_records = $this->Product_model->count_loyalty_redemption_requests($srch_string);
 		$params["ScanedCodeListing"] = $this->Product_model->list_loyalty_redemption_requests($limit_per_page, $start_index,$srch_string);
-        $params["links"] = Utils::pagination('product/list_loyalty_redemption_requests', $total_records,null,4);
+        $params["links"] = Utils::pagination('product/list_loyalty_redemption_requests', $total_records);
         
         ##--------------- pagination End ----------------##
          $data					= array();
@@ -1040,19 +1066,13 @@ function list_assigned_products() {
 		
 		$data = array();
         $id = $this->uri->segment(3);
-		
+		//echo $id;
 
-        $data['get_registered_products_by_consumers_details'] = $this->Product_model->details_loyalty_redemption_requests($id);
+        $data['get_loyalty_redemption_requests_details'] = $this->Product_model->details_loyalty_redemption_requests($id);
         $this->load->view('details_loyalty_redemption_requests_tpl', $data);
     }
 	 
-	 public function update_loyalty_redemption_requests() {
-        $data					= array();
-		$data = $this->input->post();
-		//print_r($data);exit;
-		echo $data = $this->Product_model->update_loyalty_redemption_requests($data);exit;
-		
-    }
+	 
 	
 }
 

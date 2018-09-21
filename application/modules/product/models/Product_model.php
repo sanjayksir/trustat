@@ -759,6 +759,41 @@
         
     }
 	
+	function update_loyalty_redemption_requests($data) {
+        $user_id = $this->session->userdata('admin_user_id');
+			$id = $data['lr_id'];
+               // $this->db->set('profile_photo', $frmData['profile_photo']);
+                $UpdateData = array(
+                    
+					"coupon_number" 	=> $data['coupon_number'],
+					"coupon_type" 		=> $data['coupon_type'],
+					"coupon_vendor" 	=> $data['coupon_vendor'],
+					"l_status" 			=> $data['l_status'],
+					"status_change_date" 	=>date("Y-m-d H:i:s"),
+					"courier_details" 		=> $data['courier_details'],
+					"modified_at" 			=> date("Y-m-d H:i:s")
+                );
+             
+			$whereData = array(
+                'lr_id' => $id
+					);
+
+            $this->db->where('lr_id', $id);
+				if($this->db->update('loyalty_redemption', $UpdateData)) {// echo '===query===='.$this->db->last_query();
+					$this->session->set_flashdata('success', 'Status Updated Successfully!');
+					return true;
+	
+				}return false; 
+        
+    }
+	
+	function set_product_code_unregistered($data) {
+        $user_id = $this->session->userdata('admin_user_id');
+			$id = $data['code_id'];
+		   $this->db->query("delete from purchased_product where purchased_product_id='".$id."'");
+    }
+	
+	
 	// ---
 	function list_loyalty_redemption_requests($limit,$start,$srch_string=''){
 		$resultData = array();
@@ -771,7 +806,7 @@
 		if($user_id!=1){ 
 			$this->db->where(array('P.created_by' => $user_id));
 		} */
-   		$this->db->order_by('LR.created_at','desc');
+   		$this->db->order_by('LR.l_created_at','desc');
 		$this->db->limit($limit, $start);
    		$query = $this->db->get();  //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
@@ -784,9 +819,11 @@
 	function count_loyalty_redemption_requests($srch_string=''){
 		$result_data = 0;
 		$user_id 	= $this->session->userdata('admin_user_id');
+		/*
 		if(!empty($srch_string) && $user_id==1){ 
  			$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
 		}
+		*/
  		$this->db->select('count(1) as total_rows');
 		$this->db->from('loyalty_redemption');
 		//$this->db->join('consumers C', 'C.id = LR.user_id');
@@ -810,7 +847,7 @@
         $this->db->select('*');
         $this->db->from('loyalty_redemption');
         //$this->db->join('assign_plants_to_users AS ap', 'ap.user_id = bu.user_id','LEFT');
-        $this->db->where(array('id' => $id));
+        $this->db->where(array('lr_id' => $id));
         $query = $this->db->get();
         // echo '***'.$this->db->last_query();exit;
         if ($query->num_rows() > 0) {
@@ -821,36 +858,9 @@
     }
 	
 	
-	function update_loyalty_redemption_requests($data) {
-        $user_id = $this->session->userdata('admin_user_id');
-			$id = $data['code_id'];
-               // $this->db->set('profile_photo', $frmData['profile_photo']);
-                $UpdateData = array(
-                    "modified" 				=> date("Y-m-d H:i:s"),
-					"invoice" 				=> $data['invoice_number'],
-					"purchase_date" 		=> $data['purchase_date'],
-					"warranty_start_date" 	=> $data['warranty_start_date'],
-					"warranty_end_date" 	=> $data['warranty_end_date'],
-					"expiry_date" 			=> $data['expiry_date'],
-					"status" 				=> $data['status'],
-					"seller_name" 			=> $data['seller_name'],
-					"seller_gst" 			=> $data['seller_gst'],
-					"selling_price" 		=> $data['selling_price'],
-					"discount" 				=> $data['discount']
-                );
-             
-            $whereData = array(
-                'id' => $id
-            );
-
-            $this->db->where('id', $id);
-				if($this->db->update('loyalty_redemption', $UpdateData)) {// echo '===query===='.$this->db->last_query();
-					$this->session->set_flashdata('success', 'loyalty redemption acceptance process Updated Successfully!');
-					return true;
 	
-				}return false; 
-        
-    }
+	
+	
 	
 	
 	public function sendFVPNotification($mess,$id) {
@@ -859,7 +869,34 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'howzzt product verifiction done', 'body' =>  $mess ,'sound'=>'Default',),
+		         'notification' => array('title' => 'howzzt product verifiction', 'body' =>  $mess ,'sound'=>'Default',),
+		       
+		);
+		$fields = json_encode ( $fields );
+		
+		$headers = array (
+		        'Authorization: key=' . "AAAA446l5pE:APA91bE3nQ0T5E9fOH-y4w_dkOLU1e9lV7Wn0OmVLaKNnE8tXcZ0eC3buduhCwHL1ICaJ882IHfLy-akAe7Nih7M1RewkO9IzAR-ELdPgmORtb7KjriRrQspVHkIb9GRZPOjXuqfPInlOAly5-65sEEUbGlcoujMgw", 'Content-Type: application/json'
+		);
+		
+		$ch = curl_init ();
+		curl_setopt ( $ch, CURLOPT_URL, $url );
+		curl_setopt ( $ch, CURLOPT_POST, true );
+		curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+		
+		$result = curl_exec ( $ch );
+		//curl_close ( $ch );
+		return $result;
+		}
+		
+		public function sendFBLRNotification($mess,$id) {
+		$url = 'https://fcm.googleapis.com/fcm/send';
+		
+		$fields = array (
+		        'to' => $id,
+		         
+		         'notification' => array('title' => 'howzzt loyalty verification', 'body' =>  $mess ,'sound'=>'Default',),
 		       
 		);
 		$fields = json_encode ( $fields );

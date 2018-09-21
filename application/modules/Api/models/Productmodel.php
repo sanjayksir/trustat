@@ -531,6 +531,36 @@ class ProductModel extends CI_Model {
         
         return $this->db->insert('loylty_points',$input);
     }
+	
+	public function saveConsumerPassbook($transactionType = null,$userId = null,$params = []){
+        if( empty($transactionType) || empty($userId) ){
+            return false;
+        }
+        
+        $loylty = $this->findLoylityBySlug($transactionType);
+        if(empty($loylty)){
+            return false;
+        }
+        $date = new DateTime();
+        $now = $date->format('Y-m-d H:i:s');
+       // $date->modify('+3 month');
+        $input = [
+            'user_id' => $userId,
+            'transacted_points' => $loylty['points'],
+            'transaction_type' => $loylty['transaction_type'],
+			'type_of_points' => $loylty['type_of_points'],
+			'brand_name' => $loylty['brand_name'],
+			'product_name' => $loylty['product_name'],
+           // 'params' => json_encode($params),
+            'current_balance' => 1,
+            'transaction_date' => $now
+            //'created_at' => $now,
+           // 'date_expire' => $date->format('Y-m-d H:i:s')
+        ];
+        
+        return $this->db->insert('consumer_passbook',$input);
+    }
+	
     
     public function userLoylty($userId=null){
         if(empty($userId)){
@@ -557,11 +587,32 @@ class ProductModel extends CI_Model {
         if(empty($userId)){
             return false;
         }
-        $query = $this->db->select('c.aadhaar_number,c.alternate_mobile_no,lr.city,lr.state,lr.street_address,lr.pin_code,lr.points_redeemed,lr.coupon_number,lr.coupon_type,lr.coupon_vendor,lr.courier_details,lr.created_at')
+        $query = $this->db->select('lr.aadhaar_number,lr.alternate_mobile_no,lr.city,lr.state,lr.street_address,lr.pin_code,lr.points_redeemed,lr.coupon_number,lr.coupon_type,lr.coupon_vendor,lr.courier_details,lr.l_status,lr.l_created_at')
                 ->from('loyalty_redemption AS lr')
                 ->join('consumers as c','c.id=lr.user_id')
                 ->where('user_id ="'.$userId.'"')
-				->order_by('created_at', 'desc')
+				->order_by('l_created_at', 'desc')
+                ->get();
+        if( $query->num_rows() <= 0 ){
+            return [];
+        }
+        $result = $query->result_array();
+        return $result;
+    }
+	
+	public function getConsumerPassBook($userId){
+        if(empty($userId)){
+            return false;
+        }
+        $query = $this->db->select('lr.*, lp.*')
+                ->from('loyalty_redemption AS lr, loylty_points AS lp')
+               // ->join('consumers as c','c.id=lr.user_id')
+                ->where('lr.user_id ="'.$userId.'"')
+				->where('lp.user_id ="'.$userId.'"')
+				->order_by('lr.status_change_date', 'desc')
+				->order_by('lp.modified_at', 'desc')
+				->group_by('lr.points_redeemed')
+				->group_by('lp.points')
                 ->get();
         if( $query->num_rows() <= 0 ){
             return [];

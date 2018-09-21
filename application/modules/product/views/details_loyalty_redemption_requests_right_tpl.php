@@ -10,92 +10,92 @@
 						<div id="ajax_msg"></div>
 				</div>
 				<form name="user_frm" id="user_frm" action="#" method="POST">
-			<input type="hidden" name="code_id" id="code_id" value="<?php echo $get_registered_products_by_consumers_details[0]['id'];?>" /><?php echo $get_registered_products_by_consumers_details[0]['id']?>
+			<input type="hidden" name="lr_id" id="lr_id" value="<?php echo $get_loyalty_redemption_requests_details[0]['lr_id'];?>" /><?php //echo $get_loyalty_redemption_requests_details[0]['lr_id']?>
+			<input type="hidden" name="user_id" id="user_id" value="<?php echo $get_loyalty_redemption_requests_details[0]['user_id'];?>" /><?php //echo $get_loyalty_redemption_requests_details[0]['user_id']?>
         <div class="widget-main">
 		
 		<div class="form-group row">
 			<div class="col-sm-6" style="">
-			<label for="form-field-8"><b>Consumer Name</b> : <?php echo getConsumerNameById($get_registered_products_by_consumers_details[0]['consumer_id']); ?></label>
+			<label for="form-field-8"><b>Consumer Name</b> : <?php echo getConsumerNameById($get_loyalty_redemption_requests_details[0]['user_id']); ?></label>
 			</div>
 			
 			<div class="col-sm-6">
-			 
+			<label for="form-field-8"><b>Consumer Phone</b> : <?php echo getConsumerMobileNumberById($get_loyalty_redemption_requests_details[0]['user_id']);?></label>
 			</div>
 		</div>
 		
 		<div class="form-group row">
 			<div class="col-sm-6">
-			<label for="form-field-8"><b>Product Code</b> : <?php echo $get_registered_products_by_consumers_details[0]['bar_code'];?></label>
+			<label for="form-field-8"><b>Points Redeamed Code</b> : <?php echo $get_loyalty_redemption_requests_details[0]['points_redeemed'];?></label>
 			</div>
 			
 			<div class="col-sm-6">
-			  <label for="form-field-8"><b>Product Name</b> : <?php echo get_products_name_by_id($get_registered_products_by_consumers_details[0]['product_id']);?></label>
+			  <label for="form-field-8"><b>Redemption Request Number</b> : <?php echo $get_loyalty_redemption_requests_details[0]['redemption_id'];?></label>
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-sm-6">
-			<label for="form-field-8"><b>Product Image</b> : <a href="<?php echo base_url().$get_registered_products_by_consumers_details[0]['invoice_image'];?>" onclick="window.open (this.href, 'child', 'height=800,width=900'); return false"><img alt="Invoice Image not available" src="<?php echo base_url(). $get_registered_products_by_consumers_details[0]['invoice_image'];?>" height="50" width="50"></a></label>
+			<label for="form-field-8"><b>Consumer Alt. Phone</b> : <?php echo $get_loyalty_redemption_requests_details[0]['alternate_mobile_no'];?></label>
 			</div>
 			
 			<div class="col-sm-6">
-			  <label for="form-field-8"><b>Date of Product Registration</b> : <?php echo $get_registered_products_by_consumers_details[0]['modified'];?></label>
+			  <label for="form-field-8"><b>Date of Redemption</b> : <?php echo $get_loyalty_redemption_requests_details[0]['l_created_at'];?></label>
 			</div>
 		</div>
-				
+		
 		<div class="form-group row">
 			<div class="col-sm-6">
-			<label for="form-field-8">Invoice Number</label>
-			<input name="invoice_number" id="invoice_number" type="text" class="form-control" placeholder="Invoice Number" value="<?php echo $get_registered_products_by_consumers_details[0]['invoice'];?>">
+			<label for="form-field-8"><b>Address </b> : <?php echo $get_loyalty_redemption_requests_details[0]['street_address'].", ".$get_loyalty_redemption_requests_details[0]['city'].", ".$get_loyalty_redemption_requests_details[0]['state'].", ".$get_loyalty_redemption_requests_details[0]['pin_code'];?></label>
+			</div>
+			
+			<div class="col-sm-6">
+			  <label for="form-field-8"><b>Consumer Aadhaar Number</b> : <?php echo $get_loyalty_redemption_requests_details[0]['aadhaar_number'];?></label>
+			</div>
+		</div>
+								
+		<div class="form-group row">
+			<div class="col-sm-6">
+			<label for="form-field-8">Coupon Number</label>
+			<input name="coupon_number" id="coupon_number" type="text" class="form-control" placeholder="Coupon Number" value="<?php echo $get_loyalty_redemption_requests_details[0]['coupon_number'];?>">
 			</div>
 			<div class="col-sm-6">
-			  <label for="form-field-8">Date of Purchase</label>
-             <input name="purchase_date" id="purchase_date" type="text" class="form-control" placeholder="Date of Purchase" value="<?php echo $get_registered_products_by_consumers_details[0]['purchase_date'];?>">
+			  <label for="form-field-8">Coupon Type</label>
+             <input name="coupon_type" id="coupon_type" type="text" class="form-control" placeholder="Coupon Type" value="<?php echo $get_loyalty_redemption_requests_details[0]['coupon_type'];?>">
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-sm-6">
-			<label for="form-field-8">Warranty Start Date</label>
-			<input name="warranty_start_date" id="warranty_start_date" type="text" class="form-control" placeholder="Warranty Start Date" value="<?php echo $get_registered_products_by_consumers_details[0]['warranty_start_date'];?>">
+			<label for="form-field-8">Coupon Vendor</label>
+			<input name="coupon_vendor" id="coupon_vendor" type="text" class="form-control" placeholder="Coupon Vendor" value="<?php echo $get_loyalty_redemption_requests_details[0]['coupon_vendor'];?>">
 			</div>
 			<div class="col-sm-6">
-			  <label for="form-field-8">Warranty End Date</label>
-             <input name="warranty_end_date" id="warranty_end_date" type="text" class="form-control" placeholder="Warranty End Date" value="<?php echo $get_registered_products_by_consumers_details[0]['warranty_end_date'];?>">
+			  <label for="form-field-8">Courier Details</label>
+             <input name="courier_details" id="courier_details" type="text" class="form-control" placeholder="Courier Details" value="<?php echo $get_loyalty_redemption_requests_details[0]['courier_details'];?>">
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-sm-6">
-			<label for="form-field-8">Expiry Date</label>
-			<input name="expiry_date" id="expiry_date" type="text" class="form-control" placeholder="Expiry Date" value="<?php echo $get_registered_products_by_consumers_details[0]['expiry_date'];?>">
+			<label for="form-field-8">Approval Status</label>
+			<select class="form-control" placeholder="Select Approval Status" id="l_status" name="l_status" >
+			<?php 
+			
+			$l_status = $get_loyalty_redemption_requests_details[0]['l_status']; echo $l_status . "ss";
+			if($l_status==1) {?>			
+			<option value="1" selected>Approval Successful</option>
+			<option value="0">Approval Pending</option> 			
+			<?php } else {?>
+			<option value="0" selected>Approval Pending</option> 
+			<option value="1">Approval Successful</option>
+			<?php } ?>
+			
+			 </select>  
 			</div>
 			<div class="col-sm-6">
-			  <label for="form-field-8">Verification Status</label>
+			  <label for="form-field-8"></label>
 			  
-             <input name="status" id="status" type="text" class="form-control" placeholder="Consumer Name" value="<?php echo $get_registered_products_by_consumers_details[0]['status'];?>">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6">
-			<label for="form-field-8">Name of Seller</label>
-			<input name="seller_name" id="seller_name" type="text" class="form-control" placeholder="Name of Seller" value="<?php echo $get_registered_products_by_consumers_details[0]['seller_name'];?>">
-			</div>
-			<div class="col-sm-6">
-			  <label for="form-field-8">GST Number of Seller</label>
-             <input name="seller_gst" id="seller_gst" type="text" class="form-control" placeholder="GST Number of Seller" value="<?php echo $get_registered_products_by_consumers_details[0]['seller_gst'];?>">
-			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6">
-			<label for="form-field-8">Selling Price</label>
-			<input name="selling_price" id="selling_price" type="text" class="form-control" placeholder="Selling Price" value="<?php echo $get_registered_products_by_consumers_details[0]['selling_price'];?>">
-			</div>
-			<div class="col-sm-6">
-			  <label for="form-field-8">Discount</label>
-             <input name="discount" id="discount" type="text" class="form-control" placeholder="Discount" value="<?php echo $get_registered_products_by_consumers_details[0]['discount'];?>">
 			</div>
 		</div>
 		
-		 
-
            <hr>
 
           <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">

@@ -762,13 +762,16 @@ class Consumer extends ApiController {
         }
         $data = $this->getInput();
         $cSchema = ['aadhaar_number','alternate_mobile_no','city','state','street_address','pin_code'];
-        $rSchema = ['points_redeemed','coupon_number','coupon_type','coupon_vendor','courier_details'];
+        $rSchema = ['aadhaar_number','alternate_mobile_no','city','state','street_address','pin_code','points_redeemed','coupon_number','coupon_type','coupon_vendor','courier_details'];
         $consumerData = array_intersect_key($data, array_flip($cSchema));
         $consumerData['modified_at'] = date("Y-m-d H:i:s");
         $redemtionData = array_intersect_key($data, array_flip($rSchema));
-        $redemtionData['created_at'] = date("Y-m-d H:i:s");
+        $redemtionData['l_created_at'] = date("Y-m-d H:i:s");
+		$redemtionData['redemption_id'] = mt_rand(1111111111,9999999999);
         $redemtionData['modified_at'] = date("Y-m-d H:i:s");
-        $redemtionData['status'] = 1;
+		$redemtionData['request_date'] = date("Y-m-d H:i:s");
+		$redemtionData['mobile_no'] = getConsumerMobileNumberById($user['id']);
+        $redemtionData['l_status'] = 0;
         $redemtionData['user_id'] = $user['id'];
         if ($this->db->insert('loyalty_redemption', $redemtionData)) {
             $redemptionId = $this->db->insert_id();
@@ -795,5 +798,21 @@ class Consumer extends ApiController {
        
 
     }
+	
+	public function ConsumerPassBook() {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $items = $this->ProductModel->getConsumerPassBook($user['id']);
+        Utils::response(['status'=>true,'message'=>'List of Consumer PassBook','data'=>$items]);
+       
+
+    }
+	
 
 }

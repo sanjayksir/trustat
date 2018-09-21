@@ -49,7 +49,7 @@
 
               <div class="col-xs-12">
 
-                <h3 class="header smaller lighter blue"><?php echo $constant;?></h3>
+                <!--<h3 class="header smaller lighter blue"><?php echo $constant;?></h3>-->
 
                  <?php if($this->session->flashdata('success')): ?>
 

@@ -25,7 +25,8 @@
 			
 			
 			<b>Warranty</b> : Yes/No<br />
-			<label for="form-field-8"><b>Date of Product Registration</b> : <?php echo $get_registered_products_by_consumers_details[0]['create_date'];?></label><br />
+			<label for="form-field-8"><b>Date of filing of Product Registration</b> : <?php echo $get_registered_products_by_consumers_details[0]['create_date'];?></label><br />
+			<label for="form-field-8"><b>Date of Approval of Product Registration</b> : <?php echo $get_registered_products_by_consumers_details[0]['create_date'];?></label><br />
 			<label for="form-field-8"><b>Location of Product Registration</b> : <?
 			
 			
@@ -76,36 +77,37 @@ $geocodeFromLatLong = file_get_contents('http://maps.googleapis.com/maps/api/geo
 <br />
 			 
 			
-			<!--<label for="form-field-8">Invoice Number</label> -->
-			<input name="invoice_number" id="invoice_number" type="text" class="form-control" placeholder="Invoice Number" value="<?php echo $get_registered_products_by_consumers_details[0]['invoice'];?>">
+			<label for="form-field-8">Invoice Number : </label>
+			<input name="invoice_number" id="invoice_number" type="text" class="" style="float: right;" placeholder="Invoice Number" value="<?php echo $get_registered_products_by_consumers_details[0]['invoice'];?>">
 			
-			<!--<br />
-			<label for="form-field-8">Invoice Date (yyyy-mm-dd)</label> -->
-             <input name="purchase_date" id="purchase_date" type="text" class="form-control" placeholder="Invoice Date (yyyy-mm-dd)" value="<?php echo $get_registered_products_by_consumers_details[0]['purchase_date'];?>"><!--<br />
-			<label for="form-field-8">Warranty Start Date (yyyy-mm-dd)</label> -->
-			<input name="warranty_start_date" id="warranty_start_date" type="text" class="form-control" placeholder="Warranty Start Date (yyyy-mm-dd)" value="<?php echo $get_registered_products_by_consumers_details[0]['warranty_start_date'];?>">
+			<br /><br />
+			<label for="form-field-8">Invoice Date (yyyy-mm-dd) : </label> 
+             <input name="purchase_date" id="purchase_date" type="text" class="" style="float: right;" placeholder="yyyy-mm-dd" value="<?php echo $get_registered_products_by_consumers_details[0]['purchase_date'];?>">
+			 <br /><br />
+			<label for="form-field-8">Warranty Start Date (yyyy-mm-dd) : </label> 
+			<input name="warranty_start_date" id="warranty_start_date" type="text" class="" style="float: right;" placeholder="yyyy-mm-dd" value="<?php echo $get_registered_products_by_consumers_details[0]['warranty_start_date'];?>">
 			
-			<!--<br />
-			 <label for="form-field-8">Warranty End Date (yyyy-mm-dd)</label> -->
-             <input name="warranty_end_date" id="warranty_end_date" type="text" class="form-control" placeholder="Warranty End Date (yyyy-mm-dd)" value="<?php echo $get_registered_products_by_consumers_details[0]['warranty_end_date'];?>">
-			<!--<br />
-		<label for="form-field-8">Name of Retailer</label> -->
-			<input name="seller_name" id="seller_name" type="text" class="form-control" placeholder="Name of Seller" value="<?php echo $get_registered_products_by_consumers_details[0]['seller_name'];?>">	
-			<!--<br />
-			<label for="form-field-8">GST Number of Retailer</label> -->
-             <input name="seller_gst" id="seller_gst" type="text" class="form-control" placeholder="GST Number of Seller" value="<?php echo $get_registered_products_by_consumers_details[0]['seller_gst'];?>">
-			<!--<br />
-	<label for="form-field-8">Selling Price</label> -->
-			<input name="selling_price" id="selling_price" type="text" class="form-control" placeholder="Selling Price" value="<?php echo $get_registered_products_by_consumers_details[0]['selling_price'];?>">		
-			<!--<br />
-		<label for="form-field-8">Discount</label> -->
-             <input name="discount" id="discount" type="text" class="form-control" placeholder="Discount" value="<?php echo $get_registered_products_by_consumers_details[0]['discount'];?>">	
-			<!--<br />
-	<label for="form-field-8">Product Expiry Date (yyyy-mm-dd)</label> -->
-			<input name="expiry_date" id="expiry_date" type="text" class="form-control" placeholder="Product Expiry Date (yyyy-mm-dd)" value="<?php echo $get_registered_products_by_consumers_details[0]['expiry_date'];?>">		
-			<!--<br />
-	 <label for="form-field-8">Verification Status</label> -->
-			 <select class="form-control" placeholder="Select Verification Status" id="status" name="status" >
+			<br /><br />
+			 <label for="form-field-8">Warranty End Date (yyyy-mm-dd) : </label> 
+             <input name="warranty_end_date" id="warranty_end_date" type="text" class="" style="float: right;" placeholder="yyyy-mm-dd" value="<?php echo $get_registered_products_by_consumers_details[0]['warranty_end_date'];?>">
+			<br /><br />
+		<label for="form-field-8">Name of Retailer : </label> 
+			<input name="seller_name" id="seller_name" type="text" class="" style="float: right;" placeholder="Name of Retailer" value="<?php echo $get_registered_products_by_consumers_details[0]['seller_name'];?>">	
+			<br /><br />
+			<label for="form-field-8">GST Number of Retailer : </label> 
+             <input name="seller_gst" id="seller_gst" type="text" class="" style="float: right;" placeholder="GST Number of Retailer" value="<?php echo $get_registered_products_by_consumers_details[0]['seller_gst'];?>">
+			<br /><br />
+	<label for="form-field-8">Selling Price :  </label> 
+			<input name="selling_price" id="selling_price" type="text" class="" style="float: right;" placeholder="Selling Price" value="<?php echo $get_registered_products_by_consumers_details[0]['selling_price'];?>">		
+			<br /><br />
+		<label for="form-field-8">Discount : </label> 
+             <input name="discount" id="discount" type="text" class="" style="float: right;" placeholder="Discount" value="<?php echo $get_registered_products_by_consumers_details[0]['discount'];?>">	
+			<br /><br />
+	<label for="form-field-8">Product Expiry Date (yyyy-mm-dd) : &nbsp;&nbsp;</label> 
+			<input name="expiry_date" id="expiry_date" type="text" class="" style="float: right;" placeholder="yyyy-mm-dd" value="<?php echo $get_registered_products_by_consumers_details[0]['expiry_date'];?>">		
+			<br /><br />
+	 <label for="form-field-8">Verification Status : </label> 
+			 <select class="" style="float: right;" placeholder="Select Verification Status" id="status" name="status" >
 			<?php 
 			
 			$Vstatus = $get_registered_products_by_consumers_details[0]['status'];
@@ -118,18 +120,16 @@ $geocodeFromLatLong = file_get_contents('http://maps.googleapis.com/maps/api/geo
 			<?php } ?>
 			
 			 </select>  		
-			
-		 <label for="form-field-8">Please Select if Verification Failed</label>
-			 <select class="form-control" placeholder="Query" id="vquery" name="vquery" >
-			 <!--<option value=""></option>
-			<option value="<?php //$get_registered_products_by_consumers_details[0]['vquery']; ?>" selected> <?php // $get_registered_products_by_consumers_details[0]['vquery']; ?></option>	
-			<option value="Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in “my purchase list” in Howzzt App.">The Invoice is uploaded . All particulars are correct</option> -->			
-			<option value="Your Invoice validation is not successful on account of 'Invoice not legible'. Please upload invoice again.">The Invoice is Uploaded properly as the Image Is FAINT </option> 
-			<option value="Your Invoice validation is not successful on account of 'Product not clearly mentioned/not appearing on Invoice'. Please upload invoice again.">The Purchase Says Product “X” but the Invoice uploaded is of Product “ Y”</option>
+			<br /><br />
+		 <label for="form-field-8">Reason : </label>
+			 <select class="" style="float: right; width:300px;" placeholder="Query" id="vquery" name="vquery" >
+			<option value=""></option>
+			<!--<option value="<?php //$get_registered_products_by_consumers_details[0]['vquery']; ?>" selected> <?php // $get_registered_products_by_consumers_details[0]['vquery']; ?></option>	
+			<option value="Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in “my purchase list” in Howzzt App.">The Invoice is uploaded . All particulars are correct</option> 		-->	
+			<option value="Invoice is not readable and clear. Please re-scan the product for registration and upload readable and clear invoice." selected>Invoice is not readable and clear</option> 
+			<option value="Description of the product registered does not match with the product(s) stated in invoice uploaded. Please re-scan the product for registration and upload the invoice with product details.">Description of the product registered does not match with the product(s) stated in invoice uploaded.</option>
 			 </select>  	
-			<br />
-			
-			
+						
 			</div>
 			
 			<div class="col-sm-6">
@@ -137,8 +137,6 @@ $geocodeFromLatLong = file_get_contents('http://maps.googleapis.com/maps/api/geo
 			</div>						
 		</div>
 		
-           <hr>
-
           <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
 
             <input class="btn btn-info" type="submit" name="submit" value="Save Menu" id="savemenu" />
