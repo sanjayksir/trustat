@@ -18,8 +18,10 @@
 							</li>
 
 							<li>
-							 Manage <?php echo $label;?>
+							 <a href="#">Loyalty Mgmt</a>
+
 							</li>
+							  <li class="active">Redemption Requests</li>
   						</ul><!-- /.breadcrumb -->
 
 						<div class="nav-search" id="nav-search">
@@ -70,10 +72,11 @@
  												<thead>
 													<tr>
 														<th>#</th>
+														<th>Request Date</th>
+												
 														<th>Redemption Request Number</th>
 														<th>Consumer Name</th>
 														<th>Points Redeemed</th>
-														<th>Request Date</th>
 														<th>Date Of Action</th>
 														<th>Process Status</th>
  														<!--<th>Product Registration Address</th>
@@ -93,10 +96,11 @@
 											?>
                                                <tr id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
+											   	<td><?php echo $listData['l_created_at']; ?></td>
+											
 											   <td><?php echo $listData['redemption_id']; ?></td>
 											   <td><?php echo $listData['user_name']; ?></td>
 												<td><?php echo $listData['points_redeemed']; ?></td>
-												<td><?php echo $listData['l_created_at']; ?></td>
 												<td><?php echo $listData['status_change_date']; ?></td>
 												<!--<td>
 																								
@@ -106,7 +110,7 @@
 														echo "<font color='green'>Done</font>";
 												} else { echo "<font color='red'>Pending</font>"; }
 												?></td>
-												<td><?php echo anchor("product/details_loyalty_redemption_requests/" . $listData['lr_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?></td>
+												<td><?php if($listData['l_status']==1) {  echo anchor("product/details_view_loyalty_redemption_request/" . $listData['lr_id'], '<i class="ace-icon fa fa-eye bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'View')); } else {echo anchor("product/details_loyalty_redemption_requests/" . $listData['lr_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit'));}  ?></td>
  												 
                                               </tr>
                                          <?php }

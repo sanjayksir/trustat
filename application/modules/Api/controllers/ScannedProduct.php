@@ -14,7 +14,7 @@ class ScannedProduct extends ApiController {
         parent::__construct();
         $this->load->library('form_validation');
         $this->load->model('ScannedproductsModel');
-        $this->load->model('ProductModel');
+        $this->load->model('Productmodel');
         $this->load->model('ConsumerModel');
     }
     /**
@@ -49,6 +49,10 @@ class ScannedProduct extends ApiController {
         $isLoyaltyForAudioFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForAudioFBQuesGiven($consumerId,$product_id);
         $isLoyaltyForImageFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForImageFBQuesGiven($consumerId,$product_id);
         $isLoyaltyForPDFFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForPDFFBQuesGiven($consumerId,$product_id);
+		$isLoyaltyForProductPushedAdFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductPushedAdFeedbackQuesGiven($consumerId,$product_id);
+		$isLoyaltyForProductSurveyFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductSurveyFeedbackQuesGiven($consumerId,$product_id);
+		$isLoyaltyForProductDemoVideoFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductDemoVideoFeedbackQuesGiven($consumerId,$product_id);
+		$isLoyaltyForProductDemoAudioFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductDemoAudioFeedbackQuesGiven($consumerId,$product_id);
         
         if(empty($result)){
             $data['user_id'] = $user['id'];
@@ -87,6 +91,10 @@ class ScannedProduct extends ApiController {
 		$result->isLoyaltyForAudioFBQuesGiven = $isLoyaltyForAudioFBQuesGiven;
 		$result->isLoyaltyForImageFBQuesGiven = $isLoyaltyForImageFBQuesGiven;
 		$result->isLoyaltyForPDFFBQuesGiven = $isLoyaltyForPDFFBQuesGiven;
+		$result->isLoyaltyForProductPushedAdFeedbackQuesGiven = $isLoyaltyForProductPushedAdFeedbackQuesGiven;
+		$result->isLoyaltyForProductSurveyFeedbackQuesGiven = $isLoyaltyForProductSurveyFeedbackQuesGiven;
+		$result->isLoyaltyForProductDemoVideoFeedbackQuesGiven = $isLoyaltyForProductDemoVideoFeedbackQuesGiven;
+		$result->isLoyaltyForProductDemoAudioFeedbackQuesGiven = $isLoyaltyForProductDemoAudioFeedbackQuesGiven;
 		
 		
 
@@ -120,6 +128,7 @@ class ScannedProduct extends ApiController {
 		}
 		
         if($this->db->insert($this->ScannedproductsModel->table, $data)){
+			
 			
 			//$this->db->insert('consumer_customer_link', $data);
 			
@@ -372,6 +381,13 @@ class ScannedProduct extends ApiController {
         $data['product_id'] = $result->id;
         $data['modified'] = date('Y-m-d H:i:s');
 		$data['create_date'] = date('Y-m-d H:i:s');
+		$consumer_id = $user['id'];
+		$ProductID = $result->id;
+		$product_brand_name = get_products_brand_name_by_id($ProductID);
+		$customer_id = get_customer_id_by_product_id($ProductID);
+		$product_name = get_products_name_by_id($ProductID);
+		$consumer_name = getConsumerNameById($consumer_id);
+		
         if(!empty($warrenty)){
             $data['status'] = 0;
         }else{
@@ -388,7 +404,19 @@ class ScannedProduct extends ApiController {
 				if($result->stock_status!='Customer_Code'){
                 $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();
                 $message = 'Thank You for Product Registration. '.$loyltyPoints->points.' loyalty points will be added to your howzzt loyalty account';
-                $transactionType = 'product-registration-without-warranty';   
+               // $transactionType = 'product-registration-without-warranty'; 
+				$transactionType = "product_registration_lps";
+			    $transactionTypeName = "Scan for product registration";
+			   
+				$userId = $user['id'];
+				$this->Productmodel->saveLoyltyProductReg($transactionType, $userId, $ProductID, ['verification_date' => date("Y-m-d H:i:s"), 'consumer_id' => $consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code']], $customer_id);
+				//$this->Productmodel->saveConsumerPassbookLoyalty($transactionType, $userId, ['user_id' => $userId, 'brand_name' => $result->brand_name, 'product_name' => $result->product_name, 'product_code' => $data['bar_code'], 'user_id' => $userId], 'Loyalty');
+				
+				$this->Productmodel->saveConsumerPassbookLoyaltyProductReg($transactionType, ['verification_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code']], $customer_id, $ProductID, $userId, $transactionTypeName,  'Loyalty');
+				
+				$fb_token = getConsumerFb_TokenById($userId);
+               $this->ConsumerModel->sendFCM('Thank you for Product Registration, Please check the details in "my purchase list" in howzzt App', $fb_token);
+				
 				}else{
 				// $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();
                 $message = 'Thank You for Product Registration.';
@@ -510,15 +538,29 @@ class ScannedProduct extends ApiController {
         if(empty($result[0])){
             $this->response(['status'=>false,'message'=>'Record not found'],200);
         }
+		$results2 = $this->db->select('product_id')->from('printed_barcode_qrcode')->where('barcode_qr_code_no', $data['bar_code'])->or_where('barcode_qr_code_no2', $data['bar_code'])->get()->row();
+		$ProductID = $results2->product_id;
 		
         $data['created_at'] = date("Y-m-d H:i:s");
         $data['consumer_id'] = $user['id'];
+		
 		$data['ip_address'] =  $this->input->ip_address();
         //$data['complain_code']= Utils::randomNumber(5);
         //$data['status']= 'pending';
+		$transactionType = "feedback_on_product_lps";
+		$transactionTypeName = "Feedback On Purchased Product";
+		
+		$result3 = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+		$TRPoints = $result3->$transactionType;
+				
+		$mess = 'You have given the feedback ' . $product_name . '. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
+		$customer_id = get_customer_id_by_product_id($ProductID);
         if($this->db->insert('feedback_on_product', $data)){
             //Utils::sendSMS($user['mobile_no'], 'Your feedback submitted successfully.');
             //Utils::sendSMS($this->config->item('adminMobile'), 'A consumer has looged a complain with compoain code '.$data['complain_code'].' with following description '.$data['description']);
+			$data['product_id'] = $ProductID;
+			$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
+			
             $this->response(['status'=>true,'message'=>'Your feedback submitted successfully.','data'=>$data]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to log the complaint.'],200); 

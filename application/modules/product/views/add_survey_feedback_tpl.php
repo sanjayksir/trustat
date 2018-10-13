@@ -23,10 +23,12 @@
                     <option value="Product Description Feedback">Product Description Feedback</option>
 					<option value="Product Image Feedback">Product Image Feedback</option>
 					<option value="Product Video Feedback">Product Video Feedback</option>
-					<option value="Product Audio Feedback">Product Audio Feedback</option>
+					<option value="Product Audio Feedback" >Product Audio Feedback</option>
 					<option value="Product PDF Feedback">Product PDF Feedback</option>
 					<option value="Product Pushed Ad Feedback">Product Pushed Ad Feedback</option>
 					<option value="Product Survey Feedback" selected>Product Survey Feedback</option>
+					<option value="Product VDemonstration Feedback">Product Demo Video Feedback</option>
+					<option value="Product ADemonstration Feedback">Product Demo Audio Feedback</option>
              </select>
 			 
 			</div>

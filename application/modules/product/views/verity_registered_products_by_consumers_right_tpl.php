@@ -12,6 +12,10 @@
 				<form name="user_frm" id="user_frm" action="#" method="POST">
 			<input type="hidden" name="code_id" id="code_id" value="<?php echo $get_registered_products_by_consumers_details[0]['purchased_product_id'];?>" /><?php //echo $get_registered_products_by_consumers_details[0]['purchased_product_id']?>
 			<input type="hidden" name="consumer_id" id="consumer_id" value="<?php echo $get_registered_products_by_consumers_details[0]['consumer_id'];?>" />
+			<input type="hidden" name="bar_code" id="bar_code" value="<?php echo $get_registered_products_by_consumers_details[0]['bar_code'];?>" />
+			<input type="hidden" name="product_brand_name" id="product_brand_name" value="<?php echo get_products_brand_name_by_id($get_registered_products_by_consumers_details[0]['product_id']);?>" />
+			<input type="hidden" name="product_name" id="product_name" value="<?php echo get_products_name_by_id($get_registered_products_by_consumers_details[0]['product_id']);?>" />
+			<input type="hidden" name="product_id" id="product_id" value="<?php echo $get_registered_products_by_consumers_details[0]['product_id'];?>" />
         <div class="widget-main">
 		
 		<div class="form-group row">
@@ -122,11 +126,10 @@ $geocodeFromLatLong = file_get_contents('http://maps.googleapis.com/maps/api/geo
 			 </select>  		
 			<br /><br />
 		 <label for="form-field-8">Reason : </label>
-			 <select class="" style="float: right; width:300px;" placeholder="Query" id="vquery" name="vquery" >
-			<option value=""></option>
-			<!--<option value="<?php //$get_registered_products_by_consumers_details[0]['vquery']; ?>" selected> <?php // $get_registered_products_by_consumers_details[0]['vquery']; ?></option>	
-			<option value="Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in “my purchase list” in Howzzt App.">The Invoice is uploaded . All particulars are correct</option> 		-->	
-			<option value="Invoice is not readable and clear. Please re-scan the product for registration and upload readable and clear invoice." selected>Invoice is not readable and clear</option> 
+			 <select class="" style="float: right; width:300px;" placeholder="Query" id="vquery" name="vquery" required>
+			<option value="" selected>Please Select the verification status</option>
+			<option value="Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in “my purchase list” in Howzzt App.">The Invoice is uploaded . All particulars are correct</option> 		
+			<option value="Invoice is not readable and clear. Please re-scan the product for registration and upload readable and clear invoice.">Invoice is not readable and clear</option> 
 			<option value="Description of the product registered does not match with the product(s) stated in invoice uploaded. Please re-scan the product for registration and upload the invoice with product details.">Description of the product registered does not match with the product(s) stated in invoice uploaded.</option>
 			 </select>  	
 						

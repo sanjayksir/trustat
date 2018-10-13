@@ -172,7 +172,35 @@ $medisUrl = $this->config->item('media_location');
                                             </div>
                                             <div class="col-sm-6">
                                                 <div class="form-group">
-                                                    <label>Product Description</label>
+                                                    <label for="form-field-description">Product Registration Loyalty Points : <input type="text" name="product_registration_lps" id="product_registration_lps" value="<?php echo $product_registration_lps; ?>" /> </label><br />
+							  <label for="form-field-description">Product Image Response Loyalty Points : <input type="text" name="product_image_response_lps" id="product_image_response_lps" value="<?php echo $product_image_response_lps; ?>" /></label>
+							  <label for="form-field-description"> FbQQ  : <input type="text" name="product_image_response_fbqq" id="product_image_response_fbqq" value="<?php echo $product_image_response_fbqq; ?>" /></label>
+							  <br />
+							   <label for="form-field-description">Product Audio Response Loyalty Points : <input type="text" name="product_audio_response_lps" id="product_audio_response_lps" value="<?php echo $product_audio_response_lps; ?>" /></label>
+							   <label for="form-field-description"> FbQQ  : <input type="text" name="product_audio_response_fbqq" id="product_audio_response_fbqq" value="<?php echo $product_audio_response_fbqq; ?>" /></label>
+							   <br />
+							    <label for="form-field-description">Product Video Response Loyalty Points : <input type="text" name="product_video_response_lps" id="product_video_response_lps" value="<?php echo $product_video_response_lps; ?>" /></label>
+								<label for="form-field-description"> FbQQ  : <input type="text" name="product_video_response_fbqq" id="product_video_response_fbqq" value="<?php echo $product_video_response_fbqq; ?>" /></label>
+								<br />
+								 <label for="form-field-description">Product Ad Response Loyalty Points : <input type="text" name="product_ad_response_lps" id="product_ad_response_lps" value="<?php echo $product_ad_response_lps; ?>" /></label>
+								 <label for="form-field-description"> FbQQ  : <input type="text" name="product_ad_response_fbqq" id="product_ad_response_fbqq" value="<?php echo $product_ad_response_fbqq; ?>" /></label>
+								 <br />
+								  <label for="form-field-description">Product Survey Response Loyalty Points : <input type="text" name="product_survey_response_lps" id="product_survey_response_lps" value="<?php echo $product_survey_response_lps; ?>" /></label>
+								  <label for="form-field-description"> FbQQ  : <input type="text" name="product_survey_response_fbqq" id="product_survey_response_fbqq" value="<?php echo $product_survey_response_fbqq; ?>" /></label>
+								  <br />
+								  
+								   <label for="form-field-description">Product Survey Response Loyalty Points : <input type="text" name="product_pdf_response_lps" id="product_pdf_response_lps" value="<?php echo $product_pdf_response_lps; ?>" /></label>
+								   <label for="form-field-description"> FbQQ  : <input type="text" name="product_image_response_lps" id="product_image_response_lps" value="<?php echo $product_image_response_lps; ?>" /></label>
+								   <br />
+								   
+								    <label for="form-field-description">Product Survey Response Loyalty Points : <input type="text" name="product_demo_video_response_lps" id="product_demo_video_response_lps" value="<?php echo $product_demo_video_response_lps; ?>" /></label>
+									<label for="form-field-description"> FbQQ  : <input type="text" name="product_demo_video_response_fbqq" id="product_demo_video_response_fbqq" value="<?php echo $product_demo_video_response_fbqq; ?>" /></label>
+									<br />
+									
+									 <label for="form-field-description">Product Survey Response Loyalty Points : <input type="text" name="product_demo_audio_response_lps" id="product_demo_audio_response_lps" value="<?php echo $product_demo_audio_response_lps; ?>" /></label>
+									 <label for="form-field-description"> FbQQ  : <input type="text" name="product_image_response_lps" id="product_image_response_lps" value="<?php echo $product_image_response_lps; ?>" /></label>
+									 <br />
+									<label for="form-field-description">Add Product Description :</label><br />
                                                     <textarea class="form-control" name="product_description" id="product-description" placeholder="Product description" rows="6"><?php echo $product_description; ?></textarea>
                                                 </div>
                                             </div>    

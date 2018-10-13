@@ -564,6 +564,98 @@ class User_master extends MX_Controller {
             redirect(base_url() . 'user_master/list_user/');
         }
     }
+	
+	
+	
+	public function list_common_points_loyalty() {
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+        if (empty($user_id) || empty($user_name)) {
+
+            redirect('login');
+            exit;
+        }
+        $data = array();
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->myspidey_user_master_model->get_total_common_points_loyalty_list_all($srch_string);
+
+        if ($total_records > 0) {
+            // get current page records
+            $params['userListing'] = $this->myspidey_user_master_model->get_common_points_loyalty_list_all($limit_per_page, $start_index, $srch_string);
+            
+            // build paging links
+            $params["links"] = Utils::pagination('user_master/list_common_points_loyalty', $total_records);;
+        }
+        ##--------------- pagination End ----------------##
+
+        $user_id = $this->session->userdata('admin_user_id');
+        $this->load->view('list_common_points_loyalty_tpl', $params);
+    }
+	/*
+	public function common_point_master($id) {
+
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+        if (empty($user_id) || empty($user_name)) {
+
+            redirect('login');
+            exit;
+        }
+        $data = array();
+        $id = $this->session->userdata('admin_user_id');
+        $data['get_user_details'] = $this->myspidey_user_master_model->get_common_point_master_details($id);
+        $this->load->view('edit_common_point_master_tpl', $data);
+    }
+	*/
+	public function edit_common_point() {
+
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+        if (empty($user_id) || empty($user_name)) {
+
+            redirect('login');
+            exit;
+        }
+
+        $data = array();
+        $id = $this->uri->segment(3); //$this->session->userdata('admin_user_id');
+        //$data['ownership'] 	= $this->myspidey_user_group_permissions_model->get_ownership_user();
+        
+       // $data['get_user_details'] = $this->myspidey_user_master_model->get_user_details($id);
+		$data['get_user_details'] = $this->myspidey_user_master_model->get_common_point_master_details($id);
+
+        $this->load->view('edit_common_point_master_tpl', $data);
+    }
+	
+	public function update_common_point_master() {
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+        if (empty($user_id) || empty($user_name)) {
+
+            redirect('login');
+            exit;
+        }
+        parse_str($_POST['newdata'], $searcharray);
+       
+		//$id = $this->uri->segment(3);
+
+        echo $this->myspidey_user_master_model->update_common_point_master_data($searcharray);
+        exit;
+    }
 
 }
 ?>

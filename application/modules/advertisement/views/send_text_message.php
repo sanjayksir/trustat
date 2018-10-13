@@ -84,7 +84,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 		
 		 <div class="col-sm-6">
 			 <label for="form-field-8">Remark</label>
-			  <textarea  class="form-control" name="text_message" placeholder="Write your text message..."  maxlength="800"></textarea>
+			  <textarea  class="form-control" id="text_message" name="text_message" placeholder="Write your text message..."  maxlength="800"></textarea>
 			<br /><input class="btn btn-info" type="submit" name="submit" value="Send" id="savemenu" />
 			</div>
 		

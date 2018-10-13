@@ -836,18 +836,62 @@ function list_assigned_Advertisements() {
 		$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status);
 	
 		$this->Textmessage_model->update_push_text_message_request($message_id,$send_status);
+		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+				
+				foreach ($query->result() as $user)  
+				{
+		 $consumer_id = $user->consumer_id;
+		 $fb_token = getConsumerFb_TokenById($consumer_id);
+		 
+		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
+		 }
+		//echo  $this->Advertisement_model->sendFCM("Advertisement pushed!",$fb_token);
+		exit;
+		
+		/*
+		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+				
+				foreach ($query->result() as $user)  
+				{
+		 $consumer_id = $user->consumer_id;
+		  $fb_token = getConsumerFb_TokenById(17);
+		 $this->Textmessage_model->sendFCM($consumer_id, $fb_token);
+		
+		redirect(base_url().'textmessages/approve_text_messages');	exit;
+		
+		
+		}
+		*/
+ 	}
+	
+	
+	
+	function send_text_message2(){
+	 	$this->checklogin();		
+		//$customer_id=$this->input->post('c_id');
+		//$product_id	=$this->input->post('p_id');
+		//$Chk = $this->input->post('Chk');
+		$customer_id 	= $this->session->userdata('admin_user_id');
+		$text_message	=$this->input->post('text_message');
+		if($text_message==''){
+		$this->load->view('send_text_message2');
+		} else {
+		//echo $this->Textmessage_model->save_push_advertisement($customer_id,$product_id,$Chk);
+		 
 		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				
 				foreach ($query->result() as $user)  
 				{
 		 $consumer_id = $user->consumer_id;
-		  $fb_token = getConsumerFb_TokenById($consumer_id);
+		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
-		 $this->Product_model->sendTMNotification("A Survey Posted!!", $fb_token);
-		
-		redirect(base_url().'textmessages/approve_text_messages');	exit;
+		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
+		 }
+		//echo  $this->Textmessage_model->sendFCM("tmp",$fb_token);
+		redirect(base_url().'textmessages/send_text_message2');	exit;
 		}
  	}
+	
 	
 	
 		   public function change_status() {
@@ -887,12 +931,14 @@ function list_assigned_Advertisements() {
 	 
 	 public function approve_text_messages() {
 		 //echo "aaaa";
+		 /*
         $this->checklogin();
         if (!empty($this->input->post('del_submit'))) {
             if ($this->db->query("delete from push_text_message where id='" . $this->input->post('del_submit') . "'")) {
                 $this->session->set_flashdata('success', 'Text Message Deleted Successfully!');
             }
         }
+		*/
         ##--------------- pagination start ----------------##
         // init params
         $params = array();

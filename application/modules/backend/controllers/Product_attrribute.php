@@ -105,7 +105,7 @@ class Product_attrribute extends MX_Controller {
             $this->output->set_content_type('application/json')->set_output(json_encode(['status'=>false,'message'=>'Invalid product.']));
         }
         if($this->db->update('products',$this->input->post(),['id'=>$pId])){
-            $response = ['status'=>true,'message'=>'Media description have been updated successfully.'];
+            $response = ['status'=>true,'message'=>'Product Loyalty & Description updated successfully.'];
         }else{
             $response = ['status'=>false,'message'=>'Failed to add/edit description.'];
         }

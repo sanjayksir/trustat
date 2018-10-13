@@ -268,25 +268,7 @@ function add_question_to_product(customer_id, id, text_message){
 	} 
 }
 
-function change_status(id,val){
-	if(confirm("Hey, this is final submission of Push Ad Request, you can not cancel it, press OK to confirm or Cancel it.")){
-	$.ajax({
-				type: "POST",
-				url: "<?php echo base_url();?>advertisement/change_status/",
-				data: {id:id, value:val},
-				success: function (result) {
-					if(parseInt(result)==1){
-						$('#status_'+id).val('1').css("background-color","green");
-					}else{
-						$('#status_'+id).val('Waiting for Ad pushed approval').css("background-color","yellow");
-					}
-					
-				}
-			});
-}else{
-    return false;  
-}
-}
+
  
 </script>
 

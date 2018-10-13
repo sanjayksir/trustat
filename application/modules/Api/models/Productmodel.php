@@ -1,6 +1,6 @@
 <?php
 
-class ProductModel extends CI_Model {
+class Productmodel extends CI_Model {
 
     public function validate($data, $fields) {
         $this->load->library('form_validation');
@@ -480,33 +480,237 @@ class ProductModel extends CI_Model {
     }
     
     
-    public function feedbackLoylity($userId,$transactionType,$params){
-        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$userId."'");
-        if($answerQuery->num_rows() >= 0){
+    public function feedbackLoylity($transactionType, $params, $ProductID, $userId, $transactionTypeName, $transaction_lr_type, $mess, $customer_id){
+       // $answerQuery = $this->db->get_where('loylty_points',"user_id='".$userId."'");
+		 $answerQuery = $this->db->get_where('loylty_points',"user_id='".$userId."' AND transaction_type='".$transactionType."'");
+        if($answerQuery->num_rows() > 0){
             $dataItems = $answerQuery->result();
             foreach($dataItems as $row){
                 $paramsValue = json_decode($row->params,true);                
-                if(($paramsValue['question_id'] == $params['question_id']) && ($paramsValue['product_qr_code'] == $params['product_qr_code'])){
+                if(($paramsValue['product_id'] == $params['product_id'])){
                     return false;
-                }                
+                }              
             }
         }
-        $this->saveLoylty($transactionType,$userId,$params);
+		$this->saveLoylty($transactionType, $params, $ProductID, $userId, $transactionTypeName, $transaction_lr_type, $customer_id);
+		$this->saveConsumerPassbookLoyalty($transactionType, $params, $ProductID, $userId, $transactionTypeName, $transaction_lr_type, $customer_id);
+		
+		$id = getConsumerFb_TokenById($userId);
+		
+		$this->sendFCM($mess,$id);
+		
+		//$this->sendFCM2($transactionType,$id);
     }
-    
-    public function findLoylityBySlug($slug = null){
+	
+	
+	public function feedbackLoylityDemo($transactionType, $params, $ProductID, $userId, $transactionTypeName, $transaction_lr_type, $mess, $customer_id){
+       // $answerQuery = $this->db->get_where('loylty_points',"user_id='".$userId."'");
+		 $answerQuery = $this->db->get_where('loylty_points',"user_id='".$userId."' AND transaction_type='".$transactionType."'");
+        if($answerQuery->num_rows() > 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                if(($paramsValue['product_qr_code'] == $params['product_qr_code'])){
+                    return false;
+                }              
+            }
+        }
+		$this->saveLoylty($transactionType, $params, $ProductID, $userId, $transactionTypeName, $transaction_lr_type, $customer_id);
+		$this->saveConsumerPassbookLoyalty($transactionType, $params, $ProductID, $userId, $transactionTypeName, $transaction_lr_type, $customer_id);
+		
+		$id = getConsumerFb_TokenById($userId);
+		
+		$this->sendFCM($mess,$id);
+		
+		//$this->sendFCM2($transactionType,$id);
+    }
+	
+	
+	public function sendFCM($mess,$id) {
+$url = 'https://fcm.googleapis.com/fcm/send';
+
+$fields = array (
+        'to' => $id,
+         
+         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess ,'sound'=>'Default',),
+       
+);
+$fields = json_encode ( $fields );
+
+$headers = array (
+        'Authorization: key=' . "AAAA446l5pE:APA91bE3nQ0T5E9fOH-y4w_dkOLU1e9lV7Wn0OmVLaKNnE8tXcZ0eC3buduhCwHL1ICaJ882IHfLy-akAe7Nih7M1RewkO9IzAR-ELdPgmORtb7KjriRrQspVHkIb9GRZPOjXuqfPInlOAly5-65sEEUbGlcoujMgw",
+        'Content-Type: application/json'
+);
+
+$ch = curl_init ();
+curl_setopt ( $ch, CURLOPT_URL, $url );
+curl_setopt ( $ch, CURLOPT_POST, true );
+curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+
+$result = curl_exec ( $ch );
+//curl_close ( $ch );
+return $result;
+}
+
+
+public function sendFCM2($mess,$id) {
+$url = 'https://fcm.googleapis.com/fcm/send';
+
+$fields = array (
+        'to' => $id,
+         
+         'notification' => array('title' => 't2', 'body' =>  $mess ,'sound'=>'Default',),
+       
+);
+$fields = json_encode ( $fields );
+
+$headers = array (
+        'Authorization: key=' . "AAAA446l5pE:APA91bE3nQ0T5E9fOH-y4w_dkOLU1e9lV7Wn0OmVLaKNnE8tXcZ0eC3buduhCwHL1ICaJ882IHfLy-akAe7Nih7M1RewkO9IzAR-ELdPgmORtb7KjriRrQspVHkIb9GRZPOjXuqfPInlOAly5-65sEEUbGlcoujMgw",
+        'Content-Type: application/json'
+);
+
+$ch = curl_init ();
+curl_setopt ( $ch, CURLOPT_URL, $url );
+curl_setopt ( $ch, CURLOPT_POST, true );
+curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+
+$result = curl_exec ( $ch );
+//curl_close ( $ch );
+return $result;
+}
+
+	/*
+	public function feedbackLoylityPassbook($transactionType, $transactionTypeName, $ProductID, $consumer_id, $params, $transaction_lr_type){
+       $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumer_id."' AND transaction_type='".$transactionType."'");
+	  //$answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumer_id."' AND transaction_type='".$transactionType."'");
+        if($answerQuery->num_rows() > 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                 if(($paramsValue['product_id'] == 151)){                
+                   return false;
+                }             
+            }
+        }
+        $this->saveConsumerPassbookLoyalty($transactionType, $transactionTypeName, $ProductID, $consumer_id, $params, $transaction_lr_type);
+    }
+    */
+	/* new 
+	public function feedbackLoylity($transactionType = null, $ProductID = null,$consumer_id = null,$params = [],$transaction_lr_type = null){
+		/*
+        if( empty($transactionType) || empty($userId) ){
+            return false;
+        }
+        
+        $loylty = $this->findLoylityBySlug($transactionType);
+        if(empty($loylty)){
+            return false;
+        }
+		
+		
+		
+		$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+		$TRPoints = $result->$transactionType;
+		
+		
+        $date = new DateTime();
+        $now = $date->format('Y-m-d H:i:s');
+        $date->modify('+3    month');
+        $input = [
+            'customer_id' => $customer_id,
+			'user_id' => $consumer_id,
+            'points' => $TRPoints,
+            'transaction_type' => $transactionType,
+            'params' => json_encode($params),
+            'status' => 1,
+            'modified_at' => $now,
+            'created_at' => $now,
+            'date_expire' => $date->format('Y-m-d H:i:s')
+        ];
+        
+        return $this->db->insert('loylty_points',$input);
+    }
+	*/
+	
+    public function findLoylityBySlug($transactionType = null){
         $items = [];
-        if(empty($slug)){
+        if(empty($transactionType)){
            return false; 
         }
-        $query = $this->db->get_where('loylties',['transaction_type_slug'=>$slug]);
+        $query = $this->db->get_where('loylties',['transaction_type_slug'=>$transactionType]);
         if( $query->num_rows() <= 0 ){
             return false;
         }else{
             return $query->row_array();
         }
     }
-    public function saveLoylty($transactionType = null,$userId = null,$params = []){
+	
+	
+	//$this->saveLoylty($transactionType, $params, $ProductID, $userId, $transactionTypeName, $transaction_lr_type);
+    public function saveLoylty($transactionType = null, $params = [], $ProductID = null, $userId = null, $transactionTypeName = null, $transaction_lr_type = null, $customer_id = null){
+      /* 
+	   if( empty($transactionType) || empty($userId) ){
+            return false;
+        }
+        
+        $loylty = $this->findLoylityBySlug($transactionType);
+        if(empty($loylty)){
+            return false;
+        }
+		*/
+		
+		$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+		$TRPoints = $result->$transactionType;
+		
+		
+        $date = new DateTime();
+        $now = $date->format('Y-m-d H:i:s');
+        $date->modify('+3    month');
+        $input = [
+            'customer_id' => $customer_id,
+			'user_id' => $userId,
+            'points' => $TRPoints,
+            'transaction_type' => $transactionType,
+            'params' => json_encode($params),
+            'status' => 1,
+            'modified_at' => $now,
+            'created_at' => $now,
+            'date_expire' => $date->format('Y-m-d H:i:s')
+        ];
+        
+        return $this->db->insert('loylty_points',$input);
+    }
+	
+	
+	public function saveLoyltyProductReg($transactionType = null, $userId = null, $ProductID = null, $params = [], $customer_id = null){
+      
+		$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+		$TRPoints = $result->$transactionType;
+		
+		
+        $date = new DateTime();
+        $now = $date->format('Y-m-d H:i:s');
+        $date->modify('+3    month');
+        $input = [
+			'customer_id' => $customer_id,
+            'user_id' => $userId,
+            'points' => $TRPoints,
+            'transaction_type' => $transactionType,
+            'params' => json_encode($params),
+            'status' => 1,
+            'modified_at' => $now,
+            'created_at' => $now,
+            'date_expire' => $date->format('Y-m-d H:i:s')
+        ];
+        
+        return $this->db->insert('loylty_points',$input);
+    }
+	
+	public function saveLoyltyPassbook($transactionType = null,$userId = null,$params = []){
         if( empty($transactionType) || empty($userId) ){
             return false;
         }
@@ -519,9 +723,10 @@ class ProductModel extends CI_Model {
         $now = $date->format('Y-m-d H:i:s');
         $date->modify('+3    month');
         $input = [
-            'user_id' => $userId,
-            'points' => $loylty['points'],
-            'transaction_type' => $loylty['transaction_type'],
+            'customer_id' => $customer_id,
+			'user_id' => $userId,
+            'points' => $loylty['loyalty_points'],
+            'transaction_type' => $transactionType,
             'params' => json_encode($params),
             'status' => 1,
             'modified_at' => $now,
@@ -529,10 +734,262 @@ class ProductModel extends CI_Model {
             'date_expire' => $date->format('Y-m-d H:i:s')
         ];
         
-        return $this->db->insert('loylty_points',$input);
+        return $this->db->insert('consumer_passbook',$input);
     }
 	
-	public function saveConsumerPassbook($transactionType = null,$userId = null,$params = []){
+	
+	public function findCurrentBalanceByuserId($userId){
+        //return $this->db->select('current_balance')->from('consumer_passbook')->where('consumer_id ="'.$userId.'"')->order_by('transaction_date',"desc")->limit(1)->get()->row();
+    
+	 //return $this->db->select('current_balance')->from('consumer_passbook')->where('consumer_id ="'.$userId.'"')->limit(1)->order_by('transaction_date','DESC')->get()->row();
+	//$userId = 49;
+			$this->db->select('current_balance');
+			$this->db->from('consumer_passbook');
+			$this->db->where('consumer_id', $userId);
+			$this->db->order_by('transaction_date','DESC');
+			$this->db->limit(1);			
+			$query = $this->db->get();
+			$result = $query->result();
+			return $result;
+			}
+	
+	/* old 
+	public function saveConsumerPassbookLoyalty($transactionType = null,$userId = null,$params = [],$transaction_lr_type = null){
+        if( empty($transactionType) || empty($userId) ){
+            return false;
+        }
+        
+        $loylty = $this->findLoylityBySlug($transactionType);
+        if(empty($loylty)){
+            return false;
+        }
+		$TCurrentBalance = $this->findCurrentBalanceByuserId($userId);
+		
+		//echo $CurrentBalance[0]['current_balance'];
+		
+		foreach($TCurrentBalance as $row){
+			//echo $row['current_balance'];
+			// $row->current_balance;
+		$CurrentBalance1 = $row->current_balance;
+		$CurrentBalance2 = $loylty['loyalty_points'];
+		$CurrentBalance = $CurrentBalance1+$CurrentBalance2;
+		
+		$date = new DateTime();
+        $now = $date->format('Y-m-d H:i:s');
+       // $date->modify('+3    month');
+        $input = [
+			'customer_id' => $customer_id,
+            'consumer_id' => $userId,
+            'points' => $loylty['loyalty_points'],
+            'transaction_type_name' => $loylty['transaction_type'],
+			'transaction_type_slug' => $loylty['transaction_type_slug'],
+            'params' => json_encode($params),
+            'transaction_lr_type' => $transaction_lr_type,
+            'current_balance' => $CurrentBalance,
+            'transaction_date' => $now
+        ];
+        
+        return $this->db->insert('consumer_passbook',$input);
+		}
+    }
+	*/
+	
+	
+	//$this->saveConsumerPassbookLoyalty($transactionType, $params, $ProductID, $userId, $transactionTypeName, $transaction_lr_type);
+	public function saveConsumerPassbookLoyalty($transactionType = null, $params = [], $ProductID = null, $userId = null, $transactionTypeName = null,  $transaction_lr_type = null, $customer_id = null){
+          
+		/*
+		if( empty($transactionType) || empty($consumer_id) ){
+            return false;
+        } 
+       $loylty = $this->findLoylityBySlugAndProductID($transactionType,$ProductID);
+        if(empty($loylty)){
+            return false;
+        }
+		*/
+		
+		// Find Current transuction type
+		$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+		$TRPoints = $result->$transactionType;
+		
+		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$userId, 'transaction_lr_type'=>"Loyalty"))->get()->row();
+		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$userId, 'transaction_lr_type'=>"Redemption"))->get()->row();
+		
+		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
+		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
+		
+		
+		$FinalTotalAccumulatedPoints = ($TotalAccumulatedPoints->points) + $TRPoints;
+		if(($TotalRedeemedPoints->points)!='')
+		{
+			$FinalTotalRedeemedPoints = $TotalRedeemedPoints->points;
+		} else {
+			$FinalTotalRedeemedPoints =0;
+			}
+			
+		$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
+		$Min_Locking_Balance = $result2->loyalty_points;
+		
+		$CurrentBalanceAfterMinBalanceLocking = $CurrentBalance - $Min_Locking_Balance;
+		$Points_Redeemed_in_Multiple_of = $result3->loyalty_points;
+				
+		$remainder = $CurrentBalanceAfterMinBalanceLocking % $Points_Redeemed_in_Multiple_of;
+		$quotient = ($CurrentBalanceAfterMinBalanceLocking - $remainder) / $Points_Redeemed_in_Multiple_of;
+		
+		$Points_Redeemable = $Points_Redeemed_in_Multiple_of * $quotient;
+		$PointsShortOfRedumption =$Points_Redeemed_in_Multiple_of - $remainder;
+		//testing
+		$date = new DateTime();
+        $now = $date->format('Y-m-d H:i:s');
+       // $date->modify('+3    month');
+        $input = [
+            'customer_id' => $customer_id,
+			'consumer_id' => $userId,
+            'points' => $TRPoints,
+            'transaction_type_name' => $transactionTypeName,
+			'transaction_type_slug' => $transactionType,
+            'params' => json_encode($params),
+            'transaction_lr_type' => $transaction_lr_type,
+			'total_accumulated_points' => $FinalTotalAccumulatedPoints,
+			'total_redeemed_points' => $FinalTotalRedeemedPoints,
+            'current_balance' => $CurrentBalance,
+			'points_redeemable' => $Points_Redeemable,
+			'points_short_of_redumption' => $PointsShortOfRedumption,
+            'transaction_date' => $now
+        ];
+        
+        return $this->db->insert('consumer_passbook',$input);
+		
+    }
+	
+	
+	public function saveConsumerPassbookLoyaltyProductReg($transactionType = null, $params = [], $customer_id = null, $ProductID = null, $userId = null, $transactionTypeName = null,  $transaction_lr_type = null){
+          
+		/*
+		if( empty($transactionType) || empty($consumer_id) ){
+            return false;
+        } 
+       $loylty = $this->findLoylityBySlugAndProductID($transactionType,$ProductID);
+        if(empty($loylty)){
+            return false;
+        }
+		*/
+		
+		// Find Current transuction type
+		$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+		$TRPoints = $result->$transactionType;
+		
+		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$userId, 'transaction_lr_type'=>"Loyalty"))->get()->row();
+		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$userId, 'transaction_lr_type'=>"Redemption"))->get()->row();
+		
+		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
+		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
+		
+		
+		$FinalTotalAccumulatedPoints = ($TotalAccumulatedPoints->points) + $TRPoints;
+		if(($TotalRedeemedPoints->points)!='')
+		{
+			$FinalTotalRedeemedPoints = $TotalRedeemedPoints->points;
+		} else {
+			$FinalTotalRedeemedPoints =0;
+			}
+			
+		$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
+		$Min_Locking_Balance = $result2->loyalty_points;
+		
+		$CurrentBalanceAfterMinBalanceLocking = $CurrentBalance - $Min_Locking_Balance;
+		$Points_Redeemed_in_Multiple_of = $result3->loyalty_points;
+				
+		$remainder = $CurrentBalanceAfterMinBalanceLocking % $Points_Redeemed_in_Multiple_of;
+		$quotient = ($CurrentBalanceAfterMinBalanceLocking - $remainder) / $Points_Redeemed_in_Multiple_of;
+
+		$Points_Redeemable = $Points_Redeemed_in_Multiple_of * $quotient;
+		$PointsShortOfRedumption =$Points_Redeemed_in_Multiple_of - $remainder;
+		//testing
+		$date = new DateTime();
+        $now = $date->format('Y-m-d H:i:s');
+       // $date->modify('+3    month');
+        $input = [
+			'customer_id' => $customer_id,
+            'consumer_id' => $userId,
+            'points' => $TRPoints,
+            'transaction_type_name' => $transactionTypeName,
+			'transaction_type_slug' => $transactionType,
+            'params' => json_encode($params),
+            'transaction_lr_type' => $transaction_lr_type,
+			'total_accumulated_points' => $FinalTotalAccumulatedPoints,
+			'total_redeemed_points' => $FinalTotalRedeemedPoints,
+            'current_balance' => $CurrentBalance,
+			'points_redeemable' => $Points_Redeemable,
+			'points_short_of_redumption' => $PointsShortOfRedumption,
+            'transaction_date' => $now
+        ];
+        
+        return $this->db->insert('consumer_passbook',$input);
+		
+    }
+	
+	public function saveConsumerPassbookLoyaltyReg($transactionType = null,$userId = null,$params = [],$transaction_lr_type = null){
+        if( empty($transactionType) || empty($userId) ){
+            return false;
+        }
+        
+        $loylty = $this->findLoylityBySlug($transactionType);
+        if(empty($loylty)){
+            return false;
+        }
+		$TCurrentBalance = $this->findCurrentBalanceByuserId($userId);
+		
+		//echo $CurrentBalance[0]['current_balance'];
+		
+		
+		$CurrentBalance = $loylty['loyalty_points'];
+		
+		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
+		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
+		
+		
+		$FinalTotalAccumulatedPoints = $CurrentBalance;
+		$FinalTotalRedeemedPoints = 0;
+		
+		
+		$Min_Locking_Balance = $result2->loyalty_points;
+		
+		$CurrentBalanceAfterMinBalanceLocking = $CurrentBalance - $Min_Locking_Balance;
+		$Points_Redeemed_in_Multiple_of = $result3->loyalty_points;
+				
+		$remainder = $CurrentBalanceAfterMinBalanceLocking % $Points_Redeemed_in_Multiple_of;
+		$quotient = ($CurrentBalanceAfterMinBalanceLocking - $remainder) / $Points_Redeemed_in_Multiple_of;
+
+		$Points_Redeemable = $Points_Redeemed_in_Multiple_of * $quotient;
+		$PointsShortOfRedumption =$Points_Redeemed_in_Multiple_of - $remainder;
+		
+		
+		$date = new DateTime();
+        $now = $date->format('Y-m-d H:i:s');
+       // $date->modify('+3    month');
+        $input = [
+            'customer_id' => 1,			
+			'consumer_id' => $userId,
+            'points' => $loylty['loyalty_points'],
+            'transaction_type_name' => "User Registration",
+			'transaction_type_slug' => $transactionType,
+            'params' => json_encode($params),
+            'transaction_lr_type' => $transaction_lr_type,
+			'total_accumulated_points' => $loylty['loyalty_points'],
+			'total_redeemed_points' => 0,
+            'current_balance' => $CurrentBalance,
+			'points_redeemable' => $Points_Redeemable,
+			'points_short_of_redumption' => $PointsShortOfRedumption,
+            'transaction_date' => $now	
+			
+        ];
+        
+        return $this->db->insert('consumer_passbook',$input);
+		
+    }
+	
+	public function saveLoyltyReg($transactionType = null,$userId = null,$params = []){
         if( empty($transactionType) || empty($userId) ){
             return false;
         }
@@ -543,22 +1000,20 @@ class ProductModel extends CI_Model {
         }
         $date = new DateTime();
         $now = $date->format('Y-m-d H:i:s');
-       // $date->modify('+3 month');
+        $date->modify('+3    month');
         $input = [
+			'customer_id' => 1,
             'user_id' => $userId,
-            'transacted_points' => $loylty['points'],
+            'points' => $loylty['loyalty_points'],
             'transaction_type' => $loylty['transaction_type'],
-			'type_of_points' => $loylty['type_of_points'],
-			'brand_name' => $loylty['brand_name'],
-			'product_name' => $loylty['product_name'],
-           // 'params' => json_encode($params),
-            'current_balance' => 1,
-            'transaction_date' => $now
-            //'created_at' => $now,
-           // 'date_expire' => $date->format('Y-m-d H:i:s')
+            'params' => json_encode($params),
+            'status' => 1,
+            'modified_at' => $now,
+            'created_at' => $now,
+            'date_expire' => $date->format('Y-m-d H:i:s')
         ];
         
-        return $this->db->insert('consumer_passbook',$input);
+        return $this->db->insert('loylty_points',$input);
     }
 	
     
@@ -599,26 +1054,46 @@ class ProductModel extends CI_Model {
         $result = $query->result_array();
         return $result;
     }
-	
+	/*
 	public function getConsumerPassBook($userId){
         if(empty($userId)){
             return false;
         }
-        $query = $this->db->select('lr.*, lp.*')
-                ->from('loyalty_redemption AS lr, loylty_points AS lp')
+        $query = $this->db->select('*')
+                ->from('consumer_passbook')
                // ->join('consumers as c','c.id=lr.user_id')
-                ->where('lr.user_id ="'.$userId.'"')
-				->where('lp.user_id ="'.$userId.'"')
-				->order_by('lr.status_change_date', 'desc')
-				->order_by('lp.modified_at', 'desc')
-				->group_by('lr.points_redeemed')
-				->group_by('lp.points')
-                ->get();
+                ->where('consumer_id ="'.$userId.'"')
+				->order_by('transaction_date', 'desc')
+				->get();
         if( $query->num_rows() <= 0 ){
             return [];
         }
         $result = $query->result_array();
         return $result;
     }
+	*/
+	
+	public function getConsumerPassBook($userId=null){
+        if(empty($userId)){
+            return [];
+        }
+        $query = $this->db->select('*')
+                ->from('consumer_passbook')
+                ->where('consumer_id ="'.$userId.'"')
+				->order_by('transaction_date', 'desc')
+               // ->where('status =1')
+                ->get();
+        if( $query->num_rows() <= 0 ){
+            return [];
+        }
+        $result = $query->result();
+        $items = array_map(function($obj){
+            $obj->params = json_decode($obj->params);
+            return $obj;
+        }, $result);
+        return $items;
+        
+    }
+	
 
 }

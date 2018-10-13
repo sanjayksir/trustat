@@ -853,5 +853,40 @@ function list_assigned_Advertisements() {
    		  
      }
 	 
+	 public function approve_text_messages() {
+		 //echo "aaaa";
+		 /*
+        $this->checklogin();
+        if (!empty($this->input->post('del_submit'))) {
+            if ($this->db->query("delete from push_text_message where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Text Message Deleted Successfully!');
+            }
+        }
+		*/
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+       
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+       // $total_records = $this->Textmessage_model->total_product_listing($srch_string);
+        //$params["product_list"] = $this->Textmessage_model->product_listing($limit_per_page, $start_index, $srch_string);
+		
+		$total_records = $this->Textmessage_model->total_text_messages_request_listing($srch_string);
+        $params["product_list"] = $this->Textmessage_model->text_messages_request_listing($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('advertisement/text_messages_listing', $total_records);
+        $this->load->view('text_messages_listing', $params);
+    }
+	
+	 
 }
 

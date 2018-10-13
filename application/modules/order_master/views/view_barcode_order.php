@@ -254,7 +254,7 @@ Your browser does not support audio in video tag.
 															<div class="row">
 																<div class="col-xs-12"> 
 																	<div class="col-xs-3 col-sm-3">
-																	 	<label><strong>Product PDF</strong></label>
+																	 	<label><strong>Product User Manual</strong></label>
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
 																	<?php $arrPDF = array_filter(explode(',',$get_detail['product_pdf']));

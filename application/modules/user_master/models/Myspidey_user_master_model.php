@@ -34,6 +34,103 @@ class Myspidey_user_master_model extends CI_Model {
         }
         return $res;
     }
+	
+	
+	function get_total_common_points_loyalty_list_all($srch_string = '') {
+        $result_data = 0;
+        $user_id = $this->session->userdata('admin_user_id');
+        
+        if (!empty($srch_string)) {
+            $this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR CONCAT(f_name, ' ', l_name) LIKE '%$srch_string%' OR f_name LIKE '%$srch_string%' OR l_name LIKE '%$srch_string%') and (is_parent=$user_id)");
+        } else {
+            if (empty($user_id)) {
+                $user_id = 1;
+            }
+            //$this->db->where(array('is_parent' => $user_id));
+        }
+
+        $this->db->select('count(1) as total_rows');
+        $this->db->from('loylties');
+        $query = $this->db->get(); //echo '***'.$this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            $result_data = $result[0]['total_rows'];
+        }
+        return $result_data;
+    }
+	
+	function get_common_points_loyalty_list_all($limit,$start,$srch_string = '') {
+        $result_data = 0;
+        $user_id = $this->session->userdata('admin_user_id');
+        
+        if (!empty($srch_string)) {
+            $this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR CONCAT(f_name, ' ', l_name) LIKE '%$srch_string%' OR f_name LIKE '%$srch_string%' OR l_name LIKE '%$srch_string%') and (is_parent=$user_id)");
+        } else {
+            if (empty($user_id)) {
+                $user_id = 1;
+            }
+           // $this->db->where(array('is_parent' => $user_id));
+        }
+
+        $this->db->select('*');
+        $this->db->from('loylties');
+       // $this->db->order_by('id', 'desc');
+        if (empty($srch_string)) {
+            $this->db->limit($limit, $start);
+        }
+        //echo $this->db->last_query();die;
+        $query = $this->db->get(); //echo '***'.$this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result_data = $query->result_array();
+        }
+        return $result_data;
+    }
+	
+	function get_common_point_master_details($id) {
+
+        $this->db->select(['*']);
+        $this->db->from('loylties');
+        $this->db->where(array('id' => $id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            //$res = $res[0];
+        }
+        return $res;
+    }
+	
+	function update_common_point_master_data($frmData) {
+           
+                $UpdateData = array(
+                    
+					"transaction_type" => $frmData['transaction_type'],
+					"transaction_type_slug" => $frmData['transaction_type_slug'],
+					"loyalty_points" => $frmData['loyalty_points'],
+					"customer" => "",
+					"product" => "",
+					"status" => 1,
+					"created_at" => date('Y-m-d H:i:s'),
+					"modified_at" => date('Y-m-d H:i:s')
+                );
+            
+
+
+			$id = $this->uri->segment(3);
+            $whereData = array(
+                'id' => $frmData['id']
+            );
+
+            $this->db->set($UpdateData);
+            $this->db->where($whereData);
+            if ($this->db->update('loylties')) {
+                //echo '***'.$this->db->last_query();exit;
+                $this->session->set_flashdata('success', 'Common Point Data Updated Successfully!');
+                return true;
+            }
+        
+    }
+	
 
     function save_user($frmData) {   //echo '<pre>';print_r($frmData);exit;
         $user_id = $this->session->userdata('admin_user_id');

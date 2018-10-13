@@ -12,6 +12,8 @@
 				<form name="user_frm" id="user_frm" action="#" method="POST">
 			<input type="hidden" name="lr_id" id="lr_id" value="<?php echo $get_loyalty_redemption_requests_details[0]['lr_id'];?>" /><?php //echo $get_loyalty_redemption_requests_details[0]['lr_id']?>
 			<input type="hidden" name="user_id" id="user_id" value="<?php echo $get_loyalty_redemption_requests_details[0]['user_id'];?>" /><?php //echo $get_loyalty_redemption_requests_details[0]['user_id']?>
+			<input type="hidden" name="points_redeemed" id="points_redeemed" value="<?php echo $get_loyalty_redemption_requests_details[0]['points_redeemed'];?>" />
+			<input type="hidden" name="consumer_address" id="consumer_address" value="<?php echo $get_loyalty_redemption_requests_details[0]['street_address'].", ".$get_loyalty_redemption_requests_details[0]['city'].", ".$get_loyalty_redemption_requests_details[0]['state'].", ".$get_loyalty_redemption_requests_details[0]['pin_code'];?>" />
         <div class="widget-main">
 		
 		<div class="form-group row">
@@ -26,7 +28,7 @@
 		
 		<div class="form-group row">
 			<div class="col-sm-6">
-			<label for="form-field-8"><b>Points Redeamed Code</b> : <?php echo $get_loyalty_redemption_requests_details[0]['points_redeemed'];?></label>
+			<label for="form-field-8"><b>Points Redeemed</b> : <?php echo $get_loyalty_redemption_requests_details[0]['points_redeemed'];?></label>
 			</div>
 			
 			<div class="col-sm-6">
@@ -69,7 +71,7 @@
 			<input name="coupon_vendor" id="coupon_vendor" type="text" class="form-control" placeholder="Coupon Vendor" value="<?php echo $get_loyalty_redemption_requests_details[0]['coupon_vendor'];?>">
 			</div>
 			<div class="col-sm-6">
-			  <label for="form-field-8">Courier Details</label>
+			  <label for="form-field-8">Courier Number</label>
              <input name="courier_details" id="courier_details" type="text" class="form-control" placeholder="Courier Details" value="<?php echo $get_loyalty_redemption_requests_details[0]['courier_details'];?>">
 			</div>
 		</div>
@@ -79,7 +81,7 @@
 			<select class="form-control" placeholder="Select Approval Status" id="l_status" name="l_status" >
 			<?php 
 			
-			$l_status = $get_loyalty_redemption_requests_details[0]['l_status']; echo $l_status . "ss";
+			$l_status = $get_loyalty_redemption_requests_details[0]['l_status'];
 			if($l_status==1) {?>			
 			<option value="1" selected>Approval Successful</option>
 			<option value="0">Approval Pending</option> 			

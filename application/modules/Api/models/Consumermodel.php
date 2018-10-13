@@ -28,13 +28,19 @@ class ConsumerModel extends CI_Model {
     }  
     
     
+	
+	
+	
+	
+	
+	
     public function sendFCM($mess,$id) {
 $url = 'https://fcm.googleapis.com/fcm/send';
 
 $fields = array (
         'to' => $id,
          
-         'notification' => array('title' => 'howzzt', 'body' =>  $mess ,'sound'=>'Default',),
+         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess ,'sound'=>'Default',),
        
 );
 $fields = json_encode ( $fields );
@@ -55,6 +61,8 @@ $result = curl_exec ( $ch );
 //curl_close ( $ch );
 return $result;
 }
+
+
     public function signupValidate($data){
         $validate = [
             ['field' =>'user_name','label'=>'User Name','rules' => 'required|min_length[8]' ],
@@ -183,7 +191,7 @@ return $result;
      */
     public function loylty(){
         $items = [];
-        $query = $this->db->select('*')->from('loylties')->order_by('created_at', 'desc')->get();
+        $query = $this->db->select('*')->from('loylties')->order_by('created_date', 'desc')->get();
         if($query->num_rows() <= 0){
             return false;
         }

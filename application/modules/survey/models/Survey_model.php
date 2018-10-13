@@ -1,5 +1,5 @@
 <?php
- class Advertisement_model extends CI_Model {
+ class Survey_model extends CI_Model {
      function __construct() {
          parent::__construct();
 		 $this->load->helper('common_functions_helper');
@@ -517,11 +517,11 @@
 			return $result_data;
 		}
 		
-		function IsProductAdvertisementOn($cid,$pid='') {
+		function IsProductSurveyOn($cid,$pid='') {
 			$rows 		= 0;
 			$result 	= 'true';
 			$this->db->select("id");
-			$this->db->from("push_advertisements");
+			$this->db->from("push_surveys");
 			$this->db->where(array("product_id"=> $pid));
 			//if(!empty($id)){
 				//$this->db->where("id", $id);
@@ -533,44 +533,43 @@
 			} return $result;
 		}
 		
-		function save_push_advertisement($cid,$pid,$Chk){
+		function save_push_survey($customer_id,$product_id,$Chk){
  			if($Chk=='0'){
-				$this->db->query("delete from push_advertisements where product_id='".$pid."' ");
+				$this->db->query("delete from push_surveys where product_id='".$product_id."' ");
 				$this->session->set_flashdata('success', 'Add un-Pushed Successfully!');
 				//echo $this->db->last_query();exit;
 				return true;
 			}else{
-				$isExists=$this->IsProductAdvertisementOn($cid,$pid); 
+				$isExists=$this->IsProductSurveyOn($customer_id,$product_id); 
 				if($isExists=='false'){
 					return false;
 				}
 				
 				/*  new work */
 				
-				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$cid."';");
+				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				
 				foreach ($query->result() as $user)  
 				{  
 				//$consumer_ida = $user->id; 
 				//echo $consumer_ida; exit;
 				$insertData=array(
-					"customer_id"	 => $cid,
-					"consumer_id"	 => $user->consumer_id,
-					"product_id"	 => $pid,
+					"customer_id"	 => $customer_id,
+					"consumer_id"	 => $user->id,
+					"product_id"	 => $product_id,
 					"media_type"	 => "Video",
-					"ad_push_date"	 => date(),
-					"media_play_date"	 => date(),
-					"ad_feedback_response"	 => "",
-					"ad_active"	 => "1"
-					
+					"survey_push_date"	 => date('Y-m-d H:i:s'),
+					"media_play_date"	 => "0000-00-00 00:00:00",
+					"survey_feedback_response"	 => "",
+					"survey_active"	 => "1"
 					);
 				  
-				  $this->db->insert("push_advertisements", $insertData);
+				  $this->db->insert("push_surveys", $insertData);
 				  
 				  
 				} 
 				
-					$this->session->set_flashdata('success', 'Ad Pushed Successfully!');
+					$this->session->set_flashdata('success', 'Survey Pushed Successfully!');
 					return true;
 			}
 			return false; 
@@ -583,7 +582,7 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'howzzt advertisement', 'body' =>  $mess ,'sound'=>'Default',),
+		         'notification' => array('title' => 'howzzt survey', 'body' =>  $mess ,'sound'=>'Default',),
 		       
 		);
 		$fields = json_encode ( $fields );
@@ -604,36 +603,10 @@
 		return $result;
 		}
 		
-		public function sendTextFCM($mess,$id) {
-		$url = 'https://fcm.googleapis.com/fcm/send';
-		
-		$fields = array (
-		        'to' => $id,
-		         
-		         'notification' => array('title' => 'howzzt text message', 'body' =>  $mess ,'sound'=>'Default',),
-		       
-		);
-		$fields = json_encode ( $fields );
-		
-		$headers = array (
-		        'Authorization: key=' . "AAAA446l5pE:APA91bE3nQ0T5E9fOH-y4w_dkOLU1e9lV7Wn0OmVLaKNnE8tXcZ0eC3buduhCwHL1ICaJ882IHfLy-akAe7Nih7M1RewkO9IzAR-ELdPgmORtb7KjriRrQspVHkIb9GRZPOjXuqfPInlOAly5-65sEEUbGlcoujMgw", 'Content-Type: application/json'
-		);
-		
-		$ch = curl_init ();
-		curl_setopt ( $ch, CURLOPT_URL, $url );
-		curl_setopt ( $ch, CURLOPT_POST, true );
-		curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
-		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
-		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
-		
-		$result = curl_exec ( $ch );
-		//curl_close ( $ch );
-		return $result;
-		}
 		
 		
 		function change_status($id, $value) {
-        $this->db->set(array('push_ad_req' => $value));
+        $this->db->set(array('push_survey_req' => $value));
         $this->db->where(array('id' => $id));
         if ($this->db->update('products')) {
             return $value;
@@ -642,6 +615,8 @@
         }
         //echo '***'.$this->db->last_query();exit;
     }
-				
-		}
 		
+		
+		
+}
+

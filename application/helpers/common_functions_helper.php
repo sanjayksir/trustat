@@ -6330,6 +6330,54 @@ function get_products_name_by_id($id){
  }
  
  
+ function get_question_by_question_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$ci->db->select('group_concat(question) as question');
+			$ci->db->from('feedback_question_bank');
+ 			$ci->db->where_in('question_id',$id);
+			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['question'];
+ }
+ 
+ 
+ function get_products_brand_name_by_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$id2 = checkProductsId_having_other_industry($id);
+			$ids = explode(',',$id);
+			$get_ids = array_diff($ids, $id2);
+			$ci->db->select('group_concat(brand_name) as brand_name');
+			$ci->db->from('products');
+ 			$ci->db->where_in('id',$get_ids);
+			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['brand_name'];
+ }
+ 
+  function get_customer_id_by_product_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$ci->db->select('group_concat(created_by) as created_by');
+			$ci->db->from('products');
+ 			$ci->db->where_in('id',$id);
+			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['created_by'];
+ }
+ 
+
+ 
  function get_products_attribute_list_by_id($id){ 
 	$res='0';
 	$ci = & get_instance();
@@ -6833,6 +6881,7 @@ function getProductSize($val=''){
 	}
 	return $value;
 }
+
 
 
   

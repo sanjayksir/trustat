@@ -558,8 +558,8 @@
 					"consumer_id"	 => $user->consumer_id,
 					"product_id"	 => $pid,
 					"media_type"	 => "Video",
-					"ad_push_date"	 => date(),
-					"media_play_date"	 => date(),
+					"ad_push_date"	 => date("Y-m-d H:i:s"),
+					"media_play_date"	 => date("Y-m-d H:i:s"),
 					"ad_feedback_response"	 => "",
 					"ad_active"	 => "1"
 					
@@ -583,7 +583,7 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'howzzt advertisement', 'body' =>  $mess ,'sound'=>'Default',),
+		         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess ,'sound'=>'Default',),
 		       
 		);
 		$fields = json_encode ( $fields );

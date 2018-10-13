@@ -10,7 +10,7 @@ class Consumer extends ApiController {
         parent::__construct();
         $this->load->library('form_validation');
         $this->load->model('ConsumerModel');
-        $this->load->model('ProductModel');
+        $this->load->model('Productmodel');
     }
 
     /**
@@ -66,7 +66,7 @@ class Consumer extends ApiController {
                 $this->signupMail($data);
                 $smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
                 Utils::sendSMS($data['mobile_no'], $smstext);
-                // $this->ConsumerModel->sendFCM("Your account has been re-registered",$data['fb_token']);
+                //$this->ConsumerModel->sendFCM("Congratulations! You registration is complete, and -- Loyalty Points have been added in your howzzt loyalty program.", $fb_tokenr);
                 Utils::response(['status' => true, 'message' => 'You are re-registered with this device.', 'data' => $data]);
                
             } else {
@@ -92,7 +92,8 @@ class Consumer extends ApiController {
             $data['password'] = md5($data['verification_code']);
             if ($this->db->insert('consumers', $data)) {
                 $userId = $this->db->insert_id();
-                $this->ProductModel->saveLoylty('user-registration', $userId, ['user_id' => $userId]);
+                $this->Productmodel->saveLoyltyReg('user-registration', $userId, ['consumer_id' => $userId]);
+				$this->Productmodel->saveConsumerPassbookLoyaltyReg('user-registration', $userId, ['consumer_id' => $userId, 'consumer_phone' => $checkmobileno2, 'passbook_title' => "howzzt Registration", 'passbook_event' => "User Registration"], 'Loyalty');
                 //$data['password'] = $data['mobile_no'];
                 //$data['token'] = $this->ConsumerModel->authIdentifyDR($data);
                 /*
@@ -106,10 +107,14 @@ class Consumer extends ApiController {
                   }
                  */
                 //$data['password1'] = $checkmobileno;
+				
+				$loylty = $this->Productmodel->findLoylityBySlug('user-registration');
+				//$getloylty = $loylty['loyalty_points'];
                 $this->signupMail($data);
                 $smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
                 Utils::sendSMS($data['mobile_no'], $smstext);
-               // $this->ConsumerModel->sendFCM("Your account has been registered",$data['fb_token']);
+				$fb_token = getConsumerFb_TokenById($userId);
+               $this->ConsumerModel->sendFCM('Congratulations! Your registration is complete, and ' . $loylty['loyalty_points'] . ' Loyalty Points have been added in your howzzt loyalty program.', $fb_token);
                 Utils::response(['status' => true, 'message' => 'Your account has been registered.', 'data' => $data], 200);
                 
                 
@@ -260,7 +265,7 @@ class Consumer extends ApiController {
             $smstext = 'You have added ' . $mobile_no . ' as ' . $data['relation'] . ' relation with you.';
             Utils::sendSMS($data['phone_number'], $smstext);
             $userId = $user['id'];
-            $this->ProductModel->saveLoylty('user-registration', $userId, ['user_id' => $userId]);
+            $this->Productmodel->saveLoylty('user-registration', $userId, ['user_id' => $userId]);
             Utils::response(['status' => true, 'message' => 'Your Family member has been added successfully.', 'data' => $data], 200);
         } else {
             Utils::response(['status' => false, 'message' => 'Adding relative failed.'], 200);
@@ -641,7 +646,7 @@ class Consumer extends ApiController {
         if (($this->request->method != 'get') || is_null($product)) {
             Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
         }
-        $data = $this->ProductModel->feedbackQuestion($product);
+        $data = $this->Productmodel->feedbackQuestion($product);
         if (!empty($data)) {
             Utils::response(['status' => true, 'message' => 'List of questions for feedback.', 'data' => $data]);
         } else {
@@ -667,17 +672,21 @@ class Consumer extends ApiController {
         ];
         $errors = $this->ConsumerModel->validate($data, $validate);
         if (is_array($errors)) {
-            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+            Utils::response(['status' => false, 'message' => 'Validation errors1.', 'errors' => $errors]);
         }
         /* $alreadyAnswered = $this->db->get_where('consumer_feedback',['product_qr_code'=>$data['product_qr_code'],'user_id'=>$user['id'],'question_id'=>$data['question_id']])->row();
           if(count($alreadyAnswered) > 0){
           Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>'You have already answered of this question for code.']);
           } */
-        $productQuestion = $this->ProductModel->feedbackQuestion($data['product_id']);
+        $productQuestion = $this->Productmodel->feedbackQuestion($data['product_id']);
         if (empty($productQuestion)) {
-            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => 'Invalid question id or product id.']);
+            Utils::response(['status' => false, 'message' => 'Validation errors2.', 'errors' => 'Invalid question id or product id.']);
         }
-
+		
+		
+		$ProductID = $data['product_id'];
+		$customer_id = get_customer_id_by_product_id($ProductID);
+		$Product_code = $data['product_qr_code'];
         $allQuestionIds = [];
         $questionType = null;
         foreach ($productQuestion as $row) {
@@ -694,24 +703,100 @@ class Consumer extends ApiController {
         $data['user_id'] = $user['id'];
         $data['created_date'] = $data['updated_date'] = date('Y-m-d H:i:s');
         if ($this->db->insert('consumer_feedback', $data)) {
-            //if(1){            
+            //if(1){     
+
+				$consumer_id = $user['id'];
+			    $product_brand_name = get_products_brand_name_by_id($ProductID);
+			    $product_name  = get_products_name_by_id($ProductID);
+			
             if (strstr($questionType, 'audio')) {
-                $transactionType = 'scan-for-genuity-and-audio-response';
+                $transactionType = 'product_audio_response_lps';
+				$transactionTypeName = 'Genuity Scan and Responding to Audio Promotion';
+				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+				$TRPoints = $result->$transactionType;
+				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Audio Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
+				$data['transaction_type'] = $questionType;
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
             } elseif (strstr($questionType, 'video')) {
-                $transactionType = 'scan-for-genuity-and-video-response';
+                $transactionType = 'product_video_response_lps';
+				$transactionTypeName = 'Genuity Scan and Responding to Video Promotion';
+				
+				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+				$TRPoints = $result->$transactionType;
+				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Video Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
+				$data['transaction_type'] = $questionType;
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
             } elseif (strstr($questionType, 'pdf')) {
-                $transactionType = 'scan-for-genuity-and-pdf-response';
+                $transactionType = 'product_pdf_response_lps';
+				$transactionTypeName = 'Genuity Scan and Responding to Product Brochure Promotion';
+				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+				$TRPoints = $result->$transactionType;
+				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Brochure Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
+				$data['transaction_type'] = $questionType;
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
             } elseif (strstr($questionType, 'image')) {
-                $transactionType = 'scan-for-genuity-and-image-response';
+                $transactionType = 'product_image_response_lps';
+				$transactionTypeName = 'Genuity Scan and Responding to Image Promotion';
+				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+				$TRPoints = $result->$transactionType;
+				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Image Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
+				$data['transaction_type'] = $questionType;
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
+		   } elseif (strstr($questionType, 'pushed')) {
+                $transactionType = 'product_ad_response_lps';
+				$transactionTypeName = 'Genuity Scan and Responding to Product Pushed Ad Feedback Promotion';
+				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+				$TRPoints = $result->$transactionType;
+				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Pushed Ad Feedback Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.';
+				$data['transaction_type'] = $questionType;
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
+			} elseif (strstr($questionType, 'survey')) {
+                $transactionType = 'product_survey_response_lps';
+				$transactionTypeName = 'Genuity Scan and Responding to Product Survey Feedback Promotion';
+				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+				$TRPoints = $result->$transactionType;
+				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Survey Feedback Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.';	
+				$data['transaction_type'] = $questionType;
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
+			} elseif (strstr($questionType, 'vdemonstration')) {
+                $transactionType = 'product_demo_video_response_lps';
+				$transactionTypeName = 'Genuity Scan and Responding to Product Demo Video Feedback Promotion';
+				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+				$TRPoints = $result->$transactionType;
+				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Demo Video Feedback Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.';
+				$data['transaction_type'] = $questionType;
+				$this->Productmodel->feedbackLoylityDemo($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
+			} elseif (strstr($questionType, 'ademonstration')) {
+                $transactionType = 'product_demo_audio_response_lps';
+				$transactionTypeName = 'Genuity Scan and Responding to Product Demo Audio Feedback Promotion';
+				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+				$TRPoints = $result->$transactionType;
+				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Demo Audio Feedback Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.';	
+				$data['transaction_type'] = $questionType;
+            $this->Productmodel->feedbackLoylityDemo($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
             } else {
-                $transactionType = 'scan-for-genuity-and-description-response';
+                $transactionType = 'product_ad_response_lps';
+				$transactionTypeName = 'Genuity Scan and Responding to Product Description Promotion';
+				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+				$TRPoints = $result->$transactionType;
+				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Description Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
+				$data['transaction_type'] = "product description feedback";
+            $this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
             }
-            $data['transaction_type'] = $questionType;
-            $this->ProductModel->feedbackLoylity($user['id'], $transactionType, $data);
+            
+			
+				$id = getConsumerFb_TokenById(28);
+		  
+				$this->Productmodel->sendFCM($transactionType, $id);
+			
+			//$this->Productmodel->feedbackLoylityPassbook($user['id'], $transactionType, $data, $ProductID, $transactionTypeName, 'Loyalty');
             Utils::response(['status' => true, 'message' => 'Feedback answer has been saved successfully.', 'data' => $data]);
         } else {
             Utils::response(['status' => false, 'message' => 'System failed to proccess the request.'], 200);
         }
+		
+		
+		
     }
 
     /**
@@ -743,7 +828,7 @@ class Consumer extends ApiController {
             Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
         }
         $data = [];
-        $data = $this->ProductModel->userLoylty($user['id']);
+        $data = $this->Productmodel->userLoylty($user['id']);
         if (!empty($data)) {
             Utils::response(['status' => true, 'message' => 'User gain loylties.', 'data' => $data]);
         } else {
@@ -776,7 +861,7 @@ class Consumer extends ApiController {
         if ($this->db->insert('loyalty_redemption', $redemtionData)) {
             $redemptionId = $this->db->insert_id();
             //$this->db->update('consumers',$consumerData,['id'=>$user['id']]);
-            //$this->ProductModel->saveLoylty('loyalty-redemption', $user['id'], ['user_id' => $user['id'],'redemption_id'=>$redemptionId]);
+            //$this->Productmodel->saveLoylty('loyalty-redemption', $user['id'], ['user_id' => $user['id'],'redemption_id'=>$redemptionId]);
             Utils::response(['status'=>true,'message'=>'Thank you for your redemption request, after validation, your request will be processed in next 7-10 Working days.']);
         }else{
             Utils::response(['status'=>false,'message'=>'Failed to accept the redemption request.Please contact support team.']);
@@ -793,12 +878,11 @@ class Consumer extends ApiController {
         if (($this->input->method() != 'get')) {
             Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
         }
-        $items = $this->ProductModel->getRedemption($user['id']);
+        $items = $this->Productmodel->getRedemption($user['id']);
         Utils::response(['status'=>true,'message'=>'List of redemption','data'=>$items]);
        
-
     }
-	
+	/*
 	public function ConsumerPassBook() {
         //Utils::debug();
         $user = $this->auth();
@@ -808,11 +892,29 @@ class Consumer extends ApiController {
         if (($this->input->method() != 'get')) {
             Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
         }
-        $items = $this->ProductModel->getConsumerPassBook($user['id']);
+        $items = $this->Productmodel->getConsumerPassBook($user['id']);
         Utils::response(['status'=>true,'message'=>'List of Consumer PassBook','data'=>$items]);
        
 
     }
+	*/
+	public function ConsumerPassBook() {
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $data = [];
+        $data = $this->Productmodel->getConsumerPassBook($user['id']);
+        if (!empty($data)) {
+            Utils::response(['status' => true, 'min_max_redemption_points_consumer' => '500', 'message' => 'User gain loylties.', 'data' => $data]);
+        } else {
+            Utils::response(['status' => false, 'message' => 'There is no record found.'], 200);
+        }
+    }
+	
 	
 
 }

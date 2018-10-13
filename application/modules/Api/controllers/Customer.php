@@ -8,7 +8,7 @@ class Customer extends ApiController {
         parent::__construct();
         $this->load->library('form_validation');
         $this->load->model('CustomerModel');
-        $this->load->model('ProductModel');
+        $this->load->model('Productmodel');
     }
     
     /**
@@ -31,11 +31,11 @@ class Customer extends ApiController {
         $validate = [
             ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ]
         ];
-        $errors = $this->ProductModel->validate($data,$validate);
+        $errors = $this->Productmodel->validate($data,$validate);
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-        $result = $this->ProductModel->barcodeProducts($data['bar_code']);
+        $result = $this->Productmodel->barcodeProducts($data['bar_code']);
         if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found'],200);
         }
@@ -74,7 +74,7 @@ class Customer extends ApiController {
         if(($this->input->method() != 'get')){ 
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
-        $result = $this->ProductModel->viewInventory($user['user_id'],$data['limit'],$data['offset']);
+        $result = $this->Productmodel->viewInventory($user['user_id'],$data['limit'],$data['offset']);
         //echo "<pre>";print_r($result);die;
         if(!empty($result)){
             $this->response(['status'=>true,'message'=>'List of product inventory','data'=>$result],200);
@@ -100,7 +100,7 @@ class Customer extends ApiController {
         if(($this->input->method() != 'get')){ 
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
-        $result = $this->ProductModel->productsByUser($user['user_id'],$data['limit'],$data['offset']);
+        $result = $this->Productmodel->productsByUser($user['user_id'],$data['limit'],$data['offset']);
         //echo "<pre>";print_r($result);die;
         if(!empty($result)){
             $this->response(['status'=>true,'message'=>'List of products','data'=>$result],200);
@@ -131,11 +131,11 @@ class Customer extends ApiController {
             ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
             ['field' =>'pack_level','label'=>'Packet Level','rules' => 'required']
         ];
-        $errors = $this->ProductModel->validate($data,$validate);
+        $errors = $this->Productmodel->validate($data,$validate);
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-        $result = $this->ProductModel->barcodeProducts($data['bar_code']);
+        $result = $this->Productmodel->barcodeProducts($data['bar_code']);
 		 if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
         }        

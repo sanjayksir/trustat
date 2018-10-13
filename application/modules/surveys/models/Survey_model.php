@@ -540,11 +540,13 @@
 				//echo $this->db->last_query();exit;
 				return true;
 			}else{
+				
+				/*
 				$isExists=$this->IsProductSurveyOn($customer_id,$product_id); 
 				if($isExists=='false'){
 					return false;
 				}
-				
+				*/
 				/*  new work */
 				
 				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
@@ -555,7 +557,7 @@
 				//echo $consumer_ida; exit;
 				$insertData=array(
 					"customer_id"	 => $customer_id,
-					"consumer_id"	 => $user->id,
+					"consumer_id"	 => $user->consumer_id,
 					"product_id"	 => $product_id,
 					"media_type"	 => "Video",
 					"survey_push_date"	 => date('Y-m-d H:i:s'),
