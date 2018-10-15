@@ -72,9 +72,9 @@
  														<th>State</th>
                                                         <th>Address</th>
                                                         <th>Remark</th>
- 														
+ 														<th>Customer Name</th>
 														<?php }else{?>
-														<th>Created By</th>
+														
  														<th>Assigned To</th>
 														<th>Assigned Product</th>
 														<?php }?>
@@ -109,8 +109,9 @@
                                                 <td><?php echo $listData['state']; ?></td>
                                                 <td><?php echo $listData['address']; ?></td>
                                                 <td><?php echo $listData['remark']; ?></td>
-												<?php }else{?>
 												<td><?php echo getUserNameById($listData['created_by']); ?></td>
+												<?php }else{?>
+												
                                                 <td><?php 	$plntCtl =  assogned_users_of_the_plant($listData['created_by'],$listData['plant_id']); 
 															$explod_arr = explode(',',$plntCtl);
 															echo implode('<br><hr>',$explod_arr );

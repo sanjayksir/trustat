@@ -94,8 +94,8 @@ class ScannedproductsModel extends CI_Model {
 				'product_name' => $row->product_name,
 				'push_date' => $row->ad_push_date,
 				'brand_name' => $row->brand_name,
-				'product_demo_video_response_fbqq' => $row->product_demo_video_response_fbqq,
-				'product_demo_audio_response_fbqq' => $row->product_demo_audio_response_fbqq,
+				'product_ad_response_fbqq' => $row->product_ad_response_fbqq,
+				//'product_demo_audio_response_fbqq' => $row->product_demo_audio_response_fbqq,
                // 'ad_active' => Utils::exists('push_advertisements', ['product_id'=>$row->id,'consumer_id'=>$consumer_id]),
             ];
            
@@ -184,8 +184,8 @@ return $result;
 				'product_name' => $row->product_name,
 				'push_date' => $row->survey_push_date,
 				'brand_name' => $row->brand_name,
-				'product_demo_video_response_fbqq' => $row->product_demo_video_response_fbqq,
-				'product_demo_audio_response_fbqq' => $row->product_demo_audio_response_fbqq,
+				'product_survey_response_fbqq' => $row->product_survey_response_fbqq,
+				//'product_demo_audio_response_fbqq' => $row->product_demo_audio_response_fbqq,
                // 'ad_active' => Utils::exists('push_advertisements', ['product_id'=>$row->id,'consumer_id'=>$consumer_id]),
             ];
 			

@@ -785,9 +785,9 @@ class Consumer extends ApiController {
             }
             
 			
-				$id = getConsumerFb_TokenById(28);
+				//$id = getConsumerFb_TokenById(29);
 		  
-				$this->Productmodel->sendFCM($transactionType, $id);
+				//$this->Productmodel->sendFCM($transactionType, $id);
 			
 			//$this->Productmodel->feedbackLoylityPassbook($user['id'], $transactionType, $data, $ProductID, $transactionTypeName, 'Loyalty');
             Utils::response(['status' => true, 'message' => 'Feedback answer has been saved successfully.', 'data' => $data]);
