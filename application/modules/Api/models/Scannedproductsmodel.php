@@ -99,8 +99,9 @@ class ScannedproductsModel extends CI_Model {
                // 'ad_active' => Utils::exists('push_advertisements', ['product_id'=>$row->id,'consumer_id'=>$consumer_id]),
             ];
            
-		   $consumerId = $row->id;
-			$item['isGiven'] = $this->isLoyaltyForProductPushedAdFeedbackQuesGiven($consumerId, $product_id);
+		  // $consumerId = $row->id;
+		   $product_id = $row->product_id;
+			$item['isGiven'] = $this->isLoyaltyForProductPushedAdFeedbackQuesGiven($consumer_id, $product_id);
             if(!empty($row->product_thumb_images)){
                 $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
             }else{
@@ -190,10 +191,11 @@ return $result;
             ];
 			
 			
-	$consumerId = $row->id;
-	$item['isGiven'] = $this->isLoyaltyForProductSurveyFeedbackQuesGiven($consumerId, $product_id);
+	//$consumerId = 29;
+	$product_id = $row->product_id;
+	$item['isGiven'] = $this->isLoyaltyForProductSurveyFeedbackQuesGiven($consumer_id, $product_id);
 			
-			
+			$item['cid'] = $consumer_id;
 		
            
             if(!empty($row->product_thumb_images)){
@@ -315,7 +317,7 @@ return $result;
 	
 		// checking if the Loyalty given to the user on Image type questions on code 
     Public function isLoyaltyForImageFBQuesGiven($consumerId, $product_id) {
-        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_audio_response_lps'");
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_image_response_lps'");
         if($answerQuery->num_rows() > 0){
             $dataItems = $answerQuery->result();
             foreach($dataItems as $row){
@@ -353,8 +355,8 @@ return $result;
     }
 	
 	// checking if the Loyalty given to the user on on Survey Product Pushed Ad Feedback type questions on code 
-    Public function isLoyaltyForProductPushedAdFeedbackQuesGiven($consumerId, $product_id) {
-        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_ad_response_lps'");
+    Public function isLoyaltyForProductPushedAdFeedbackQuesGiven($consumer_id, $product_id) {
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumer_id."' AND transaction_type='product_ad_response_lps'");
         if($answerQuery->num_rows() > 0){
             $dataItems = $answerQuery->result();
             foreach($dataItems as $row){
@@ -538,7 +540,7 @@ return $result;
         }elseif(!empty($barCode)){
             $conditions['pp.bar_code'] = $barCode;
         }
-        $query = $this->db->select("pp.purchased_product_id AS purchased_id,pp.bar_code,pp.purchase_date,pp.create_date,pp.invoice,pp.invoice_image,pp.expiry_date,pp.warranty_start_date,pp.warranty_end_date,pr.*")
+        $query = $this->db->select("pp.purchased_product_id AS purchased_id,pp.bar_code,pp.purchase_date,pp.create_date,pp.invoice,pp.invoice_image,pp.expiry_date,pp.warranty_start_date,pp.warranty_end_date,pp.loyalty_points_earned,pp.seller_name,pp.selling_price,pp.discount,pr.*")
                 ->from('purchased_product AS pp')
                 ->join('products AS pr', 'pr.id=pp.product_id')
                 ->where($conditions)
@@ -555,6 +557,9 @@ return $result;
                 'bar_code' => $row->bar_code,
                 'purchased_id' => $row->purchased_id,
                 'purchase_date' => $row->purchase_date,
+				'seller_name' => $row->seller_name,
+				'selling_price' => $row->selling_price,
+				'discount' => $row->discount,
 				'product_registration_date' => $row->create_date,
                 'invoice' => $row->invoice,
                 'expiry_date' => $row->expiry_date,
@@ -564,7 +569,7 @@ return $result;
 				'product_demo_video' => $row->product_demo_video,
 				'product_demo_audio' => $row->product_demo_audio,
 				'product_user_manual' => $row->product_user_manual,
-				'loyalty_points_earned' => '10',
+				'loyalty_points_earned' => $row->loyalty_points_earned,
                 'invoice_image' => (!empty($row->invoice_image))?base_url($row->invoice_image):"",
                 'product_id' => $row->id,
                 'product_name' => $row->product_name,

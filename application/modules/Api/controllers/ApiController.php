@@ -73,7 +73,7 @@ class ApiController extends MX_Controller {
         }
         $user = $this->CustomerModel->verifyToken($this->request->token,$plant);
         if($user == 'plant'){
-            $this->response(['status'=>false,'message'=>'Plant id is invalid.']);
+            $this->response(['status'=>false,'message'=>'Plant is not assigned.']);
         }
         if($key != null && array_key_exists($key, $user)){
             return $user[$key];

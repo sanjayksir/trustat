@@ -367,7 +367,7 @@ if(!empty($isOtherIndustry)){
         <?php 
             $listOpt = getAllProductName('');
             $listALLOpt = json_decode($listOpt,true);
-          ?> 
+          ?> <!--
          <div class="form-group row">
 				<div class="col-sm-4">
 				  <label for="form-field-8">Product Level-1<?php //echo $ParentName;?></label>
@@ -386,7 +386,7 @@ if(!empty($isOtherIndustry)){
 				</div>
 			</div>		
           
-             
+             -->
          </div>
          
          <!--------------------------------- Essential attributes-----------------------------------> 
@@ -527,7 +527,7 @@ function getChildAttr(parent='', childs=''){
 	});	
 }
 
-getChildAttr('<?php echo implode(',',$id_parents); ?>',$("#childs_selected").val());
+//getChildAttr('<?php echo implode(',',$id_parents); ?>',$("#childs_selected").val());
 
  function genrateSku(){
 	var skuFld = $("#product_sku").val();
@@ -557,13 +557,12 @@ getChildAttr('<?php echo implode(',',$id_parents); ?>',$("#childs_selected").val
 			brand_name: {
 			 	 required: true
 						},
-			attr_level_1: {
-			 	 required: true
-						},				
+							
 						
   			messages: {
- 					industry:    {
-						required: "Please select Industry"
+				
+ 			industry:    {
+					required: "Please select Industry"
 					} 
 			},
 

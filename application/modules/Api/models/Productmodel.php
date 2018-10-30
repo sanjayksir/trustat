@@ -208,7 +208,7 @@ class Productmodel extends CI_Model {
             $barCodes = explode(',', $barCodes);
         }
         
-        $query = $this->db->select(['p.*','pbq.id AS pbq_id','pbq.active_status','pbq.pack_level','pbq.barcode_qr_code_no'])
+        $query = $this->db->select(['p.*','pbq.id AS pbq_id','pbq.active_status','pbq.pack_level','pbq.barcode_qr_code_no','pbq.product_id'])
                 ->from('printed_barcode_qrcode AS pbq')
                 ->join('products AS p', 'p.id=pbq.product_id')
                 ->where('pbq.barcode_qr_code_no IN ("'.implode('", "',$barCodes).'")')
@@ -1094,6 +1094,17 @@ return $result;
         return $items;
         
     }
+	
+	
+	Public function isPackLevelSeted($bar_code=null) {
+        $answerQuery = $this->db->get_where('packaging_codes_pcr', array('bar_code' => $bar_code));
+		//print $answerQuery;
+        if($answerQuery->num_rows() < 1){
+           return true;
+        }
+		//return false;
+    }
+	
 	
 
 }

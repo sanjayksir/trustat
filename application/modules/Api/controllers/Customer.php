@@ -138,7 +138,11 @@ class Customer extends ApiController {
         $result = $this->Productmodel->barcodeProducts($data['bar_code']);
 		 if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
-        }        
+        }     
+
+		//echo print_r($result[0]['product_id']); 
+		
+			//die;
         $this->db->set('active_status',1);
         $this->db->set('pack_level',$data['pack_level']);
         $this->db->set('plant_id',$user['plant_id']);
@@ -148,6 +152,22 @@ class Customer extends ApiController {
             $this->db->or_where('barcode_qr_code_no',$code);
         }
         if($this->db->update('printed_barcode_qrcode')){
+			
+			
+		/*
+			$data2['barcode_qr_code_no'] = $data['bar_code'];
+			$data2['product_id'] = $result[0]['product_id'];
+			$data2['packaging_level'] = $data['pack_level'];
+			$data2['parent_barcode_qr_code'] = 0;
+			$this->db->insert('packaging_codes_pc', $data2);
+		*/	
+			$product_id = $result[0]['product_id'];
+			
+			$pack_level_field_name = "pack_level" . $data['pack_level'];
+			
+			$results2 = $this->db->select($pack_level_field_name)->from('product_packaging_qty_levels')->where('product_id', $product_id)->get()->row();
+			$result['number_of_children'] = $results2->$pack_level_field_name;
+			
             //echo $this->db->last_query();die;
             $this->response(['status'=>true,'message'=>'Level has been added.','new_pack_level'=>$data['pack_level'],'data'=>$result]);
         }else{
@@ -155,6 +175,123 @@ class Customer extends ApiController {
         }
     }
     
+	public function addProductLevelParentActivate(){
+        $user = $this->customerAuth();
+        if(empty($user)){
+            $this->response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        $data = $this->getInput();
+        if(($this->input->method() != 'post') || empty($data)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
+			['field' =>'parent_bar_code','label'=>'Parent Barcode','rules' => 'required' ],
+			['field' =>'parent_pack_level','label'=>'Parent Pack Barcode','rules' => 'required' ],
+            ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ]
+        ];
+        $errors = $this->Productmodel->validate($data,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+        $result = $this->Productmodel->barcodeProducts($data['bar_code']);
+		 if(empty($result)){
+            $this->response(['status'=>false,'message'=>'Record not found.'],200);
+        }     
+
+		   //echo print_r($result[0]['product_id']); 
+		   
+		   
+			$results2 = $this->db->select('pack_level')->from('printed_barcode_qrcode')->where('barcode_qr_code_no', $data['bar_code'])->get()->row();
+			//$result['number_of_children'] = $results2->$pack_level_field_name;
+			//$data['parent_barcode_qr_code'] = $data['parent_bar_code'];
+			///$data['barcode_qr_code_no'] = $data['bar_code'];
+			$data['packaging_level'] = $results2->pack_level;
+			$data['product_id'] = $result[0]['product_id'];
+			//$data['packaging_level'] = $data['pack_level'];
+			
+		
+       // foreach(explode(',',$data['bar_code']) as $ind => $code){
+            //$this->db->or_where('barcode_qr_code_no',$code);
+        //$data['bar_code'] = $code;
+		
+		 $isPackLevelSeted = $this->Productmodel->isPackLevelSeted($data['bar_code']);
+		
+		if($isPackLevelSeted==true){
+        if($this->db->insert('packaging_codes_pcr', $data)){
+			
+			$data['child_added'] = $this->db->where('parent_bar_code',$data['parent_bar_code'])->from("packaging_codes_pcr")->count_all_results();
+		
+            $this->response(['status'=>true,'message'=>'Level has been added.','number_of_children_added'=>$data['child_added'],'data'=>$result]);
+        }else{
+            $this->response(['status'=>false,'message'=>'System failed to add level.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to add packaging because this code is already added in packaging.'],200); 
+        }
+    }
+	
+	
+	/*
+	public function addProductLevelParentActivate(){
+        $user = $this->customerAuth();
+        if(empty($user)){
+            $this->response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        $data = $this->getInput();
+        if(($this->input->method() != 'post') || empty($data)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
+			['field' =>'parent_bar_code','label'=>'Parent Barcode','rules' => 'required' ],
+            ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
+            ['field' =>'pack_level','label'=>'Packet Level','rules' => 'required']
+        ];
+        $errors = $this->Productmodel->validate($data,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+        $result = $this->Productmodel->barcodeProducts($data['bar_code']);
+		 if(empty($result)){
+            $this->response(['status'=>false,'message'=>'Record not found.'],200);
+        }     
+
+		//echo print_r($result[0]['product_id']); 
+		
+			//die;
+        $this->db->set('active_status',1);
+        $this->db->set('pack_level',$data['pack_level']);
+        $this->db->set('plant_id',$user['plant_id']);
+        $this->db->set('customer_id',$user['user_id']);
+        $this->db->set('modified_at', (new DateTime('now'))->format('Y-m-d H:i:s'));
+        foreach(explode(',',$data['bar_code']) as $ind => $code){
+            $this->db->or_where('barcode_qr_code_no',$code);
+        }
+        if($this->db->update('printed_barcode_qrcode')){
+			
+			
+		
+			$data2['barcode_qr_code_no'] = $data['bar_code'];
+			$data2['product_id'] = $result[0]['product_id'];
+			$data2['packaging_level'] = $data['pack_level'];
+			$data2['parent_barcode_qr_code'] = $data['parent_bar_code'];
+			$this->db->insert('packaging_codes_pc', $data2);
+		
+			$product_id = $result[0]['product_id'];
+			
+			$pack_level_field_name = "pack_level" . $data['pack_level'];
+			
+			$results2 = $this->db->select($pack_level_field_name)->from('product_packaging_qty_levels')->where('product_id', $product_id)->get()->row();
+			$result['number_of_children'] = $results2->$pack_level_field_name;
+			
+            //echo $this->db->last_query();die;
+            $this->response(['status'=>true,'message'=>'Level has been added.','new_pack_level'=>$data['pack_level'],'data'=>$result]);
+        }else{
+            $this->response(['status'=>false,'message'=>'System failed to add level.'],200); 
+        }
+    }
+	
+	*/
+	
     /**
      * login method to get user logged in by api
      * 

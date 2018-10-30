@@ -148,7 +148,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                                 <td><?php echo $attr['answer1']; ?></td>
                                                 <td><?php echo $attr['answer2']; ?></td>
                                                 <td><?php echo $attr['answer3']; ?></td>
-                                                <td><?php echo $attr['answer4']; ?><?php echo $attr['question_id'];?></td>
+                                                <td><?php echo $attr['answer4']; ?><?php //echo $attr['question_id'];?></td>
                                                 <td><?php if(!empty($attr['correct_answer'])){echo 'Option-'.$attr['correct_answer'];}; ?></td>
 												 <td>
 												 <form name="frm_<?php echo $attr['question_id'];?>" id="frm_<?php echo $attr['question_id'];?>" method="post" action="">

@@ -64,7 +64,7 @@
 
 				<div class="navbar-header pull-left">
 			<a href="<?php echo base_url()?>backend/dashboard" title="howzzt"><img src="<?php echo base_url()?>/assets/images/finallogow.png" height="70"></a>
-					<!--<a href="<?php echo base_url()?>backend/dashboard" class="navbar-brand" title="Admin">
+					<!--<a href="<?php echo base_url()?>backend/dashboard" class="navbar-brand" title="Admin">-->
 
 						<!--<img src="<?php echo base_url()?>/assets/images/logo.png" height="">
 						<?php 

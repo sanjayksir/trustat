@@ -70,6 +70,29 @@
 
 	}
 
+	function add_product_attributes(){
+		$user_id 	= $this->session->userdata('admin_user_id');
+		if(empty($user_id)){
+ 			redirect(base_url().'login');	exit;
+ 		}
+		$data = array();
+		//$data['product_attr'] = $this->Product_model->get_all_attrs();
+		$data['product_data'] = $this->Product_model->fetch_product_detail($this->uri->segment(3));
+		$this->load->view('add_product_attributes_tpl', $data);
+		}
+	
+	function manage_packaging(){
+		$user_id 	= $this->session->userdata('admin_user_id');
+		if(empty($user_id)){
+ 			redirect(base_url().'login');	exit;
+ 		}
+		$data = array();
+		//$data['product_attr'] = $this->Product_model->get_all_attrs();
+		$data['product_data'] = $this->Product_model->fetch_product_pack_level_detail($this->uri->segment(3));
+		$this->load->view('manage_packaging_tpl', $data);
+		}
+		
+		
 
  function getSubCategory_bkp(){
  $user_id 	= $this->session->userdata('admin_user_id');
@@ -152,6 +175,35 @@
 		exit;
     }
 
+	
+	  function save_product_attributes($id='') {
+  $user_id 	= $this->session->userdata('admin_user_id');
+		if(empty($user_id)){
+ 			redirect(base_url().'login');	exit;
+ 		}
+  		$res = $this->Product_model->save_product_attributes($id);
+		if($res=='1'){
+			echo '1';
+		}else{
+			echo '0';
+		}
+		exit;
+    }
+	
+	function save_product_pack_level() {
+  $user_id 	= $this->session->userdata('admin_user_id');
+		if(empty($user_id)){
+ 			redirect(base_url().'login');	exit;
+ 		}
+  		$res = $this->Product_model->save_product_pack_level();
+		if($res=='1'){
+			echo '1';
+		}else{
+			echo '0';
+		}
+		exit;
+    }
+	
 
  function genate_sku(){
 		//$name = $this->input->post('name');
@@ -265,7 +317,7 @@ function list_assigned_products() {
 	 	if($id!=''){
 			$data = json_decode(getAllProductName($id),true);//print_r($data);exit;
 			$options = "";
-			$dd =  '<select class="form-control" name="product_attr[]" multiple="multiple" required><option>select Child Product</option>';
+			$dd =  '<select class="form-control" name="product_attr[]" size="20" style="height: 100%;" multiple="multiple" required>';
 			foreach($data as $rec){
 				$selected = '';
 				if(in_array($rec['product_id'],$parent)){

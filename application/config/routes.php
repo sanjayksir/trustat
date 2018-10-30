@@ -125,6 +125,8 @@ $route['api/loylties'] = 'Api/Consumer/loylty';
 $route['api/consumer-loylty'] = 'Api/Consumer/consumerLoylty';
 $route['api/redemption/add'] = 'Api/Consumer/redemptionAdd';
 $route['api/redemption'] = 'Api/Consumer/redemption';
+$route['api/faqs_otherafterlogindata'] = 'Api/Consumer/FaqsAndOtherData';
+$route['api/terms_and_conditions'] = 'Api/Consumer/TermsAndConditions';
 
 $route['api/consumerpassbook'] = 'Api/Consumer/ConsumerPassBook';
 
@@ -147,6 +149,7 @@ $route['api/feedback-on-product'] = 'Api/ScannedProduct/FeedbackOnProduct';
 $route['api/customer/login'] = 'Api/Customer/login';
 $route['api/customer/logout'] = 'Api/Customer/logout';
 $route['api/customer/add-product-level'] = 'Api/Customer/addProductLevel';
+$route['api/customer/add-product-level-parent-activate'] = 'Api/Customer/addProductLevelParentActivate';
 $route['api/customer/add-inventory'] = 'Api/Customer/addInventory';
 $route['api/customer/view-product'] = 'Api/Customer/viewProduct';
 $route['api/customer/view-inventory'] = 'Api/Customer/viewInventory';
@@ -233,6 +236,7 @@ $route['reports/barcode_printed_reports'] = 'order_master/barcode/list_printed_r
 $route['reports/barcode_scanned_reports'] = 'order_master/barcode/list_scanned_report';
 $route['reports/list_purchased_products'] = 'order_master/barcode/list_purchased_products';
 $route['reports/list_complaint_log'] = 'order_master/barcode/list_complaint_log';
+$route['reports/list_feedback_on_product'] = 'order_master/barcode/list_feedback_on_product';
 $route['reports/list_warranty_claims'] = 'order_master/barcode/list_warranty_claims';
 
 

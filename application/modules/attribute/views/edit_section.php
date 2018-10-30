@@ -20,10 +20,33 @@ $parent  		= getCategoryParentName_ATTR($edited_data['parent']);
             <input name="attribute" id="attribute" type="text" class="form-control" value="<?php echo $menu;?>" placeholder="Attribute Name">
           </div>
           <hr>
-          <div>
+          
+		  <?php if($parent=='')
+		  {?>
+			 <div>
+					<br />
+            <label for="form-field-9">Select Parent Industries from the list below (Press Ctrl key for multi-selection)</label>
+		
+			<select class="form-control" name="industry_id[]" id="industry_id[]" multiple="multiple">
+				 <!-- <option value="">-Select Parent Industries-</option> -->
+				  	<?php foreach(getAllParentIndustries() as $val){?>
+					  		<option value="<?php echo $val['category_Id'];?>"><?php //echo $val['category_Id'];?><?php echo $val['categoryName'];?></option> 
+					<?php }?>
+                  </select>
+
+          </div>
+		  <?php 
+		  } else {
+		  ?>
+		  
+		  <div>
             <label for="form-field-9">Parent Attribute</label>
             <input type="text" class="form-control" value="<?php echo $parent;?>" readonly="readonly">
           </div>
+		  <?php 
+		  } 
+		  ?>
+		  
           <hr>
            <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
             <input class="btn btn-info" type="submit" name="submit" value="Save Menu" id="savemenu" />

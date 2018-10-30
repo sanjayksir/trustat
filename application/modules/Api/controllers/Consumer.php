@@ -728,59 +728,59 @@ class Consumer extends ApiController {
 				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
             } elseif (strstr($questionType, 'pdf')) {
                 $transactionType = 'product_pdf_response_lps';
-				$transactionTypeName = 'Genuity Scan and Responding to Product Brochure Promotion';
+				$transactionTypeName = 'Genuity Scan and Responding to Product Brochure';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
 				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Brochure Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
 				$data['transaction_type'] = $questionType;
 				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
-            } elseif (strstr($questionType, 'image')) {
+            } elseif (strstr($questionType, 'Product Image Feedback')) {
                 $transactionType = 'product_image_response_lps';
-				$transactionTypeName = 'Genuity Scan and Responding to Image Promotion';
+				$transactionTypeName = 'Genuity Scan and Responding to Image Promotion.';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
-				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Image Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
+				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Image Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
 				$data['transaction_type'] = $questionType;
 				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
 		   } elseif (strstr($questionType, 'pushed')) {
                 $transactionType = 'product_ad_response_lps';
-				$transactionTypeName = 'Genuity Scan and Responding to Product Pushed Ad Feedback Promotion';
+				$transactionTypeName = 'Product Advertisement';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
-				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Pushed Ad Feedback Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.';
+				$mess = 'You have responded to video promotion for ' . $product_brand_name . ' . '. $TRPoints .' Loyalty Points have been added to your howzzt loyalty program.';
 				$data['transaction_type'] = $questionType;
 				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
 			} elseif (strstr($questionType, 'survey')) {
                 $transactionType = 'product_survey_response_lps';
-				$transactionTypeName = 'Genuity Scan and Responding to Product Survey Feedback Promotion';
+				$transactionTypeName = 'Product Survey';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
-				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Survey Feedback Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.';	
+				$mess = 'You have responded to product survey for ' . $product_brand_name . '. '. $TRPoints .' Loyalty Points have been added to your howzzt loyalty program.';	
 				$data['transaction_type'] = $questionType;
 				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
 			} elseif (strstr($questionType, 'vdemonstration')) {
                 $transactionType = 'product_demo_video_response_lps';
-				$transactionTypeName = 'Genuity Scan and Responding to Product Demo Video Feedback Promotion';
+				$transactionTypeName = 'Viewing product video demonstration';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
-				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Demo Video Feedback Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.';
+				$mess = 'Thank you for viewing product video demonstration. Loyalty Point. '. $TRPoints .' have been added to your howzzt loyalty program.';
 				$data['transaction_type'] = $questionType;
 				$this->Productmodel->feedbackLoylityDemo($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
 			} elseif (strstr($questionType, 'ademonstration')) {
                 $transactionType = 'product_demo_audio_response_lps';
-				$transactionTypeName = 'Genuity Scan and Responding to Product Demo Audio Feedback Promotion';
+				$transactionTypeName = 'Listening product audio demonstration ';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
-				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Demo Audio Feedback Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.';	
+				$mess = 'Thank you for listening product audio demonstration. Loyalty Point '. $TRPoints .' have been added to your howzzt loyalty program.';	
 				$data['transaction_type'] = $questionType;
             $this->Productmodel->feedbackLoylityDemo($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
             } else {
-                $transactionType = 'product_ad_response_lps';
+                $transactionType = 'product_image_response_lps';
 				$transactionTypeName = 'Genuity Scan and Responding to Product Description Promotion';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
-				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Description Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
-				$data['transaction_type'] = "product description feedback";
+				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Image Promotion. '. $TRPoints .' have been added to your howzzt loyalty program'; 
+				$data['transaction_type'] = "product image feedback";
             $this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
             }
             
@@ -882,6 +882,56 @@ class Consumer extends ApiController {
         Utils::response(['status'=>true,'message'=>'List of redemption','data'=>$items]);
        
     }
+	
+	    public function FaqsAndOtherData() {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        //$items = $this->Productmodel->getRedemption($user['id']);
+		$data['consumer_id'] = $user['id'];
+		$data['faqs_list'] = "
+		Question 1. Data..................<br>
+		Answer - Data..................<br>
+		Question 2. Data..................<br>
+		Answer - Data..................<br>
+		Question 3. Data..................<br>
+		Answer - Data..................<br>
+		Question 4. Data..................<br>
+		Answer - Data..................<br>
+		Question 5. Data..................<br>
+		Answer - Data..................<br>
+		Question 6. Data..................<br>
+		Answer - Data..................<br>
+		Question 6. Data..................<br>
+		Answer - Data..................<br>
+		Question 8. Data..................<br>
+		Answer - Data..................<br>
+		
+		";
+		
+        Utils::response(['status'=>true,'message'=>'List of Faqs And Other Data', 'data'=>$data]);
+       
+    }
+	
+	public function TermsAndConditions() {
+        //Utils::debug();
+       
+        //$items = $this->Productmodel->getRedemption($user['id']);
+		$data['APP_Name'] = "howzzt app";
+		$data['faqs_list'] = "........................
+		...................................................
+		..................................................";
+		
+        Utils::response(['status'=>true,'message'=>'Terms And Conditions Data', 'data'=>$data]);
+       
+    }
+	
+	
 	/*
 	public function ConsumerPassBook() {
         //Utils::debug();

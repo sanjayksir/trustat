@@ -51,8 +51,9 @@ $medisUrl = $this->config->item('media_location');
                                             </div>
                                         </div>
                                     </div>
+									</div>
 									
-									
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
                                         <h6 class="widget-title smaller lighter">Product Ad Images</h6>
                                     </div>
@@ -65,7 +66,9 @@ $medisUrl = $this->config->item('media_location');
                                             </div>
                                         </div>
                                     </div>
+									</div>
 									
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
                                         <h6 class="widget-title smaller lighter">Product Audio</h6>
                                     </div>
@@ -78,8 +81,9 @@ $medisUrl = $this->config->item('media_location');
                                             </div>
                                         </div>
                                     </div>
+									</div>
 									
-									
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
                                         <h6 class="widget-title smaller lighter">Product Video</h6>
                                     </div>
@@ -92,9 +96,9 @@ $medisUrl = $this->config->item('media_location');
                                             </div>
                                         </div>
                                     </div>
+									</div>
 									
-									
-									
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
                                         <h6 class="widget-title smaller lighter">Product Push Ad Video</h6>
                                     </div>
@@ -107,8 +111,9 @@ $medisUrl = $this->config->item('media_location');
                                             </div>
                                         </div>
                                     </div>
+									 </div> 
 									
-									
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
                                         <h6 class="widget-title smaller lighter">Product Survey Video</h6>
                                     </div>
@@ -121,11 +126,11 @@ $medisUrl = $this->config->item('media_location');
                                             </div>
                                         </div>
                                     </div>	
+									 </div> 
 									
 									
 									
-									
-									
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									 <div class="widget-header widget-header-small">
                                         <h6 class="widget-title smaller lighter">Product Demo Video</h6>
                                     </div>
@@ -138,9 +143,10 @@ $medisUrl = $this->config->item('media_location');
                                             </div>
                                         </div>
                                     </div>
+									 </div> 
 									
 									
-									
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
                                         <h6 class="widget-title smaller lighter">Product Demo Audio</h6>
                                     </div>
@@ -153,8 +159,9 @@ $medisUrl = $this->config->item('media_location');
                                             </div>
                                         </div>
                                     </div>
-									
-									
+									 </div> 
+								
+								<div class="col-xs-12 col-sm-4 widget-box transparent text-center">								
 								<div class="widget-header widget-header-small">
                                         <h6 class="widget-title smaller lighter">Product Brochure</h6>
                                     </div>
@@ -167,8 +174,9 @@ $medisUrl = $this->config->item('media_location');
                                             </div>
                                         </div>
                                     </div>	
+									 </div> 
 									
-									
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
                                         <h6 class="widget-title smaller lighter">Product User Manual</h6>
                                     </div>
@@ -181,8 +189,6 @@ $medisUrl = $this->config->item('media_location');
                                             </div>
                                         </div>
                                     </div>	
-									
-									
                                 </div> 
 								
 								
@@ -296,7 +302,7 @@ $medisUrl = $this->config->item('media_location');
     <script type="text/javascript">
         $(document).ready(function(){
             $("#product_thumb_images").uploadFile({
-                uploadStr:"Select Images",
+                uploadStr:"Select Image",
                 url:site_url+"backend/product_attrribute/media_attribute/product_thumb_images/<?php echo base64_encode($id); ?>",
                 fileName:"product_thumb_images",
                 showDelete: true,
@@ -336,7 +342,7 @@ $medisUrl = $this->config->item('media_location');
                 }
             }); // upload product thumb images 
 			$("#product_images").uploadFile({
-                uploadStr:"Select Images",
+                uploadStr:"Select Image",
                 url:site_url+"backend/product_attrribute/media_attribute/product_images/<?php echo base64_encode($id); ?>",
                 fileName:"product_images",
                 showDelete: true,

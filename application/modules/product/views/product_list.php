@@ -117,7 +117,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th class="hidden-480">Product Industry</th>
                                     <th>Created By</th>
                                     <th>Creation Date</th>
-                                    <th>Edit/Delete Product </th>
+                                    <th>Edit/DeleteProduct </th>
                                     <th>Product Review (View/Edit/Add)</th>
                                     <th>Feedback Questions (View/Edit/Add)</th>
                                 </tr>
@@ -154,10 +154,19 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                                  <td><?php echo $attr['created_date']; ?></td>
                                                   <td><form name="frm_<?php echo $attr['id'];?>" id="frm_<?php echo $attr['id'];?>" method="post" action="">
  														<div class="hidden-sm hidden-xs btn-group">
-   															<a href="<?php echo base_url();?>product/update_product/<?php echo $attr['id'];?>" class="btn btn-xs btn-info">
- 																<i class="ace-icon fa fa-pencil bigger-120"></i>
+   															<a href="<?php echo base_url();?>product/update_product/<?php echo $attr['id'];?>" title="Edit Product"  class="btn btn-xs btn-info">
+ 																<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
  															</a>
-  															<a href="javascript:void(0);" class="btn btn-xs btn-danger" onclick="delete_attr('<?php echo $attr['id'];?>');">
+															
+															<a href="<?php echo base_url();?>product/add_product_attributes/<?php echo $attr['id'];?>" title="Manage Product Attributes"  class="btn btn-xs btn-info">
+ 																&nbsp;<i class="ace-icon fa fa-plus-square bigger-120"></i>
+ 															</a>
+															 &nbsp;
+															<a href="<?php echo base_url();?>product/manage_packaging/<?php echo $attr['id'];?>" title="Manage Packaging"  class="btn btn-xs btn-info">
+ 																<i class="fa fa-sort-numeric-asc bigger-120"></i>
+ 															</a>
+															
+  															<a href="javascript:void(0);" title="Delete Product" class="btn btn-xs btn-danger" onclick="delete_attr('<?php echo $attr['id'];?>');">
  																<i class="ace-icon fa fa-trash-o bigger-120"></i>
  															</a>
                                                             <input type="hidden" name="del_submit" value="<?php echo $attr['id'];?>" />
@@ -165,7 +174,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 														</div>
 														</form>
  													</td> 
-                                                     <td> 
+                                                    <td> 
  														<div class="hidden-sm hidden-xs btn-group">
    															<a title="add media" href="<?php echo base_url();?>backend/product_attrribute/att_detail/<?php echo $attr['id'];?>" class="btn btn-xs btn-info">
  																<i class="ace-icon fa fa-camera-retro"></i>
@@ -178,9 +187,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                                     <td> 
  														<div class="hidden-sm hidden-xs btn-group">
    															<a title="Product Description Feedback" href="<?php echo base_url();?>product/ask_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa 	fa-barcode" aria-hidden="true"></i></a> 
-															<a title="Product Image Feedback" href="<?php echo base_url();?>product/ask_image_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="glyphicon-picture" aria-hidden="true"></i></a>
+															<a title="Product Image Feedback" href="<?php echo base_url();?>product/ask_image_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa 	fa-file-image-o" aria-hidden="true"></i></a>
 															<a title="Product Video Feedback" href="<?php echo base_url();?>product/ask_video_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-video-camera" aria-hidden="true"></i> </a>
-															<a title="Product Audio Feedback" href="<?php echo base_url();?>product/ask_audio_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-bullhorn" aria-hidden="true"></i> </a>
+															<a title="Product Audio Feedback" href="<?php echo base_url();?>product/ask_audio_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-bullhorn" aria-hidden="true"></i> </a>&nbsp;
 															<a title="Product PDF Feedback" href="<?php echo base_url();?>product/ask_pdf_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-book" aria-hidden="true"></i> </a>
 															<a title="Product Pushed Ad Feedback" href="<?php echo base_url();?>product/ask_pushed_ad_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-globe " aria-hidden="true"></i> </a>
 															<a title="Product Survey Feedback" href="<?php echo base_url();?>product/ask_survey_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-laptop" aria-hidden="true"></i> </a>

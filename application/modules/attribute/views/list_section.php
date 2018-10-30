@@ -19,6 +19,7 @@
                 <th>#</th>
 
                 <th>Attribute Name</th>
+				<th>Assigned Industries </th>
 
              	<th style="text-align:center;" >Action</th>
 
@@ -77,19 +78,30 @@
                 
 
              </td>
+				<td> <?php //echo $val['industry_id']; 
+				$character = json_decode($val['industry_id']);	
+				
+				//echo $character;
+				
+				//$industry_ids=implode(",<br>",$character);
+				//echo " " . $industry_ids;
+				foreach ($character as $topping) {
+						echo " &nbsp;&nbsp; " . get_industry_name_by_id($topping) . "<br>";
+					}
+				
 
+				//echo get_industry_name_by_id($string);
+				
+				?></td>
                 <td align="center"><a class="green" href="#" onClick="edit_menu(<?php echo $val['product_id'];?>);" title="Edit Menu"><i class="ace-icon fa fa-pencil bigger-130"></i> </a> &nbsp; <a class="green del_atert" href="javascript:void(0);"  onclick="return deleteAlert('<?php echo $val['product_id'];?>');"  title="Delete Attribute"><i class="ace-icon fa fa-trash-o bigger-120"></i></a> </td>
 
           </tr>
 
           <?php } ?>
-<tr><td colspan="4"><div class="footer">
+			<tr><td colspan="4"><div class="footer">
 				<div class="footer-inner">
 					<div class="footer-content">
-						 
-
-
-						&nbsp; &nbsp;
+					&nbsp; &nbsp;
 						<span class="action-buttons">
 							<a href="#">
 								<i class="ace-icon fa fa-twitter-square light-blue bigger-150"></i>

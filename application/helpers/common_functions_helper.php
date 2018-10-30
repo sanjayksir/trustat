@@ -1621,6 +1621,22 @@ function getParentIdFromUserId(){
 	return $res;  
 }
 
+function getParentIdFromUserIdTAPP($userId){
+	$ci = & get_instance();
+	//$userId = $ci->session->userdata('admin_user_id');
+	
+	$ci->db->select('is_parent');
+	$ci->db->from('backend_user');
+	$ci->db->where(array('status'=>'1','user_id'=>$userId));
+	$query = $ci->db->get();
+	if ($query->num_rows() > 0) {
+		$res = $query->result_array();
+		$res = $res[0]['is_parent'];
+	} 
+	return $res;  
+}
+
+
 function getDepth($id='',$cnt1){
  	$ci = & get_instance();
   	$sql = "select ownershipid from user_group_master";
@@ -5612,34 +5628,18 @@ function create_sub_category_level_ATTR($product_id){//echo $category_Id;
 
 
  function getCategoryParentName($id=''){
-
  	$res 		= '';
-
  	$ci 		= & get_instance();
-
 	$ci->db->select('categoryName');
-
 	$ci->db->from('categories');
-
 	$ci->db->where('category_Id',$id);
-
 	$query = $ci->db->get();// echo $ci->db->last_query();exit;
-
 	if ($query->num_rows() > 0) {
-
  		$res = $query->result_array();
-
  		$res = $res[0]['categoryName'];
-
-
-
 	}		
-
  	return $res;
-
-
-
-}
+	}
 
 
  function getCategoryParentName_ATTR($id=''){
@@ -5658,38 +5658,38 @@ function create_sub_category_level_ATTR($product_id){//echo $category_Id;
 
 
 function getAllCategory($parent=''){
-
  	$res 		= '';
-
  	$ci 		= & get_instance();
-
 	$ci->db->select('category_Id, categoryName');
-
 	$ci->db->from('categories');
-	
 	if($parent!=''){
 		$ci->db->where('parent',$parent);
 	}
-	
 	//$ci->db->where('category_Id',$id);
-
 	$query = $ci->db->get();  echo $ci->db->last_query(); 
-
 	if ($query->num_rows() > 0) {
-
  		$res = $query->result_array();
-
  	//	$res = $res[0]['categoryName'];
-
-
-
 	}		
-
  	return $res;
-
-
-
 }
+
+function getAllParentIndustries($parent=''){
+ 	$res 		= '';
+ 	$ci 		= & get_instance();
+	$ci->db->select('category_Id, categoryName');
+	$ci->db->from('categories');
+	$ci->db->where('parent', 0);
+	//$ci->db->where('category_Id',$id);
+	$query = $ci->db->get();  echo $ci->db->last_query(); 
+	if ($query->num_rows() > 0) {
+ 		$res = $query->result_array();
+ 		//$res = $res[0]['categoryName'];
+	}		
+ 	return $res;
+}
+
+
 
 
 function getAllRoles(){
@@ -5750,37 +5750,38 @@ function getRoleSlugById($id){
 
 
 function getAllCategory_ATTR($parent=''){
-
  	$res 		= '';
-
  	$ci 		= & get_instance();
-
 	$ci->db->select('product_id, name');
-
 	$ci->db->from('attribute_name');
-	
 	if($parent!=''){
 		$ci->db->where('parent',$parent);
 	}
-	
 	//$ci->db->where('category_Id',$id);
-
 	$query = $ci->db->get();  echo $ci->db->last_query(); 
-
 	if ($query->num_rows() > 0) {
-
  		$res = $query->result_array();
-
  	//	$res = $res[0]['categoryName'];
-
-
-
 	}		
-
  	return $res;
+}
 
 
-
+function getAllParentAttribute($parent=''){
+ 	$res 		= '';
+ 	$ci 		= & get_instance();
+	$ci->db->select('product_id, name');
+	$ci->db->from('attribute_name');
+	//if($parent!=''){
+		$ci->db->where('parent', 0);
+	//}
+	//$ci->db->where('category_Id',$id);
+	$query = $ci->db->get();  echo $ci->db->last_query(); 
+	if ($query->num_rows() > 0) {
+ 		$res = $query->result_array();
+ 	//	$res = $res[0]['categoryName'];
+	}		
+ 	return $res;
 }
 
  
@@ -5813,7 +5814,22 @@ function getProduct_name($id){
   	return json_encode($res);
  }
 
-
+ function getAllAttributeNamesAssignedIndustryWise($parent=''){
+  	$res 		= '';
+  	$ci 		= & get_instance();
+ 	$ci->db->select('product_id,name');
+ 	$ci->db->from('attribute_name');
+	//$parent  = (empty($parent))?0:explode(',',$parent);
+	//$ci->db->where_in(json_decode('industry_id'),$parent);
+	$ci->db->like('industry_id', $parent);
+	//$ci->db->order_by("industry_id", "ASC");
+ 	$query = $ci->db->get(); // echo $ci->db->last_query();exit;
+ 	if ($query->num_rows() > 0) {
+  		$res = $query->result_array();
+  	}		
+  	return json_encode($res);
+ }
+ 
 function generate_password( $length = 6 ) {
 $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 $password = substr( str_shuffle( $chars ), 0, $length );
@@ -6279,6 +6295,21 @@ function get_assigned_plant_user_list($user_id){
  	return $res_arr[0]['name'];
  }
  
+   function get_product_id_by_product_code($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$ci->db->select('group_concat(barcode_qr_code_no) as product_id');
+			$ci->db->from('printed_barcode_qrcode');
+			$ci->db->where_in('barcode_qr_code_no',$id);
+			//$ci->db->or_where('barcode_qr_code_no2',$id);
+			$query= $ci->db->get();//echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['product_id'];
+ }
+ 
  function get_functionality_slug_by_id($id){ 
 	$res='0';
 	$ci = & get_instance();
@@ -6323,6 +6354,23 @@ function get_products_name_by_id($id){
 			$ci->db->select('group_concat(product_name) as name');
 			$ci->db->from('products');
  			$ci->db->where_in('id',$get_ids);
+			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['name'];
+ }
+ 
+ function get_industry_name_by_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			//$id2 = checkProductsId_having_other_industry($id);
+			//$ids = explode(',',$id);
+			//$get_ids = array_diff($ids, $id2);
+			$ci->db->select('group_concat(categoryName) as name');
+			$ci->db->from('categories');
+ 			$ci->db->where_in('category_Id',$id);
 			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
 			$res_arr = $query->result_array();
  		}

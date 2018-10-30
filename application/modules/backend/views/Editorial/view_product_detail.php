@@ -273,7 +273,7 @@ Your browser does not support audio in video tag.
 																	<div class="col-xs-9 col-sm-9">
 																	
 																	
-					<a href="<?php echo base_url().'uploads/'.$details['product_pdf'];?>" target="_blank" /><?php //echo $i;?> <img src="<?php echo base_url();?>/assets/images/pdf-preview.png" alt="<?php echo $recs;?>" width = "200"><br /><?php //echo $recs;?>Please click here to Open the File</a> <!--&nbsp &nbsp The Consumer will get <b><?php echo $details['product_image_response_lps']; ?></b> Loyalty Points on Product PDF Feedback.-->
+					<a href="<?php echo base_url().'uploads/'.$details['product_pdf'];?>" target="_blank" /><?php //echo $i;?> <img src="<?php echo base_url();?>/assets/images/pdf-preview.png" alt="<?php echo $recs;?>" width = "200"><br /><?php //echo $recs;?>Please click here to Open the File</a> &nbsp &nbsp The Consumer will get <b><?php echo $details['product_pdf_response_lps']; ?></b> Loyalty Points on Product PDF Feedback.
 																		  
 																	</div>
   																</div>
@@ -296,7 +296,7 @@ Your browser does not support audio in video tag.
 								<source src="<?php echo base_url().'uploads/'.$details['product_demo_video'];?>" type="video/mp4">
 																		  
 																		  Your browser does not support the video tag.
-																		</video> &nbsp &nbsp The Consumer will get <b><?php echo $details['product_image_response_lps']; ?></b> Loyalty Points on Product Image Feedback.
+																		</video> &nbsp &nbsp The Consumer will get <b><?php echo $details['product_demo_video_response_lps']; ?></b> Loyalty Points on Product Image Feedback.
 																	<?php //echo base_url().'uploads/'.$details['product_demo_video'];?>
 																	</div>
   																</div>
@@ -318,7 +318,7 @@ Your browser does not support audio in video tag.
 																		 <audio width="320" height="240" controls>
   <source src="<?php echo base_url().'uploads/'.$details['product_demo_audio'];?>" type="audio/mpeg">
 Your browser does not support audio in video tag.
-</audio>&nbsp &nbsp The Consumer will get <b><?php echo $details['product_image_response_lps']; ?></b> Loyalty Points on Product Image Feedback.
+</audio>&nbsp &nbsp The Consumer will get <b><?php echo $details['product_demo_audio_response_lps']; ?></b> Loyalty Points on Product Image Feedback.
 																		  
 																	</div>
   																</div>
@@ -336,7 +336,7 @@ Your browser does not support audio in video tag.
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
 																	
-		<a href="<?php echo base_url().'uploads/'.$details['product_user_manual'];?>" target="_blank" /><?php //echo $i;?> <img src="<?php echo base_url();?>/assets/images/pdf-preview.png" alt="<?php echo $recs;?>" width = "200"><br /><?php //echo $recs;?>
+		<a href="<?php echo base_url().'uploads/'.$details['product_user_manual'];?>" target="_blank" /><?php //echo $i;?> <img src="<?php echo base_url();?>/assets/images/pdf-preview.png" alt="<?php echo $recs;?>" width = "200"><br /><?php //echo $recs;?></a>
 																		  
 																	</div>
   																</div>

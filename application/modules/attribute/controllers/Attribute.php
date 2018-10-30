@@ -28,7 +28,7 @@
 	 # Save Menu function
 	 public function saveData() {
 		 parse_str($_POST[form_data], $searcharray);
- 
+		
 		 //echo '<pre>';print_r($searcharray);exit;
  			$this->Attribute_model->saveMenu($searcharray);
        }

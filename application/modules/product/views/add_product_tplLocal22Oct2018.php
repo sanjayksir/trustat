@@ -64,15 +64,26 @@
 		<div class="form-group row">
 			<div class="col-sm-3 ind_1">
 			<label for="form-field-8">Product Industry</label>
-			<select  name="industry[]" id="industry" class="form-control" onchange="get_sub_industry(this.value,'2');" required>
+			<form>
+			<select  name="industry[]" id="industry" class="form-control" onchange="get_sub_industry(this.value,'2'); myFunction(this);" required>
            <option value="">-Select Industry-</option>
             <?php foreach(getAllCategory('0') as $val){?>
 				<option value="<?php echo $val['category_Id'];?>"><?php  echo $val['categoryName'];?></option> 
 			<?php }?>
             <option value="other">Other</option>
             </select>
+			</form>
 			</div>
-            
+		
+			
+			<script>
+			  function myFunction(selectObject) {
+				var industryp = selectObject.value;
+				document.getElementById("selectedIndustry").innerHTML = industryp;
+			  }
+			</script>
+			
+			<div id="colorVal"></div>
             <div class="col-sm-3 ind_2" style="display:none;">
 			<label for="form-field-8">Industry (Level-1)</label>
 			<select  name="industry[]" id="industry_2" class="form-control" onchange="get_sub_industry(this.value,'3');">
@@ -253,19 +264,42 @@
              <input  value="Create SKU" id="GenerateSKU" class="btn btn-info" name="GenerateSKU" type="button" onclick="return genrateSku();">
           </div>
   		</div>
+	
 		 <?php 
-            $listOpt = getAllProductName('');
+			$resultIndustryValue = '<p id="selectedIndustry"></p>';
+			//$resultIndustryValue = $_GET['industry'];
+			$intxxx = (int) filter_var($resultIndustryValue, FILTER_SANITIZE_NUMBER_INT);
+			//echo '</select>'; 
+			//$resultIndustryValue = 449;
+			//echo $resultIndustryValue . "sanjay";
+            $listOpt = getAllAttributeNamesAssignedIndustryWise($intxxx);
             $listALLOpt = json_decode($listOpt,true);
+			
           ?>
-			<!-- <div class="form-group row" >
+		 <?php foreach($listALLOpt as $val){
+					  		
+							echo $val['product_id'];
+							
+							echo 'sanjay'; 
+						 }?>
+		<div class="form-group row">
 				<div class="col-sm-4">
 				  <label for="form-field-8">Product Attributes (Press Ctrl key for multi-selection )<?php //echo $ParentName;?></label>
-                  <select class="form-control" name="attr_level_1" id="attr_level_1" multiple="multiple" onClick="getChildAttr();">
-				  <option value="">-Select Product-</option> 
+                  <?php echo '<select class="form-control" name="attr_level_1" id="attr_level_1" multiple="multiple" onClick="getChildAttr();">'; ?>
+				  <?php echo '<option value="">-Select Product Attributes-</option> '; ?>
 				  	<?php foreach($listALLOpt as $val){?>
-					  		<option value="<?php echo $val['product_id'];?>"><?php echo $val['name'];?></option> 
+					  		<!--<option value="<?php //echo $val['product_id'];?>"><?php //echo $val['name'];?></option> -->
+							<?php 
+							echo $val['product_id'];
+							
+							echo '<option value="' . $val['product_id'] . '">' .  $val['name'] . '</option>'; ?>
+							
 					<?php }?>
-                  </select>
+                  <?php echo '</select>'; ?>
+				 <?php 
+					
+						
+					?>
 				</div>
 			
             
@@ -273,7 +307,7 @@
 				  <label for="form-field-8">Attribute Level-2<?php //echo $ParentName;?></label>
                   <span id="child_attr"></span>
 				</div>
-			</div>	 -->				
+			</div>					
       
          </div>
 		 

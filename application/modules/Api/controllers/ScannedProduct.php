@@ -40,7 +40,7 @@ class ScannedProduct extends ApiController {
         }
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
         $bar_code_data = $data['bar_code'];
-		$product_id = $result->id;;
+		$product_id = $result->id;
 		$consumerId = $user['id'];
 		// function to get product registration status
         $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);   
@@ -388,10 +388,19 @@ class ScannedProduct extends ApiController {
 		$product_name = get_products_name_by_id($ProductID);
 		$consumer_name = getConsumerNameById($consumer_id);
 		
+		
+		$transactionType = 'product_registration_lps';
+		$transactionTypeName = 'Product Registration';
+				
+		$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+		$TRPoints = $result->$transactionType;
+		$data['loyalty_points_earned'] = $TRPoints;
+		
         if(!empty($warrenty)){
             $data['status'] = 0;
         }else{
             $data['status'] = 1;
+			
         }
         
         unset($data['purchase_date']);
@@ -402,14 +411,14 @@ class ScannedProduct extends ApiController {
             $data['id'] = $this->db->insert_id();
             if(is_null($warrenty)){
 				if($result->stock_status!='Customer_Code'){
-                $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();
-                $message = 'Thank You for Product Registration. '.$loyltyPoints->points.' loyalty points will be added to your howzzt loyalty account';
+                //$loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();
+                $message = 'Thank You for Product Registration. '. $TRPoints .' loyalty points will be added to your howzzt loyalty account';
                // $transactionType = 'product-registration-without-warranty'; 
 				$transactionType = "product_registration_lps";
 			    $transactionTypeName = "Scan for product registration";
 			   
 				$userId = $user['id'];
-				$this->Productmodel->saveLoyltyProductReg($transactionType, $userId, $ProductID, ['verification_date' => date("Y-m-d H:i:s"), 'consumer_id' => $consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code']], $customer_id);
+				$this->Productmodel->saveLoyltyProductReg($transactionType, $userId, $ProductID, ['verification_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code']], $customer_id);
 				//$this->Productmodel->saveConsumerPassbookLoyalty($transactionType, $userId, ['user_id' => $userId, 'brand_name' => $result->brand_name, 'product_name' => $result->product_name, 'product_code' => $data['bar_code'], 'user_id' => $userId], 'Loyalty');
 				
 				$this->Productmodel->saveConsumerPassbookLoyaltyProductReg($transactionType, ['verification_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code']], $customer_id, $ProductID, $userId, $transactionTypeName,  'Loyalty');
@@ -426,8 +435,8 @@ class ScannedProduct extends ApiController {
 				
             }else{
 				if($result->stock_status!='Customer_Code'){
-                $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-with-warranty'])->row();
-                $message = 'Thank you for uploading the invoice, your product warranty will be activated and '.$loyltyPoints->points.' loyalty points will be added to your loyalty account after validation of uploaded invoice';
+                //$loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-with-warranty'])->row();
+                $message = 'Thank you for uploading the invoice, your product warranty will be activated and '. $TRPoints .' loyalty points will be added to your loyalty account after validation of uploaded invoice';
                 $transactionType = 'product-registration-with-warranty';
                 $data['message1'] = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
 				}else {
@@ -506,9 +515,9 @@ class ScannedProduct extends ApiController {
         $data['complain_code']= Utils::randomNumber(5);
         $data['status']= 'pending';
         if($this->db->insert('consumer_complaint', $data)){
-            Utils::sendSMS($user['mobile_no'], 'Your compain code is '.$data['complain_code'].'. Our teem will contact you shortly.');
+            Utils::sendSMS($user['mobile_no'], 'Your complaint code is '.$data['complain_code'].'. Our team will contact to you shortly.');
             //Utils::sendSMS($this->config->item('adminMobile'), 'A consumer has looged a complain with compoain code '.$data['complain_code'].' with following description '.$data['description']);
-            $this->response(['status'=>true,'message'=>'Your complain has been logged successfully.','data'=>$data]);
+            $this->response(['status'=>true,'message'=>'Your complaint has been logged successfully.','data'=>$data]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to log the complaint.'],200); 
         }
@@ -543,17 +552,17 @@ class ScannedProduct extends ApiController {
 		
         $data['created_at'] = date("Y-m-d H:i:s");
         $data['consumer_id'] = $user['id'];
-		
+		$data['product_id'] = $ProductID;
 		$data['ip_address'] =  $this->input->ip_address();
         //$data['complain_code']= Utils::randomNumber(5);
         //$data['status']= 'pending';
 		$transactionType = "feedback_on_product_lps";
-		$transactionTypeName = "Feedback On Purchased Product";
+		$transactionTypeName = "Product Feedback";
 		
 		$result3 = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 		$TRPoints = $result3->$transactionType;
 				
-		$mess = 'You have given the feedback ' . $product_name . '. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
+		$mess = 'Thank you for posting your product experince. Loyalty Point '. $TRPoints .' have been added to your howzzt loyalty program.'; 
 		$customer_id = get_customer_id_by_product_id($ProductID);
         if($this->db->insert('feedback_on_product', $data)){
             //Utils::sendSMS($user['mobile_no'], 'Your feedback submitted successfully.');

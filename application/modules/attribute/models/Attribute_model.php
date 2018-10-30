@@ -11,9 +11,13 @@
  		$user_id 	= (!empty($this->session->userdata('admin_user_id')))?$this->session->userdata('admin_user_id'):1;
   	  	//	 echo '*<pre>';print_r($frmData); 
   		//echo '***'.$id = $frmData['menu_id'];exit;
+		//$industry_id_attr 			= json_encode($this->input->post('industry_id[]'));
+		$industry_id_attr 			= json_encode($frmData['industry_id']);
+		
  		if(!empty($frmData['id'])){
  			$UpdateData = array(
- 				"name"=>$frmData['attribute']
+ 				"name"=>$frmData['attribute'],
+				"industry_id"=>$industry_id_attr
  			);
  
 			$whereData = array(
@@ -29,8 +33,13 @@
  			$insertData=array(
  				"name"=>$frmData['attribute'],
  				"parent"=>$frmData['parent'],
+				
+				//$shift=$_POST['selectDuration'];
+				
+				"industry_id"=>$industry_id_attr,
+
  				//"created_date"=>$this->session->userdata('admin_user_id'),
- 				"status "=>0
+ 				"status "=>1
  			);//echo '<pre>';print_r($insertData);exit;
  			if($this->db->insert("attribute_name", $insertData)) {//echo '===query===='.$this->db->last_query();
 

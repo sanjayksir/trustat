@@ -242,6 +242,37 @@ public function list_complaint_log() {
          $this->load->view('list_complaint_log_tpl', $params);
      }
 
+	 
+	 public function list_feedback_on_product() {
+ 		##--------------- pagination start ----------------##
+		 // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if(empty($srch_string)){
+                $srch_string ='';
+        }
+        
+        list($total_records,$params["ScanedCodeListing"]) = $this->order_master_model->get_feedback_on_product($limit_per_page, $start_index,$srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_feedback_on_product', $total_records,null,4);
+		
+		
+        ##--------------- pagination End ----------------##
+         $data					= array();
+         $user_id 	= $this->session->userdata('admin_user_id');		
+         //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+         $this->load->view('list_feedback_on_product_tpl', $params);
+     }
+	 
+	 
+	 
 public function list_warranty_claims() {
  		##--------------- pagination start ----------------##
 		 // init params

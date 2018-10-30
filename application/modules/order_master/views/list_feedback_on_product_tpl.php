@@ -4,10 +4,10 @@
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
-			<?php $label = 'Complaints';?>
+			<?php $label = 'Feedbacks';?>
 
 			<?php $this->load->view('../includes/admin_sidebar');?>
-			
+			 
 			<div class="main-content">
 				<div class="main-content-inner">
 					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
@@ -67,7 +67,7 @@
  												<thead>
 													<tr>
 														<th>#</th>
-														<th>Purchased Product Code</th>
+														<th>Product Code</th>
 														<th>Product Name</th>
 														<th>Consumer Name</th>
  														<!--<th>Location-latitude/longitude</th>-->

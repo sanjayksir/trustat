@@ -136,7 +136,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                         $i=0;
                         foreach ($list_view_consumer_passbook as $attr){
                         $i++;
-                         ?>
+                         ?> 
                                 <tr id="show<?php echo $attr['id'];?>">
                                 <td><?php echo $sno; ?></td>
                                 <td><?php echo $attr['transaction_date']; ?></td>

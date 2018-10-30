@@ -118,7 +118,8 @@
 		## ================for other value================ ##
 		## essential attributes
 		$code_type  			= ($this->input->post('code_type'))?$this->input->post('code_type'):'';
-		$code_activation_type   = $this->input->post('code_activation_type');
+		$code_activation_type  	= ($this->input->post('code_activation_type'))?$this->input->post('code_activation_type'):'';
+		//$code_activation_type   = $this->input->post('code_activation_type');
 		$delivery_method  		= ($this->input->post('delivery_method'))?$this->input->post('delivery_method'):'';
 		$code_key_type  		= ($this->input->post('code_key_type'))?$this->input->post('code_key_type'):'';
 		$code_size  			= ($this->input->post('code_size'))?$this->input->post('code_size'):'';
@@ -131,7 +132,7 @@
 		 if(!empty($id)){
 		 	 $updateArr=array(
 					"brand_name"=>$brand_name,
-					"attribute_list"=>$product_attr,
+					//"attribute_list"=>$product_attr,
 					"industry_data"=>$industry,
 					"code_type"			  => $code_type,
 					"code_activation_type"=> $code_activation_type,
@@ -184,6 +185,207 @@
 				}return false; 
 		}
 	}
+	
+	
+		function save_product_attributes(){
+ 		$user_id 	=$this->session->userdata('admin_user_id');
+		$is_parent	= $this->session->userdata('admin_user_id');
+		if($this->input->post('ccadmin')!=''){
+			$is_parent 	= $this->input->post('ccadmin');	
+		}
+		// echo '<pre>';print_r($this->input->post());exit;
+		$industry 				=  json_encode(array_filter($this->input->post('industry')));
+		
+		$product_name 			= $this->input->post('product_name');
+		$brand_name 			= $this->input->post('brand_name');
+		$product_sku  			= $this->input->post('product_sku');
+		$product_attr 			= json_encode($this->input->post('product_attr'));
+		
+		## ================for other value================ ##
+		$filtered 				= array_filter($this->input->post(), function($k){
+   									return preg_match('#textbox_\d#', $k);
+								  }, ARRAY_FILTER_USE_KEY);
+		$Other_industry_val		=''; 
+		$Other_industry_key  	= array_keys($filtered);
+		$otherKey 				= $Other_industry_key[0];
+		if(!empty($otherKey)){
+			$Other_industry_val	= $filtered[$otherKey];
+			$remark 			= $this->input->post('remarkbox');
+			$other_industry_id 	= $this->checkExistsOtherIndustry($Other_industry_val,$remark);	
+ 			$Other_industry_val = (!empty($otherKey))?$otherKey.'-||-'.$other_industry_id:'';	
+			
+		} 
+  		
+		## ================for other value================ ##
+		## essential attributes
+		$code_type  			= ($this->input->post('code_type'))?$this->input->post('code_type'):'';
+		$code_activation_type  	= ($this->input->post('code_activation_type'))?$this->input->post('code_activation_type'):'';
+		//$code_activation_type   = $this->input->post('code_activation_type');
+		$delivery_method  		= ($this->input->post('delivery_method'))?$this->input->post('delivery_method'):'';
+		$code_key_type  		= ($this->input->post('code_key_type'))?$this->input->post('code_key_type'):'';
+		$code_size  			= ($this->input->post('code_size'))?$this->input->post('code_size'):'';
+		$code_unity_type  		= ($this->input->post('code_unity_type'))?$this->input->post('code_unity_type'):'';			
+		## essential attributes
+		
+		$id			  = $this->input->post('id');
+		
+		
+		 if(!empty($id)){
+		 	 $updateArr=array(
+					"attribute_list"=>$product_attr
+					
+ 				);
+				//echo '<pre>';print_r($insertData);exit;
+				$this->db->where('id', $id);
+				if($this->db->update("products", $updateArr)) {// echo '===query===='.$this->db->last_query();
+					$this->session->set_flashdata('success', 'Product Updated Successfully!');
+					return true;
+	
+				}return false; 
+		 }else{
+ 			 $insertData=array(
+					"product_name"		  => $product_name,
+					"brand_name"		  => $brand_name,
+					"attribute_list"	  => $product_attr,
+					"industry_data"		  => $industry,
+					"product_sku"		  => $product_sku,
+					"created_by"		  => $is_parent,
+					"status"			  => 1,
+					"product_description" => '',
+					"product_thumb_images"	  => '',
+					"product_images"	  => '',
+					"product_video"	      => '',
+					"product_audio"		  => '',
+					"product_pdf"         => '',
+					"product_demo_video"	      => '',
+					"product_demo_audio"		  => '',
+					"product_user_manual"         => '',
+					"product_push_ad_video"	      => '',
+					"product_survey_video"	      => '',
+					"code_type"			  => $code_type,
+					"code_activation_type"=> $code_activation_type,
+					"delivery_method"	  => $delivery_method,
+					"code_key_type"		  => $code_key_type,
+					"code_size"			  => $code_size,
+					"code_unity_type"	  => $code_unity_type,
+					"other_industry"	  => $Other_industry_val
+					
+				); //echo '<pre>';print_r($insertData);exit;
+				if($this->db->insert("products", $insertData)) {// echo '===query===='.$this->db->last_query();
+					$this->session->set_flashdata('success', 'Product Added Successfully!');
+					return true;
+				}return false; 
+		}
+	}
+	
+	
+	function save_product_pack_level(){
+ 		$user_id 	=$this->session->userdata('admin_user_id');
+		$is_parent	= $this->session->userdata('admin_user_id');
+		if($this->input->post('ccadmin')!=''){
+			$is_parent 	= $this->input->post('ccadmin');	
+		}
+		// echo '<pre>';print_r($this->input->post());exit;
+		//$industry 				=  json_encode(array_filter($this->input->post('industry')));
+		$id			 			= $this->input->post('id');
+		$product_id 			= $this->input->post('product_id');
+		$pack_level1 			= $this->input->post('pack_level1');
+		$pack_level2 			= $this->input->post('pack_level2');
+		$pack_level3 			= $this->input->post('pack_level3');
+		$pack_level4 			= $this->input->post('pack_level4');
+		$pack_level5 			= $this->input->post('pack_level5');
+		$pack_level6 			= $this->input->post('pack_level6');
+		$pack_level7 			= $this->input->post('pack_level7');
+		$pack_level8 			= $this->input->post('pack_level8');
+		$pack_level9 			= $this->input->post('pack_level9');
+		$pack_level10 			= $this->input->post('pack_level10');
+		$pack_level11 			= $this->input->post('pack_level11');
+		$pack_level12 			= $this->input->post('pack_level12');
+		$pack_level13 			= $this->input->post('pack_level13');
+		$pack_level14 			= $this->input->post('pack_level14');
+		$pack_level15 			= $this->input->post('pack_level15');
+		$pack_level16 			= $this->input->post('pack_level16');
+		$pack_level17 			= $this->input->post('pack_level17');
+		$pack_level18 			= $this->input->post('pack_level18');
+		$pack_level19 			= $this->input->post('pack_level19');
+		$pack_level20 			= $this->input->post('pack_level20');
+		$pack_level21 			= $this->input->post('pack_level21');
+		
+		
+		//$product_attr 			= json_encode($this->input->post('product_attr'));
+		
+		## ================for other value================ ##
+		 
+  		
+		## ================for other value================ ##
+		## essential attributes
+		
+		 if(!empty($id)){
+		 	 $updateArr=array(
+					"product_id"=>$product_id,
+					"pack_level1"=>$pack_level1,
+					"pack_level2"=>$pack_level2,
+					"pack_level3"=>$pack_level3,
+					"pack_level4"=>$pack_level4,
+					"pack_level5"=>$pack_level5,
+					"pack_level6"=>$pack_level6,
+					"pack_level7"=>$pack_level7,
+					"pack_level8"=>$pack_level8,
+					"pack_level9"=>$pack_level9,
+					"pack_level10"=>$pack_level10,
+					"pack_level11"=>$pack_level11,
+					"pack_level12"=>$pack_level12,
+					"pack_level13"=>$pack_level13,
+					"pack_level14"=>$pack_level14,
+					"pack_level15"=>$pack_level15,
+					"pack_level16"=>$pack_level16,
+					"pack_level17"=>$pack_level17,
+					"pack_level18"=>$pack_level18,
+					"pack_level19"=>$pack_level19,
+					"pack_level20"=>$pack_level20,
+					"pack_level21"=>$pack_level21
+					
+ 				);
+				//echo '<pre>';print_r($insertData);exit;
+				$this->db->where('id', $id);
+				if($this->db->update("product_packaging_qty_levels", $updateArr)) {// echo '===query===='.$this->db->last_query();
+					$this->session->set_flashdata('success', 'Product Packaging Levels Childern Updated Successfully!');
+					return true;
+	
+				} return false; 
+		 }else{
+ 			 $insertData=array(
+					"product_id"=>$product_id,
+					"pack_level1"=>$pack_level1,
+					"pack_level2"=>$pack_level2,
+					"pack_level3"=>$pack_level3,
+					"pack_level4"=>$pack_level4,
+					"pack_level5"=>$pack_level5,
+					"pack_level6"=>$pack_level6,
+					"pack_level7"=>$pack_level7,
+					"pack_level8"=>$pack_level8,
+					"pack_level9"=>$pack_level9,
+					"pack_level10"=>$pack_level10,
+					"pack_level11"=>$pack_level11,
+					"pack_level12"=>$pack_level12,
+					"pack_level13"=>$pack_level13,
+					"pack_level14"=>$pack_level14,
+					"pack_level15"=>$pack_level15,
+					"pack_level16"=>$pack_level16,
+					"pack_level17"=>$pack_level17,
+					"pack_level18"=>$pack_level18,
+					"pack_level19"=>$pack_level19,
+					"pack_level20"=>$pack_level20,
+					"pack_level21"=>$pack_level21
+					
+				); //echo '<pre>';print_r($insertData);exit;
+				if($this->db->insert("product_packaging_qty_levels", $insertData)) {// echo '===query===='.$this->db->last_query();
+					$this->session->set_flashdata('success', 'Product Packaging Levels Childern Added Successfully!');
+					return true;
+				} return false; 
+		}
+	}
+	
 	
 	function product_listing($limit,$start,$srch_string='') {
 		$user_id 	= $this->session->userdata('admin_user_id');
@@ -272,6 +474,13 @@
 		$this->db->select("*");
 		$this->db->from("products");
 		$this->db->where("id", $id);
+        return $this->db->get()->result_array();
+    }
+	
+	function fetch_product_pack_level_detail($id) {
+		$this->db->select("*");
+		$this->db->from("product_packaging_qty_levels");
+		$this->db->where("product_id", $id);
         return $this->db->get()->result_array();
     }
 	
