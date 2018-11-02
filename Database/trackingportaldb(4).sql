@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 21, 2018 at 07:24 AM
+-- Generation Time: Nov 02, 2018 at 11:44 AM
 -- Server version: 5.6.16
 -- PHP Version: 5.5.11
 
@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS `assign_functionalities_to_role` (
   `status` tinyint(4) NOT NULL DEFAULT '1',
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=15 ;
 
 --
 -- Dumping data for table `assign_functionalities_to_role`
@@ -62,7 +62,16 @@ CREATE TABLE IF NOT EXISTS `assign_functionalities_to_role` (
 INSERT INTO `assign_functionalities_to_role` (`id`, `functionality_id`, `role_id`, `role_quantity`, `created_uq_r`, `assigned_by`, `status`, `created_date`) VALUES
 (4, 10, 4, 2, NULL, 221, 1, '2018-08-06 06:32:26'),
 (3, 6, 3, 2, NULL, 221, 1, '2018-08-06 06:32:07'),
-(5, 11, 4, 2, NULL, 221, 1, '2018-08-06 06:32:26');
+(5, 11, 4, 2, NULL, 221, 1, '2018-08-06 06:32:26'),
+(6, 1, 5, 6, NULL, 1, 1, '2018-10-31 07:36:51'),
+(7, 2, 5, 6, NULL, 1, 1, '2018-10-31 07:36:51'),
+(8, 3, 5, 6, NULL, 1, 1, '2018-10-31 07:36:51'),
+(9, 4, 5, 6, NULL, 1, 1, '2018-10-31 07:36:51'),
+(10, 5, 5, 6, NULL, 1, 1, '2018-10-31 07:36:51'),
+(11, 6, 5, 6, NULL, 1, 1, '2018-10-31 07:36:51'),
+(12, 7, 5, 6, NULL, 1, 1, '2018-10-31 07:36:51'),
+(13, 8, 5, 6, NULL, 1, 1, '2018-10-31 07:36:51'),
+(14, 9, 5, 6, NULL, 1, 1, '2018-10-31 07:36:51');
 
 -- --------------------------------------------------------
 
@@ -78,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `assign_plants` (
   `status` tinyint(4) NOT NULL DEFAULT '1',
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=254 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=269 ;
 
 --
 -- Dumping data for table `assign_plants`
@@ -140,33 +149,32 @@ INSERT INTO `assign_plants` (`id`, `plant_id`, `product_id`, `assigned_by`, `sta
 (240, 36, 153, 221, 1, '2018-08-10 05:52:03'),
 (239, 36, 152, 221, 1, '2018-08-10 05:52:03'),
 (238, 36, 151, 221, 1, '2018-08-10 05:52:03'),
-(252, 31, 165, 221, 1, '2018-08-16 11:45:06'),
+(267, 31, 165, 221, 1, '2018-10-27 05:30:33'),
 (105, 34, 136, 199, 1, '2018-03-18 05:14:56'),
 (106, 34, 137, 199, 1, '2018-03-18 05:14:56'),
 (110, 32, 138, 199, 1, '2018-03-18 05:15:10'),
 (109, 32, 137, 199, 1, '2018-03-18 05:15:10'),
-(253, 31, 166, 221, 1, '2018-08-16 11:45:06'),
+(266, 31, 164, 221, 1, '2018-10-27 05:30:33'),
 (241, 36, 143, 221, 1, '2018-08-10 05:52:03'),
 (237, 37, 143, 221, 1, '2018-08-10 05:51:51'),
 (236, 37, 153, 221, 1, '2018-08-10 05:51:51'),
-(234, 35, 149, 221, 1, '2018-08-10 05:51:40'),
-(233, 35, 148, 221, 1, '2018-08-10 05:51:40'),
-(232, 35, 147, 221, 1, '2018-08-10 05:51:40'),
-(231, 35, 145, 221, 1, '2018-08-10 05:51:40'),
+(268, 31, 166, 221, 1, '2018-10-27 05:30:33'),
+(255, 35, 143, 221, 1, '2018-10-15 10:04:15'),
+(254, 35, 153, 221, 1, '2018-10-15 10:04:15'),
 (132, 38, 72, 199, 1, '2018-04-05 17:07:50'),
 (133, 38, 107, 199, 1, '2018-04-05 17:07:50'),
 (134, 38, 136, 199, 1, '2018-04-05 17:07:50'),
 (135, 38, 137, 199, 1, '2018-04-05 17:07:50'),
-(251, 31, 164, 221, 1, '2018-08-16 11:45:06'),
-(250, 31, 163, 221, 1, '2018-08-16 11:45:06'),
-(249, 31, 162, 221, 1, '2018-08-16 11:45:06'),
-(248, 31, 161, 221, 1, '2018-08-16 11:45:06'),
-(247, 31, 158, 221, 1, '2018-08-16 11:45:06'),
-(246, 31, 149, 221, 1, '2018-08-16 11:45:06'),
-(245, 31, 148, 221, 1, '2018-08-16 11:45:06'),
-(244, 31, 147, 221, 1, '2018-08-16 11:45:06'),
-(243, 31, 145, 221, 1, '2018-08-16 11:45:06'),
-(242, 31, 143, 221, 1, '2018-08-16 11:45:06'),
+(265, 31, 163, 221, 1, '2018-10-27 05:30:33'),
+(264, 31, 162, 221, 1, '2018-10-27 05:30:33'),
+(263, 31, 161, 221, 1, '2018-10-27 05:30:33'),
+(262, 31, 158, 221, 1, '2018-10-27 05:30:33'),
+(261, 31, 149, 221, 1, '2018-10-27 05:30:33'),
+(260, 31, 148, 221, 1, '2018-10-27 05:30:33'),
+(259, 31, 147, 221, 1, '2018-10-27 05:30:33'),
+(258, 31, 145, 221, 1, '2018-10-27 05:30:33'),
+(257, 31, 143, 221, 1, '2018-10-27 05:30:33'),
+(256, 31, 151, 221, 1, '2018-10-27 05:30:33'),
 (230, 39, 152, 221, 1, '2018-08-08 06:25:57');
 
 -- --------------------------------------------------------
@@ -183,18 +191,20 @@ CREATE TABLE IF NOT EXISTS `assign_plants_to_users` (
   `status` tinyint(4) NOT NULL DEFAULT '1',
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=9 ;
 
 --
 -- Dumping data for table `assign_plants_to_users`
 --
 
 INSERT INTO `assign_plants_to_users` (`id`, `plant_id`, `user_id`, `assigned_by`, `status`, `created_date`) VALUES
-(1, 31, 222, 221, 1, '2018-08-08 08:07:39'),
+(1, 31, 224, 221, 1, '2018-10-24 07:59:45'),
 (2, 35, 222, 221, 1, '2018-08-08 08:07:39'),
 (3, 36, 222, 221, 1, '2018-08-08 08:07:39'),
 (4, 37, 222, 221, 1, '2018-08-08 08:07:39'),
-(5, 31, 234, 222, 1, '2018-08-10 08:30:49');
+(6, 31, 222, 221, 1, '2018-10-24 09:51:53'),
+(7, 31, 225, 222, 1, '2018-10-27 09:43:29'),
+(8, 31, 265, 222, 1, '2018-10-31 07:51:51');
 
 -- --------------------------------------------------------
 
@@ -204,54 +214,59 @@ INSERT INTO `assign_plants_to_users` (`id`, `plant_id`, `user_id`, `assigned_by`
 
 CREATE TABLE IF NOT EXISTS `attribute_name` (
   `product_id` int(11) NOT NULL AUTO_INCREMENT,
+  `industry_id` text,
   `name` varchar(100) NOT NULL,
   `status` tinyint(4) NOT NULL DEFAULT '1',
   `parent` int(11) NOT NULL DEFAULT '0',
   `lavel` tinyint(4) NOT NULL DEFAULT '1',
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`product_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=57 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=78 ;
 
 --
 -- Dumping data for table `attribute_name`
 --
 
-INSERT INTO `attribute_name` (`product_id`, `name`, `status`, `parent`, `lavel`, `created_date`) VALUES
-(1, 'Colour', 1, 0, 1, '2017-11-29 16:19:25'),
-(2, 'Size', 1, 0, 1, '2017-11-29 16:19:25'),
-(49, 'Warranty', 0, 0, 1, '2018-02-24 09:17:01'),
-(4, 'Weight', 1, 0, 1, '2017-11-29 16:19:25'),
-(51, '2 Years', 0, 49, 1, '2018-02-24 09:17:29'),
-(21, '6', 1, 2, 4, '2017-12-07 15:51:02'),
-(20, 'test color2', 1, 5, 3, '2017-12-07 15:27:42'),
-(31, 'Green', 0, 1, 1, '2017-12-13 12:00:58'),
-(42, '8', 0, 2, 1, '2018-02-24 08:21:10'),
-(22, 'Black', 1, 1, 2, '2017-12-08 10:07:06'),
-(23, '100 GM', 1, 4, 2, '2017-12-08 10:31:02'),
-(24, 'my weight 2', 1, 6, 3, '2017-12-08 10:31:17'),
-(26, 'Pink', 1, 1, 2, '2017-12-08 11:19:02'),
-(27, '7', 1, 2, 3, '2017-12-08 11:19:16'),
-(28, 'tt1.1.15555', 1, 3, 4, '2017-12-08 11:19:30'),
-(47, '10', 0, 2, 1, '2018-02-24 08:33:11'),
-(50, '1 Year', 0, 49, 1, '2018-02-24 09:17:14'),
-(34, 'Heights', 0, 0, 1, '2018-01-24 10:16:07'),
-(35, '1 Feet', 0, 34, 1, '2018-01-24 10:16:23'),
-(36, '2 Feet', 0, 34, 1, '2018-01-24 10:16:35'),
-(37, '3 Feet', 0, 34, 1, '2018-01-24 10:16:48'),
-(38, '4 Feet', 0, 34, 1, '2018-01-24 10:16:59'),
-(39, '1 Kg', 0, 4, 1, '2018-02-09 10:40:58'),
-(40, '2 Kg', 0, 4, 1, '2018-02-09 10:41:08'),
-(41, '3 Kg', 0, 4, 1, '2018-02-09 10:41:22'),
-(43, '9', 0, 2, 1, '2018-02-24 08:21:16'),
-(44, 'Brown', 0, 1, 1, '2018-02-24 08:31:23'),
-(45, 'Red', 0, 1, 1, '2018-02-24 08:31:31'),
-(46, 'Yellow', 0, 1, 1, '2018-02-24 08:31:43'),
-(48, '11', 0, 2, 1, '2018-02-24 08:33:20'),
-(52, '3 Years', 0, 49, 1, '2018-02-24 09:17:40'),
-(53, '4 Years', 0, 49, 1, '2018-02-24 09:17:53'),
-(54, 'Consumer Complaint type', 0, 0, 1, '2018-06-03 03:36:18'),
-(55, 'Consumer Complaint type1', 0, 54, 1, '2018-06-03 03:36:55'),
-(56, 'Consumer Complaint type2', 0, 54, 1, '2018-06-03 03:37:07');
+INSERT INTO `attribute_name` (`product_id`, `industry_id`, `name`, `status`, `parent`, `lavel`, `created_date`) VALUES
+(1, '["205","227","449"]', 'Colour', 1, 0, 1, '2017-11-29 16:19:25'),
+(2, '["205","227","449"]', 'Size', 1, 0, 1, '2017-11-29 16:19:25'),
+(49, '["205","227","449"]', 'Warranty', 0, 0, 1, '2018-02-24 09:17:01'),
+(4, '["227"]', 'Weight', 1, 0, 1, '2017-11-29 16:19:25'),
+(51, NULL, '2 Years', 0, 49, 1, '2018-02-24 09:17:29'),
+(21, NULL, '6', 1, 2, 4, '2017-12-07 15:51:02'),
+(20, NULL, 'test color2', 1, 5, 3, '2017-12-07 15:27:42'),
+(31, NULL, 'Green', 0, 1, 1, '2017-12-13 12:00:58'),
+(42, NULL, '8', 0, 2, 1, '2018-02-24 08:21:10'),
+(22, NULL, 'Black', 1, 1, 2, '2017-12-08 10:07:06'),
+(23, NULL, '100 GM', 1, 4, 2, '2017-12-08 10:31:02'),
+(24, NULL, 'my weight 2', 1, 6, 3, '2017-12-08 10:31:17'),
+(26, NULL, 'Pink', 1, 1, 2, '2017-12-08 11:19:02'),
+(27, NULL, '7', 1, 2, 3, '2017-12-08 11:19:16'),
+(28, NULL, 'tt1.1.15555', 1, 3, 4, '2017-12-08 11:19:30'),
+(47, NULL, '10', 0, 2, 1, '2018-02-24 08:33:11'),
+(50, NULL, '1 Year', 0, 49, 1, '2018-02-24 09:17:14'),
+(34, '["205","227","449"]', 'Heights', 0, 0, 1, '2018-01-24 10:16:07'),
+(35, NULL, '1 Feet', 0, 34, 1, '2018-01-24 10:16:23'),
+(36, NULL, '2 Feet', 0, 34, 1, '2018-01-24 10:16:35'),
+(37, NULL, '3 Feet', 0, 34, 1, '2018-01-24 10:16:48'),
+(38, NULL, '4 Feet', 0, 34, 1, '2018-01-24 10:16:59'),
+(39, NULL, '1 Kg', 0, 4, 1, '2018-02-09 10:40:58'),
+(40, NULL, '2 Kg', 0, 4, 1, '2018-02-09 10:41:08'),
+(41, NULL, '3 Kg', 0, 4, 1, '2018-02-09 10:41:22'),
+(43, NULL, '9', 0, 2, 1, '2018-02-24 08:21:16'),
+(44, NULL, 'Brown', 0, 1, 1, '2018-02-24 08:31:23'),
+(45, NULL, 'Red', 0, 1, 1, '2018-02-24 08:31:31'),
+(46, NULL, 'Yellow', 0, 1, 1, '2018-02-24 08:31:43'),
+(48, NULL, '11', 0, 2, 1, '2018-02-24 08:33:20'),
+(52, NULL, '3 Years', 0, 49, 1, '2018-02-24 09:17:40'),
+(53, NULL, '4 Years', 0, 49, 1, '2018-02-24 09:17:53'),
+(54, '["449"]', 'Consumer Complaint type', 0, 0, 1, '2018-06-03 03:36:18'),
+(55, '', 'Consumer Complaint type1', 0, 54, 1, '2018-06-03 03:36:55'),
+(56, '', 'Consumer Complaint type2', 0, 54, 1, '2018-06-03 03:37:07'),
+(77, 'null', 'test92', 1, 75, 1, '2018-10-23 08:09:20'),
+(76, 'null', 'test91', 1, 75, 1, '2018-10-23 08:09:10'),
+(74, '', '5M', 1, 57, 1, '2018-10-16 11:09:11'),
+(75, '["227","449"]', 'test99', 1, 0, 1, '2018-10-16 11:10:01');
 
 -- --------------------------------------------------------
 
@@ -322,7 +337,7 @@ CREATE TABLE IF NOT EXISTS `backend_user` (
   `is_verified` tinyint(4) NOT NULL DEFAULT '0',
   `remark` text,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=256 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=266 ;
 
 --
 -- Dumping data for table `backend_user`
@@ -353,7 +368,7 @@ INSERT INTO `backend_user` (`user_id`, `user_name`, `password`, `mobile_no`, `em
 (222, 'sanjaypc', '89a606a2a403066606aa0f5e7dad9134', '', 'sanjaypc@innovigents.com', 'img/user_profile_pic/_user_default_profile.png', 3, '2018-02-27 03:36:58', '123', '9', '2018-02-27 03:36:58', '2018-02-27 16:06:58', 0, '2018-02-27 03:36:58', 1, '1', 221, '0', NULL, NULL, 'GV43467nk', '0', '', 0, 0, 1, NULL),
 (223, 'devtest', '9ac7ec230e0e4513578f309d6d3579ad', '7678665537', 'devtest@gmail.com', 'img/user_profile_pic/_user_default_profile.png', 3, '2018-02-27 03:36:58', '123', '9', '2018-02-27 03:36:58', '2018-02-27 16:06:58', 0, '2018-08-06 13:04:25', 221, '0', 221, '0', 'Testing ', '', 'GV43467nk', NULL, NULL, NULL, NULL, 1, ''),
 (224, 'packinglevel0', '89a606a2a403066606aa0f5e7dad9134', '7678665537', 'packinglevel0@gmail.com', 'tc2_1520937646.jpg', 4, '2018-03-13 03:40:46', '123', '9', '2018-03-13 03:40:46', '2018-03-13 03:40:46', 222, '2018-03-13 03:40:46', 1, '1', 222, '0', 'Packing Level', '0', 'IH66948cw', NULL, NULL, NULL, NULL, 1, 'this is test user'),
-(225, 'packinglevel1', '89a606a2a403066606aa0f5e7dad9134', '7678665537', 'packinglevel1@gmail.com', 'untitled_1520937789.png', 0, '2018-03-13 03:43:09', '123', '9', '2018-03-13 03:43:09', '2018-03-13 03:43:09', 222, '2018-03-13 03:43:09', 1, '1', 222, '0', 'Packing Level', '1', 'PY41813bm', NULL, NULL, NULL, NULL, 1, 'this is test user'),
+(225, 'packinglevel1', '89a606a2a403066606aa0f5e7dad9134', '7678665537', 'packinglevel1@gmail.com', 'untitled_1520937789.png', 4, '2018-03-13 03:43:09', '123', '9', '2018-03-13 03:43:09', '2018-03-13 03:43:09', 222, '2018-10-27 15:13:29', 222, '1', 222, '0', 'Packing Level', '1', 'PY41813bm', NULL, NULL, NULL, NULL, 1, 'this is test user'),
 (226, 'packinglevel2', '89a606a2a403066606aa0f5e7dad9134', '7678665537', 'packinglevel2@gmail.com', 'viewlogo_1520937909.png', 0, '2018-03-13 03:45:09', '123', '9', '2018-03-13 03:45:09', '2018-03-13 03:45:09', 222, '2018-03-13 03:45:09', 1, '1', 222, '0', 'Packing Level', '2', 'HK74950zg', NULL, NULL, NULL, NULL, 1, 'This is test User'),
 (227, 'packinglevel3', '89a606a2a403066606aa0f5e7dad9134', '7678665537', 'packinglevel3@gmail.com', 'viewlogo_1520938366.png', 0, '2018-03-13 03:52:46', '123', '9', '2018-03-13 03:52:46', '2018-03-13 03:52:46', 222, '2018-03-13 03:52:46', 1, '1', 222, '0', 'Packing Level', '3', 'VN54828cy', NULL, NULL, NULL, NULL, 1, 'test'),
 (228, 'packinglevel4', '89a606a2a403066606aa0f5e7dad9134', '7678665537', 'packinglevel4@gmail.com', 'viewlogo_1520938423.png', 0, '2018-03-13 03:53:43', '123', '9', '2018-03-13 03:53:43', '2018-03-13 03:53:43', 222, '2018-03-13 03:53:43', 1, '1', 222, '0', 'Packing Level', '4', 'EH89840sb', NULL, NULL, NULL, NULL, 1, 'test'),
@@ -382,7 +397,17 @@ INSERT INTO `backend_user` (`user_id`, `user_name`, `password`, `mobile_no`, `em
 (252, 'test8', '70131da73a042f2ca658513e904de9d0', '7678665537', 'test8@gmail.com', '', 3, '2018-08-01 16:39:44', '123', '9', '2018-08-01 16:39:44', '2018-08-01 16:39:44', 1, '2018-08-01 16:39:44', 1, '0', 221, '0', 'Sanjay', 'Kumar', 'HT20315hx', 'FMCD Industry', '', 270, NULL, 0, ''),
 (253, 'tpc2', '15bcb6306888f57c0077250f41de44d0', '7678665537', 'tpc2@gmail.com', '', 3, '2018-08-01 16:52:04', '123', '9', '2018-08-01 16:52:04', '2018-08-01 16:52:04', 221, '2018-08-01 16:58:12', 221, '0', 221, '0', '', '', 'FZ50699rv', NULL, NULL, NULL, NULL, 0, ''),
 (254, 'sfs', '836b0817d5cc20af0a58857d7359a6f4', '7678665537', 'sfs@gmail.com', '', 4, '2018-08-06 12:48:11', '123', '9', '2018-08-06 12:48:11', '2018-08-06 12:48:11', 221, '2018-08-06 13:03:48', 221, '0', 221, '0', 'tShope flor S', 'user', 'XI24973jx', NULL, NULL, NULL, NULL, 0, ''),
-(255, 'test11', '89a606a2a403066606aa0f5e7dad9134', '7678665537', 'test11@gmail.com', '2_1533622783.jpg', 4, '2018-08-07 11:49:43', '123', '9', '2018-08-07 11:49:43', '2018-08-07 11:49:43', 222, '2018-08-07 17:06:44', 222, '1', 222, '0', 'test11', '0', 'HY99850dc', NULL, NULL, NULL, NULL, 1, 'test');
+(255, 'test11', '89a606a2a403066606aa0f5e7dad9134', '7678665537', 'test11@gmail.com', '2_1533622783.jpg', 4, '2018-08-07 11:49:43', '123', '9', '2018-08-07 11:49:43', '2018-08-07 11:49:43', 222, '2018-08-07 17:06:44', 222, '1', 222, '0', 'test11', '0', 'HY99850dc', NULL, NULL, NULL, NULL, 1, 'test'),
+(256, 'test12', 'cedf5569ab2de9a738dd14031e6e63f9', '9958176790', 'test12@gmail.com', 'image2_1539595770.jpg', 3, '2018-10-15 14:59:31', '123', '9', '2018-10-15 14:59:31', '2018-10-15 14:59:31', 221, '2018-10-15 14:59:31', 1, '0', 221, '0', 'ss', 'ss', 'JM03203da', NULL, NULL, NULL, NULL, 0, 'sss'),
+(257, 'test123', 'fa5432e76b8389144191a43eaa9369d3', '9958176790', 'test123@gmail.com', 'image2_1539595855.jpg', 3, '2018-10-15 15:00:55', '123', '9', '2018-10-15 15:00:55', '2018-10-15 15:00:55', 221, '2018-10-15 15:00:55', 1, '0', 221, '0', 'Sanjay123', 'ss123', 'PJ38743cl', NULL, NULL, NULL, NULL, 0, 'test'),
+(258, 'test22', '667cfd3c5b9d5920872dd054856c4cbb', '9958176790', 'test22@gmail.com', 'image3_1539595941.jpg', 3, '2018-10-15 15:02:21', '123', '9', '2018-10-15 15:02:21', '2018-10-15 15:02:21', 221, '2018-10-15 15:02:21', 1, '0', 221, '0', 'Sanjay22', 'Kumar22', 'QC56123gm', NULL, NULL, NULL, NULL, 0, 'test'),
+(259, 'test44', '17826fb875d808aeb5ddc1825919d563', '9958176790', 'test44@gmail.com', '1_1539596735.png', 3, '2018-10-15 15:15:35', '123', '9', '2018-10-15 15:15:35', '2018-10-15 15:15:35', 221, '2018-10-15 15:15:35', 1, '0', 221, '0', 'test44', 'Kumar44', 'ID69655jr', NULL, NULL, NULL, NULL, 0, 'test'),
+(260, 'test55', '1f33d4f5175b44e041c5807a53f26d91', '9958176790', 'test55@gmail.com', '1_1539596774.png', 3, '2018-10-15 15:16:14', '123', '9', '2018-10-15 15:16:14', '2018-10-15 15:16:14', 221, '2018-10-15 15:16:14', 1, '0', 221, '0', 'Sanjay55', 'Kumar55', 'VC71779jj', NULL, NULL, NULL, NULL, 0, ''),
+(261, 'test66', '621255e57b0745dcc76c810e1067b1a6', '9958176790', 'test66@gmail.com', '1_1539596829.png', 3, '2018-10-15 15:17:09', '123', '9', '2018-10-15 15:17:09', '2018-10-15 15:17:09', 221, '2018-10-15 15:17:09', 1, '0', 221, '0', 'Sanjay66', 'Kumar66', 'AX73781bb', NULL, NULL, NULL, NULL, 0, 'test'),
+(262, 'test77', 'ec08812b06a8b4b591ccdcdbbb1273ac', '9958176790', 'test77@gmail.com', '1_1539596870.png', 3, '2018-10-15 15:17:50', '123', '9', '2018-10-15 15:17:50', '2018-10-15 15:17:50', 221, '2018-10-15 15:17:50', 1, '0', 221, '0', 'Sanjay77', 'Kumar77', 'VP79600hc', NULL, NULL, NULL, NULL, 0, 'test'),
+(263, 'test88', '1f57944e677b10ad90d85e234f6d9c90', '9958176790', 'test88@gmail.com', '1_1539596924.png', 3, '2018-10-15 15:18:44', '123', '9', '2018-10-15 15:18:44', '2018-10-15 15:18:44', 221, '2018-10-15 15:18:44', 1, '0', 221, '0', 'Sanjay88', 'Kumar88', 'WF75778sw', NULL, NULL, NULL, NULL, 0, 'test'),
+(264, 'test10', '3f409ecebe89f765c72891ae8f5a28db', '9958176790', 'test10@gmail.com', '1_1539597650.png', 3, '2018-10-15 15:30:50', '123', '9', '2018-10-15 15:30:50', '2018-10-15 15:30:50', 221, '2018-10-15 15:30:50', 1, '0', 221, '0', 'Sanjay10', 'Kumar10', 'KD73598aj', NULL, NULL, NULL, NULL, 0, 'test'),
+(265, 'plantdispatcher', '89a606a2a403066606aa0f5e7dad9134', '7678665537', 'plantdispatcher@gmail.com', 'download_1540972311.jpg', 5, '2018-10-31 13:21:51', '123', '9', '2018-10-31 13:21:51', '2018-10-31 13:21:51', 222, '2018-10-31 13:21:51', 1, '1', 222, '0', 'Plant Dispatcher ', '10', 'DD03861ep', NULL, NULL, NULL, NULL, 1, 'test');
 
 -- --------------------------------------------------------
 
@@ -1568,15 +1593,9 @@ CREATE TABLE IF NOT EXISTS `ci_sessions` (
 --
 
 INSERT INTO `ci_sessions` (`id`, `ip_address`, `timestamp`, `data`) VALUES
-('ab41e072ec38e3e767b234d1f4700a920be69f99', '::1', 1537434750, 0x5f5f63695f6c6173745f726567656e65726174657c693a313533373433343136383b61646d696e5f757365725f69647c733a333a22323231223b757365725f6e616d657c733a393a2273616e6a6179636363223b6c6f67696e5f747970657c733a353a2261646d696e223b6c6f676765645f696e7c623a313b),
-('391789d403d17afacdc0def175d5cfe6de9baa54', '::1', 1537440076, 0x5f5f63695f6c6173745f726567656e65726174657c693a313533373433363534343b),
-('4f107a211c4fa91f2483ea083a83dedc3b8de69f', '::1', 1537435119, 0x5f5f63695f6c6173745f726567656e65726174657c693a313533373431383431323b),
-('6d5df3cbc905719af53a359019be62c0c1934b29', '::1', 1537434747, 0x5f5f63695f6c6173745f726567656e65726174657c693a313533373431383038343b61646d696e5f757365725f69647c733a313a2231223b757365725f6e616d657c733a31303a22737570657261646d696e223b6c6f67696e5f747970657c733a353a2261646d696e223b6c6f676765645f696e7c623a313b737563636573737c733a32373a2253757276657920507573686564205375636365737366756c6c7921223b5f5f63695f766172737c613a313a7b733a373a2273756363657373223b733a333a226e6577223b7d),
-('d0483f2de9edf7287c03769d391a2fa935a41e38', '::1', 1537363744, 0x5f5f63695f6c6173745f726567656e65726174657c693a313533373336333332373b61646d696e5f757365725f69647c733a333a22323231223b757365725f6e616d657c733a393a2273616e6a6179636363223b6c6f67696e5f747970657c733a353a2261646d696e223b6c6f676765645f696e7c623a313b),
-('adf4b5787d8e9cbeddf5e52122cda689f57c7410', '::1', 1537342204, 0x5f5f63695f6c6173745f726567656e65726174657c693a313533373333323535353b61646d696e5f757365725f69647c733a333a22323231223b757365725f6e616d657c733a393a2273616e6a6179636363223b6c6f67696e5f747970657c733a353a2261646d696e223b6c6f676765645f696e7c623a313b),
-('be624603b07ffcded2f108faafaee08c84a0ef56', '::1', 1537356363, 0x5f5f63695f6c6173745f726567656e65726174657c693a313533373334333834343b61646d696e5f757365725f69647c733a313a2231223b757365725f6e616d657c733a31303a22737570657261646d696e223b6c6f67696e5f747970657c733a353a2261646d696e223b6c6f676765645f696e7c623a313b),
-('cbe3262b02e4a5032177f6b464ccfb989383ceec', '::1', 1537341906, 0x5f5f63695f6c6173745f726567656e65726174657c693a313533373334313838383b),
-('226bc1a26cf1d0411b8e5ac483a9d325c632389e', '::1', 1537363602, 0x5f5f63695f6c6173745f726567656e65726174657c693a313533373336313939373b61646d696e5f757365725f69647c733a313a2231223b757365725f6e616d657c733a31303a22737570657261646d696e223b6c6f67696e5f747970657c733a353a2261646d696e223b6c6f676765645f696e7c623a313b);
+('fbde9b519794a8ed6e94273096d52ee84a30adc5', '::1', 1541150879, 0x5f5f63695f6c6173745f726567656e65726174657c693a313534313133353332353b),
+('479d1b4e6160caba5b36588cb5d70c822cd5e92e', '::1', 1541143620, 0x5f5f63695f6c6173745f726567656e65726174657c693a313534313134333631393b),
+('75374e696389efd6c7d90d915a4266fd93eeebf5', '::1', 1541155017, 0x5f5f63695f6c6173745f726567656e65726174657c693a313534313135313332303b61646d696e5f757365725f69647c733a333a22323231223b757365725f6e616d657c733a393a2273616e6a6179636363223b6c6f67696e5f747970657c733a353a2261646d696e223b6c6f676765645f696e7c623a313b);
 
 -- --------------------------------------------------------
 
@@ -1597,6 +1616,28 @@ CREATE TABLE IF NOT EXISTS `codes_inventory` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `common_point_master`
+--
+
+CREATE TABLE IF NOT EXISTS `common_point_master` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `points_type` varchar(30) NOT NULL,
+  `min_ll_balance` int(10) NOT NULL,
+  `points_redeem_in_multiples_of` int(10) NOT NULL,
+  `last_updated_on` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `common_point_master`
+--
+
+INSERT INTO `common_point_master` (`id`, `points_type`, `min_ll_balance`, `points_redeem_in_multiples_of`, `last_updated_on`) VALUES
+(1, 'consumer loyalty', 100, 500, '2018-09-29 12:02:46');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `consumers`
 --
 
@@ -1609,7 +1650,7 @@ CREATE TABLE IF NOT EXISTS `consumers` (
   `mobile_no` bigint(20) NOT NULL,
   `alternate_mobile_no` varchar(14) DEFAULT NULL,
   `gender` char(15) NOT NULL,
-  `dob` date NOT NULL,
+  `dob` date DEFAULT NULL,
   `ip` varchar(50) NOT NULL,
   `fb_token` varchar(255) NOT NULL,
   `iemi` bigint(20) NOT NULL,
@@ -1621,26 +1662,16 @@ CREATE TABLE IF NOT EXISTS `consumers` (
   `created_at` datetime NOT NULL,
   `modified_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
 --
 -- Dumping data for table `consumers`
 --
 
 INSERT INTO `consumers` (`id`, `user_name`, `email`, `aadhaar_number`, `password`, `mobile_no`, `alternate_mobile_no`, `gender`, `dob`, `ip`, `fb_token`, `iemi`, `is_verified`, `verification_code`, `status`, `terms_conditions`, `avatar_url`, `created_at`, `modified_at`) VALUES
-(1, 'sujeet', '', NULL, '3e2ccc2754fd3902604c7ac85611690f', 7290885263, NULL, '', '2000-01-01', '150.242.63.131', '', 0, 2, NULL, 'inactive', 0, 'uploads/consumer/IMG_20180505_221823.jpg', '2018-02-20 20:17:43', '2018-06-02 12:38:37'),
-(2, 'devtester1', 'devtest111@yopmail.com', NULL, '9ac7ec230e0e4513578f309d6d3579ad', 1234567890, NULL, 'male', '2000-02-22', '1.23.105.252', '', 0, 1, NULL, 'active', 1, 'uploads/consumer/profile1.jpg', '2018-02-20 20:41:41', '2018-02-20 20:41:41'),
-(3, 'Priyank Singh', 'sujeet155@gmail.com', NULL, '7af612d8c2794ec49e6fac07b7f4166d', 8373965233, NULL, 'male', '1990-06-02', '150.242.67.24', '', 0, 0, '249812', 'inactive', 1, NULL, '2018-02-23 12:42:11', '2018-02-23 12:42:11'),
-(4, 'Priyank Singh', 'sujeet@efleetsystems.in', NULL, '690e7d0339d153c9202317443a21a13b', 8373963352, NULL, 'male', '1990-06-02', '150.242.67.24', '', 0, 2, NULL, 'inactive', 1, NULL, '2018-02-23 12:45:49', '2018-02-23 12:45:49'),
-(10, 'Sandeep Sikka', '', NULL, '4234c234d197be5aca6cb24bb7e00229', 9810078031, NULL, '', '2000-01-01', '103.240.193.67', '', 0, 2, NULL, 'inactive', 1, NULL, '2018-03-31 12:58:58', '2018-06-03 13:25:49'),
-(11, 'sandeepsikka', '', NULL, '8b1dd029b253ce48a0931bc73d6c2ad7', 9810110075, NULL, '', '2000-01-01', '106.210.25.52', '', 0, 2, NULL, 'inactive', 1, NULL, '2018-04-01 18:28:54', '2018-04-17 22:59:26'),
-(13, 'HowZzt Customer', '7290085263@gmail.com', NULL, '6dae9537e89dd9dd2d083628e046a269', 7290085263, NULL, 'male', '2000-01-01', '1.39.28.84', '', 0, 0, '616734', 'inactive', 1, NULL, '2018-04-06 15:35:10', '2018-04-06 15:35:10'),
-(15, 'Manish Gupta', '9899703291@gmail.com', NULL, '154fdc5e9c696a3cb96d645dbd8cab20', 9899703291, NULL, '', '2000-01-01', '182.69.37.90', '', 0, 2, NULL, 'inactive', 1, NULL, '2018-04-09 23:34:25', '2018-06-01 13:11:58'),
-(16, 'Sanjay Kumar', '7678665537@gmail.com', NULL, 'd05f73f26884c6dd71034117ee6f5c03', 7678665537, NULL, '', '2000-01-01', '47.31.62.249', '', 0, 2, '132295', 'inactive', 1, 'uploads/consumer/IMG_20180512_140222.jpg', '2018-04-10 16:52:45', '2018-06-02 16:02:42'),
-(17, 'ashvin', '', NULL, 'c17b29097c068547655a1c47bd57ea15', 9810078029, NULL, '', '2000-01-01', '106.210.74.131', '', 0, 2, NULL, 'inactive', 1, NULL, '2018-04-12 19:59:37', '2018-04-18 22:04:53'),
-(18, 'HowZzt Customer', '9650608203@gmail.com', NULL, '4301d3f765cdff03d1eb32120c37abd4', 9650608203, NULL, 'male', '2000-01-01', '223.225.12.223', '', 0, 2, NULL, 'inactive', 1, NULL, '2018-04-14 11:28:24', '2018-04-14 12:01:39'),
-(19, 'preeti', '', NULL, '50a46ed460283795dae8fe20ad6a03f6', 9599725387, NULL, 'male', '2000-01-01', '103.206.101.162', '', 0, 2, NULL, 'inactive', 1, NULL, '2018-04-14 11:56:56', '2018-04-14 11:58:42'),
-(21, 'kkpp', '9958439076@gmail.com', NULL, 'f41c98ac606e9b29fce2d59f71df434d', 9958439076, NULL, '', '2000-01-01', '::1', 'ssssss', 123456789, 2, NULL, 'inactive', 1, NULL, '2018-07-24 11:19:26', '2018-09-12 13:40:36');
+(13, 'Sanjay2', 'sanjay@gmail.com', NULL, '08691d48b9e93e92b61b3ace7146449a', 7678665537, NULL, 'male', '0001-01-01', '::1', '', 0, 2, NULL, 'inactive', 1, NULL, '2018-10-11 10:28:57', '2018-10-27 10:51:54'),
+(14, 'aaa', 'aa', 222, 'aaa', 111, NULL, '', NULL, '', '', 0, 0, NULL, 'inactive', 0, NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00'),
+(15, 'SK2', '9958439076@gmail.com', NULL, 'a7c7cd5e88af6246501c7dcf1bab8cb2', 9958439076, NULL, 'male', '0001-01-01', '::1', 'ssssss', 123456789, 2, NULL, 'inactive', 1, NULL, '2018-10-13 11:05:29', '2018-10-15 11:02:16');
 
 -- --------------------------------------------------------
 
@@ -1688,18 +1719,19 @@ CREATE TABLE IF NOT EXISTS `consumer_customer_link` (
   `longitude` varchar(50) NOT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=13 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `consumer_customer_link`
 --
 
 INSERT INTO `consumer_customer_link` (`id`, `consumer_id`, `product_id`, `customer_id`, `bar_code`, `latitude`, `longitude`, `created_at`) VALUES
-(1, 20, 175, 261, '', '', '', '2018-09-05 00:00:00'),
-(2, 16, 163, 261, '', '', '', '2018-09-06 00:00:00'),
-(7, 10, 190, 299, '', '', '', '2018-09-08 00:00:00'),
-(10, 26, 192, 264, '', '', '', '2018-09-11 00:00:00'),
-(12, 21, 166, 221, 'db-9013-7805-4', '33333.3333', '33.333333', '2018-09-13 15:19:17');
+(1, 1, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-04 11:30:15'),
+(2, 5, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-04 12:08:53'),
+(3, 9, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-04 16:04:14'),
+(4, 11, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-06 20:59:07'),
+(5, 12, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-09 15:24:18'),
+(6, 15, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-13 15:21:32');
 
 -- --------------------------------------------------------
 
@@ -1949,16 +1981,53 @@ INSERT INTO `consumer_log` (`id`, `consumer_id`, `token`, `plain_token`, `device
 
 CREATE TABLE IF NOT EXISTS `consumer_passbook` (
   `id` int(10) NOT NULL AUTO_INCREMENT,
-  `user_id` int(10) NOT NULL,
-  `transacted_points` int(10) NOT NULL,
-  `type_of_points` varchar(15) NOT NULL,
-  `brand_name` varchar(100) DEFAULT NULL,
-  `product_name` varchar(100) DEFAULT NULL,
-  `transaction_type` varchar(100) DEFAULT NULL,
-  `current_balance` int(10) DEFAULT NULL,
+  `customer_id` int(10) DEFAULT NULL,
+  `consumer_id` int(10) NOT NULL,
+  `points` int(10) NOT NULL,
+  `transaction_type_name` varchar(256) NOT NULL,
+  `transaction_type_slug` varchar(256) DEFAULT NULL,
+  `params` text,
+  `transaction_lr_type` varchar(100) DEFAULT NULL,
+  `total_accumulated_points` int(10) NOT NULL,
+  `total_redeemed_points` int(10) NOT NULL,
+  `current_balance` varchar(100) DEFAULT NULL,
+  `points_redeemable` int(10) NOT NULL,
+  `points_short_of_redumption` int(10) NOT NULL,
   `transaction_date` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=35 ;
+
+--
+-- Dumping data for table `consumer_passbook`
+--
+
+INSERT INTO `consumer_passbook` (`id`, `customer_id`, `consumer_id`, `points`, `transaction_type_name`, `transaction_type_slug`, `params`, `transaction_lr_type`, `total_accumulated_points`, `total_redeemed_points`, `current_balance`, `points_redeemable`, `points_short_of_redumption`, `transaction_date`) VALUES
+(9, NULL, 11, 100, 'User Registration', 'user-registration', '{"consumer_id":11,"consumer_phone":"9958439076","passbook_title":"howzzt Registration","passbook_event":"User Registration"}', 'Loyalty', 100, 0, '100', 0, 500, '2018-10-05 17:30:51'),
+(10, NULL, 11, 220, 'Scan for product registration', 'product_registration_lps', '{"verification_date":"2018-10-08 11:42:25","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-7599-5"}', 'Loyalty', 320, 0, '320', 0, 280, '2018-10-08 11:42:25'),
+(11, NULL, 12, 100, 'User Registration', 'user-registration', '{"consumer_id":12,"consumer_phone":"9958439076","passbook_title":"howzzt Registration","passbook_event":"User Registration"}', 'Loyalty', 100, 0, '100', 0, 500, '2018-10-09 15:18:40'),
+(12, NULL, 12, 220, 'Scan for product registration', 'product_registration_lps', '{"verification_date":"2018-10-09 15:20:44","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-7599-1"}', 'Loyalty', 320, 0, '320', 0, 280, '2018-10-09 15:20:44'),
+(13, NULL, 12, 220, 'Scan for product registration', 'product_registration_lps', '{"verification_date":"2018-10-09 15:20:52","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-7599-2"}', 'Loyalty', 540, 0, '540', 0, 60, '2018-10-09 15:20:52'),
+(14, NULL, 12, 220, 'Scan for product registration', 'product_registration_lps', '{"verification_date":"2018-10-09 15:21:37","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-7599-3"}', 'Loyalty', 760, 0, '760', 500, 340, '2018-10-09 15:21:37'),
+(15, NULL, 12, 600, 'Successful verification of invoice uploaded for product registration ', 'product_registration_lps', '{"verification_date":"2018-10-09 15:25:37","brand_name":"Dolly","product_name":"Dolly Battery","product_id":"166","product_code":"db-9013-5025-1"}', 'Loyalty', 1360, 0, '1360', 1000, 240, '2018-10-09 15:25:37'),
+(16, NULL, 12, 1000, 'Loyalty Rewards redemption', 'loyalty_loints_ledeemed', '{"transaction_date":"2018-10-09 15:27:32","points_redeemed":"1000","coupon_number":"988900"}', 'Redemption', 1360, 1000, '360', 0, 240, '2018-10-09 15:27:32'),
+(17, NULL, 13, 100, 'User Registration', 'user-registration', '{"consumer_id":13,"consumer_phone":"7678665537","passbook_title":"howzzt Registration","passbook_event":"User Registration"}', 'Loyalty', 100, 0, '100', 0, 500, '2018-10-11 10:28:57'),
+(18, NULL, 13, 60012, 'Successful verification of invoice uploaded for product registration ', 'product_registration_lps', '{"verification_date":"2018-10-11 10:32:03","brand_name":"Dolly","product_name":"Dolly Battery","product_id":"166","product_code":"db-9013-5025-4"}', 'Loyalty', 60112, 0, '60112', 60000, 488, '2018-10-11 10:32:03'),
+(19, NULL, 13, 60012, 'Successful verification of invoice uploaded for product registration ', 'product_registration_lps', '{"verification_date":"2018-10-11 10:32:33","brand_name":"Dolly","product_name":"Dolly Battery","product_id":"166","product_code":"db-9013-5025-3"}', 'Loyalty', 120124, 0, '120124', 120000, 476, '2018-10-11 10:32:33'),
+(20, NULL, 13, 60012, 'Successful verification of invoice uploaded for product registration ', 'product_registration_lps', '{"verification_date":"2018-10-11 10:33:05","brand_name":"Dolly","product_name":"Dolly Battery","product_id":"166","product_code":"db-9013-5025-2"}', 'Loyalty', 180136, 0, '180136', 180000, 464, '2018-10-11 10:33:05'),
+(21, 221, 13, 220, 'Scan for product registration', 'product_registration_lps', '{"verification_date":"2018-10-12 16:00:06","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-8264-6"}', 'Loyalty', 180356, 0, '180356', 180000, 244, '2018-10-12 16:00:06'),
+(22, 221, 13, 60012, 'Successful verification of invoice uploaded for product registration ', 'product_registration_lps', '{"verification_date":"2018-10-12 16:10:29","brand_name":"Dolly","product_name":"Dolly Battery","product_id":"166","product_code":"db-9013-5025-5"}', 'Loyalty', 240368, 0, '240368', 240000, 232, '2018-10-12 16:10:29'),
+(23, 0, 15, 100, 'User Registration', 'user-registration', '{"consumer_id":15,"consumer_phone":"9958439076","passbook_title":"howzzt Registration","passbook_event":"User Registration"}', 'Loyalty', 100, 0, '100', 0, 500, '2018-10-13 11:05:29'),
+(24, 221, 13, 220, 'Scan for product registration', 'product_registration_lps', '{"verification_date":"2018-10-13 11:38:57","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-8264-7"}', 'Loyalty', 240588, 0, '240588', 240000, 12, '2018-10-13 11:38:57'),
+(25, 221, 13, 220, 'Scan for product registration', 'product_registration_lps', '{"verification_date":"2018-10-13 11:39:19","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-8264-8"}', 'Loyalty', 240808, 0, '240808', 240500, 292, '2018-10-13 11:39:19'),
+(26, 221, 15, 220, 'Scan for product registration', 'product_registration_lps', '{"verification_date":"2018-10-13 15:06:02","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-8264-9"}', 'Loyalty', 320, 0, '320', 0, 280, '2018-10-13 15:06:02'),
+(27, 221, 15, 1012, 'Scan for product registration', 'product_registration_lps', '{"verification_date":"2018-10-13 16:22:42","brand_name":"INDIA GATE BASMATI RICE ","product_name":"India Gate Classic","product_id":"151","product_code":"india-gate-classic-4809-7163-1"}', 'Loyalty', 1332, 0, '1332', 1000, 268, '2018-10-13 16:22:42'),
+(28, 221, 15, 500, 'Feedback On Purchased Product', 'feedback_on_product_lps', '{"bar_code":"india-gate-classic-4809-7163-1","rating":"4","description":"This is Ok4","created_at":"2018-10-13 16:23:19","consumer_id":"15","ip_address":"::1"}', 'Loyalty', 1832, 0, '1832', 1500, 268, '2018-10-13 16:23:19'),
+(29, 221, 15, 60012, 'Successful verification of invoice uploaded for product registration ', 'product_registration_lps', '{"verification_date":"2018-10-20 10:52:23","brand_name":"Dolly","product_name":"Dolly Battery","product_id":"166","product_code":"db-9013-5563-1"}', 'Loyalty', 61844, 0, '61844', 61500, 256, '2018-10-20 10:52:23'),
+(30, 221, 15, 100, 'Product Feedback', 'feedback_on_product_lps', '{"bar_code":"db-9013-5563-1","rating":"4","description":"This is Ok4","created_at":"2018-10-22 11:33:14","consumer_id":"15","product_id":"166","ip_address":"::1"}', 'Loyalty', 61944, 0, '61944', 61500, 156, '2018-10-22 11:33:14'),
+(31, 221, 13, 60012, 'Successful verification of invoice uploaded for product registration ', 'product_registration_lps', '{"verification_date":"2018-10-27 10:57:52","brand_name":"Dolly","product_name":"Dolly Battery","product_id":"166","product_code":"db-9013-2926-7"}', 'Loyalty', 300820, 0, '300820', 300500, 280, '2018-10-27 10:57:52'),
+(32, 221, 13, 60012, 'Successful verification of invoice uploaded for product registration ', 'product_registration_lps', '{"verification_date":"2018-10-27 10:58:23","brand_name":"Dolly","product_name":"Dolly Battery","product_id":"166","product_code":"db-9013-2926-8"}', 'Loyalty', 360832, 0, '360832', 360500, 268, '2018-10-27 10:58:23'),
+(33, 221, 13, 60012, 'Successful verification of invoice uploaded for product registration ', 'product_registration_lps', '{"verification_date":"2018-10-27 10:59:02","brand_name":"Dolly","product_name":"Dolly Battery","product_id":"166","product_code":"db-9013-2926-9"}', 'Loyalty', 420844, 0, '420844', 420500, 256, '2018-10-27 10:59:02'),
+(34, 221, 13, 60012, 'Successful verification of invoice uploaded for product registration ', 'product_registration_lps', '{"verification_date":"2018-10-27 10:59:26","brand_name":"Dolly","product_name":"Dolly Battery","product_id":"166","product_code":"db-9013-2926-10"}', 'Loyalty', 480856, 0, '480856', 480500, 244, '2018-10-27 10:59:26');
 
 -- --------------------------------------------------------
 
@@ -2057,11 +2126,45 @@ CREATE TABLE IF NOT EXISTS `customer_feedback` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `dispatch_stock_transfer_out`
+--
+
+CREATE TABLE IF NOT EXISTS `dispatch_stock_transfer_out` (
+  `dispatch_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `request_id` varchar(30) NOT NULL,
+  `bar_code` varchar(100) NOT NULL,
+  `invoice_number` varchar(100) NOT NULL,
+  `transaction_type` varchar(100) NOT NULL,
+  `location_type` varchar(100) NOT NULL,
+  `location_name` varchar(100) NOT NULL,
+  `transfer_out_date` datetime NOT NULL,
+  `created_by_id` int(10) NOT NULL,
+  `created_date_time` datetime NOT NULL,
+  PRIMARY KEY (`dispatch_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+
+--
+-- Dumping data for table `dispatch_stock_transfer_out`
+--
+
+INSERT INTO `dispatch_stock_transfer_out` (`dispatch_id`, `request_id`, `bar_code`, `invoice_number`, `transaction_type`, `location_type`, `location_name`, `transfer_out_date`, `created_by_id`, `created_date_time`) VALUES
+(1, 'Warehouse', 'db-9013-2926-1', 'Shipped', 'Warehouse', 'Gurgaon', '1234567', '0000-00-00 00:00:00', 0, '2018-11-01 10:13:23'),
+(2, 'Warehouse', 'db-9013-2926-1', 'Shipped', 'Warehouse', 'Gurgaon', '1234567', '0000-00-00 00:00:00', 0, '2018-11-01 10:15:29'),
+(3, 'Warehouse', 'db-9013-2926-1', 'Shipped', 'Warehouse', 'Gurgaon', '1234567', '0000-00-00 00:00:00', 0, '2018-11-01 10:15:58'),
+(4, '123456', 'db-9013-2926-1', '123456', 'Shipped', 'Warehouse', 'Gurgaon', '2018-11-01 10:15:58', 22, '2018-11-01 10:18:10'),
+(5, '123456', 'db-9013-2926-2', '123456', 'Shipped', 'Warehouse', 'Gurgaon', '2018-11-01 10:15:58', 22, '2018-11-01 10:35:08'),
+(6, '123456', 'db-9013-2926-3', '123456', 'Shipped', 'Warehouse', 'Gurgaon', '2018-11-01 10:15:58', 22, '2018-11-01 10:35:18'),
+(7, '123456', 'db-9013-2926-4', '123456', 'Shipped', 'Warehouse', 'Gurgaon', '2018-11-01 10:15:58', 22, '2018-11-01 10:35:23');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `feedback_on_product`
 --
 
 CREATE TABLE IF NOT EXISTS `feedback_on_product` (
   `fop_id` int(10) NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) DEFAULT NULL,
   `bar_code` varchar(255) NOT NULL,
   `consumer_id` int(10) NOT NULL,
   `rating` tinyint(1) NOT NULL,
@@ -2069,23 +2172,28 @@ CREATE TABLE IF NOT EXISTS `feedback_on_product` (
   `ip_address` varchar(20) NOT NULL,
   `created_at` date NOT NULL,
   PRIMARY KEY (`fop_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=11 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
 --
 -- Dumping data for table `feedback_on_product`
 --
 
-INSERT INTO `feedback_on_product` (`fop_id`, `bar_code`, `consumer_id`, `rating`, `description`, `ip_address`, `created_at`) VALUES
-(1, 'bentodent-toothpaste-4105-0000-129-1', 14, 5, 'Product is very Good.', '::1', '2018-06-02'),
-(2, 'bentodent-toothpaste-4105-0000-129-2', 20, 5, 'Product is very Good.', '103.201.141.106', '2018-06-02'),
-(3, 'prosinc-9538-0000-72-1', 1, 0, 'sfcf', '47.31.95.15', '2018-06-02'),
-(4, 'prosinc-9538-0000-72-1', 1, 2, 'sfcf', '47.31.95.15', '2018-06-02'),
-(5, 'colgate-total-9494-0000-124-1', 1, 3, 'vf', '47.31.95.15', '2018-06-02'),
-(6, 'colgate-total-9494-0000-124-2', 20, 5, 'Product is very Good.', '::1', '2018-06-06'),
-(7, 'colgate-total-9494-0000-124-211', 20, 5, 'Product is very Good.', '::1', '2018-06-06'),
-(8, 'lifehinc-7034-0000-64-2', 20, 5, 'Product is very Good.', '::1', '2018-06-06'),
-(9, 'colgate-total-9494-0000-124-2', 20, 5, 'Product is very Good.', '::1', '2018-06-06'),
-(10, 'colgate-total-9494-0000-124-2', 20, 5, 'Product is very Good.', '::1', '2018-06-13');
+INSERT INTO `feedback_on_product` (`fop_id`, `product_id`, `bar_code`, `consumer_id`, `rating`, `description`, `ip_address`, `created_at`) VALUES
+(1, NULL, 'bentodent-toothpaste-4105-0000-129-1', 14, 5, 'Product is very Good.', '::1', '2018-06-02'),
+(2, NULL, 'bentodent-toothpaste-4105-0000-129-2', 20, 5, 'Product is very Good.', '103.201.141.106', '2018-06-02'),
+(3, NULL, 'prosinc-9538-0000-72-1', 1, 0, 'sfcf', '47.31.95.15', '2018-06-02'),
+(4, NULL, 'prosinc-9538-0000-72-1', 1, 2, 'sfcf', '47.31.95.15', '2018-06-02'),
+(5, NULL, 'colgate-total-9494-0000-124-1', 1, 3, 'vf', '47.31.95.15', '2018-06-02'),
+(6, NULL, 'colgate-total-9494-0000-124-2', 20, 5, 'Product is very Good.', '::1', '2018-06-06'),
+(7, NULL, 'colgate-total-9494-0000-124-211', 20, 5, 'Product is very Good.', '::1', '2018-06-06'),
+(8, NULL, 'lifehinc-7034-0000-64-2', 20, 5, 'Product is very Good.', '::1', '2018-06-06'),
+(9, NULL, 'colgate-total-9494-0000-124-2', 20, 5, 'Product is very Good.', '::1', '2018-06-06'),
+(10, NULL, 'colgate-total-9494-0000-124-2', 20, 5, 'Product is very Good.', '::1', '2018-06-13'),
+(11, NULL, 'hl-6367-8264-9', 15, 5, 'This is Ok', '::1', '2018-10-13'),
+(12, NULL, 'india-gate-classic-4809-7163-1', 15, 4, 'This is Ok4', '::1', '2018-10-13'),
+(13, 166, 'db-9013-5563-1', 15, 4, 'This is Ok4', '::1', '2018-10-22'),
+(14, 166, 'db-9013-5563-1', 15, 4, 'This is Ok4', '::1', '2018-10-22'),
+(15, 166, 'db-9013-5563-1', 15, 4, 'This is Ok4', '::1', '2018-10-22');
 
 -- --------------------------------------------------------
 
@@ -2106,7 +2214,7 @@ CREATE TABLE IF NOT EXISTS `feedback_question_bank` (
   `status` tinyint(4) NOT NULL DEFAULT '1',
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`question_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=87 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=89 ;
 
 --
 -- Dumping data for table `feedback_question_bank`
@@ -2121,6 +2229,7 @@ INSERT INTO `feedback_question_bank` (`question_id`, `product_id`, `question`, `
 (60, 156, 'Do you Like this Survey', 'Product Survey Feedback', 'No', 'Yes', 'Can''t Say', 'Let me see', 2, 1, '2018-07-04 10:14:43'),
 (85, 151, 'test1 Product PDF Feedback Question ', 'Product PDF Feedback', 't1O1', 't1O2', 't1O3', 't1O', 1, 1, '2018-07-31 11:34:28'),
 (62, 151, 'How Long audio?', 'Product Audio Feedback', '1x', '3x', '7x', '6x', 4, 1, '2018-08-02 11:48:24'),
+(88, 151, 'test Demo Audio', 'Product Demo Audio Feedback', 'Answer1:', 'Answer2:', 'Answer3:', 'Answer4:', 2, 1, '2018-09-30 09:52:31'),
 (64, 151, 'How is the image', 'Product Image Feedback', 'Good', 'Bad', 'Not bad', 'Very bad', 2, 1, '2018-08-02 11:29:01'),
 (84, 150, 'test1 Product Video Feedback Question ', 'Product Video Feedback', 't1O1', 't2O2', 't2O3', 't2O4', 1, 1, '2018-07-31 11:27:48'),
 (66, 65, 'What is the product2', 'Product Image Feedback', 'Rice2', 'Motor2', 'TV2', 'Can''t say2', 2, 1, '2018-07-30 10:50:08'),
@@ -2128,6 +2237,7 @@ INSERT INTO `feedback_question_bank` (`question_id`, `product_id`, `question`, `
 (71, 150, 'test Product Video Feedback Question ', 'Product Video Feedback', 'tVO1', 'tVO2', 'tVO3', 'tVO4', 1, 1, '2018-07-31 10:57:06'),
 (73, 151, 'test2 Product Video Feedback Question ', 'Product Video Feedback', 't2vO1', 't2vO2', 't2vO3', 't2vO4', 2, 1, '2018-07-31 11:00:57'),
 (74, 151, 'test3 Product Video Feedback Question ', 'Product Video Feedback', 't3Vo1', 't3Vo2', 't3Vo3', 't3Vo4', 1, 1, '2018-08-02 11:41:45'),
+(87, 151, 'test Question', 'Product Demo Video Feedback', 'Answer1:', 'Answer2:', 'Answer3:', 'Answer4:', 1, 1, '2018-09-30 09:50:24'),
 (82, 151, 'test1 Product Description Feedback Question ', 'Product Description Feedback', 't1O1', 't1O2', 't1O3', 't1O4', 2, 1, '2018-08-02 11:24:59'),
 (78, 151, 'test1 Product pushed ad Feedback Question s', 'Product Pushed Ad Feedback', 't1O1', 't1O2', 't1O3', 't1O4', 2, 1, '2018-08-02 12:00:06'),
 (79, 151, 'test1 Product Survey Feedback Question a', 'Product Survey Feedback', 't1O1a', 't1O2a', 't1O3a', 't1O4a', 2, 1, '2018-08-02 12:05:01'),
@@ -2150,7 +2260,7 @@ CREATE TABLE IF NOT EXISTS `functionality_master` (
   `functionality_name_value` varchar(156) NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=14 ;
 
 --
 -- Dumping data for table `functionality_master`
@@ -2167,7 +2277,68 @@ INSERT INTO `functionality_master` (`id`, `functionality_name_slug`, `functional
 (8, 'receipt_at_warehouse_or_plant', 'Receipt at Warehouse/Plant (Stock Transfer-In)', 1),
 (9, 'dispatch_from_plant_or_warehouse_to_customers', 'Dispatch from plant/Warehouse to customers (Customer Sale)', 1),
 (10, 'product_return_from_customer', 'Product Return from Customer', 1),
-(11, 'physical_inventory_check', 'Physical inventory check', 1);
+(11, 'physical_inventory_check', 'Physical inventory check', 1),
+(12, 'packaging', 'Packaging', 1),
+(13, 'dekitting', 'De-Kitting', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `location_master`
+--
+
+CREATE TABLE IF NOT EXISTS `location_master` (
+  `location_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `location_code` varchar(10) DEFAULT NULL,
+  `location_type` varchar(100) NOT NULL,
+  `location_name` varchar(100) NOT NULL,
+  `location_key` varchar(100) NOT NULL,
+  `email_id` varchar(200) NOT NULL,
+  `phone` bigint(20) NOT NULL,
+  `gst` varchar(14) NOT NULL,
+  `state` varchar(30) NOT NULL,
+  `address` varchar(200) NOT NULL,
+  `remark` text NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '0',
+  `created_by` int(11) NOT NULL,
+  `created_date` datetime NOT NULL,
+  `updated_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+  PRIMARY KEY (`location_id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `location_master`
+--
+
+INSERT INTO `location_master` (`location_id`, `location_code`, `location_type`, `location_name`, `location_key`, `email_id`, `phone`, `gst`, `state`, `address`, `remark`, `status`, `created_by`, `created_date`, `updated_date`) VALUES
+(1, '123456', 'Plant', 'Delhi Plant', 'Rohini, Delhi', 'dp@gmail.com', 7678665537, '1234567', '1', '111, Rohini, Delhi', 'OK, its working ', 1, 2, '2018-11-02 00:00:00', '2018-11-01 18:30:00');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `location_type_master`
+--
+
+CREATE TABLE IF NOT EXISTS `location_type_master` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `location_type_name` varchar(100) NOT NULL,
+  `location_name` varchar(100) NOT NULL,
+  `transaction_type` varchar(100) NOT NULL,
+  `status` tinyint(1) NOT NULL,
+  `create_date` datetime NOT NULL,
+  `modify_date` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `location_type_master`
+--
+
+INSERT INTO `location_type_master` (`id`, `location_type_name`, `location_name`, `transaction_type`, `status`, `create_date`, `modify_date`) VALUES
+(1, 'Plant', 'Delhi', 'Shipped', 1, '2018-10-31 00:00:00', '2018-10-31 00:00:00'),
+(2, 'Warehouse', 'Gurgaon', 'Receipt', 1, '2018-10-31 00:00:00', '2018-10-31 00:00:00'),
+(3, 'Distributor', 'Mumbai', '', 1, '2018-10-31 00:00:00', '2018-10-31 00:00:00'),
+(4, 'Dealer', 'Rohtak', '', 1, '2018-10-31 00:00:00', '2018-10-31 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -2197,30 +2368,18 @@ CREATE TABLE IF NOT EXISTS `loyalty_redemption` (
   `l_created_at` datetime DEFAULT NULL,
   `modified_at` datetime DEFAULT NULL,
   PRIMARY KEY (`lr_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=18 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
 
 --
 -- Dumping data for table `loyalty_redemption`
 --
 
 INSERT INTO `loyalty_redemption` (`lr_id`, `user_id`, `redemption_id`, `points_redeemed`, `mobile_no`, `alternate_mobile_no`, `street_address`, `city`, `state`, `pin_code`, `coupon_number`, `coupon_type`, `coupon_vendor`, `request_date`, `l_status`, `status_change_date`, `courier_details`, `aadhaar_number`, `l_created_at`, `modified_at`) VALUES
-(1, 21, 0, 200, 0, 0, '', '', '', 0, '9889', 'xyss', 'tracking', '1899-11-30 00:00:00', 0, '1899-11-30 00:00:00', 'kk', NULL, '2018-09-18 00:00:00', '2018-08-24 00:00:00'),
-(2, 21, 0, 20, 0, 0, '', '', '', 0, '9889', 'xyss', 'tracking', '0000-00-00 00:00:00', 1, '0000-00-00 00:00:00', 'kk', NULL, '2018-08-24 00:00:00', '2018-08-24 00:00:00'),
-(3, 21, 0, 20, 0, 0, '', '', '', 0, '9889', 'xyss', 'tracking', '0000-00-00 00:00:00', 1, '0000-00-00 00:00:00', 'kk', NULL, '2018-08-24 00:00:00', '2018-08-24 00:00:00'),
-(4, 21, 0, 20, 0, 0, '', '', '', 0, '9889', 'xyss', 'tracking', '0000-00-00 00:00:00', 1, '0000-00-00 00:00:00', 'kk', NULL, '2018-08-24 00:00:00', '2018-08-24 00:00:00'),
-(5, 21, 0, 20, 0, 0, '', '', '', 0, '9889', 'xyss', 'tracking', '0000-00-00 00:00:00', 1, '0000-00-00 00:00:00', 'kk', NULL, '2018-08-24 00:00:00', '2018-08-24 00:00:00'),
-(6, 21, 0, 20, 0, 0, '', '', '', 0, '9889', 'xyss', 'tracking', '0000-00-00 00:00:00', 1, '0000-00-00 00:00:00', 'kk', NULL, '2018-08-24 00:00:00', '2018-08-24 00:00:00'),
-(7, 21, 0, 20, 0, 0, '', '', '', 0, '9889', 'xyss', 'tracking', '0000-00-00 00:00:00', 1, '0000-00-00 00:00:00', 'kk', NULL, '2018-08-24 00:00:00', '2018-08-24 00:00:00'),
-(8, 21, 0, 20, 0, 0, '', '', '', 0, '9889', 'xyss', 'tracking', '0000-00-00 00:00:00', 1, '0000-00-00 00:00:00', '', NULL, '2018-09-12 00:00:00', '2018-09-12 00:00:00'),
-(9, 21, 0, 10, 0, 0, '', '', '', 0, '9889', 'xyss', 'tracking', '0000-00-00 00:00:00', 1, '0000-00-00 00:00:00', '', NULL, '2018-09-12 16:23:16', '2018-09-12 16:23:16'),
-(10, 21, 0, 100, 0, 0, '', '', '', 0, '9889', 'xyss', 'tracking', '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', '', NULL, '2018-09-18 14:09:25', '2018-09-18 14:09:25'),
-(11, 21, 0, 15, 0, 0, '', '', '', 0, '9889', 'xyss', 'tracking', '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', '', NULL, '2018-09-18 16:13:58', '2018-09-18 16:13:58'),
-(12, 21, 18478, 15, 0, 0, '', '', '', 0, '9889', 'xyss', 'tracking', '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', '', NULL, '2018-09-18 16:23:50', '2018-09-18 16:23:50'),
-(13, 21, 22404, 150, 0, 8765456, 'pocket c1, Mayurvihar phase 3', 'New Delhi', 'Delhi', 110096, '9889', 'xyss', 'tracking', '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', '', '7876543456789876', '2018-09-18 16:36:40', '2018-09-18 16:36:40'),
-(14, 21, 23900, 400, 9958439076, 8765456, 'pocket c1, Mayurvihar phase 3', 'New Delhi', 'Delhi', 110096, '9889', 'xyss', 'tracking', '2018-09-18 16:40:38', 0, '0000-00-00 00:00:00', 'courier_details', '7876543456789876', '2018-09-18 16:40:38', '2018-09-18 16:40:38'),
-(15, 21, 1792, 500, 9958439076, 8765456, 'pocket c1, Mayurvihar phase 3', 'New Delhi', 'Delhi', 110096, '9889', 'xyss', 'tracking', '2018-09-20 10:10:12', 0, '0000-00-00 00:00:00', 'courier_details', '7876543456789876', '2018-09-20 10:10:12', '2018-09-20 10:10:12'),
-(16, 21, 1392302223, 600, 9958439076, 8765456, 'pocket c1, Mayurvihar phase 3', 'New Delhi', 'Delhi', 110096, '98891', 'xyss1', 'tracking1', '2018-09-20 10:14:01', 1, '2018-09-20 11:10:07', 'courier_details1', '7876543456789876', '2018-09-20 10:14:01', '2018-09-20 11:10:07'),
-(17, 21, 1382622730, 700, 9958439076, 8765456, 'pocket c1, Mayurvihar phase 3', 'New Delhi', 'Delhi', 110096, '98890012', 'xyss0012', 'trackinghhh12', '2018-09-20 10:17:58', 1, '2018-09-20 11:45:09', 'courier_details12', '7876543456789876', '2018-09-20 10:17:58', '2018-09-20 11:45:09');
+(1, 5, 1228406941, 500, 9958439076, 8765456, 'pocket c1, Mayurvihar phase 3', 'New Delhi', 'Delhi', 110096, '988900', 'xyss00', 'trackinghhh', '2018-10-04 12:23:55', 1, '2018-10-04 12:24:33', 'courier_details', '7876543456789876', '2018-10-04 12:23:55', '2018-10-04 12:24:33'),
+(2, 5, 1280216694, 500, 9958439076, 8765456, 'pocket c1, Mayurvihar phase 3', 'New Delhi', 'Delhi', 110096, '1234567890', 'xyss00', 'trackinghhh', '2018-10-04 12:36:25', 1, '2018-10-04 12:36:44', 'courier_details', '7876543456789876', '2018-10-04 12:36:25', '2018-10-04 12:36:44'),
+(3, 12, 1228311336, 1000, 9958439076, 8765456, 'pocket c1, Mayurvihar phase 3', 'New Delhi', 'Delhi', 110096, '988900', 'xyss00', 'trackinghhh', '2018-10-09 15:26:34', 1, '2018-10-09 15:27:32', 'courier_details', '7876543456789876', '2018-10-09 15:26:34', '2018-10-09 15:27:32'),
+(4, 15, 1403063520, 1000, 9958439076, 8765456, 'pocket c1, Mayurvihar phase 3', 'New Delhi', 'Delhi', 110096, '988900', 'xyss00', 'trackinghhh', '2018-10-16 10:35:58', 0, '0000-00-00 00:00:00', 'courier_details', '7876543456789876', '2018-10-16 10:35:58', '2018-10-16 10:35:58'),
+(5, 15, 1296749887, 500, 9958439076, 8765456, 'pocket c1, Mayurvihar phase 3', 'New Delhi', 'Delhi', 110096, '988900', 'xyss00', 'trackinghhh', '2018-10-16 10:36:07', 0, '0000-00-00 00:00:00', 'courier_details', '7876543456789876', '2018-10-16 10:36:07', '2018-10-16 10:36:07');
 
 -- --------------------------------------------------------
 
@@ -2230,33 +2389,38 @@ INSERT INTO `loyalty_redemption` (`lr_id`, `user_id`, `redemption_id`, `points_r
 
 CREATE TABLE IF NOT EXISTS `loylties` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(10) DEFAULT NULL,
   `transaction_type` varchar(100) NOT NULL,
   `transaction_type_slug` varchar(200) DEFAULT NULL,
-  `points` int(20) NOT NULL,
+  `loyalty_points` int(20) NOT NULL,
   `customer` varchar(100) DEFAULT NULL,
   `product` varchar(100) DEFAULT NULL,
   `status` tinyint(3) NOT NULL DEFAULT '1',
   `created_at` datetime NOT NULL,
   `modified_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=12 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
 
 --
 -- Dumping data for table `loylties`
 --
 
-INSERT INTO `loylties` (`id`, `transaction_type`, `transaction_type_slug`, `points`, `customer`, `product`, `status`, `created_at`, `modified_at`) VALUES
-(1, 'User Registration', 'user-registration', 100, NULL, NULL, 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(2, 'Family Group Addition', 'family-group-addition', 21, NULL, NULL, 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(3, 'Scan for Genuity and Audio Response', 'scan-for-genuity-and-audio-response', 2, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(4, 'Scan for Genuity and Video Response', 'scan-for-genuity-and-video-response', 2, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(5, 'Scan for Genuity and pdf Response', 'scan-for-genuity-and-pdf-response', 6, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(6, 'Product Registration with Warranty', 'product-registration-with-warranty', 8, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(7, 'Product Registration without Warranty', 'product-registration-without-warranty', 10, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(8, 'Product Survey Feedback', 'product-survey-feedback', 12, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(9, 'Advt1', 'advt1', 14, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(10, 'Advt2', 'advt2', 16, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
-(11, 'Product Pushed Ad Feedback', 'product-pushed-ad-feedback', 11, 'C1', 'P1', 1, '2018-06-28 00:00:00', '2018-06-28 00:00:00');
+INSERT INTO `loylties` (`id`, `customer_id`, `transaction_type`, `transaction_type_slug`, `loyalty_points`, `customer`, `product`, `status`, `created_at`, `modified_at`) VALUES
+(1, NULL, 'User Registration', 'user-registration', 100, '', '', 1, '2018-10-09 15:17:43', '2018-10-09 15:17:43'),
+(2, NULL, 'Family Group Addition', 'family-group-addition', 211, '', '', 1, '2018-10-09 13:56:05', '2018-10-09 13:56:05'),
+(3, NULL, 'Minimum Locking Balance', 'minimum_locking_balance', 100, '', '', 1, '2018-10-09 15:17:54', '2018-10-09 15:17:54'),
+(4, NULL, 'Redemption in multiple of', 'redemption_in_multiple_of', 500, '', '', 1, '2018-10-09 15:18:03', '2018-10-09 15:18:03'),
+(5, NULL, 'Scan for Genuity and pdf Response', 'scan-for-genuity-and-pdf-response', 60, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(6, NULL, 'Product Registration with Warranty', 'product-registration-with-warranty', 80, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(7, NULL, 'Product Registration without Warranty', 'product-registration-without-warranty', 10, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(8, NULL, 'Survey Response', 'survey-response', 12, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(9, NULL, 'Advt1', 'advt1', 14, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(10, NULL, 'Advt2', 'advt2', 16, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(11, NULL, 'Scan for Genuity and description Response', 'scan-for-genuity-and-description-response', 60, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(12, NULL, 'Scan for Genuity and image Response', 'scan-for-genuity-and-image-response', 60, 'C1', 'P1', 1, '2018-05-12 00:00:00', '2018-05-12 00:00:00'),
+(13, NULL, 'Product Video Advertisement Feedback Response', 'product-video-advertisement-feedback-response', 110, 'C1', 'P1', 1, '2018-06-28 00:00:00', '2018-06-28 00:00:00'),
+(14, NULL, 'Product Survey Feedback', 'product-survey-feedback', 110, 'C1', 'P1', 1, '2018-07-07 00:00:00', '2018-07-07 00:00:00'),
+(15, NULL, 'Product Pushed Ad Feedback', 'product-pushed-ad-feedback', 140, 'C1', 'P1', 1, '2018-07-07 00:00:00', '2018-07-07 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -2266,6 +2430,7 @@ INSERT INTO `loylties` (`id`, `transaction_type`, `transaction_type_slug`, `poin
 
 CREATE TABLE IF NOT EXISTS `loylty_points` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `customer_id` int(10) DEFAULT NULL,
   `user_id` int(11) NOT NULL COMMENT 'The id of the user the points belong to',
   `points` int(11) NOT NULL COMMENT 'The number of points in this block of points',
   `transaction_type` varchar(200) DEFAULT NULL,
@@ -2275,76 +2440,38 @@ CREATE TABLE IF NOT EXISTS `loylty_points` (
   `created_at` datetime NOT NULL,
   `date_expire` datetime NOT NULL COMMENT 'When do these reward points expire',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=66 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=27 ;
 
 --
 -- Dumping data for table `loylty_points`
 --
 
-INSERT INTO `loylty_points` (`id`, `user_id`, `points`, `transaction_type`, `params`, `status`, `modified_at`, `created_at`, `date_expire`) VALUES
-(1, 1, 8, 'Product Registration with Warranty', '{"product_id":17}', 1, '2018-05-15 20:06:00', '2018-05-15 20:06:00', '2018-08-15 20:06:00'),
-(2, 10, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"7"}', 1, '2018-05-15 23:14:18', '2018-05-15 23:14:18', '2018-08-15 23:14:18'),
-(3, 10, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"6"}', 1, '2018-05-15 23:14:19', '2018-05-15 23:14:19', '2018-08-15 23:14:19'),
-(4, 10, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"8"}', 1, '2018-05-15 23:14:32', '2018-05-15 23:14:32', '2018-08-15 23:14:32'),
-(5, 10, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"13"}', 1, '2018-05-15 23:14:32', '2018-05-15 23:14:32', '2018-08-15 23:14:32'),
-(6, 10, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"7"}', 1, '2018-05-16 15:31:00', '2018-05-16 15:31:00', '2018-08-16 15:31:00'),
-(7, 10, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"6"}', 1, '2018-05-16 15:31:00', '2018-05-16 15:31:00', '2018-08-16 15:31:00'),
-(8, 10, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"7"}', 1, '2018-05-16 15:38:07', '2018-05-16 15:38:07', '2018-08-16 15:38:07'),
-(9, 10, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"6"}', 1, '2018-05-16 15:38:08', '2018-05-16 15:38:08', '2018-08-16 15:38:08'),
-(10, 1, 8, 'Product Registration with Warranty', '{"product_id":18}', 1, '2018-05-17 20:32:50', '2018-05-17 20:32:50', '2018-08-17 20:32:50'),
-(11, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"8"}', 1, '2018-05-18 00:13:46', '2018-05-18 00:13:46', '2018-08-18 00:13:46'),
-(12, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"13"}', 1, '2018-05-18 00:13:47', '2018-05-18 00:13:47', '2018-08-18 00:13:47'),
-(13, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"8"}', 1, '2018-05-18 00:23:29', '2018-05-18 00:23:29', '2018-08-18 00:23:29'),
-(14, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"13"}', 1, '2018-05-18 00:23:31', '2018-05-18 00:23:31', '2018-08-18 00:23:31'),
-(15, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"7"}', 1, '2018-05-18 00:24:41', '2018-05-18 00:24:41', '2018-08-18 00:24:41'),
-(16, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"6"}', 1, '2018-05-18 00:24:42', '2018-05-18 00:24:42', '2018-08-18 00:24:42'),
-(17, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"6"}', 1, '2018-05-18 00:28:27', '2018-05-18 00:28:27', '2018-08-18 00:28:27'),
-(18, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"7"}', 1, '2018-05-18 00:30:08', '2018-05-18 00:30:08', '2018-08-18 00:30:08'),
-(19, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"8"}', 1, '2018-05-18 00:45:37', '2018-05-18 00:45:37', '2018-08-18 00:45:37'),
-(20, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"13"}', 1, '2018-05-18 00:45:38', '2018-05-18 00:45:38', '2018-08-18 00:45:38'),
-(21, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"8"}', 1, '2018-05-18 00:46:09', '2018-05-18 00:46:09', '2018-08-18 00:46:09'),
-(22, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"13"}', 1, '2018-05-18 00:46:10', '2018-05-18 00:46:10', '2018-08-18 00:46:10'),
-(23, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"8"}', 1, '2018-05-18 00:50:46', '2018-05-18 00:50:46', '2018-08-18 00:50:46'),
-(24, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"13"}', 1, '2018-05-18 00:50:47', '2018-05-18 00:50:47', '2018-08-18 00:50:47'),
-(25, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"7"}', 1, '2018-05-18 00:51:15', '2018-05-18 00:51:15', '2018-08-18 00:51:15'),
-(26, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"6"}', 1, '2018-05-18 00:51:16', '2018-05-18 00:51:16', '2018-08-18 00:51:16'),
-(27, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"8"}', 1, '2018-05-18 00:51:44', '2018-05-18 00:51:44', '2018-08-18 00:51:44'),
-(28, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"13"}', 1, '2018-05-18 00:51:44', '2018-05-18 00:51:44', '2018-08-18 00:51:44'),
-(29, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"8"}', 1, '2018-05-18 01:04:37', '2018-05-18 01:04:37', '2018-08-18 01:04:37'),
-(30, 1, 6, 'Scan for Genuity and pdf Response', '{"product_id":"143","question_id":"8"}', 1, '2018-05-18 01:05:31', '2018-05-18 01:05:31', '2018-08-18 01:05:31'),
-(31, 20, 100, 'User Registration', '{"user_id":20}', 1, '2018-05-18 10:55:15', '2018-05-18 10:55:15', '2018-08-18 10:55:15'),
-(32, 20, 8, 'Product Registration with Warranty', '{"product_id":19}', 1, '2018-05-19 16:36:39', '2018-05-19 16:36:39', '2018-08-19 16:36:39'),
-(33, 20, 8, 'Product Registration with Warranty', '{"product_id":20}', 1, '2018-05-22 15:00:37', '2018-05-22 15:00:37', '2018-08-22 15:00:37'),
-(34, 20, 8, 'Product Registration with Warranty', '{"product_id":21}', 1, '2018-05-22 15:00:51', '2018-05-22 15:00:51', '2018-08-22 15:00:51'),
-(35, 20, 8, 'Product Registration with Warranty', '{"product_id":22}', 1, '2018-05-22 15:01:00', '2018-05-22 15:01:00', '2018-08-22 15:01:00'),
-(36, 20, 8, 'Product Registration with Warranty', '{"product_id":23}', 1, '2018-05-22 15:17:47', '2018-05-22 15:17:47', '2018-08-22 15:17:47'),
-(37, 20, 8, 'Product Registration with Warranty', '{"product_id":24}', 1, '2018-05-22 15:17:59', '2018-05-22 15:17:59', '2018-08-22 15:17:59'),
-(38, 20, 8, 'Product Registration with Warranty', '{"product_id":25}', 1, '2018-05-22 15:27:17', '2018-05-22 15:27:17', '2018-08-22 15:27:17'),
-(39, 20, 8, 'Product Registration with Warranty', '{"product_id":26}', 1, '2018-05-22 15:42:32', '2018-05-22 15:42:32', '2018-08-22 15:42:32'),
-(40, 16, 8, 'Product Survey Feedback', '{"product_id":155}', 1, '2018-07-07 15:15:59', '2018-05-22 15:43:53', '2018-08-22 15:43:53'),
-(41, 20, 100, 'User Registration', '{"user_id":"20"}', 1, '2018-06-01 14:18:55', '2018-06-01 14:18:55', '2018-09-01 14:18:55'),
-(42, 20, 100, 'User Registration', '{"user_id":"20"}', 1, '2018-06-01 14:19:21', '2018-06-01 14:19:21', '2018-09-01 14:19:21'),
-(43, 20, 100, 'User Registration', '{"user_id":"20"}', 1, '2018-06-01 14:22:19', '2018-06-01 14:22:19', '2018-09-01 14:22:19'),
-(44, 20, 100, 'User Registration', '{"user_id":"20"}', 1, '2018-06-01 14:22:39', '2018-06-01 14:22:39', '2018-09-01 14:22:39'),
-(47, 16, 2, 'Scan for Genuity and Audio Response', '{"product_id":"151","question_id":"29"}', 1, '2018-06-10 21:50:10', '2018-06-10 21:50:10', '2018-09-10 21:50:10'),
-(48, 10, 2, 'Scan for Genuity and Video Response', '{"product_id":"151","question_id":"26"}', 1, '2018-06-10 22:30:40', '2018-06-10 22:30:40', '2018-09-10 22:30:40'),
-(49, 10, 2, 'Scan for Genuity and Audio Response', '{"product_id":"151","question_id":"19"}', 1, '2018-06-10 22:31:43', '2018-06-10 22:31:43', '2018-09-10 22:31:43'),
-(50, 10, 6, 'Scan for Genuity and pdf Response', '{"product_id":"151","question_id":"32"}', 1, '2018-06-10 22:33:09', '2018-06-10 22:33:09', '2018-09-10 22:33:09'),
-(51, 21, 100, 'User Registration', '{"user_id":21}', 1, '2018-06-15 19:21:43', '2018-06-15 19:21:43', '2018-09-15 19:21:43'),
-(52, 1, 2, 'Scan for Genuity and Audio Response', '{"product_id":"147","product_qr_code":"dk-motor-8321-0000-130-13","question_id":"52","selected_answer":"Car Sound","user_id":"1","updated_date":"2018-06-18 10:30:05","created_date":"2018-06-18 10:30:05","transaction_type":"product audio feedback"}', 1, '2018-06-18 10:30:05', '2018-06-18 10:30:05', '2018-09-18 10:30:05'),
-(53, 1, 2, 'Scan for Genuity and Audio Response', '{"product_id":148,"product_qr_code":"dk-motor-8321-0000-130-13","question_id":55,"selected_answer":"Car Sound","user_id":"1","updated_date":"2018-06-18 11:30:31","created_date":"2018-06-18 11:30:31","transaction_type":"product audio feedback"}', 1, '2018-06-18 11:30:31', '2018-06-18 11:30:31', '2018-09-18 11:30:31'),
-(54, 1, 2, 'Scan for Genuity and Video Response', '{"product_id":148,"product_qr_code":"dk-motor-8321-0000-130-13","question_id":56,"selected_answer":"No","user_id":"1","updated_date":"2018-06-18 12:34:40","created_date":"2018-06-18 12:34:40","transaction_type":"product video feedback"}', 1, '2018-06-18 12:34:40', '2018-06-18 12:34:40', '2018-09-18 12:34:40'),
-(55, 1, 2, 'Scan for Genuity and Video Response', '{"product_id":148,"product_qr_code":"dk-motor-8321-0000-130-13","question_id":54,"selected_answer":"Red","user_id":"1","updated_date":"2018-06-18 12:35:36","created_date":"2018-06-18 12:35:36","transaction_type":"product video feedback"}', 1, '2018-06-18 12:35:36', '2018-06-18 12:35:36', '2018-09-18 12:35:36'),
-(56, 20, 2, 'Scan for Genuity and Video Response', '{"product_id":148,"product_qr_code":"dk-motor-8321-0000-130-13","question_id":54,"selected_answer":"Red","user_id":"20","updated_date":"2018-06-18 16:05:10","created_date":"2018-06-18 16:05:10","transaction_type":"product video feedback"}', 1, '2018-06-18 16:05:10', '2018-06-18 16:05:10', '2018-09-18 16:05:10'),
-(57, 20, 2, 'Scan for Genuity and Video Response', '{"product_id":148,"product_qr_code":"dk-motor-8321-0000-130-13","question_id":56,"selected_answer":"No","user_id":"20","updated_date":"2018-06-18 16:09:18","created_date":"2018-06-18 16:09:18","transaction_type":"product video feedback"}', 1, '2018-06-18 16:09:18', '2018-06-18 16:09:18', '2018-09-18 16:09:18'),
-(58, 1, 2, 'Scan for Genuity and Video Response', '{"product_id":"157","product_qr_code":"addidas-solarboost-4018-0000-132-12","question_id":"65","selected_answer":"May Things ","user_id":"1","updated_date":"2018-06-19 07:35:52","created_date":"2018-06-19 07:35:52","transaction_type":"product video feedback"}', 1, '2018-06-19 07:35:52', '2018-06-19 07:35:52', '2018-09-19 07:35:52'),
-(59, 1, 2, 'Scan for Genuity and Video Response', '{"product_id":"157","product_qr_code":"addidas-solarboost-4018-0000-132-12","question_id":"64","selected_answer":"Not OK","user_id":"1","updated_date":"2018-06-19 07:35:52","created_date":"2018-06-19 07:35:52","transaction_type":"product video feedback"}', 1, '2018-06-19 07:35:52', '2018-06-19 07:35:52', '2018-09-19 07:35:52'),
-(60, 1, 2, 'Scan for Genuity and Video Response', '{"product_id":"151","product_qr_code":"india-gate-classic-4809-0000-131-12","question_id":"76","selected_answer":"Home Setting","user_id":"1","updated_date":"2018-06-19 07:38:49","created_date":"2018-06-19 07:38:49","transaction_type":"product video feedback"}', 1, '2018-06-19 07:38:49', '2018-06-19 07:38:49', '2018-09-19 07:38:49'),
-(61, 1, 2, 'Scan for Genuity and Video Response', '{"product_id":"151","product_qr_code":"india-gate-classic-4809-0000-131-12","question_id":"77","selected_answer":"No ","user_id":"1","updated_date":"2018-06-19 07:38:50","created_date":"2018-06-19 07:38:50","transaction_type":"product video feedback"}', 1, '2018-06-19 07:38:50', '2018-06-19 07:38:50', '2018-09-19 07:38:50'),
-(62, 1, 2, 'Scan for Genuity and Video Response', '{"product_id":"151","product_qr_code":"india-gate-classic-4809-0000-131-12","question_id":"78","selected_answer":"Beti Padhao","user_id":"1","updated_date":"2018-06-19 07:38:51","created_date":"2018-06-19 07:38:51","transaction_type":"product video feedback"}', 1, '2018-06-19 07:38:51', '2018-06-19 07:38:51', '2018-09-19 07:38:51'),
-(63, 20, 2, 'Scan for Genuity and Video Response', '{"product_id":"147","product_qr_code":"bentodent-toothpaste-4105-0000-129-15","question_id":"48","selected_answer":"Yes","user_id":"16","updated_date":"2018-06-19 10:45:42","created_date":"2018-06-19 10:45:42","transaction_type":"product video feedback"}', 1, '2018-06-19 16:01:57', '2018-06-19 10:45:42', '2018-09-19 10:45:42'),
-(64, 20, 2, 'Scan for Genuity and Audio Response', '{"product_id":"147","product_qr_code":"bentodent-toothpaste-4105-0000-129-15","question_id":"44","selected_answer":"Good","user_id":"16","updated_date":"2018-06-19 10:45:42","created_date":"2018-06-19 10:45:42","transaction_type":"product video feedback"}', 1, '2018-06-19 22:58:05', '2018-06-19 10:45:42', '2018-09-19 10:45:42'),
-(65, 21, 100, 'User Registration', '{"user_id":21}', 1, '2018-07-24 11:19:27', '2018-07-24 11:19:27', '2018-10-24 11:19:27');
+INSERT INTO `loylty_points` (`id`, `customer_id`, `user_id`, `points`, `transaction_type`, `params`, `status`, `modified_at`, `created_at`, `date_expire`) VALUES
+(2, NULL, 11, 100, 'User Registration', '{"consumer_id":11}', 1, '2018-10-05 17:30:50', '2018-10-05 17:30:50', '2019-01-05 17:30:50'),
+(3, NULL, 11, 220, 'product_registration_lps', '{"verification_date":"2018-10-08 11:42:25","consumer_id":"11","consumer_name":"","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-7599-5"}', 1, '2018-10-08 11:42:25', '2018-10-08 11:42:25', '2019-01-08 11:42:25'),
+(4, NULL, 12, 100, 'User Registration', '{"consumer_id":12}', 1, '2018-10-09 15:18:40', '2018-10-09 15:18:40', '2019-01-09 15:18:40'),
+(5, NULL, 12, 220, 'product_registration_lps', '{"verification_date":"2018-10-09 15:20:44","consumer_id":"12","consumer_name":"","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-7599-1"}', 1, '2018-10-09 15:20:44', '2018-10-09 15:20:44', '2019-01-09 15:20:44'),
+(6, NULL, 12, 220, 'product_registration_lps', '{"verification_date":"2018-10-09 15:20:52","consumer_id":"12","consumer_name":"","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-7599-2"}', 1, '2018-10-09 15:20:52', '2018-10-09 15:20:52', '2019-01-09 15:20:52'),
+(7, NULL, 12, 220, 'product_registration_lps', '{"verification_date":"2018-10-09 15:21:37","consumer_id":"12","consumer_name":"","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-7599-3"}', 1, '2018-10-09 15:21:37', '2018-10-09 15:21:37', '2019-01-09 15:21:37'),
+(8, NULL, 12, 600, 'product_registration_lps', '{"transaction_date":"2018-10-09 15:25:37","consumer_id":"12","product_id":"166"}', 1, '2018-10-09 15:25:37', '2018-10-09 15:25:37', '2019-01-09 15:25:37'),
+(9, NULL, 13, 100, 'User Registration', '{"consumer_id":13}', 1, '2018-10-11 10:28:57', '2018-10-11 10:28:57', '2019-01-11 10:28:57'),
+(10, NULL, 13, 60012, 'product_registration_lps', '{"transaction_date":"2018-10-11 10:32:03","consumer_id":"13","product_id":"166"}', 1, '2018-10-11 10:32:03', '2018-10-11 10:32:03', '2019-01-11 10:32:03'),
+(11, NULL, 13, 60012, 'product_registration_lps', '{"transaction_date":"2018-10-11 10:32:33","consumer_id":"13","product_id":"166"}', 1, '2018-10-11 10:32:33', '2018-10-11 10:32:33', '2019-01-11 10:32:33'),
+(12, NULL, 13, 60012, 'product_registration_lps', '{"transaction_date":"2018-10-11 10:33:05","consumer_id":"13","product_id":"166"}', 1, '2018-10-11 10:33:05', '2018-10-11 10:33:05', '2019-01-11 10:33:05'),
+(13, 221, 13, 220, 'product_registration_lps', '{"verification_date":"2018-10-12 16:00:05","consumer_id":"13","consumer_name":"Sanjay2","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-8264-6"}', 1, '2018-10-12 16:00:05', '2018-10-12 16:00:05', '2019-01-12 16:00:05'),
+(14, 221, 13, 60012, 'product_registration_lps', '{"transaction_date":"2018-10-12 16:10:29","consumer_id":"13","product_id":"166"}', 1, '2018-10-12 16:10:29', '2018-10-12 16:10:29', '2019-01-12 16:10:29'),
+(15, 0, 15, 100, 'User Registration', '{"consumer_id":15}', 1, '2018-10-13 11:05:29', '2018-10-13 11:05:29', '2019-01-13 11:05:29'),
+(16, 221, 13, 220, 'product_registration_lps', '{"verification_date":"2018-10-13 11:38:57","consumer_id":"13","consumer_name":"Sanjay2","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-8264-7"}', 1, '2018-10-13 11:38:57', '2018-10-13 11:38:57', '2019-01-13 11:38:57'),
+(17, 221, 13, 220, 'product_registration_lps', '{"verification_date":"2018-10-13 11:39:19","consumer_id":"13","consumer_name":"Sanjay2","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-8264-8"}', 1, '2018-10-13 11:39:19', '2018-10-13 11:39:19', '2019-01-13 11:39:19'),
+(18, 221, 15, 220, 'product_registration_lps', '{"verification_date":"2018-10-13 15:06:02","consumer_id":"15","consumer_name":"SK2","brand_name":"HP","product_name":"HP L100","product_id":"165","product_code":"hl-6367-8264-9"}', 1, '2018-10-13 15:06:02', '2018-10-13 15:06:02', '2019-01-13 15:06:02'),
+(19, 221, 15, 1012, 'product_registration_lps', '{"verification_date":"2018-10-13 16:22:42","consumer_id":"15","consumer_name":"SK2","brand_name":"INDIA GATE BASMATI RICE ","product_name":"India Gate Classic","product_id":"151","product_code":"india-gate-classic-4809-7163-1"}', 1, '2018-10-13 16:22:42', '2018-10-13 16:22:42', '2019-01-13 16:22:42'),
+(20, 221, 15, 500, 'feedback_on_product_lps', '{"bar_code":"india-gate-classic-4809-7163-1","rating":"4","description":"This is Ok4","created_at":"2018-10-13 16:23:19","consumer_id":"15","ip_address":"::1"}', 1, '2018-10-13 16:23:19', '2018-10-13 16:23:19', '2019-01-13 16:23:19'),
+(21, 221, 15, 60012, 'product_registration_lps', '{"transaction_date":"2018-10-20 10:52:23","consumer_id":"15","product_id":"166"}', 1, '2018-10-20 10:52:23', '2018-10-20 10:52:23', '2019-01-20 10:52:23'),
+(22, 221, 15, 100, 'feedback_on_product_lps', '{"bar_code":"db-9013-5563-1","rating":"4","description":"This is Ok4","created_at":"2018-10-22 11:33:14","consumer_id":"15","product_id":"166","ip_address":"::1"}', 1, '2018-10-22 11:33:14', '2018-10-22 11:33:14', '2019-01-22 11:33:14'),
+(23, 221, 13, 60012, 'product_registration_lps', '{"transaction_date":"2018-10-27 10:57:52","consumer_id":"13","product_id":"166"}', 1, '2018-10-27 10:57:52', '2018-10-27 10:57:52', '2019-01-27 10:57:52'),
+(24, 221, 13, 60012, 'product_registration_lps', '{"transaction_date":"2018-10-27 10:58:23","consumer_id":"13","product_id":"166"}', 1, '2018-10-27 10:58:23', '2018-10-27 10:58:23', '2019-01-27 10:58:23'),
+(25, 221, 13, 60012, 'product_registration_lps', '{"transaction_date":"2018-10-27 10:59:02","consumer_id":"13","product_id":"166"}', 1, '2018-10-27 10:59:02', '2018-10-27 10:59:02', '2019-01-27 10:59:02'),
+(26, 221, 13, 60012, 'product_registration_lps', '{"transaction_date":"2018-10-27 10:59:26","consumer_id":"13","product_id":"166"}', 1, '2018-10-27 10:59:26', '2018-10-27 10:59:26', '2019-01-27 10:59:26');
 
 -- --------------------------------------------------------
 
@@ -2365,19 +2492,19 @@ CREATE TABLE IF NOT EXISTS `menu_master` (
   `lastupdated_by` int(11) NOT NULL,
   `status` enum('0','1') NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=177 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=185 ;
 
 --
 -- Dumping data for table `menu_master`
 --
 
 INSERT INTO `menu_master` (`id`, `menu`, `parent`, `type`, `url`, `order_by`, `created_on`, `created_by`, `lastupdated_on`, `lastupdated_by`, `status`) VALUES
-(1, 'Add/Edit CCC Admin', 0, '1', 'admin', 2, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, '1'),
+(1, 'Customer Rgst/Mgmt', 0, '1', 'admin', 2, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, '1'),
 (4, 'Existing Customer ', 1, '1', 'user_master/list_user/', 2, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, '1'),
 (12, 'Industry Master', 0, '1', 'category/listing', 9, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 0, '1'),
 (84, 'Manage Industry', 12, '1', 'category/listing/', 8, '2017-08-19 15:16:24', 1, '2017-08-19 15:16:31', 1, '1'),
 (85, 'Manage Attributes', 0, '1', 'attribute/listing', 9, '0000-00-00 00:00:00', 0, '2017-08-19 15:16:31', 1, '1'),
-(86, 'Add Attributes', 12, '1', 'attribute/listing', 4, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 1, '1'),
+(86, 'Manage Attributes', 12, '1', 'attribute/listing', 4, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 1, '1'),
 (87, 'Product Mgmt', 0, '1', 'product/list_product', 3, '0000-00-00 00:00:00', 0, '2017-08-19 15:16:31', 1, '1'),
 (88, 'Add Product', 87, '1', 'product/add_product', 0, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 1, '1'),
 (89, 'Existing Products', 87, '1', 'product/list_product', 1, '0000-00-00 00:00:00', 0, '0000-00-00 00:00:00', 1, '1'),
@@ -2389,7 +2516,7 @@ INSERT INTO `menu_master` (`id`, `menu`, `parent`, `type`, `url`, `order_by`, `c
 (97, 'List Payment', 93, '1', 'customer/payment_list', 3, '2017-12-04 00:00:00', 0, '0000-00-00 00:00:00', 0, '1'),
 (98, 'Consumer', 0, '1', 'consumer', 4, '2017-12-04 00:00:00', 0, '0000-00-00 00:00:00', 0, '1'),
 (99, 'Reports', 0, '1', 'reports', 9, '2017-12-04 00:00:00', 0, '0000-00-00 00:00:00', 0, '1'),
-(100, 'List Consumer', 98, '1', 'consumer/consumer_list', 4, '2017-12-04 00:00:00', 0, '0000-00-00 00:00:00', 0, '1'),
+(100, 'List Consumer', 98, '1', 'product/list_all_consumers', 4, '2017-12-04 00:00:00', 0, '0000-00-00 00:00:00', 0, '1'),
 (101, 'Barcode Scanned', 98, '1', 'consumer/barcode_scanned', 4, '2017-12-04 00:00:00', 0, '0000-00-00 00:00:00', 0, '1'),
 (102, 'Plant Controllers', 0, '1', 'reports', 5, '2017-12-04 00:00:00', 0, '0000-00-00 00:00:00', 0, '0'),
 (103, 'Existing Plant Controllers', 102, '1', 'plants/list_management', 5, '2017-12-04 00:00:00', 0, '0000-00-00 00:00:00', 0, '1'),
@@ -2438,7 +2565,7 @@ INSERT INTO `menu_master` (`id`, `menu`, `parent`, `type`, `url`, `order_by`, `c
 (146, 'Products Purchased', 144, '1', 'product/list_registered_products_by_consumers', 2, '2018-03-21 00:00:00', 0, '2018-03-21 00:00:00', 0, '1'),
 (147, 'Complaint Log', 144, '1', 'reports/list_complaint_log', 3, '2018-03-21 00:00:00', 0, '2018-03-21 00:00:00', 0, '1'),
 (148, 'Warranty Claims', 144, '1', 'reports/list_warranty_claims', 4, '2018-03-21 00:00:00', 0, '2018-03-21 00:00:00', 0, '1'),
-(149, 'Product Feedback', 144, '1', 'javascript:void(0);', 5, '2018-03-21 00:00:00', 0, '2018-03-21 00:00:00', 0, '1'),
+(149, 'Product Feedback', 144, '1', 'reports/list_feedback_on_product', 5, '2018-03-21 00:00:00', 0, '2018-03-21 00:00:00', 0, '1'),
 (150, 'Survey Mgmt', 0, '1', 'javascript:void(0);', 7, '2018-03-21 00:00:00', 0, '2018-03-21 00:00:00', 0, '1'),
 (151, 'Create Survey', 150, '1', 'surveys/create_survey', 1, '2018-03-21 00:00:00', 0, '2018-03-21 00:00:00', 0, '1'),
 (152, 'Launch Survey', 150, '1', 'surveys/launch_survey', 2, '2018-03-21 00:00:00', 0, '2018-03-21 00:00:00', 0, '1'),
@@ -2458,14 +2585,22 @@ INSERT INTO `menu_master` (`id`, `menu`, `parent`, `type`, `url`, `order_by`, `c
 (166, 'Customer Codes', 0, '2', 'javascript:void(0);', 9, '2018-08-16 00:00:00', 2, '2018-08-16 00:00:00', 2, '1'),
 (167, 'Upload', 166, '2', 'order_master/list_orders/upload_codes', 0, '2018-08-16 00:00:00', 2, '2018-08-16 00:00:00', 2, '1'),
 (168, 'List', 166, '2', 'order_master/list_customer_codes', 1, '2018-08-20 00:00:00', 2, '2018-08-20 00:00:00', 2, '1'),
-(169, 'Registered Product', 87, '2', 'product/list_registered_products_by_consumers/', 2, '2018-08-22 00:00:00', 2, '2018-08-22 00:00:00', 2, '1'),
-(170, 'Loyalty Redemption', 98, '1', 'product/list_loyalty_redemption_requests', 1, '2018-09-01 00:00:00', 1, '2018-09-01 00:00:00', 1, '1'),
+(169, 'Registered Product', 87, '2', '0', 2, '2018-08-22 00:00:00', 2, '2018-08-22 00:00:00', 2, '1'),
+(170, 'Redemption Requests', 177, '1', 'product/list_loyalty_redemption_requests', 2, '2018-09-01 00:00:00', 1, '2018-09-01 00:00:00', 1, '1'),
 (171, 'Text Message', 0, '2', 'javascript:void(0);', 10, '2018-09-06 00:00:00', 2, '2018-09-06 00:00:00', 2, '1'),
 (172, 'Send Message', 171, '2', 'textmessages/push_text_message_request', 2, '2018-09-06 00:00:00', 2, '2018-09-06 00:00:00', 2, '1'),
 (173, 'Pending Approvals', 0, '1', 'javascript:void(0);', 10, '2018-09-08 00:00:00', 1, '2018-09-08 00:00:00', 1, '1'),
 (174, 'Approve Ads', 173, '1', 'javascript:void(0);', 1, '2018-09-08 00:00:00', 1, '2018-09-08 00:00:00', 1, '1'),
 (175, 'Approve Surveys', 173, '1', 'javascript:void(0);', 2, '2018-09-08 00:00:00', 1, '2018-09-08 00:00:00', 1, '1'),
-(176, 'Text Messages', 173, '1', 'textmessages/approve_text_messages', 3, '2018-09-08 00:00:00', 1, '2018-09-08 00:00:00', 1, '1');
+(176, 'Text Messages', 173, '1', 'textmessages/approve_text_messages', 3, '2018-09-08 00:00:00', 1, '2018-09-08 00:00:00', 1, '1'),
+(177, 'Loyalty Mgmt', 0, '1', 'javascript:void(0);', 11, '2018-09-24 00:00:00', 1, '2018-09-24 00:00:00', 1, '1'),
+(178, 'Consumer Loyalty Mgmt', 177, '1', 'product/list_consumers_loyalty_summary', 1, '2018-09-24 00:00:00', 1, '2018-09-24 00:00:00', 1, '1'),
+(179, 'Others', 0, '1', 'javascript:void(0);', 12, '2018-09-24 00:00:00', 1, '2018-09-24 00:00:00', 1, '1'),
+(180, 'Customer Loyalty Mgmt', 177, '1', 'product/list_customer_loyalty_summary', 3, '2018-09-24 00:00:00', 1, '2018-09-24 00:00:00', 1, '1'),
+(181, 'Loyalty Summary', 177, '1', 'product/list_consumers_loyalty_summary', 4, '2018-09-24 00:00:00', 1, '2018-09-24 00:00:00', 1, '1'),
+(182, 'Edit View Points', 179, '', 'user_master/list_common_points_loyalty', 1, '2018-09-29 00:00:00', 1, '2018-09-29 00:00:00', 1, '1'),
+(183, 'Consumer Loyalty Mgmt', 177, '2', 'product/view_customer_loyalties', 1, '2018-10-13 00:00:00', 1, '2018-10-13 00:00:00', 1, '1'),
+(184, 'Assign Functionalities to Role', 137, '1', 'role_master/assign_functionalities_to_role', 5, '2018-10-27 00:00:00', 1, '2018-10-27 00:00:00', 1, '1');
 
 -- --------------------------------------------------------
 
@@ -2499,8 +2634,8 @@ CREATE TABLE IF NOT EXISTS `menu_master_permission` (
 --
 
 INSERT INTO `menu_master_permission` (`id`, `usergroup_id`, `userid`, `rwa_id`, `username`, `permissiontypeid`, `show_hide_chks`, `read_chks`, `write_chks`, `delete_chks`, `print_chks`, `export_chks`, `created_on`, `created_by`, `lastupdated_on`, `lastupdated_by`, `status`) VALUES
-(1, 11, 1, 0, 'superadmin', '1', '1,4,12,84,86,87,88,89,92,93,94,95,96,97,98,99,100,101,103,104,105,116,117,106,107,108,128,130,132,134,150,151,152,153,154,155,156,157,169,170,173,174,175,176\n\n\n', '', '', '', '', '', '2017-06-22 16:00:00', 1, '2017-06-22 16:00:00', 1, '1'),
-(2, 2, 2, 0, 'ccc', NULL, '87,103,102,104,105,88,89,106,107,108,109,110,111,112,113,114,115,116,117,126,127,128,129,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,166,167,168,169,171,172\n', '', '', '', '', '', '2017-06-22 16:00:00', 1, '2017-06-22 16:00:00', 1, '1'),
+(1, 11, 1, 0, 'superadmin', '1', '1,4,12,84,86,87,88,89,92,93,94,95,96,97,98,99,100,101,103,104,105,116,117,106,107,108,128,130,132,134,150,151,152,153,154,155,156,157,169,170,173,174,175,176,177,178,179,180,182\n\n\n', '', '', '', '', '', '2017-06-22 16:00:00', 1, '2017-06-22 16:00:00', 1, '1'),
+(2, 2, 2, 0, 'ccc', NULL, '87,103,102,104,105,88,89,106,107,108,109,110,111,112,113,114,115,116,117,126,127,128,129,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,166,167,168,171,172,177,183,184\n', '', '', '', '', '', '2017-06-22 16:00:00', 1, '2017-06-22 16:00:00', 1, '1'),
 (3, 2, 2, 0, 'pc', NULL, '119,120,121,122,123,124,126,116,117,131,93,133,135,136,157,158,159,160,161,162,163,164,165', '', '', '', '', '', '2017-06-22 16:00:00', 1, '2017-06-22 16:00:00', 1, '1');
 
 -- --------------------------------------------------------
@@ -2527,7 +2662,7 @@ CREATE TABLE IF NOT EXISTS `order_master` (
   `updated_date` datetime NOT NULL,
   `updated_by` int(11) NOT NULL,
   PRIMARY KEY (`order_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=166 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=170 ;
 
 --
 -- Dumping data for table `order_master`
@@ -2686,7 +2821,11 @@ INSERT INTO `order_master` (`order_id`, `order_no`, `order_tracking_number`, `us
 (162, 20180813145647, 'demo4p-8134', 221, 'demo4p', 'demo4p-8134', 161, 31, 1000, '2018-09-06', 0, 1, 1, '2018-08-13 09:27:11', '1970-01-01 00:00:00', 0),
 (163, 20180813174445, 'hl-6367', 221, 'HP L100', 'hl-6367', 165, 31, 1000, '2018-09-08', 0, 1, 1, '2018-08-13 12:14:58', '1970-01-01 00:00:00', 0),
 (164, 20180816171533, 'db-9013', 221, 'Dolly Battery', 'db-9013', 166, 31, 1000, '2018-09-08', 0, 1, 1, '2018-08-16 11:45:58', '1970-01-01 00:00:00', 0),
-(165, 20180817161309, 'db-9013', 221, 'Dolly Battery', 'db-9013', 166, 31, 10000, '2018-09-08', 0, 1, 1, '2018-08-17 10:43:18', '1970-01-01 00:00:00', 0);
+(165, 20180817161309, 'db-9013', 221, 'Dolly Battery', 'db-9013', 166, 31, 10000, '2018-09-08', 0, 1, 1, '2018-08-17 10:43:18', '1970-01-01 00:00:00', 0),
+(166, 20181013162004, 'india-gate-classic-4809', 221, 'India Gate Classic', 'india-gate-classic-4809', 151, 36, 100, '2018-11-08', 0, 1, 1, '2018-10-13 10:50:26', '1970-01-01 00:00:00', 0),
+(167, 20181020104939, 'db-9013', 221, 'Dolly Battery', 'db-9013', 166, 31, 1000, '2018-11-10', 0, 1, 1, '2018-10-20 05:20:21', '1970-01-01 00:00:00', 0),
+(168, 20181027110051, 'india-gate-classic-4809', 221, 'India Gate Classic', 'india-gate-classic-4809', 151, 31, 100, '2018-11-10', 0, 1, 1, '2018-10-27 05:37:04', '1970-01-01 00:00:00', 0),
+(169, 20181101145210, 'india-gate-classic-4809', 221, 'India Gate Classic', 'india-gate-classic-4809', 151, 31, 100, '2018-12-08', 0, 1, 1, '2018-11-01 09:22:32', '1970-01-01 00:00:00', 0);
 
 -- --------------------------------------------------------
 
@@ -2703,7 +2842,7 @@ CREATE TABLE IF NOT EXISTS `order_print_listing` (
   `last_printed_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=357 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=364 ;
 
 --
 -- Dumping data for table `order_print_listing`
@@ -3065,7 +3204,14 @@ INSERT INTO `order_print_listing` (`id`, `order_id`, `last_printed_rows`, `total
 (353, 163, 10, 1000, 'barcode', '2018-08-24 05:57:58', 1),
 (354, 163, 10, 1000, 'barcode', '2018-08-24 05:58:32', 1),
 (355, 163, 10, 1000, 'barcode', '2018-08-24 06:44:13', 1),
-(356, 165, 10, 10000, 'Qrcode', '2018-08-24 06:46:39', 1);
+(356, 165, 10, 10000, 'Qrcode', '2018-08-24 06:46:39', 1),
+(357, 165, 10, 10000, 'Qrcode', '2018-10-01 06:11:12', 1),
+(358, 163, 10, 1000, 'barcode', '2018-10-01 07:18:07', 1),
+(359, 165, 10, 10000, 'Qrcode', '2018-10-09 09:53:31', 1),
+(360, 166, 10, 100, 'Qrcode', '2018-10-13 10:51:23', 1),
+(361, 167, 10, 1000, 'Qrcode', '2018-10-20 05:20:28', 1),
+(362, 169, 10, 100, 'Qrcode', '2018-11-01 09:22:42', 1),
+(363, 169, 10, 100, 'Qrcode', '2018-11-01 10:01:40', 1);
 
 -- --------------------------------------------------------
 
@@ -3085,6 +3231,63 @@ CREATE TABLE IF NOT EXISTS `other_industry` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `packaging_codes_pc`
+--
+
+CREATE TABLE IF NOT EXISTS `packaging_codes_pc` (
+  `id` int(10) NOT NULL AUTO_INCREMENT,
+  `product_id` int(10) NOT NULL,
+  `bar_code` text NOT NULL,
+  `parent_bar_code` varchar(100) NOT NULL,
+  `packaging_level` int(4) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `packaging_codes_pc`
+--
+
+INSERT INTO `packaging_codes_pc` (`id`, `product_id`, `bar_code`, `parent_bar_code`, `packaging_level`) VALUES
+(1, 166, 'db-9013-2926-1, db-9013-2926-2', 'db-9013-2926-6', 1),
+(2, 166, 'db-9013-2926-1', 'db-9013-2926-6', 1),
+(3, 166, 'db-9013-2926-1', 'db-9013-2926-6', 1),
+(4, 166, 'db-9013-2926-1, db-9013-2926-2', 'db-9013-2926-6', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `packaging_codes_pcr`
+--
+
+CREATE TABLE IF NOT EXISTS `packaging_codes_pcr` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `product_id` bigint(20) NOT NULL,
+  `bar_code` varchar(100) NOT NULL,
+  `parent_bar_code` varchar(100) NOT NULL,
+  `packaging_level` int(4) NOT NULL,
+  `parent_pack_level` int(4) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=20 ;
+
+--
+-- Dumping data for table `packaging_codes_pcr`
+--
+
+INSERT INTO `packaging_codes_pcr` (`id`, `product_id`, `bar_code`, `parent_bar_code`, `packaging_level`, `parent_pack_level`) VALUES
+(10, 166, 'db-9013-2926-5', 'db-9013-2926-1', 1, 2),
+(11, 166, 'db-9013-2926-6', 'db-9013-2926-1', 4, 2),
+(12, 166, 'db-9013-2926-7', 'db-9013-2926-1', 0, 2),
+(13, 166, 'db-9013-2926-8', 'db-9013-2926-1', 0, 2),
+(14, 166, 'db-9013-2926-9', 'db-9013-2926-1', 0, 2),
+(15, 166, 'db-9013-2926-10', 'db-9013-2926-1', 0, 2),
+(16, 151, 'india-gate-classic-4809-8749-2', 'india-gate-classic-4809-8749-1', 4, 5),
+(17, 151, 'india-gate-classic-4809-8749-3', 'india-gate-classic-4809-8749-1', 4, 5),
+(18, 151, 'india-gate-classic-4809-8749-3', 'india-gate-classic-4809-8749-1', 4, 5),
+(19, 151, 'india-gate-classic-4809-8749-3', 'india-gate-classic-4809-8749-1', 4, 5);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `physical_inventory`
 --
 
@@ -3095,7 +3298,14 @@ CREATE TABLE IF NOT EXISTS `physical_inventory` (
   `plant_id` bigint(20) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `physical_inventory`
+--
+
+INSERT INTO `physical_inventory` (`id`, `customer_id`, `bar_code`, `plant_id`, `created_at`) VALUES
+(1, 265, 'db-9013-2926-4', 31, '2018-11-02 14:57:59');
 
 -- --------------------------------------------------------
 
@@ -3118,7 +3328,7 @@ CREATE TABLE IF NOT EXISTS `plant_master` (
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `updated_date` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`plant_id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=48 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=49 ;
 
 --
 -- Dumping data for table `plant_master`
@@ -3168,7 +3378,8 @@ INSERT INTO `plant_master` (`plant_id`, `plant_code`, `plant_name`, `email_id`, 
 (44, 'P001', 'test6', 'test6@gmail.com', 7678665537, 'GST-1234567890', 737, 'test', 'test', 1, 221, '2018-06-08 07:19:22', '0000-00-00 00:00:00'),
 (45, 'P001', 'test7', 'test7@gmail.com', 7678665537, 'GST-1234567891', 737, 'test', 'ttt', 1, 221, '2018-06-08 07:20:54', '0000-00-00 00:00:00'),
 (46, 'P0046', 'test8', 'test8@gmail.com', 7678665537, 'GST-1234567890', 737, 'test', 'test', 1, 221, '2018-08-01 05:50:35', '0000-00-00 00:00:00'),
-(47, 'P001', 'paa', 'paa@gmail.com', 9958439076, '12345678909876', 270, 'B-37/1 Badarpur Extn. Badarpur', '', 1, 221, '2018-09-08 09:57:27', '0000-00-00 00:00:00');
+(47, 'P001', 'paa', 'paa@gmail.com', 9958439076, '12345678909876', 270, 'B-37/1 Badarpur Extn. Badarpur', '', 1, 221, '2018-09-08 09:57:27', '0000-00-00 00:00:00'),
+(48, 'P001', 'LalitM10Plant', 'test1@gmail.com', 9958176790, '12345678123411', 737, 'test', 'test', 0, 221, '2018-10-15 10:03:41', '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -3193,154 +3404,224 @@ CREATE TABLE IF NOT EXISTS `printed_barcode_qrcode` (
   `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `receive_date` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=143 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=213 ;
 
 --
 -- Dumping data for table `printed_barcode_qrcode`
 --
 
 INSERT INTO `printed_barcode_qrcode` (`id`, `print_id`, `order_id`, `product_id`, `plant_id`, `print_user_id`, `active_status`, `pack_level`, `barcode_qr_code_no`, `barcode_qr_code_no2`, `pack_level2`, `customer_id`, `stock_status`, `modified_at`, `receive_date`) VALUES
-(1, 343, 165, 166, 31, 221, 1, 1, 'db-9013-4476-1', 'db-9013-3432-1', 0, 0, 'Not Received', '2018-08-18 11:33:02', NULL),
-(12, 1, 1, 166, 31, 221, 1, 0, 'dbupexist100', 'db-9013-5991-1', 0, 0, 'Customer_Code', '2018-08-23 09:16:01', '2018-08-23 14:46:01'),
-(3, 343, 165, 166, 31, 221, 1, 1, 'db-9013-4476-3', 'db-9013-3432-3', 0, 0, 'Not Received', '2018-08-18 11:33:02', NULL),
-(4, 343, 165, 166, 31, 221, 1, 1, 'db-9013-4476-4', 'db-9013-3432-4', 0, 0, 'Not Received', '2018-08-18 11:33:02', NULL),
-(5, 343, 165, 166, 31, 221, 1, 1, 'db-9013-4476-5', 'db-9013-3432-5', 0, 0, 'Not Received', '2018-08-18 11:33:02', NULL),
-(6, 343, 165, 166, 31, 221, 1, 1, 'db-9013-4476-6', 'db-9013-3432-6', 0, 0, 'Not Received', '2018-08-18 11:33:02', NULL),
-(7, 343, 165, 166, 31, 221, 1, 1, 'db-9013-4476-7', 'db-9013-3432-7', 0, 0, 'Not Received', '2018-08-18 11:33:02', NULL),
-(8, 343, 165, 166, 31, 221, 1, 1, 'db-9013-4476-8', 'db-9013-3432-8', 0, 0, 'Not Received', '2018-08-18 11:33:02', NULL),
-(9, 343, 165, 166, 31, 221, 1, 11, 'db-9013-4476-9', 'db-9013-3432-9', 10, 0, 'Not Received', '2018-08-18 11:54:30', NULL),
-(10, 343, 165, 166, 31, 221, 1, 1, 'db-9013-4476-10', 'db-9013-3432-10', 0, 0, 'Not Received', '2018-08-18 11:33:02', NULL),
-(11, 1, 1, 147, 31, 221, 1, 0, 'DellLaptopWa', 'bentodent-toothpaste-4105-6678-1', 0, 0, 'Customer_Code', '2018-08-21 12:17:00', '2018-08-20 15:29:28'),
-(13, 344, 165, 166, 31, 221, 1, 1, 'db-9013-7608-1', 'db-9013-2852-1', 0, 0, 'Not Received', '2018-08-23 09:18:00', NULL),
-(14, 344, 165, 166, 31, 221, 1, 1, 'db-9013-7608-2', 'db-9013-2852-2', 0, 0, 'Not Received', '2018-08-23 09:18:00', NULL),
-(15, 344, 165, 166, 31, 221, 1, 1, 'db-9013-7608-3', 'db-9013-2852-3', 0, 0, 'Not Received', '2018-08-23 09:18:00', NULL),
-(16, 344, 165, 166, 31, 221, 1, 1, 'db-9013-7608-4', 'db-9013-2852-4', 0, 0, 'Not Received', '2018-08-23 09:18:00', NULL),
-(17, 344, 165, 166, 31, 221, 1, 1, 'bb-bike-1260-0000-128-100', 'db-9013-2852-5', 0, 0, 'Not Received', '2018-08-25 11:46:29', NULL),
-(18, 344, 165, 166, 31, 221, 1, 1, 'db-9013-7608-6', 'db-9013-2852-6', 0, 0, 'Not Received', '2018-08-23 09:18:00', NULL),
-(19, 344, 165, 166, 31, 221, 1, 1, 'db-9013-7608-7', 'db-9013-2852-7', 0, 0, 'Not Received', '2018-08-23 09:18:00', NULL),
-(20, 344, 165, 166, 31, 221, 1, 1, 'db-9013-7608-8', 'db-9013-2852-8', 0, 0, 'Not Received', '2018-08-23 09:18:00', NULL),
-(21, 344, 165, 166, 31, 221, 1, 1, 'db-9013-7608-9', 'db-9013-2852-9', 0, 0, 'Not Received', '2018-08-23 09:18:00', NULL),
-(22, 344, 165, 166, 31, 221, 1, 1, 'db-9013-7608-10', 'db-9013-2852-10', 0, 0, 'Not Received', '2018-08-23 09:18:00', NULL),
-(23, 345, 165, 166, 31, 221, 1, 1, 'db-9013-8849-1', 'db-9013-4804-1', 0, 0, 'Not Received', '2018-08-24 05:21:59', NULL),
-(24, 345, 165, 166, 31, 221, 1, 1, 'db-9013-8849-2', 'db-9013-4804-2', 0, 0, 'Not Received', '2018-08-24 05:21:59', NULL),
-(25, 345, 165, 166, 31, 221, 1, 1, 'db-9013-8849-3', 'db-9013-4804-3', 0, 0, 'Not Received', '2018-08-24 05:21:59', NULL),
-(26, 345, 165, 166, 31, 221, 1, 1, 'db-9013-8849-4', 'db-9013-4804-4', 0, 0, 'Not Received', '2018-08-24 05:21:59', NULL),
-(27, 345, 165, 166, 31, 221, 1, 1, 'db-9013-8849-5', 'db-9013-4804-5', 0, 0, 'Not Received', '2018-08-24 05:22:00', NULL),
-(28, 345, 165, 166, 31, 221, 1, 1, 'db-9013-8849-6', 'db-9013-4804-6', 0, 0, 'Not Received', '2018-08-24 05:22:00', NULL),
-(29, 345, 165, 166, 31, 221, 1, 1, 'db-9013-8849-7', 'db-9013-4804-7', 0, 0, 'Not Received', '2018-08-24 05:22:00', NULL),
-(30, 345, 165, 166, 31, 221, 1, 1, 'db-9013-8849-8', 'db-9013-4804-8', 0, 0, 'Not Received', '2018-08-24 05:22:00', NULL),
-(31, 345, 165, 166, 31, 221, 1, 1, 'db-9013-8849-9', 'db-9013-4804-9', 0, 0, 'Not Received', '2018-08-24 05:22:00', NULL),
-(32, 345, 165, 166, 31, 221, 1, 1, 'db-9013-8849-10', 'db-9013-4804-10', 0, 0, 'Not Received', '2018-08-24 05:22:00', NULL),
-(33, 346, 165, 166, 31, 221, 1, 1, 'db-9013-1000-1', 'db-9013-9140-1', 0, 0, 'Not Received', '2018-08-24 05:23:30', NULL),
-(34, 346, 165, 166, 31, 221, 1, 1, 'db-9013-1000-2', 'db-9013-9140-2', 0, 0, 'Not Received', '2018-08-24 05:23:30', NULL),
-(35, 346, 165, 166, 31, 221, 1, 1, 'db-9013-1000-3', 'db-9013-9140-3', 0, 0, 'Not Received', '2018-08-24 05:23:30', NULL),
-(36, 346, 165, 166, 31, 221, 1, 1, 'db-9013-1000-4', 'db-9013-9140-4', 0, 0, 'Not Received', '2018-08-24 05:23:30', NULL),
-(37, 346, 165, 166, 31, 221, 1, 1, 'db-9013-1000-5', 'db-9013-9140-5', 0, 0, 'Not Received', '2018-08-24 05:23:30', NULL),
-(38, 346, 165, 166, 31, 221, 1, 1, 'db-9013-1000-6', 'db-9013-9140-6', 0, 0, 'Not Received', '2018-08-24 05:23:30', NULL),
-(39, 346, 165, 166, 31, 221, 1, 1, 'db-9013-1000-7', 'db-9013-9140-7', 0, 0, 'Not Received', '2018-08-24 05:23:30', NULL),
-(40, 346, 165, 166, 31, 221, 1, 1, 'db-9013-1000-8', 'db-9013-9140-8', 0, 0, 'Not Received', '2018-08-24 05:23:30', NULL),
-(41, 346, 165, 166, 31, 221, 1, 1, 'db-9013-1000-9', 'db-9013-9140-9', 0, 0, 'Not Received', '2018-08-24 05:23:30', NULL),
-(42, 346, 165, 166, 31, 221, 1, 1, 'db-9013-1000-10', 'db-9013-9140-10', 0, 0, 'Not Received', '2018-08-24 05:23:30', NULL),
-(43, 347, 165, 166, 31, 221, 1, 1, 'db-9013-1457-1', 'db-9013-8035-1', 0, 0, 'Not Received', '2018-08-24 05:24:05', NULL),
-(44, 347, 165, 166, 31, 221, 1, 1, 'db-9013-1457-2', 'db-9013-8035-2', 0, 0, 'Not Received', '2018-08-24 05:24:06', NULL),
-(45, 347, 165, 166, 31, 221, 1, 1, 'db-9013-1457-3', 'db-9013-8035-3', 0, 0, 'Not Received', '2018-08-24 05:24:06', NULL),
-(46, 347, 165, 166, 31, 221, 1, 1, 'db-9013-1457-4', 'db-9013-8035-4', 0, 0, 'Not Received', '2018-08-24 05:24:06', NULL),
-(47, 347, 165, 166, 31, 221, 1, 1, 'db-9013-1457-5', 'db-9013-8035-5', 0, 0, 'Not Received', '2018-08-24 05:24:06', NULL),
-(48, 347, 165, 166, 31, 221, 1, 1, 'db-9013-1457-6', 'db-9013-8035-6', 0, 0, 'Not Received', '2018-08-24 05:24:06', NULL),
-(49, 347, 165, 166, 31, 221, 1, 1, 'db-9013-1457-7', 'db-9013-8035-7', 0, 0, 'Not Received', '2018-08-24 05:24:06', NULL),
-(50, 347, 165, 166, 31, 221, 1, 1, 'db-9013-1457-8', 'db-9013-8035-8', 0, 0, 'Not Received', '2018-08-24 05:24:06', NULL),
-(51, 347, 165, 166, 31, 221, 1, 1, 'db-9013-1457-9', 'db-9013-8035-9', 0, 0, 'Not Received', '2018-08-24 05:24:06', NULL),
-(52, 347, 165, 166, 31, 221, 1, 1, 'db-9013-1457-10', 'db-9013-8035-10', 0, 0, 'Not Received', '2018-08-24 05:24:06', NULL),
-(53, 348, 165, 166, 31, 221, 1, 1, 'db-9013-6241-1', 'db-9013-2756-1', 0, 0, 'Not Received', '2018-08-24 05:25:30', NULL),
-(54, 348, 165, 166, 31, 221, 1, 1, 'db-9013-6241-2', 'db-9013-2756-2', 0, 0, 'Not Received', '2018-08-24 05:25:30', NULL),
-(55, 348, 165, 166, 31, 221, 1, 1, 'db-9013-6241-3', 'db-9013-2756-3', 0, 0, 'Not Received', '2018-08-24 05:25:30', NULL),
-(56, 348, 165, 166, 31, 221, 1, 1, 'db-9013-6241-4', 'db-9013-2756-4', 0, 0, 'Not Received', '2018-08-24 05:25:30', NULL),
-(57, 348, 165, 166, 31, 221, 1, 1, 'db-9013-6241-5', 'db-9013-2756-5', 0, 0, 'Not Received', '2018-08-24 05:25:31', NULL),
-(58, 348, 165, 166, 31, 221, 1, 1, 'db-9013-6241-6', 'db-9013-2756-6', 0, 0, 'Not Received', '2018-08-24 05:25:31', NULL),
-(59, 348, 165, 166, 31, 221, 1, 1, 'db-9013-6241-7', 'db-9013-2756-7', 0, 0, 'Not Received', '2018-08-24 05:25:31', NULL),
-(60, 348, 165, 166, 31, 221, 1, 1, 'db-9013-6241-8', 'db-9013-2756-8', 0, 0, 'Not Received', '2018-08-24 05:25:31', NULL),
-(61, 348, 165, 166, 31, 221, 1, 1, 'db-9013-6241-9', 'db-9013-2756-9', 0, 0, 'Not Received', '2018-08-24 05:25:31', NULL),
-(62, 348, 165, 166, 31, 221, 1, 1, 'db-9013-6241-10', 'db-9013-2756-10', 0, 0, 'Not Received', '2018-08-24 05:25:31', NULL),
-(63, 349, 163, 165, 31, 221, 1, 1, 'hl-6367-5828-1', 'hl-6367-7547-1', 0, 0, 'Not Received', '2018-08-24 05:28:28', NULL),
-(64, 349, 163, 165, 31, 221, 1, 1, 'hl-6367-5828-2', 'hl-6367-7547-2', 0, 0, 'Not Received', '2018-08-24 05:28:28', NULL),
-(65, 349, 163, 165, 31, 221, 1, 1, 'hl-6367-5828-3', 'hl-6367-7547-3', 0, 0, 'Not Received', '2018-08-24 05:28:28', NULL),
-(66, 349, 163, 165, 31, 221, 1, 1, 'hl-6367-5828-4', 'hl-6367-7547-4', 0, 0, 'Not Received', '2018-08-24 05:28:28', NULL),
-(67, 349, 163, 165, 31, 221, 1, 1, 'hl-6367-5828-5', 'hl-6367-7547-5', 0, 0, 'Not Received', '2018-08-24 05:28:28', NULL),
-(68, 349, 163, 165, 31, 221, 1, 1, 'hl-6367-5828-6', 'hl-6367-7547-6', 0, 0, 'Not Received', '2018-08-24 05:28:28', NULL),
-(69, 349, 163, 165, 31, 221, 1, 1, 'hl-6367-5828-7', 'hl-6367-7547-7', 0, 0, 'Not Received', '2018-08-24 05:28:28', NULL),
-(70, 349, 163, 165, 31, 221, 1, 1, 'hl-6367-5828-8', 'hl-6367-7547-8', 0, 0, 'Not Received', '2018-08-24 05:28:28', NULL),
-(71, 349, 163, 165, 31, 221, 1, 1, 'hl-6367-5828-9', 'hl-6367-7547-9', 0, 0, 'Not Received', '2018-08-24 05:28:29', NULL),
-(72, 349, 163, 165, 31, 221, 1, 1, 'hl-6367-5828-10', 'hl-6367-7547-10', 0, 0, 'Not Received', '2018-08-24 05:28:29', NULL),
-(73, 350, 163, 165, 31, 221, 1, 1, 'hl-6367-2069-1', 'hl-6367-3520-1', 0, 0, 'Not Received', '2018-08-24 05:56:30', NULL),
-(74, 350, 163, 165, 31, 221, 1, 1, 'hl-6367-2069-2', 'hl-6367-3520-2', 0, 0, 'Not Received', '2018-08-24 05:56:30', NULL),
-(75, 350, 163, 165, 31, 221, 1, 1, 'hl-6367-2069-3', 'hl-6367-3520-3', 0, 0, 'Not Received', '2018-08-24 05:56:30', NULL),
-(76, 350, 163, 165, 31, 221, 1, 1, 'hl-6367-2069-4', 'hl-6367-3520-4', 0, 0, 'Not Received', '2018-08-24 05:56:30', NULL),
-(77, 350, 163, 165, 31, 221, 1, 1, 'hl-6367-2069-5', 'hl-6367-3520-5', 0, 0, 'Not Received', '2018-08-24 05:56:30', NULL),
-(78, 350, 163, 165, 31, 221, 1, 1, 'hl-6367-2069-6', 'hl-6367-3520-6', 0, 0, 'Not Received', '2018-08-24 05:56:30', NULL),
-(79, 350, 163, 165, 31, 221, 1, 1, 'hl-6367-2069-7', 'hl-6367-3520-7', 0, 0, 'Not Received', '2018-08-24 05:56:30', NULL),
-(80, 350, 163, 165, 31, 221, 1, 1, 'hl-6367-2069-8', 'hl-6367-3520-8', 0, 0, 'Not Received', '2018-08-24 05:56:30', NULL),
-(81, 350, 163, 165, 31, 221, 1, 1, 'hl-6367-2069-9', 'hl-6367-3520-9', 0, 0, 'Not Received', '2018-08-24 05:56:30', NULL),
-(82, 350, 163, 165, 31, 221, 1, 1, 'hl-6367-2069-10', 'hl-6367-3520-10', 0, 0, 'Not Received', '2018-08-24 05:56:30', NULL),
-(83, 351, 163, 165, 31, 221, 1, 1, 'hl-6367-5409-1', 'hl-6367-9575-1', 0, 0, 'Not Received', '2018-08-24 05:57:05', NULL),
-(84, 351, 163, 165, 31, 221, 1, 1, 'hl-6367-5409-2', 'hl-6367-9575-2', 0, 0, 'Not Received', '2018-08-24 05:57:05', NULL),
-(85, 351, 163, 165, 31, 221, 1, 1, 'hl-6367-5409-3', 'hl-6367-9575-3', 0, 0, 'Not Received', '2018-08-24 05:57:05', NULL),
-(86, 351, 163, 165, 31, 221, 1, 1, 'hl-6367-5409-4', 'hl-6367-9575-4', 0, 0, 'Not Received', '2018-08-24 05:57:05', NULL),
-(87, 351, 163, 165, 31, 221, 1, 1, 'hl-6367-5409-5', 'hl-6367-9575-5', 0, 0, 'Not Received', '2018-08-24 05:57:05', NULL),
-(88, 351, 163, 165, 31, 221, 1, 1, 'hl-6367-5409-6', 'hl-6367-9575-6', 0, 0, 'Not Received', '2018-08-24 05:57:05', NULL),
-(89, 351, 163, 165, 31, 221, 1, 1, 'hl-6367-5409-7', 'hl-6367-9575-7', 0, 0, 'Not Received', '2018-08-24 05:57:05', NULL),
-(90, 351, 163, 165, 31, 221, 1, 1, 'hl-6367-5409-8', 'hl-6367-9575-8', 0, 0, 'Not Received', '2018-08-24 05:57:05', NULL),
-(91, 351, 163, 165, 31, 221, 1, 1, 'hl-6367-5409-9', 'hl-6367-9575-9', 0, 0, 'Not Received', '2018-08-24 05:57:05', NULL),
-(92, 351, 163, 165, 31, 221, 1, 1, 'hl-6367-5409-10', 'hl-6367-9575-10', 0, 0, 'Not Received', '2018-08-24 05:57:05', NULL),
-(93, 352, 163, 165, 31, 221, 1, 1, 'hl-6367-4412-1', 'hl-6367-9381-1', 0, 0, 'Not Received', '2018-08-24 05:57:31', NULL),
-(94, 352, 163, 165, 31, 221, 1, 1, 'hl-6367-4412-2', 'hl-6367-9381-2', 0, 0, 'Not Received', '2018-08-24 05:57:31', NULL),
-(95, 352, 163, 165, 31, 221, 1, 1, 'hl-6367-4412-3', 'hl-6367-9381-3', 0, 0, 'Not Received', '2018-08-24 05:57:31', NULL),
-(96, 352, 163, 165, 31, 221, 1, 1, 'hl-6367-4412-4', 'hl-6367-9381-4', 0, 0, 'Not Received', '2018-08-24 05:57:31', NULL),
-(97, 352, 163, 165, 31, 221, 1, 1, 'hl-6367-4412-5', 'hl-6367-9381-5', 0, 0, 'Not Received', '2018-08-24 05:57:31', NULL),
-(98, 352, 163, 165, 31, 221, 1, 1, 'hl-6367-4412-6', 'hl-6367-9381-6', 0, 0, 'Not Received', '2018-08-24 05:57:31', NULL),
-(99, 352, 163, 165, 31, 221, 1, 1, 'hl-6367-4412-7', 'hl-6367-9381-7', 0, 0, 'Not Received', '2018-08-24 05:57:31', NULL),
-(100, 352, 163, 165, 31, 221, 1, 1, 'hl-6367-4412-8', 'hl-6367-9381-8', 0, 0, 'Not Received', '2018-08-24 05:57:31', NULL),
-(101, 352, 163, 165, 31, 221, 1, 1, 'hl-6367-4412-9', 'hl-6367-9381-9', 0, 0, 'Not Received', '2018-08-24 05:57:31', NULL),
-(102, 352, 163, 165, 31, 221, 1, 1, 'hl-6367-4412-10', 'hl-6367-9381-10', 0, 0, 'Not Received', '2018-08-24 05:57:31', NULL),
-(103, 353, 163, 165, 31, 221, 1, 1, 'hl-6367-4807-1', 'hl-6367-1211-1', 0, 0, 'Not Received', '2018-08-24 05:57:57', NULL),
-(104, 353, 163, 165, 31, 221, 1, 1, 'hl-6367-4807-2', 'hl-6367-1211-2', 0, 0, 'Not Received', '2018-08-24 05:57:57', NULL),
-(105, 353, 163, 165, 31, 221, 1, 1, 'hl-6367-4807-3', 'hl-6367-1211-3', 0, 0, 'Not Received', '2018-08-24 05:57:57', NULL),
-(106, 353, 163, 165, 31, 221, 1, 1, 'hl-6367-4807-4', 'hl-6367-1211-4', 0, 0, 'Not Received', '2018-08-24 05:57:57', NULL),
-(107, 353, 163, 165, 31, 221, 1, 1, 'hl-6367-4807-5', 'hl-6367-1211-5', 0, 0, 'Not Received', '2018-08-24 05:57:57', NULL),
-(108, 353, 163, 165, 31, 221, 1, 1, 'hl-6367-4807-6', 'hl-6367-1211-6', 0, 0, 'Not Received', '2018-08-24 05:57:57', NULL),
-(109, 353, 163, 165, 31, 221, 1, 1, 'hl-6367-4807-7', 'hl-6367-1211-7', 0, 0, 'Not Received', '2018-08-24 05:57:58', NULL),
-(110, 353, 163, 165, 31, 221, 1, 1, 'hl-6367-4807-8', 'hl-6367-1211-8', 0, 0, 'Not Received', '2018-08-24 05:57:58', NULL),
-(111, 353, 163, 165, 31, 221, 1, 1, 'hl-6367-4807-9', 'hl-6367-1211-9', 0, 0, 'Not Received', '2018-08-24 05:57:58', NULL),
-(112, 353, 163, 165, 31, 221, 1, 1, 'hl-6367-4807-10', 'hl-6367-1211-10', 0, 0, 'Not Received', '2018-08-24 05:57:58', NULL),
-(113, 354, 163, 165, 31, 221, 1, 1, 'hl-6367-5636-1', 'hl-6367-5003-1', 0, 0, 'Not Received', '2018-08-24 05:58:32', NULL),
-(114, 354, 163, 165, 31, 221, 1, 1, 'hl-6367-5636-2', 'hl-6367-5003-2', 0, 0, 'Not Received', '2018-08-24 05:58:32', NULL),
-(115, 354, 163, 165, 31, 221, 1, 1, 'hl-6367-5636-3', 'hl-6367-5003-3', 0, 0, 'Not Received', '2018-08-24 05:58:32', NULL),
-(116, 354, 163, 165, 31, 221, 1, 1, 'hl-6367-5636-4', 'hl-6367-5003-4', 0, 0, 'Not Received', '2018-08-24 05:58:32', NULL),
-(117, 354, 163, 165, 31, 221, 1, 1, 'hl-6367-5636-5', 'hl-6367-5003-5', 0, 0, 'Not Received', '2018-08-24 05:58:32', NULL),
-(118, 354, 163, 165, 31, 221, 1, 1, 'hl-6367-5636-6', 'hl-6367-5003-6', 0, 0, 'Not Received', '2018-08-24 05:58:32', NULL),
-(119, 354, 163, 165, 31, 221, 1, 1, 'hl-6367-5636-7', 'hl-6367-5003-7', 0, 0, 'Not Received', '2018-08-24 05:58:32', NULL),
-(120, 354, 163, 165, 31, 221, 1, 1, 'hl-6367-5636-8', 'hl-6367-5003-8', 0, 0, 'Not Received', '2018-08-24 05:58:32', NULL),
-(121, 354, 163, 165, 31, 221, 1, 1, 'hl-6367-5636-9', 'hl-6367-5003-9', 0, 0, 'Not Received', '2018-08-24 05:58:32', NULL),
-(122, 354, 163, 165, 31, 221, 1, 1, 'hl-6367-5636-10', 'hl-6367-5003-10', 0, 0, 'Not Received', '2018-08-24 05:58:32', NULL),
-(123, 355, 163, 165, 31, 221, 1, 1, 'hl-6367-9614-1', 'hl-6367-8264-1', 0, 0, 'Not Received', '2018-08-24 06:44:13', NULL),
-(124, 355, 163, 165, 31, 221, 1, 1, 'hl-6367-9614-2', 'hl-6367-8264-2', 0, 0, 'Not Received', '2018-08-24 06:44:13', NULL),
-(125, 355, 163, 165, 31, 221, 1, 1, 'hl-6367-9614-3', 'hl-6367-8264-3', 0, 0, 'Not Received', '2018-08-24 06:44:13', NULL),
-(126, 355, 163, 165, 31, 221, 1, 1, 'hl-6367-9614-4', 'hl-6367-8264-4', 0, 0, 'Not Received', '2018-08-24 06:44:13', NULL),
-(127, 355, 163, 165, 31, 221, 1, 1, 'hl-6367-9614-5', 'hl-6367-8264-5', 0, 0, 'Not Received', '2018-08-24 06:44:13', NULL),
-(128, 355, 163, 165, 31, 221, 1, 1, 'hl-6367-9614-6', 'hl-6367-8264-6', 0, 0, 'Not Received', '2018-08-24 06:44:13', NULL),
-(129, 355, 163, 165, 31, 221, 1, 1, 'hl-6367-9614-7', 'hl-6367-8264-7', 0, 0, 'Not Received', '2018-08-24 06:44:13', NULL),
-(130, 355, 163, 165, 31, 221, 1, 1, 'hl-6367-9614-8', 'hl-6367-8264-8', 0, 0, 'Not Received', '2018-08-24 06:44:13', NULL),
-(131, 355, 163, 165, 31, 221, 1, 1, 'hl-6367-9614-9', 'hl-6367-8264-9', 0, 0, 'Not Received', '2018-08-24 06:44:13', NULL),
-(132, 355, 163, 165, 31, 221, 1, 1, 'hl-6367-9614-10', 'hl-6367-8264-10', 0, 0, 'Not Received', '2018-08-24 06:44:13', NULL),
-(133, 356, 165, 166, 31, 221, 1, 1, 'db-9013-9584-1', 'db-9013-7805-1', 0, 0, 'Not Received', '2018-08-24 06:46:38', NULL),
-(134, 356, 165, 166, 31, 221, 1, 1, 'db-9013-9584-2', 'db-9013-7805-2', 0, 0, 'Not Received', '2018-08-24 06:46:38', NULL),
-(135, 356, 165, 166, 31, 221, 1, 1, 'db-9013-9584-3', 'db-9013-7805-3', 0, 0, 'Not Received', '2018-08-24 06:46:38', NULL),
-(136, 356, 165, 166, 31, 221, 1, 1, 'db-9013-9584-4', 'db-9013-7805-4', 0, 0, 'Not Received', '2018-08-24 06:46:38', NULL),
-(137, 356, 165, 166, 31, 221, 1, 1, 'db-9013-9584-5', 'db-9013-7805-5', 0, 0, 'Not Received', '2018-08-24 06:46:38', NULL),
-(138, 356, 165, 166, 31, 221, 1, 1, 'db-9013-9584-6', 'db-9013-7805-6', 0, 0, 'Not Received', '2018-08-24 06:46:38', NULL),
-(139, 356, 165, 166, 31, 221, 1, 1, 'db-9013-9584-7', 'db-9013-7805-7', 0, 0, 'Not Received', '2018-08-24 06:46:38', NULL),
-(140, 356, 165, 166, 31, 221, 1, 1, 'db-9013-9584-8', 'db-9013-7805-8', 0, 0, 'Not Received', '2018-08-24 06:46:39', NULL),
-(141, 356, 165, 166, 31, 221, 1, 1, 'db-9013-9584-9', 'db-9013-7805-9', 0, 0, 'Not Received', '2018-08-24 06:46:39', NULL),
-(142, 356, 165, 166, 31, 221, 1, 1, 'db-9013-9584-10', 'db-9013-7805-10', 0, 0, 'Not Received', '2018-08-24 06:46:39', NULL);
+(1, 343, 165, 166, 31, 221, 1, 4, 'db-9013-4476-1', 'db-9013-3432-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(12, 1, 1, 166, 31, 221, 1, 4, 'dbupexist100', 'db-9013-5991-1', 0, 226, 'Customer_Code', '2018-11-01 10:00:42', '2018-08-23 14:46:01'),
+(3, 343, 165, 166, 31, 221, 1, 4, 'db-9013-4476-3', 'db-9013-3432-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(4, 343, 165, 166, 31, 221, 1, 4, 'db-9013-4476-4', 'db-9013-3432-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(5, 343, 165, 166, 31, 221, 1, 4, 'db-9013-4476-5', 'db-9013-3432-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(6, 343, 165, 166, 31, 221, 1, 4, 'db-9013-4476-6', 'db-9013-3432-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(7, 343, 165, 166, 31, 221, 1, 4, 'db-9013-4476-7', 'db-9013-3432-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(8, 343, 165, 166, 31, 221, 1, 4, 'db-9013-4476-8', 'db-9013-3432-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(9, 343, 165, 166, 31, 221, 1, 4, 'db-9013-4476-9', 'db-9013-3432-9', 10, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(10, 343, 165, 166, 31, 221, 1, 4, 'db-9013-4476-10', 'db-9013-3432-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(11, 1, 1, 147, 31, 221, 1, 4, 'DellLaptopWa', 'bentodent-toothpaste-4105-6678-1', 0, 226, 'Customer_Code', '2018-11-01 10:00:42', '2018-08-20 15:29:28'),
+(13, 344, 165, 166, 31, 221, 1, 4, 'db-9013-7608-1', 'db-9013-2852-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(14, 344, 165, 166, 31, 221, 1, 4, 'db-9013-7608-2', 'db-9013-2852-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(15, 344, 165, 166, 31, 221, 1, 4, 'db-9013-7608-3', 'db-9013-2852-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(16, 344, 165, 166, 31, 221, 1, 4, 'db-9013-7608-4', 'db-9013-2852-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(17, 344, 165, 166, 31, 221, 1, 4, 'bb-bike-1260-0000-128-100', 'db-9013-2852-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(18, 344, 165, 166, 31, 221, 1, 4, 'db-9013-7608-6', 'db-9013-2852-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(19, 344, 165, 166, 31, 221, 1, 4, 'db-9013-7608-7', 'db-9013-2852-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(20, 344, 165, 166, 31, 221, 1, 4, 'db-9013-7608-8', 'db-9013-2852-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(21, 344, 165, 166, 31, 221, 1, 4, 'db-9013-7608-9', 'db-9013-2852-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(22, 344, 165, 166, 31, 221, 1, 4, 'db-9013-7608-10', 'db-9013-2852-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(23, 345, 165, 166, 31, 221, 1, 4, 'db-9013-8849-1', 'db-9013-4804-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(24, 345, 165, 166, 31, 221, 1, 4, 'db-9013-8849-2', 'db-9013-4804-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(25, 345, 165, 166, 31, 221, 1, 4, 'db-9013-8849-3', 'db-9013-4804-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(26, 345, 165, 166, 31, 221, 1, 4, 'db-9013-8849-4', 'db-9013-4804-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(27, 345, 165, 166, 31, 221, 1, 4, 'db-9013-8849-5', 'db-9013-4804-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(28, 345, 165, 166, 31, 221, 1, 4, 'db-9013-8849-6', 'db-9013-4804-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(29, 345, 165, 166, 31, 221, 1, 4, 'db-9013-8849-7', 'db-9013-4804-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(30, 345, 165, 166, 31, 221, 1, 4, 'db-9013-8849-8', 'db-9013-4804-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(31, 345, 165, 166, 31, 221, 1, 4, 'db-9013-8849-9', 'db-9013-4804-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(32, 345, 165, 166, 31, 221, 1, 4, 'db-9013-8849-10', 'db-9013-4804-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(33, 346, 165, 166, 31, 221, 1, 4, 'db-9013-1000-1', 'db-9013-9140-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(34, 346, 165, 166, 31, 221, 1, 4, 'db-9013-1000-2', 'db-9013-9140-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(35, 346, 165, 166, 31, 221, 1, 4, 'db-9013-1000-3', 'db-9013-9140-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(36, 346, 165, 166, 31, 221, 1, 4, 'db-9013-1000-4', 'db-9013-9140-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(37, 346, 165, 166, 31, 221, 1, 4, 'db-9013-1000-5', 'db-9013-9140-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(38, 346, 165, 166, 31, 221, 1, 4, 'db-9013-1000-6', 'db-9013-9140-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(39, 346, 165, 166, 31, 221, 1, 4, 'db-9013-1000-7', 'db-9013-9140-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(40, 346, 165, 166, 31, 221, 1, 4, 'db-9013-1000-8', 'db-9013-9140-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(41, 346, 165, 166, 31, 221, 1, 4, 'db-9013-1000-9', 'db-9013-9140-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(42, 346, 165, 166, 31, 221, 1, 4, 'db-9013-1000-10', 'db-9013-9140-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(43, 347, 165, 166, 31, 221, 1, 4, 'db-9013-1457-1', 'db-9013-8035-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(44, 347, 165, 166, 31, 221, 1, 4, 'db-9013-1457-2', 'db-9013-8035-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(45, 347, 165, 166, 31, 221, 1, 4, 'db-9013-1457-3', 'db-9013-8035-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(46, 347, 165, 166, 31, 221, 1, 4, 'db-9013-1457-4', 'db-9013-8035-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(47, 347, 165, 166, 31, 221, 1, 4, 'db-9013-1457-5', 'db-9013-8035-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(48, 347, 165, 166, 31, 221, 1, 4, 'db-9013-1457-6', 'db-9013-8035-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(49, 347, 165, 166, 31, 221, 1, 4, 'db-9013-1457-7', 'db-9013-8035-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(50, 347, 165, 166, 31, 221, 1, 4, 'db-9013-1457-8', 'db-9013-8035-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(51, 347, 165, 166, 31, 221, 1, 4, 'db-9013-1457-9', 'db-9013-8035-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(52, 347, 165, 166, 31, 221, 1, 4, 'db-9013-1457-10', 'db-9013-8035-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(53, 348, 165, 166, 31, 221, 1, 4, 'db-9013-6241-1', 'db-9013-2756-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(54, 348, 165, 166, 31, 221, 1, 4, 'db-9013-6241-2', 'db-9013-2756-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(55, 348, 165, 166, 31, 221, 1, 4, 'db-9013-6241-3', 'db-9013-2756-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(56, 348, 165, 166, 31, 221, 1, 4, 'db-9013-6241-4', 'db-9013-2756-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(57, 348, 165, 166, 31, 221, 1, 4, 'db-9013-6241-5', 'db-9013-2756-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(58, 348, 165, 166, 31, 221, 1, 4, 'db-9013-6241-6', 'db-9013-2756-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(59, 348, 165, 166, 31, 221, 1, 4, 'db-9013-6241-7', 'db-9013-2756-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(60, 348, 165, 166, 31, 221, 1, 4, 'db-9013-6241-8', 'db-9013-2756-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(61, 348, 165, 166, 31, 221, 1, 4, 'db-9013-6241-9', 'db-9013-2756-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(62, 348, 165, 166, 31, 221, 1, 4, 'db-9013-6241-10', 'db-9013-2756-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(63, 349, 163, 165, 31, 221, 1, 4, 'hl-6367-5828-1', 'hl-6367-7547-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(64, 349, 163, 165, 31, 221, 1, 4, 'hl-6367-5828-2', 'hl-6367-7547-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(65, 349, 163, 165, 31, 221, 1, 4, 'hl-6367-5828-3', 'hl-6367-7547-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(66, 349, 163, 165, 31, 221, 1, 4, 'hl-6367-5828-4', 'hl-6367-7547-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(67, 349, 163, 165, 31, 221, 1, 4, 'hl-6367-5828-5', 'hl-6367-7547-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(68, 349, 163, 165, 31, 221, 1, 4, 'hl-6367-5828-6', 'hl-6367-7547-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(69, 349, 163, 165, 31, 221, 1, 4, 'hl-6367-5828-7', 'hl-6367-7547-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(70, 349, 163, 165, 31, 221, 1, 4, 'hl-6367-5828-8', 'hl-6367-7547-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(71, 349, 163, 165, 31, 221, 1, 4, 'hl-6367-5828-9', 'hl-6367-7547-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(72, 349, 163, 165, 31, 221, 1, 4, 'hl-6367-5828-10', 'hl-6367-7547-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(73, 350, 163, 165, 31, 221, 1, 4, 'hl-6367-2069-1', 'hl-6367-3520-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(74, 350, 163, 165, 31, 221, 1, 4, 'hl-6367-2069-2', 'hl-6367-3520-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(75, 350, 163, 165, 31, 221, 1, 4, 'hl-6367-2069-3', 'hl-6367-3520-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(76, 350, 163, 165, 31, 221, 1, 4, 'hl-6367-2069-4', 'hl-6367-3520-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(77, 350, 163, 165, 31, 221, 1, 4, 'hl-6367-2069-5', 'hl-6367-3520-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(78, 350, 163, 165, 31, 221, 1, 4, 'hl-6367-2069-6', 'hl-6367-3520-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(79, 350, 163, 165, 31, 221, 1, 4, 'hl-6367-2069-7', 'hl-6367-3520-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(80, 350, 163, 165, 31, 221, 1, 4, 'hl-6367-2069-8', 'hl-6367-3520-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(81, 350, 163, 165, 31, 221, 1, 4, 'hl-6367-2069-9', 'hl-6367-3520-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(82, 350, 163, 165, 31, 221, 1, 4, 'hl-6367-2069-10', 'hl-6367-3520-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(83, 351, 163, 165, 31, 221, 1, 4, 'hl-6367-5409-1', 'hl-6367-9575-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(84, 351, 163, 165, 31, 221, 1, 4, 'hl-6367-5409-2', 'hl-6367-9575-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(85, 351, 163, 165, 31, 221, 1, 4, 'hl-6367-5409-3', 'hl-6367-9575-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(86, 351, 163, 165, 31, 221, 1, 4, 'hl-6367-5409-4', 'hl-6367-9575-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(87, 351, 163, 165, 31, 221, 1, 4, 'hl-6367-5409-5', 'hl-6367-9575-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(88, 351, 163, 165, 31, 221, 1, 4, 'hl-6367-5409-6', 'hl-6367-9575-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(89, 351, 163, 165, 31, 221, 1, 4, 'hl-6367-5409-7', 'hl-6367-9575-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(90, 351, 163, 165, 31, 221, 1, 4, 'hl-6367-5409-8', 'hl-6367-9575-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(91, 351, 163, 165, 31, 221, 1, 4, 'hl-6367-5409-9', 'hl-6367-9575-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(92, 351, 163, 165, 31, 221, 1, 4, 'hl-6367-5409-10', 'hl-6367-9575-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(93, 352, 163, 165, 31, 221, 1, 4, 'hl-6367-4412-1', 'hl-6367-9381-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(94, 352, 163, 165, 31, 221, 1, 4, 'hl-6367-4412-2', 'hl-6367-9381-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(95, 352, 163, 165, 31, 221, 1, 4, 'hl-6367-4412-3', 'hl-6367-9381-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(96, 352, 163, 165, 31, 221, 1, 4, 'hl-6367-4412-4', 'hl-6367-9381-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(97, 352, 163, 165, 31, 221, 1, 4, 'hl-6367-4412-5', 'hl-6367-9381-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(98, 352, 163, 165, 31, 221, 1, 4, 'hl-6367-4412-6', 'hl-6367-9381-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(99, 352, 163, 165, 31, 221, 1, 4, 'hl-6367-4412-7', 'hl-6367-9381-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(100, 352, 163, 165, 31, 221, 1, 4, 'hl-6367-4412-8', 'hl-6367-9381-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(101, 352, 163, 165, 31, 221, 1, 4, 'hl-6367-4412-9', 'hl-6367-9381-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(102, 352, 163, 165, 31, 221, 1, 4, 'hl-6367-4412-10', 'hl-6367-9381-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(103, 353, 163, 165, 31, 221, 1, 4, 'hl-6367-4807-1', 'hl-6367-1211-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(104, 353, 163, 165, 31, 221, 1, 4, 'hl-6367-4807-2', 'hl-6367-1211-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(105, 353, 163, 165, 31, 221, 1, 4, 'hl-6367-4807-3', 'hl-6367-1211-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(106, 353, 163, 165, 31, 221, 1, 4, 'hl-6367-4807-4', 'hl-6367-1211-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(107, 353, 163, 165, 31, 221, 1, 4, 'hl-6367-4807-5', 'hl-6367-1211-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(108, 353, 163, 165, 31, 221, 1, 4, 'hl-6367-4807-6', 'hl-6367-1211-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(109, 353, 163, 165, 31, 221, 1, 4, 'hl-6367-4807-7', 'hl-6367-1211-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(110, 353, 163, 165, 31, 221, 1, 4, 'hl-6367-4807-8', 'hl-6367-1211-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(111, 353, 163, 165, 31, 221, 1, 4, 'hl-6367-4807-9', 'hl-6367-1211-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(112, 353, 163, 165, 31, 221, 1, 4, 'hl-6367-4807-10', 'hl-6367-1211-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(113, 354, 163, 165, 31, 221, 1, 4, 'hl-6367-5636-1', 'hl-6367-5003-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(114, 354, 163, 165, 31, 221, 1, 4, 'hl-6367-5636-2', 'hl-6367-5003-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(115, 354, 163, 165, 31, 221, 1, 4, 'hl-6367-5636-3', 'hl-6367-5003-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(116, 354, 163, 165, 31, 221, 1, 4, 'hl-6367-5636-4', 'hl-6367-5003-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(117, 354, 163, 165, 31, 221, 1, 4, 'hl-6367-5636-5', 'hl-6367-5003-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(118, 354, 163, 165, 31, 221, 1, 4, 'hl-6367-5636-6', 'hl-6367-5003-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(119, 354, 163, 165, 31, 221, 1, 4, 'hl-6367-5636-7', 'hl-6367-5003-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(120, 354, 163, 165, 31, 221, 1, 4, 'hl-6367-5636-8', 'hl-6367-5003-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(121, 354, 163, 165, 31, 221, 1, 4, 'hl-6367-5636-9', 'hl-6367-5003-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(122, 354, 163, 165, 31, 221, 1, 4, 'hl-6367-5636-10', 'hl-6367-5003-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(123, 355, 163, 165, 31, 221, 1, 4, 'hl-6367-9614-1', 'hl-6367-8264-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(124, 355, 163, 165, 31, 221, 1, 4, 'hl-6367-9614-2', 'hl-6367-8264-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(125, 355, 163, 165, 31, 221, 1, 4, 'hl-6367-9614-3', 'hl-6367-8264-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(126, 355, 163, 165, 31, 221, 1, 4, 'hl-6367-9614-4', 'hl-6367-8264-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(127, 355, 163, 165, 31, 221, 1, 4, 'hl-6367-9614-5', 'hl-6367-8264-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(128, 355, 163, 165, 31, 221, 1, 4, 'hl-6367-9614-6', 'hl-6367-8264-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(129, 355, 163, 165, 31, 221, 1, 4, 'hl-6367-9614-7', 'hl-6367-8264-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(130, 355, 163, 165, 31, 221, 1, 4, 'hl-6367-9614-8', 'hl-6367-8264-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(131, 355, 163, 165, 31, 221, 1, 4, 'hl-6367-9614-9', 'hl-6367-8264-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(132, 355, 163, 165, 31, 221, 1, 4, 'hl-6367-9614-10', 'hl-6367-8264-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(133, 356, 165, 166, 31, 221, 1, 4, 'db-9013-9584-1', 'db-9013-7805-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(134, 356, 165, 166, 31, 221, 1, 4, 'db-9013-9584-2', 'db-9013-7805-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(135, 356, 165, 166, 31, 221, 1, 4, 'db-9013-9584-3', 'db-9013-7805-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(136, 356, 165, 166, 31, 221, 1, 4, 'db-9013-9584-4', 'db-9013-7805-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(137, 356, 165, 166, 31, 221, 1, 4, 'db-9013-9584-5', 'db-9013-7805-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(138, 356, 165, 166, 31, 221, 1, 4, 'db-9013-9584-6', 'db-9013-7805-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(139, 356, 165, 166, 31, 221, 1, 4, 'db-9013-9584-7', 'db-9013-7805-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(140, 356, 165, 166, 31, 221, 1, 4, 'db-9013-9584-8', 'db-9013-7805-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(141, 356, 165, 166, 31, 221, 1, 4, 'db-9013-9584-9', 'db-9013-7805-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(142, 356, 165, 166, 31, 221, 1, 4, 'db-9013-9584-10', 'db-9013-7805-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(143, 357, 165, 166, 31, 221, 1, 4, 'db-9013-1642-1', 'db-9013-7801-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(144, 357, 165, 166, 31, 221, 1, 4, 'db-9013-1642-2', 'db-9013-7801-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(145, 357, 165, 166, 31, 221, 1, 4, 'db-9013-1642-3', 'db-9013-7801-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(146, 357, 165, 166, 31, 221, 1, 4, 'db-9013-1642-4', 'db-9013-7801-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(147, 357, 165, 166, 31, 221, 1, 4, 'db-9013-1642-5', 'db-9013-7801-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(148, 357, 165, 166, 31, 221, 1, 4, 'db-9013-1642-6', 'db-9013-7801-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(149, 357, 165, 166, 31, 221, 1, 4, 'db-9013-1642-7', 'db-9013-7801-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(150, 357, 165, 166, 31, 221, 1, 4, 'db-9013-1642-8', 'db-9013-7801-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(151, 357, 165, 166, 31, 221, 1, 4, 'db-9013-1642-9', 'db-9013-7801-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(152, 357, 165, 166, 31, 221, 1, 4, 'db-9013-1642-10', 'db-9013-7801-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(153, 358, 163, 165, 31, 221, 1, 4, 'hl-6367-7415-1', 'hl-6367-7599-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(154, 358, 163, 165, 31, 221, 1, 4, 'hl-6367-7415-2', 'hl-6367-7599-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(155, 358, 163, 165, 31, 221, 1, 4, 'hl-6367-7415-3', 'hl-6367-7599-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(156, 358, 163, 165, 31, 221, 1, 4, 'hl-6367-7415-4', 'hl-6367-7599-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(157, 358, 163, 165, 31, 221, 1, 4, 'hl-6367-7415-5', 'hl-6367-7599-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(158, 358, 163, 165, 31, 221, 1, 4, 'hl-6367-7415-6', 'hl-6367-7599-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(159, 358, 163, 165, 31, 221, 1, 4, 'hl-6367-7415-7', 'hl-6367-7599-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(160, 358, 163, 165, 31, 221, 1, 4, 'hl-6367-7415-8', 'hl-6367-7599-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(161, 358, 163, 165, 31, 221, 1, 4, 'hl-6367-7415-9', 'hl-6367-7599-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(162, 358, 163, 165, 31, 221, 1, 4, 'hl-6367-7415-10', 'hl-6367-7599-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(163, 359, 165, 166, 31, 221, 1, 4, 'db-9013-9572-1', 'db-9013-5025-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(164, 359, 165, 166, 31, 221, 1, 4, 'db-9013-9572-2', 'db-9013-5025-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(165, 359, 165, 166, 31, 221, 1, 4, 'db-9013-9572-3', 'db-9013-5025-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(166, 359, 165, 166, 31, 221, 1, 4, 'db-9013-9572-4', 'db-9013-5025-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(167, 359, 165, 166, 31, 221, 1, 4, 'db-9013-9572-5', 'db-9013-5025-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(168, 359, 165, 166, 31, 221, 1, 4, 'db-9013-9572-6', 'db-9013-5025-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(169, 359, 165, 166, 31, 221, 1, 4, 'db-9013-9572-7', 'db-9013-5025-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(170, 359, 165, 166, 31, 221, 1, 4, 'db-9013-9572-8', 'db-9013-5025-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(171, 359, 165, 166, 31, 221, 1, 4, 'db-9013-9572-9', 'db-9013-5025-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(172, 359, 165, 166, 31, 221, 1, 4, 'db-9013-9572-10', 'db-9013-5025-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(173, 360, 166, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1668-1', 'india-gate-classic-4809-7163-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(174, 360, 166, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1668-2', 'india-gate-classic-4809-7163-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(175, 360, 166, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1668-3', 'india-gate-classic-4809-7163-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(176, 360, 166, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1668-4', 'india-gate-classic-4809-7163-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(177, 360, 166, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1668-5', 'india-gate-classic-4809-7163-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(178, 360, 166, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1668-6', 'india-gate-classic-4809-7163-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(179, 360, 166, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1668-7', 'india-gate-classic-4809-7163-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(180, 360, 166, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1668-8', 'india-gate-classic-4809-7163-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(181, 360, 166, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1668-9', 'india-gate-classic-4809-7163-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(182, 360, 166, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1668-10', 'india-gate-classic-4809-7163-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(183, 361, 167, 166, 31, 221, 1, 4, 'db-9013-2926-1', 'db-9013-5563-1', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(184, 361, 167, 166, 31, 221, 1, 4, 'db-9013-2926-2', 'db-9013-5563-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(185, 361, 167, 166, 31, 221, 1, 4, 'db-9013-2926-3', 'db-9013-5563-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(186, 361, 167, 166, 31, 221, 1, 4, 'db-9013-2926-4', 'db-9013-5563-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(187, 361, 167, 166, 31, 221, 1, 4, 'db-9013-2926-5', 'db-9013-5563-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(188, 361, 167, 166, 31, 221, 1, 4, 'db-9013-2926-6', 'db-9013-5563-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(189, 361, 167, 166, 31, 221, 1, 4, 'db-9013-2926-7', 'db-9013-5563-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(190, 361, 167, 166, 31, 221, 1, 4, 'db-9013-2926-8', 'db-9013-5563-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(191, 361, 167, 166, 31, 221, 1, 4, 'db-9013-2926-9', 'db-9013-5563-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(192, 361, 167, 166, 31, 221, 1, 4, 'db-9013-2926-10', 'db-9013-5563-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(193, 362, 169, 151, 31, 221, 1, 5, 'india-gate-classic-4809-1807-1', 'india-gate-classic-4809-5776-1', 0, 226, 'Not Received', '2018-11-01 10:15:02', NULL),
+(194, 362, 169, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1807-2', 'india-gate-classic-4809-5776-2', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(195, 362, 169, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1807-3', 'india-gate-classic-4809-5776-3', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(196, 362, 169, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1807-4', 'india-gate-classic-4809-5776-4', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(197, 362, 169, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1807-5', 'india-gate-classic-4809-5776-5', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(198, 362, 169, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1807-6', 'india-gate-classic-4809-5776-6', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(199, 362, 169, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1807-7', 'india-gate-classic-4809-5776-7', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(200, 362, 169, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1807-8', 'india-gate-classic-4809-5776-8', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(201, 362, 169, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1807-9', 'india-gate-classic-4809-5776-9', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(202, 362, 169, 151, 31, 221, 1, 4, 'india-gate-classic-4809-1807-10', 'india-gate-classic-4809-5776-10', 0, 226, 'Not Received', '2018-11-01 10:00:42', NULL),
+(203, 363, 169, 151, 31, 221, 1, 5, 'india-gate-classic-4809-8749-1', 'india-gate-classic-4809-3723-1', 0, 226, 'Not Received', '2018-11-01 10:20:20', NULL),
+(204, 363, 169, 151, 31, 221, 1, 4, 'india-gate-classic-4809-8749-2', 'india-gate-classic-4809-3723-2', 0, 226, 'Not Received', '2018-11-01 10:19:38', NULL),
+(205, 363, 169, 151, 31, 221, 1, 4, 'india-gate-classic-4809-8749-3', 'india-gate-classic-4809-3723-3', 0, 226, 'Not Received', '2018-11-02 05:17:12', NULL),
+(206, 363, 169, 151, 31, 221, 1, 1, 'india-gate-classic-4809-8749-4', 'india-gate-classic-4809-3723-4', 0, 0, 'Not Received', '2018-11-01 10:01:40', NULL),
+(207, 363, 169, 151, 31, 221, 1, 1, 'india-gate-classic-4809-8749-5', 'india-gate-classic-4809-3723-5', 0, 0, 'Not Received', '2018-11-01 10:01:40', NULL),
+(208, 363, 169, 151, 31, 221, 1, 1, 'india-gate-classic-4809-8749-6', 'india-gate-classic-4809-3723-6', 0, 0, 'Not Received', '2018-11-01 10:01:40', NULL),
+(209, 363, 169, 151, 31, 221, 1, 1, 'india-gate-classic-4809-8749-7', 'india-gate-classic-4809-3723-7', 0, 0, 'Not Received', '2018-11-01 10:01:40', NULL),
+(210, 363, 169, 151, 31, 221, 1, 1, 'india-gate-classic-4809-8749-8', 'india-gate-classic-4809-3723-8', 0, 0, 'Not Received', '2018-11-01 10:01:40', NULL),
+(211, 363, 169, 151, 31, 221, 1, 1, 'india-gate-classic-4809-8749-9', 'india-gate-classic-4809-3723-9', 0, 0, 'Not Received', '2018-11-01 10:01:40', NULL),
+(212, 363, 169, 151, 31, 221, 1, 1, 'india-gate-classic-4809-8749-10', 'india-gate-classic-4809-3723-10', 0, 0, 'Not Received', '2018-11-01 10:01:40', NULL);
 
 -- --------------------------------------------------------
 
@@ -3357,7 +3638,7 @@ CREATE TABLE IF NOT EXISTS `print_orders_history` (
   `last_printed_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `status` tinyint(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=75 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=78 ;
 
 --
 -- Dumping data for table `print_orders_history`
@@ -3435,9 +3716,12 @@ INSERT INTO `print_orders_history` (`id`, `order_id`, `last_printed_rows`, `tota
 (69, 160, 90, 1000, 'Qrcode', '2018-08-11 08:47:38', 1),
 (70, 161, 20, 1000, 'Qrcode', '2018-08-13 08:48:44', 1),
 (71, 162, 610, 1000, 'Qrcode', '2018-08-13 12:49:49', 1),
-(72, 163, 410, 1000, 'barcode', '2018-08-24 06:44:13', 1),
+(72, 163, 420, 1000, 'barcode', '2018-10-01 07:18:07', 1),
 (73, 164, 1050, 1000, 'barcode', '2018-08-17 10:40:54', 1),
-(74, 165, 410, 10000, 'Qrcode', '2018-08-24 06:46:39', 1);
+(74, 165, 430, 10000, 'Qrcode', '2018-10-09 09:53:31', 1),
+(75, 166, 10, 100, 'Qrcode', '2018-10-13 10:51:23', 1),
+(76, 167, 10, 1000, 'Qrcode', '2018-10-20 05:20:28', 1),
+(77, 169, 20, 100, 'Qrcode', '2018-11-01 10:01:40', 1);
 
 -- --------------------------------------------------------
 
@@ -3449,7 +3733,7 @@ CREATE TABLE IF NOT EXISTS `products` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
   `product_name` varchar(100) NOT NULL,
   `brand_name` varchar(100) NOT NULL,
-  `attribute_list` varchar(555) NOT NULL DEFAULT '0',
+  `attribute_list` text,
   `industry_data` text NOT NULL,
   `created_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` int(11) NOT NULL DEFAULT '1',
@@ -3475,40 +3759,61 @@ CREATE TABLE IF NOT EXISTS `products` (
   `other_industry` char(100) DEFAULT '',
   `push_ad_req` varchar(1) DEFAULT NULL,
   `push_survey_req` varchar(1) DEFAULT NULL,
+  `product_registration_lps` int(4) NOT NULL DEFAULT '0',
+  `product_image_response_lps` int(4) NOT NULL DEFAULT '0',
+  `product_audio_response_lps` int(4) NOT NULL DEFAULT '0',
+  `product_video_response_lps` int(4) NOT NULL DEFAULT '0',
+  `product_pdf_response_lps` int(10) NOT NULL DEFAULT '0',
+  `product_ad_response_lps` int(4) NOT NULL DEFAULT '0',
+  `product_survey_response_lps` int(4) NOT NULL DEFAULT '0',
+  `product_demo_video_response_lps` int(10) NOT NULL DEFAULT '0',
+  `product_demo_audio_response_lps` int(10) NOT NULL DEFAULT '0',
+  `feedback_on_product_lps` int(10) NOT NULL DEFAULT '0',
+  `product_image_response_fbqq` int(4) NOT NULL DEFAULT '3',
+  `product_audio_response_fbqq` int(4) NOT NULL DEFAULT '3',
+  `product_video_response_fbqq` int(4) NOT NULL DEFAULT '3',
+  `product_pdf_response_fbqq` int(4) NOT NULL DEFAULT '3',
+  `product_ad_response_fbqq` int(4) NOT NULL DEFAULT '3',
+  `product_survey_response_fbqq` int(4) NOT NULL DEFAULT '3',
+  `product_demo_video_response_fbqq` int(4) NOT NULL DEFAULT '3',
+  `product_demo_audio_response_fbqq` int(4) NOT NULL DEFAULT '3',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=167 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=171 ;
 
 --
 -- Dumping data for table `products`
 --
 
-INSERT INTO `products` (`id`, `product_name`, `brand_name`, `attribute_list`, `industry_data`, `created_date`, `created_by`, `status`, `product_sku`, `product_description`, `product_thumb_images`, `product_images`, `product_video`, `product_audio`, `product_pdf`, `product_demo_video`, `product_demo_audio`, `product_user_manual`, `product_push_ad_video`, `product_survey_video`, `code_type`, `code_activation_type`, `delivery_method`, `code_key_type`, `code_unity_type`, `code_size`, `other_industry`, `push_ad_req`, `push_survey_req`) VALUES
-(94, 'BrownRice', 'pp', '["31","22","26","27","28"]', '["77","78","84","95","96","97","98","other"]', '2018-02-24 08:10:36', 219, 1, 'brownrice-2368', '', NULL, '', 'Usha_40sec_720_opt_01.mp4', '', '', NULL, NULL, NULL, '', '', 'barcode', 0, 1, 'serial', '', 'S', 'textbox_9-||-19', NULL, NULL),
-(95, 'Hushpuppies001', '', '["42","22","23"]', '["186","188","195"]', '2018-02-24 08:56:06', 219, 1, 'hushpuppies001-2110', 'Comments .....', NULL, '5a91291900f0c.png,5a91291925ec8.png,5a91291a0b630.png,5a91291a28381.png', 'video_12_1519462717728.mp4', 'sampleaudio_file-1519462843.mp3', '', NULL, NULL, NULL, '', '', 'qrcode', 0, 4, 'serial', '', 'S', '', '0', NULL),
-(96, 'Woodloand Black', '', '["51","21","31","23"]', '["186","188","195","197","199"]', '2018-02-24 10:54:08', 217, 1, 'woodloand-black-4543', 'Comments here...', NULL, '5a914496ede98.png,5a91449764251.png,5a91449a7af79.png,5a91449d618ca.png', 'video_12_1519469737565.mp4', 'sampleaudio_file-1519469765.mp3', 'brochure1-1519469736.pdf,brochure4-1519469736.pdf,brochure2-1519469739.pdf,brochure3-1519469743.pdf', NULL, NULL, NULL, '', '', 'qrcode', 0, 2, 'random', '', 'M', '', '1', NULL),
-(97, 'Walk Slipon', '', '["31"]', '["186","188","195","197","other"]', '2018-02-24 12:00:17', 217, 1, 'walk-slipon-2716', 'Testing ....', NULL, '5a93b76353d43.png,5a93b76394b2d.png,5a93b763bd723.png,5a93b763df324.png', 'video_12_1519630173676.mp4', 'sampleaudio_file-1519630257.mp3', '', NULL, NULL, NULL, '', '', 'barcode', 1, 1, 'serial', '', 'S', 'textbox_6-||-20', NULL, NULL),
-(107, 'DELMUMEXP001', '', '["22"]', '["143","144","150","152"]', '2018-03-09 16:00:53', 199, 1, 'delmumexp001-1294', '', NULL, '', 'Usha_40sec_720_opt_01.mp4', '', '', NULL, NULL, NULL, '', '', 'barcode', 1, 2, 'serial', '', 'S', '', NULL, NULL),
-(151, 'India Gate Classic', 'INDIA GATE BASMATI RICE ', 'null', '["227","228","229","230","231","other"]', '2018-06-05 08:51:45', 221, 1, 'india-gate-classic-4809', 'India Gate Basmati Rice is the Leading Rice Brand In india - for fine , Long Grain Basmati Rice with a Sweet Fragrance', 'image42.jpg', 'image12.jpg', 'demo1.mp4', 'india-gate-basmati-rice-ad-1528255725.mp3', 'Single_Bar_Code_Level_0_Code_with_Warranty.pdf', 'testingvideo115.mp4', NULL, NULL, 'testingvideo114.mp4', 'testingvideo11.mp4', 'barcode', 1, 1, 'serial', '', 'M', 'textbox_7-||-28', NULL, NULL),
-(152, 'DAIKIN FTKC SERIES', 'DAIKIN', '["26","23","53","55","56"]', '["449","495","510","511"]', '2018-06-06 04:16:27', 221, 1, 'daikin-ftkc-series-3668', 'Daikin is a world wide technology leader in Airconditioning products - For home and for the Workplace !! Choose from our Wide range and series of products for years and years of comfort', NULL, '5b17611788b3d.jpg', 'video_12_1528258892497.mp4', 'daikin-jingle-1528258923.mp3', 'daikin-product-brochure-1528258910.pdf,', NULL, NULL, NULL, '', '', 'qrcode', 0, 1, 'serial', '', 'L', '', NULL, NULL),
-(153, 'Symphony Storm ', 'SYMPHONY', '["50"]', '["449","other"]', '2018-06-06 07:04:08', 221, 1, 'symphony-storm-1042', 'Symphony presents a Wise range of Evaporative Coolers for Residential , Commercial and Industrial Application', NULL, '5b1787b48e7ef.jpg', 'video_12_1528268825779.mp4', '', ',product-knowledge-1528268876.pdf', NULL, NULL, NULL, '', '', 'qrcode', 1, 1, 'serial', '', 'L', 'textbox_3-||-30', NULL, NULL),
-(143, 'Colgate Total', 'Colgate', '["23"]', '["227","345","346","414","415","421"]', '2018-04-19 09:13:15', 221, 1, 'colgate-total-9494', 'Colgate Total Toothpaste is sold as a teeth cleaning product from the Colgate Palmolive Company. Other than water and flavoring, the product has 13 different ingredients that make up the formula. Toothpaste is not meant to be swallowed, and should be rinsed after using. Swallowing too much toothpaste can give side effects of dizziness, nausea, headache and vomiting, according to the U.S. Department of Health and Human Services.', NULL, '5ad863950f3fc.png,5ad86394efc93.png,5ad863957a535.png,5ad8639a9c51a.png', 'video_12_1524130719208.mp4', 'audio-1524131424.mp3', 'colgate-total-benefits-1524130833.pdf,colgate-total-ingrediants-1524130835.pdf', NULL, NULL, NULL, '', '', 'qrcode', 1, 1, 'serial', 'Twin', 'M', '', '1', NULL),
-(145, 'BB-Bike', '', '["45","41","51"]', '["18","37","41"]', '2018-05-10 05:38:59', 221, 1, 'bb-bike-1260', 'This is a sample product named for Bikes', NULL, '5af42bfe06bef.jpg,5af42bfe8bb9e.jpg,5af42bffcf348.jpg,5af42c012bed0.jpg', 'video_12_1525951492722.mp4', 'sampleaudio_file-1525951549.mp3', 'brochure4-1525951586.pdf,brochure2-1525951588.pdf,brochure1-1525951591.pdf,brochure3-1525951591.pdf', NULL, NULL, NULL, '', '', 'qrcode', 0, 1, 'random', '', 'M', '', NULL, NULL),
-(147, 'BentoDent ToothPaste', 'Bento', '["21","23"]', '{"0":"449","1":"495","2":"496","3":"497","5":"421"}', '2018-05-30 09:14:32', 221, 1, 'bentodent-toothpaste-4105', 'Testing............', NULL, '5b0fccb0123e5.jpg,5b0fccb05424e.jpg,5b0fccb07eb83.jpg,5b0fccb0c829f.jpg', 'video_12_1527762128193.mp4', 'sampleaudio-1527762159.mp3,sampleaudio-1527762206.mp3', 'brochure3-1527762128.pdf', 'video_12_1527762128193.mp4', 'video_12_1527762128193.mp4', 'brochure3-1527762128.pdf', '', '', 'barcode', 0, 2, 'serial', '', 'S', '', '', NULL),
-(148, 'DK Motor', 'DKM', '["46","47","41","53","55"]', '["449","450","484","485"]', '2018-06-02 07:27:49', 221, 1, 'dk-motor-8321', '', NULL, '5b0fccb0123e5.jpg,5b0fccb05424e.jpg,5b0fccb07eb83.jpg,5b0fccb0c829f.jpg', 'video_12_1527762128193.mp4', 'sampleaudio-1527762159.mp3,sampleaudio-1527762206.mp3', 'brochure3-1527762128.pdf', 'video_12_1527762128193.mp4', 'video_12_1527762128193.mp4', 'brochure3-1527762128.pdf', '', '', 'qrcode', 0, 3, 'serial', '', 'L', '', NULL, NULL),
-(149, 'EP 7-12', 'EXIDE', '["45","51"]', '["205","206","208"]', '2018-06-04 08:40:43', 221, 1, 'ep-7-12-4017', '.................', NULL, '5b1517f36b888.jpg', 'video_12_1528109067570.mp4', 'sampleaudio-1528109095.mp3,sampleaudio2-1528109111.mp3', 'brochure3-1528109092.pdf,brochure4-1528109110.pdf', 'video_12_1528102556977.mp4', 'exide-battery-caller-tune-1528101791.mp3', 'exide---product-brochure-1528101788.pdf,exide---product-brochure-1528101821.pdf', '', '', 'barcode', 1, 1, 'serial', '', 'L', '', NULL, NULL),
-(150, 'S248 165 80 R14 TL', '', '["50"]', '["205","other"]', '2018-06-05 08:07:08', 221, 1, 's248-165-80-r14-tl-4932', 'Bridgestone S248 165/80 R14 TL is a Tubeless Radial tyre in the dimension of 165/80 which is the most popular size of small sized vehicles as also some mid size sedans .', NULL, '5b164596e0fbe.jpg', 'video_12_1528186289939.mp4', 'bridgestone-(jingle)-1528186477.mp3', 'testimonials-1528186510.pdf', 'video_12_1528186289939.mp4', 'bridgestone-(jingle)-1528186477.mp3', 'testimonials-1528186510.pdf', 'video_12_1528186289939.mp4', 'video_12_1528186289939.mp4', 'qrcode', 1, 1, 'serial', '', 'L', 'textbox_3-||-27', NULL, NULL),
-(154, 'Food Product demo1', 'Brand Name', '["46","47","50"]', '["449","450","451"]', '2018-06-08 11:03:11', 221, 1, 'food-product-demo1-8695', '', NULL, '', 'Usha_40sec_720_opt_01.mp4', '', '', '', '', '', '', '', 'qrcode', 1, 1, 'serial', '', 'S', '', '0', NULL),
-(155, 'Product demo2', 'Demo Brand Name 2-1', '["31","45","46"]', '["205","212","213","214"]', '2018-06-08 11:04:10', 221, 1, 'product-demo2-4719', 'This is a test-001KKSanjay', NULL, 'image4.jpg,image3.jpg,image11.jpg,image2.jpg', 'Usha_40sec_720_opt_01.mp4', 'sampleaudio.mp3', 'brochure1.pdf', 'video_12_1513699607791.mp4', 'sampleaudio2.mp3', 'brochure3.pdf', '', '', 'qrcode', 1, 1, 'serial', '', 'M', '', '0', NULL),
-(156, 'Demo Product', 'DemoBrand', '["31","48","39","55","56"]', '["205","212","213","217"]', '2018-06-25 08:54:40', 221, 1, 'demo-product-6430', 'KKThis is a Demo product, without warranty.\nm\nThanks \n...................\n.......................\n............\nSanjay', NULL, 'IMG-20161009-WA0028.jpg', 'demo3.mp4', 'sampleaudio_-_Copy.mp3', 'brochure41.pdf', 'testingvideo113.mp4', 'sampleaudio.mp3', 'brochure3.pdf', 'testingvideo112.mp4', 'testingvideo111.mp4', 'barcode', 1, 3, 'serial', 'Twin', 'S', '', '0', NULL),
-(158, 'C2 Mobile', 'Samsung', '["22","47","51"]', '["449","495","510","512"]', '2018-07-06 05:46:12', 221, 1, 'c2-mobile-4410', '', NULL, '', '', '', '', '', '', '', '', '', 'barcode', 1, 1, 'serial', '', 'M', '', '0', NULL),
-(159, 'aaaa', 'Demo1Brand', 'null', '[]', '2018-07-14 11:27:02', 221, 1, 'aaaa-7886', '', NULL, 'noimage.png', '', '', '', '', '', '', '', '', 'barcode', 1, 1, 'serial', '', 'S', '', '0', NULL),
-(160, 'sss', 'sss', '', '[]', '2018-07-14 11:40:59', 221, 1, 'sss-9613', '', NULL, '', '', '', '', '', '', '', '', '', 'barcode', 1, 1, 'serial', '', 'S', '', '0', NULL),
-(161, 'demo4p', 'Demo', '["22","47","51"]', '["205"]', '2018-07-14 11:50:59', 221, 1, 'demo4p-8134', '', NULL, '', '', '', '', '', '', '', '', '', 'qrcode', 1, 1, 'serial', 'Single', 'M', '', '0', NULL),
-(162, 'Dell Inspiron 5558', 'Dell', '["22","21","51"]', '["449","450","489"]', '2018-07-16 05:39:18', 221, 1, 'dell-inspiron-5558-7156', '', NULL, '', '', '', '', '', '', '', '', '', 'qrcode', 1, 2, 'serial', '', 'S', '', '0', NULL),
-(163, 'Nokia 1100', 'Nokia', '["22","47","51"]', '["449","514","515","516"]', '2018-07-16 06:55:53', 221, 1, 'nokia-1100-8528', '', NULL, '', '', '', '', '', '', '', '', '', 'qrcode', 1, 1, 'serial', 'Twin', 'S', '', '1', NULL),
-(164, 'AKASO EK7000 Wi-Fi Ultra HD Waterproof Sports Action Camera', 'AKASO', '["22","47","51"]', '["449","450","473","475"]', '2018-07-20 05:15:39', 221, 1, 'aewuhwsac-7341', '', NULL, 'image41.jpg', 'demo.mp4', '', '', '', '', '', '', '', 'barcode', 0, 1, 'serial', 'Twin', 'M', '', '1', ''),
-(165, 'HP L100', 'HP', '["22","27","51"]', '["449","514","515","516"]', '2018-07-20 10:39:09', 221, 1, 'hl-6367', '', NULL, '', '', '', '', '', '', '', '', '', 'barcode', 1, 1, 'serial', 'Twin', 'M', '', '1', '1'),
-(166, 'Dolly Battery', 'Dolly', '["31","47","50"]', '["205","212","222"]', '2018-08-16 11:44:45', 221, 1, 'db-9013', '', 'download.png', 'image43.jpg', '', '', '', '', '', '', '', '', 'qrcode', 1, 1, 'serial', 'Twin', 'M', '', '1', '1');
+INSERT INTO `products` (`id`, `product_name`, `brand_name`, `attribute_list`, `industry_data`, `created_date`, `created_by`, `status`, `product_sku`, `product_description`, `product_thumb_images`, `product_images`, `product_video`, `product_audio`, `product_pdf`, `product_demo_video`, `product_demo_audio`, `product_user_manual`, `product_push_ad_video`, `product_survey_video`, `code_type`, `code_activation_type`, `delivery_method`, `code_key_type`, `code_unity_type`, `code_size`, `other_industry`, `push_ad_req`, `push_survey_req`, `product_registration_lps`, `product_image_response_lps`, `product_audio_response_lps`, `product_video_response_lps`, `product_pdf_response_lps`, `product_ad_response_lps`, `product_survey_response_lps`, `product_demo_video_response_lps`, `product_demo_audio_response_lps`, `feedback_on_product_lps`, `product_image_response_fbqq`, `product_audio_response_fbqq`, `product_video_response_fbqq`, `product_pdf_response_fbqq`, `product_ad_response_fbqq`, `product_survey_response_fbqq`, `product_demo_video_response_fbqq`, `product_demo_audio_response_fbqq`) VALUES
+(94, 'BrownRice', 'pp', '["31","22","26","27","28"]', '["77","78","84","95","96","97","98","other"]', '2018-02-24 08:10:36', 219, 1, 'brownrice-2368', '', NULL, '', 'Usha_40sec_720_opt_01.mp4', '', '', NULL, NULL, NULL, '', '', 'barcode', 0, 1, 'serial', '', 'S', 'textbox_9-||-19', NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(95, 'Hushpuppies001', '', '["42","22","23"]', '["186","188","195"]', '2018-02-24 08:56:06', 219, 1, 'hushpuppies001-2110', 'Comments .....', NULL, '5a91291900f0c.png,5a91291925ec8.png,5a91291a0b630.png,5a91291a28381.png', 'video_12_1519462717728.mp4', 'sampleaudio_file-1519462843.mp3', '', NULL, NULL, NULL, '', '', 'qrcode', 0, 4, 'serial', '', 'S', '', '0', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(96, 'Woodloand Black', '', '["51","21","31","23"]', '["186","188","195","197","199"]', '2018-02-24 10:54:08', 217, 1, 'woodloand-black-4543', 'Comments here...', NULL, '5a914496ede98.png,5a91449764251.png,5a91449a7af79.png,5a91449d618ca.png', 'video_12_1519469737565.mp4', 'sampleaudio_file-1519469765.mp3', 'brochure1-1519469736.pdf,brochure4-1519469736.pdf,brochure2-1519469739.pdf,brochure3-1519469743.pdf', NULL, NULL, NULL, '', '', 'qrcode', 0, 2, 'random', '', 'M', '', '1', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(97, 'Walk Slipon', '', '["31"]', '["186","188","195","197","other"]', '2018-02-24 12:00:17', 217, 1, 'walk-slipon-2716', 'Testing ....', NULL, '5a93b76353d43.png,5a93b76394b2d.png,5a93b763bd723.png,5a93b763df324.png', 'video_12_1519630173676.mp4', 'sampleaudio_file-1519630257.mp3', '', NULL, NULL, NULL, '', '', 'barcode', 1, 1, 'serial', '', 'S', 'textbox_6-||-20', NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(107, 'DELMUMEXP001', '', '["22"]', '["143","144","150","152"]', '2018-03-09 16:00:53', 199, 1, 'delmumexp001-1294', '', NULL, '', 'Usha_40sec_720_opt_01.mp4', '', '', NULL, NULL, NULL, '', '', 'barcode', 1, 2, 'serial', '', 'S', '', NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(151, 'India Gate Classic', 'INDIA GATE BASMATI RICE ', '["46","47"]', '["227","228","229","230","231","other"]', '2018-06-05 08:51:45', 221, 1, 'india-gate-classic-4809', 'India Gate Basmati Rice is the Leading Rice Brand In india - for fine , Long Grain Basmati Rice with a Sweet Fragrance.K12', 'IMG-20161012-WA0019.jpg', 'image12.jpg', 'demo1.mp4', 'sampleaudio1.mp3', 'brochure11.pdf', 'testingvideo115.mp4', NULL, 'brochure13.pdf', 'testingvideo114.mp4', 'testingvideo11.mp4', 'qrcode', 1, 1, 'serial', 'Twin', 'M', '', '0', '', 1012, 2012, 3012, 4012, 2012, 5012, 6012, 2012, 2012, 500, 3, 3, 3, 3, 3, 3, 3, 3),
+(152, 'DAIKIN FTKC SERIES', 'DAIKIN', '["26","23","53","55","56"]', '["449","495","510","511"]', '2018-06-06 04:16:27', 221, 1, 'daikin-ftkc-series-3668', 'Daikin is a world wide technology leader in Airconditioning products - For home and for the Workplace !! Choose from our Wide range and series of products for years and years of comfort', NULL, '5b17611788b3d.jpg', 'video_12_1528258892497.mp4', 'daikin-jingle-1528258923.mp3', 'daikin-product-brochure-1528258910.pdf,', NULL, NULL, NULL, '', '', 'qrcode', 0, 1, 'serial', '', 'L', '', '0', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(153, 'Symphony Storm ', 'SYMPHONY', '["50"]', '["449","other"]', '2018-06-06 07:04:08', 221, 1, 'symphony-storm-1042', 'Symphony presents a Wise range of Evaporative Coolers for Residential , Commercial and Industrial Application', NULL, '5b1787b48e7ef.jpg', 'video_12_1528268825779.mp4', '', ',product-knowledge-1528268876.pdf', NULL, NULL, NULL, '', '', 'qrcode', 1, 1, 'serial', '', 'L', 'textbox_3-||-30', '0', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(143, 'Colgate Total', 'Colgate', '["23"]', '["227","345","346","414","415","421"]', '2018-04-19 09:13:15', 221, 1, 'colgate-total-9494', 'Colgate Total Toothpaste is sold as a teeth cleaning product from the Colgate Palmolive Company. Other than water and flavoring, the product has 13 different ingredients that make up the formula. Toothpaste is not meant to be swallowed, and should be rinsed after using. Swallowing too much toothpaste can give side effects of dizziness, nausea, headache and vomiting, according to the U.S. Department of Health and Human Services.', NULL, '5ad863950f3fc.png,5ad86394efc93.png,5ad863957a535.png,5ad8639a9c51a.png', 'video_12_1524130719208.mp4', 'audio-1524131424.mp3', 'colgate-total-benefits-1524130833.pdf,colgate-total-ingrediants-1524130835.pdf', NULL, NULL, NULL, '', '', 'qrcode', 1, 1, 'serial', 'Twin', 'M', '', '1', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(145, 'BB-Bike', '', '["45","41","51"]', '["18","37","41"]', '2018-05-10 05:38:59', 221, 1, 'bb-bike-1260', 'This is a sample product named for Bikes', NULL, '5af42bfe06bef.jpg,5af42bfe8bb9e.jpg,5af42bffcf348.jpg,5af42c012bed0.jpg', 'video_12_1525951492722.mp4', 'sampleaudio_file-1525951549.mp3', 'brochure4-1525951586.pdf,brochure2-1525951588.pdf,brochure1-1525951591.pdf,brochure3-1525951591.pdf', NULL, NULL, NULL, '', '', 'qrcode', 0, 1, 'random', '', 'M', '', NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(147, 'BentoDent ToothPaste', 'Bento', '["21","23"]', '{"0":"449","1":"495","2":"496","3":"497","5":"421"}', '2018-05-30 09:14:32', 221, 1, 'bentodent-toothpaste-4105', 'Testing............', NULL, '5b0fccb0123e5.jpg,5b0fccb05424e.jpg,5b0fccb07eb83.jpg,5b0fccb0c829f.jpg', 'video_12_1527762128193.mp4', 'sampleaudio-1527762159.mp3,sampleaudio-1527762206.mp3', 'brochure3-1527762128.pdf', 'video_12_1527762128193.mp4', 'video_12_1527762128193.mp4', 'brochure3-1527762128.pdf', '', '', 'barcode', 0, 2, 'serial', '', 'S', '', '', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(148, 'DK Motor', 'DKM', '["46","47","41","53","55"]', '["449","450","484","485"]', '2018-06-02 07:27:49', 221, 1, 'dk-motor-8321', '', NULL, '5b0fccb0123e5.jpg,5b0fccb05424e.jpg,5b0fccb07eb83.jpg,5b0fccb0c829f.jpg', 'video_12_1527762128193.mp4', 'sampleaudio-1527762159.mp3,sampleaudio-1527762206.mp3', 'brochure3-1527762128.pdf', 'video_12_1527762128193.mp4', 'video_12_1527762128193.mp4', 'brochure3-1527762128.pdf', '', '', 'qrcode', 0, 3, 'serial', '', 'L', '', NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(149, 'EP 7-12', 'EXIDE', '["45","51"]', '["205","206","208"]', '2018-06-04 08:40:43', 221, 1, 'ep-7-12-4017', '.................', NULL, '5b1517f36b888.jpg', 'video_12_1528109067570.mp4', 'sampleaudio-1528109095.mp3,sampleaudio2-1528109111.mp3', 'brochure3-1528109092.pdf,brochure4-1528109110.pdf', 'video_12_1528102556977.mp4', 'exide-battery-caller-tune-1528101791.mp3', 'exide---product-brochure-1528101788.pdf,exide---product-brochure-1528101821.pdf', '', '', 'barcode', 1, 1, 'serial', '', 'L', '', NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(150, 'S248 165 80 R14 TL', '', '["50"]', '["205","other"]', '2018-06-05 08:07:08', 221, 1, 's248-165-80-r14-tl-4932', 'Bridgestone S248 165/80 R14 TL is a Tubeless Radial tyre in the dimension of 165/80 which is the most popular size of small sized vehicles as also some mid size sedans .', NULL, '5b164596e0fbe.jpg', 'video_12_1528186289939.mp4', 'bridgestone-(jingle)-1528186477.mp3', 'testimonials-1528186510.pdf', 'video_12_1528186289939.mp4', 'bridgestone-(jingle)-1528186477.mp3', 'testimonials-1528186510.pdf', 'video_12_1528186289939.mp4', 'video_12_1528186289939.mp4', 'qrcode', 1, 1, 'serial', '', 'L', 'textbox_3-||-27', NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(154, 'Food Product demo1', 'Brand Name', '["46","47","50"]', '["449","450","451"]', '2018-06-08 11:03:11', 221, 1, 'food-product-demo1-8695', '', NULL, '', 'Usha_40sec_720_opt_01.mp4', '', '', '', '', '', '', '', 'qrcode', 1, 1, 'serial', '', 'S', '', '0', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(155, 'Product demo2', 'Demo Brand Name 2-1', '["31","45","46"]', '["205","212","213","214"]', '2018-06-08 11:04:10', 221, 1, 'product-demo2-4719', 'This is a test-001KKSanjay', NULL, 'image4.jpg,image3.jpg,image11.jpg,image2.jpg', 'Usha_40sec_720_opt_01.mp4', 'sampleaudio.mp3', 'brochure1.pdf', 'video_12_1513699607791.mp4', 'sampleaudio2.mp3', 'brochure3.pdf', '', '', 'qrcode', 1, 1, 'serial', '', 'M', '', '0', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(156, 'Demo Product', 'DemoBrand', '["31","48","39","55","56"]', '["205","212","213","217"]', '2018-06-25 08:54:40', 221, 1, 'demo-product-6430', 'KKThis is a Demo product, without warranty.\nm\nThanks \n...................\n.......................\n............\nSanjay', NULL, 'IMG-20161009-WA0028.jpg', 'demo3.mp4', 'sampleaudio_-_Copy.mp3', 'brochure41.pdf', 'testingvideo113.mp4', 'sampleaudio.mp3', 'brochure3.pdf', 'testingvideo112.mp4', 'testingvideo111.mp4', 'barcode', 1, 3, 'serial', 'Twin', 'S', '', '0', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(158, 'C2 Mobile', 'C2', '["44","53"]', '["227","345","346","377","385","388"]', '2018-07-06 05:46:12', 221, 1, 'c2-mobile-4410', 'test', 'download1.png', 'image31.jpg', 'demo22.mp4', 'sampleaudio5.mp3', 'brochure32.pdf', 'demo23.mp4', 'sampleaudio6.mp3', 'brochure33.pdf', 'demo11.mp4', 'demo21.mp4', 'barcode', 1, 2, 'serial', 'Twin', 'M', '', '0', NULL, 56, 11, 22, 33, 44, 55, 55, 66, 77, 67, 3, 3, 3, 3, 3, 3, 3, 3),
+(159, 'aaaa', 'Demo1Brand', 'null', '[]', '2018-07-14 11:27:02', 221, 1, 'aaaa-7886', '', NULL, 'noimage.png', '', '', '', '', '', '', '', '', 'barcode', 1, 1, 'serial', '', 'S', '', '0', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(169, 'test2', 'test2', 'null', '["227","228","247","259","264"]', '2018-11-02 10:00:23', 221, 1, 't-9684', '', '', '', '', '', '', '', '', '', '', '', 'barcode', 0, 1, 'serial', 'Single', 'M', '', NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(161, 'demo4p', 'Demo', '["22","47","51"]', '["205"]', '2018-07-14 11:50:59', 221, 1, 'demo4p-8134', '', NULL, '', '', '', '', '', '', '', '', '', 'qrcode', 1, 1, 'serial', 'Single', 'M', '', '1', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(162, 'Dell Inspiron 5558', 'Dell', '["22","21","51"]', '["449","450","489"]', '2018-07-16 05:39:18', 221, 1, 'dell-inspiron-5558-7156', '', NULL, '', '', '', '', '', '', '', '', '', 'qrcode', 1, 2, 'serial', '', 'S', '', '1', NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(163, 'Nokia 1100', 'Nokia', '["22","47","51"]', '["449","514","515","516"]', '2018-07-16 06:55:53', 221, 1, 'nokia-1100-8528', '', NULL, '', '', '', '', '', '', '', '', '', 'qrcode', 1, 1, 'serial', 'Twin', 'S', '', '1', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(164, 'AKASO EK7000 Wi-Fi Ultra HD Waterproof Sports Action Camera', 'AKASO', '["22","47","51"]', '["449","450","473","475"]', '2018-07-20 05:15:39', 221, 1, 'aewuhwsac-7341', '', NULL, 'image41.jpg', 'demo.mp4', '', '', '', '', '', '', '', 'barcode', 0, 1, 'serial', 'Twin', 'M', '', '1', '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(165, 'HP L100', 'HP', '["22","27","51"]', '["449","514","515","516"]', '2018-07-20 10:39:09', 221, 1, 'hl-6367', '', NULL, '', '', '', '', 'demo2.mp4', 'sampleaudio4.mp3', '', '', '', 'barcode', 1, 1, 'serial', 'Twin', 'M', '', '1', '1', 220, 220, 220, 220, 220, 220, 220, 220, 220, 0, 3, 3, 3, 3, 3, 3, 3, 3),
+(166, 'Dolly Battery', 'Dolly', '["31","47","50"]', '["205","212","222"]', '2018-08-16 11:44:45', 221, 1, 'db-9013', 'ppps-Changed1600ssss12', 'download.png', 'image13.jpg', 'demo31.mp4', 'sampleaudio2.mp3', 'brochure12.pdf', 'video_12_15136996077911.mp4', 'sampleaudio3.mp3', 'brochure2.pdf', 'demo32.mp4', 'video_12_1524130719208.mp4', 'qrcode', 1, 1, 'serial', 'Twin', 'M', '', '1', '1', 60012, 110, 60012, 60012, 60012, 60012, 60012, 60012, 60012, 100, 4, 4, 312, 312, 312, 312, 312, 312),
+(167, 'test P11', 'testP11ss', '["-Select Child Attribute Name-"]', '["205","212","213","215"]', '2018-10-23 06:31:29', 221, 1, 'tp-1949', 'testP11', 'image14.jpg', 'download2.png', 'demo34.mp4', 'sampleaudio7.mp3', 'brochure41.pdf', 'demo33.mp4', 'sampleaudio8.mp3', 'brochure34.pdf', 'demo12.mp4', 'demo24.mp4', 'barcode', 1, 1, 'serial', 'Twin', 'M', '', NULL, NULL, 100, 10, 20, 30, 40, 50, 60, 70, 80, 90, 3, 3, 3, 3, 3, 3, 3, 3),
+(168, 'test2 Product', 'test2Bkk', '["31","47","35","52","55","76"]', '["449","450","473","474"]', '2018-10-23 08:49:12', 221, 1, 'tp-2798', 't2', 'download3.png', 'image32.jpg', 'DemoAudio.mp4', 'sampleaudio21.mp3', 'brochure35.pdf', 'video_12_15136996077913.mp4', 'sampleaudio22.mp3', 'brochure14.pdf', 'demo13.mp4', 'video_12_15136996077912.mp4', 'barcode', 0, 1, 'serial', 'Single', 'S', '', NULL, NULL, 90, 10, 20, 30, 40, 50, 60, 70, 80, 99, 3, 3, 3, 3, 3, 3, 3, 3),
+(170, 'test4', 'test45', 'null', '["227","345","346","414","415","417"]', '2018-11-02 10:15:12', 221, 1, 't-2286', '', '', '', '', '', '', '', '', '', '', '', 'barcode', 1, 1, 'serial', 'Twin', 'S', '', NULL, NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3);
 
 -- --------------------------------------------------------
 
@@ -3521,7 +3826,7 @@ CREATE TABLE IF NOT EXISTS `product_feedback_questions` (
   `product_id` int(11) NOT NULL,
   `question_id` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=98 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=101 ;
 
 --
 -- Dumping data for table `product_feedback_questions`
@@ -3601,7 +3906,53 @@ INSERT INTO `product_feedback_questions` (`id`, `product_id`, `question_id`) VAL
 (77, 156, 60),
 (78, 156, 58),
 (97, 151, 63),
-(96, 151, 62);
+(98, 151, 79),
+(96, 151, 62),
+(99, 151, 74),
+(100, 151, 73);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `product_packaging_qty_levels`
+--
+
+CREATE TABLE IF NOT EXISTS `product_packaging_qty_levels` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `product_id` varchar(20) DEFAULT NULL,
+  `pack_level0` varchar(111) DEFAULT '1',
+  `pack_level1` varchar(101) NOT NULL DEFAULT '0',
+  `pack_level2` int(10) DEFAULT NULL,
+  `pack_level3` int(10) DEFAULT NULL,
+  `pack_level4` int(10) DEFAULT NULL,
+  `pack_level5` int(10) DEFAULT NULL,
+  `pack_level6` int(10) DEFAULT NULL,
+  `pack_level7` int(10) DEFAULT NULL,
+  `pack_level8` int(10) DEFAULT NULL,
+  `pack_level9` int(10) DEFAULT NULL,
+  `pack_level10` int(10) DEFAULT NULL,
+  `pack_level11` int(10) DEFAULT NULL,
+  `pack_level12` int(10) DEFAULT NULL,
+  `pack_level13` int(10) DEFAULT NULL,
+  `pack_level14` int(10) DEFAULT NULL,
+  `pack_level15` int(10) DEFAULT NULL,
+  `pack_level16` int(10) DEFAULT NULL,
+  `pack_level17` int(10) DEFAULT NULL,
+  `pack_level18` int(10) DEFAULT NULL,
+  `pack_level19` int(10) DEFAULT NULL,
+  `pack_level20` int(10) DEFAULT NULL,
+  `pack_level21` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+
+--
+-- Dumping data for table `product_packaging_qty_levels`
+--
+
+INSERT INTO `product_packaging_qty_levels` (`id`, `product_id`, `pack_level0`, `pack_level1`, `pack_level2`, `pack_level3`, `pack_level4`, `pack_level5`, `pack_level6`, `pack_level7`, `pack_level8`, `pack_level9`, `pack_level10`, `pack_level11`, `pack_level12`, `pack_level13`, `pack_level14`, `pack_level15`, `pack_level16`, `pack_level17`, `pack_level18`, `pack_level19`, `pack_level20`, `pack_level21`) VALUES
+(1, '168', '1', '100', 50, 40, 40, 10, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(2, '166', '1', '10', 20, 30, 40, 50, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+(3, '151', '1', '4', 4, 4, 4, 4, 4, 4, 4, 4, 4, 44, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4);
 
 -- --------------------------------------------------------
 
@@ -3627,23 +3978,53 @@ CREATE TABLE IF NOT EXISTS `purchased_product` (
   `purchase_date` varchar(20) DEFAULT NULL,
   `registration_process` varchar(10) NOT NULL DEFAULT 'pending',
   `status` tinyint(1) DEFAULT NULL,
+  `loyalty_points_earned` int(10) DEFAULT NULL,
   `vquery` longtext,
   `latitude` varchar(50) DEFAULT NULL,
   `longitude` varchar(50) DEFAULT NULL,
   `modified` datetime DEFAULT NULL,
   `create_date` datetime DEFAULT NULL,
   PRIMARY KEY (`purchased_product_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=34 ;
 
 --
 -- Dumping data for table `purchased_product`
 --
 
-INSERT INTO `purchased_product` (`purchased_product_id`, `consumer_id`, `bar_code`, `product_id`, `ordered_date`, `invoice`, `invoice_image`, `seller_name`, `seller_gst`, `selling_price`, `discount`, `expiry_date`, `warranty_start_date`, `warranty_end_date`, `purchase_date`, `registration_process`, `status`, `vquery`, `latitude`, `longitude`, `modified`, `create_date`) VALUES
-(2, 21, 'db-9013-7805-8', 166, NULL, '123456', 'uploads/invoice/LogoDummy4.jpg', 'PP Limited', '123456789', '1000.00', '10.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, NULL, '28.41224114', '77.05176533', '2018-09-17 14:38:16', '2018-09-17 14:34:58'),
-(3, 21, 'db-9013-7805-9', 166, NULL, '123456', 'uploads/invoice/IMG-20161010-WA0028.jpg', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 0, NULL, '28.41224114', '77.05176533', '2018-09-19 12:54:48', '2018-09-19 12:54:48'),
-(4, 21, 'db-9013-7805-7', 166, NULL, '123456', 'uploads/invoice/IMG-20161010-WA00281.jpg', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 0, NULL, '28.41224114', '77.05176533', '2018-09-19 12:55:01', '2018-09-19 12:55:01'),
-(5, 21, 'db-9013-7805-6', 166, NULL, '123456', 'uploads/invoice/IMG-20161010-WA00282.jpg', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 0, NULL, '28.41224114', '77.05176533', '2018-09-19 12:55:05', '2018-09-19 12:55:05');
+INSERT INTO `purchased_product` (`purchased_product_id`, `consumer_id`, `bar_code`, `product_id`, `ordered_date`, `invoice`, `invoice_image`, `seller_name`, `seller_gst`, `selling_price`, `discount`, `expiry_date`, `warranty_start_date`, `warranty_end_date`, `purchase_date`, `registration_process`, `status`, `loyalty_points_earned`, `vquery`, `latitude`, `longitude`, `modified`, `create_date`) VALUES
+(1, 1, 'hl-6367-7599-4', 165, NULL, '123456', 'uploads/invoice/image18.jpg', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-04 10:25:20', '2018-10-04 10:25:20'),
+(2, 1, 'db-9013-7801-10', 166, NULL, '123456', 'uploads/invoice/gillite.JPG', 'PP Limited', '123456789', '1000.00', '1.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-04 10:34:10', '2018-10-04 10:30:06'),
+(3, 1, 'db-9013-7801-9', 166, NULL, '123456', 'uploads/invoice/gillite1.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 0, NULL, NULL, '28.41224114', '77.05176533', '2018-10-04 10:30:15', '2018-10-04 10:30:15'),
+(4, 1, 'db-9013-7801-8', 166, NULL, '123456', 'uploads/invoice/gillite2.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 0, NULL, NULL, '28.41224114', '77.05176533', '2018-10-04 10:30:20', '2018-10-04 10:30:20'),
+(5, 1, 'db-9013-7801-7', 166, NULL, '123456', 'uploads/invoice/gillite3.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 0, NULL, NULL, '28.41224114', '77.05176533', '2018-10-04 10:30:24', '2018-10-04 10:30:24'),
+(6, 5, 'db-9013-7801-6', 166, NULL, '123456', 'uploads/invoice/gillite4.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 0, NULL, NULL, '28.41224114', '77.05176533', '2018-10-04 12:09:17', '2018-10-04 12:09:17'),
+(7, 5, 'db-9013-7801-5', 166, NULL, '123456', 'uploads/invoice/gillite5.JPG', 'PP Limited', '123456789', '1000.00', '10.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-04 12:10:42', '2018-10-04 12:09:21'),
+(8, 5, 'db-9013-7801-3', 166, NULL, '123456', 'uploads/invoice/gillite6.JPG', 'PP Limited', '123456789', '1000.00', '10.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-04 12:10:13', '2018-10-04 12:09:27'),
+(9, 5, 'hl-6367-7599-10', 165, NULL, '123456', 'uploads/invoice/gillite7.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-04 12:11:45', '2018-10-04 12:11:45'),
+(10, 5, 'hl-6367-7599-9', 165, NULL, '123456', 'uploads/invoice/gillite8.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-04 12:54:18', '2018-10-04 12:54:18'),
+(11, 11, 'hl-6367-7599-7', 165, NULL, '123456', 'uploads/invoice/gillite9.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-08 11:13:49', '2018-10-08 11:13:49'),
+(12, 11, 'hl-6367-7599-8', 165, NULL, '123456', 'uploads/invoice/gillite10.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-08 11:14:32', '2018-10-08 11:14:32'),
+(13, 11, 'hl-6367-7599-6', 165, NULL, '123456', 'uploads/invoice/gillite11.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-08 11:33:28', '2018-10-08 11:33:28'),
+(14, 11, 'hl-6367-7599-5', 165, NULL, '123456', 'uploads/invoice/gillite12.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-08 11:42:25', '2018-10-08 11:42:25'),
+(15, 12, 'hl-6367-7599-1', 165, NULL, '123456', 'uploads/invoice/gillite13.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-09 15:20:43', '2018-10-09 15:20:43'),
+(16, 12, 'hl-6367-7599-2', 165, NULL, '123456', 'uploads/invoice/gillite14.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-09 15:20:52', '2018-10-09 15:20:52'),
+(17, 12, 'hl-6367-7599-3', 165, NULL, '123456', 'uploads/invoice/gillite15.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-09 15:21:37', '2018-10-09 15:21:37'),
+(18, 12, 'db-9013-5025-1', 166, NULL, '123456', 'uploads/invoice/gillite16.JPG', 'PP Limited', '123456789', '1000.00', '10.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-09 15:25:37', '2018-10-09 15:24:50'),
+(19, 13, 'db-9013-5025-2', 166, NULL, '123456', 'uploads/invoice/gillite17.JPG', 'PP Limited', '123456789', '1000.00', '10.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-11 10:33:05', '2018-10-11 10:30:12'),
+(20, 13, 'db-9013-5025-3', 166, NULL, '123456', 'uploads/invoice/gillite18.JPG', 'PP Limited', '123456789', '1000.00', '10.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-11 10:32:33', '2018-10-11 10:30:22'),
+(21, 13, 'db-9013-5025-4', 166, NULL, '123456', 'uploads/invoice/gillite19.JPG', 'PP Limited', '123456789', '1000.00', '10.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-11 10:32:03', '2018-10-11 10:30:28'),
+(22, 13, 'db-9013-5025-5', 166, NULL, '123456', 'uploads/invoice/gillite20.JPG', 'PP Limited', '123456789', '1000.00', '10.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-12 16:10:29', '2018-10-12 15:55:19'),
+(23, 13, 'hl-6367-8264-5', 165, NULL, '123456', 'uploads/invoice/gillite21.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-12 15:56:30', '2018-10-12 15:56:30'),
+(24, 13, 'hl-6367-8264-6', 165, NULL, '123456', 'uploads/invoice/gillite22.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-12 16:00:05', '2018-10-12 16:00:05'),
+(25, 13, 'hl-6367-8264-7', 165, NULL, '123456', 'uploads/invoice/gillite23.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-13 11:38:57', '2018-10-13 11:38:57'),
+(26, 13, 'hl-6367-8264-8', 165, NULL, '123456', 'uploads/invoice/gillite24.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-13 11:39:19', '2018-10-13 11:39:19'),
+(27, 15, 'hl-6367-8264-9', 165, NULL, '123456', 'uploads/invoice/gillite25.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-13 15:06:02', '2018-10-13 15:06:02'),
+(28, 15, 'india-gate-classic-4809-7163-1', 151, NULL, '123456', 'uploads/invoice/gillite26.JPG', NULL, NULL, NULL, NULL, '2020-09-01', NULL, NULL, NULL, 'pending', 1, NULL, NULL, '28.41224114', '77.05176533', '2018-10-13 16:22:42', '2018-10-13 16:22:42'),
+(29, 15, 'db-9013-5563-1', 166, NULL, '123456', 'uploads/invoice/gillite27.JPG', 'PP Limited', '123456789', '1000.00', '10.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, 60012, NULL, '28.41224114', '77.05176533', '2018-10-20 10:52:24', '2018-10-20 10:51:20'),
+(30, 13, 'db-9013-2926-10', 166, NULL, '123456', 'uploads/invoice/download.jpg', 'PP Limited', '123456789', '1000.00', '10.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, 60012, NULL, '28.41224114', '77.05176533', '2018-10-27 10:59:26', '2018-10-27 10:56:33'),
+(31, 13, 'db-9013-2926-9', 166, NULL, '123456', 'uploads/invoice/download1.jpg', 'PP Limited', '123456789', '1000.00', '10.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, 60012, NULL, '28.41224114', '77.05176533', '2018-10-27 10:59:02', '2018-10-27 10:56:58'),
+(32, 13, 'db-9013-2926-8', 166, NULL, '123456', 'uploads/invoice/download2.jpg', 'PP Limited', '123456789', '1000.00', '10.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, 60012, NULL, '28.41224114', '77.05176533', '2018-10-27 10:58:23', '2018-10-27 10:57:02'),
+(33, 13, 'db-9013-2926-7', 166, NULL, '123456', 'uploads/invoice/download3.jpg', 'PP Limited', '123456789', '1000.00', '10.00', '2020-09-01', '2018-09-17', '2018-09-17', '2018-09-17', 'pending', 1, 60012, NULL, '28.41224114', '77.05176533', '2018-10-27 10:57:52', '2018-10-27 10:57:09');
 
 -- --------------------------------------------------------
 
@@ -3662,17 +4043,34 @@ CREATE TABLE IF NOT EXISTS `push_advertisements` (
   `ad_feedback_response` varchar(10) NOT NULL,
   `ad_active` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=22 ;
 
 --
 -- Dumping data for table `push_advertisements`
 --
 
 INSERT INTO `push_advertisements` (`id`, `customer_id`, `consumer_id`, `product_id`, `media_type`, `ad_push_date`, `media_play_date`, `ad_feedback_response`, `ad_active`) VALUES
-(1, 221, 21, 166, 'Video', '1899-11-30 00:00:00', '0000-00-00 00:00:00', '', 1),
-(2, 221, 21, 165, 'Video', '1899-11-30 00:00:00', '0000-00-00 00:00:00', '', 1),
-(3, 221, 21, 164, 'Video', '1899-11-30 05:00:00', '0000-00-00 00:00:00', '', 1),
-(4, 221, 21, 163, 'Video', '1899-11-30 03:09:16', '0000-00-00 00:00:00', '', 1);
+(1, 221, 12, 166, 'Video', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 1),
+(2, 221, 12, 164, 'Video', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 1),
+(3, 221, 95, 166, 'Video', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 1),
+(4, 221, 21, 165, 'Video', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 1),
+(5, 221, 88, 165, 'Video', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 1),
+(6, 221, 95, 165, 'Video', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 1),
+(7, 221, 21, 164, 'Video', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 1),
+(8, 221, 88, 164, 'Video', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 1),
+(9, 221, 95, 164, 'Video', '0000-00-00 00:00:00', '0000-00-00 00:00:00', '', 1),
+(10, 221, 1, 163, 'Video', '2018-10-06 21:00:26', '2018-10-06 21:00:26', '', 1),
+(11, 221, 5, 163, 'Video', '2018-10-06 21:00:26', '2018-10-06 21:00:26', '', 1),
+(12, 221, 9, 163, 'Video', '2018-10-06 21:00:26', '2018-10-06 21:00:26', '', 1),
+(13, 221, 11, 163, 'Video', '2018-10-06 21:00:26', '2018-10-06 21:00:26', '', 1),
+(14, 221, 1, 162, 'Video', '2018-10-06 21:00:29', '2018-10-06 21:00:29', '', 1),
+(15, 221, 5, 162, 'Video', '2018-10-06 21:00:29', '2018-10-06 21:00:29', '', 1),
+(16, 221, 9, 162, 'Video', '2018-10-06 21:00:29', '2018-10-06 21:00:29', '', 1),
+(17, 221, 11, 162, 'Video', '2018-10-06 21:00:29', '2018-10-06 21:00:29', '', 1),
+(18, 221, 1, 161, 'Video', '2018-10-06 21:00:36', '2018-10-06 21:00:36', '', 1),
+(19, 221, 5, 161, 'Video', '2018-10-06 21:00:36', '2018-10-06 21:00:36', '', 1),
+(20, 221, 9, 161, 'Video', '2018-10-06 21:00:36', '2018-10-06 21:00:36', '', 1),
+(21, 221, 11, 161, 'Video', '2018-10-06 21:00:36', '2018-10-06 21:00:36', '', 1);
 
 -- --------------------------------------------------------
 
@@ -3691,15 +4089,23 @@ CREATE TABLE IF NOT EXISTS `push_surveys` (
   `survey_feedback_response` varchar(10) NOT NULL,
   `survey_active` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=41 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=45 ;
 
 --
 -- Dumping data for table `push_surveys`
 --
 
 INSERT INTO `push_surveys` (`id`, `customer_id`, `consumer_id`, `product_id`, `media_type`, `survey_push_date`, `media_play_date`, `survey_feedback_response`, `survey_active`) VALUES
-(39, 221, 21, 166, 'Video', '2018-09-20 14:42:24', '0000-00-00 00:00:00', '', 1),
-(40, 221, 21, 165, 'Video', '2018-09-20 14:42:26', '0000-00-00 00:00:00', '', 1);
+(35, 221, 1, 166, 'Video', '2018-10-10 16:14:04', '0000-00-00 00:00:00', '', 1),
+(36, 221, 5, 166, 'Video', '2018-10-10 16:14:04', '0000-00-00 00:00:00', '', 1),
+(37, 221, 9, 166, 'Video', '2018-10-10 16:14:04', '0000-00-00 00:00:00', '', 1),
+(38, 221, 11, 166, 'Video', '2018-10-10 16:14:04', '0000-00-00 00:00:00', '', 1),
+(39, 221, 12, 166, 'Video', '2018-10-10 16:14:04', '0000-00-00 00:00:00', '', 1),
+(40, 221, 1, 165, 'Video', '2018-10-10 16:14:06', '0000-00-00 00:00:00', '', 1),
+(41, 221, 5, 165, 'Video', '2018-10-10 16:14:06', '0000-00-00 00:00:00', '', 1),
+(42, 221, 9, 165, 'Video', '2018-10-10 16:14:06', '0000-00-00 00:00:00', '', 1),
+(43, 221, 11, 165, 'Video', '2018-10-10 16:14:06', '0000-00-00 00:00:00', '', 1),
+(44, 221, 12, 165, 'Video', '2018-10-10 16:14:06', '0000-00-00 00:00:00', '', 1);
 
 -- --------------------------------------------------------
 
@@ -3715,14 +4121,19 @@ CREATE TABLE IF NOT EXISTS `push_text_message` (
   `message_push_date` datetime DEFAULT NULL,
   `message_active` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=7 ;
 
 --
 -- Dumping data for table `push_text_message`
 --
 
 INSERT INTO `push_text_message` (`id`, `customer_id`, `consumer_id`, `text_message`, `message_push_date`, `message_active`) VALUES
-(7, 221, 21, 'test1', '2018-09-14 15:33:57', 1);
+(1, 221, 1, 'test22', '2018-10-06 13:10:10', 1),
+(2, 221, 5, 'test22', '2018-10-06 13:10:10', 1),
+(3, 221, 9, 'test22', '2018-10-06 13:10:11', 1),
+(4, 221, 1, 'test1', '2018-10-06 13:16:27', 1),
+(5, 221, 5, 'test1', '2018-10-06 13:16:27', 1),
+(6, 221, 9, 'test1', '2018-10-06 13:16:27', 1);
 
 -- --------------------------------------------------------
 
@@ -3738,14 +4149,42 @@ CREATE TABLE IF NOT EXISTS `push_text_message_request` (
   `sent_date` datetime DEFAULT NULL,
   `send_status` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=3 ;
 
 --
 -- Dumping data for table `push_text_message_request`
 --
 
 INSERT INTO `push_text_message_request` (`id`, `customer_id`, `text_message`, `request_date`, `sent_date`, `send_status`) VALUES
-(1, 221, 'test1', '2018-09-14 15:13:55', '2018-09-14 15:33:57', 1);
+(1, 221, 'test1', '2018-09-14 15:13:55', '2018-10-06 13:16:27', 1),
+(2, 221, 'test22', '2018-10-01 16:45:32', '2018-10-06 13:10:11', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `receipt_stock_transfer_in`
+--
+
+CREATE TABLE IF NOT EXISTS `receipt_stock_transfer_in` (
+  `receipt_id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `request_id` varchar(30) NOT NULL,
+  `invoice_number` varchar(100) NOT NULL,
+  `bar_code` varchar(100) NOT NULL,
+  `transaction_type` varchar(100) NOT NULL,
+  `location_type` varchar(100) NOT NULL,
+  `location_name` varchar(100) NOT NULL,
+  `transfer_out_date` datetime NOT NULL,
+  `created_by_id` int(10) NOT NULL,
+  `created_date_time` datetime NOT NULL,
+  PRIMARY KEY (`receipt_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=2 ;
+
+--
+-- Dumping data for table `receipt_stock_transfer_in`
+--
+
+INSERT INTO `receipt_stock_transfer_in` (`receipt_id`, `request_id`, `invoice_number`, `bar_code`, `transaction_type`, `location_type`, `location_name`, `transfer_out_date`, `created_by_id`, `created_date_time`) VALUES
+(1, '123456', '123456', 'db-9013-2926-4', 'Shipped', 'Warehouse', 'Gurgaon', '2018-11-01 10:15:58', 22, '2018-11-01 11:49:55');
 
 -- --------------------------------------------------------
 
@@ -4696,7 +5135,7 @@ CREATE TABLE IF NOT EXISTS `scanned_products` (
   `longitude` varchar(50) DEFAULT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=654 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=673 ;
 
 --
 -- Dumping data for table `scanned_products`
@@ -5356,7 +5795,26 @@ INSERT INTO `scanned_products` (`id`, `consumer_id`, `product_id`, `customer_id`
 (650, 21, 166, 221, 'db-9013-7805-4', '33333.3333', '33.333333', '2018-09-13 14:42:36'),
 (651, 21, 166, 221, 'db-9013-7805-4', '33333.3333', '33.333333', '2018-09-13 14:48:30'),
 (652, 21, 166, 221, 'db-9013-7805-4', '33333.3333', '33.333333', '2018-09-13 15:18:13'),
-(653, 21, 166, 221, 'db-9013-7805-4', '33333.3333', '33.333333', '2018-09-13 15:19:17');
+(653, 21, 166, 221, 'db-9013-7805-4', '33333.3333', '33.333333', '2018-09-13 15:19:17'),
+(654, 88, 166, 221, 'db-9013-7805-4', '33333.3333', '33.333333', '2018-09-22 17:46:21'),
+(655, 95, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-01 15:59:11'),
+(656, 95, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-01 16:02:31'),
+(657, 95, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-03 16:02:31'),
+(658, 95, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-03 16:13:40'),
+(659, 1, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-04 10:25:15'),
+(660, 1, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-04 11:01:18'),
+(661, 1, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-04 11:30:15'),
+(662, 5, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-04 12:08:53'),
+(663, 9, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-04 16:04:14'),
+(664, 11, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-06 20:59:07'),
+(665, 12, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-09 15:24:18'),
+(666, 12, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-10 15:51:56'),
+(667, 12, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-10 16:07:58'),
+(668, 15, 165, 221, 'hl-6367-7599-4', '33333.3333', '33.333333', '2018-10-13 15:21:32'),
+(669, 15, 151, 221, 'india-gate-classic-4809-1668-1', '33333.3333', '33.333333', '2018-10-13 16:22:10'),
+(670, 15, 151, 221, 'india-gate-classic-4809-7163-1', '33333.3333', '33.333333', '2018-10-13 16:23:06'),
+(671, 15, 151, 221, 'india-gate-classic-4809-7163-1', '33333.3333', '33.333333', '2018-10-15 16:30:36'),
+(672, 15, 151, 221, 'india-gate-classic-4809-7163-1', '33333.3333', '33.333333', '2018-10-16 16:17:08');
 
 -- --------------------------------------------------------
 
@@ -6086,35 +6544,49 @@ CREATE TABLE IF NOT EXISTS `user_log` (
   `last_login` datetime DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=233 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=270 ;
 
 --
 -- Dumping data for table `user_log`
 --
 
 INSERT INTO `user_log` (`id`, `consumer_id`, `customer_id`, `token`, `plain_token`, `device_id`, `login_status`, `last_login`, `created_at`) VALUES
-(23, 9, NULL, '61a688398947cb178e841211e6926f7a', '61a688398947cb178e841211e6926f7a', '351867062773921', 1, '2018-03-31 12:12:35', '2018-03-31 12:12:35'),
 (54, NULL, NULL, '9d9cdcf0f4d20c5e34fc9bc42f2d6f26', '9d9cdcf0f4d20c5e34fc9bc42f2d6f26', NULL, 1, '2018-04-09 11:00:14', '2018-04-09 11:00:14'),
-(66, 12, NULL, '3b8af08ae3a92f27d41f0e8c7d226c77', '3b8af08ae3a92f27d41f0e8c7d226c77', '864068030728275', 1, '2018-04-10 14:59:22', '2018-04-10 14:59:22'),
 (80, 19, NULL, '52d2be7daf642202063bff4c37f22365', '52d2be7daf642202063bff4c37f22365', '867159036350284', 1, '2018-04-14 11:58:21', '2018-04-14 11:58:21'),
 (81, 18, NULL, 'b71bcc737d59e66bf4e414f0ecbdfde3', 'b71bcc737d59e66bf4e414f0ecbdfde3', '351867062773921', 1, '2018-04-14 12:04:22', '2018-04-14 12:04:22'),
-(87, NULL, 225, '17549fd686aeb98e2551062fbe36e5ae', '17549fd686aeb98e2551062fbe36e5ae', '866469034306506', 1, '2018-04-16 17:13:20', '2018-04-16 17:13:20'),
-(93, 11, NULL, '13c3e0c7942619e8231bee6941440ca1', '13c3e0c7942619e8231bee6941440ca1', '862588035283556', 1, '2018-04-17 22:59:13', '2018-04-17 22:59:13'),
 (95, 17, NULL, '3034842b36b9cab6ba7e0e8c12a8540f', '3034842b36b9cab6ba7e0e8c12a8540f', '862588035283556', 1, '2018-04-18 22:04:44', '2018-04-18 22:04:44'),
 (100, NULL, 233, '9a9962d4c9e9ed74c9417dd686330c59', '9a9962d4c9e9ed74c9417dd686330c59', 'DATEOSDEVICEIP', 1, '2018-04-21 10:22:41', '2018-04-21 10:22:41'),
-(122, 2, NULL, '6f4a58414db5ab5941dca247d65111c9', '6f4a58414db5ab5941dca247d65111c9', 'DATEOSDEVICEIP', 1, '2018-04-27 23:07:12', '2018-04-27 23:07:12'),
 (154, NULL, 228, '089a1169f43dddf259b1c673634235d7', '089a1169f43dddf259b1c673634235d7', '356530060794241', 1, '2018-05-16 15:51:31', '2018-05-16 15:51:31'),
 (156, 14, NULL, '19436b00d486117099c286fbc9c9a5fc', '19436b00d486117099c286fbc9c9a5fc', 'DATEOSDEVICEIP', 1, '2018-05-17 14:39:25', '2018-05-17 14:39:25'),
-(165, 15, NULL, '219ba85a635de2dc9cbc6ba9ebdafb9f', '219ba85a635de2dc9cbc6ba9ebdafb9f', '867363021925551', 1, '2018-06-01 13:12:09', '2018-06-01 13:12:09'),
-(167, 1, NULL, '4dedd70eb587db707d2710ea116be469', '4dedd70eb587db707d2710ea116be469', '866469034306506', 1, '2018-06-02 12:38:32', '2018-06-02 12:38:32'),
 (170, 16, NULL, '0473a762dd534d8e51fecfa42f43712a', '0473a762dd534d8e51fecfa42f43712a', '864068030728275', 1, '2018-06-02 16:02:55', '2018-06-02 16:02:55'),
 (172, 10, NULL, '8a60aacbc2fa34b0122807d1ff579cff', '8a60aacbc2fa34b0122807d1ff579cff', '356530060794241', 1, '2018-06-03 13:25:44', '2018-06-03 13:25:44'),
 (174, 20, NULL, '39b66c29e6d9fa4232b9175ac863d865', '39b66c29e6d9fa4232b9175ac863d865', 'DATEOSDEVICEIP', 1, '2018-06-18 16:57:15', '2018-06-18 16:57:15'),
 (220, NULL, 222, 'fe5b88f0305ec7d162c4fcf36d1ac58b', 'fe5b88f0305ec7d162c4fcf36d1ac58b', 'DATEOSDEVICEIP', 1, '2018-08-07 14:15:38', '2018-08-07 14:15:38'),
-(223, NULL, 224, '8108d348535269f9f922623bbab45535', '8108d348535269f9f922623bbab45535', 'DATEOSDEVICEIP', 1, '2018-08-07 14:19:27', '2018-08-07 14:19:27'),
 (225, NULL, 255, '606ca23adf2b9822739786697dc96196', '606ca23adf2b9822739786697dc96196', 'DATEOSDEVICEIP', 1, '2018-08-07 14:20:13', '2018-08-07 14:20:13'),
 (227, NULL, 234, 'f43fa554f4e2a3d0668074c88deeab93', 'f43fa554f4e2a3d0668074c88deeab93', 'DATEOSDEVICEIP', 1, '2018-08-10 14:01:15', '2018-08-10 14:01:15'),
-(232, 21, NULL, 'a5e6c2b99f15d8680accbcc09996468b', 'a5e6c2b99f15d8680accbcc09996468b', 'DATEOSDEVICEIP', 1, '2018-09-12 13:41:07', '2018-09-12 13:41:07');
+(232, 21, NULL, 'a5e6c2b99f15d8680accbcc09996468b', 'a5e6c2b99f15d8680accbcc09996468b', 'DATEOSDEVICEIP', 1, '2018-09-12 13:41:07', '2018-09-12 13:41:07'),
+(233, 80, NULL, '7e4bff73bd6b3a0fc3146cb262fd3985', '7e4bff73bd6b3a0fc3146cb262fd3985', 'DATEOSDEVICEIP', 1, '2018-09-21 19:02:32', '2018-09-21 19:02:32'),
+(234, 85, NULL, 'b88ee5aaf316734d49892aa7b707a305', 'b88ee5aaf316734d49892aa7b707a305', 'DATEOSDEVICEIP', 1, '2018-09-22 10:53:47', '2018-09-22 10:53:47'),
+(235, 87, NULL, '922f62a3cfe38f33c7e7000be534adbf', '922f62a3cfe38f33c7e7000be534adbf', 'DATEOSDEVICEIP', 1, '2018-09-22 14:07:08', '2018-09-22 14:07:08'),
+(237, 88, NULL, 'a6510323979c7fb0a4bc877c8d162418', 'a6510323979c7fb0a4bc877c8d162418', 'DATEOSDEVICEIP', 1, '2018-09-22 15:31:47', '2018-09-22 15:31:47'),
+(238, 92, NULL, 'c8df5356e4b25d2e508ec9d0ef84d1d5', 'c8df5356e4b25d2e508ec9d0ef84d1d5', 'DATEOSDEVICEIP', 1, '2018-09-30 12:18:07', '2018-09-30 12:18:07'),
+(239, 93, NULL, '7a56c6da602dab7bbb7ca229f2282312', '7a56c6da602dab7bbb7ca229f2282312', 'DATEOSDEVICEIP', 1, '2018-09-30 12:47:07', '2018-09-30 12:47:07'),
+(240, 94, NULL, 'fce44e90588d5c00f5d0dbdb36385e4f', 'fce44e90588d5c00f5d0dbdb36385e4f', 'DATEOSDEVICEIP', 1, '2018-10-01 11:42:00', '2018-10-01 11:42:00'),
+(242, 95, NULL, '266732e9f6ac44cb95dfc685aab3e170', '266732e9f6ac44cb95dfc685aab3e170', 'DATEOSDEVICEIP', 1, '2018-10-03 16:00:44', '2018-10-03 16:00:44'),
+(247, 1, NULL, '1501343ee0cb3346362bb475f6bebea9', '1501343ee0cb3346362bb475f6bebea9', 'DATEOSDEVICEIP', 1, '2018-10-04 11:29:56', '2018-10-04 11:29:56'),
+(248, 2, NULL, 'a4554c83c6961c7a6b70c5afb0699a50', 'a4554c83c6961c7a6b70c5afb0699a50', 'DATEOSDEVICEIP', 1, '2018-10-04 11:35:31', '2018-10-04 11:35:31'),
+(250, 3, NULL, '8ee99327b6dc52d2f29e17cc39e4c8bf', '8ee99327b6dc52d2f29e17cc39e4c8bf', 'DATEOSDEVICEIP', 1, '2018-10-04 11:44:42', '2018-10-04 11:44:42'),
+(251, 4, NULL, '346b08e97b9ae7a0ed18e977e5919c09', '346b08e97b9ae7a0ed18e977e5919c09', 'DATEOSDEVICEIP', 1, '2018-10-04 11:56:24', '2018-10-04 11:56:24'),
+(252, 5, NULL, '7af3fdc574dbcde4f9913d4f7e4eb724', '7af3fdc574dbcde4f9913d4f7e4eb724', 'DATEOSDEVICEIP', 1, '2018-10-04 12:03:25', '2018-10-04 12:03:25'),
+(253, 9, NULL, '74e3bd26ef55f59e365c363e01e01a07', '74e3bd26ef55f59e365c363e01e01a07', 'DATEOSDEVICEIP', 1, '2018-10-04 15:53:14', '2018-10-04 15:53:14'),
+(255, 11, NULL, 'aff802530114a8c36c569efac1e70b72', 'aff802530114a8c36c569efac1e70b72', 'DATEOSDEVICEIP', 1, '2018-10-06 20:55:28', '2018-10-06 20:55:28'),
+(256, 12, NULL, '21867fee59128bab1949407ce194eb49', '21867fee59128bab1949407ce194eb49', 'DATEOSDEVICEIP', 1, '2018-10-09 15:19:12', '2018-10-09 15:19:12'),
+(260, 15, NULL, '30464333add2de87b9d97113761714f1', '30464333add2de87b9d97113761714f1', 'DATEOSDEVICEIP', 1, '2018-10-15 11:02:52', '2018-10-15 11:02:52'),
+(263, NULL, 224, '7c52851b386b99732c45a2eb643f56ab', '7c52851b386b99732c45a2eb643f56ab', 'DATEOSDEVICEIP', 1, '2018-10-26 12:38:15', '2018-10-26 12:38:15'),
+(264, 13, NULL, 'c61c79da3b3a462c7b879f06cb9f3b66', 'c61c79da3b3a462c7b879f06cb9f3b66', 'DATEOSDEVICEIP', 1, '2018-10-27 10:54:33', '2018-10-27 10:54:33'),
+(266, NULL, 225, '9399bc65a3dc52a6c53edd60af9d2936', '9399bc65a3dc52a6c53edd60af9d2936', 'DATEOSDEVICEIP', 1, '2018-10-27 15:13:59', '2018-10-27 15:13:59'),
+(267, NULL, 226, '8593bb79907ee16a0c512278a36ec579', '8593bb79907ee16a0c512278a36ec579', 'DATEOSDEVICEIP', 1, '2018-10-30 12:16:49', '2018-10-30 12:16:49'),
+(269, NULL, 265, 'e6efb0686eecd7912380c6968dd7e3b4', 'e6efb0686eecd7912380c6968dd7e3b4', 'DATEOSDEVICEIP', 1, '2018-11-02 11:22:58', '2018-11-02 11:22:58');
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
