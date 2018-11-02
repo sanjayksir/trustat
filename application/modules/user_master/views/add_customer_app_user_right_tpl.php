@@ -74,11 +74,12 @@
 			 </select>
 			 <!--<input name="l_name" id="l_name" type="text" class="form-control" placeholder="Numeric Number"  maxlength="30"> -->
 			</div>
+			<!--
 			<div class="col-sm-4">
 			<label for="form-field-8">Select Role of user-</label>
 		   <select  name="role" id="role" class="form-control" required>
            <option value="4">Shop Floor Supervisor</option>
-		   <!--
+		   
 		   <?php if($this->session->userdata('admin_user_id')==1){?>
 		   <option value="2">CCC Admin</option>
 		   <?php } ?>
@@ -86,9 +87,21 @@
 				<option value="<?php echo $val['id'];?>"><?php  echo $val['role_name_value'];?></option> 
 			<?php }?>
             <option value="other">Other</option>
-			 -->
+			 
             </select>
 			</div>
+			-->
+			<div class="col-sm-4">
+			<label for="form-field-8">Select Role of user</label>
+		   <select  name="role" id="role" class="form-control" required>
+           <option value="<?php echo $get_user_details[0]['designation_id'];?>" selected><?php echo getRoleNameById($get_user_details[0]['designation_id']);?></option>
+            <?php foreach(getAllRoles('0') as $val){?>
+				<option value="<?php echo $val['id'];?>"><?php  echo $val['role_name_value'];?></option> 
+			<?php }?>
+            <option value="other">Other</option>
+            </select>
+			</div>
+			
 		</div>
 		
 		<?php if($this->session->userdata('admin_user_id')==1){?>

@@ -1096,8 +1096,8 @@ return $result;
     }
 	
 	
-	Public function isPackLevelSeted($bar_code=null) {
-        $answerQuery = $this->db->get_where('packaging_codes_pcr', array('bar_code' => $bar_code));
+	Public function isPackLevelSeted($bar_code=null, $parent_bar_code=null) {
+        $answerQuery = $this->db->get_where('packaging_codes_pcr', array('bar_code' => $bar_code, 'parent_bar_code' => $parent_bar_code));
 		//print $answerQuery;
         if($answerQuery->num_rows() < 1){
            return true;
@@ -1105,6 +1105,42 @@ return $result;
 		//return false;
     }
 	
+	Public function isItemAlreadyExists($bar_code=null) {
+        $answerQuery = $this->db->get_where('dispatch_stock_transfer_out', array('bar_code' => $bar_code));
+		//print $answerQuery;
+        if($answerQuery->num_rows() < 1){
+           return true;
+        }
+		//return false;
+    }
+	
+	Public function isItemAlreadyExistsStockIn($bar_code=null) {
+        $answerQuery = $this->db->get_where('receipt_stock_transfer_in', array('bar_code' => $bar_code));
+		//print $answerQuery;
+        if($answerQuery->num_rows() < 1){
+           return true;
+        }
+		//return false;
+    }
+	
+	Public function isAnyChildAdded($bar_code=null) {
+        $answerQuery = $this->db->get_where('packaging_codes_pcr', array('parent_bar_code' => $bar_code));
+		//print $answerQuery;
+        if($answerQuery->num_rows() < 1){
+           return true;
+        }
+		//return false;
+    }
+	
+	
+	public function location_type_master(){
+        $items = [];
+        $query = $this->db->select('*')->from('location_type_master')->get();
+        if($query->num_rows() <= 0){
+            return false;
+        }
+        return $query->result_array();
+    }
 	
 
 }

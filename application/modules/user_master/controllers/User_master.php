@@ -656,6 +656,8 @@ class User_master extends MX_Controller {
         echo $this->myspidey_user_master_model->update_common_point_master_data($searcharray);
         exit;
     }
+	
+		
 
 }
 ?>

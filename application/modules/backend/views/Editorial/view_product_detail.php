@@ -313,9 +313,7 @@ Your browser does not support audio in video tag.
 																	 	<label><strong>Product Demo Audio</strong></label>
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
-																	
-																		 
-																		 <audio width="320" height="240" controls>
+																	 <audio width="320" height="240" controls>
   <source src="<?php echo base_url().'uploads/'.$details['product_demo_audio'];?>" type="audio/mpeg">
 Your browser does not support audio in video tag.
 </audio>&nbsp &nbsp The Consumer will get <b><?php echo $details['product_demo_audio_response_lps']; ?></b> Loyalty Points on Product Image Feedback.

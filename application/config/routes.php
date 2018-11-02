@@ -150,9 +150,13 @@ $route['api/customer/login'] = 'Api/Customer/login';
 $route['api/customer/logout'] = 'Api/Customer/logout';
 $route['api/customer/add-product-level'] = 'Api/Customer/addProductLevel';
 $route['api/customer/add-product-level-parent-activate'] = 'Api/Customer/addProductLevelParentActivate';
+$route['api/customer/delete-product-parent-delink'] = 'Api/Customer/DeleteProductParentDelink';
+$route['api/customer/dispatch-stock-transfer-out'] = 'Api/Customer/DispatchStockTransferOut';
+$route['api/customer/receipt-stock-transfer-in'] = 'Api/Customer/ReceiptStockTransferIn';
 $route['api/customer/add-inventory'] = 'Api/Customer/addInventory';
 $route['api/customer/view-product'] = 'Api/Customer/viewProduct';
 $route['api/customer/view-inventory'] = 'Api/Customer/viewInventory';
+$route['api/customer/location-type-master'] = 'Api/Customer/location_type_master';
 /* End of API */
 
 

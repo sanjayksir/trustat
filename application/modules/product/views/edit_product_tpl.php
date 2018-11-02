@@ -373,9 +373,9 @@ if(!empty($isOtherIndustry)){
 				  <label for="form-field-8">Product Level-1<?php //echo $ParentName;?></label>
                   <select class="form-control" name="attr_level_1" multiple="multiple" onClick="getChildAttr();">
 				  <option value="">-Select Product-</option> 
-				  	<?php foreach($listALLOpt as $val){?>
-					  		<option <?php if(in_array($val['product_id'],$id_parents)){echo 'selected="selected"';}?> value="<?php echo $val['product_id'];?>"><?php echo $val['name'];?></option> 
-					<?php }?>
+				  	<?php //foreach($listALLOpt as $val){?>
+					  		<option <?php //if(in_array($val['product_id'],$id_parents)){echo 'selected="selected"';}?> value="<?php //echo $val['product_id'];?>"><?php //echo $val['name'];?></option> 
+					<?php //}?>
                   </select>
 				</div>
 			

@@ -262,9 +262,9 @@
 				  <label for="form-field-8">Product Attributes (Press Ctrl key for multi-selection )<?php //echo $ParentName;?></label>
                   <select class="form-control" name="attr_level_1" id="attr_level_1" multiple="multiple" onClick="getChildAttr();">
 				  <option value="">-Select Product-</option> 
-				  	<?php foreach($listALLOpt as $val){?>
-					  		<option value="<?php echo $val['product_id'];?>"><?php echo $val['name'];?></option> 
-					<?php }?>
+				  	<?php //foreach($listALLOpt as $val){?>
+					  		<option value="<?php //echo $val['product_id'];?>"><?php echo $val['name'];?></option> 
+					<?php //}?>
                   </select>
 				</div>
 			
