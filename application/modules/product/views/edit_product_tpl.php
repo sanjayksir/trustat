@@ -400,11 +400,16 @@ if(!empty($isOtherIndustry)){
   			</div>
 			<div class="col-sm-4">
 				<label for="form-field-8">Code Activation Type</label>
-				<?php //echo $dt['code_activation_type'];?>
+				<?php //echo $dt['code_activation_type'];
+				$one='1';
+				$zero='0';
+				
+				?>
 				<select name="code_activation_type" id="code_activation_type" class="form-control">
 				 
-				 <option value="1" <?php if ($dt['code_activation_type']==1){ ?> selected <?php } ?>> Pre-Activated</option>
-				 <option value="0"<?php if ($dt['code_activation_type']==0){ ?> selected <?php } ?>>Post-Activated</option>
+				<!-- <option value="1" <?php //echo ($dt['code_activation_type']=='1')?'selected':'';?>> Pre-Activated</option>-->
+				 
+				  <option value="0" <?php echo ($dt['code_activation_type']=='0')?'selected':'';?>> Post-Activated</option>
 				 
 				</select>
  		    </div>

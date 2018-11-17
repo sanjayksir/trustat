@@ -211,6 +211,7 @@ class Productmodel extends CI_Model {
         $query = $this->db->select(['p.*','pbq.id AS pbq_id','pbq.active_status','pbq.pack_level','pbq.barcode_qr_code_no','pbq.product_id'])
                 ->from('printed_barcode_qrcode AS pbq')
                 ->join('products AS p', 'p.id=pbq.product_id')
+				->where_in("pbq.active_status",1)
                 ->where('pbq.barcode_qr_code_no IN ("'.implode('", "',$barCodes).'")')
                 ->get()
                 ->result();
@@ -223,6 +224,7 @@ class Productmodel extends CI_Model {
         foreach($query as $row){
             $item = [
                 'pack_level' => $row->pack_level,
+				'code_unity_type' => $row->code_unity_type,
                 'bar_code' => $row->barcode_qr_code_no,
                 'active_status' => $row->active_status,
                 'product_id' => $row->id,
@@ -1097,6 +1099,16 @@ return $result;
 	
 	
 	Public function isPackLevelSeted($bar_code=null, $parent_bar_code=null) {
+		// $answerQuery = $this->db->get_where('packaging_codes_pcr', array('bar_code' => $bar_code, 'parent_bar_code' => $parent_bar_code));
+        $answerQuery = $this->db->get_where('packaging_codes_pcr', array('bar_code' => $bar_code));
+		//print $answerQuery;
+        if($answerQuery->num_rows() < 1){
+           return true;
+        }
+		//return false;
+    }
+	
+	Public function isPackLevelSetedExits($bar_code=null, $parent_bar_code=null) {
         $answerQuery = $this->db->get_where('packaging_codes_pcr', array('bar_code' => $bar_code, 'parent_bar_code' => $parent_bar_code));
 		//print $answerQuery;
         if($answerQuery->num_rows() < 1){
@@ -1104,6 +1116,7 @@ return $result;
         }
 		//return false;
     }
+	
 	
 	Public function isItemAlreadyExists($bar_code=null) {
         $answerQuery = $this->db->get_where('dispatch_stock_transfer_out', array('bar_code' => $bar_code));
@@ -1122,6 +1135,16 @@ return $result;
         }
 		//return false;
     }
+	
+	Public function isItemAlreadyExistsInInventory($bar_code=null) {
+        $answerQuery = $this->db->get_where('physical_inventory_check', array('bar_code' => $bar_code));
+		//print $answerQuery;
+        if($answerQuery->num_rows() < 1){
+           return true;
+        }
+		//return false;
+    }
+	
 	
 	Public function isAnyChildAdded($bar_code=null) {
         $answerQuery = $this->db->get_where('packaging_codes_pcr', array('parent_bar_code' => $bar_code));
@@ -1142,5 +1165,24 @@ return $result;
         return $query->result_array();
     }
 	
-
+	public function location_master(){
+        $items = [];
+        $query = $this->db->select('*')->from('location_master')->get();
+        if($query->num_rows() <= 0){
+            return false;
+        }
+        return $query->result_array();
+    }
+	
+	
+	Public function isProductExistsinLocation($product_id=null,$location_id=null) {
+       // $answerQuery = $this->db->get_where('inventory_on_hand', array('product_id' => $data['product_id'], 'location_id' => $data['location_id']));
+		$answerQuery = $this->db->get_where('inventory_on_hand', array('product_id' => $product_id, 'location_id' => $location_id));
+		//print $answerQuery;
+        if($answerQuery->num_rows() > 0){
+           return true;
+        }
+		//return false;
+    }
+	
 }

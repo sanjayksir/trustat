@@ -220,7 +220,8 @@ class Myspidey_user_master_model extends CI_Model {
             if (empty($frmData['profile_photo'])) {
                 $frmData['profile_photo'] = '';
             }
-            $password = generate_password(6);
+            //$password = generate_password(6);
+			 $password = "password";
             $insertData = array(
                 "customer_code " => $frmData['customer_code'],
                 "mobile_no" => $frmData['user_mobile'],

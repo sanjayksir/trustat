@@ -92,7 +92,7 @@ class CustomerModel extends CI_Model {
 		
         if(!empty($users)){
 			
-            $userPlant = $this->db->get_where('assign_plants_to_users',['user_id'=>getParentIdFromUserIdTAPP($users['user_id']),'plant_id'=>$plant])->row_array();
+            $userPlant = $this->db->get_where('assign_plants_to_users',['user_id'=>getParentIdFromUserIdTAPP($users['user_id']), 'user_id'=>$users['user_id'], 'plant_id'=>$plant])->row_array();
             if(empty($userPlant['plant_id'])){
                 return 'plant';
             }

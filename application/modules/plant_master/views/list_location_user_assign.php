@@ -7,7 +7,7 @@
         } catch (e) {
         }
     </script>
-    <?php $label = '/ Assigned Functionalities to Role'; ?>
+    <?php $label = '/ Assign Location to Location Controller Users'; ?>
 
     <?php $this->load->view('../includes/admin_sidebar'); ?>
 
@@ -42,9 +42,9 @@
                     <div class="col-xs-12">
                         <div class="widget-box widget-color-blue">
                             <div class="widget-header widget-header-flat">
-                                <h5 class="widget-title bigger lighter">List Assigned Functionalities to Role </h5>
+                                <h5 class="widget-title bigger lighter">List / Assign Location to Location Controller Users</h5>
                                 <div class="widget-toolbar">
-                                    <a href="<?php echo base_url('role_master/assign_functionalities_to_role') ?>" class="btn btn-xs btn-warning" title="Assign Plant to Plant Controller"> Assign Functionalities to Role </a>
+                                    <a href="<?php echo base_url('plant_master/assign_location_to_users') ?>" class="btn btn-xs btn-warning" title="Assign Location to Location Controller">Assign Location to Location Controller Users</a>
                                 </div>
                             </div>
                             <div class="widget-body">
@@ -73,13 +73,12 @@
                                     <thead>
                                         <tr>
                                             <th>Sno</th>
-                                            <th>Role Name</th>
-											 <th>Total Users</th>
-											 <th>Created</th>
-											 <th>Remained</th>
-                                            <th>Assign Functionalities</th>
-                                            <!--<th>Updated on</th>-->
-                                           <th>Edit</th>
+                                            <th>Location Controller Name</th>
+                                            <th>Email ID</th>
+                                            <th>Phone</th>
+                                            <th>Location Name</th>
+                                            <th>Created on</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -100,24 +99,22 @@
                                                     $colorStyle = "style='color:black;border-radius:10px;background-color:red;border:none;'";
                                                 }
                                                 ?>
-                                                <tr id="show<?php echo $listData['id']; ?>">
+                                                <tr id="show<?php echo $listData['location_id']; ?>">
                                                     <td><?php echo $sno; ?></td>
-                                                    <td><?php echo $listData['role_name_value']; ?></td>
-													<td><?php $required_users_for_the_role = get_required_users_for_the_role($listData['id']); echo $required_users_for_the_role; ?>
-													</td>
-													<td><?php echo get_created_users_for_the_role($listData['id']); ?></td>
-													<td><?php echo $remained = $required_users_for_the_role-get_created_users_for_the_role($listData['id']); ?></td>
-                                                    <td><?php $plants = get_assigned_functionalities_to_role_list($listData['id']);
+                                                    <td><?php echo $listData['user_name']; ?></td>
+                                                    <td><?php echo $listData['email_id']; ?></td>
+                                                    <td><?php echo $listData['mobile_no']; ?></td>
+                                                    <td><?php $plants = get_assigned_location_user_list($listData['user_id']);
 
-//echo $listData['id'];
-                                                echo get_functionality_name_by_id($plants);
+
+                                                echo get_locations_name_by_id($plants);
                                                 ?></td>
 
-                                                  <!--  <td><?php echo $listData['update_date']; ?>sss</td>-->
-                                                   <td>
+                                                    <td><?php echo date('d/M/Y', strtotime($listData['created_on'])); ?></td>
+                                                    <td>
                                                         <div class="hidden-sm hidden-xs action-buttons">
-                                                            <!--<a href="<?php echo base_url() . 'plant_master/view_plant/' . $listData['user_id']; ?>" class="blue" target="_blank" title="View"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>-->
-        <?php echo anchor("role_master/assign_functionalities_to_role/" . $listData['id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green', 'title' => 'Edit')); ?>
+                                                            <!--<a href="<?php echo base_url() . 'plant_master/view_location/' . $listData['user_id']; ?>" class="blue" target="_blank" title="View"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>-->
+        <?php echo anchor("plant_master/assign_location_to_users/" . $listData['user_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green', 'title' => 'Edit')); ?>
                                                            <!-- <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['user_id']; ?>" value="<?php echo $status; ?>" onclick="return change_status('<?php echo $listData['user_id']; ?>', this.value, '<?php echo $plants; ?>');" />-->
 
                                                         </div>
@@ -175,11 +172,11 @@
         <script>
 
             function change_status(id, val, plantsId) {
-                if (confirm("Are you sure want to change the plant status?")) {
+                if (confirm("Are you sure want to change the location assignment status?")) {
                     $.ajax({
                         type: "POST",
-                        url: "<?php echo base_url(); ?>plant_master/change_assign_plant_status/",
-                        data: {id: id, value: val, plant_id: plantsId},
+                        url: "<?php echo base_url(); ?>plant_master/change_assign_location_status/",
+                        data: {id: id, value: val, location_id: plantsId},
                         success: function (result) {
                             if (parseInt(result) == 1) {
                                 $('#status_' + id).val('Active').css("background-color", "green");

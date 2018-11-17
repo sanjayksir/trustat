@@ -34,6 +34,8 @@ class plant_master_model extends CI_Model {
         return $res;
     }
 
+	
+	
     function save_user($frmData) { //echo '<pre>';print_r($frmData);exit;
         $user_id = $this->session->userdata('admin_user_id');
         $is_parent = $this->session->userdata('admin_user_id');
@@ -204,8 +206,6 @@ class plant_master_model extends CI_Model {
             }
         }
 
-
-
         $this->db->select('count(1) as total_rows');
         $this->db->from('plant_master');
         $query = $this->db->get(); //echo '***'.$this->db->last_query();
@@ -245,6 +245,296 @@ class plant_master_model extends CI_Model {
         }
         return $result;
     }
+	// Location Type Names 
+	function total_get_location_type_list_all($srch_string = '') {
+        $result = '';
+        $user_id = $this->session->userdata('admin_user_id');
+        $srch_string = trim($srch_string);
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                $this->db->where("(location_type_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%') and (created_by=$user_id)");
+            } else {
+                $this->db->where(array('created_by' => $user_id));
+            }
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(location_type_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%')");
+            }
+        }
+
+        $this->db->select('count(1) as total_rows');
+        $this->db->from('location_type_master');
+        $query = $this->db->get(); //echo '***'.$this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            $result_data = $result[0]['total_rows'];
+        }
+        return $result_data;
+    }
+
+    function get_location_type_list_all($limit, $start, $srch_string = '') {
+        $result = '';
+        $srch_string = trim($srch_string);
+        $user_id = $this->session->userdata('admin_user_id');
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                $this->db->where("(location_type_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%'  OR plant_code LIKE '%$srch_string%') and (created_by=$user_id)");
+            } else {
+                $this->db->where(array('created_by' => $user_id));
+            }
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(location_type_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%')");
+            }
+        }
+
+        $this->db->select('*');
+        $this->db->from('location_type_master');
+        $this->db->order_by('id', 'asc');
+        if (empty($srch_string)) {
+            $this->db->limit($limit, $start);
+        }
+        $query = $this->db->get(); //echo $this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+        }
+        return $result;
+    }
+	
+	function get_location_type_details($id) {
+        $res = 0;
+        $this->db->select('*');
+        $this->db->from('location_type_master');
+        $this->db->where(array('id' => $id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            // $res=1;
+        }
+        return $res;
+    }
+	
+	function save_location_type($frmData) { //echo '<pre>';print_r($frmData);exit;
+        
+        if (!empty($frmData['id'])) {
+            $UpdateData = array(
+                "location_type_name" => $frmData['location_type_name'],
+				"status" => 1,
+                "modify_date" => date('Y-m-d H:i:s')
+            );
+
+            $whereData = array(
+                'id' => $frmData['id']
+            );
+
+            $this->db->set($UpdateData);
+            $this->db->where($whereData);
+            if ($this->db->update('location_type_master')) {
+                // echo '***'.$this->db->last_query();exit;
+                $this->session->set_flashdata('success', 'Location Type Updated Successfully!');
+                return 1;
+            }
+        } else {
+            //$password = generate_password(6);
+            $insertData = array(
+                "location_type_name" => $frmData['location_type_name'],
+				"status" => 1,
+                "create_date" => date('Y-m-d H:i:s'),
+				"modify_date" => date('Y-m-d H:i:s')
+            ); //echo '<pre>';print_r($insertData);exit;
+
+            if ($this->db->insert("location_type_master", $insertData)) {
+                
+                $this->session->set_flashdata('success', 'Location Type Added Successfully!');
+                return 1;
+            }
+            return 0;
+        }
+    }
+	
+	function checkLocationTypeName($location_type_name, $location_type_id = '') {
+        $result = 'true';
+        $this->db->select('id');
+        $this->db->from('location_type_master');
+        if (!empty($location_type_id)) {
+            $this->db->where(array('id!=' => $location_type_id));
+        }
+        $this->db->where(array('location_type_name' => $location_type_name));
+        $query = $this->db->get();
+        //echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            if (!empty($res[0]['id'])) {
+                $result = 'false';
+            }
+        }
+        //echo '==='.$result;exit;
+        return $result;
+    }
+	
+	// end location type name 
+	
+	// Location Names 
+	function total_get_location_list_all($srch_string = '') {
+        $result = '';
+        $user_id = $this->session->userdata('admin_user_id');
+        $srch_string = trim($srch_string);
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%') and (created_by=$user_id)");
+            } else {
+                $this->db->where(array('created_by' => $user_id));
+            }
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%')");
+            }
+        }
+
+        $this->db->select('count(1) as total_rows');
+        $this->db->from('location_master');
+        $query = $this->db->get(); //echo '***'.$this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            $result_data = $result[0]['total_rows'];
+        }
+        return $result_data;
+    }
+
+    function get_location_list_all($limit, $start, $srch_string = '') {
+        $result = '';
+        $srch_string = trim($srch_string);
+        $user_id = $this->session->userdata('admin_user_id');
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%'  OR plant_code LIKE '%$srch_string%') and (created_by=$user_id)");
+            } else {
+                $this->db->where(array('created_by' => $user_id));
+            }
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%')");
+            }
+        }
+
+        $this->db->select('*');
+        $this->db->from('location_master');
+        $this->db->order_by('location_id', 'asc');
+        if (empty($srch_string)) {
+            $this->db->limit($limit, $start);
+        }
+        $query = $this->db->get(); //echo $this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+        }
+        return $result;
+    }
+	
+	function get_location_details($location_id) {
+        $res = 0;
+        $this->db->select('*');
+        $this->db->from('location_master');
+        $this->db->where(array('location_id' => $location_id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            // $res=1;
+        }
+        return $res;
+    }
+	
+	function save_location($frmData) { //echo '<pre>';print_r($frmData);exit;
+        $user_id = $this->session->userdata('admin_user_id');
+        $is_parent = $this->session->userdata('admin_user_id');
+        if (isset($frmData['ccadmin']) && $frmData['ccadmin'] != '') {
+            $is_parent = $frmData['ccadmin'];
+        }
+
+        if (!empty($frmData['location_id'])) {
+            $UpdateData = array(
+                "location_code" => $frmData['location_code'],
+                "location_name" => $frmData['location_name'],
+				"location_type" => $frmData['location_type'],
+                "email_id" => $frmData['user_email'],
+                "phone " => $frmData['user_mobile'],
+                "gst" => $frmData['gst'],
+                "address" => $frmData['address'],
+                "remark" => $frmData['remark'],
+                "status" => 1,
+                "state" => $frmData['state_name'],
+                "created_by" => $user_id,
+				"updated_date" => date("Y-m-d H:i:s")
+            );
+
+            $whereData = array(
+                'location_id' => $frmData['location_id']
+            );
+
+            $this->db->set($UpdateData);
+            $this->db->where($whereData);
+            if ($this->db->update('location_master')) {
+                // echo '***'.$this->db->last_query();exit;
+                $this->session->set_flashdata('success', 'Location Updated Successfully!');
+                return 1;
+            }
+        } else {
+            //$password = generate_password(6);
+            $insertData = array(
+                "location_code" => $frmData['location_code'],
+                "location_name" => $frmData['location_name'],
+				"location_type" => $frmData['location_type'],
+                "email_id" => $frmData['user_email'],
+                "phone " => $frmData['user_mobile'],
+                "gst" => $frmData['gst'],
+                "address" => $frmData['address'],
+                "remark" => $frmData['remark'],
+                "status" => 1,
+                "state" => $frmData['state_name'],
+                "created_by" => $user_id,
+				"created_date" => date("Y-m-d H:i:s")
+				
+            ); //echo '<pre>';print_r($insertData);exit;
+
+            if ($this->db->insert("location_master", $insertData)) {
+                //$plant_code = $frmData['plant_code'];
+                //$plant_name = $frmData['plant_name'];
+                // echo $this->db->last_query();exit;
+               // $this->user_registration_mail($plant_code, $plant_name, $frmData['user_email']);
+                $this->session->set_flashdata('success', 'Location Added Successfully!');
+                return 1;
+            }
+            return 0;
+        }
+    }
+	
+	
+	function checkLocationName($location_name, $location_id = '') {
+        $result = 'true';
+        $this->db->select('location_id');
+        $this->db->from('location_master');
+        if (!empty($location_id)) {
+            $this->db->where(array('location_id!=' => $location_id));
+        }
+        $this->db->where(array('location_name' => $location_name));
+        $query = $this->db->get();
+        //echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            if (!empty($res[0]['location_id'])) {
+                $result = 'false';
+            }
+        }
+        //echo '==='.$result;exit;
+        return $result;
+    }
+	
+	// end location name 
 
     function change_status($id, $value) {
         $this->db->set(array('status' => $value));
@@ -257,6 +547,18 @@ class plant_master_model extends CI_Model {
         //echo '***'.$this->db->last_query();exit;
     }
 
+	function change_location_status($id, $value) {
+        $this->db->set(array('status' => $value));
+        $this->db->where(array('location_id' => $id));
+        if ($this->db->update('location_master')) {
+            return $value;
+        } else {
+            return '';
+        }
+        //echo '***'.$this->db->last_query();exit;
+    }
+	
+	
     function get_city_listing($state_id) {
         $res = 0;
         $this->db->select('id, ci_name');
@@ -367,7 +669,60 @@ class plant_master_model extends CI_Model {
         $this->session->set_flashdata('success', 'Plant Assigned Successfully!');
         return 1;
     }
-
+	
+	
+	function save_assign_locations_users($plant_array, $plant_controller_user, $assigned_by, $is_edit = '') {  
+        $user_id = $this->session->userdata('admin_user_id');
+        $plant_arr = json_decode($plant_array, true); 
+       if($user_id==1){
+                   
+            if ($this->input->post('is_edit') == 1) {
+                $this->db->query('delete from assign_locations_to_users where user_id="' . $plant_controller_user . '" and assigned_by="' . $assigned_by . '"');
+            }
+            foreach ($plant_arr as $plants) { 
+                $insertData = array(
+                    "location_id" => $plants,
+                    "user_id" => $plant_controller_user,
+                    "assigned_by" => $assigned_by
+                );
+                if ($this->check_exists_users_location($plants, $users) == 0) {
+                    $this->db->insert("assign_locations_to_users", $insertData);
+                     // echo $this->db->last_query();
+                } 
+            }
+       }else{ 
+           $users =$plant_controller_user;
+            if ($this->input->post('is_edit') == 1) {
+                $this->db->query('delete from assign_locations_to_users where user_id="' . $users . '" and assigned_by="' . $user_id . '"');
+            }
+            foreach ($plant_arr as $plants) { 
+                $insertData = array(
+                    "location_id" => $plants,
+                    "user_id" => $users,
+                    "assigned_by" => $user_id
+                );
+                if ($this->check_exists_users_location($plants, $users) == 0) {
+                    $this->db->insert("assign_locations_to_users", $insertData); 
+                } 
+            } 
+       } 
+        $this->session->set_flashdata('success', 'Location Assigned Successfully!');
+        return 1;
+    }
+	
+function check_exists_users_location($plant_id, $userid) {
+        $this->db->select('id');
+        $this->db->from('assign_locations_to_users');
+        $this->db->where(array('location_id' => $plant_id, 'user_id' => $userid));
+        $query = $this->db->get(); //echo $this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            $result = $res[0]['id'];
+        }
+        return $result;
+    }
+	
+	
     function check_exists_users_plant($plant_id, $userid) {
         $this->db->select('id');
         $this->db->from('assign_plants_to_users');
@@ -411,6 +766,19 @@ class plant_master_model extends CI_Model {
             $this->db->set(array('status' => $value));
             $this->db->where(array('plant_id' => $pltId, 'user_id' => $id));
             if (!$this->db->update('assign_plants_to_users')) {//echo '**'.$this->db->last_query();exit;
+                $run_query = 0;
+            }
+        }return $value;
+    }
+	
+	function qry_change_assign_location_status($id, $value, $plant_id) {
+        $run_query = 1;
+        $plant_arr = explode(',', $plant_id);
+        // print_r($plant_arr);exit;
+        foreach ($plant_arr as $pltId) {
+            $this->db->set(array('status' => $value));
+            $this->db->where(array('location_id' => $pltId, 'user_id' => $id));
+            if (!$this->db->update('assign_locations_to_users')) {//echo '**'.$this->db->last_query();exit;
                 $run_query = 0;
             }
         }return $value;

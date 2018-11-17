@@ -76,6 +76,7 @@
    		 $this->load->view('add_plant', $data); 
       }
  
+ 
 	 public function edit_plant() {
  		 $data					= array();
 		 $id 					= $this->uri->segment(3);//$this->session->userdata('admin_user_id');
@@ -108,7 +109,190 @@
  		$isExists = $this->plant_master_model->checkPantName($plant_name,$plant_id);
  		echo $isExists;exit;	
  	  }
+	  // Location Type Work 
+	  public function list_location_types() {
+ 		 $data					= array();
+		 
+		 #--------------- pagination start ----------------##
+		 // init params
+        $params = array();
+        $limit_per_page = 20;
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		$srch_string =  $this->input->post('search'); 
+		if(empty($srch_string)){
+			$srch_string ='';
+		}
+		  $user_id 	= $this->session->userdata('admin_user_id');	
+		 // $total_records 	= $this->plant_master_model->total_get_user_list_all($srch_string);
+		  $total_records 	= $this->plant_master_model->total_get_location_type_list_all($srch_string);
+		 
+        //$total_records = $this->Category_model->total_load_listingData($srch_string);
+		
+		if ($total_records > 0) 
+        {
+            // get current page records
+ 			$params['userListing'] 	= $this->plant_master_model->get_location_type_list_all($limit_per_page, $start_index,$srch_string);
+  			
+			//$data['listingData']=$this->Category_model->load_listingData();
+             
+            $config['base_url'] = base_url() . 'plant_master/list_location_types';
+            $config['total_rows'] = $total_records;
+            $config['per_page'] = $limit_per_page;
+            $config["uri_segment"] = 3;
+             
+ 			$config["full_tag_open"] = '<ul class="pagination">';
+			$config["full_tag_close"] = '</ul>';	
+			$config["first_link"] = "&laquo;";
+			$config["first_tag_open"] = "<li>";
+			$config["first_tag_close"] = "</li>";
+			$config["last_link"] = "&raquo;";
+			$config["last_tag_open"] = "<li>";
+			$config["last_tag_close"] = "</li>";
+			$config['next_link'] = '&gt;';
+			$config['next_tag_open'] = '<li>';
+			$config['next_tag_close'] = '<li>';
+			$config['prev_link'] = '&lt;';
+			$config['prev_tag_open'] = '<li>';
+			$config['prev_tag_close'] = '<li>';
+			$config['cur_tag_open'] = '<li class="active"><a href="#">';
+			$config['cur_tag_close'] = '</a></li>';
+			$config['num_tag_open'] = '<li>';
+			$config['num_tag_close'] = '</li>';
+ 
+			## paging style configuration End 
+            $this->pagination->initialize($config);
+             // build paging links
+            $params["links"] = $this->pagination->create_links();
+        }
+		##--------------- pagination End ----------------##
+    	$this->load->view('list_location_type_tpl', $params);
+     }
+  
+     public function add_location_type() {
+ 		 $data					= array();
+   		 $this->load->view('add_location_type', $data); 
+      }
+ 
+ 
+	 public function edit_location_type() {
+ 		 $data					= array();
+		 $id 					= $this->uri->segment(3);//$this->session->userdata('admin_user_id');
+ 		 $data['get_user_details'] 	= $this->plant_master_model->get_location_type_details($id);
+    	 $this->load->view('add_location_type', $data); 
+      }
+
+ 	 public function save_location_type() {
+		  //print_r($_POST);exit;
+		  $savedData = $this->input->post();
+  		  echo $this->plant_master_model->save_location_type($savedData);  exit;
+
+      }
+
+ 	   
 	  
+	   public function checkLocationTypeName(){
+		$location_type_id = '';
+		$location_type_id = $this->input->post('location_type_id');
+ 	  	$location_type_name = $this->input->post('location_type_name');
+ 		$isExists = $this->plant_master_model->checkLocationTypeName($location_type_name,$location_type_id);
+ 		echo $isExists;exit;	
+ 	  }
+	  
+	  // End Location Type Work
+	  
+	  
+ // Location Work 
+	  public function list_locations() {
+ 		 $data					= array();
+		 
+		 #--------------- pagination start ----------------##
+		 // init params
+        $params = array();
+        $limit_per_page = 20;
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		$srch_string =  $this->input->post('search'); 
+		if(empty($srch_string)){
+			$srch_string ='';
+		}
+		  $user_id 	= $this->session->userdata('admin_user_id');	
+		 // $total_records 	= $this->plant_master_model->total_get_user_list_all($srch_string);
+		  $total_records 	= $this->plant_master_model->total_get_location_list_all($srch_string);
+		 
+        //$total_records = $this->Category_model->total_load_listingData($srch_string);
+		
+		if ($total_records > 0) 
+        {
+            // get current page records
+ 			$params['userListing'] 	= $this->plant_master_model->get_location_list_all($limit_per_page, $start_index,$srch_string);
+  			
+			//$data['listingData']=$this->Category_model->load_listingData();
+             
+            $config['base_url'] = base_url() . 'plant_master/list_locations';
+            $config['total_rows'] = $total_records;
+            $config['per_page'] = $limit_per_page;
+            $config["uri_segment"] = 3;
+             
+ 			$config["full_tag_open"] = '<ul class="pagination">';
+			$config["full_tag_close"] = '</ul>';	
+			$config["first_link"] = "&laquo;";
+			$config["first_tag_open"] = "<li>";
+			$config["first_tag_close"] = "</li>";
+			$config["last_link"] = "&raquo;";
+			$config["last_tag_open"] = "<li>";
+			$config["last_tag_close"] = "</li>";
+			$config['next_link'] = '&gt;';
+			$config['next_tag_open'] = '<li>';
+			$config['next_tag_close'] = '<li>';
+			$config['prev_link'] = '&lt;';
+			$config['prev_tag_open'] = '<li>';
+			$config['prev_tag_close'] = '<li>';
+			$config['cur_tag_open'] = '<li class="active"><a href="#">';
+			$config['cur_tag_close'] = '</a></li>';
+			$config['num_tag_open'] = '<li>';
+			$config['num_tag_close'] = '</li>';
+ 
+			## paging style configuration End 
+            $this->pagination->initialize($config);
+             // build paging links
+            $params["links"] = $this->pagination->create_links();
+        }
+		##--------------- pagination End ----------------##
+    	$this->load->view('list_location_tpl', $params);
+     }
+	 
+	 
+  
+     public function add_location() {
+ 		 $data					= array();
+   		 $this->load->view('add_location', $data); 
+      }
+ 
+ 
+	 public function edit_location() {
+ 		 $data					= array();
+		 $location_id 					= $this->uri->segment(3);//$this->session->userdata('admin_user_id');
+ 		 $data['get_user_details'] 	= $this->plant_master_model->get_location_details($location_id);
+    	 $this->load->view('add_location', $data); 
+      }
+
+ 	 public function save_location() {
+		  //print_r($_POST);exit;
+		  $savedData = $this->input->post();
+  		  echo $this->plant_master_model->save_location($savedData);  exit;
+
+      }
+
+ 	   
+	  
+	   public function checkLocationName(){
+		$location_id = '';
+		$location_id = $this->input->post('location_id');
+ 	  	$location_name = $this->input->post('location_name');
+ 		$isExists = $this->plant_master_model->checkLocationName($location_name,$location_id);
+ 		echo $isExists; exit;	
+ 	  }
+	  
+	  // End Location Work	  
 	  
 	   public function change_status() {
  		 $id = $this->input->post('id');
@@ -120,6 +304,19 @@
 		 }
 		 //$user_id 	= $this->session->userdata('admin_user_id');		
 		 echo $status= $this->plant_master_model->change_status($id,$status);exit;
+   		  
+     }
+	 
+	 public function change_location_status() {
+ 		 $id = $this->input->post('id');
+		 $status = $this->input->post('value');
+		 if(strtolower($status)=='inactive'){
+			 $status ='1';# Now it will be active
+		 }else{
+		 	$status ='0';# Now it will be inactive
+		 }
+		 //$user_id 	= $this->session->userdata('admin_user_id');		
+		 echo $status= $this->plant_master_model->change_location_status($id,$status);exit;
    		  
      }
 	 
@@ -367,6 +564,110 @@
 			redirect(base_url().'user_master/list_user/');
 	   	 }
 	   }
+	   
+	   
+	 public function getActiveLocationControllerList() {
+			$result = '';
+			$user_id 			= $this->input->post('id');
+			 
+ 			$location_controller_list 	= get_active_users($user_id,1);
+			 foreach($location_controller_list as $res){?>
+				<option value="<?php echo $res['user_id'];?>" <?php if($this->uri->segment(3)==$res['user_id']){echo 'selected';}?>><?php echo ucfirst($res['user_name']);?></option>
+          <?php }
+           
+			return $result;
+	 }	
+      
+      
+      
+	
+	  public function list_assigned_locations_user() {
+			 $data					= array();
+			 $parent_id				= $this->session->userdata('admin_user_id');		
+			 $data['plant_data'] 	= get_all_users_exclude_pc($parent_id);
+			 $this->load->view('list_location_user_assign', $data);
+     	}
+		
+		
+		public function change_assign_location_status() {
+ 		 $id = $this->input->post('id');
+		 $plantsId = $this->input->post('location_id');
+		 $status = $this->input->post('value');
+		 if(strtolower($status)=='inactive'){
+			 $status ='1';# Now it will be active
+		 }else{
+		 	$status ='0';# Now it will be inactive
+		 }
+		 //$user_id 	= $this->session->userdata('admin_user_id');		
+		 echo $status= $this->plant_master_model->qry_change_assign_plant_status($id,$status,$plantsId);exit;
+   		  
+     }  
+	   
+	 public function assign_location_to_users() {
+ 		 $data						= array();
+ 		 $data['get_user_details'] 	= $this->plant_master_model->get_location_details();
+          $user_id 		= $this->session->userdata('admin_user_id');
+          if($user_id==1){
+              $this->load->view('assign_location_to_users_ccadmin_tpl', $data);  
+          }else{
+            $this->load->view('assign_location_to_users_tpl', $data);   
+          }
+     }
+
+		public function save_assign_user_to_location() {
+            $user_id 	= $this->session->userdata('admin_user_id');
+            if($user_id==1){
+                $result = '';
+                //echo '<pre>';print_r($_POST);exit;
+                $plant_array = json_encode($this->input->post('locations'));
+                $assigned_by		         = $this->input->post('user'); 
+                $plant_controller_user		 = $this->input->post('location_controller_val'); 
+                if(count($this->input->post('locations'))>0 && count($plant_controller_user)>0){
+                    $result = $this->plant_master_model->save_assign_locations_users($plant_array, $plant_controller_user, $assigned_by);	
+                }
+            }else{
+                $plant_array = json_encode($this->input->post('locations'));
+                $user		 = $this->input->post('user'); 
+                if(count($this->input->post('locations'))>0 && count($user)>0){
+                    $result = $this->plant_master_model->save_assign_locations_users($plant_array, $user);	
+                }
+            }
+            echo  $result;exit;
+ 		 }
+
+
+	public function getActiveLocationList() {
+			$result = '';
+			$id 			= $this->input->post('id');
+            $user_id 		= $this->session->userdata('admin_user_id');
+            if(empty($user_id)){
+                //$user_id			= $this->input->post('ccadminId');
+            }
+			
+			## assigned plants array
+ 			$assigned_arr = explode(',',get_assigned_active_locations_list($id));
+			
+			//print_r($assigned_arr);exit;
+			
+ 			$product_data 	= get_all_active_locations($user_id);
+			 foreach($product_data as $res){?>
+				<option value="<?php echo $res['location_id'];?>" <?php if(in_array($res['location_id'],$assigned_arr )){echo 'selected';}?>><?php echo $res['location_name'];?> -> (<?php echo $res['location_type'];?>)</option>
+          <?php }
+			return $result;
+	 }
+
+
+	public function view_location() {
+ 		 $data						= array();
+		 $id 						= $this->uri->segment(3);//$this->session->userdata('admin_user_id');
+ 		 $data['get_user_details'] 	= $this->plant_master_model->get_location_details($id);
+ 		 //echo '***'.$data['get_user_details'][0]['city'];
+		 $data['show_city_name']	 =$this->plant_master_model->fetch_city_name( $data['get_user_details'][0]['city']);
+   		 $this->load->view('view_location', $data); 
+
+     }	 
+	 
+	   
 	 
   }?>
 

@@ -3,7 +3,7 @@
  				<!--<div align="center"><img src="<?php echo base_url()?>/assets/images/tlogo.jpg" height="40"></div>-->
 				<ul class="nav nav-list">
                     <li class="">
-						<a href="<?php echo base_url(); ?>backend/dashboard"><i class="menu-icon fa fa-tachometer"></i><span class="menu-text"> Home </span></a>
+						<a href="<?php echo base_url(); ?>backend/dashboard"><i class="menu-icon fa fa-tachometer"></i><span class="menu-text"><b>Home </b></span></a>
  						<b class="arrow"></b>
 					</li> 
  					<?php
@@ -23,7 +23,7 @@
  									<li class="">
  										<a href="#" class="dropdown-toggle" title="<?php echo $val['menu'];?>">
  											<i class="menu-icon fa fa-pencil-square-o"></i>
- 											<span class="menu-text"><?php echo $val['menu'];?></span>
+ 											<span class="menu-text"><b><?php echo $val['menu'];?></b></span>
  											<?php $child_cnt;if($child_cnt>0){?>
  											<b class="arrow fa fa-angle-down"></b><?php }?>
  										</a>

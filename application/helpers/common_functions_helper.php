@@ -5720,6 +5720,32 @@ function getAllRoles(){
 }
 
 
+function getAllLocationTypes(){
+	
+ 	$res 		= '';
+
+ 	$ci 		= & get_instance();
+
+	$ci->db->select('id, location_type_name');
+
+	$ci->db->from('location_type_master');
+	
+		//$ci->db->where(array('status'=>'1','id!='=>'2'));
+		$ci->db->where('status',1);
+	//$ci->db->where(array('status'=>'1','spideyImage!='=>''));	
+	$query = $ci->db->get();  echo $ci->db->last_query(); 
+
+	if ($query->num_rows() > 0) {
+
+ 		$res = $query->result_array();
+
+ 	//	$res = $res[0]['categoryName'];
+
+	}		
+ 	return $res;
+}
+
+
 function getRoleNameById($id){
 	$res = 0;
 	$ci = & get_instance();
@@ -6088,6 +6114,23 @@ function getParentUsers($id='',$status=''){
 	return($res);
  }
  
+  function get_all_active_locations($user_id){
+	$res='0';
+	$ci = & get_instance();
+	$admin_id 				= $ci->session->userdata('admin_user_id');	
+	if(!empty($user_id)){
+ 		$ci->db->select('location_id,location_name,location_type,location_code,email_id,phone,created_date,status');
+		$ci->db->from('location_master');
+		$ci->db->where(array('status'=>'1'));
+		//if($admin_id>1){
+			$ci->db->where('created_by',$user_id);
+		//}
+		$query= $ci->db->get();
+		$res = $query->result_array();
+	}
+	return($res);
+ }
+ 
  //Sanjay
  function get_all_active_functionalities($user_id){
 	$res='0';
@@ -6206,6 +6249,21 @@ function get_assigned_plant_user_list($user_id){
  	return $res_arr[0]['plant_id'];
  } 
  
+ 
+ function get_assigned_location_user_list($user_id){
+	$res='0';
+	$ci = & get_instance();
+	 $admin_id 				= $ci->session->userdata('admin_user_id');	
+ 		if(!empty($user_id)){ 
+			$ci->db->select('group_concat(location_id) as location_id');
+			$ci->db->from('assign_locations_to_users');
+			$ci->db->where(array('user_id'=>$user_id, 'assigned_by'=>$admin_id));
+			$query= $ci->db->get();//echo '***'. $ci->db->last_query();exit;
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['location_id'];
+ } 
+ 
  function get_assigned_functionalities_to_role_list($roleId){
 	$res='0';
 	$ci = & get_instance();
@@ -6280,6 +6338,21 @@ function get_assigned_plant_user_list($user_id){
  		}
  	return $res_arr[0]['name'];
  }
+ 
+  function get_locations_name_by_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$ci->db->select('group_concat(location_name) as name');
+			$ci->db->from('location_master');
+			$ci->db->where_in('location_id',explode(',',$id));
+			$query= $ci->db->get();//echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['name'];
+ }
+ 
 
   function get_functionality_name_by_id($id){ 
 	$res='0';
@@ -6493,6 +6566,20 @@ function get_assigned_plants_list($id){
  	return $res_arr[0]['plantId'];
  }
  
+  function get_assigned_active_locations_list($id){
+	$res='0';
+	$ci = & get_instance();
+	 $user_id 				= $ci->session->userdata('admin_user_id');	
+ 		if(!empty($id)){
+			$ci->db->select('group_concat(location_id) as plantId');
+			$ci->db->from('assign_locations_to_users');
+			$ci->db->where(array('user_id'=>$id, 'assigned_by'=>$user_id,'status'=>'1'));
+			$query= $ci->db->get();//echo $ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['plantId'];
+ }
+ 
  function get_assigned_active_functionalities_list($id){
 	$res='0';
 	$ci = & get_instance();
@@ -6522,6 +6609,7 @@ function get_assigned_plants_list($id){
  		return $res; 
  }
  
+
  
   
  function get_active_users($id)
@@ -6537,6 +6625,21 @@ function get_assigned_plants_list($id){
   		}
  		return $res; 
  } 
+ 
+  function get_all_users_exclude_pc($id)
+  {
+ 		$res = 0;
+ 		$ci = & get_instance();
+ 		$ci->db->select('*');
+   		$ci->db->from('backend_user');
+ 		$ci->db->where(array('is_parent'=>$id,'status'=>'1','designation_id!='=>'3'));
+   		$query = $ci->db->get();//echo $ci->db->last_query();
+  		if ($query->num_rows() > 0) {
+  			$res = $query->result_array();
+  		}
+ 		return $res; 
+ } 
+ 
   
 function get_parent_user($id,$statusVal='')
   {

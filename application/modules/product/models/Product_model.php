@@ -118,8 +118,8 @@
 		## ================for other value================ ##
 		## essential attributes
 		$code_type  			= ($this->input->post('code_type'))?$this->input->post('code_type'):'';
-		$code_activation_type  	= ($this->input->post('code_activation_type'))?$this->input->post('code_activation_type'):'';
-		//$code_activation_type   = $this->input->post('code_activation_type');
+		//$code_activation_type  	= ($this->input->post('code_activation_type'))?$this->input->post('code_activation_type'):'';
+		$code_activation_type   = $this->input->post('code_activation_type');
 		$delivery_method  		= ($this->input->post('delivery_method'))?$this->input->post('delivery_method'):'';
 		$code_key_type  		= ($this->input->post('code_key_type'))?$this->input->post('code_key_type'):'';
 		$code_size  			= ($this->input->post('code_size'))?$this->input->post('code_size'):'';

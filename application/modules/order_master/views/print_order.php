@@ -47,7 +47,9 @@
 				  <div class="form-group">
 					<label for="message-text">Print Quantity:</label>
 					<select name="qty" id="qty" class="form-control">
- 						<option value="10">10</option>	
+ 						<option value="10">10</option>
+						<option value="20">20</option>
+						<option value="50">50</option>		
 						<option value="100">100</option>
 						<option value="1000">1,000</option>
 						<option value="10000">10,000</option>

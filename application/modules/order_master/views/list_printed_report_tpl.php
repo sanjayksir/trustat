@@ -78,7 +78,7 @@
                                                         </thead>
                                                         <tbody>
 
-    <?php $i = 0;  //  echo '***<pre>';print_r($orderListing);
+    <?php $i = 0;  //  echo '***<pre>';print_r($orderListing); 
                                             if(count($PrintedCodeListing)>0){
                                                     $i=0;
                                                     $page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;

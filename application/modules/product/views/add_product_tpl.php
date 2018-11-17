@@ -289,7 +289,7 @@
 			<div class="col-sm-4">
 				<label for="form-field-8">Code Activation Type</label>
 				<select name="code_activation_type" id="code_activation_type" class="form-control">
-					<option value="1">Pre-Activated</option>	
+					<!--<option value="1">Pre-Activated</option>	-->
 					<option value="0">Post-Activated</option>	
 								 
 				</select>

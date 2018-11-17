@@ -184,6 +184,232 @@
         //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
         $this->load->view('list_scanned_report_tpl', $params);
     }
+	
+	public function list_physical_packaging_report() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_physical_packaging_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_physical_packaging_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_physical_packaging_report', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_physical_packaging_report_tpl', $params);
+    }
+	
+	public function list_stock_transfer_out_report() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_stock_transfer_out_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_stock_transfer_out_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_stock_transfer_out_report', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_stock_transfer_out_report_tpl', $params);
+    }
+	
+	public function list_stock_transfer_out_invoice_details() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_stock_transfer_out_invoice_details($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_stock_transfer_out_invoice_details($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_stock_transfer_out_invoice_details', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_stock_transfer_out_invoice_details_tpl', $params);
+    }
+	
+	
+	public function list_stock_transfer_in_report() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_stock_transfer_in_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_stock_transfer_in_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_stock_transfer_in_report', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_stock_transfer_in_report_tpl', $params);
+    }
+	
+	
+	public function list_stock_transfer_in_invoice_details() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_stock_transfer_in_invoice_details($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_stock_transfer_in_invoice_details($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_stock_transfer_in_invoice_details', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_stock_transfer_in_invoice_details_tpl', $params);
+    }
+	
+	public function list_physical_inventory_check_report() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_physical_inventory_check_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_physical_inventory_check_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_physical_inventory_check_report', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_physical_inventory_check_report_tpl', $params);
+    }
+	
+	public function list_physical_inventory_details() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_physical_inventory_details($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_physical_inventory_details($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_physical_inventory_details', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_physical_inventory_details_tpl', $params);
+    }
+	
+	public function inventory_on_hand_report() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_inventory_on_hand_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_inventory_on_hand_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/inventory_on_hand_report', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_inventory_on_hand_report_tpl', $params);
+    }
 
     public function list_purchased_products() {
  		##--------------- pagination start ----------------##

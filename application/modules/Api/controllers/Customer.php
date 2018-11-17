@@ -211,6 +211,7 @@ class Customer extends ApiController {
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
         $validate = [
+			['field' =>'plant_id','label'=>'plant_id is required','rules' => 'required' ],
 			['field' =>'parent_bar_code','label'=>'Parent Barcode','rules' => 'required' ],
 			['field' =>'parent_pack_level','label'=>'Parent Pack Barcode','rules' => 'required' ],
             ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ]
@@ -235,17 +236,60 @@ class Customer extends ApiController {
 			
 			$packaging_level = $data['packaging_level'] + 1;
 			$parent_pack_level = $data['parent_pack_level'];
+			$code_unity_type = $result[0]['code_unity_type'];
+			$spackaging_qty_levels = "pack_level" . $data['packaging_level'];
 			
+			
+		$number_of_children_added_in_basecode = $this->db->where('parent_bar_code',$data['bar_code'])->from("packaging_codes_pcr")->count_all_results();
+		$results4 = $this->db->select($spackaging_qty_levels)->from('product_packaging_qty_levels')->where('product_id', $data['product_id'])->get()->row();
+		$number_of_children_required_in_basecode = $results4->$spackaging_qty_levels;
+		
+		
+		
+		/*
+		echo print_r($data['packaging_level']) . "<br>"; 
+		echo print_r($number_of_children_required_in_basecode) . "<br>"; 
+		echo print_r($number_of_children_added_in_basecode) . "<br>"; 
+		echo print_r($code_unity_type) . "<br>"; 
+		exit;
+			
+		*/
+			
+		$parent_product_packaging_qty_levels = "pack_level" . $data['parent_pack_level'];
+		
+		 
+		 
+	$number_of_children_added_in_parentcode = $this->db->where('parent_bar_code',$data['parent_bar_code'])->from("packaging_codes_pcr")->count_all_results();
+		$results5 = $this->db->select($parent_product_packaging_qty_levels)->from('product_packaging_qty_levels')->where('product_id', $data['product_id'])->get()->row();
+		$number_of_children_required_in_parentcode = $results5->$parent_product_packaging_qty_levels;
+			
+			
+			
+			
+			//echo print_r($result) . "<br>"; 
+			/*
+		echo print_r($data['parent_pack_level']) . "<br>"; 
+		echo print_r($number_of_children_required_in_parentcode) . "<br>"; 
+		echo print_r($number_of_children_added_in_parentcode) . "<br>"; 
+		echo print_r($code_unity_type) . "<br>"; 
+		exit;
+			*/
 		//echo $packaging_level . $parent_pack_level; 
 		//echo print_r($parent_pack_level);  exit;
        // foreach(explode(',',$data['bar_code']) as $ind => $code){
             //$this->db->or_where('barcode_qr_code_no',$code);
         //$data['bar_code'] = $code;
+		// if(2 < 2){
+			
 		
-		 
-		if($packaging_level == $parent_pack_level){
+			
+		if($code_unity_type=='Single'){ 
+		if($data['packaging_level'] > 0){ 
+		 if($number_of_children_required_in_basecode <= $number_of_children_added_in_basecode){ // incomplete or empty box can not be packed
+		 if($number_of_children_required_in_parentcode > $number_of_children_added_in_parentcode){ // Only number of childrent can be added as defined in parent code
+		if($packaging_level == $parent_pack_level){ // Only one level lower level code can be added in the parent box
 			$isPackLevelSeted = $this->Productmodel->isPackLevelSeted($data['bar_code'], $data['parent_bar_code']);
-		if($isPackLevelSeted==true){
+		if($isPackLevelSeted==true){ // if the code is already added in any other box
         if($this->db->insert('packaging_codes_pcr', $data)){
 			
 			$data['number_of_children_added'] = $this->db->where('parent_bar_code',$data['parent_bar_code'])->from("packaging_codes_pcr")->count_all_results();
@@ -260,6 +304,90 @@ class Customer extends ApiController {
 		}else{
             $this->response(['status'=>false,'message'=>'System failed to add packaging because packaging level miss match.'],200); 
         }
+		}else{
+            $this->response(['status'=>false, $number_of_children_required_in_parentcode, $number_of_children_added_in_parentcode, 'message'=>'System failed to add packaging because packaging box is filled.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false, $number_of_children_required_in_basecode, $number_of_children_added_in_basecode, 'message'=>'System failed to add packaging because incomplete or empty box can not be packed.'],200); 
+        }
+		}else{ // this condition is for level 0 code adding
+            if($number_of_children_required_in_parentcode > $number_of_children_added_in_parentcode){ // Only number of childrent can be added as defined in parent code
+		if($packaging_level == $parent_pack_level){ // Only one level lower level code can be added in the parent box
+			$isPackLevelSeted = $this->Productmodel->isPackLevelSeted($data['bar_code'], $data['parent_bar_code']);
+		if($isPackLevelSeted==true){ // if the code is already added in any other box
+        if($this->db->insert('packaging_codes_pcr', $data)){
+			
+			$data['number_of_children_added'] = $this->db->where('parent_bar_code',$data['parent_bar_code'])->from("packaging_codes_pcr")->count_all_results();
+		
+            $this->response(['status'=>true,'message'=>'Level has been added.','number_of_children_added'=>$data['number_of_children_added'],'data'=>$result]);
+        }else{
+            $this->response(['status'=>false,'message'=>'System failed to add level.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to add packaging because this code is already added in packaging.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to add packaging because packaging level miss match.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false, 'message'=>'System failed to add packaging because packaging box is filled.'],200); 
+        }
+        }//
+		}else{ // loop for twin
+            
+		if($data['packaging_level'] > 1){ 
+		 if($number_of_children_required_in_basecode <= $number_of_children_added_in_basecode){ // incomplete or empty box can not be packed
+		 if($number_of_children_required_in_parentcode > $number_of_children_added_in_parentcode){ // Only number of childrent can be added as defined in parent code
+		if($packaging_level == $parent_pack_level){ // Only one level lower level code can be added in the parent box
+			$isPackLevelSeted = $this->Productmodel->isPackLevelSeted($data['bar_code'], $data['parent_bar_code']);
+		if($isPackLevelSeted==true){ // if the code is already added in any other box
+        if($this->db->insert('packaging_codes_pcr', $data)){
+			
+			$data['number_of_children_added'] = $this->db->where('parent_bar_code',$data['parent_bar_code'])->from("packaging_codes_pcr")->count_all_results();
+		
+            $this->response(['status'=>true,'message'=>'Level has been added.','number_of_children_added'=>$data['number_of_children_added'],'data'=>$result]);
+        }else{
+            $this->response(['status'=>false,'message'=>'System failed to add level.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to add packaging because this code is already added in packaging.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to add packaging because packaging level miss match.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false, 'message'=>'System failed to add packaging because packaging box is filled.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false, 'message'=>'System failed to add packaging because incomplete or empty box can not be packed.'],200); 
+        }
+		}else{ // this condition is for level 0 code adding
+            if($number_of_children_required_in_parentcode > $number_of_children_added_in_parentcode){ // Only number of childrent can be added as defined in parent code
+		if($packaging_level == $parent_pack_level){ // Only one level lower level code can be added in the parent box
+			$isPackLevelSeted = $this->Productmodel->isPackLevelSeted($data['bar_code'], $data['parent_bar_code']);
+		if($isPackLevelSeted==true){ // if the code is already added in any other box
+        if($this->db->insert('packaging_codes_pcr', $data)){
+			
+			$data['number_of_children_added'] = $this->db->where('parent_bar_code',$data['parent_bar_code'])->from("packaging_codes_pcr")->count_all_results();
+		
+            $this->response(['status'=>true,'message'=>'Level has been added.','number_of_children_added'=>$data['number_of_children_added'],'data'=>$result]);
+        }else{
+            $this->response(['status'=>false,'message'=>'System failed to add level.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to add packaging because this code is already added in packaging.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to add packaging because packaging level miss match.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false, 'message'=>'System failed to add packaging because packaging box is filled.'],200); 
+        }
+        }			
+			
+        }
+		
+		
     }
 	
 	public function DispatchStockTransferOut(){
@@ -272,14 +400,15 @@ class Customer extends ApiController {
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
         $validate = [
+			['field' =>'plant_id','label'=>'plant_id is required','rules' => 'required' ],
 			['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
 			['field' =>'invoice_number','label'=>'Invoice Number','rules' => 'required' ],
 			['field' =>'transaction_type','label'=>'Transaction Type','rules' => 'required' ],
 			['field' =>'location_type','label'=>'Location Type','rules' => 'required' ],
+			['field' =>'location_id','label'=>'Location id','rules' => 'required' ],
 			['field' =>'location_name','label'=>'Location Name','rules' => 'required' ],
 			['field' =>'created_by_id','label'=>'Created By','rules' => 'required' ],
 			['field' =>'transfer_out_date','label'=>'Date is not given','rules' => 'required' ]
-            
         ];
         $errors = $this->Productmodel->validate($data,$validate);
         if(is_array($errors)){
@@ -291,10 +420,37 @@ class Customer extends ApiController {
         } 
 				$data['request_id'] = rand(1111111111,9999999999);
 				$data['created_date_time'] = date("Y-m-d H:i:s");
+				
+		$data['product_id'] = $result[0]['product_id'];		
 		 $isItemAlreadyExists = $this->Productmodel->isItemAlreadyExists($data['bar_code']);
 		
 		if($isItemAlreadyExists==true){
 		    if($this->db->insert('dispatch_stock_transfer_out', $data)){
+			$product_id = $data['product_id']; 
+			$location_id = $data['location_id'];
+			
+			$isProductExistsinLocation = $this->Productmodel->isProductExistsinLocation($product_id, $location_id);
+			//$isProductExistsinLocation != true;
+			$data2['plant_id'] = $data['plant_id'];
+			$data2['location_id'] = $data['location_id'];
+			$data2['product_id'] = $data['product_id'];
+			$data2['update_date'] = date("Y-m-d H:i:s");
+			if($isProductExistsinLocation==true){
+				
+				$Rstock_transfer_out_qty = $this->db->select('stock_transfer_out_qty')->from('inventory_on_hand')->where(array('location_id' => $data2['location_id'], 'product_id' => $data2['product_id']))->get()->row();
+				$stock_transfer_out_qty = $Rstock_transfer_out_qty->stock_transfer_out_qty;
+				
+				$data2['stock_transfer_out_qty'] = $stock_transfer_out_qty+1;
+				$this->db->where(array('location_id' => $data2['location_id'], 'product_id' => $data2['product_id']));
+				$this->db->update('inventory_on_hand', $data2);
+				
+			} else {
+				$data2['stock_transfer_out_qty'] = 1;
+				$data2['stock_transfer_in_qty'] = 0;
+				$this->db->insert('inventory_on_hand',$data2);
+				
+			}
+			
 			
 		
             $this->response(['status'=>true,'message'=>'Dispatch Stock Transfer-Out has been added.','stock_data'=>$data,'code_data'=>$result]);
@@ -317,10 +473,12 @@ class Customer extends ApiController {
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
         $validate = [
+			['field' =>'plant_id','label'=>'plant_id is required','rules' => 'required' ],
 			['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
 			['field' =>'invoice_number','label'=>'Invoice Number','rules' => 'required' ],
 			['field' =>'transaction_type','label'=>'Transaction Type','rules' => 'required' ],
 			['field' =>'location_type','label'=>'Location Type','rules' => 'required' ],
+			['field' =>'location_id','label'=>'Location id','rules' => 'required' ],
 			['field' =>'location_name','label'=>'Location Name','rules' => 'required' ],
 			['field' =>'created_by_id','label'=>'Created By','rules' => 'required' ],
 			['field' =>'transfer_out_date','label'=>'Date is not given','rules' => 'required' ]
@@ -336,10 +494,39 @@ class Customer extends ApiController {
         } 
 				$data['request_id'] = rand(1111111111,9999999999); 
 				$data['created_date_time'] = date("Y-m-d H:i:s");
+				
+		$data['product_id'] = $result[0]['product_id'];
+		
 		 $isItemAlreadyExistsStockIn = $this->Productmodel->isItemAlreadyExistsStockIn($data['bar_code']);
 		
 		if($isItemAlreadyExistsStockIn==true){
 		    if($this->db->insert('receipt_stock_transfer_in', $data)){
+			
+			$product_id = $data['product_id']; 
+			$location_id = $data['location_id'];
+			
+			$isProductExistsinLocation = $this->Productmodel->isProductExistsinLocation($product_id, $location_id);
+			//$isProductExistsinLocation != true;
+			$data2['plant_id'] = $data['plant_id'];
+			$data2['location_id'] = $data['location_id'];
+			$data2['product_id'] = $data['product_id'];
+			$data2['update_date'] = date("Y-m-d H:i:s");
+			if($isProductExistsinLocation==true){
+				
+				$Rstock_transfer_in_qty = $this->db->select('stock_transfer_in_qty')->from('inventory_on_hand')->where(array('location_id' => $data2['location_id'], 'product_id' => $data2['product_id']))->get()->row();
+				$stock_transfer_in_qty = $Rstock_transfer_in_qty->stock_transfer_in_qty;
+				
+				$data2['stock_transfer_in_qty'] = $stock_transfer_in_qty+1;
+				$this->db->where(array('location_id' => $data2['location_id'], 'product_id' => $data2['product_id']));
+				$this->db->update('inventory_on_hand', $data2);
+				
+			} else {
+				$data2['stock_transfer_out_qty'] = 0;
+				$data2['stock_transfer_in_qty'] = 1;
+				$this->db->insert('inventory_on_hand',$data2);
+				
+			}
+			
 			
 		
             $this->response(['status'=>true,'message'=>'Receipt Stock Transfer-In has been added.','stock_data'=>$data,'code_data'=>$result]);
@@ -352,7 +539,59 @@ class Customer extends ApiController {
 		
     }
 	
-	
+	public function PhysicalInventoryCheck(){
+        $user = $this->customerAuth();
+        if(empty($user)){
+            $this->response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        $data = $this->getInput();
+        if(($this->input->method() != 'post') || empty($data)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
+			['field' =>'plant_id','label'=>'plant_id is required','rules' => 'required' ],
+			['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
+			['field' =>'pi_number','label'=>'Physical Inventory Number','rules' => 'required' ],
+			['field' =>'transaction_type','label'=>'Transaction Type','rules' => 'required' ],
+			['field' =>'location_type','label'=>'Location Type','rules' => 'required' ],
+			['field' =>'location_id','label'=>'Location id','rules' => 'required' ],
+			['field' =>'location_name','label'=>'Location Name','rules' => 'required' ],
+			['field' =>'created_by_id','label'=>'Created By','rules' => 'required' ],
+			['field' =>'inventory_in_date','label'=>'Date is not given','rules' => 'required' ]
+            
+        ];
+        $errors = $this->Productmodel->validate($data,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+        $result = $this->Productmodel->barcodeProducts($data['bar_code']);
+		
+		//echo "<pre>";print_r($result);die;
+		
+		 if(empty($result)){
+            $this->response(['status'=>false,'message'=>'Record not found.'],200);
+        } 
+		
+		
+		
+				$data['request_id'] = rand(1111111111,9999999999); 
+				$data['created_date_time'] = date("Y-m-d H:i:s");
+				$data['product_id'] = $result[0]['product_id'];
+		 $isItemAlreadyExistsInInventory = $this->Productmodel->isItemAlreadyExistsInInventory($data['bar_code']);
+		
+		if($isItemAlreadyExistsInInventory==true){
+		    if($this->db->insert('physical_inventory_check', $data)){
+			
+		
+            $this->response(['status'=>true,'message'=>'Physical inventory  has been added.','stock_data'=>$data,'code_data'=>$result]);
+        }else{
+            $this->response(['status'=>false,'message'=>'System failed to add.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to add Physical inventory check because this item already exists.'],200); 
+        }
+		
+    }
 	
 	
 	public function DeleteProductParentDelink(){
@@ -365,6 +604,7 @@ class Customer extends ApiController {
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
         $validate = [
+			['field' =>'plant_id','label'=>'plant_id is required','rules' => 'required' ],
 			['field' =>'parent_bar_code','label'=>'Parent Barcode','rules' => 'required' ],
             ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ]
         ];
@@ -376,8 +616,8 @@ class Customer extends ApiController {
 		 if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
         }     
-		 $isPackLevelSeted = $this->Productmodel->isPackLevelSeted($data['bar_code']);
-		if($isPackLevelSeted!=true){
+		 $isPackLevelSetedExits = $this->Productmodel->isPackLevelSetedExits($data['bar_code']);
+		if($isPackLevelSetedExits==true){
         if($this->db->delete('packaging_codes_pcr', array('bar_code' => $data['bar_code'], 'parent_bar_code' => $data['parent_bar_code']))){
 			
 			if (!$this->db->affected_rows()) {
@@ -407,6 +647,26 @@ class Customer extends ApiController {
         }
         $data = [];
         $data = $this->Productmodel->location_type_master();
+                if(!empty($data)){
+            Utils::response(['status'=>true,'message'=>'List of locations.','data'=>$data]);
+        }else{
+            Utils::response(['status'=>false,'message'=>'There is no record found.'],200);
+        }
+    }
+	
+	public function location_master(){
+       
+		$user = $this->customerAuth();
+        if(empty($user)){
+            $this->response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+		
+		
+        if(($this->input->method() != 'get')){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $data = [];
+        $data = $this->Productmodel->location_master();
                 if(!empty($data)){
             Utils::response(['status'=>true,'message'=>'List of locations.','data'=>$data]);
         }else{

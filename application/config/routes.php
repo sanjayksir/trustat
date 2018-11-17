@@ -153,10 +153,12 @@ $route['api/customer/add-product-level-parent-activate'] = 'Api/Customer/addProd
 $route['api/customer/delete-product-parent-delink'] = 'Api/Customer/DeleteProductParentDelink';
 $route['api/customer/dispatch-stock-transfer-out'] = 'Api/Customer/DispatchStockTransferOut';
 $route['api/customer/receipt-stock-transfer-in'] = 'Api/Customer/ReceiptStockTransferIn';
+$route['api/customer/physical-inventory-check'] = 'Api/Customer/PhysicalInventoryCheck';
 $route['api/customer/add-inventory'] = 'Api/Customer/addInventory';
 $route['api/customer/view-product'] = 'Api/Customer/viewProduct';
 $route['api/customer/view-inventory'] = 'Api/Customer/viewInventory';
 $route['api/customer/location-type-master'] = 'Api/Customer/location_type_master';
+$route['api/customer/location-master'] = 'Api/Customer/location_master';
 /* End of API */
 
 
@@ -238,10 +240,19 @@ $route['city-news/(:any)'] = 'home/citywise_stories_view/$1';
 
 $route['reports/barcode_printed_reports'] = 'order_master/barcode/list_printed_report';
 $route['reports/barcode_scanned_reports'] = 'order_master/barcode/list_scanned_report';
+$route['reports/product_physical_packaging_reports'] = 'order_master/barcode/list_physical_packaging_report';
+$route['reports/product_stock_transfer_out_reports'] = 'order_master/barcode/list_stock_transfer_out_report';
+$route['reports/product_stock_transfer_out_invoice_details/(:any)'] = 'order_master/barcode/list_stock_transfer_out_invoice_details/$1';
+$route['reports/product_stock_transfer_in_invoice_details/(:any)'] = 'order_master/barcode/list_stock_transfer_in_invoice_details/$1';
+$route['reports/product_stock_physical_inventory_details/(:any)'] = 'order_master/barcode/list_physical_inventory_details/$1';
+$route['reports/product_stock_transfer_in_reports'] = 'order_master/barcode/list_stock_transfer_in_report';
+$route['reports/product_physical_inventory_check_report'] = 'order_master/barcode/list_physical_inventory_check_report';
+$route['reports/inventory_on_hand_report'] = 'order_master/barcode/inventory_on_hand_report';
 $route['reports/list_purchased_products'] = 'order_master/barcode/list_purchased_products';
 $route['reports/list_complaint_log'] = 'order_master/barcode/list_complaint_log';
 $route['reports/list_feedback_on_product'] = 'order_master/barcode/list_feedback_on_product';
 $route['reports/list_warranty_claims'] = 'order_master/barcode/list_warranty_claims';
+
 
 
 

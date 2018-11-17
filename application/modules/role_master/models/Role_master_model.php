@@ -333,7 +333,8 @@ class role_master_model extends CI_Model {
         $functionality_arr = json_decode($functionality_array, true);
         $user_id = $this->session->userdata('admin_user_id');
        // if ($this->input->post('is_edit') == 1) {
-            $this->db->query('delete from assign_functionalities_to_role where role_id="' . $roles . '" and assigned_by="' . $user_id . '"');
+            //$this->db->query('delete from assign_functionalities_to_role where role_id="' . $roles . '" and assigned_by="' . $user_id . '"');
+			 $this->db->query('delete from assign_functionalities_to_role where role_id="' . $roles . '" ');
         //}
         foreach ($functionality_arr as $functionalities) {###ediiit case
             //if($this->input->post('is_edit')==1){
@@ -349,6 +350,7 @@ class role_master_model extends CI_Model {
                 "functionality_id" => $functionalities,
                 "role_id" => $roles,
 				"role_quantity" => $role_quantity,
+				"update_date" => date('Y-m-d h:i:s'),
                 "assigned_by" => $user_id
             );
            // if ($this->check_exists_users_role($roles, $user_id) == 0) {
