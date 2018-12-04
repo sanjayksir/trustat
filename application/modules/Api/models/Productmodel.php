@@ -200,23 +200,24 @@ class Productmodel extends CI_Model {
         }
         return $items;
     }
-    public function barcodeProducts($barCodes = null) {
+    public function barcodeProducts($barCodes = null, $userId = null) {
         if ($barCodes == null) {
             return false;
         }
         if(!is_array($barCodes)){
             $barCodes = explode(',', $barCodes);
         }
-        
+        $userParentId = getUserParentIDById($userId);
         $query = $this->db->select(['p.*','pbq.id AS pbq_id','pbq.active_status','pbq.pack_level','pbq.barcode_qr_code_no','pbq.product_id'])
                 ->from('printed_barcode_qrcode AS pbq')
                 ->join('products AS p', 'p.id=pbq.product_id')
 				->where_in("pbq.active_status",1)
                 ->where('pbq.barcode_qr_code_no IN ("'.implode('", "',$barCodes).'")')
+				->where('p.created_by ="'.$userParentId.'"') 
                 ->get()
                 ->result();
         //echo $this->db->last_query();die;
-        //echo "<pre>";print_r($query);die;
+      // echo print_r($query);die;
         if (empty($query)) {
             return false;
         }
@@ -230,6 +231,87 @@ class Productmodel extends CI_Model {
                 'product_id' => $row->id,
                 'product_name' => $row->product_name,
                 'product_sku' => $row->product_sku,
+                'product_description' => $row->product_description,
+            ];
+            if (!empty($row->attribute_list)) {
+                $attributesids = implode(',', json_decode($row->attribute_list, true));
+                $item['attribute_list'] = $this->getAttributes($attributesids);
+            }else{
+                $item['attribute_list'] = [];
+            }
+            if (!empty($row->industry_data)) {
+                $indIds = implode(',', json_decode($row->industry_data, true));
+                $item['industry_data'] = $this->getIndustry($indIds);
+            }else{
+                $item['industry_data'] = [];
+            }
+            if(!empty($row->product_thumb_images)){
+                $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
+            }else{
+                $item['product_thumb_images'] = '';
+            }
+			if(!empty($row->product_images)){
+                $item['product_images'] = Utils::setFileUrl($row->product_images);
+            }else{
+                $item['product_images'] = '';
+            }
+            if(!empty($row->product_video)){
+                $item['product_video'] = Utils::setFileUrl($row->product_video);
+            }else{
+                $item['product_video'] = '';
+            }
+            if(!empty($row->product_audio)){
+                $item['product_audio'] = Utils::setFileUrl($row->product_audio);
+            }else{
+                $item['product_audio'] = '';
+            }
+            if(!empty($row->product_pdf)){
+                $item['product_pdf'] = Utils::setFileUrl($row->product_pdf);
+            }else{
+                $item['product_pdf'] = '';
+            }
+            $items[] = $item;
+        }
+        return $items;
+    }
+	
+	
+	public function barcodeProductsInactive($barCodes = null, $userId = null) {
+        if ($barCodes == null) {
+            return false;
+        }
+        if(!is_array($barCodes)){
+            $barCodes = explode(',', $barCodes);
+        }
+        $userParentId = getUserParentIDById($userId);
+		$userParentId2 = getUserParentIDById($userParentId);
+        $query = $this->db->select(['p.*','pbq.id AS pbq_id','pbq.active_status','pbq.pack_level','p.created_by','pbq.barcode_qr_code_no','pbq.product_id'])
+                ->from('printed_barcode_qrcode AS pbq')
+                ->join('products AS p', 'p.id=pbq.product_id')
+				
+                ->where('pbq.barcode_qr_code_no IN ("'.implode('", "',$barCodes).'")')
+				//->or_where("p.created_by", getUserParentIDById($userId)) // Check if Customer is same
+				 //->where('p.created_by ="'.getUserParentIDById($userId).'"')
+				 ->where('p.created_by ="'.$userParentId.'" OR p.created_by="'.$userParentId2.'"') 
+				 //->where('p.created_by ="'.$userParentId.'" OR status="'.$userParentId2.'"') 
+                ->get()
+                ->result();
+        //echo $this->db->last_query();die;
+        //echo "<pre>";print_r($query);//die;
+        if (empty($query)) {
+            return false;
+        }
+        $items = [];
+        foreach($query as $row){
+            $item = [
+                'pack_level' => $row->pack_level,
+				'code_unity_type' => $row->code_unity_type,
+                'bar_code' => $row->barcode_qr_code_no,
+                'active_status' => $row->active_status,
+                'product_id' => $row->id,
+                'product_name' => $row->product_name,
+                'product_sku' => $row->product_sku,
+				'created_by' => $row->created_by,
                 'product_description' => $row->product_description,
             ];
             if (!empty($row->attribute_list)) {
@@ -1165,9 +1247,10 @@ return $result;
         return $query->result_array();
     }
 	
-	public function location_master(){
+	public function location_master($ParentuserId){
         $items = [];
-        $query = $this->db->select('*')->from('location_master')->get();
+		$query = $this->db->select('*')->from('location_master')->where('created_by', $ParentuserId)->get();
+       // $query = $this->db->select('*')->from('location_master')->get();
         if($query->num_rows() <= 0){
             return false;
         }

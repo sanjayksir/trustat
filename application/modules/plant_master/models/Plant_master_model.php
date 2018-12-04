@@ -196,13 +196,13 @@ class plant_master_model extends CI_Model {
         if ($user_id > 1) {
             //$this->db->where('created_by', $user_id);
             if (!empty($srch_string)) {
-                $this->db->where("(plant_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%') and (created_by=$user_id)");
+                $this->db->where("(plant_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%' OR phone LIKE '%$srch_string%') and (created_by=$user_id)");
             } else {
                 $this->db->where(array('created_by' => $user_id));
             }
         } else {
             if (!empty($srch_string)) {
-                $this->db->where("(plant_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%')");
+                $this->db->where("(plant_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%' OR phone LIKE '%$srch_string%')");
             }
         }
 
@@ -223,13 +223,13 @@ class plant_master_model extends CI_Model {
         if ($user_id > 1) {
             //$this->db->where('created_by', $user_id);
             if (!empty($srch_string)) {
-                $this->db->where("(plant_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%'  OR plant_code LIKE '%$srch_string%') and (created_by=$user_id)");
+                $this->db->where("(plant_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%'  OR plant_code LIKE '%$srch_string%' OR phone LIKE '%$srch_string%') and (created_by=$user_id)");
             } else {
                 $this->db->where(array('created_by' => $user_id));
             }
         } else {
             if (!empty($srch_string)) {
-                $this->db->where("(plant_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%')");
+                $this->db->where("(plant_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%' OR phone LIKE '%$srch_string%')");
             }
         }
 

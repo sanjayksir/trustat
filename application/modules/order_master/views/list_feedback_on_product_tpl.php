@@ -54,7 +54,7 @@
                                                                             </div>
                                                                             <div class="col-sm-6">
                                                                                 <div class="input-group">
-                                                                                    <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Type your query">
+                                                                           <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Code or Product Name or Consumer Name or Feedback Description">
                                                                                     <span class="input-group-btn">
                                                                                         <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                                         <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -70,14 +70,14 @@
 														<th>Product Code</th>
 														<th>Product Name</th>
 														<th>Consumer Name</th>
- 														<!--<th>Location-latitude/longitude</th>-->
+ 														<th>Rating & Feedback of the Product</th>
 														<th>date time</th>
                                                        <!-- <th>Action</th> -->
   													</tr>
 												</thead>
 												<tbody>
 
-                                        <?php $i = 0;  //  echo '***<pre>';print_r($orderListing);
+                                         <?php $i = 0;  //  echo '***<pre>';print_r($orderListing);
 										if(count($ScanedCodeListing)>0){
 											$i=0;
                                                                                         $page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
@@ -86,14 +86,11 @@
 											$i++;
 											?>
                                                <tr id="show<?php echo $key; ?>">
-											   <td><?php echo $i; ?></td>
+											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['bar_code']; ?></td>
 												<td><?php echo $listData['product_name']; ?></td>
 												<td><?php echo $listData['user_name']; ?></td>
-												<!--<td>
-																								
-												<?php echo $listData['latitude']. " / "; ?><?php echo $listData['longitude']; ?>
-												</td>-->
+												<td>Rating = <?php echo $listData['rating']; ?> : <?php echo $listData['description']; ?></td>
 												<td><?php echo $listData['created_at']; ?></td>
  												 
                                               </tr>
@@ -104,9 +101,9 @@
                                        
                                     </tbody>
 											</table>
-                                                                        <div class="row paging-box">
-<?php echo $links ?>
-</div>
+                 <div class="row paging-box">
+				<?php echo $links ?>
+					</div>
   								<!-- PAGE CONTENT ENDS -->
 							</div><!-- /.col -->
 						</div><!-- /.row -->

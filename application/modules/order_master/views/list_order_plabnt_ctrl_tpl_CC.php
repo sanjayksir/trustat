@@ -4,7 +4,7 @@
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
-			<?php $label = 'Order';?>
+			<?php $label = 'Orders';?>
 
 			<?php $this->load->view('../includes/admin_sidebar');?>
 			
@@ -39,9 +39,10 @@
 							<div class="col-xs-12">
  								<div class="row">
 									<div class="col-xs-12">
-										<h3 class="header smaller lighter blue">List <?php echo $label;?></h3>
- 										<!------------------------- Add Order model popup Start--------------------------->
-										<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Make Order</button>
+									<div class="widget-box widget-color-blue">
+									<!--	<h3 class="header smaller lighter blue">List <?php echo $label;?></h3>
+ 										----------------------- Add Order model popup Start-------------------------
+										<button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">Make Order</button>-->
  											<!-- Modal -->
 											<div id="myModal" class="modal fade" role="dialog">
 											  <div class="modal-dialog">
@@ -129,21 +130,40 @@
 											</div>
  										<!------------------------- Add Order model popup end--------------------------->
 										<!--------------- Search Tab start----------------->
-                            <div class="row"><form id="form-filter" action="" method="post" class="form-horizontal" onsubmit="return validateSrch();">
-                                <table id="search" class="table table-hover display">
-                                    
-                                        <tbody>
-                                        	<tr>
-                                            	<td><input name="search" value="<?php if(!empty($this->input->post('search'))){echo $this->input->post('search');}?>" id="searchStr" placeholder="Search Records" class="form-control" type="text"></td>
-                                            	<td>
-                                                	<input type="submit" id="btn-filter" value="Search" name="Search" class="btn btn-primary btn-search">&nbsp;
-                                                	<button type="button" id="btn-reset" class="btn btn-default btn-search">Reset</button>
-                                            	</td>
-                                         	</tr>
-                                 		 </tbody>
-                                   	
-                                 </table></form>
-                            </div>
+                            <div class="widget-header widget-header-flat">
+                                                <h5 class="widget-title bigger lighter">List Order</h5>
+                                                <div class="widget-toolbar">
+                                                  <button type="button" class="btn btn-xs btn-warning" data-toggle="modal" data-target="#myModal">Make Order</button>
+													<!--
+												  <a href="<?php echo base_url('order_master/list_orders_plant_controlllers_CC') ?>" class="btn btn-xs btn-warning" title="List Plant Controllers Orders">List Plant Controllers Orders </a>
+                                                    <a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Make Order" data-toggle="modal" data-target="#myModal">Make Order</a>
+													<a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Upload Customer Codes" data-toggle="modal" data-target="#myUploadModal">Upload Customer Codes</a>
+													-->
+													
+                                                </div>
+                                            </div>
+                                            <div class="widget-body">
+                                                <div class="row filter-box">
+                                                    <form id="form-filter" action="" method="get" class="form-horizontal" >
+                                                        <div class="col-sm-6">
+                                                            <label>Display
+                                                                <select name="page_limit" id="page_limit" class="form-control" onchange="this.form.submit()">
+                                                                <?php echo Utils::selectOptions('pagelimit',['options'=>$this->config->item('pageOption'),'value'=>$this->config->item('pageLimit')]) ?>
+                                                                </select>
+                                                            Records
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group">
+                                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Order Number or Product SKU or Product Name">
+                                                                <span class="input-group-btn">
+                                                                    <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
+                                                                    <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
                       <!--------------- Search Tab start----------------->
 										<!-- div.table-responsive -->
  										<!-- div.dataTables_borderWrap -->
@@ -152,10 +172,10 @@
 													<tr>
 														<th>#</th>
 														
-														<th>Tracking Number</th>
- 														<th>Product Code</th>
+														<th>Order Number</th>
+ 														<th>Product SKU</th>
  														<th>Product Name</th>
-														<th>Qty</th>
+														<th>Order Qty</th>
 														<th>Delivery Date</th>
                                                         <th>Order Date</th>
                                                         <th>Status</th>
@@ -181,7 +201,7 @@
 											}?>
                                                <tr id="show<?php echo $listData['order_id']; ?>">
 											   <td><?php echo $i; ?></td>
-											   <td><?php echo $listData['order_tracking_number']; ?></td>
+											   <td><?php echo $listData['order_no']; ?></td>
 												<td><?php echo $listData['product_sku']; ?></td>
 												<td><?php echo $listData['product_name']; ?></td>
 												<td><?php echo $listData['quantity']; ?></td>
@@ -250,13 +270,13 @@
 										}else{ ?>
 										<tr><td align="center" colspan="8" class="color error">No Records Founds</td></tr>
 										<?php }?>
-                                        <tr><td align="right" colspan="10" class="color"><?php if (isset($links)) { ?>
+              <tr><td align="left" colspan="10" class="color"><?php if (isset($links)) { ?>
                 <?php echo $links ?>
-            <?php } ?></td></tr>
+					<?php } ?></td></tr>
                                     </tbody>
 											</table>
   								<!-- PAGE CONTENT ENDS -->
-							</div><!-- /.col -->
+							</div> </div> </div><!-- /.col -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
 				</div><div class="footer">

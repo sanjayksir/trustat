@@ -54,7 +54,7 @@
                                                             </div>
                                                             <div class="col-sm-6">
                                                                 <div class="input-group">
-                                                                    <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Type your query">
+                                                                    <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Code, Product Name">
                                                                     <span class="input-group-btn">
                                                                         <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                         <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -73,6 +73,9 @@
                                                             <th>Plant Name</th>
                                                             <th>Active Status</th>
                                                             <th>Packaging Level</th>
+															<th>Activation Date Time</th>
+															<th>Activation Location</th>
+															<th>Details</th>
            <!-- <th>Action</th> -->
                                                             </tr>
                                                         </thead>
@@ -105,7 +108,18 @@
 
                                                               ?>
                                                             </td>
-                                                            <td><?php echo $listData['pack_level']; ?></td>
+                                                            <td><?php 
+															if ($activeinactive == 1)
+                                                                     { 
+																 echo $listData['pack_level'];
+                                                                     } else { 
+                                                                     echo "";
+                                                                     }
+															
+															 ?></td>
+															 <td><?php echo $listData['activation_date'];  ?></td>
+															  <td><?php echo $listData['address']; ?><?php //echo $listData['id']; ?></td>
+															  <td><a href="<?php  echo base_url().'order_master/barcode/view_product_code_details/'.$listData['id'];?>" class="btn btn-xs btn-success" target="_blank" title="View Details">View Details <i class="fa fa-eye"></i></a></td>
           </tr>
      <?php 
      $sno++;

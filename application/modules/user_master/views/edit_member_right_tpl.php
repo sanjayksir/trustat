@@ -10,7 +10,7 @@
 									$type = "User";
 								}?>
       <h4 class="widget-title">Edit <?php echo $type;?></h4>
-						<div class="widget-toolbar"> <a href="#" data-action="collapse"> <i class="ace-icon fa fa-chevron-up"></i> </a> <a href="#" data-action="close"> <i class="ace-icon fa fa-times"></i> </a> <a href="#" class="show_loader" data-action="reload" style="display:none;"><i class="ace-icon fa fa-refresh"></i></a> </div>
+		<div class="widget-toolbar"> <a href="<?php echo base_url('user_master/list_user/') ?>" > <i class="ace-icon fa fa-chevron-up"></i> </a> <a href="<?php echo base_url('user_master/list_user/') ?>" > <i class="ace-icon fa fa-times"></i> </a> <a href="#" class="show_loader" style="display:none;"><i class="ace-icon fa fa-refresh"></i></a> </div>
 				</div>
 				<div class="widget-body">
 						<div id="ajax_msg"></div>

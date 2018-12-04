@@ -435,8 +435,6 @@ class User_master extends MX_Controller {
             redirect('login');
             exit;
         }
-
-
         $data = array();
         $id = $this->uri->segment(3); //$this->session->userdata('admin_user_id');
         $data['get_user_details'] = $this->myspidey_user_master_model->get_user_details($id);
@@ -444,6 +442,7 @@ class User_master extends MX_Controller {
         $data['show_city_name'] = $this->myspidey_user_master_model->fetch_city_name($data['get_user_details'][0]['city']);
         $this->load->view('view_member', $data);
     }
+	
 
     public function view_plevel_user() {
 

@@ -945,14 +945,29 @@
 	
 	
 	function list_registered_products_by_consumers($limit,$start,$srch_string=''){
-		$resultData = array();
+		$resultData = 0;
  		$user_id 	= $this->session->userdata('admin_user_id');
+		
+		$srch_string = trim($srch_string);
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                $this->db->where("(PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%'  OR C.user_name LIKE '%$srch_string%' OR PP.purchase_date LIKE '%$srch_string%') and (P.created_by=$user_id)");
+            } else {
+                $this->db->where(array('P.created_by' => $user_id));
+            }
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%'  OR C.user_name LIKE '%$srch_string%' OR PP.purchase_date LIKE '%$srch_string%')");
+            }
+        }
+		
 		
  		$this->db->select('PP.*, C.*, P.product_name, P.product_sku, P.created_by, PP.status',false);
 		$this->db->from('purchased_product PP');
 		$this->db->join('consumers C', 'C.id = PP.consumer_id');
 		$this->db->join('products P', 'P.id = PP.product_id');
-		if($user_id!=1){ 
+		if($user_id > 1){ 
 			$this->db->where(array('P.created_by' => $user_id));
 		}
    		$this->db->order_by('PP.create_date','desc');
@@ -968,14 +983,26 @@
 	function count_registered_products_by_consumers($srch_string=''){
 		$result_data = 0;
 		$user_id 	= $this->session->userdata('admin_user_id');
-		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
-		}
+		
+		$srch_string = trim($srch_string);
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                $this->db->where("(PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%'  OR C.user_name LIKE '%$srch_string%' OR PP.purchase_date LIKE '%$srch_string%') and (P.created_by=$user_id)");
+            } else {
+                $this->db->where(array('P.created_by' => $user_id));
+            }
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%'  OR C.user_name LIKE '%$srch_string%' OR PP.purchase_date LIKE '%$srch_string%')");
+            }
+        }
+		
  		$this->db->select('count(1) as total_rows');
 		$this->db->from('purchased_product PP');
 		$this->db->join('consumers C', 'C.id = PP.consumer_id');
 		$this->db->join('products P', 'P.id = PP.product_id');
-		if($user_id!=1){ 
+		if($user_id > 1){ 
 			$this->db->where(array('P.created_by' => $user_id));
 		}
  		

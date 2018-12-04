@@ -136,7 +136,7 @@
 	 
 	 
 	## For listing all Plant Controllers of a perticular cc admin
-	public function list_orders_plant_controlllers_CC() {
+	public function list_orders_plant_controlllers_CCOld() {
  		##--------------- pagination start ----------------##
 		 // init params
         $params = array();
@@ -188,6 +188,35 @@
 		 //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
    		 $this->load->view('list_order_plabnt_ctrl_tpl_CC', $params);
      }
+	 
+	 
+	 public function list_orders_plant_controlllers_CC() {
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->get_total_order_list_plcrt($srch_string);
+
+        $params["orderListing"] = $this->order_master_model->get_order_list_plcrt($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/list_orders_plant_controlllers_CC', $total_records);
+
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        $params['user_id'] = $user_id;
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_order_plabnt_ctrl_tpl_CC', $params);
+    }
+	
 	 
 	 
 	  public function save_order() {

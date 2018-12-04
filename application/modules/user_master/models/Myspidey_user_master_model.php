@@ -259,7 +259,8 @@ class Myspidey_user_master_model extends CI_Model {
 				
                 // echo $this->db->last_query();exit;
 				$email = $frmData['user_email']; 
-                $this->user_registration_mail($first_name, $full_name, $username, $password, $email);
+				// Email is not going to the user right now
+                //$this->user_registration_mail($first_name, $full_name, $username, $password, $email);
                 $this->session->set_flashdata('success', 'User Added Successfully!');
                 return 1;
             }

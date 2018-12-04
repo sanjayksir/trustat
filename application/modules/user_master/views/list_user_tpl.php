@@ -106,19 +106,19 @@
 
                                         <?php $i = 0;
                                         $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
-        $sno =  $page + 1;
+										$sno =  $page + 1;
                                     if(count($userListing)>0){
                                         foreach ($userListing as $listData){
-                                $i++;
+											$i++;
                                         $status = $listData['status'];
-if($status ==1){
+										if($status ==1){
                                         $status ='Active';
                                                 $colorStyle="style='color:white;border-radius:10px;background-color:green;border:none;'";
                                         }else{
                                         $status ='Inactive';
                                                 $colorStyle="style='color:black;border-radius:10px;background-color:red;border:none;'";
                                         }?>
-<tr id="show<?php echo $listData['user_id']; ?>">
+										<tr id="show<?php echo $listData['user_id']; ?>">
                                            <td><?php echo $sno;$sno++; ?></td>
                                                 <td><?php echo $listData['f_name'].' '. $listData['l_name']; ?></td>
                                                 <td><?php echo $listData['user_name']; ?></td>

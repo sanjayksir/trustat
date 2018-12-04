@@ -35,7 +35,8 @@ class Customer extends ApiController {
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-        $result = $this->Productmodel->barcodeProducts($data['bar_code']);
+		$userId = $user['user_id'];
+        $result = $this->Productmodel->barcodeProducts($data['bar_code'], $userId);
         if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found'],200);
         }
@@ -135,14 +136,18 @@ class Customer extends ApiController {
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-        $result = $this->Productmodel->barcodeProducts($data['bar_code']);
+		$userId = $user['user_id'];
+        $result = $this->Productmodel->barcodeProductsInactive($data['bar_code'], $userId);
 		 if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
         }     
-
-		//echo print_r($result[0]['active_status']); 
-		
-			//die;
+		 //$userParentId = getUserParentIDById($userId);
+		//echo print_r($result[0]['created_by']) . "<br>"; 
+		//echo print_r($userParentId) . "<br>";
+		//echo print_r($result);
+		//	die;
+			
+			//echo print_r($result[0]['active_status']);
         
         /*
 		foreach(explode(',',$data['bar_code']) as $ind => $code){
@@ -160,9 +165,10 @@ class Customer extends ApiController {
 			
 		$this->db->set('active_status',1);
         $this->db->set('pack_level', $data['pack_level']);
-        $this->db->set('plant_id',$user['plant_id']);
+       // $this->db->set('plant_id',$user['plant_id']);
         $this->db->set('customer_id',$user['user_id']);
-        $this->db->set('modified_at', (new DateTime('now'))->format('Y-m-d H:i:s'));
+        //$this->db->set('modified_at', (new DateTime('now'))->format('Y-m-d H:i:s'));
+		$this->db->set('activation_date', (new DateTime('now'))->format('Y-m-d H:i:s'));
 		$this->db->where('barcode_qr_code_no', $data['bar_code']);
 		
         if($this->db->update('printed_barcode_qrcode')){
@@ -211,7 +217,8 @@ class Customer extends ApiController {
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
         $validate = [
-			['field' =>'plant_id','label'=>'plant_id is required','rules' => 'required' ],
+			['field' =>'plant_id','label'=>'Plant id is required','rules' => 'required' ],
+			['field' =>'location_id','label'=>'Location id is required','rules' => 'required' ],
 			['field' =>'parent_bar_code','label'=>'Parent Barcode','rules' => 'required' ],
 			['field' =>'parent_pack_level','label'=>'Parent Pack Barcode','rules' => 'required' ],
             ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ]
@@ -220,7 +227,10 @@ class Customer extends ApiController {
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-        $result = $this->Productmodel->barcodeProducts($data['bar_code']);
+		$userId = $user['user_id'];
+		$data['customer_user_id'] = $userId;
+		$data['create_date'] = date('Y-m-d H:i:s');
+        $result = $this->Productmodel->barcodeProducts($data['bar_code'], $userId);
 		 if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
         } 
@@ -414,7 +424,8 @@ class Customer extends ApiController {
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-        $result = $this->Productmodel->barcodeProducts($data['bar_code']);
+		$userId = $user['user_id'];
+        $result = $this->Productmodel->barcodeProducts($data['bar_code'], $userId);
 		 if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
         } 
@@ -423,7 +434,10 @@ class Customer extends ApiController {
 				
 		$data['product_id'] = $result[0]['product_id'];		
 		 $isItemAlreadyExists = $this->Productmodel->isItemAlreadyExists($data['bar_code']);
-		
+		 
+		 $isitMaster = $this->db->where('bar_code',$data['bar_code'])->from("packaging_codes_pcr")->count_all_results();
+		 
+		if($isitMaster<1){
 		if($isItemAlreadyExists==true){
 		    if($this->db->insert('dispatch_stock_transfer_out', $data)){
 			$product_id = $data['product_id']; 
@@ -450,17 +464,16 @@ class Customer extends ApiController {
 				$this->db->insert('inventory_on_hand',$data2);
 				
 			}
-			
-			
-		
             $this->response(['status'=>true,'message'=>'Dispatch Stock Transfer-Out has been added.','stock_data'=>$data,'code_data'=>$result]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to Dispatch Stock Transfer-Out.'],200); 
         }
 		}else{
-            $this->response(['status'=>false,'message'=>'System failed to add this item in Stock because this item already exists.'],200); 
+            $this->response(['status'=>false,'message'=>'System failed to add this item Out-Stock because this item already exists.'],200); 
         }
-		
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to add this item Out-Stock because only master carton can be Dispatch.'],200); 
+        }
     }
 	
 	public function ReceiptStockTransferIn(){
@@ -488,7 +501,9 @@ class Customer extends ApiController {
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-        $result = $this->Productmodel->barcodeProducts($data['bar_code']);
+		
+		$userId = $user['user_id'];
+        $result = $this->Productmodel->barcodeProducts($data['bar_code'], $userId);
 		 if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
         } 
@@ -499,6 +514,9 @@ class Customer extends ApiController {
 		
 		 $isItemAlreadyExistsStockIn = $this->Productmodel->isItemAlreadyExistsStockIn($data['bar_code']);
 		
+		 $isitMaster = $this->db->where('bar_code',$data['bar_code'])->from("packaging_codes_pcr")->count_all_results();
+		 
+		if($isitMaster<1){
 		if($isItemAlreadyExistsStockIn==true){
 		    if($this->db->insert('receipt_stock_transfer_in', $data)){
 			
@@ -526,15 +544,15 @@ class Customer extends ApiController {
 				$this->db->insert('inventory_on_hand',$data2);
 				
 			}
-			
-			
-		
             $this->response(['status'=>true,'message'=>'Receipt Stock Transfer-In has been added.','stock_data'=>$data,'code_data'=>$result]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to Dispatch Stock Transfer-In.'],200); 
         }
 		}else{
-            $this->response(['status'=>false,'message'=>'System failed to add this item in Stock because this item already exists.'],200); 
+            $this->response(['status'=>false,'message'=>'System failed to add this item Stock Transfer-In because this item already exists.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to add this item Stock Transfer-In because only master carton can be Stock Transfer-In.'],200); 
         }
 		
     }
@@ -564,11 +582,15 @@ class Customer extends ApiController {
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-        $result = $this->Productmodel->barcodeProducts($data['bar_code']);
-		
+		$userId = $user['user_id'];
+		$barCodes = $data['bar_code'];
+        $result = $this->Productmodel->barcodeProducts($barCodes, $userId);
+		$array = array('product_id' => $result[0]['product_id'], 'location_id' => $data['location_id']);
+		$total_codes_quantity_of_productr = $this->db->where($array)->from("physical_inventory_check")->count_all_results();
+		$result['total_codes_quantity_of_product'] = $total_codes_quantity_of_productr + 1;
 		//echo "<pre>";print_r($result);die;
 		
-		 if(empty($result)){
+		 if(empty($result) || $result[0]['product_id']==""){
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
         } 
 		
@@ -577,6 +599,7 @@ class Customer extends ApiController {
 				$data['request_id'] = rand(1111111111,9999999999); 
 				$data['created_date_time'] = date("Y-m-d H:i:s");
 				$data['product_id'] = $result[0]['product_id'];
+				//echo "<pre>";print_r($data['product_id']);die;
 		 $isItemAlreadyExistsInInventory = $this->Productmodel->isItemAlreadyExistsInInventory($data['bar_code']);
 		
 		if($isItemAlreadyExistsInInventory==true){
@@ -612,7 +635,8 @@ class Customer extends ApiController {
         if(is_array($errors)){
             Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
         }
-        $result = $this->Productmodel->barcodeProducts($data['bar_code']);
+		$userId = $user['user_id'];
+        $result = $this->Productmodel->barcodeProducts($data['bar_code'], $userId);
 		 if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
         }     
@@ -666,7 +690,11 @@ class Customer extends ApiController {
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
         $data = [];
-        $data = $this->Productmodel->location_master();
+		$userId = $user['user_id'];
+		$ParentuserId = getParentIdFromUserIdTAPP($userId);
+		//print_r($userId);
+		//print_r($ParentuserId); exit;
+        $data = $this->Productmodel->location_master($ParentuserId);
                 if(!empty($data)){
             Utils::response(['status'=>true,'message'=>'List of locations.','data'=>$data]);
         }else{
@@ -774,6 +802,8 @@ class Customer extends ApiController {
         }else{
             $userPlant = $this->db->get_where('assign_plants_to_users',['user_id'=>$user->user_id])->row();
             $user->plant_id = $userPlant->plant_id;
+			$userLocation = $this->db->get_where('assign_locations_to_users',['user_id'=>$user->user_id])->row();
+            $user->location_id = $userLocation->location_id;
 			$user->designation_name_slug = getRoleSlugById($user->designation_id);
 			$user->designation_name_value = getRoleNameById($user->designation_id);
 			$functionalities = get_assigned_functionalities_to_role_list($user->designation_id);
@@ -797,9 +827,52 @@ class Customer extends ApiController {
         if(empty($this->request->token)){
             Utils::response(['status'=>false,'message'=>'Bad request.'],400);
         }
+		
         $this->load->model('UserLogModel');
         $this->db->where('token',$this->request->token)->delete($this->UserLogModel->table);
         $this->response(['status'=>true,'message'=>'Logout successfully.']);
     }
+	
+	
+	 /**
+     * forgotPassword method to reset password.
+     * 
+     * @param String $mobile_no|$email either mobile no or email
+     * @return Json generated random password
+     */
+    public function forgotPassword($username = null) {
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $username = urldecode($username);
+        if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+            $validate = [['field' => 'username', 'label' => 'Email', 'rules' => 'trim|required|valid_email']];
+            $condition = ['email_id' => $username];
+        } else {
+            $validate = [['field' => 'username', 'label' => 'Mobile No', 'rules' => 'trim|required|integer|exact_length[10]']];
+            $condition = ['mobile_no' => $username];
+        }
+        $errors = $this->CustomerModel->validate(['username' => $username], $validate);
+        if (is_array($errors)) {
+            $this->response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }
+        $user = $this->CustomerModel->findBy($condition);
+        if (!$user) {
+            Utils::response(['status' => false, 'message' => 'Record not found.']);
+        }
+        $password = Utils::randomNumber(8);
+        $user->password = md5($password);
+        $smstext = 'System generated password is ' . $password . ' Please change it after doing logging.';
+        if (Utils::sendSMS($user->mobile_no, $smstext)) {
+            if ($this->db->update($this->CustomerModel->table, ['password' => $user->password], ['user_id' => $user->id])) {
+                Utils::response(['status' => true, 'message' => 'A new password has been sent to your registered mobile no.']);
+            } else {
+                Utils::response(['status' => false, 'message' => 'There is system error to reset password.']);
+            }
+        } else {
+            Utils::response(['status' => false, 'message' => 'Failed to send message, Try after some time.']);
+        }
+    }
+	
     
 }

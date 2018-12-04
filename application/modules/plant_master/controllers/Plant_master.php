@@ -13,7 +13,7 @@
 		}
       }
 	  
-      public function list_plants() {
+      public function list_plantsOld() {
  		 $data					= array();
 		 
 		 #--------------- pagination start ----------------##
@@ -70,6 +70,46 @@
 		##--------------- pagination End ----------------##
     	$this->load->view('list_plant_tpl', $params);
      }
+	 
+	 public function list_plants() {
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+        if (empty($user_id) || empty($user_name)) {
+
+            redirect('login');
+            exit;
+        }
+        $data = array();
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->plant_master_model->total_get_user_list_all($srch_string);
+
+        if ($total_records > 0) {
+            // get current page records
+            $params['userListing'] = $this->plant_master_model->get_user_list_all($limit_per_page, $start_index, $srch_string);
+            
+            // build paging links
+            $params["links"] = Utils::pagination('plant_master/list_plants', $total_records);;
+        }
+        ##--------------- pagination End ----------------##
+
+        $user_id = $this->session->userdata('admin_user_id');
+        $this->load->view('list_plant_tpl', $params);
+    }
+	 
   
      public function add_plant() {
  		 $data					= array();

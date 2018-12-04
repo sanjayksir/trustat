@@ -54,65 +54,73 @@
         <div class="widget-main">
 		<div class="form-group row">
 			<div class="col-sm-6">
-			<label for="form-field-8">Customer Code</label>
-			<div class="form-control"><?php echo $get_user_details[0]['customer_code'];?></div>
+			<label for="form-field-8"><b>Customer Code</b></label>
+			<div class=""><?php echo $get_user_details[0]['customer_code'];?></div>
 			 
 			</div>
 			
 			<div class="col-sm-6">
-			  <label for="form-field-8">Phone#</label>
-             <div class="form-control"><?php echo $get_user_details[0]['mobile_no'];?></div>
+			  <label for="form-field-8"><b>Phone#</b></label>
+             <div class=""><?php echo $get_user_details[0]['mobile_no'];?></div>
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-sm-6">
-			  <label for="form-field-8">User Name</label>
-             <div class="form-control"><?php echo $get_user_details[0]['user_name'];?></div>
+			  <label for="form-field-8"><b>User Name</b></label>
+             <div class=""><?php echo $get_user_details[0]['user_name'];?></div>
 			</div>
 			 
 			
 			<div class="col-sm-6">
-			  <label for="form-field-8">Email ID</label>
+			  <label for="form-field-8"><b>Email ID</b></label>
 
-            <div class="form-control"><?php echo $get_user_details[0]['email_id'];?></div>
+            <div class=""><?php echo $get_user_details[0]['email_id'];?></div>
 			</div>
 		</div>
 		<div class="form-group row">
 			<div class="col-sm-6">
-			  <label for="form-field-8">First Name</label>
-			<div class="form-control"><?php echo $get_user_details[0]['f_name'];?></div>
+			  <label for="form-field-8"><b>First Name</b></label>
+			<div class=""><?php echo $get_user_details[0]['f_name'];?></div>
 			</div>
  			<div class="col-sm-6">
-			  <label for="form-field-8">Last Name</label>
-			 <div class="form-control"><?php echo $get_user_details[0]['l_name'];?></div>
+			  <label for="form-field-8"><b>Last Name</b></label>
+			 <div class=""><?php echo $get_user_details[0]['l_name'];?></div>
+			</div>
+			<div class="col-sm-6">
+			  <label for="form-field-8"><b>Role of user</b></label>
+			 <div class=""><?php echo getRoleNameById($get_user_details[0]['designation_id']);?></div>
+			</div>
+			<div class="col-sm-6">
+			  <label for="form-field-8"><b>Assigned Locations</b></label>
+			 <div class=""><?php echo get_locations_name_by_id(get_assigned_location_user_list($get_user_details[0]['user_id'])); ?></div>
 			</div>
 		</div>
 		<?php if($this->session->userdata('admin_user_id')==1){?>
 		<div class="form-group row">
 			<div class="col-sm-6">
-			<label for="form-field-8">Industry</label>
-			<div class="form-control"><?php echo $get_user_details[0]['industry'];?></div>
+			<label for="form-field-8"><b>Industry</b></label>
+			<div class=""><?php echo $get_user_details[0]['industry'];?></div>
 			</div>
 			
 			<div class="col-sm-6">
-			  <label for="form-field-8">Pan</label>
-             <div class="form-control"><?php echo $get_user_details[0]['pan'];?></div>
+			  <label for="form-field-8"><b>Pan</b></label>
+             <div class=""><?php echo $get_user_details[0]['pan'];?></div>
 			</div>
 		</div>
   		<div class="form-group row">
 			<div class="col-sm-6">
-			 <label for="form-field-9">State</label>
+			 <label for="form-field-9"><b>State</b></label>
 			 <?php $states = get_state_name(31);?>
    		  		<?php foreach($states as $val){
 					if($val['state_id']==$get_user_details[0]['state']){?>
-					<div class="form-control"><?php  echo $val['state_name'];?></div>
+					<div class=""><?php  echo $val['state_name'];?></div>
 				<?php }}?>
  			</div>
 			 
 			
 			<div class="col-sm-6"><?php //print_r($show_city_name);?>
-			 <label for="form-field-9">City</label>
-              <div class="form-control"><?php  echo $show_city_name[0]['ci_name'];?></div>
+			 <label for="form-field-9"><b>City</b></label>
+              <div class=""><?php  echo $show_city_name[0]['ci_name'];?></div>
  			</div>
 		</div>
 		
@@ -135,8 +143,8 @@
 				<?php }?>
 			</div>
 			<div class="col-sm-6">
-			  <label for="form-field-8">Remark</label>
-             <div class="form-control" style=" height: 100px;overflow: scroll;"><?php echo $get_user_details[0]['remark'];?></div>
+			  <label for="form-field-8"><b>Remark</b></label>
+             <div class="" style="height: 100px;overflow: scroll;"><?php echo $get_user_details[0]['remark'];?></div>
 			</div> 
 			 
 		</div>

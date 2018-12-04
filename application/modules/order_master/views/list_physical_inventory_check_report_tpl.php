@@ -69,7 +69,6 @@
 													<tr>
 														<th>#</th>
 														<th>Product Name</th>
-														<th>Product Code</th>
 														<th>Physical Inventory Number</th>
  														<th>location Type</th>
 														<th>Location Name</th>
@@ -90,9 +89,7 @@
                                                <tr id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['product_name']; ?></td>
-												<td><?php echo $listData['bar_code']; ?></td>
 												<td><?php echo $listData['pi_number']; ?> <a href="<?php  echo base_url().'reports/product_stock_physical_inventory_details/'.$listData['pi_number'];?>" class="btn btn-xs btn-success" target="_blank" title="View Details">View Details <i class="fa fa-eye"></i></a></td>
-												<td><?php echo $listData['location_type']; ?></td>
 												<td><?php echo $listData['location_type']; ?></td>
 												<td><?php echo $listData['location_name']; ?></td>
 												<td><?php echo $listData['inventory_in_date']; ?></td>

@@ -1142,15 +1142,17 @@ function list_assigned_products() {
         }
         $total_records = $this->Product_model->count_registered_products_by_consumers($srch_string);
 		$params["ScanedCodeListing"] = $this->Product_model->list_registered_products_by_consumers($limit_per_page, $start_index,$srch_string);
-        $params["links"] = Utils::pagination('product/list_registered_products_by_consumers',$total_records,null,4);
+        $params["links"] = Utils::pagination('product/list_registered_products_by_consumers', $total_records);
         
         ##--------------- pagination End ----------------##
-         $data					= array();
-         $user_id 	= $this->session->userdata('admin_user_id');		
-         $params["ScanedCodeListing"] = $this->Product_model->list_registered_products_by_consumers($limit_per_page, $start_index,$srch_string);
+        // $data					= array();
+        // $user_id 	= $this->session->userdata('admin_user_id');		
+        // $params["ScanedCodeListing"] = $this->Product_model->list_registered_products_by_consumers($limit_per_page, $start_index,$srch_string);
          $this->load->view('list_registered_products_by_consumers_tpl', $params);
      }
 
+	 
+	 
 		public function verity_registered_products_by_consumers() {
 		
 		$data = array();
@@ -1342,7 +1344,7 @@ function list_assigned_products() {
         }
         $total_records = $this->Product_model->count_total_list_customerwise_consumer_loyalty($id,$srch_string);
         $params["list_view_consumer_passbook"] = $this->Product_model->list_customerwise_consumer_loyalty($id, $limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('product/list_customerwise_consumer_loyalty_details/' . $id, $total_records);
+        $params["links"] = Utils::pagination('product/list_customerwise_consumer_loyalty_details/' . $id, $total_records, null, 4);
 		//echo $user_id;
         $this->load->view('list_view_customerwise_consumer_loyalty_tpl', $params);
     }

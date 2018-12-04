@@ -69,7 +69,7 @@
 													<tr>
 														<th>#</th>
 														<th>Product Name</th>
-														<!--<th>Invoice Number</th>-->
+														<th>Product Description</th>
  														<th>Location Name</th>
                                                         <th>Transfer-In Quantity</th> 
 														<th>Transfer-Out Quantity</th> 
@@ -89,7 +89,8 @@
                                                <tr id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['product_name']; ?></td>
-												<td><?php echo $listData['location_id']; ?></td>
+											   <td><?php echo $listData['product_description']; ?></td>
+												<td><?php echo get_locations_name_by_id($listData['location_id']); ?></td>
 												<td><?php echo $listData['stock_transfer_in_qty']; ?></td>
  												<td><?php echo $listData['stock_transfer_out_qty']; ?></td>
 												<td><?php echo $listData['stock_transfer_in_qty']-$listData['stock_transfer_out_qty']; ?></td>

@@ -159,6 +159,9 @@ $route['api/customer/view-product'] = 'Api/Customer/viewProduct';
 $route['api/customer/view-inventory'] = 'Api/Customer/viewInventory';
 $route['api/customer/location-type-master'] = 'Api/Customer/location_type_master';
 $route['api/customer/location-master'] = 'Api/Customer/location_master';
+
+$route['api/customer/forgot-password/(:any)'] = 'Api/Customer/forgotPassword/$1';
+
 /* End of API */
 
 

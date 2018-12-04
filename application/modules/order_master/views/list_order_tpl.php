@@ -63,7 +63,7 @@
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <div class="input-group">
-                                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Name or Product SKU or Tracking No">
+                                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Order Number or Tracking Number or Product SKU or Product Name">
                                                                 <span class="input-group-btn">
                                                                     <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                     <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -222,7 +222,14 @@
                  <a href="<?php  echo base_url().'order_master/view_order/'.$listData['order_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>
 
 
-                 <?php echo anchor("order_master/edit_product/" . $listData['order_id'], '<i class="ace-icon fa fa-pencil"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>
+                 <?php 
+				 if((order_status($listData['order_status']))=="Pending") {
+				 echo anchor("order_master/edit_product/" . $listData['order_id'], '<i class="ace-icon fa fa-pencil"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); }
+	
+
+				 ?>
+				 
+				 
                 <!-- <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['order_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['order_id'];?>',this.value);" />-->
 
             </div>

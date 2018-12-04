@@ -279,58 +279,34 @@ function getChildFromParent_ATTR($id){
 
 function getUserNameById($id){
 	$res = 0;
-
-
-
 	$ci = & get_instance();
-
-
-
 	$ci->db->select('user_name');
-
-
-
 	$ci->db->from('backend_user');
-
-
-
 	$ci->db->where(array('status'=>'1', 'user_id'=>$id));
-
-
-
  	$query = $ci->db->get();
-
-
-
 	//echo $ci->db->last_query(); 
-
-
-
 	if ($query->num_rows() > 0) {
-
-
-
 		$res = $query->result_array();
-
-
-
 		$res = ucfirst($res[0]['user_name']);
-
-
-
  	}
-
-
-
 	return $res;
-
-
-
-	
-
-
-
 }
+
+function getUserParentIDById($userId){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('is_parent');
+	$ci->db->from('backend_user');
+	$ci->db->where(array('user_id'=>$userId));
+ 	$query = $ci->db->get();
+	//echo $ci->db->last_query(); 
+	if ($query->num_rows() > 0) {
+		$res = $query->result_array();
+		$res = ucfirst($res[0]['is_parent']);
+ 	}
+	return $res;
+}
+
 
 
 function getConsumerNameById($id){
@@ -349,6 +325,58 @@ function getConsumerNameById($id){
  	}
 	return $res;
 }
+
+function getRecLocationByInvoiceNumber($InvoiceNumber){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('location_name');
+	$ci->db->from('receipt_stock_transfer_in');
+	$ci->db->where(array('invoice_number'=>$InvoiceNumber));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['location_name']);
+
+ 	}
+	return $res;
+}
+
+function getRecLocationTypeByInvoiceNumber($InvoiceNumber){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('location_type');
+	$ci->db->from('receipt_stock_transfer_in');
+	$ci->db->where(array('invoice_number'=>$InvoiceNumber));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['location_type']);
+
+ 	}
+	return $res;
+}
+
+function getProductCodeActicationLevelbyCode($ProductCode){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('pack_level');
+	$ci->db->from('printed_barcode_qrcode');
+	$ci->db->where(array('barcode_qr_code_no'=>$ProductCode));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['pack_level']);
+
+ 	}
+	return $res;
+}
+
 
 function getConsumerMobileNumberById($id){
 	$res = 0;
@@ -6248,6 +6276,7 @@ function get_assigned_plant_user_list($user_id){
  		}
  	return $res_arr[0]['plant_id'];
  } 
+ 
  
  
  function get_assigned_location_user_list($user_id){

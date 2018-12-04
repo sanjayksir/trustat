@@ -143,8 +143,10 @@
         if (empty($srch_string)) {
             $srch_string = '';
         }
-        $total_records = $this->order_master_model->get_barcode_total_order_list_all($srch_string);
-
+        $total_records = $this->order_master_model->get_total_printed_code_list_all($srch_string);
+		
+		//echo $total_records;
+		//$total_records = 1000;
         $params["PrintedCodeListing"] = $this->order_master_model->get_printed_barqrcodelist($limit_per_page, $start_index, $srch_string);
         $params["links"] = Utils::pagination('order_master/barcode/list_printed_report', $total_records,null,4);
         
@@ -429,7 +431,7 @@
         }
         $total_records = $this->order_master_model->get_barcode_total_order_list_all($srch_string);
 	$params["ScanedCodeListing"] = $this->order_master_model->get_purchsed_barqrcodelist($limit_per_page, $start_index,$srch_string);
-        $params["links"] = Utils::pagination('order_master/barcode/list_scanned_report', $total_records,null,4);
+        $params["links"] = Utils::pagination('order_master/barcode/list_purchased_products', $total_records,null,4);
         
         ##--------------- pagination End ----------------##
          $data					= array();
@@ -438,9 +440,37 @@
          $this->load->view('list_purchased_products_report_tpl', $params);
      }
 	
+## For complaint reports
+    public function list_complaint_log() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        //$total_records = $this->order_master_model->count_scanned_barqrcodelist($srch_string);
+		$total_records = $this->order_master_model->count_complaint_log($srch_string);
+        $params["ScanedCodeListing"] = $this->order_master_model->get_complaint_log($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_complaint_log', $total_records, null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_complaint_log_tpl', $params);
+    }
+	
 
-
-public function list_complaint_log() {
+		public function list_complaint_logOld() {
  		##--------------- pagination start ----------------##
 		 // init params
         $params = array();
@@ -499,7 +529,7 @@ public function list_complaint_log() {
 	 
 	 
 	 
-public function list_warranty_claims() {
+	public function list_warranty_claims() {
  		##--------------- pagination start ----------------##
 		 // init params
         $params = array();
@@ -524,6 +554,34 @@ public function list_warranty_claims() {
 	
         $this->load->view('list_warranty_claims_tpl', $params);
      }	 
+	 
+	 
+	
+	 function view_product_code_details($id = ''){
+		if(empty($id)){
+			redirect('reports/barcode_printed_reports');
+		}	
+		$data['detailData']		= $this->order_master_model->get_product_code_details($id);
+			
+		$result = $this->db->select('*')->from('printed_barcode_qrcode')->where('id', $id)->get()->row();
+		$product_code = $result->barcode_qr_code_no;
+		$order_idn = $result->order_id;
+		//echo $order_idn . $product_code;
+		$result2 =$this->db->select('*')->from('order_master')->where('order_id', $order_idn)->get()->row();
+		$data['order_no'] = $result2->order_no;
+		$data['created_date'] = $result2->created_date;
+		
+		$result3 =$this->db->select('*')->from('packaging_codes_pcr')->where('bar_code', $product_code)->get()->row();
+		$data['customer_user_id'] = $result3->customer_user_id;
+		$data['create_date'] = $result3->create_date;
+		
+		//echo $result2->order_no;
+		$data['ChildernData']	= $this->order_master_model->get_product_code_childern_details($product_code);
+		$data['ParentData']	= $this->order_master_model->get_product_code_parent_details($product_code);
+		$this->load->view('view_product_code_details_tpl', $data);			
+	}
+	
+	
 	
    }?>
 
