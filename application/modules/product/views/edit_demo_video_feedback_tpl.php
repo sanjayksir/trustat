@@ -1,5 +1,5 @@
 <?php
-		$dt = $product_survey_feedback_data[0];
+		$dt = $edit_demo_video_feedback_data[0];
 		?>
 <div class="col-xs-12">
 

@@ -11,7 +11,8 @@
 			</script>
 
   <?php $this->load->view('../includes/admin_sidebar');?>
-
+<?php //echo $this->uri->segment(3); ?>
+<?php //echo base_url().'product/ask_feedback/' . $this->uri->segment(3);?>
   
 
   <div class="main-content">
@@ -24,15 +25,18 @@
 
           <li> <i class="ace-icon fa fa-home home-icon"></i> <a href="<?php echo site_url(); ?>">Home</a> </li>
 			
-		 				<?php if($this->uri->segment(2)=='edit_feedback'){
+		 				<?php 
+						
+						
+						if($this->uri->segment(2)=='edit_feedback'){
 
-								  	$constant = "Edit Feedback" ;
+								  	$constant = "Edit Feedback Question" ;
 
                               }else{ // $this->load->view('add_member_right_tpl'); 
-							  $constant = "Add Question" ;
+							  $constant = "Add Feedback Question" ;
 
 					 			}?>	
-          <li class="active">Administration</li><li class="active"><?php echo $constant;?></li>
+          <li class="active">Manage</li><li class="active"><?php echo $constant;?></li>
 
         </ul>
 
@@ -56,7 +60,7 @@
 
               <div class="col-xs-12">
 
-                <h3 class="header smaller lighter blue"><?php echo $constant;?></h3>
+                <h3 class="header smaller lighter blue">Product Name - <?php echo get_products_name_by_id($this->uri->segment(3)); ?><?php //echo $constant;?></h3>
 
                  <?php if($this->session->flashdata('success')): ?>
 
@@ -302,7 +306,7 @@
 				data: dataSend,
   				success: function (msg) {
 					setTimeout(function() {
- 						  window.location.href="<?php echo base_url().'product/list_product';?>";
+ 						  window.location.href="<?php echo base_url().'product/ask_feedback/' . $this->uri->segment(3);?>";
 					  }, 2000); 
 				}
 			});

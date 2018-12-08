@@ -381,6 +381,20 @@ class User_master extends MX_Controller {
         echo $isExists;
         exit;
     }
+	
+	public function checkUserMobileNo() {
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+
+        $uid = $this->input->post('userid');
+
+        $mobile = $this->input->post('user_mobile');
+
+        $isExists = $this->myspidey_user_master_model->checkMobileNo($mobile, $uid);
+
+        echo $isExists;
+        exit;
+    }
 
     public function checkUserName() {
         $user_id = $this->session->userdata('admin_user_id');

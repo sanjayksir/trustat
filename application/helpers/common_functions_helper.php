@@ -716,6 +716,9 @@ function get_state_name($country_id)
   		return $res[0]['ci_name']; 
  }
  
+
+ 
+ 
  function getGroupList_GRPS_bkp($grpId='') {
  	$res = 0;
  	$ci = & get_instance();

@@ -570,14 +570,35 @@
 		$result2 =$this->db->select('*')->from('order_master')->where('order_id', $order_idn)->get()->row();
 		$data['order_no'] = $result2->order_no;
 		$data['created_date'] = $result2->created_date;
+		$data['user_id'] = $result2->user_id;
 		
 		$result3 =$this->db->select('*')->from('packaging_codes_pcr')->where('bar_code', $product_code)->get()->row();
 		$data['customer_user_id'] = $result3->customer_user_id;
 		$data['create_date'] = $result3->create_date;
+		$data['location_id'] = $result3->location_id;
+		
 		
 		//echo $result2->order_no;
 		$data['ChildernData']	= $this->order_master_model->get_product_code_childern_details($product_code);
 		$data['ParentData']	= $this->order_master_model->get_product_code_parent_details($product_code);
+		
+		$ParentbareCode = $data['ParentData'];
+		//print_r($ParentbareCode[parent_bar_code]);
+		$result4 =$this->db->select('*')->from('receipt_stock_transfer_in')->where('bar_code', $ParentbareCode[parent_bar_code])->get()->row();
+		$data['created_by_id4'] = $result4->created_by_id;
+		$data['location_id4'] = $result4->location_id;
+		$data['created_date_time4'] = $result4->created_date_time;
+		
+		$result5 =$this->db->select('*')->from('dispatch_stock_transfer_out')->where('bar_code', $ParentbareCode[parent_bar_code])->get()->row();
+		$data['created_by_id5'] = $result5->created_by_id;
+		$data['location_id5'] = $result5->location_id;
+		$data['created_date_time5'] = $result5->created_date_time;
+		
+		$result6 =$this->db->select('*')->from('dispatch_stock_transfer_out')->where('bar_code', $ParentbareCode[parent_bar_code])->get()->row();
+		$data['created_by_id6'] = $result6->created_by_id;
+		$data['location_id6'] = $result6->location_id;
+		$data['created_date_time6'] = $result6->created_date_time;
+		
 		$this->load->view('view_product_code_details_tpl', $data);			
 	}
 	

@@ -334,7 +334,16 @@ get_related_city_list('<?php echo $get_user_details[0]['state'];?>')
 			 	 required: true,
 				 digits: true, 
                  minlength: 10,
- 				maxlength:12
+ 				maxlength:12,
+				remote: {
+
+                       	 	url: "<?php echo base_url().'user_master/';?>checkUserMobileNo",
+
+                         	type: "post",
+
+							data: {  userid: $( "#user_id" ).val() }
+
+                    	 }
 			},
 			ccadmin: {
 			 	 required: true
@@ -362,8 +371,8 @@ get_related_city_list('<?php echo $get_user_details[0]['state'];?>')
 				user_mobile: {
 					required: "Please enter Mobile No.",
 					digits:"Only Numeric value accepted",
-
-					minlength: "Please enter valid Number" 
+					minlength: "Please enter valid Number",
+					remote: "Mobile Number already exists!" 	
 
 				},
 				ccadmin: {

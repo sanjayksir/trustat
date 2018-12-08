@@ -391,6 +391,25 @@ class Myspidey_user_master_model extends CI_Model {
         }
         return $result;
     }
+	
+	function checkMobileNo($mobile, $uid = '') {
+        $result = 'true';
+        $this->db->select('user_id');
+        $this->db->from('backend_user');
+        if (!empty($uid)) {
+            $this->db->where(array('user_id!=' => $uid));
+        }
+        $this->db->where(array('mobile_no' => $mobile));
+        $query = $this->db->get();
+        //echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            $result = $res[0]['user_id'];
+            $result = 'false';
+        }
+        return $result;
+    }
+	
 
     function checkUserName($uname, $uid = '') {
         $result = 'true';

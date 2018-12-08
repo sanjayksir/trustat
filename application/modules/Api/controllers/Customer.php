@@ -130,7 +130,8 @@ class Customer extends ApiController {
         }
         $validate = [
             ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
-            ['field' =>'pack_level','label'=>'Packet Level','rules' => 'required']
+            ['field' =>'pack_level','label'=>'Packet Level','rules' => 'required'],
+            ['field' =>'activation_location_id','label'=>'Location ID','rules' => 'required']
         ];
         $errors = $this->Productmodel->validate($data,$validate);
         if(is_array($errors)){
@@ -165,7 +166,7 @@ class Customer extends ApiController {
 			
 		$this->db->set('active_status',1);
         $this->db->set('pack_level', $data['pack_level']);
-       // $this->db->set('plant_id',$user['plant_id']);
+        $this->db->set('activation_location_id',$data['activation_location_id']);
         $this->db->set('customer_id',$user['user_id']);
         //$this->db->set('modified_at', (new DateTime('now'))->format('Y-m-d H:i:s'));
 		$this->db->set('activation_date', (new DateTime('now'))->format('Y-m-d H:i:s'));
@@ -864,7 +865,7 @@ class Customer extends ApiController {
         $user->password = md5($password);
         $smstext = 'System generated password is ' . $password . ' Please change it after doing logging.';
         if (Utils::sendSMS($user->mobile_no, $smstext)) {
-            if ($this->db->update($this->CustomerModel->table, ['password' => $user->password], ['user_id' => $user->id])) {
+            if ($this->db->update('backend_user', ['password' => $user->password], ['user_id' => $user->user_id])) {
                 Utils::response(['status' => true, 'message' => 'A new password has been sent to your registered mobile no.']);
             } else {
                 Utils::response(['status' => false, 'message' => 'There is system error to reset password.']);

@@ -502,42 +502,54 @@ function list_assigned_products() {
 	
 	function edit_feedback(){
 		 $data					= array();
-		 $data['product_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+		 $data['product_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(4));
    		 $this->load->view('feedback', $data);
 	}
 	
 	function edit_image_feedback(){
 		 $data					= array();
-		 $data['product_image_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+		 $data['product_image_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(4));
    		 $this->load->view('image_feedback', $data);
 	}
 	
 	function edit_video_feedback(){
 		 $data					= array();
-		 $data['product_video_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+		 $data['product_video_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(4));
    		 $this->load->view('video_feedback', $data);
 	}
 	
 	function edit_audio_feedback(){
 		 $data					= array();
-		 $data['product_audio_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+		 $data['product_audio_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(4));
    		 $this->load->view('audio_feedback', $data);
 	}
 	
 	function edit_pdf_feedback(){
 		 $data					= array();
-		 $data['product_pdf_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+		 $data['product_pdf_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(4));
    		 $this->load->view('pdf_feedback', $data);
 	}
 	function edit_pushed_ad_feedback(){
 		 $data					= array();
-		 $data['product_pushed_ad_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+		 $data['product_pushed_ad_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(4));
    		 $this->load->view('pushed_ad_feedback', $data);
 	}
 	function edit_survey_feedback(){
 		 $data					= array();
-		 $data['product_survey_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(3));
+		 $data['product_survey_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(4));
    		 $this->load->view('survey_feedback', $data);
+	}
+	
+	function edit_demo_audio_feedback(){
+		 $data					= array();
+		 $data['edit_demo_audio_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(4));
+   		 $this->load->view('demo_audio_feedback', $data);
+	}
+	
+	function edit_demo_video_feedback(){
+		 $data					= array();
+		 $data['edit_demo_video_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(4));
+   		 $this->load->view('demo_video_feedback', $data);
 	}
    /*
 	function delete_attribute($id){//echo '**'.$id;exit;
@@ -597,7 +609,7 @@ function list_assigned_products() {
 	// Product Description Feedback Questions
  function ask_feedback($id=''){
 		if(empty($id)){
-			redirect('product/list_product');
+			redirect('product/ask_feedback');
 		}
  		 $this->checklogin();
  		 ##--------------- pagination start ----------------##
@@ -616,7 +628,7 @@ function list_assigned_products() {
             // get current page records
             $params["product_list"] = $this->Product_model->feedback_listing($limit_per_page, $start_index,$srch_string, $id);
 
-            $config['base_url'] = base_url() . 'product/ask_feedback_tpl';
+            $config['base_url'] = base_url() . 'product/ask_feedback';
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;

@@ -33,9 +33,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                         <a href="<?php echo DASH_B;?>">Home</a>
                     </li>
                     <li>
-                        <a href="#">Master</a>
+                        <a href="#">Manage</a>
                     </li>
-                    <li class="active">MANAGE ATTRIBUTES</li>
+                    <li class="active">Product Description Feedback Questions</li>
                 </ul><!-- /.breadcrumb -->           
             </div>
 
@@ -73,16 +73,16 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                             <div class="col-xs-12">
 
-                                <h3 class="header smaller lighter blue">MANAGE PRODUCTS QUESTIONS</h3>
+                                <h3 class="header smaller lighter blue">Product Name - <?php echo get_products_name_by_id($this->uri->segment(3)); ?></h3>
 
                                
  								<div style="clear:both;">
 								
-								<div class="form-group row">
+								<!--<div class="form-group row">
                                     <div class="col-sm-10">&nbsp;</div>
                                      <div class="col-sm-2"><?php echo anchor('product/add_product', 'Add A Product',array('class' => 'btn btn-primary pull-right')); ?></div> 
 									
-								</div>
+								</div>-->
 								
 								</div>
 								 <div class="table-header">
@@ -108,7 +108,6 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                  </table></form>
 								<?php $product_id = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)); ?>
                                  </div> <div class="col-sm-2 pull-right"><?php echo anchor('product/add_feedback/'.$product_id.'/', 'Add New Question',array('class' => 'btn btn-primary pull-right')); ?><?php //echo $product_id;?></div>
-                                
                             </div> 
                       <!--------------- Search Tab start----------------->
                                   <table id="dynamic-table" class="table table-striped table-bordered table-hover">  
@@ -152,7 +151,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                                <td>
 											   <form name="frm_<?php echo $attr['question_id'];?>" id="frm_<?php echo $attr['question_id'];?>" method="post" action="">
  														<div class="hidden-sm hidden-xs btn-group">
-   															<a href="<?php echo base_url();?>product/edit_feedback/<?php echo $attr['question_id'];?>" class="btn btn-xs btn-info">
+   															<a href="<?php echo base_url();?>product/edit_feedback/<?php echo $attr['product_id'];?>/<?php echo $attr['question_id'];?>" class="btn btn-xs btn-info">
  																<i class="ace-icon fa fa-pencil bigger-120"></i>
  															</a>
   															<a href="javascript:void(0);" class="btn btn-xs btn-danger" onclick="delete_feedback_question('<?php echo $attr['question_id'];?>');">

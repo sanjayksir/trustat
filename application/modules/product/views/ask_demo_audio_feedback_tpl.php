@@ -33,9 +33,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                         <a href="<?php echo DASH_B;?>">Home</a>
                     </li>
                     <li>
-                        <a href="#">Master</a>
+                        <a href="#">Mange</a>
                     </li>
-                    <li class="active">MANAGE ATTRIBUTES</li>
+                    <li class="active">Product Demo Audio Feedback Questions</li>
                 </ul><!-- /.breadcrumb -->           
             </div>
 
@@ -73,7 +73,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                             <div class="col-xs-12">
 
-                                <h3 class="header smaller lighter blue">MANAGE PRODUCTS QUESTIONS</h3>
+                               <h3 class="header smaller lighter blue">Product Name - <?php echo get_products_name_by_id($this->uri->segment(3)); ?></h3>
 
                                
  								<!--<div style="clear:both;">
@@ -152,7 +152,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                                <td>
 											   <form name="frm_<?php echo $attr['question_id'];?>" id="frm_<?php echo $attr['question_id'];?>" method="post" action="">
  														<div class="hidden-sm hidden-xs btn-group">
-   															<a href="<?php echo base_url();?>product/edit_demo_audio_feedback/<?php echo $attr['question_id'];?>" class="btn btn-xs btn-info">
+   															<a href="<?php echo base_url();?>product/edit_demo_audio_feedback/<?php echo $attr['product_id'];?>/<?php echo $attr['question_id'];?>" class="btn btn-xs btn-info">
  																<i class="ace-icon fa fa-pencil bigger-120"></i>
  															</a>
   															<a href="javascript:void(0);" class="btn btn-xs btn-danger" onclick="delete_feedback_question('<?php echo $attr['question_id'];?>');">
@@ -236,7 +236,8 @@ function validateSrch(){
 }	
 
 function add_question_to_product(product_id, quest_id){
-	var r = confirm("Sure to add this question as product feedback?");
+	//var r = confirm("Sure to add this question as product feedback?");
+	var r = true;
 	if (r == true) {
 		if ($("#quest_"+quest_id).prop('checked')==true){ 
 			var Chk =1; 
