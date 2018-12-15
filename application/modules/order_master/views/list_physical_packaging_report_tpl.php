@@ -64,15 +64,102 @@
                                                                                 </form>
                                                                             </div>
 										
- 											<table id="missing_people" class="table table-striped table-bordered table-hover">
+										
+<script type="text/javascript">
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {	
+        $('#tblExample').each(function () {
+            var Column_number_to_Merge = 3;
+ 
+            // Previous_TD holds the first instance of same td. Initially first TD=null.
+            var Previous_TD = null;
+            var i = 1;
+            $("tbody",this).find('tr').each(function () {
+                // find the correct td of the correct column
+                // we are considering the table column 1, You can apply on any table column
+                var Current_td = $(this).find('td:nth-child(' + Column_number_to_Merge + ')');
+                 
+                if (Previous_TD == null) {
+                    // for first row
+                    Previous_TD = Current_td;
+                    i = 1;
+                } 
+                else if (Current_td.text() == Previous_TD.text()) {
+                    Previous_TD.attr('rowspan', i + 1);
+                    // the current td is identical to the previous row td
+                    // remove the current td
+                    Current_td.remove();
+                    // increment the rowspan attribute of the first row td instance
+                    i = i + 1;
+                } 
+                else {
+                    // means new value found in current td. So initialize counter variable i
+                    Previous_TD = Current_td;
+                    i = 1;
+                }
+            });
+        });		
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {	
+        $('#tblExample').each(function () {
+            var Column_number_to_Merge2 = 2;
+			
+ 
+            // Previous_TD holds the first instance of same td. Initially first TD=null.
+            var Previous_TD = null;
+            var i = 1;
+            $("tbody",this).find('tr').each(function () {
+                // find the correct td of the correct column
+                // we are considering the table column 1, You can apply on any table column
+                var Current_td = $(this).find('td:nth-child(' + Column_number_to_Merge2 + ')');
+                 
+                if (Previous_TD == null) {
+                    // for first row
+                    Previous_TD = Current_td;
+                    i = 1;
+                } 
+                else if (Current_td.text() == Previous_TD.text()) {
+                    Previous_TD.attr('rowspan', i + 1);
+                    // the current td is identical to the previous row td
+                    // remove the current td
+                    Current_td.remove();
+                    // increment the rowspan attribute of the first row td instance
+                    i = i + 1;
+                } 
+                else {
+                    // means new value found in current td. So initialize counter variable i
+                    Previous_TD = Current_td;
+                    i = 1;
+                }
+            });
+        });		
+    });
+</script>
+<style>
+
+</style>
+
+<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+ <script src="https://code.jquery.com/jquery-1.9.1.js"></script> 
+ 
+
+										
+ 									<table id="tblExample" class="table table-striped table-bordered table-hover" style="border-collapse:collapse;">
  												<thead>
 													<tr>
-														<th>#</th>
+														<th>Id</th>
 														<th>Product Name</th>
+														<th>Parent Code</th>
+														<!--<th>Parent Packaging Level</th>-->
 														<th>Child Code</th>
 														<th>Child Packaging Level</th>
- 														<th>Parent Code</th>
-														<th>Parent Packaging Level</th>
+ 														
+														
                                                        <!-- <th>Action</th> -->
   													</tr>
 												</thead>
@@ -81,19 +168,18 @@
                                         <?php $i = 0;  //  echo '***<pre>';print_r($orderListing);
 										if(count($ScanedCodeListing)>0){
 											$i=0;
-                                                                                         $page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
-        $sno =  $page + 1;
+                                            $page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
+											$sno =  $page + 1;
                                         foreach ($ScanedCodeListing as $key=>$listData){
 											$i++;
 											?>
-                                               <tr id="show<?php echo $key; ?>">
+                                               <tr  id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['product_name']; ?></td>
-												<td><?php echo $listData['bar_code']; ?></td>
-												<td><?php echo $listData['packaging_level']; ?></td>
-												<td><?php echo $listData['parent_bar_code']; ?></td>
-												<td><?php echo $listData['parent_pack_level']; ?></td>
- 												 
+											   <td><?php echo $listData['parent_bar_code']; ?></td>
+											   <!--<td><?php echo $listData['parent_pack_level']; ?></td>-->
+											   <td><?php echo $listData['bar_code']; ?></td>
+											   <td><?php echo $listData['packaging_level']; ?></td>
                                               </tr>
                                          <?php }
 										}else{ ?>

@@ -557,7 +557,7 @@ $("#product2").html(msg2);
                   //$('#ajax_msg').text("Codes Upoaded Successfully!").css("color","green").show();
                     $('.alert-success').show();
                     $('#frmup')[0].reset(); 
-                    window.location="<?php echo base_url(); ?>order_master/list_orders/";
+                    window.location="<?php echo base_url(); ?>order_master/list_customer_codes/";
 					
                             }
                     }
@@ -565,7 +565,7 @@ $("#product2").html(msg2);
             });
 			
 				alert("Codes Upoaded!");
-				window.location.href = "<?php echo base_url(); ?>order_master/list_orders/";
+				window.location.href = "<?php echo base_url(); ?>order_master/list_customer_codes/";
              return false; 
     }
     });

@@ -228,6 +228,7 @@ class Productmodel extends CI_Model {
 				'code_unity_type' => $row->code_unity_type,
                 'bar_code' => $row->barcode_qr_code_no,
                 'active_status' => $row->active_status,
+				'created_by' => $row->created_by,
                 'product_id' => $row->id,
                 'product_name' => $row->product_name,
                 'product_sku' => $row->product_sku,
@@ -1257,10 +1258,37 @@ return $result;
         return $query->result_array();
     }
 	
+	public function PhysicalInventoryOnHand($ParentuserId){
+        $items = [];
+		//$query = $this->db->select('*')->from('inventory_on_hand')->where('created_by_parent_id', $ParentuserId)->get();
+       // $query = $this->db->select('*')->from('location_master')->get();
+	   /*
+	   $this->db->select(' C.*, P.product_name, P.product_sku, P.product_description, P.created_by',false);
+		$this->db->from('inventory_on_hand C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		$this->db->where(array('P.created_by' => $ParentuserId));
+   		$this->db->order_by('C.update_date','desc');
+		*/
+		 $query = $this->db->select(' C.*, P.product_name, P.product_sku, P.product_description, P.created_by, lm.location_name',false)
+                ->from('inventory_on_hand C')
+				->join('location_master AS lm','lm.location_id=C.location_id')
+                ->join('products P', 'P.id = C.product_id')
+				//->where_in("pbq.active_status",1)
+                ->where(array('P.created_by' => $ParentuserId))
+				->order_by('C.update_date','desc') 
+                ->get();
+		
+        if($query->num_rows() <= 0){
+            return false;
+        }
+        return $query->result_array();
+    }
 	
-	Public function isProductExistsinLocation($product_id=null,$location_id=null) {
+	
+	Public function isProductExistsinLocation($product_id=null,$location_id=null,$code_packaging_level=null) {
        // $answerQuery = $this->db->get_where('inventory_on_hand', array('product_id' => $data['product_id'], 'location_id' => $data['location_id']));
-		$answerQuery = $this->db->get_where('inventory_on_hand', array('product_id' => $product_id, 'location_id' => $location_id));
+		$answerQuery = $this->db->get_where('inventory_on_hand', array('product_id' => $product_id, 'location_id' => $location_id, 'code_packaging_level' => $code_packaging_level));
 		//print $answerQuery;
         if($answerQuery->num_rows() > 0){
            return true;

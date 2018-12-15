@@ -69,11 +69,11 @@ class ApiController extends MX_Controller {
         $this->load->model('CustomerModel');
         $plant = $this->input->server('HTTP_PLANT');
         if(empty($plant)){
-            $this->response(['status'=>false,'message'=>'Plant is required in header.']);
+            $this->response(['status'=>false,'message'=>'Parent is required in header.']);
         }
         $user = $this->CustomerModel->verifyToken($this->request->token,$plant);
         if($user == 'plant'){
-            $this->response(['status'=>false,'message'=>'Plant is not assigned.']);
+            $this->response(['status'=>false,'message'=>'User is not assigned.']);
         }
         if($key != null && array_key_exists($key, $user)){
             return $user[$key];

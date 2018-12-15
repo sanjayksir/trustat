@@ -168,7 +168,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 								
 								if(base_url()=='http://localhost/trackingportal/') {
 								mysql_connect("localhost", "root", "");
-								mysql_select_db("trackingportaldb");
+								mysql_select_db("trackingportaldb2");
 								} else {
 									mysql_connect("localhost", "tpdbuser", "india@123");
 								mysql_select_db("trackingprortaldb");

@@ -377,6 +377,23 @@ function getProductCodeActicationLevelbyCode($ProductCode){
 	return $res;
 }
 
+function getAssignedPlantIDbyProductCode($ProductCode){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('plant_id');
+	$ci->db->from('printed_barcode_qrcode');
+	$ci->db->where(array('barcode_qr_code_no'=>$ProductCode));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['plant_id']);
+
+ 	}
+	return $res;
+}
+
 
 function getConsumerMobileNumberById($id){
 	$res = 0;
@@ -6664,7 +6681,7 @@ function get_assigned_plants_list($id){
  		$ci = & get_instance();
  		$ci->db->select('*');
    		$ci->db->from('backend_user');
- 		$ci->db->where(array('is_parent'=>$id,'status'=>'1','designation_id!='=>'3'));
+ 		$ci->db->where(array('is_parent'=>$id,'status'=>'1','designation_id!='=>'2'));
    		$query = $ci->db->get();//echo $ci->db->last_query();
   		if ($query->num_rows() > 0) {
   			$res = $query->result_array();

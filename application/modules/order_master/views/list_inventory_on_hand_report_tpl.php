@@ -69,11 +69,13 @@
 													<tr>
 														<th>#</th>
 														<th>Product Name</th>
-														<th>Product Description</th>
+														<th>Product SKU</th>
+														<!--<th>Product Description</th>-->
  														<th>Location Name</th>
                                                         <th>Transfer-In Quantity</th> 
 														<th>Transfer-Out Quantity</th> 
 														<th>Balance Quantity</th>
+														<th>Packaging Level</th>
   													</tr>
 												</thead>
 												<tbody>
@@ -89,11 +91,13 @@
                                                <tr id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['product_name']; ?></td>
-											   <td><?php echo $listData['product_description']; ?></td>
+											   <td><?php echo $listData['product_sku']; ?></td>
+											  <!-- <td><?php echo $listData['product_description']; ?></td>-->
 												<td><?php echo get_locations_name_by_id($listData['location_id']); ?></td>
 												<td><?php echo $listData['stock_transfer_in_qty']; ?></td>
  												<td><?php echo $listData['stock_transfer_out_qty']; ?></td>
 												<td><?php echo $listData['stock_transfer_in_qty']-$listData['stock_transfer_out_qty']; ?></td>
+												<td><?php echo $listData['code_packaging_level']; ?></td>
                                               </tr>
                                          <?php }
 										}else{ ?>

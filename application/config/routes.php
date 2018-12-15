@@ -149,6 +149,7 @@ $route['api/feedback-on-product'] = 'Api/ScannedProduct/FeedbackOnProduct';
 $route['api/customer/login'] = 'Api/Customer/login';
 $route['api/customer/logout'] = 'Api/Customer/logout';
 $route['api/customer/add-product-level'] = 'Api/Customer/addProductLevel';
+$route['api/customer/view-product-level'] = 'Api/Customer/viewProductLevel';
 $route['api/customer/add-product-level-parent-activate'] = 'Api/Customer/addProductLevelParentActivate';
 $route['api/customer/delete-product-parent-delink'] = 'Api/Customer/DeleteProductParentDelink';
 $route['api/customer/dispatch-stock-transfer-out'] = 'Api/Customer/DispatchStockTransferOut';
@@ -159,6 +160,8 @@ $route['api/customer/view-product'] = 'Api/Customer/viewProduct';
 $route['api/customer/view-inventory'] = 'Api/Customer/viewInventory';
 $route['api/customer/location-type-master'] = 'Api/Customer/location_type_master';
 $route['api/customer/location-master'] = 'Api/Customer/location_master';
+$route['api/customer/physical-inventory-on-hand'] = 'Api/Customer/PhysicalInventoryOnHand';
+
 
 $route['api/customer/forgot-password/(:any)'] = 'Api/Customer/forgotPassword/$1';
 
