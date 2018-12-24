@@ -24,9 +24,25 @@
 	
 	function get_product_code_details($id)
      {  
+	 
+	  $id = $this->uri->segment(4);
 		$this->db->select('*');
 		$this->db->from('printed_barcode_qrcode');
-		$this->db->where(array('id'=>$id));
+		$this->db->where(array('barcode_qr_code_no'=>$id));
+ 		$query = $this->db->get();
+		 // echo '***'.$this->db->last_query();exit;
+		if ($query->num_rows() > 0) {
+			$res = $query->result_array();
+			$res = $res[0];
+		}
+		return $res;
+  	}
+	
+	function get_product_code_transduction_details($id)
+     {  
+		$this->db->select('*');
+		$this->db->from('list_transactions_table');
+		$this->db->where(array('id'=>15));
  		$query = $this->db->get();
 		 // echo '***'.$this->db->last_query();exit;
 		if ($query->num_rows() > 0) {
@@ -54,6 +70,7 @@
 		}
 		return $result;
 	}
+	
 	 function save_orders($frmData){ //echo '<pre>';print_r($frmData);exit;
 		$user_id 	=$this->session->userdata('admin_user_id');
 		//$user_exists = $this->checkDuplicateUser($frmData['user_name']);
@@ -769,7 +786,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%'");
 			}else{
 				$this->db->where(array('P.created_by'=>$user_id));
 			}			
@@ -816,7 +833,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%'");
 			}else{
 				$this->db->where(array('P.created_by'=>$user_id));
 			}			
@@ -854,9 +871,9 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')"); 
+ 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%') AND P.created_by LIKE '%$user_id%'"); 
 			}else{
-				//$this->db->where(array('P.created_by'=>$user_id));
+				$this->db->where(array('P.created_by'=>$user_id));
 			}			
 		}else{
 			if(!empty($srch_string)){ 
@@ -868,6 +885,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->from('consumers C');
 		$this->db->join('scanned_products S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = S.product_id');
+		$this->db->where(array('P.created_by'=>$user_id));
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -888,9 +906,9 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')"); 
+ 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')  AND P.created_by LIKE '%$user_id%'"); 
 			}else{
-				//$this->db->where(array('P.created_by'=>$user_id));
+				$this->db->where(array('P.created_by'=>$user_id));
 			}			
 		}else{
 			if(!empty($srch_string)){ 
@@ -903,6 +921,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->from('consumers C');
 		$this->db->join('scanned_products S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = S.product_id');
+		$this->db->where(array('P.created_by'=>$user_id));
    		$this->db->order_by('S.created_at','desc');
 		$this->db->limit($limit, $start);
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
@@ -919,8 +938,17 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
  
-		if(!empty($srch_string) && $user_id==1){ 
-                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");                    
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(C.bar_code LIKE '%$srch_string%' OR C.parent_bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.packaging_level LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(C.bar_code LIKE '%$srch_string%' OR C.parent_bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.packaging_level LIKE '%$srch_string%')"); 
+			}
 		}
 		 
  		$this->db->select('count(1) as total_rows');
@@ -938,11 +966,90 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 	 function get_physical_packaging_barqrcodelist($limit,$start,$srch_string=''){
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
- 
+		/*
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");              
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		} */
+		 
+		 if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(C.bar_code LIKE '%$srch_string%' OR C.parent_bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.packaging_level LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(C.bar_code LIKE '%$srch_string%' OR C.parent_bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.packaging_level LIKE '%$srch_string%')"); 
+			}
+		}
+		
+ 		$this->db->select(' C.*, P.product_name, P.product_sku, P.created_by',false);
+		$this->db->from('packaging_codes_pcr C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		$this->db->where(array('P.created_by' => $user_id));
+   		$this->db->order_by('C.id','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 
+	 
+	 function count_physical_unpackaging_barqrcodelist($srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(C.bar_code LIKE '%$srch_string%' OR C.parent_bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.packaging_level LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(C.bar_code LIKE '%$srch_string%' OR C.parent_bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.packaging_level LIKE '%$srch_string%')"); 
+			}
 		}
 		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('packaging_codes_pcr C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->where(array('P.created_by' => $user_id));
+		$this->db->join('products P', 'P.id = C.product_id');
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 function get_physical_unpackaging_barqrcodelist($limit,$start,$srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+		/*
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		} */
+		 
+		 if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(C.bar_code LIKE '%$srch_string%' OR C.parent_bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.packaging_level LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(C.bar_code LIKE '%$srch_string%' OR C.parent_bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.packaging_level LIKE '%$srch_string%')"); 
+			}
+		}
+		
  		$this->db->select(' C.*, P.product_name, P.product_sku, P.created_by',false);
 		$this->db->from('packaging_codes_pcr C');
 		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
@@ -963,15 +1070,27 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
  
-		if(!empty($srch_string) && $user_id==1){ 
-                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");                    
+		
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.invoice_number LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.invoice_number LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
 		}
+		
 		 
  		$this->db->select('count(1) as total_rows');
 		//$this->db->distinct('C.invoice_number');
 		$this->db->from('dispatch_stock_transfer_out C');
 		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
 		$this->db->where(array('P.created_by' => $user_id));
+		$this->db->group_by('C.invoice_number');
 		$this->db->join('products P', 'P.id = C.product_id');
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
@@ -984,10 +1103,22 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
  
-		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");              
+		
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.invoice_number LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.invoice_number LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
 		}
-		$this->db->select(' C.*, P.product_name, P.created_by',false);
+		
+		
+		$this->db->select(' C.*, P.product_name, P.product_sku, P.created_by',false);
 		$this->db->from('dispatch_stock_transfer_out C');
 		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = C.product_id');
@@ -1009,15 +1140,24 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
  
-		if(!empty($srch_string) && $user_id==1){ 
-                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");                    
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
 		}
 		 
  		$this->db->select('count(1) as total_rows');
 		$this->db->from('dispatch_stock_transfer_out C');
 		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = C.product_id');
-   		 $this->db->where(array('invoice_number' => $invoice_number));
+   		 $this->db->where(array('invoice_number' => $invoice_number, 'P.created_by' => $user_id));
 		$query = $this->db->get(); // echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -1029,15 +1169,30 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		 $invoice_number = $this->uri->segment(3);
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
- 
+	/*
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");              
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		} */
+		
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
 		}
+		
+		
 		$this->db->select(' C.*, P.product_name, P.product_sku, P.product_description',false);
 		$this->db->from('dispatch_stock_transfer_out C');
 		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = C.product_id');
-		 $this->db->where(array('invoice_number' => $invoice_number));
+		 $this->db->where(array('invoice_number' => $invoice_number, 'P.created_by' => $user_id));
 		//$this->db->group_by('C.invoice_number');
    		$this->db->order_by('C.dispatch_id','desc');
 		
@@ -1054,16 +1209,31 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 	 function count_stock_transfer_in_barqrcodelist($srch_string=''){
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
- 
+		/*
 		if(!empty($srch_string) && $user_id==1){ 
-                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");                    
+                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");                    
 		}
+		*/
 		 
+		  if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR C.invoice_number LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR C.invoice_number LIKE '%$srch_string%')"); 
+			}
+		}
+		
  		$this->db->select('count(1) as total_rows');
 		$this->db->from('receipt_stock_transfer_in C');
 		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = C.product_id');
 		$this->db->where(array('P.created_by' => $user_id));
+		$this->db->group_by('C.invoice_number');
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -1074,11 +1244,25 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 	 function get_stock_transfer_in_barqrcodelist($limit,$start,$srch_string=''){
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
- 
+		/*
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");              
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
 		}
+		 */
 		 
+		 if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR C.invoice_number LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR C.invoice_number LIKE '%$srch_string%')"); 
+			}
+		}
+		
  		$this->db->select(' C.*, P.product_name, P.product_sku, P.created_by',false);
 		$this->db->from('receipt_stock_transfer_in C');
 		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
@@ -1100,15 +1284,24 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
  
-		if(!empty($srch_string) && $user_id==1){ 
-                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");                    
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.code_packaging_level LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.code_packaging_level LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
 		}
 		 
  		$this->db->select('count(1) as total_rows');
 		$this->db->from('receipt_stock_transfer_in C');
 		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = C.product_id');
-   		 $this->db->where(array('invoice_number' => $invoice_number));
+   		$this->db->where(array('invoice_number' => $invoice_number, 'P.created_by' => $user_id));
 		$query = $this->db->get(); // echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -1116,19 +1309,34 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
  		}
 		return $result_data;
 	 }
+	 
 	 function get_stock_transfer_in_invoice_details($limit,$start,$srch_string=''){
 		 $invoice_number = $this->uri->segment(3);
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
- 
+		/*
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");              
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
 		}
+		*/
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.code_packaging_level LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.code_packaging_level LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
+		}
+		
 		$this->db->select(' C.*, P.product_name',false);
 		$this->db->from('receipt_stock_transfer_in C');
 		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = C.product_id');
-		 $this->db->where(array('invoice_number' => $invoice_number));
+		$this->db->where(array('invoice_number' => $invoice_number, 'P.created_by' => $user_id));
 		//$this->db->group_by('C.invoice_number');
    		$this->db->order_by('C.receipt_id','desc');
 		
@@ -1146,7 +1354,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
  		$user_id 	= $this->session->userdata('admin_user_id');
  
 		if(!empty($srch_string) && $user_id==1){ 
-                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");                    
+                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");                    
 		}
 		 
  		$this->db->select('count(1) as total_rows');
@@ -1166,7 +1374,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
  		$user_id 	= $this->session->userdata('admin_user_id');
  
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");              
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
 		}
 		 
  		$this->db->select(' C.*, P.product_name, P.product_sku, P.created_by',false);
@@ -1191,14 +1399,14 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
  		$user_id 	= $this->session->userdata('admin_user_id');
  
 		if(!empty($srch_string) && $user_id==1){ 
-                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");                    
+                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");                    
 		}
 		 
  		$this->db->select('count(1) as total_rows');
 		$this->db->from('physical_inventory_check C');
 		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = C.product_id');
-		$this->db->where(array('pi_number' => $pi_number));
+		$this->db->where(array('pi_number' => $pi_number, 'P.created_by' => $user_id));
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -1213,7 +1421,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
  		$user_id 	= $this->session->userdata('admin_user_id');
  
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");              
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
 		}
 		 
  		$this->db->select(' C.*, P.product_name, P.product_sku',false);
@@ -1221,7 +1429,54 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = C.product_id');
 		//$this->db->group_by('C.pi_number');
-		$this->db->where(array('pi_number' => $pi_number));
+		$this->db->where(array('pi_number' => $pi_number, 'P.created_by' => $user_id));
+   		$this->db->order_by('C.id','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 
+	 function count_product_code_details($srch_string=''){
+		$pi_number = $this->uri->segment(4);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");                    
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('list_transactions_table C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		$this->db->where(array('product_code' => $pi_number, 'P.created_by' => $user_id));
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 function get_product_code_details2($limit,$start,$srch_string=''){
+		 $pi_number = $this->uri->segment(4);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		}
+		 
+ 		$this->db->select(' C.*, P.product_name, P.product_sku',false);
+		$this->db->from('list_transactions_table C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		//$this->db->group_by('C.pi_number');
+		$this->db->where(array('product_code' => $pi_number, 'P.created_by' => $user_id));
    		$this->db->order_by('C.id','desc');
 		$this->db->limit($limit, $start);
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
@@ -1233,12 +1488,14 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 	 
 	 
 	 
+	 
+	 
 	 function count_inventory_on_hand_barqrcodelist($srch_string=''){
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
  
 		if(!empty($srch_string) && $user_id==1){ 
-                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");                    
+                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");                    
 		}
 		 
  		$this->db->select('count(1) as total_rows');
@@ -1258,7 +1515,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
  		$user_id 	= $this->session->userdata('admin_user_id');
  
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");              
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
 		}
 		 
  		$this->db->select(' C.*, P.product_name, P.product_sku, P.product_description, P.created_by',false);
@@ -1279,15 +1536,30 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 	 function get_purchsed_barqrcodelist($limit,$start,$srch_string=''){
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
- 
+ /*
 		if(!empty($srch_string) && $user_id==1){ 
  			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%')");
 		}
+		*/
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%') AND P.created_by LIKE '%$user_id%'"); 
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')"); 
+			}
+		}
+		
 		 
  		$this->db->select(' C.*, PP.*, P.product_name, P.product_sku',false);
 		$this->db->from('consumers C');
 		$this->db->join('purchased_product PP', 'C.id = PP.consumer_id');
 		$this->db->join('products P', 'P.id = PP.product_id');
+		$this->db->where(array('P.created_by' => $user_id));
    		$this->db->order_by('PP.ordered_date','desc');
 		$this->db->limit($limit, $start);
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
@@ -1312,7 +1584,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')"); 
+ 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%') AND P.created_by LIKE '%$user_id%'"); 
 			}else{
 				$this->db->where(array('P.created_by'=>$user_id));
 			}			
@@ -1327,6 +1599,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->from('consumers C');
 		$this->db->join('consumer_complaint S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = S.product_id');
+		$this->db->where(array('P.created_by'=>$user_id));
    		$this->db->order_by('S.created_at','desc');
 		$this->db->limit($limit, $start);
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
@@ -1349,7 +1622,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')"); 
+ 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')"); 
 			}else{
 				$this->db->where(array('P.created_by'=>$user_id));
 			}			
@@ -1363,6 +1636,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->from('consumers C');
 		$this->db->join('consumer_complaint S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = S.product_id');
+		$this->db->where(array('P.created_by'=>$user_id));
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -1380,7 +1654,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
                 $condition = null;
  
 		if(!empty($srch_string) && $user_id > 1){ 
- 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR PP.rating LIKE '%$srch_string%' OR PP.description LIKE '%$srch_string%')";
+ 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR PP.rating LIKE '%$srch_string%' OR PP.description LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')";
 		}
 		$total = $this->totalFeedbacksOnProducts($condition);
                 if(!empty($condition)){
@@ -1390,6 +1664,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->from('consumers C');
 		$this->db->join('feedback_on_product PP', 'C.id = PP.consumer_id');
 		$this->db->join('products P', 'P.id = PP.product_id');
+		$this->db->where(array('P.created_by'=>$user_id));
    		$this->db->order_by('PP.created_at','desc');
                 
 		$this->db->limit($limit, $start);
@@ -1408,7 +1683,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
                 $condition = null;
  
 		if(!empty($srch_string) && $user_id>1){ 
- 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR PP.rating LIKE '%$srch_string%' OR PP.description LIKE '%$srch_string%')";
+ 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR PP.rating LIKE '%$srch_string%' OR PP.description LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')";
 		}
 		
                 if(!empty($condition)){
@@ -1419,6 +1694,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->from('consumers C');
 		$this->db->join('feedback_on_product PP', 'C.id = PP.consumer_id');
 		$this->db->join('products P', 'P.id = PP.product_id');
+		$this->db->where(array('P.created_by'=>$user_id));
    		$this->db->order_by('PP.created_at','desc');
                 
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
@@ -1437,7 +1713,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
                 $condition = null;
  
 		if(!empty($srch_string) && $user_id > 1){ 
- 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%')";
+ 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')";
 		}
 		$total = $this->totalWarrantyClaims($condition);
                 if(!empty($condition)){
@@ -1447,6 +1723,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->from('consumers C');
 		$this->db->join('purchased_product PP', 'C.id = PP.consumer_id');
 		$this->db->join('products P', 'P.id = PP.product_id');
+		$this->db->where(array('P.created_by'=>$user_id));
    		$this->db->order_by('PP.ordered_date','desc');
                 
 		$this->db->limit($limit, $start);
@@ -1464,7 +1741,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
                 $condition = null;
  
 		if(!empty($srch_string) && $user_id> 1){ 
- 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%')";
+ 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')";
 		}
 		
                 if(!empty($condition)){
@@ -1475,6 +1752,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->from('consumers C');
 		$this->db->join('purchased_product PP', 'C.id = PP.consumer_id');
 		$this->db->join('products P', 'P.id = PP.product_id');
+		$this->db->where(array('P.created_by'=>$user_id));
    		$this->db->order_by('PP.ordered_date','desc');
                 
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();

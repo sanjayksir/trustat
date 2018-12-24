@@ -4,7 +4,7 @@
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
-			<?php $label = 'Product Stock Transfer-In Report';?>
+			<?php $label = 'Product Un-Packaging Report';?>
 
 			<?php $this->load->view('../includes/admin_sidebar');?>
 			
@@ -39,7 +39,7 @@
 							<div class="col-xs-12">
  								<div class="widget-box widget-color-blue">
                                                                     <div class="widget-header widget-header-flat">
-                                                                        <h5 class="widget-title bigger lighter">List <?php echo $label;?>, Invoice Number - <?php echo $this->uri->segment(3);?></h5>
+                                                                        <h5 class="widget-title bigger lighter">List <?php echo $label;?></h5>
                                                                     </div>
 									<div class="widget-body">
                                                                             <div class="row filter-box">
@@ -54,7 +54,7 @@
                                                                                     </div>
                                                                                     <div class="col-sm-6">
                                                                                         <div class="input-group">
-                                                                                            <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Name, Product Barcode or location Name">
+                                                                                            <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Name, BarCode,Parent BarCode">
                                                                                             <span class="input-group-btn">
                                                                                                 <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                                                 <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -64,19 +64,108 @@
                                                                                 </form>
                                                                             </div>
 										
- 											<table id="missing_people" class="table table-striped table-bordered table-hover">
+										
+<script type="text/javascript">
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {	
+        $('#tblExample').each(function () {
+            var Column_number_to_Merge = 3;
+ 
+            // Previous_TD holds the first instance of same td. Initially first TD=null.
+            var Previous_TD = null;
+            var i = 1;
+            $("tbody",this).find('tr').each(function () {
+                // find the correct td of the correct column
+                // we are considering the table column 1, You can apply on any table column
+                var Current_td = $(this).find('td:nth-child(' + Column_number_to_Merge + ')');
+                 
+                if (Previous_TD == null) {
+                    // for first row
+                    Previous_TD = Current_td;
+                    i = 1;
+                } 
+                else if (Current_td.text() == Previous_TD.text()) {
+                    Previous_TD.attr('rowspan', i + 1);
+                    // the current td is identical to the previous row td
+                    // remove the current td
+                    Current_td.remove();
+                    // increment the rowspan attribute of the first row td instance
+                    i = i + 1;
+                } 
+                else {
+                    // means new value found in current td. So initialize counter variable i
+                    Previous_TD = Current_td;
+                    i = 1;
+                }
+            });
+        });		
+    });
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {	
+        $('#tblExample').each(function () {
+            var Column_number_to_Merge2 = 2;
+			
+ 
+            // Previous_TD holds the first instance of same td. Initially first TD=null.
+            var Previous_TD = null;
+            var i = 1;
+            $("tbody",this).find('tr').each(function () {
+                // find the correct td of the correct column
+                // we are considering the table column 1, You can apply on any table column
+                var Current_td = $(this).find('td:nth-child(' + Column_number_to_Merge2 + ')');
+                 
+                if (Previous_TD == null) {
+                    // for first row
+                    Previous_TD = Current_td;
+                    i = 1;
+                } 
+                else if (Current_td.text() == Previous_TD.text()) {
+                    Previous_TD.attr('rowspan', i + 1);
+                    // the current td is identical to the previous row td
+                    // remove the current td
+                    Current_td.remove();
+                    // increment the rowspan attribute of the first row td instance
+                    i = i + 1;
+                } 
+                else {
+                    // means new value found in current td. So initialize counter variable i
+                    Previous_TD = Current_td;
+                    i = 1;
+                }
+            });
+        });		
+    });
+</script>
+
+<style>
+
+</style>
+
+<script src="https://code.jquery.com/jquery-1.11.3.js"></script>
+<script src="https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+ <script src="https://code.jquery.com/jquery-1.9.1.js"></script> 
+ 
+
+										
+ 									<table id="tblExample" class="table table-striped table-bordered table-hover" style="border-collapse:collapse;">
  												<thead>
-													<tr> 
-														<th>#</th>
+													<tr>
+														<th>Id</th>
 														<th>Product Name</th>
-														<th>Product Barcode</th>
-														<th>Barcode Level</th>
-														<!--<!--<th>Invoice Number</th> -->
- 														<th>location Type</th>
-														<th>Location Name</th>
+														<th>Parent Code</th>
+														<th>Parent Packaging Level</th>
+														<th>Child Code</th>
+														<th>Child Packaging Level</th>
+														<th>Date Time</th>
 														<th>User Name</th>
-                                                        <th>Requested at</th> 
-														<th>Confirmed at</th> 
+														<th>Location Name</th>
+														<th>Status</th>
+ 														
+														
+                                                       <!-- <th>Action</th> -->
   													</tr>
 												</thead>
 												<tbody>
@@ -84,22 +173,22 @@
                                         <?php $i = 0;  //  echo '***<pre>';print_r($orderListing);
 										if(count($ScanedCodeListing)>0){
 											$i=0;
-                                             $page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
+                                            $page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
 											$sno =  $page + 1;
                                         foreach ($ScanedCodeListing as $key=>$listData){
 											$i++;
 											?>
-                                               <tr id="show<?php echo $key; ?>">
+                                               <tr  id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['product_name']; ?></td>
-												<td><?php echo $listData['bar_code']; ?></td>
-												<td><?php echo $listData['code_packaging_level']; ?></td>
-												<!--<td><?php echo $listData['invoice_number']; ?></td>-->
-												<td><?php echo $listData['location_type']; ?></td>
-												<td><?php echo $listData['location_name']; ?></td>
-												<td><?php echo getUserFullNameById($listData['created_by_id']); ?></td>
-												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['transfer_out_date']))); ?></td>
- 												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['created_date_time']))); ?></td>
+											   <td><?php echo $listData['parent_bar_code']; ?></td>
+											   <td><?php echo $listData['parent_pack_level']; ?></td>
+											   <td><?php echo $listData['bar_code']; ?></td>
+											   <td><?php echo $listData['packaging_level']; ?></td>
+											   <td><?php if($listData['unpackaging_date']==''){ echo ""; } else{ echo (date('j M Y H:i:s D', strtotime($listData['unpackaging_date']))); } ?></td>
+											   <td><?php echo getUserFullNameById($listData['unpacked_by_id']); ?></td>
+											   <td><?php echo get_locations_name_by_id($listData['unpackaging_location_id']); ?></td>
+											    <td><?php  echo $listData['unpackaging_status']; ?></td>
                                               </tr>
                                          <?php }
 										}else{ ?>

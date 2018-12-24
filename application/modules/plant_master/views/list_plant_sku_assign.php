@@ -83,7 +83,7 @@
 												
 												echo get_products_name_by_id($products);?></td>
                                        
-												<td><?php echo date('d/M/Y',strtotime($listData['created_date'])); ?></td>
+												<td><?php echo date('j M Y H:i:s D',strtotime($listData['created_date'])); ?></td>
                                                  <td>
                                                      <div class="hidden-sm hidden-xs action-buttons">
                                                          <a href="<?php  echo base_url().'plant_master/view_plant/'.$listData['plant_id'];?>" class="blue" target="_blank" title="View"><i class="fa fa-eye"></i></a>

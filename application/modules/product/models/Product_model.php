@@ -1189,7 +1189,7 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'howzzt product verifiction', 'body' =>  $mess ,'sound'=>'Default',),
+		         'notification' => array('title' => 'howzzt product verifiction', 'body' =>  $mess ,'sound'=>'Default')
 		       
 		);
 		$fields = json_encode ( $fields );
@@ -1216,7 +1216,7 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'howzzt loyalty verification', 'body' =>  $mess ,'sound'=>'Default',),
+		         'notification' => array('title' => 'howzzt loyalty verification', 'body' =>  $mess ,'sound'=>'Default')
 		       
 		);
 		$fields = json_encode ( $fields );

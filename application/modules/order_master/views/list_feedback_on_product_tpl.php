@@ -91,7 +91,7 @@
 												<td><?php echo $listData['product_name']; ?></td>
 												<td><?php echo $listData['user_name']; ?></td>
 												<td>Rating = <?php echo $listData['rating']; ?> : <?php echo $listData['description']; ?></td>
-												<td><?php echo $listData['created_at']; ?></td>
+												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['created_at']))); ?></td>
  												 
                                               </tr>
                                          <?php }

@@ -131,7 +131,7 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 $fields = array (
         'to' => $id,
          
-         'notification' => array('title' => 'howzzt Ad', 'body' =>  $mess ,'sound'=>'Default',),
+         'notification' => array('title' => 'howzzt Ad', 'body' =>  $mess ,'sound'=>'Default')
        
 );
 $fields = json_encode ( $fields );
@@ -227,7 +227,7 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 $fields = array (
         'to' => $consumer_id,
          
-         'notification' => array('title' => 'howzzt Survey', 'body' =>  $mess ,'sound'=>'Default',),
+         'notification' => array('title' => 'howzzt Survey', 'body' =>  $mess ,'sound'=>'Default')
        
 );
 $fields = json_encode ( $fields );

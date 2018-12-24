@@ -583,7 +583,7 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess ,'sound'=>'Default',),
+		         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess ,'sound'=>'Default')
 		       
 		);
 		$fields = json_encode ( $fields );
@@ -612,7 +612,7 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'howzzt text message', 'body' =>  $mess ,'sound'=>'Default',),
+		         'notification' => array('title' => 'howzzt text message', 'body' =>  $mess ,'sound'=>'Default')
 		       
 		);
 		$fields = json_encode ( $fields );

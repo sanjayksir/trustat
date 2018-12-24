@@ -151,7 +151,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                    ?></div>
                                 </td>
                                              <td><?php echo getUserFullNameById($attr['created_by']);?></td>
-                                                 <td><?php echo $attr['created_date']; ?></td>
+                                                 <td><?php echo(date('j M Y H:i:s D', strtotime($attr['created_date'])));  ?></td>
                                                   <td><form name="frm_<?php echo $attr['id'];?>" id="frm_<?php echo $attr['id'];?>" method="post" action="">
  														<div class="hidden-sm hidden-xs btn-group">
    															<a href="<?php echo base_url();?>product/update_product/<?php echo $attr['id'];?>" title="Edit Product"  class="btn btn-xs btn-info">

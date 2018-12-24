@@ -103,7 +103,7 @@
 																								
 												<?php //echo $listData['latitude']. " / "; ?><?php //echo $listData['longitude']; ?>
 												</td>-->
-												<td><?php echo $listData['create_date']; ?></td>
+												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['create_date']))); ?></td>
 												<td><?php //echo $listData['status']; ?><?php if($listData['status']==1){
 													echo "<font color='green'>Yes</font>";													
 												} else { echo "<font color='red'>Pending</font>"; } ?></td>

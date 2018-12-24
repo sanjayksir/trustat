@@ -117,8 +117,8 @@
                                                         <td><?php echo $listData['product_sku']; ?></td>
                                                         <td><?php echo $listData['product_name']; ?></td>
                                                         <td><?php echo $listData['quantity']; ?></td>
-                                                        <td><?php  if($listData['delivery_date']!='0000-00-00'){echo date('d/M/Y',strtotime($listData['delivery_date']));}else{echo '';}; ?></td>
-                                                        <td><?php  if($listData['created_date']!='0000-00-00'){echo date('d/M/Y',strtotime($listData['created_date']));}else{echo '';}; ?></td>
+                                                        <td><?php  if($listData['delivery_date']!='0000-00-00'){echo date('j M Y H:i:s D',strtotime($listData['delivery_date']));}else{echo '';}; ?></td>
+                                                        <td><?php  if($listData['created_date']!='0000-00-00'){echo date('j M Y H:i:s D',strtotime($listData['created_date']));}else{echo '';}; ?></td>
                                                         <?php if($this->session->userdata('admin_user_id')==1){
                                                                 //echo $listData['user_id'].'**'.$this->session->userdata('admin_user_id');		
 

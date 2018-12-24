@@ -54,7 +54,7 @@
                                                                                     </div>
                                                                                     <div class="col-sm-6">
                                                                                         <div class="input-group">
-                                                                                            <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Bar-QR Code,Product Name or Consumer Name">
+                                                                                            <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Name, Product SKU, Invoice Number, location Type or location Name">
                                                                                             <span class="input-group-btn">
                                                                                                 <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                                                 <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -69,12 +69,13 @@
 													<tr>
 														<th>#</th>
 														<th>Product Name</th>
-														<th>Invoice Number & Details</th>
+														<th>Product SKU</th>
+														<th>Invoice#</th>
 														<th>Received Details</th>
  														<th>location Type</th>
 														<th>Location Name</th>
-                                                        <th>Transfer-Out Requested at</th> 
-														<th>Actual Transfer-Out at</th> 
+                                                        <th>Requested At</th> 
+														<th>Confirmation at</th> 
   													</tr>
 												</thead>
 												<tbody>
@@ -90,12 +91,20 @@
                                                <tr id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['product_name']; ?></td>
+											    <td><?php echo $listData['product_sku']; ?></td>
 											   <td><?php echo $listData['invoice_number']; ?> <a href="<?php  echo base_url().'reports/product_stock_transfer_out_invoice_details/'.$listData['invoice_number'];?>" class="btn btn-xs btn-success" target="_blank" title="View Details">View Details <i class="fa fa-eye"></i></a></td>
-											    <td><?php echo getRecLocationByInvoiceNumber($listData['invoice_number']); ?>, <?php echo getRecLocationTypeByInvoiceNumber($listData['invoice_number']); ?></td>
+											    <td><?php if(getRecLocationByInvoiceNumber($listData['invoice_number'])!='0') { 
+												echo getRecLocationByInvoiceNumber($listData['invoice_number']); ?>, <?php echo getRecLocationTypeByInvoiceNumber($listData['invoice_number']); 
+												} else {
+
+													echo "Item not received yet.";
+												}
+
+												?></td>
 												<td><?php echo $listData['location_type']; ?></td>
 												<td><?php echo $listData['location_name']; ?></td>
-												<td><?php echo $listData['transfer_out_date']; ?></td>
- 												<td><?php echo $listData['created_date_time']; ?></td>
+												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['transfer_out_date']))); ?></td>
+ 												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['created_date_time']))); ?></td>
                                               </tr>
                                          <?php }
 										}else{ ?>

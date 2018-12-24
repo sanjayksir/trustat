@@ -92,8 +92,8 @@
 												<td><?php echo $listData['pi_number']; ?> <a href="<?php  echo base_url().'reports/product_stock_physical_inventory_details/'.$listData['pi_number'];?>" class="btn btn-xs btn-success" target="_blank" title="View Details">View Details <i class="fa fa-eye"></i></a></td>
 												<td><?php echo $listData['location_type']; ?></td>
 												<td><?php echo $listData['location_name']; ?></td>
-												<td><?php echo $listData['inventory_in_date']; ?></td>
- 												<td><?php echo $listData['created_date_time']; ?></td>
+												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['inventory_in_date']))); ?></td>
+ 												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['created_date_time']))); ?></td>
                                               </tr>
                                          <?php }
 										}else{ ?>

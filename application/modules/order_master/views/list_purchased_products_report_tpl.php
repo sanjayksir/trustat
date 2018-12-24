@@ -97,7 +97,7 @@
 																								
 												<?php echo $listData['latitude']. " / "; ?><?php echo $listData['longitude']; ?>
 												</td>
-												<td><?php echo $listData['created_at']; ?></td>
+												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['created_at']))); ?></td>
  												 
                                               </tr>
                                          <?php }

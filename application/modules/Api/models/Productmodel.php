@@ -617,7 +617,7 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 $fields = array (
         'to' => $id,
          
-         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess ,'sound'=>'Default',),
+         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess ,'sound'=>'Default')
        
 );
 $fields = json_encode ( $fields );
@@ -646,7 +646,7 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 $fields = array (
         'to' => $id,
          
-         'notification' => array('title' => 't2', 'body' =>  $mess ,'sound'=>'Default',),
+         'notification' => array('title' => 't2', 'body' =>  $mess ,'sound'=>'Default')
        
 );
 $fields = json_encode ( $fields );
@@ -1194,7 +1194,7 @@ return $result;
 	Public function isPackLevelSetedExits($bar_code=null, $parent_bar_code=null) {
         $answerQuery = $this->db->get_where('packaging_codes_pcr', array('bar_code' => $bar_code, 'parent_bar_code' => $parent_bar_code));
 		//print $answerQuery;
-        if($answerQuery->num_rows() < 1){
+        if($answerQuery->num_rows() > 0){
            return true;
         }
 		//return false;
@@ -1218,6 +1218,9 @@ return $result;
         }
 		//return false;
     }
+	
+	
+
 	
 	Public function isItemAlreadyExistsInInventory($bar_code=null) {
         $answerQuery = $this->db->get_where('physical_inventory_check', array('bar_code' => $bar_code));

@@ -54,7 +54,7 @@
                                                                                     </div>
                                                                                     <div class="col-sm-6">
                                                                                         <div class="input-group">
-                                                                                            <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Bar-QR Code,Product Name or Consumer Name">
+                                                                                            <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Name, Product SKU, Product BarCode, Location Type, Location Name or Consumer Name">
                                                                                             <span class="input-group-btn">
                                                                                                 <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                                                 <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -70,10 +70,13 @@
 														<th>#</th>
 														<th>Product Name</th>
 														<th>Product SKU</th>
-														<th>Product Code</th>
-														<th>Product Description</th>
-														<th>Activation Level</th>
-                                                        <th>Total Qty of level 0 </th> 
+														<th>Product BarCode</th>
+														<th>Packaging Level</th>
+														<th>Qty at 0 Level</th> 
+														<th>Location Type</th> 
+														<th>Location Name</th> 
+														<th>Requested At</th> 
+														<th>Confirmation At</th> 
   													</tr>
 												</thead>
 												<tbody>
@@ -90,9 +93,10 @@
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['product_name']; ?></td>
 											   <td><?php echo $listData['product_sku']; ?></td>
-												<td><?php echo $listData['bar_code']; ?></td>
-												<td><?php echo $listData['product_description']; ?></td>
-												<td><?php echo getProductCodeActicationLevelbyCode($listData['bar_code']); ?></td>
+											   <td><?php echo $listData['bar_code']; ?></td>
+											   <td><?php echo getProductCodeActicationLevelbyCode($listData['bar_code']); ?></td>
+												
+												
  												<td><?php //echo $listData['product_id'];
 												
 											$CodeCurrentActicationLevel = getProductCodeActicationLevelbyCode($listData['bar_code']);
@@ -1207,6 +1211,12 @@
 
 
 												?></td>
+												
+												
+						<td><?php echo $listData['location_type']; ?></td>
+						<td><?php echo $listData['location_name']; ?></td>
+						<td><?php echo (date('j M Y H:i:s D', strtotime($listData['transfer_out_date']))); ?></td>
+ 						<td><?php echo (date('j M Y H:i:s D', strtotime($listData['created_date_time']))); ?></td>
                                               </tr>
                                          <?php }
 										}else{ ?>

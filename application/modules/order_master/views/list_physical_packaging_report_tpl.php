@@ -54,7 +54,7 @@
                                                                                     </div>
                                                                                     <div class="col-sm-6">
                                                                                         <div class="input-group">
-                                                                                            <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Bar-QR Code,Product Name or Consumer Name">
+                                                                                            <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Name, BarCode,Parent BarCode">
                                                                                             <span class="input-group-btn">
                                                                                                 <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                                                 <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -139,6 +139,7 @@
         });		
     });
 </script>
+
 <style>
 
 </style>
@@ -155,9 +156,13 @@
 														<th>Id</th>
 														<th>Product Name</th>
 														<th>Parent Code</th>
-														<!--<th>Parent Packaging Level</th>-->
+														<th>Parent Packaging Level</th>
 														<th>Child Code</th>
 														<th>Child Packaging Level</th>
+														<th>Packaging Date Time</th>
+														<th>User Name</th>
+														<th>Location Name</th>
+														<th>Status</th>
  														
 														
                                                        <!-- <th>Action</th> -->
@@ -177,9 +182,13 @@
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['product_name']; ?></td>
 											   <td><?php echo $listData['parent_bar_code']; ?></td>
-											   <!--<td><?php echo $listData['parent_pack_level']; ?></td>-->
+											   <td><?php echo $listData['parent_pack_level']; ?></td>
 											   <td><?php echo $listData['bar_code']; ?></td>
 											   <td><?php echo $listData['packaging_level']; ?></td>
+											   <td><?php echo (date('j M Y H:i:s D', strtotime($listData['create_date']))); ?></td>
+											   <td><?php echo getUserFullNameById($listData['customer_user_id']); ?></td>
+											   <td><?php echo get_locations_name_by_id($listData['location_id']); ?></td>
+											    <td><?php  echo $listData['unpackaging_status']; ?></td>
                                               </tr>
                                          <?php }
 										}else{ ?>

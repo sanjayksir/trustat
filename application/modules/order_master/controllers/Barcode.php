@@ -215,6 +215,35 @@
         $this->load->view('list_physical_packaging_report_tpl', $params);
     }
 	
+	public function list_physical_unpackaging_report() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_physical_unpackaging_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_physical_unpackaging_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_physical_unpackaging_report', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_physical_unpackaging_report_tpl', $params);
+    }
+	
+	
 	public function list_stock_transfer_out_report() {
         ##--------------- pagination start ----------------##
         // init params
@@ -320,7 +349,7 @@
         $total_records = $this->order_master_model->count_stock_transfer_in_invoice_details($srch_string);
 
         $params["ScanedCodeListing"] = $this->order_master_model->get_stock_transfer_in_invoice_details($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('order_master/barcode/list_stock_transfer_in_invoice_details', $total_records,null,4);
+        $params["links"] = Utils::pagination('order_master/barcode/list_stock_transfer_in_invoice_details/', $total_records,null,4);
         
         ##--------------- pagination End ----------------##
         $data = array();
@@ -385,6 +414,37 @@
         $this->load->view('list_physical_inventory_details_tpl', $params);
     }
 	
+	
+	public function view_product_code_details() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_product_code_details($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_product_code_details2($limit_per_page, $start_index, $srch_string);
+		$params['detailData']		= $this->order_master_model->get_product_code_details($id);
+        $params["links"] = Utils::pagination('order_master/barcode/view_product_code_details', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('view_product_code_details_tpl', $params);
+    }
+	
+	
 	public function inventory_on_hand_report() {
         ##--------------- pagination start ----------------##
         // init params
@@ -430,7 +490,7 @@
                 $srch_string ='';
         }
         $total_records = $this->order_master_model->get_barcode_total_order_list_all($srch_string);
-	$params["ScanedCodeListing"] = $this->order_master_model->get_purchsed_barqrcodelist($limit_per_page, $start_index,$srch_string);
+		$params["ScanedCodeListing"] = $this->order_master_model->get_purchsed_barqrcodelist($limit_per_page, $start_index,$srch_string);
         $params["links"] = Utils::pagination('order_master/barcode/list_purchased_products', $total_records,null,4);
         
         ##--------------- pagination End ----------------##
@@ -555,52 +615,7 @@
         $this->load->view('list_warranty_claims_tpl', $params);
      }	 
 	 
-	 
 	
-	 function view_product_code_details($id = ''){
-		if(empty($id)){
-			redirect('reports/barcode_printed_reports');
-		}	
-		$data['detailData']		= $this->order_master_model->get_product_code_details($id);
-			
-		$result = $this->db->select('*')->from('printed_barcode_qrcode')->where('id', $id)->get()->row();
-		$product_code = $result->barcode_qr_code_no;
-		$order_idn = $result->order_id;
-		//echo $order_idn . $product_code;
-		$result2 =$this->db->select('*')->from('order_master')->where('order_id', $order_idn)->get()->row();
-		$data['order_no'] = $result2->order_no;
-		$data['created_date'] = $result2->created_date;
-		$data['user_id'] = $result2->user_id;
-		
-		$result3 =$this->db->select('*')->from('packaging_codes_pcr')->where('bar_code', $product_code)->get()->row();
-		$data['customer_user_id'] = $result3->customer_user_id;
-		$data['create_date'] = $result3->create_date;
-		$data['location_id'] = $result3->location_id;
-		
-		
-		//echo $result2->order_no;
-		$data['ChildernData']	= $this->order_master_model->get_product_code_childern_details($product_code);
-		$data['ParentData']	= $this->order_master_model->get_product_code_parent_details($product_code);
-		
-		$ParentbareCode = $data['ParentData'];
-		//print_r($ParentbareCode[parent_bar_code]);
-		$result4 =$this->db->select('*')->from('receipt_stock_transfer_in')->where('bar_code', $ParentbareCode[parent_bar_code])->get()->row();
-		$data['created_by_id4'] = $result4->created_by_id;
-		$data['location_id4'] = $result4->location_id;
-		$data['created_date_time4'] = $result4->created_date_time;
-		
-		$result5 =$this->db->select('*')->from('dispatch_stock_transfer_out')->where('bar_code', $ParentbareCode[parent_bar_code])->get()->row();
-		$data['created_by_id5'] = $result5->created_by_id;
-		$data['location_id5'] = $result5->location_id;
-		$data['created_date_time5'] = $result5->created_date_time;
-		
-		$result6 =$this->db->select('*')->from('dispatch_stock_transfer_out')->where('bar_code', $ParentbareCode[parent_bar_code])->get()->row();
-		$data['created_by_id6'] = $result6->created_by_id;
-		$data['location_id6'] = $result6->location_id;
-		$data['created_date_time6'] = $result6->created_date_time;
-		
-		$this->load->view('view_product_code_details_tpl', $data);			
-	}
 	
 	
 	

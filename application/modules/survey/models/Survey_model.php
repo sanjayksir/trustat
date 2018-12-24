@@ -582,7 +582,7 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'howzzt survey', 'body' =>  $mess ,'sound'=>'Default',),
+		         'notification' => array('title' => 'howzzt survey', 'body' =>  $mess ,'sound'=>'Default')
 		       
 		);
 		$fields = json_encode ( $fields );

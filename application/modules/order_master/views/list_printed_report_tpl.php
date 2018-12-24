@@ -117,9 +117,9 @@
                                                                      }
 															
 															 ?></td>
-															 <td><?php echo $listData['activation_date'];  ?></td>
-															  <td><?php echo $listData['address']; ?><?php //echo $listData['id']; ?></td>
-															  <td><a href="<?php  echo base_url().'order_master/barcode/view_product_code_details/'.$listData['id'];?>" class="btn btn-xs btn-success" target="_blank" title="View Details">View Details <i class="fa fa-eye"></i></a></td>
+															 <td><?php echo (date('j M Y H:i:s D', strtotime($listData['activation_date'])));  ?></td>
+															  <td><?php echo get_locations_name_by_id($listData['activation_location_id']); ?><?php //echo $listData['id']; ?></td>
+															  <td><a href="<?php  echo base_url().'order_master/barcode/view_product_code_details/'.$listData['barcode_qr_code_no'];?>" class="btn btn-xs btn-success" target="_blank" title="View Details">View Details <i class="fa fa-eye"></i></a></td>
           </tr>
      <?php 
      $sno++;

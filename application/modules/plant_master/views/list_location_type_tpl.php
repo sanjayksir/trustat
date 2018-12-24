@@ -97,8 +97,8 @@
 												
                                                
 												<?php }?>
-												<td><?php echo $listData['create_date']; ?></td>
-												<td><?php echo $listData['modify_date']; ?></td>
+												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['create_date'])));  ?></td>
+												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['modify_date'])));  ?></td>
                                                  <td>
                                                      <div class="hidden-sm hidden-xs action-buttons">
 													 

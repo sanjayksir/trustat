@@ -54,7 +54,7 @@
                                                                                     </div>
                                                                                     <div class="col-sm-6">
                                                                                         <div class="input-group">
-                                                                                            <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Bar-QR Code,Product Name or Consumer Name">
+                                                                                            <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Name, Product SKU, Location Name or Consumer Name">
                                                                                             <span class="input-group-btn">
                                                                                                 <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                                                 <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -70,12 +70,14 @@
 														<th>#</th>
 														<th>Product Name</th>
 														<th>Product SKU</th>
+														<th>Packaging Level</th>
 														<!--<th>Product Description</th>-->
  														<th>Location Name</th>
-                                                        <th>Transfer-In Quantity</th> 
-														<th>Transfer-Out Quantity</th> 
+                                                        <th>In Quantity</th> 
+														<th>Out Quantity</th> 
 														<th>Balance Quantity</th>
-														<th>Packaging Level</th>
+														<th>Balance at Level 0</th>
+														
   													</tr>
 												</thead>
 												<tbody>
@@ -92,12 +94,1129 @@
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['product_name']; ?></td>
 											   <td><?php echo $listData['product_sku']; ?></td>
+											   <td><?php echo $listData['code_packaging_level']; ?></td>
 											  <!-- <td><?php echo $listData['product_description']; ?></td>-->
 												<td><?php echo get_locations_name_by_id($listData['location_id']); ?></td>
 												<td><?php echo $listData['stock_transfer_in_qty']; ?></td>
  												<td><?php echo $listData['stock_transfer_out_qty']; ?></td>
-												<td><?php echo $listData['stock_transfer_in_qty']-$listData['stock_transfer_out_qty']; ?></td>
-												<td><?php echo $listData['code_packaging_level']; ?></td>
+												<td><?php 
+												
+												$balance_qty = $listData['stock_transfer_in_qty']-$listData['stock_transfer_out_qty'];
+												echo $balance_qty; ?></td>
+												<td><?php //echo $listData['product_id'];
+												
+											$CodeCurrentActicationLevel = $listData['code_packaging_level'];
+											//$CodeCurrentActicationLevel = 1;
+						//echo $CodeCurrentActicationLevel . "<br>";
+						
+						switch($CodeCurrentActicationLevel) {
+							case 1:
+								//echo "the value is either 1";
+								
+			$Cild1cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			echo $NumberofchildernatLevel1 * $balance_qty;
+			
+								break;
+								
+							case 2:
+								//echo "the value is either 2";
+								
+								
+			$Cild2cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;
+			
+			
+								break;
+								
+							case 3:
+								//echo "the value is either 3";
+								
+								
+			$Cild3cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;
+			
+								break;
+								
+							case 4:
+								//echo "the value is either 4";
+								
+								//$MastercartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']);
+			$Cild4cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;
+			
+								break;
+								
+							case 5:
+								//echo "the value is either 5";
+							
+
+			$Cild5cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+			
+								
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;
+
+			
+								break;
+								
+							case 6:
+								//echo "the value is either 6";
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+			
+								
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;
+								
+								break;
+								
+							case 7:
+								//echo "the value is either 7";
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+			
+								
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;					
+								break;
+								
+							case 8:
+								//echo "the value is either 8";
+			$Cild8cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+			
+								
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;					
+								break;
+								
+							case 9:
+								//echo "the value is either 9";
+			$Cild9cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results9 = $this->db->select($Cild9cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel9 = $results9->$Cild9cartonPackagingLevelNumber;
+			
+			$Cild8cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+			
+								
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel9 * $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;					
+								break;
+								
+							case 10:
+								//echo "the value is either 10";
+			$Cild10cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results10 = $this->db->select($Cild10cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel10 = $results10->$Cild10cartonPackagingLevelNumber;
+			
+			$Cild9cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results9 = $this->db->select($Cild9cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel9 = $results9->$Cild9cartonPackagingLevelNumber;
+			
+			$Cild8cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+					
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-9);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel10 * $NumberofchildernatLevel9 * $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;	
+			
+								break;		
+								
+							case 11:
+								//echo "the value is either 11";
+								
+			$Cild11cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results11 = $this->db->select($Cild11cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel11 = $results11->$Cild11cartonPackagingLevelNumber;
+			
+			$Cild10cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results10 = $this->db->select($Cild10cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel10 = $results10->$Cild10cartonPackagingLevelNumber;
+			
+			$Cild9cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results9 = $this->db->select($Cild9cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel9 = $results9->$Cild9cartonPackagingLevelNumber;
+			
+			$Cild8cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+					
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-9);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-10);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel11 * $NumberofchildernatLevel10 * $NumberofchildernatLevel9 * $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;
+			
+								break;	
+								
+							case 12:
+								//echo "the value is either 12";
+			$Cild12cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results12 = $this->db->select($Cild12cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel12 = $results12->$Cild12cartonPackagingLevelNumber;
+			
+			$Cild11cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results11 = $this->db->select($Cild11cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel11 = $results11->$Cild11cartonPackagingLevelNumber;
+			
+			$Cild10cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results10 = $this->db->select($Cild10cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel10 = $results10->$Cild10cartonPackagingLevelNumber;
+			
+			$Cild9cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results9 = $this->db->select($Cild9cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel9 = $results9->$Cild9cartonPackagingLevelNumber;
+			
+			$Cild8cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+					
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-9);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-10);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-11);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel12 * $NumberofchildernatLevel11 * $NumberofchildernatLevel10 * $NumberofchildernatLevel9 * $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;
+								
+								break;	
+								
+							case 13:
+								//echo "the value is either 13";
+			$Cild13cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results13 = $this->db->select($Cild13cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel13 = $results13->$Cild13cartonPackagingLevelNumber;
+			
+			$Cild12cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results12 = $this->db->select($Cild12cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel12 = $results12->$Cild12cartonPackagingLevelNumber;
+			
+			$Cild11cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results11 = $this->db->select($Cild11cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel11 = $results11->$Cild11cartonPackagingLevelNumber;
+			
+			$Cild10cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results10 = $this->db->select($Cild10cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel10 = $results10->$Cild10cartonPackagingLevelNumber;
+			
+			$Cild9cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results9 = $this->db->select($Cild9cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel9 = $results9->$Cild9cartonPackagingLevelNumber;
+			
+			$Cild8cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+					
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-9);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-10);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-11);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-12);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel13 * $NumberofchildernatLevel12 * $NumberofchildernatLevel11 * $NumberofchildernatLevel10 * $NumberofchildernatLevel9 * $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;					
+								break;	
+								
+							case 14:
+								//echo "the value is either 14";
+			$Cild14cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results14 = $this->db->select($Cild14cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel14 = $results14->$Cild14cartonPackagingLevelNumber;
+			
+			$Cild13cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results13 = $this->db->select($Cild13cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel13 = $results13->$Cild13cartonPackagingLevelNumber;
+			
+			$Cild12cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results12 = $this->db->select($Cild12cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel12 = $results12->$Cild12cartonPackagingLevelNumber;
+			
+			$Cild11cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results11 = $this->db->select($Cild11cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel11 = $results11->$Cild11cartonPackagingLevelNumber;
+			
+			$Cild10cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results10 = $this->db->select($Cild10cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel10 = $results10->$Cild10cartonPackagingLevelNumber;
+			
+			$Cild9cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results9 = $this->db->select($Cild9cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel9 = $results9->$Cild9cartonPackagingLevelNumber;
+			
+			$Cild8cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-9);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+					
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-10);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-11);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-12);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-13);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel14 * $NumberofchildernatLevel13 * $NumberofchildernatLevel12 * $NumberofchildernatLevel11 * $NumberofchildernatLevel10 * $NumberofchildernatLevel9 * $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;				
+								
+								break;	
+								
+							case 15:
+								//echo "the value is either 15";
+			$Cild15cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results15 = $this->db->select($Cild15cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel15 = $results15->$Cild15cartonPackagingLevelNumber;
+			
+			$Cild14cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results14 = $this->db->select($Cild14cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel14 = $results14->$Cild14cartonPackagingLevelNumber;
+			
+			$Cild13cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results13 = $this->db->select($Cild13cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel13 = $results13->$Cild13cartonPackagingLevelNumber;
+			
+			$Cild12cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results12 = $this->db->select($Cild12cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel12 = $results12->$Cild12cartonPackagingLevelNumber;
+			
+			$Cild11cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results11 = $this->db->select($Cild11cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel11 = $results11->$Cild11cartonPackagingLevelNumber;
+			
+			$Cild10cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results10 = $this->db->select($Cild10cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel10 = $results10->$Cild10cartonPackagingLevelNumber;
+			
+			$Cild9cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results9 = $this->db->select($Cild9cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel9 = $results9->$Cild9cartonPackagingLevelNumber;
+			
+			$Cild8cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-9);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-10);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+					
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-11);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-12);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-13);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-14);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel15 * $NumberofchildernatLevel14 * $NumberofchildernatLevel13 * $NumberofchildernatLevel12 * $NumberofchildernatLevel11 * $NumberofchildernatLevel10 * $NumberofchildernatLevel9 * $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;					
+								break;
+								
+							case 16:
+								//echo "the value is either 16";
+			$Cild16cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results16 = $this->db->select($Cild16cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel16 = $results16->$Cild16cartonPackagingLevelNumber;
+			
+			$Cild15cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results15 = $this->db->select($Cild15cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel15 = $results15->$Cild15cartonPackagingLevelNumber;
+			
+			$Cild14cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results14 = $this->db->select($Cild14cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel14 = $results14->$Cild14cartonPackagingLevelNumber;
+			
+			$Cild13cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results13 = $this->db->select($Cild13cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel13 = $results13->$Cild13cartonPackagingLevelNumber;
+			
+			$Cild12cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results12 = $this->db->select($Cild12cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel12 = $results12->$Cild12cartonPackagingLevelNumber;
+			
+			$Cild11cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results11 = $this->db->select($Cild11cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel11 = $results11->$Cild11cartonPackagingLevelNumber;
+			
+			$Cild10cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results10 = $this->db->select($Cild10cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel10 = $results10->$Cild10cartonPackagingLevelNumber;
+			
+			$Cild9cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results9 = $this->db->select($Cild9cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel9 = $results9->$Cild9cartonPackagingLevelNumber;
+			
+			$Cild8cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-9);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-10);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-11);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+					
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-12);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-13);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-14);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-15);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel16 * $NumberofchildernatLevel15 * $NumberofchildernatLevel14 * $NumberofchildernatLevel13 * $NumberofchildernatLevel12 * $NumberofchildernatLevel11 * $NumberofchildernatLevel10 * $NumberofchildernatLevel9 * $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;					
+								break;
+								
+							case 17:
+								//echo "the value is either 17";
+			$Cild17cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results17 = $this->db->select($Cild17cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel17 = $results17->$Cild17cartonPackagingLevelNumber;
+			
+			$Cild16cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results16 = $this->db->select($Cild16cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel16 = $results16->$Cild16cartonPackagingLevelNumber;
+			
+			$Cild15cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results15 = $this->db->select($Cild15cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel15 = $results15->$Cild15cartonPackagingLevelNumber;
+			
+			$Cild14cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results14 = $this->db->select($Cild14cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel14 = $results14->$Cild14cartonPackagingLevelNumber;
+			
+			$Cild13cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results13 = $this->db->select($Cild13cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel13 = $results13->$Cild13cartonPackagingLevelNumber;
+			
+			$Cild12cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results12 = $this->db->select($Cild12cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel12 = $results12->$Cild12cartonPackagingLevelNumber;
+			
+			$Cild11cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results11 = $this->db->select($Cild11cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel11 = $results11->$Cild11cartonPackagingLevelNumber;
+			
+			$Cild10cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results10 = $this->db->select($Cild10cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel10 = $results10->$Cild10cartonPackagingLevelNumber;
+			
+			$Cild9cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results9 = $this->db->select($Cild9cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel9 = $results9->$Cild9cartonPackagingLevelNumber;
+			
+			$Cild8cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-10);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-11);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-12);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+					
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-13);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-14);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-15);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-16);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel16 * $NumberofchildernatLevel15 * $NumberofchildernatLevel14 * $NumberofchildernatLevel13 * $NumberofchildernatLevel12 * $NumberofchildernatLevel11 * $NumberofchildernatLevel10 * $NumberofchildernatLevel9 * $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;					
+								break;
+								
+							case 18:
+								//echo "the value is either 18";
+			$Cild18cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results18 = $this->db->select($Cild18cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel18 = $results18->$Cild18cartonPackagingLevelNumber;
+			
+			$Cild17cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results17 = $this->db->select($Cild17cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel17 = $results17->$Cild17cartonPackagingLevelNumber;
+			
+			$Cild16cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results16 = $this->db->select($Cild16cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel16 = $results16->$Cild16cartonPackagingLevelNumber;
+			
+			$Cild15cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results15 = $this->db->select($Cild15cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel15 = $results15->$Cild15cartonPackagingLevelNumber;
+			
+			$Cild14cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results14 = $this->db->select($Cild14cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel14 = $results14->$Cild14cartonPackagingLevelNumber;
+			
+			$Cild13cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results13 = $this->db->select($Cild13cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel13 = $results13->$Cild13cartonPackagingLevelNumber;
+			
+			$Cild12cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results12 = $this->db->select($Cild12cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel12 = $results12->$Cild12cartonPackagingLevelNumber;
+			
+			$Cild11cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results11 = $this->db->select($Cild11cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel11 = $results11->$Cild11cartonPackagingLevelNumber;
+			
+			$Cild10cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results10 = $this->db->select($Cild10cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel10 = $results10->$Cild10cartonPackagingLevelNumber;
+			
+			$Cild9cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-9);
+			$results9 = $this->db->select($Cild9cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel9 = $results9->$Cild9cartonPackagingLevelNumber;
+			
+			$Cild8cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-10);
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-11);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-12);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-13);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+					
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-14);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-15);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-16);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-17);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel18 *$NumberofchildernatLevel17 *$NumberofchildernatLevel16 * $NumberofchildernatLevel15 * $NumberofchildernatLevel14 * $NumberofchildernatLevel13 * $NumberofchildernatLevel12 * $NumberofchildernatLevel11 * $NumberofchildernatLevel10 * $NumberofchildernatLevel9 * $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;					
+								break;
+								
+							case 19:
+								//echo "the value is either 19";
+			$Cild19cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results19 = $this->db->select($Cild19cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel19 = $results19->$Cild19cartonPackagingLevelNumber;
+			
+			$Cild18cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results18 = $this->db->select($Cild18cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel18 = $results18->$Cild18cartonPackagingLevelNumber;
+			
+			$Cild17cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results17 = $this->db->select($Cild17cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel17 = $results17->$Cild17cartonPackagingLevelNumber;
+			
+			$Cild16cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results16 = $this->db->select($Cild16cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel16 = $results16->$Cild16cartonPackagingLevelNumber;
+			
+			$Cild15cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results15 = $this->db->select($Cild15cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel15 = $results15->$Cild15cartonPackagingLevelNumber;
+			
+			$Cild14cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results14 = $this->db->select($Cild14cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel14 = $results14->$Cild14cartonPackagingLevelNumber;
+			
+			$Cild13cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results13 = $this->db->select($Cild13cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel13 = $results13->$Cild13cartonPackagingLevelNumber;
+			
+			$Cild12cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results12 = $this->db->select($Cild12cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel12 = $results12->$Cild12cartonPackagingLevelNumber;
+			
+			$Cild11cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results11 = $this->db->select($Cild11cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel11 = $results11->$Cild11cartonPackagingLevelNumber;
+			
+			$Cild10cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-9);
+			$results10 = $this->db->select($Cild10cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel10 = $results10->$Cild10cartonPackagingLevelNumber;
+			
+			$Cild9cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-10);
+			$results9 = $this->db->select($Cild9cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel9 = $results9->$Cild9cartonPackagingLevelNumber;
+			
+			$Cild8cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-11);
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-12);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-13);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-14);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+					
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-15);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-16);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-17);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-18);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel19 * $NumberofchildernatLevel18 *$NumberofchildernatLevel17 *$NumberofchildernatLevel16 * $NumberofchildernatLevel15 * $NumberofchildernatLevel14 * $NumberofchildernatLevel13 * $NumberofchildernatLevel12 * $NumberofchildernatLevel11 * $NumberofchildernatLevel10 * $NumberofchildernatLevel9 * $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;		
+								break;
+								
+							case 20:
+								//echo "the value is either 20";
+			$Cild20cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results20 = $this->db->select($Cild20cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel20 = $results19->$Cild20cartonPackagingLevelNumber;
+			
+			$Cild19cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results19 = $this->db->select($Cild19cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel19 = $results19->$Cild19cartonPackagingLevelNumber;
+			
+			$Cild18cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results18 = $this->db->select($Cild18cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel18 = $results18->$Cild18cartonPackagingLevelNumber;
+			
+			$Cild17cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results17 = $this->db->select($Cild17cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel17 = $results17->$Cild17cartonPackagingLevelNumber;
+			
+			$Cild16cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results16 = $this->db->select($Cild16cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel16 = $results16->$Cild16cartonPackagingLevelNumber;
+			
+			$Cild15cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results15 = $this->db->select($Cild15cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel15 = $results15->$Cild15cartonPackagingLevelNumber;
+			
+			$Cild14cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results14 = $this->db->select($Cild14cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel14 = $results14->$Cild14cartonPackagingLevelNumber;
+			
+			$Cild13cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results13 = $this->db->select($Cild13cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel13 = $results13->$Cild13cartonPackagingLevelNumber;
+			
+			$Cild12cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results12 = $this->db->select($Cild12cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel12 = $results12->$Cild12cartonPackagingLevelNumber;
+			
+			$Cild11cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-9);
+			$results11 = $this->db->select($Cild11cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel11 = $results11->$Cild11cartonPackagingLevelNumber;
+			
+			$Cild10cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-10);
+			$results10 = $this->db->select($Cild10cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel10 = $results10->$Cild10cartonPackagingLevelNumber;
+			
+			$Cild9cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-11);
+			$results9 = $this->db->select($Cild9cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel9 = $results9->$Cild9cartonPackagingLevelNumber;
+			
+			$Cild8cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-12);
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-13);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-14);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-15);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+					
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-16);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-17);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-18);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-19);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel20 * $NumberofchildernatLevel19 * $NumberofchildernatLevel18 *$NumberofchildernatLevel17 *$NumberofchildernatLevel16 * $NumberofchildernatLevel15 * $NumberofchildernatLevel14 * $NumberofchildernatLevel13 * $NumberofchildernatLevel12 * $NumberofchildernatLevel11 * $NumberofchildernatLevel10 * $NumberofchildernatLevel9 * $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;
+			
+								break;
+								
+							case 21:
+								//echo "the value is either 21";
+			$Cild21cartonPackagingLevelNumber = "pack_level" . $listData['code_packaging_level'];
+			$results21 = $this->db->select($Cild21cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel21 = $results21->$Cild21cartonPackagingLevelNumber;
+			
+			$Cild20cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-1);
+			$results20 = $this->db->select($Cild20cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel20 = $results19->$Cild20cartonPackagingLevelNumber;
+			
+			$Cild19cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-2);
+			$results19 = $this->db->select($Cild19cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel19 = $results19->$Cild19cartonPackagingLevelNumber;
+			
+			$Cild18cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-3);
+			$results18 = $this->db->select($Cild18cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel18 = $results18->$Cild18cartonPackagingLevelNumber;
+			
+			$Cild17cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-4);
+			$results17 = $this->db->select($Cild17cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel17 = $results17->$Cild17cartonPackagingLevelNumber;
+			
+			$Cild16cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-5);
+			$results16 = $this->db->select($Cild16cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel16 = $results16->$Cild16cartonPackagingLevelNumber;
+			
+			$Cild15cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-6);
+			$results15 = $this->db->select($Cild15cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel15 = $results15->$Cild15cartonPackagingLevelNumber;
+			
+			$Cild14cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-7);
+			$results14 = $this->db->select($Cild14cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel14 = $results14->$Cild14cartonPackagingLevelNumber;
+			
+			$Cild13cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-8);
+			$results13 = $this->db->select($Cild13cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel13 = $results13->$Cild13cartonPackagingLevelNumber;
+			
+			$Cild12cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-9);
+			$results12 = $this->db->select($Cild12cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel12 = $results12->$Cild12cartonPackagingLevelNumber;
+			
+			$Cild11cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-10);
+			$results11 = $this->db->select($Cild11cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel11 = $results11->$Cild11cartonPackagingLevelNumber;
+			
+			$Cild10cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-11);
+			$results10 = $this->db->select($Cild10cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel10 = $results10->$Cild10cartonPackagingLevelNumber;
+			
+			$Cild9cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-12);
+			$results9 = $this->db->select($Cild9cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel9 = $results9->$Cild9cartonPackagingLevelNumber;
+			
+			$Cild8cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-13);
+			$results8 = $this->db->select($Cild8cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel8 = $results8->$Cild8cartonPackagingLevelNumber;	
+			
+			$Cild7cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-14);
+			$results7 = $this->db->select($Cild7cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel7 = $results7->$Cild7cartonPackagingLevelNumber;	
+								
+			$Cild6cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-15);
+			$results6 = $this->db->select($Cild6cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel6 = $results6->$Cild6cartonPackagingLevelNumber;
+			
+			$Cild5cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-16);
+			$results5 = $this->db->select($Cild5cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel5 = $results5->$Cild5cartonPackagingLevelNumber;
+					
+			$Cild4cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-17);
+			$results4 = $this->db->select($Cild4cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel4 = $results4->$Cild4cartonPackagingLevelNumber;
+			
+			$Cild3cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-18);
+			$results3 = $this->db->select($Cild3cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel3 = $results3->$Cild3cartonPackagingLevelNumber;
+			
+			$Cild2cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-19);
+			$results2 = $this->db->select($Cild2cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel2 = $results2->$Cild2cartonPackagingLevelNumber;
+			
+			$Cild1cartonPackagingLevelNumber = "pack_level" . ($listData['code_packaging_level']-20);
+			$results1 = $this->db->select($Cild1cartonPackagingLevelNumber)->from('product_packaging_qty_levels')->where('product_id', $listData['product_id'])->get()->row();
+			$NumberofchildernatLevel1 = $results1->$Cild1cartonPackagingLevelNumber;
+			
+			$TotalChildren = $NumberofchildernatLevel21 * $NumberofchildernatLevel20 * $NumberofchildernatLevel19 * $NumberofchildernatLevel18 *$NumberofchildernatLevel17 *$NumberofchildernatLevel16 * $NumberofchildernatLevel15 * $NumberofchildernatLevel14 * $NumberofchildernatLevel13 * $NumberofchildernatLevel12 * $NumberofchildernatLevel11 * $NumberofchildernatLevel10 * $NumberofchildernatLevel9 * $NumberofchildernatLevel8 * $NumberofchildernatLevel7 * $NumberofchildernatLevel6 * $NumberofchildernatLevel5 * $NumberofchildernatLevel4 * $NumberofchildernatLevel3 * $NumberofchildernatLevel2 * $NumberofchildernatLevel1;
+			
+			echo $TotalChildren * $balance_qty;					
+								break;
+						}
+						
+					
+			
+
+
+												?></td>
                                               </tr>
                                          <?php }
 										}else{ ?>

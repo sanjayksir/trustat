@@ -166,8 +166,9 @@ class Customer extends ApiController {
 		
         if($this->db->update('printed_barcode_qrcode')){
 			
-			
-			$tlogdata['trax_name'] = "viewProductLevel"; 
+			/*
+			$tlogdata['trax_slug'] = "viewProductLevel"; 
+			$tlogdata['trax_name'] = "View Product Details"; 
 			$tlogdata['parent_customer_id'] = $result[0]['created_by']; 
 			$tlogdata['agent_customer_id'] = $userId; 
 			$tlogdata['product_id'] = $result[0]['product_id']; 
@@ -178,7 +179,7 @@ class Customer extends ApiController {
 			$tlogdata['transaction_datetime'] = date('Y-m-d H:i:s'); 
 			
 			$this->db->insert('list_transactions_table', $tlogdata);
-			
+			*/
 		/*
 			$data2['barcode_qr_code_no'] = $data['bar_code'];
 			$data2['product_id'] = $result[0]['product_id'];
@@ -276,7 +277,8 @@ class Customer extends ApiController {
 		
         if($this->db->update('printed_barcode_qrcode')){
 			
-			$tlogdata['trax_name'] = "addProductLevel"; 
+			$tlogdata['trax_slug'] = "addProductLevel"; 
+			$tlogdata['trax_name'] = "Add Product Level Activate";
 			$tlogdata['parent_customer_id'] = $result[0]['created_by']; 
 			$tlogdata['agent_customer_id'] = $userId; 
 			$tlogdata['product_id'] = $result[0]['product_id']; 
@@ -360,6 +362,7 @@ class Customer extends ApiController {
 			///$data['barcode_qr_code_no'] = $data['bar_code'];
 			$data['packaging_level'] = $results2->pack_level;
 			$data['product_id'] = $result[0]['product_id'];
+			$data['unpackaging_status'] = "Packaged";
 			//$data['packaging_level'] = $data['pack_level'];
 			
 			$packaging_level = $data['packaging_level'] + 1;
@@ -420,7 +423,9 @@ class Customer extends ApiController {
 		if($isPackLevelSeted==true){ // if the code is already added in any other box
         if($this->db->insert('packaging_codes_pcr', $data)){
 			
-			$tlogdata['trax_name'] = "addProductLevelParentActivate"; 
+			
+			$tlogdata['trax_slug'] = "addProductLevelParentActivate"; 
+			$tlogdata['trax_name'] = "Product Packaging";
 			$tlogdata['parent_customer_id'] = $result[0]['created_by']; 
 			$tlogdata['agent_customer_id'] = $userId; 
 			$tlogdata['product_id'] = $result[0]['product_id']; 
@@ -457,7 +462,9 @@ class Customer extends ApiController {
 		if($isPackLevelSeted==true){ // if the code is already added in any other box
         if($this->db->insert('packaging_codes_pcr', $data)){
 			
-			$tlogdata['trax_name'] = "addProductLevelParentActivate"; 
+			
+			$tlogdata['trax_slug'] = "addProductLevelParentActivate"; 
+			$tlogdata['trax_name'] = "Product Packaging";
 			$tlogdata['parent_customer_id'] = $result[0]['created_by']; 
 			$tlogdata['agent_customer_id'] = $userId; 
 			$tlogdata['product_id'] = $result[0]['product_id']; 
@@ -495,7 +502,9 @@ class Customer extends ApiController {
 		if($isPackLevelSeted==true){ // if the code is already added in any other box
         if($this->db->insert('packaging_codes_pcr', $data)){
 			
-			$tlogdata['trax_name'] = "addProductLevelParentActivate"; 
+			
+			$tlogdata['trax_slug'] = "addProductLevelParentActivate"; 
+			$tlogdata['trax_name'] = "Product Packaging";
 			$tlogdata['parent_customer_id'] = $result[0]['created_by']; 
 			$tlogdata['agent_customer_id'] = $userId; 
 			$tlogdata['product_id'] = $result[0]['product_id']; 
@@ -533,7 +542,9 @@ class Customer extends ApiController {
 		if($isPackLevelSeted==true){ // if the code is already added in any other box
         if($this->db->insert('packaging_codes_pcr', $data)){
 			
-			$tlogdata['trax_name'] = "addProductLevelParentActivate"; 
+			
+			$tlogdata['trax_slug'] = "addProductLevelParentActivate"; 
+			$tlogdata['trax_name'] = "Product Packaging";
 			$tlogdata['parent_customer_id'] = $result[0]['created_by']; 
 			$tlogdata['agent_customer_id'] = $userId; 
 			$tlogdata['product_id'] = $result[0]['product_id']; 
@@ -603,14 +614,15 @@ class Customer extends ApiController {
 		$data['code_packaging_level'] = $result[0]['pack_level'];			
 		 $isItemAlreadyExists = $this->Productmodel->isItemAlreadyExists($data['bar_code']);
 		 
-		 $isitMaster = $this->db->where('bar_code',$data['bar_code'])->from("packaging_codes_pcr")->count_all_results();
+		  $isitMaster = $this->db->where('parent_bar_code',$data['bar_code'])->from("packaging_codes_pcr")->count_all_results();
 		 
-		if($isitMaster<1){
-		if($isItemAlreadyExists==true){
+		if($isitMaster>0){
+		//if($isItemAlreadyExists==true){
 		    if($this->db->insert('dispatch_stock_transfer_out', $data)){
 				
 				
-			$tlogdata['trax_name'] = "DispatchStockTransferOut"; 
+			$tlogdata['trax_slug'] = "DispatchStockTransferOut"; 
+			$tlogdata['trax_name'] = "Stock Transfer Out";
 			$tlogdata['parent_customer_id'] = $result[0]['created_by']; 
 			$tlogdata['agent_customer_id'] = $userId; 
 			$tlogdata['product_id'] = $result[0]['product_id']; 
@@ -618,7 +630,7 @@ class Customer extends ApiController {
 			$tlogdata['plant_id'] = getAssignedPlantIDbyProductCode($data['bar_code']); 
 			$tlogdata['location_id'] = $data['location_id']; 
 			$tlogdata['product_sku'] = $result[0]['product_sku']; 
-			$tlogdata['transaction_datetime'] = date('Y-m-d H:i:s'); 
+			$tlogdata['transaction_datetime'] = date('Y-m-d H:i:s'); 	
 			
 			$this->db->insert('list_transactions_table', $tlogdata);
 			
@@ -651,10 +663,10 @@ class Customer extends ApiController {
             $this->response(['status'=>true,'message'=>'Dispatch Stock Transfer-Out has been added.','stock_data'=>$data,'code_data'=>$result]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to Dispatch Stock Transfer-Out.'],200); 
-        }
+        } /*
 		}else{
             $this->response(['status'=>false,'message'=>'System failed to add this item Out-Stock because this item already exists.'],200); 
-        }
+        } */
 		}else{
             $this->response(['status'=>false,'message'=>'System failed to add this item Out-Stock because only master carton can be Dispatch.'],200); 
         }
@@ -698,13 +710,15 @@ class Customer extends ApiController {
 		$data['code_packaging_level'] = $result[0]['pack_level'];
 		 $isItemAlreadyExistsStockIn = $this->Productmodel->isItemAlreadyExistsStockIn($data['bar_code']);
 		
-		 $isitMaster = $this->db->where('bar_code',$data['bar_code'])->from("packaging_codes_pcr")->count_all_results();
+		 $isitMaster = $this->db->where('parent_bar_code',$data['bar_code'])->from("packaging_codes_pcr")->count_all_results();
 		 
-		if($isitMaster<1){
-		if($isItemAlreadyExistsStockIn==true){
+		if($isitMaster>0){
+		//if($isItemAlreadyExistsStockIn==true){
 		    if($this->db->insert('receipt_stock_transfer_in', $data)){
 				
-			$tlogdata['trax_name'] = "ReceiptStockTransferIn"; 
+			
+			$tlogdata['trax_slug'] = "ReceiptStockTransferIn"; 
+			$tlogdata['trax_name'] = "Stock Transfer In";
 			$tlogdata['parent_customer_id'] = $result[0]['created_by']; 
 			$tlogdata['agent_customer_id'] = $userId; 
 			$tlogdata['product_id'] = $result[0]['product_id']; 
@@ -747,10 +761,10 @@ class Customer extends ApiController {
             $this->response(['status'=>true,'message'=>'Receipt Stock Transfer-In has been added.','stock_data'=>$data,'code_data'=>$result]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to Dispatch Stock Transfer-In.'],200); 
-        }
+        } /*
 		}else{
             $this->response(['status'=>false,'message'=>'System failed to add this item Stock Transfer-In because this item already exists.'],200); 
-        }
+        } */
 		}else{
             $this->response(['status'=>false,'message'=>'System failed to add this item Stock Transfer-In because only master carton can be Stock Transfer-In.'],200); 
         }
@@ -785,7 +799,7 @@ class Customer extends ApiController {
 		$userId = $user['user_id'];
 		$barCodes = $data['bar_code'];
 		$data['created_by_parent_id'] = getParentIdFromUserIdTAPP($userId);
-        $result = $this->Productmodel->barcodeProducts($barCodes, $userId);
+        $result = $this->Productmodel->barcodeProductsInactive($barCodes, $userId);
 		$array = array('product_id' => $result[0]['product_id'], 'location_id' => $data['location_id']);
 		$total_codes_quantity_of_productr = $this->db->where($array)->from("physical_inventory_check")->count_all_results();
 		$result['total_codes_quantity_of_product'] = $total_codes_quantity_of_productr + 1;
@@ -795,18 +809,18 @@ class Customer extends ApiController {
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
         } 
 		
-		
-		
 				$data['request_id'] = rand(1111111111,9999999999); 
 				$data['created_date_time'] = date("Y-m-d H:i:s");
 				$data['product_id'] = $result[0]['product_id'];
 				//echo "<pre>";print_r($data['product_id']);die;
 		 $isItemAlreadyExistsInInventory = $this->Productmodel->isItemAlreadyExistsInInventory($data['bar_code']);
 		
-		if($isItemAlreadyExistsInInventory==true){
+		//if($isItemAlreadyExistsInInventory==true){
 		    if($this->db->insert('physical_inventory_check', $data)){
 				
-			$tlogdata['trax_name'] = "PhysicalInventoryCheck"; 
+			
+			$tlogdata['trax_slug'] = "PhysicalInventoryCheck"; 
+			$tlogdata['trax_name'] = "Physical Inventory Check";
 			$tlogdata['parent_customer_id'] = $result[0]['created_by']; 
 			$tlogdata['agent_customer_id'] = $userId; 
 			$tlogdata['product_id'] = $result[0]['product_id']; 
@@ -822,10 +836,10 @@ class Customer extends ApiController {
             $this->response(['status'=>true,'message'=>'Physical inventory  has been added.','stock_data'=>$data,'code_data'=>$result]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to add.'],200); 
-        }
+        } /*
 		}else{
             $this->response(['status'=>false,'message'=>'System failed to add Physical inventory check because this item already exists.'],200); 
-        }
+        } */
 		
     }
 	
@@ -855,11 +869,21 @@ class Customer extends ApiController {
 		 if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
         }     
-		 $isPackLevelSetedExits = $this->Productmodel->isPackLevelSetedExits($data['bar_code']);
+		 $isPackLevelSetedExits = $this->Productmodel->isPackLevelSetedExits($data['bar_code'],$data['parent_bar_code']);
 		if($isPackLevelSetedExits==true){
-        if($this->db->delete('packaging_codes_pcr', array('bar_code' => $data['bar_code'], 'parent_bar_code' => $data['parent_bar_code']))){
 			
-			$tlogdata['trax_name'] = "DeleteProductParentDelink"; 
+		$this->db->set('unpackaging_status', "Un-Packaging Done");
+        $this->db->set('unpackaging_date', (new DateTime('now'))->format('Y-m-d H:i:s'));
+        $this->db->set('unpacked_by_id', $user['user_id']);
+		 $this->db->set('unpackaging_location_id', $data['location_id']);
+        $this->db->where(array('bar_code' => $data['bar_code'], 'parent_bar_code' => $data['parent_bar_code']));
+	
+	
+        if($this->db->update('packaging_codes_pcr')){
+			
+			
+			$tlogdata['trax_slug'] = "DeleteProductParentDelink"; 
+			$tlogdata['trax_name'] = "Un-Packaging";
 			$tlogdata['parent_customer_id'] = $result[0]['created_by']; 
 			$tlogdata['agent_customer_id'] = $userId; 
 			$tlogdata['product_id'] = $result[0]['product_id']; 

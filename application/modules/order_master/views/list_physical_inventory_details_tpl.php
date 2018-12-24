@@ -4,7 +4,7 @@
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
-			<?php $label = 'Product Physical Inventory Check Report';?>
+			<?php $label = 'Product Physical Inventory Check Details';?>
 
 			<?php $this->load->view('../includes/admin_sidebar');?>
 			
@@ -39,7 +39,7 @@
 							<div class="col-xs-12">
  								<div class="widget-box widget-color-blue">
                                                                     <div class="widget-header widget-header-flat">
-                                                                        <h5 class="widget-title bigger lighter">List <?php echo $label;?></h5>
+                                                                        <h5 class="widget-title bigger lighter">List <?php echo $label;?>, Physical Inventory Number - <?php echo $this->uri->segment(3);?></h5>
                                                                     </div>
 									<div class="widget-body">
                                                                             <div class="row filter-box">
@@ -70,7 +70,7 @@
 														<th>#</th>
 														<th>Product Name</th>
 														<th>Product Code</th>
-														<th>Physical Inventory Number</th>
+														<!--<th>Physical Inventory Number</th>-->
  														<th>location Type</th>
 														<th>Location Name</th>
                                                         <th>Inventory Date Time</th> 
@@ -91,12 +91,11 @@
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['product_name']; ?></td>
 												<td><?php echo $listData['bar_code']; ?></td>
-												<td><?php echo $listData['pi_number']; ?></td>
-												<td><?php echo $listData['location_type']; ?></td>
+												<!-- <td><?php echo $listData['pi_number']; ?></td>-->
 												<td><?php echo $listData['location_type']; ?></td>
 												<td><?php echo $listData['location_name']; ?></td>
 												<td><?php echo $listData['inventory_in_date']; ?></td>
- 												<td><?php echo $listData['created_date_time']; ?></td>
+ 												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['created_date_time']))); ?></td>
                                               </tr>
                                          <?php }
 										}else{ ?>

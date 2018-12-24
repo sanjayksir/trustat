@@ -40,7 +40,7 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 $fields = array (
         'to' => $id,
          
-         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess ,'sound'=>'Default',),
+         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess ,'sound'=>'Default')
        
 );
 $fields = json_encode ( $fields );

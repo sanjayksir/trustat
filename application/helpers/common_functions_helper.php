@@ -377,6 +377,26 @@ function getProductCodeActicationLevelbyCode($ProductCode){
 	return $res;
 }
 
+
+function getProductCodeActicationLevelbyProductID($ProductID){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('pack_level');
+	$ci->db->from('printed_barcode_qrcode');
+	$ci->db->where(array('barcode_qr_code_no'=>$ProductID));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['pack_level']);
+
+ 	}
+	return $res;
+}
+
+
+
 function getAssignedPlantIDbyProductCode($ProductCode){
 	$res = 0;
 	$ci = & get_instance();
@@ -6402,6 +6422,20 @@ function get_assigned_plant_user_list($user_id){
  	return $res_arr[0]['name'];
  }
  
+ function get_locations_type_by_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$ci->db->select('group_concat(location_type) as type');
+			$ci->db->from('location_master');
+			$ci->db->where_in('location_id',explode(',',$id));
+			$query= $ci->db->get();//echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['type'];
+ }
+ 
 
   function get_functionality_name_by_id($id){ 
 	$res='0';
@@ -6582,6 +6616,19 @@ function get_products_name_by_id($id){
 			$res_arr = $query->result_array();
  		}
  	return $res_arr[0]['sku'];
+ }
+ 
+  function get_product_product_description_by_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 			$ci->db->select('group_concat(product_description) as product_description');
+			$ci->db->from('products');
+ 			$ci->db->where_in('id',$id);
+			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		
+ 	return $res_arr[0]['product_description'];
  }
 
  

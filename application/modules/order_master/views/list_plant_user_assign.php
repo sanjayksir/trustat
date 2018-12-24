@@ -80,7 +80,7 @@
 												
 												echo get_plants_name_by_id($plants);?></td>
                                        
-												<td><?php echo date('d/M/Y',strtotime($listData['created_on'])); ?></td>
+												<td><?php echo date('j M Y H:i:s D',strtotime($listData['created_on'])); ?></td>
                                                  <td>
                                                      <div class="hidden-sm hidden-xs action-buttons">
                                                          <!--<a href="<?php  echo base_url().'plant_master/view_plant/'.$listData['user_id'];?>" class="blue" target="_blank" title="View"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>-->
