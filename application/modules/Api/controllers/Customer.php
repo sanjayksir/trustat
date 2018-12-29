@@ -812,8 +812,54 @@ class Customer extends ApiController {
 				$data['request_id'] = rand(1111111111,9999999999); 
 				$data['created_date_time'] = date("Y-m-d H:i:s");
 				$data['product_id'] = $result[0]['product_id'];
+				//$data['code_packaging_level'] = $result[0]['pack_level'];
 				//echo "<pre>";print_r($data['product_id']);die;
 		 $isItemAlreadyExistsInInventory = $this->Productmodel->isItemAlreadyExistsInInventory($data['bar_code']);
+		
+		
+			$product_id = $data['product_id']; 
+			$location_id = $data['location_id'];
+			$code_packaging_level = $result[0]['pack_level'];
+		
+		$isProductExistsinLocationSummery = $this->Productmodel->isProductExistsinLocationSummery($product_id, $location_id, $code_packaging_level);
+			$data2['plant_id'] = $data['plant_id'];
+			$data2['pi_number'] = $data['pi_number'];
+			$data2['pi_summery_date'] = date("Y-m-d H:i:s");
+			$data2['location_id'] = $data['location_id'];
+			$data2['location_name'] = get_locations_name_by_id($data['location_id']);
+			$data2['product_id'] = $data['product_id'];
+			$data2['product_sku'] = get_product_sku_by_id($data['product_id']);
+			$data2['product_name'] = get_products_name_by_id($data['product_id']);
+			$data2['pack_level'] = $result[0]['pack_level'];
+			$data2['customer_user_id'] = $data['created_by_id'];
+			if($isProductExistsinLocationSummery==true){				
+				
+				$Rqty_as_per_pi = $this->db->select('qty_as_per_pi')->from('physical_inventory_summary')->where(array('location_id' => $data2['location_id'], 'product_id' => $data2['product_id'], 'pack_level' => $data2['pack_level']))->get()->row();
+				$qty_as_per_pi = $Rqty_as_per_pi->qty_as_per_pi;
+				
+				$data2['qty_as_per_pi'] = $qty_as_per_pi+1;
+				$this->db->where(array('location_id' => $data2['location_id'], 'product_id' => $data2['product_id'], 'pack_level' => $data2['pack_level']));
+				
+				$this->db->update('physical_inventory_summary', $data2);
+				
+			} else {
+				
+				
+				$data2['qty_as_per_pi'] = 1;
+				
+				$Rstock_transfer_in_qty = $this->db->select('stock_transfer_in_qty')->from('inventory_on_hand')->where(array('location_id' => $data2['location_id'], 'product_id' => $data2['product_id'], 'code_packaging_level' => $data2['pack_level']))->get()->row();
+				$stock_transfer_in_qty = $Rstock_transfer_in_qty->stock_transfer_in_qty;
+				
+				$Rstock_transfer_out_qty = $this->db->select('stock_transfer_out_qty')->from('inventory_on_hand')->where(array('location_id' => $data2['location_id'], 'product_id' => $data2['product_id'], 'code_packaging_level' => $data2['pack_level']))->get()->row();
+				$stock_transfer_out_qty = $Rstock_transfer_out_qty->stock_transfer_out_qty;
+				
+				$data2['qty_as_per_on_hand'] = $stock_transfer_out_qty - $stock_transfer_in_qty;
+				$this->db->insert('physical_inventory_summary',$data2);
+				
+			}
+			
+			
+			
 		
 		//if($isItemAlreadyExistsInInventory==true){
 		    if($this->db->insert('physical_inventory_check', $data)){
@@ -831,6 +877,10 @@ class Customer extends ApiController {
 			$tlogdata['transaction_datetime'] = date('Y-m-d H:i:s'); 
 			
 			$this->db->insert('list_transactions_table', $tlogdata);
+			
+			
+			
+			
 			
 		
             $this->response(['status'=>true,'message'=>'Physical inventory  has been added.','stock_data'=>$data,'code_data'=>$result]);

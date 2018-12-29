@@ -6173,9 +6173,9 @@ function getParentUsers($id='',$status=''){
  		$ci->db->select('plant_id,plant_name,plant_code,email_id,phone,created_date,status');
 		$ci->db->from('plant_master');
 		$ci->db->where(array('status'=>'1'));
-		//if($admin_id>1){
+		if($admin_id>1){
 			$ci->db->where('created_by',$user_id);
-		//}
+		}
 		$query= $ci->db->get();
 		$res = $query->result_array();
 	}
@@ -6236,7 +6236,9 @@ function getParentUsers($id='',$status=''){
  		$ci = & get_instance();
  			$ci->db->select('id, product_name');
 			$ci->db->from('products');
+			if($user_id > 1){
 			$ci->db->where(array('created_by'=>$user_id, 'other_industry NOT LIKE'=>'other%'));
+			}
 			$query= $ci->db->get();
 			$res = $query->result_array();
 	}

@@ -129,7 +129,7 @@ if( $this->uri->segment(3)!=''){
 			<div class="col-sm-4">
 			<label for="form-field-8">Select CCC admin User</label>
             <select class="form-control" name="user" id="user" onchange="return get_plants_controller(this.value),get_plants(this.value);;">
-			<?php if($SelectDD!=''){?><option value="">-Select Plant Controller-</option>
+			<?php if($SelectDD!=''){?><option value="">-Select CCC admin-</option>
             <?php }
  			//$plant_data = get_all_plants($user_id);
  			foreach($UserData as $res){?>
@@ -152,7 +152,7 @@ if( $this->uri->segment(3)!=''){
 			
 			
 			<div class="col-sm-4">
-			  <label for="form-field-8">Select Plant(Press Ctrl to Select Multiple plants)</label>
+			 <label for="form-field-8">Select Plant(Press Ctrl to Select Multiple plants)</label>
              <select class="form-control" name="plants[]" id="plants" multiple="multiple" >
              
              </select>

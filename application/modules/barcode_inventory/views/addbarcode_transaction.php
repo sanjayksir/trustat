@@ -18,17 +18,29 @@
                 <select class="form-control" name="printed_order" id="printed-order" onchange="barcode.printedCode(this,'printed-code')">                    
                 </select>
             </div>
+			
+			
+			
             <div class="form-group">
                 <label>Printed Code <a href="javascript:void(0);" id="checkall" class="hide checked" onclick="barcode.checkAll(this)">|&nbsp;Toggle Selection</a></label>
                 <div class="col-sm-12" id="printed-code"></div>
             </div>
-           
-
+			<?php if($this->uri->segment(3)=="Issued") { ?>
+           <div class="form-group">
+                <label>Issue Location</label>
+                 <select class="form-control" name="issue_location" id="issue_location">
+                    <?php echo Utils::selectOptions('location_name',['options'=>$locationcontroller,'empty'=>'Select Location']) ?>
+                </select>
+            </div>
+			<?php } ?>
             <div class="form-group">
                     <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
                         <input class="btn btn-info" type="submit" name="submit" value="Submit" id="savebtn" onclick="event.preventDefault();barcode.saveForm(this.event)" />
                     </div>
             </div>
+			
+			
+			
         </form>
     </div>
 </div>

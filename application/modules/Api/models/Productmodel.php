@@ -1299,4 +1299,14 @@ return $result;
 		//return false;
     }
 	
+	Public function isProductExistsinLocationSummery($product_id=null,$location_id=null,$code_packaging_level=null) {
+       // $answerQuery = $this->db->get_where('physical_inventory_summary', array('product_id' => $data['product_id'], 'location_id' => $data['location_id']));
+		$answerQuery = $this->db->get_where('physical_inventory_summary', array('product_id' => $product_id, 'location_id' => $location_id, 'pack_level' => $code_packaging_level));
+		//print $answerQuery;
+        if($answerQuery->num_rows() > 0){
+           return true;
+        }
+		//return false;
+    }
+	
 }

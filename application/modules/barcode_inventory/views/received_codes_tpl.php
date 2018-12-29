@@ -36,9 +36,9 @@
                     <th>Order No.</th>                    
                     <th>Order Date</th>
                     <th>Print Date</th>
-                    <th>Source From</th>
-                    <th>Recieve Date</th>
-                    <th>Action</th>
+                     <th>Source</th>
+                    <th>Date</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>            
@@ -74,14 +74,14 @@
 <!--                <td><?php echo $row['stock_status'];?></td>-->
                 <td>                    
                     <?php
-                    $sString = 'Inactive';
+                    $sString = 'Issued';
                     $sClass = 'danger';
                     if($row['status'] == 1){
-                        $sString = 'Active';
+                        $sString = 'Recieved';
                         $sClass = 'success';
                     }
                     ?>
-                    <a href="<?php echo site_url('barcode_inventory/barcode_order_status/'.$row['id'].'/transactions'); ?>" class="label label-<?php echo $sClass; ?> bostatus"><?php echo $sString ?></a>
+                    <a href="<?php //echo site_url('barcode_inventory/barcode_order_status/'.$row['id'].'/transactions'); ?>" class="label label-<?php echo $sClass; ?> bostatus"><?php echo $sString ?></a>
                 </td>
             </tr>
             <?php $sno++; ?>
@@ -100,7 +100,8 @@
             e.preventDefault();
             var currentElem = $(this);
             var url = $(this).attr('href');
-            bootbox.confirm("Are you sure want to change the status?", function(result){
+            //bootbox.confirm("Are you sure want to change the status?", function(result){
+				 bootbox.confirm("Have you seen the status?", function(result){
                 if(!result){
                     return;
                 }

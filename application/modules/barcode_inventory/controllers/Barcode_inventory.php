@@ -36,12 +36,41 @@ class Barcode_inventory extends MX_Controller {
         ];
         $this->load->view('template', $data);
     }
+	
+	
+	public function all_barcode_inventory() {
+        #Utils::debug();
+        $data['title'] = 'List All Barcode Inventory';
+        $data['view'] = 'all_barcode_inventory_tpl';
+        if (!empty($this->input->get('page_limit'))) {
+            $limit = $this->input->get('page_limit');
+        } else {
+            $limit = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit);
+        $offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $query = $this->input->get('search', null);
+        list($data['total'], $data['items']) = $this->BarcodeInventoryModel->getAllBarcode($limit, $offset, $query,'Received');
+
+        $data["links"] = Utils::pagination('barcode_inventory/all_barcode_inventory', $data['total']);
+        $data['breadcrumb'] = [
+            ['title' => 'Barcode Inventory', 'url' => null]
+        ];
+        $this->load->view('template', $data);
+    }
+	
 
     public function addbarcode_transaction() {
         $data['plants'] = $this->BarcodeInventoryModel->getAssignedPlant();
         foreach ($data['plants'] as $row) {
             $data['plantcontroller'][$row['plant_id']] = $row['plant_name'];
         }
+		
+		$data['locations'] = $this->BarcodeInventoryModel->getAssignedLocation();
+        foreach ($data['locations'] as $row) {
+            $data['locationcontroller'][$row['location_id']] = $row['location_name'];
+        }
+		
         $this->load->view('barcode_inventory/addbarcode_transaction', $data);
     }
 
@@ -126,10 +155,11 @@ class Barcode_inventory extends MX_Controller {
             'receive_date' => date("Y-m-d H:i:s"),
             'first_code_number' => current($post['printed_code']),
             'last_code_number' => end($post['printed_code']),
+			'issue_location' => ($post['status_type'] == 'Issued')?$post['issue_location']:0,
             'status' => ($post['status_type'] == 'Received')?1:2
         ];
         if ($this->db->insert('transactions_codes', $tData)) {
-            $this->db->update("printed_barcode_qrcode", ['stock_status' => $post['status_type'],'receive_date'=>date('Y-m-d H:i:s')], 'print_id ="'.$post['printed_order'].'"');
+            $this->db->update("printed_barcode_qrcode", ['stock_status' => $post['status_type'],'issue_location' => $post['issue_location'],'receive_date'=>date('Y-m-d H:i:s')], 'print_id ="'.$post['printed_order'].'"');
             Utils::response(['status' => true, 'message' => 'Transaction has been '.$post['status_type'].'.']);
         } else {
             
@@ -170,7 +200,7 @@ class Barcode_inventory extends MX_Controller {
         $query = $this->input->get('search', null);
         list($data['total'], $data['items']) = $this->BarcodeInventoryModel->getBarcode($limit, $offset, $query,'Issued');
 
-        $data["links"] = Utils::pagination('barcode_inventory/receive_codes', $data['total']);
+        $data["links"] = Utils::pagination('barcode_inventory/issue_codes', $data['total']);
         $data['breadcrumb'] = [
             ['title' => 'Issued Barcode Inventory', 'url' => null]
         ];

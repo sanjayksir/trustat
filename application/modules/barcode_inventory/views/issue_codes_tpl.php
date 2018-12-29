@@ -37,10 +37,10 @@
                     <th>Order No.</th>                    
                     <th>Order Date</th>
                     <th>Print Date</th>
-                    <th>Source From</th>
+                    <th>Issue Location</th>
                     <th>Issue Date</th>
                     <th>Code Status</th>
-                    <th>Action</th>
+                    <!--<th>Action</th>-->
                 </tr>
             </thead>
             <tbody>            
@@ -60,7 +60,8 @@
                 <td><?php echo $row['order_no'];?></td>
                 <td><?php echo date('d/M/Y',strtotime($row['created_date'])); ?></td>
                 <td><?php echo date('d/M/Y',strtotime($row['modified_at'])); ?></td>
-                <td><?php
+                <td><?php echo get_locations_name_by_id($row['issue_location']);
+				/*
                 if($row['delivery_method'] == 1){
                     echo 'Super Admin';
                 }elseif($row['delivery_method'] ==2){
@@ -68,11 +69,11 @@
                 }elseif($row['delivery_method'] == 3){
                     echo 'CCC Admin';
                 }
-                
+                */
                 ?></td>
                 <td><?php echo date('d/M/Y',strtotime($row['receive_date'])); ?></td>
                 <td><?php echo $row['stock_status'];?></td>
-                <td>                    
+                <!--<td>                    
                     <?php
                     $sString = 'Inactive';
                     $sClass = 'danger';
@@ -82,7 +83,7 @@
                     }
                     ?>
                     <a href="<?php echo site_url('barcode_inventory/barcode_order_status/'.$row['id'].'/barcode'); ?>" class="label label-<?php echo $sClass; ?> bostatus"><?php echo $sString ?></a>
-                </td>
+                </td>-->
             </tr>
             <?php $sno++; ?>
             <?php endforeach; ?>

@@ -109,6 +109,7 @@
 
  			</div> 
 		</div>
+		
             <hr>
 
           <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">

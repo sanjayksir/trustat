@@ -53,7 +53,7 @@ if(!empty($isOtherIndustry)){
 					?>
         
         <!-- <div class="form-group row">
-		     <div class="col-sm-6"> -->
+		     <div class="col-sm-6">
             <?php $userId 	=$this->session->userdata('admin_user_id');
 			if($userId==1){?>
 				  <label for="form-field-9">Assined to CCC Admin</label>

@@ -4,7 +4,7 @@
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
-			<?php $label = 'Product Physical Inventory Check Report';?>
+			<?php $label = 'Product Physical Inventory Summary';?>
 
 			<?php $this->load->view('../includes/admin_sidebar');?>
 			
@@ -39,7 +39,7 @@
 							<div class="col-xs-12">
  								<div class="widget-box widget-color-blue">
                                                                     <div class="widget-header widget-header-flat">
-                                                                        <h5 class="widget-title bigger lighter">List <?php echo $label;?></h5>
+                                                                        <h5 class="widget-title bigger lighter">List <?php echo $label;?>, Physical Inventory Number - <?php echo $this->uri->segment(3);?></h5>
                                                                     </div>
 									<div class="widget-body">
                                                                             <div class="row filter-box">
@@ -68,12 +68,15 @@
  												<thead>
 													<tr>
 														<th>#</th>
-														<th>Product Name</th>
-														<th>Physical Inventory Number</th>
- 														<th>location Type</th>
-														<th>Location Name</th>
-                                                        <th>Inventory Date Time</th> 
-														<th>Actual Date Time</th> 
+														<th>PI Summary</th>
+														<th>PI#</th>
+														<th>PI Date</th>
+ 														<th>location</th>
+														<th>Product SKU</th>
+                                                        <th>Scanned Barcode Level</th> 
+														<th>Qty as per On Hand</th> 
+														<th>Qty as per PI</th> 
+														<th>User Name</th> 
   													</tr>
 												</thead>
 												<tbody>
@@ -88,12 +91,15 @@
 											?>
                                                <tr id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
-											   <td><?php echo $listData['product_name']; ?></td>
-												<td><?php echo $listData['pi_number']; ?> <a href="<?php  echo base_url().'reports/product_stock_physical_inventory_details/'.$listData['pi_number'];?>" class="btn btn-xs btn-success" target="_blank" title="View Details">View Details <i class="fa fa-eye"></i></a>  <a href="<?php  echo base_url().'reports/product_stock_physical_inventory_summary/'.$listData['pi_number'];?>" class="btn btn-xs btn-success" target="_blank" title="View Details"> PI Summary <i class="fa fa-eye"></i></a></td>
-												<td><?php echo $listData['location_type']; ?></td>
+											   <td><?php echo $listData['pi_number']; ?></td>
+												<td><?php echo $listData['pi_number']; ?></td>
+												 <td><?php echo (date('j M Y H:i:s D', strtotime($listData['created_date_time']))); ?></td>
 												<td><?php echo $listData['location_name']; ?></td>
-												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['inventory_in_date']))); ?></td>
- 												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['created_date_time']))); ?></td>
+												<td><?php echo $listData['product_sku']; ?></td>
+												<td><?php echo $listData['pack_level']; ?></td>
+ 												<td><?php echo $listData['qty_as_per_on_hand']; ?></td>
+												<td><?php echo $listData['qty_as_per_pi']; ?></td>
+												<td><?php echo getUserFullNameById($listData['customer_user_id']); ?></td>
                                               </tr>
                                          <?php }
 										}else{ ?>

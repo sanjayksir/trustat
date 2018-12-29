@@ -76,15 +76,14 @@
                                                 <table id="missing_people" class="table table-striped table-bordered table-hover">
                                                         <thead>
                                                             <tr>
-                                                                <th>#</th> 
-																<th>Order Date</th>
-                                                                <th>Order By</th>
-                                                                <!--<th>Order Number</th>
+                                                                <th>#</th>
+                                                                <th>Order Number</th>
                                                                 <th>Tracking Number</th>
-                                                                <th>Product SKU</th>-->
+                                                                <th>Product SKU</th>
                                                                 <th>Product Name</th>
-                                                                <th>Ordered Qty</th>
+                                                                <th>Qty</th>
                                                                 <th>Delivery Date</th>
+                                                                <th>Order Date</th>
                                                                 <th>Status</th>
                                                                 <th>Print</th>
                                                                 <th>Action</th>
@@ -113,15 +112,13 @@
                                                 }?>
        <tr id="show<?php echo $listData['order_id']; ?>">
                                                    <td><?php  echo $sno;$sno++; ?></td>
-												    <td><?php  if($listData['created_date']!='0000-00-00'){echo date('j M Y H:i:s D',strtotime($listData['created_date']));}else{echo '';}; ?></td>
-													 <td><?php echo getUserFullNameById($listData['user_id']); ?></td>
-                                                   <!--<td><?php  echo $listData['order_no']; ?>
+                                                   <td><?php  echo $listData['order_no']; ?>
                                                    <td><?php  echo $listData['order_tracking_number']; ?></td>
-                                                        <td><?php echo $listData['product_sku']; ?></td>-->
+                                                        <td><?php echo $listData['product_sku']; ?></td>
                                                         <td><?php echo $listData['product_name']; ?></td>
                                                         <td><?php echo $listData['quantity']; ?></td>
                                                         <td><?php  if($listData['delivery_date']!='0000-00-00'){echo date('j M Y H:i:s D',strtotime($listData['delivery_date']));}else{echo '';}; ?></td>
-                                                       
+                                                        <td><?php  if($listData['created_date']!='0000-00-00'){echo date('j M Y H:i:s D',strtotime($listData['created_date']));}else{echo '';}; ?></td>
                                                         <?php if($this->session->userdata('admin_user_id')==1){
                                                                 //echo $listData['user_id'].'**'.$this->session->userdata('admin_user_id');		
 
@@ -304,11 +301,95 @@
 //echo $datecodedno;
 
 ?>
+<?php 
+$user_id 	= $this->session->userdata('admin_user_id');//echo '<pre>';print_r($this->session->userdata('admin_user_id'));
+
+if( $this->uri->segment(3)!=''){
+	$user_id=	$this->uri->segment(3);
+	$UserData = get_parent_user($user_id,'1'); 
+	$SelectDD='';
+}else{
+	$SelectDD='1';
+	$UserData = get_active_users($user_id,'1');
+}
+   //echo '<pre>';print_r($UserData) ;
+
+//echo '<pre>';print_r($UserData);?>
 <form name="frm" id="frm" action="#" method="POST">
 <!--<input name="menu_id" id="menu_id" type="hidden" value="">-->
 <input name="order_no" id="order_no" type="hidden" value="<?php $datecodedno; ?>">
 <div class="form-group row">
+
 <div class="col-sm-12">
+
+		<?php $userId 	=$this->session->userdata('admin_user_id');
+			if($userId==1){?>
+			<label for="form-field-8">Select CCC Admin User</label>
+            <select class="form-control" name="user" id="user" onchange="return get_plants(this.value);">
+			<?php if($SelectDD!=''){?><option value="">-Select CCC Admin User-</option>
+            <?php }
+ 			//$plant_data = get_all_plants($user_id);
+ 			foreach($UserData as $res){?>
+            <option value="<?php echo $res['user_id'];?>" <?php if($this->uri->segment(3)==$res['user_id']){echo 'selected';}?>><?php echo ucfirst($res['user_name']);?></option>
+ 			<?php }?>
+            </select> 
+			<br />
+			
+			<label for="form-field-8">Select a Plant</label>
+             <select class="form-control" name="plant_id[]" id="plant_id" onchange="return get_productsku(this.value);">
+             
+             </select>
+			 
+			
+			 
+			  <script>
+		 function get_plants(id){
+		 	if(id!=''){
+				$.ajax({
+				type:'POST',
+				url:'<?php echo base_url().'plant_master/getActivePlantListSA'?>',
+				data:{id:id},
+				success:function(msg){
+					$("#plant_id").html(msg);
+				}
+				})
+		 	}
+		 }
+             
+		 </script>
+		 <?php if(!empty($this->uri->segment(3))){?>
+		 <script>get_plants(<?php echo $this->uri->segment(3);?>);</script>
+		 <?php }?>
+		 <br />
+			
+			<label for="form-field-8">SKU/Product Name</label>
+             <select class="form-control" name="products[]" id="products">
+             
+             </select>
+			  <?php //if(!empty($this->uri->segment(3))){?>
+		 <script>get_productsku(<?php echo $this->uri->segment(3);?>);</script>
+		 <?php //}?>
+		 
+			  <script>
+		 function get_productsku(id){
+		 	if(id!=''){
+				$.ajax({
+				type:'POST',
+				url:'<?php echo base_url().'plant_master/getAssignedProductList'?>',
+				data:{id:id},
+				success:function(msg){
+					$("#products").html(msg);
+				}
+				})
+		 	}
+		 }
+             
+		 </script>
+		
+		 
+		 <?php //echo $this->uri->segment(3). "sanjay";?>
+			<?php } else { ?>
+			
 <label for="form-field-8">Plant Name</label>
 <select class="form-control" name="plant_id" id="plant_id" onchange="return get_products(this.value);">
 <option value="">-Select Plant-</option>
@@ -317,9 +398,10 @@ $user_id 	= $this->session->userdata('admin_user_id');
 $plant_data = get_all_active_plants($user_id);
 foreach($plant_data as $res){?>
 <option value="<?php echo $res['plant_id'];?>" <?php if($this->uri->segment(3)==$res['plant_id']){echo 'selected';}?>><?php echo $res['plant_name'];?></option>
-<?php }?>
+			<?php }  ?>
 </select>
 <br />
+<?php echo $this->uri->segment(3);?>
 <label for="form-field-8">SKU/Product Name</label>
 <select class="form-control" name="product[]" id="product" >
 
@@ -327,7 +409,7 @@ foreach($plant_data as $res){?>
 <?php if(!empty($this->uri->segment(3))){?>
 <script>get_products(<?php echo $this->uri->segment(3);?>);</script>
 <?php }?>						
-
+<?php //echo $this->uri->segment(3). "sanjay2";?>
 
 <script>
 function get_products(id){
@@ -343,6 +425,8 @@ $("#product").html(msg);
 }
 }
 </script>
+<?php  } ?>
+
 
 
                                   </div>

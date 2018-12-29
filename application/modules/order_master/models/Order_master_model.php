@@ -1440,6 +1440,54 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 	 }
 	 
 	 
+	 function count_physical_inventory_summary($srch_string=''){
+		$pi_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");                    
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('physical_inventory_summary C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		$this->db->where(array('pi_number' => $pi_number, 'P.created_by' => $user_id));
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 function get_physical_inventory_summary($limit,$start,$srch_string=''){
+		 $pi_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		}
+		 
+ 		$this->db->select(' C.*, P.product_name, P.product_sku',false);
+		$this->db->from('physical_inventory_summary C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		//$this->db->group_by('C.pi_number');
+		$this->db->where(array('pi_number' => $pi_number, 'P.created_by' => $user_id));
+   		$this->db->order_by('C.pi_summery_n','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 
+	 
 	 function count_product_code_details($srch_string=''){
 		$pi_number = $this->uri->segment(4);
 		$resultData = array();

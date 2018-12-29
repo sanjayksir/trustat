@@ -36,9 +36,9 @@
                     <th>Order No.</th>                    
                     <th>Order Date</th>
                     <th>Print Date</th>
-                    <th>Source From</th>
-                    <th>Issue Date</th>
-                    <th>Action</th>
+                    <th>Issue Location</th>
+                    <th>Date</th>
+                    <th>Status</th>
                 </tr>
             </thead>
             <tbody>            
@@ -60,7 +60,8 @@
                 <td><?php echo $row['order_number'];?></td>
                 <td><?php echo date('d/M/Y',strtotime($row['order_date'])); ?></td>
                 <td><?php echo date('d/M/Y',strtotime($row['print_date'])); ?></td>
-                <td><?php
+                <td><?php echo get_locations_name_by_id($row['issue_location']);
+				/*
                 if($row['source_received_from'] == 1){
                     echo 'Super Admin';
                 }elseif($row['source_received_from'] ==2){
@@ -68,20 +69,20 @@
                 }elseif($row['source_received_from'] == 3){
                     echo 'CCC Admin';
                 }
-                
+                */
                 ?></td>
                 <td><?php echo date('d/M/Y',strtotime($row['receive_date'])); ?></td>
 <!--                <td><?php echo $row['stock_status'];?></td>-->
                 <td>                    
                     <?php
-                    $sString = 'Inactive';
+                    $sString = 'Issued';
                     $sClass = 'danger';
                     if($row['status'] == 1){
-                        $sString = 'Active';
+                        $sString = 'Recieved';
                         $sClass = 'success';
                     }
                     ?>
-                    <a href="<?php echo site_url('barcode_inventory/barcode_order_status/'.$row['id'].'/transactions'); ?>" class="label label-<?php echo $sClass; ?> bostatus"><?php echo $sString ?></a>
+                    <a href="<?php //echo site_url('barcode_inventory/barcode_order_status/'.$row['id'].'/transactions'); ?>" class="label label-<?php echo $sClass; ?> bostatus"><?php echo $sString ?></a>
                 </td>
             </tr>
             <?php $sno++; ?>
@@ -100,7 +101,8 @@
             e.preventDefault();
             var currentElem = $(this);
             var url = $(this).attr('href');
-            bootbox.confirm("Are you sure want to change the status?", function(result){
+           // bootbox.confirm("Are you sure want to change the status?", function(result){
+			   bootbox.confirm("Have you seen the status?", function(result){
                 if(!result){
                     return;
                 }

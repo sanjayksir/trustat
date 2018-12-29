@@ -252,6 +252,7 @@ $route['reports/product_stock_transfer_out_reports'] = 'order_master/barcode/lis
 $route['reports/product_stock_transfer_out_invoice_details/(:any)'] = 'order_master/barcode/list_stock_transfer_out_invoice_details/$1';
 $route['reports/product_stock_transfer_in_invoice_details/(:any)'] = 'order_master/barcode/list_stock_transfer_in_invoice_details/$1';
 $route['reports/product_stock_physical_inventory_details/(:any)'] = 'order_master/barcode/list_physical_inventory_details/$1';
+$route['reports/product_stock_physical_inventory_summary/(:any)'] = 'order_master/barcode/list_physical_inventory_summary/$1';
 //$route['reports/view_product_code_details/(:any)'] = 'order_master/barcode/view_product_code_details/$1';
 $route['reports/product_stock_transfer_in_reports'] = 'order_master/barcode/list_stock_transfer_in_report';
 $route['reports/product_physical_inventory_check_report'] = 'order_master/barcode/list_physical_inventory_check_report';

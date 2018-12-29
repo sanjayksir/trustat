@@ -3,7 +3,7 @@
     <div class="widget-header widget-header-flat">
         <h5 class="widget-title bigger lighter"><?php echo $title;?></h5>
         <div class="widget-toolbar">
-            <a href="<?php echo base_url('barcode_inventory/addbarcode_transaction/Received') ?>" class="btn btn-sm btn-success btnadd" title="Receive More Codes">Receive More Codes</a>
+            <!--<a href="<?php echo base_url('barcode_inventory/addbarcode_transaction/Received') ?>" class="btn btn-sm btn-success btnadd" title="Receive More Codes">Receive More Codes</a>-->
         </div>
     </div>
     <div class="widget-body">
@@ -31,8 +31,8 @@
         <table id="missing_people" class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>Sno</th>
-                    <th>Plant Code</th>
+                    <th>#</th>
+                    <th>Plant Name</th>
                     <th>Product SKU</th>
                     <th>Product Code</th>
                     <th>Order No.</th>                    
@@ -40,8 +40,9 @@
                     <th>Print Date</th>
                     <th>Source From</th>
                     <th>Recieve Date</th>
-                    <th>Code Status</th>
-                    <!--<th>Action</th>-->
+					<th>Recieve Location</th>
+                    <th>Inventory Status</th>
+                   <!-- <th>Action</th>-->
                 </tr>
             </thead>
             <tbody>            
@@ -55,8 +56,8 @@
             ?>
             <tr>
                 <td><?php echo $sno; ?></td>
-                <td><?php echo $row['plant_id'];?></td>
-                <td><?php echo $row['product_sku'];?></td>
+                <td><?php echo get_plants_name_by_id($row['plant_id']);?></td>
+                <td><?php echo $row['product_name'];?></td>
                 <td><?php echo $row['barcode_qr_code_no'];?></td>
                 <td><?php echo $row['order_no'];?></td>
                 <td><?php echo date('d/M/Y',strtotime($row['created_date'])); ?></td>
@@ -72,8 +73,9 @@
                 
                 ?></td>
                 <td><?php echo date('d/M/Y',strtotime($row['receive_date'])); ?></td>
-                <td><?php echo $row['stock_status'];?></td>
-                <!--<td>                    
+				<td><?php echo get_locations_name_by_id($row['issue_location']); ?></td>
+                <td><?php if($row['active_status'] == 0){ echo $row['stock_status']; } else { echo "Consumed"; }?></td>
+               <!-- <td>                    
                     <?php
                     $sString = 'Inactive';
                     $sClass = 'danger';

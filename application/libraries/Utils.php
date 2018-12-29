@@ -168,6 +168,7 @@ class Utils {
         }
         return $optionVal;
     }
+	
     public static function elemValue($key,$data){
         if (self::$ci->input->server('REQUEST_METHOD') == 'POST'){
             $input = self::$ci->input->post();

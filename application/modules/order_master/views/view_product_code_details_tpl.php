@@ -93,11 +93,11 @@
  												<thead>
 													<tr>
 														<th>S.No.</th>
-														<th>Transaction Type</th>
+														<th>Date and Time</th>
+                                                        <th>Activity</th>
 														<th>Location Type</th>
 														<th>Location Name</th>
-														<th>Date and Time</th>
-                                                        <th>User Name</th> 
+														<th>User Name</th> 
   													</tr>
 												</thead>
 												<tbody>
@@ -112,9 +112,6 @@
 											?>
                                                <tr id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
-												<td><?php echo $listData['trax_name']; ?></td>
-												<td><?php echo get_locations_type_by_id($listData['location_id']); ?></td>
-												<td><?php echo get_locations_name_by_id($listData['location_id']); ?></td>
 												<td><?php 
 												
 												//$Tdate = "STR_TO_DATE(".$listData['transaction_datetime'].", '%d/%m/%Y %H:%i:%s')";
@@ -125,6 +122,10 @@
 												echo(date('j M Y H:i:s D', strtotime($listData['transaction_datetime'])));
 									           //echo(date('d-m-Y H:i:s', strtotime($listData['transaction_datetime'])));
 												?></td>
+												<td><?php echo $listData['trax_name']; ?></td>
+												<td><?php echo get_locations_type_by_id($listData['location_id']); ?></td>
+												<td><?php echo get_locations_name_by_id($listData['location_id']); ?></td>
+												
 												<td><?php echo getUserFullNameById($listData['agent_customer_id']); ?></td>
                                               </tr>
                                          <?php }
