@@ -79,8 +79,9 @@ class ScannedproductsModel extends CI_Model {
         $query = $this->db->select("pr.*, sp.*")
                 ->from('push_advertisements AS sp')
                 ->join('products AS pr', 'pr.id=sp.product_id')
-                ->where(['sp.consumer_id' => $consumer_id])
-				//->order_by('created_at', 'desc')
+                //->where(['sp.consumer_id' => $consumer_id])
+				->where(array('sp.consumer_id' => $consumer_id, 'sp.ad_active' => 1))
+				->order_by('sp.id', 'desc')
                 ->get()
                 ->result();
         if(empty($query)){
@@ -170,8 +171,8 @@ return $result;
         $query = $this->db->select("pr.*,sp.*")
                 ->from('push_surveys AS sp')
                 ->join('products AS pr', 'pr.id=sp.product_id')
-                ->where(['sp.consumer_id' => $consumer_id])
-				//->order_by('created_at', 'desc')
+                ->where(array('sp.consumer_id' => $consumer_id, 'sp.survey_active' => 1))
+				->order_by('sp.id', 'desc')
                 ->get()
                 ->result();
         if(empty($query)){

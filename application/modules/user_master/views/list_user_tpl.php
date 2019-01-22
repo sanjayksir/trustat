@@ -78,7 +78,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="input-group">
-                        <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Type your query">
+                        <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Full Name, User Name, Email ID, Phone Number">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                             <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -98,7 +98,7 @@
                                             <th>User Name</th>
                                             <th>Email ID</th>
                                             <th>Phone</th>
-                                            <th><?php echo $label;?> Plants</th>
+                                            <th>Location name with type</th>
                                             <th>Action</th>
                                     </tr>
                             </thead>
@@ -124,7 +124,21 @@
                                                 <td><?php echo $listData['user_name']; ?></td>
                                                 <td><?php echo $listData['email_id']; ?></td>
                                                 <td><?php echo $listData['mobile_no']; ?></td>
-                                                <td><?php echo assigned_plants($listData['user_id']); ?></td>
+                                                <td><?php if($this->session->userdata('admin_user_id')==1){
+				
+												$location_name = get_all_active_locations($listData['user_id']);
+															//echo $location_name['location_name'];
+															//print_r($array['location_name']);
+															
+															
+															foreach ($location_name as $key => $value) {
+																echo $value['location_name'] . ' [' .  $value['location_type']. ']' . '<br/>';
+															}
+															}else{
+																echo assigned_locations($listData['user_id']);
+															}
+
+												?></td>
                                                  <td>
 
                                                     <div class="hidden-sm hidden-xs action-buttons">

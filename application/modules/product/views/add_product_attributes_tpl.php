@@ -40,12 +40,12 @@ if(!empty($isOtherIndustry)){
       <div class="page-content">
         <div class="row">
           <div class="col-xs-12">
-            <div class="row"><div style="clear:both;"><?php echo anchor('product/list_product', 'List Product',array('class' => 'btn btn-primary pull-right')); ?></div>
+            <div class="row"><div style="clear:both;"><?php echo anchor('product/list_product', 'List Products',array('class' => 'btn btn-primary pull-right')); ?></div>
               <div class="col-xs-12">
                 <div class="accordion-style1 panel-group" id="accordion">
                   <div class="">
                   <!--  <h3 class="header smaller lighter blue">Select Product Attributes </h3>-->
-					
+					<div style="color:red">Note*- You must must need to add at least 1 attribute for this product to make it working.</div> 
                     <form name="user_frm" id="user_frm" action="#" method="post">
 					<input type="hidden" name="id" value="<?php echo $this->uri->segment(3)?>" id="id" />
                     <div class="widget-main">

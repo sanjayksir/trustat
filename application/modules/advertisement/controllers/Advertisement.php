@@ -159,7 +159,7 @@
  		echo $res =  slugify2($name).'-'.$pin;
 		exit;
    }
-   
+   /*
    public function launch_advertisement() {
         $this->checklogin();
         if (!empty($this->input->post('del_submit'))) {
@@ -186,6 +186,35 @@
         $params["product_list"] = $this->Advertisement_model->product_listing($limit_per_page, $start_index, $srch_string);
         $params["links"] = Utils::pagination('advertisement/launch_advertisement', $total_records);
         $this->load->view('launch_advertisement', $params);
+    }
+	*/
+	
+	public function launch_advertisement() {
+        $this->checklogin();
+        if (!empty($this->input->post('del_submit'))) {
+            if ($this->db->query("delete from Surveys where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Advertisement Deleted Successfully!');
+            }
+        }
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+       
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Advertisement_model->total_advertisement_listing($srch_string);
+        $params["orderListing"] = $this->Advertisement_model->advertisement_listing($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('advertisement/launch_advertisement', $total_records);
+        $this->load->view('launch_advertisements_tpl', $params);
     }
 	
 	public function create_advertisement() {
@@ -792,14 +821,15 @@ function list_assigned_Advertisements() {
 	 	$this->checklogin();		
 		$customer_id=$this->input->post('c_id');
 		$product_id	=$this->input->post('p_id');
+		$promotion_id =$this->input->post('promotion_id');
 		$Chk = $this->input->post('Chk');
-		echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$Chk);
-		if($Chk==0){
-		$value='';
+		echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$promotion_id,$Chk);
+		if($Chk==2){
+		$value=2;
 		} else {
 			$value=1;
 		}
-		 echo $status= $this->Advertisement_model->change_status($product_id,$value);
+		 echo $status= $this->Advertisement_model->change_status($promotion_id,$value);
 		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				
 				foreach ($query->result() as $user)  
@@ -881,12 +911,57 @@ function list_assigned_Advertisements() {
        // $total_records = $this->Textmessage_model->total_product_listing($srch_string);
         //$params["product_list"] = $this->Textmessage_model->product_listing($limit_per_page, $start_index, $srch_string);
 		
-		$total_records = $this->Textmessage_model->total_text_messages_request_listing($srch_string);
-        $params["product_list"] = $this->Textmessage_model->text_messages_request_listing($limit_per_page, $start_index, $srch_string);
+		$total_records = $this->Advertisement_model->total_text_messages_request_listing($srch_string);
+        $params["product_list"] = $this->Advertisement_model->text_messages_request_listing($limit_per_page, $start_index, $srch_string);
         $params["links"] = Utils::pagination('advertisement/text_messages_listing', $total_records);
         $this->load->view('text_messages_listing', $params);
     }
 	
-	 
+	public function save_promotion_request() {
+		  //print_r($_POST);exit;
+		  $savedData = $this->input->post();
+  		  echo $this->Advertisement_model->save_promotion_request($savedData);  exit;
+      }
+	  
+	  
+	  
+	  public function view_advertisement_details() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Advertisement_model->count_advertisement_details($srch_string);
+
+        $params["ScanedCodeListing"] = $this->Advertisement_model->get_advertisement_details($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('surveys/view_survey_details', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('view_advertisement_details_tpl', $params);
+    }
+	
+	  
+	 function review_advertisement($id = '') {
+        if (empty($id)) {
+            redirect('advertisement/launch_advertisement');
+        }
+        $data['detailData'] = $this->Advertisement_model->review_advertisement_data($id);
+        $this->load->view('review_advertisement_tpl', $data);
+    } 
+
+	  
 }
 

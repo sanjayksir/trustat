@@ -123,7 +123,11 @@
 		$delivery_method  		= ($this->input->post('delivery_method'))?$this->input->post('delivery_method'):'';
 		$code_key_type  		= ($this->input->post('code_key_type'))?$this->input->post('code_key_type'):'';
 		$code_size  			= ($this->input->post('code_size'))?$this->input->post('code_size'):'';
-		$code_unity_type  		= ($this->input->post('code_unity_type'))?$this->input->post('code_unity_type'):'';			
+		$code_unity_type  		= ($this->input->post('code_unity_type'))?$this->input->post('code_unity_type'):'';	
+		$registration_pack  	= ($this->input->post('registration_pack'))?$this->input->post('registration_pack'):'';	
+		$retailer_pack  		= ($this->input->post('retailer_pack'))?$this->input->post('retailer_pack'):'';	
+		$min_shipper_pack_level  		= ($this->input->post('min_shipper_pack_level'))?$this->input->post('min_shipper_pack_level'):'';	
+		$max_shipper_pack_level  		= ($this->input->post('max_shipper_pack_level'))?$this->input->post('max_shipper_pack_level'):'';			
 		## essential attributes
 		
 		$id			  = $this->input->post('id');
@@ -140,6 +144,10 @@
 					"code_key_type"		  => $code_key_type,
 					"code_size"			  => $code_size,
 					"code_unity_type"	  => $code_unity_type,
+					"registration_pack"	  => $registration_pack,
+					"retailer_pack"	  	  => $retailer_pack,
+					"min_shipper_pack_level"	  => $min_shipper_pack_level,
+					"max_shipper_pack_level"	  => $max_shipper_pack_level,
 					"created_by"		  => $is_parent,
 					"other_industry"	  => $Other_industry_val
  				);
@@ -174,6 +182,10 @@
 					"code_activation_type"=> $code_activation_type,
 					"delivery_method"	  => $delivery_method,
 					"code_key_type"		  => $code_key_type,
+					"registration_pack"	  => $registration_pack,
+					"retailer_pack"		  => $retailer_pack,
+					"min_shipper_pack_level"	=> $min_shipper_pack_level,
+					"max_shipper_pack_level"	=> $max_shipper_pack_level,
 					"code_size"			  => $code_size,
 					"code_unity_type"	  => $code_unity_type,
 					"other_industry"	  => $Other_industry_val

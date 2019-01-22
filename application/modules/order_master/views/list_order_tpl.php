@@ -63,7 +63,7 @@
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <div class="input-group">
-                                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Order Number or Tracking Number or Product SKU or Product Name">
+                                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Order Number or Product Name">
                                                                 <span class="input-group-btn">
                                                                     <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                     <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -77,9 +77,10 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th> 
+																<th>Order Number</th>
 																<th>Order Date</th>
                                                                 <th>Order By</th>
-                                                                <!--<th>Order Number</th>
+                                                                <!--
                                                                 <th>Tracking Number</th>
                                                                 <th>Product SKU</th>-->
                                                                 <th>Product Name</th>
@@ -111,8 +112,9 @@
                                                 $status ='Inactive';
                                                         $colorStyle="style='color:black;border-radius:10px;background-color:red;border:none;'";
                                                 }?>
-       <tr id="show<?php echo $listData['order_id']; ?>">
+												  <tr id="show<?php echo $listData['order_id']; ?>">
                                                    <td><?php  echo $sno;$sno++; ?></td>
+												    <td><?php  echo $listData['order_no']; ?></td>
 												    <td><?php  if($listData['created_date']!='0000-00-00'){echo date('j M Y H:i:s D',strtotime($listData['created_date']));}else{echo '';}; ?></td>
 													 <td><?php echo getUserFullNameById($listData['user_id']); ?></td>
                                                    <!--<td><?php  echo $listData['order_no']; ?>
@@ -314,9 +316,9 @@
 <option value="">-Select Plant-</option>
 <?php 
 $user_id 	= $this->session->userdata('admin_user_id');
-$plant_data = get_all_active_plants($user_id);
+$plant_data = get_all_active_locations_plant($user_id);
 foreach($plant_data as $res){?>
-<option value="<?php echo $res['plant_id'];?>" <?php if($this->uri->segment(3)==$res['plant_id']){echo 'selected';}?>><?php echo $res['plant_name'];?></option>
+<option value="<?php echo $res['location_id'];?>" <?php if($this->uri->segment(3)==$res['location_id']){echo 'selected';}?>><?php echo $res['location_name'];?><?php if($user_id=='1'){ echo " - [" .getUserFullNameById($res['created_by']) . "]"; } ?></option>
 <?php }?>
 </select>
 <br />
@@ -420,9 +422,9 @@ $("#product").html(msg);
 <option value="">-Select Plant-</option>
 <?php 
 $user_id 	= $this->session->userdata('admin_user_id');
-$plant_data = get_all_active_plants($user_id);
+$plant_data = get_all_active_locations_plant($user_id);
 foreach($plant_data as $res){?>
-<option value="<?php echo $res['plant_id'];?>" <?php if($this->uri->segment(3)==$res['plant_id']){echo 'selected';}?>><?php echo $res['plant_name'];?></option>
+<option value="<?php echo $res['location_id'];?>" <?php if($this->uri->segment(3)==$res['location_id']){echo 'selected';}?>><?php echo $res['location_name'];?></option>
 <?php }?>
 </select>
 <br />
@@ -602,7 +604,7 @@ $("#product2").html(msg2);
                                     //$('#ajax_msg').text("User Added Successfully!").css("color","green").show();
                                     $('.alert-success').show();
                                     $('#frm')[0].reset(); 
-                                    window.location="<?php echo base_url(); ?>order_master/list_orders/";
+                                    window.location="<?php echo base_url(); ?>order_master/list_orders";
 
                             }
                     }

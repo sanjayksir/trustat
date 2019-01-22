@@ -94,79 +94,70 @@
 
 											<div class="widget-body">
 												<div class="widget-main padding-4">
-												<table class="table table-bordered table-striped">
+												<table class="table table-bordered table-striped" style="display: block; height: 300px; overflow-y: auto">
 														<thead class="thin-border-bottom">
 															<tr>
 																<th>
-																	<i class="ace-icon fa fa-caret-right blue"></i>Product Name																</th>
+																	<i class="ace-icon fa fa-caret-right blue"></i>Barcode																</th>
 
 																<th>
-																	<i class="ace-icon fa fa-caret-right blue"></i>Type</th>
+																	<i class="ace-icon fa fa-caret-right blue"></i>Product Name</th>
 
-																<th class="hidden-480">
-																	<i class="ace-icon fa fa-caret-right blue"></i>Ordered</th>
-															    <th class="hidden-480"><i class="ace-icon fa fa-caret-right blue"></i>Printed</th>
-															    <th class="hidden-480"><i class="ace-icon fa fa-caret-right blue"></i>Activated</th>
-															    <th class="hidden-480"><i class="ace-icon fa fa-caret-right blue"></i>Scanned</th>
+																
+															    <th class="hidden-480"><i class="ace-icon fa fa-caret-right blue"></i>Status</th>
+															    
+																<th class="hidden-480"><i class="ace-icon fa fa-caret-right blue"></i>Purhased</th>
 															</tr>
 														</thead>
+						
+										<tbody>
 
-														<tbody>
-															<tr>
-																<td>&nbsp;</td>
+    <?php $i = 0;  //  echo '***<pre>';print_r($orderListing); 
+                                            if(count($PrintedCodeListing)>0){
+                                                    $i=0;
+                                                    $page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
+                                                    $sno =  $page + 1;
+    foreach ($PrintedCodeListing as $key=>$listData){
+                                                    $i++;
+                                                    ?>
+           <tr id="show<?php echo $key; ?>">
+															<td class="hidden-480"><?php echo $listData['barcode_qr_code_no']; ?></td>
+                                                            <td class="hidden-480"><?php echo $listData['product_name']; ?></td>
+                                                            <td>
 
-																<td>&nbsp;</td>
+                                                            <?php 												
 
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
+                                                             $activeinactive = $listData['active_status'];
+                                                             if ($activeinactive == 1)
+                                                                     { echo "Active";
+                                                                     } else { 
+                                                                     echo "Inactive";
+                                                                     }
 
-															<tr>
-																<td>&nbsp;</td>
+                                                              ?>
+                                                            </td>
+                                                             <td><?php //echo isProductCodeRegistered($listData['barcode_qr_code_no']); ?>
+															 <?php 												
 
-																<td>&nbsp;</td>
+                                                             $isProductCodeRegistered = isProductCodeRegistered($listData['barcode_qr_code_no']);
+                                                             if ($isProductCodeRegistered == true)
+                                                                     { echo "Yes";
+                                                                     } else { 
+                                                                     echo "No";
+                                                                     }
 
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-														</tbody>
+                                                              ?>
+															 </td>
+															  
+															 
+          </tr>
+     <?php 
+     $sno++;
+     }
+                                            }else{ ?>
+                                            <tr><td align="center" colspan="9" class="color error">No Records Founds</td></tr>
+                                            <?php }?>
+                                        </tbody>
 													</table>
 													<div id="sales-charts"></div>
 												</div><!-- /.widget-main -->
@@ -194,17 +185,79 @@
 
 											<div class="widget-body">
 												<div class="widget-main no-padding">
-													<table class="table table-bordered table-striped">
+													<table class="table table-bordered table-striped" style="display: block; height: 300px; overflow-y: auto">
 														<thead class="thin-border-bottom">
 															<tr>
-																<th>
-																	<i class="ace-icon fa fa-caret-right blue"></i>Product Name																</th>
-
-																<th><i class="ace-icon fa fa-caret-right blue"></i>Order Status </th>
-																<th><i class="ace-icon fa fa-caret-right blue"></i>Quantity </th>
+																<th><i class="ace-icon fa fa-caret-right blue"></i>Order Number</th>
+																<th><i class="ace-icon fa fa-caret-right blue"></i>Product Name </th>
+																<th><i class="ace-icon fa fa-caret-right blue"></i>Order Status</th>
 															</tr>
 														</thead>
+														<tbody>
 
+                                        <?php 
+                                        $i = 0; 
+
+                                        if(count($orderListing)>0){
+                                            $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+                                            $sno =  $page + 1;
+                                            foreach ($orderListing as $listData){
+                                                $essentialAttributeArr = array();
+                                                $essentialAttributeArr = getEssentialAttributes($listData['product_id']);
+                                                // echo '***<pre>';print_r($essentialAttributeArr);
+                                                $i++;
+                                                $status = $listData['status'];
+    if($status ==1){
+                                                $status ='Active';
+                                                        $colorStyle="style='color:white;border-radius:10px;background-color:green;border:none;'";
+                                                }else{
+                                                $status ='Inactive';
+                                                        $colorStyle="style='color:black;border-radius:10px;background-color:red;border:none;'";
+                                                }?>
+												  <tr id="show<?php echo $listData['order_id']; ?>">
+                                                   <td><?php  echo $listData['order_no']; ?></td>
+												   <td><?php echo $listData['product_name']; ?></td>
+          
+                                                        <?php if($this->session->userdata('admin_user_id')==1){
+                                                                //echo $listData['user_id'].'**'.$this->session->userdata('admin_user_id');		
+
+                                                                                if($this->session->userdata('admin_user_id')!=$listData['user_id']){
+                                                                                        $print_opt = 0;
+                                                                                }else{
+                                                                                        $print_opt = 1;
+                                                                                }
+
+                                                                ?>
+
+                                                         <td>
+         <?php //if($essentialAttributeArr['delivery_method']==4){?>
+                <select name="change_order_status" id="change_order_status" onchange="return change_order_status('<?php echo $listData['order_id'];?>',this.value,'<?php echo $print_opt;?>');">
+                                                                <option value="0" <?php if($listData['order_status']=='0'){echo 'selected';}?>>Pending</option>
+                                                                <option value="1" <?php if($listData['order_status']=='1'){echo 'selected';}?>>Accepted</option>
+                                                                <option value="2" <?php if($listData['order_status']=='2'){echo 'selected';}?>>Rejected</option>
+                                                                </select>
+        <?php //}else{
+                                                                //echo 'Hard Print';
+                                                        //}?>
+                                                        </td> 
+                                                        <?php }else{?>
+                                                         <td><?php echo order_status($listData['order_status']); ?></td>
+                                                        <?php }?>
+                                                        
+         
+     </tr>
+    <?php 
+    }
+ }else{
+    ?>
+    <tr><td align="center" colspan="8" class="color error">No Records Founds</td></tr>
+<?php         
+ }
+ ?>
+
+                </tbody>
+														
+														<!--
 														<tbody>
 															<tr>
 																<td>&nbsp;</td>
@@ -241,6 +294,7 @@
 																<td>&nbsp;</td>
 															</tr>
 														</tbody>
+														-->
 													</table>
 												</div><!-- /.widget-main -->
 											</div><!-- /.widget-body -->

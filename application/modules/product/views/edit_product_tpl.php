@@ -449,7 +449,50 @@ if(!empty($isOtherIndustry)){
  		    </div>
 			
   		</div> 
-		<!--------------------------------- Essential attributes-----------------------------------> 
+		<div class="form-group row"> 
+           <div class="col-sm-4">
+				<label for="form-field-8">Registration Pack</label>
+				<select name="registration_pack" id="registration_pack" class="form-control">
+				
+				<option value="Yes"  <?php echo ($dt['registration_pack']=='Yes')?'selected':'';?>>Yes</option>
+				<option value="No"  <?php echo ($dt['registration_pack']=='No')?'selected':'';?>>No</option>
+				 
+				</select>
+ 		    </div> 
+            
+            <div class="col-sm-4">
+				<label for="form-field-8">Retailer Pack</label>
+				<select name="retailer_pack" id="retailer_pack" class="form-control">
+				 <option value="Yes"  <?php echo ($dt['retailer_pack']=='Yes')?'selected':'';?>>Yes</option>
+				<option value="No"  <?php echo ($dt['retailer_pack']=='No')?'selected':'';?>>No</option>
+				</select>
+ 		    </div>
+			
+			<div class="col-sm-4">
+				<label for="form-field-8">Min Shipper Pack Level </label>
+				<input type="number" name="min_shipper_pack_level" min="2" step="1" id="min_shipper_pack_level" class="form-control" value="<?php echo $dt['min_shipper_pack_level'];?>" />
+				
+				<!--
+				<select name="min_shipper_pack_level" id="min_shipper_pack_level" class="form-control">
+				 <option value="Single">Single</option>
+				 <option value="Twin">Twin</option>
+				 -->
+				</select>
+ 		    </div>
+  		</div>
+		<div class="form-group row"> 
+           <div class="col-sm-4">
+				<label for="form-field-8">Max Shipper Pack Level </label>
+				<input type="number" name="max_shipper_pack_level" min="2" step="1" id="max_shipper_pack_level" class="form-control" value="<?php echo $dt['max_shipper_pack_level'];?>" />				
+				
+				<!--
+				<select name="max_shipper_pack_level" id="max_shipper_pack_level" class="form-control">
+				 <option value="serial"> Serial Unique</option>
+				 <option value="random">Random Unique</option> 
+				</select>-->
+ 		    </div> 
+  		</div>
+		<!--------------------------------- Essential attributes ends-----------------------------------> 
          
          <hr>
 		<div class="form-group row">

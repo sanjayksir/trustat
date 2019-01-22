@@ -188,7 +188,7 @@
 	}
 	 public function place_order_mail($product_code, $product_name, $tracking_no,$email,$user_name)
 	 {//echo '***'.$email;exit;
-		$subject    =  'Admin:: Welcome to Tracking Portal';
+		$subject    =  'ISPL Admin:: Welcome to Tracking Portal';
 		$body			=	"<b>Hello <b>".$user_name."</b>,
 								</b><br><br><r>
 								 A Order has been Placed.
@@ -196,12 +196,12 @@
 								<br>Product Name is :".$product_name."<br />
 								<br>Tracking Order No is :".$tracking_no."<br />
  								 "."".'</b>
-								<br><br><br>Thanks & Regards<br><b>Team Admin</b>';												
+								<br><br><br>Thanks & Regards<br><b>Team ISPL</b>';												
 		$mail_conf =  array(
 		'subject'=>$subject,
 		'to_email'=>$email,
 		'from_email'=>'admin@innovigents.com',
-		'from_name'=> 'Admin',
+		'from_name'=> 'ISPL Admin',
 		'body_part'=>$body
 		);
 		if($this->dmailer->mail_notify($mail_conf)){

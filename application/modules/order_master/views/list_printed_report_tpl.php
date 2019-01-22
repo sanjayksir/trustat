@@ -75,8 +75,8 @@
                                                             <th>Packaging Level</th>
 															<th>Activation Date Time</th>
 															<th>Activation Location</th>
-															<th>Details</th>
-           <!-- <th>Action</th> -->
+															 <!--<th>Details</th>
+													<th>Action</th> -->
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -94,7 +94,7 @@
                                                        <td><?php echo $listData['barcode_qr_code_no']; ?></td>
                                                             <td><?php echo $listData['product_name']; ?></td>
                                                             <td><?php echo $listData['user_name']; ?></td>
-                                                            <td><?php echo $listData['plant_name']; ?></td>
+                                                            <td><?php echo get_locations_name_by_id($listData['location_id']); ?></td>
                                                             <td>
 
                                                             <?php 												
@@ -108,18 +108,10 @@
 
                                                               ?>
                                                             </td>
-                                                            <td><?php 
-															if ($activeinactive == 1)
-                                                                     { 
-																 echo $listData['pack_level'];
-                                                                     } else { 
-                                                                     echo "";
-                                                                     }
-															
-															 ?></td>
-															 <td><?php echo (date('j M Y H:i:s D', strtotime($listData['activation_date'])));  ?></td>
+                                                            <td><?php echo $listData['pack_level']; ?></td>
+															 <td><?php if($listData['activation_date']!='0000-00-00 00:00:00'){echo (date('j M Y H:i:s D', strtotime($listData['activation_date'])));};  ?></td>
 															  <td><?php echo get_locations_name_by_id($listData['activation_location_id']); ?><?php //echo $listData['id']; ?></td>
-															  <td><a href="<?php  echo base_url().'order_master/barcode/view_product_code_details/'.$listData['barcode_qr_code_no'];?>" class="btn btn-xs btn-success" target="_blank" title="View Details">View Details <i class="fa fa-eye"></i></a></td>
+															 
           </tr>
      <?php 
      $sno++;

@@ -69,7 +69,7 @@
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="input-group">
-                                            <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Type your query">
+                                            <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="First Name, Last Name, User Name, Email ID or Phone Number">
                                             <span class="input-group-btn">
                                                 <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                 <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -84,11 +84,13 @@
                                     <tr>
                                         <th>SNo.</th>
 										<th><?php //echo $label; ?> Customer</th>
-                                        <th>Full Name</th>
+                                        <th>First Name</th>
+										<th>Last Name</th>
                                         <th>User Name</th>
+										<th>User Type</th>
+										<th>Assigned Locations</th>
                                         <th>Email ID</th>
                                         <th>Phone</th>
-                                        
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -111,8 +113,11 @@
                                     <tr id="show<?php echo $listData['user_id']; ?>">
                                     <td><?php echo $sno; ?></td>
 									<td><?php echo getUserNameById($listData['is_parent']); ?></td>
-                                    <td><?php echo $listData['f_name'] . ' ' . $listData['l_name']; ?></td>
+                                    <td><?php echo $listData['f_name']; ?></td>
+									<td><?php echo $listData['l_name']; ?></td>
                                     <td><?php echo $listData['user_name']; ?></td>
+									<td><?php echo get_role_name_by_designation_id($listData['designation_id']); ?></td>
+									<td><?php echo assigned_locations($listData['user_id']); ?></td>
                                     <td><?php echo $listData['email_id']; ?></td>
                                     <td><?php echo $listData['mobile_no']; ?></td>
                                     

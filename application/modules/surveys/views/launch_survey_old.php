@@ -93,7 +93,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                                 <?php echo Utils::selectOptions('pagelimit',['options'=>$this->config->item('pageOption'),'value'=>$this->config->item('pageLimit')]) ?>
                                                 </select>
                                             Records
-                                            </label>
+											</label>
+                                            <span style="margin-left:90px"></span>  <a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Request to Push Survey" data-toggle="modal" data-target="#myModal" align="center">Request to Push Survey</a>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="input-group">
@@ -101,7 +102,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                                 <span class="input-group-btn">
                                                     <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                     <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
-                                                </span>
+                                                </span> 
                                             </div>
                                         </div>
                                     </form>
@@ -112,14 +113,12 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                             <thead>
                                 <tr>
                                     <th>S No.</th>
+									<th class="hidden-480">Request No</th>
+									<th class="hidden-480">Date Time</th>
                                     <th class="hidden-480">Product Name</th>
-                                    <th class="hidden-480">Product SKU</th>
-                                    <th class="hidden-480">View Product Media</th>
-                                    <th>Survey on Product Description <a title="Product Description Feedback" href="#" class="btn btn-xs btn-info"><i class="fa 	fa-barcode" aria-hidden="true"></i></a></th>
-                                    <th>Survey on Product Image <a title="Product Image Feedback" href="#" class="btn btn-xs btn-info"><i class="glyphicon-picture" aria-hidden="true"></i></a></th>
-                                    <th>Survey on Product Video <a title="Product Video Feedback" href="#" class="btn btn-xs btn-info"><i class="fa fa-video-camera" aria-hidden="true"></i> </a></th>
-                                    <th>Survey on Product Audio <a title="Product Audio Feedback" href="#" class="btn btn-xs btn-info"><i class="fa fa-bullhorn" aria-hidden="true"></i> </a></th>
-                                    <th>Survey on Product PDF <a title="Survey on Product PDF" href="#" class="btn btn-xs btn-info"><i class="fa fa-book" aria-hidden="true"></i> </a>  </th>
+                                    <th class="hidden-480">Type of Survey</th>
+                                    <th class="hidden-480">Number of Consumers</th>
+                                    <th class="hidden-480">Status</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -146,13 +145,10 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                             <tr id="show<?php echo $attr['id'];?>">
                                 <td><?php echo $sno; ?></td>
                                 <td><?php echo $attr['product_name']; ?></td>
-                                                                                <td><?php echo $attr['product_sku']; ?></td>
-												                                <td>&nbsp;&nbsp; <a title="View" href="<?php echo base_url();?>backend/product_attrribute/view/<?php echo $attr['id'];?>" class="btn btn-xs btn-info">
- 																<i class="fa fa-eye" aria-hidden="true"></i>
-
- 															</a> </td>
-												                                <td><input type="checkbox" name="vehicle" value="Bike"></td>
-                                                 <td><input type="checkbox" name="vehicle" value="Bike"></td>
+								<td><?php echo $attr['product_name']; ?></td>
+								<td><?php echo $attr['product_name']; ?></td>
+                                <td><?php echo $attr['product_sku']; ?></td>
+								<td>&nbsp;&nbsp; <a title="View" href="<?php echo base_url();?>backend/product_attrribute/view/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"> <i class="fa fa-eye" aria-hidden="true"></i></a></td>
                                        
 												  <td>	<?php  
 	$user_id 	= $this->session->userdata('admin_user_id');
@@ -170,14 +166,14 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 	<?php } else { ?>
 	<input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $attr['id'];?>" value="<?php echo $push_survey_req_status ;?>"  onclick="return change_status('<?php echo $attr['id'];?>',this.value);" />
                     	<?php } ?>		
-							  </td>
+							 View Response </td>
 												  
 												  
 												  
-                                                  <td> 
+                                                 <!-- <td> 
  														<input type="checkbox" name="vehicle" value="Bike">						  </td>
                                                     <td> 
- 														<input type="checkbox" name="vehicle" value="Bike"></td>
+ 														<input type="checkbox" name="vehicle" value="Bike"></td>-->
 													<!--<td><input type="checkbox" name="assignProduct[]" class="assignProduct" /></td>-->
                               </tr>
 
@@ -200,6 +196,97 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     </div><!-- /.row -->
 
                 </div><!-- /.page-content -->
+				
+<!-- myModal Div -->
+<div id="myModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+          <!-- Modal content-->
+          <div class="modal-content">
+            <div class="modal-header">
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <h4 class="modal-title">Request to Push Survey</h4>
+            </div>
+            <div class="modal-body">
+<?php 
+//$datecodedno = date('YmdHis');
+//$date = date('Y-m-d H:i:s');
+//echo $datecodedno;
+
+?>
+<form name="frm" id="frm" action="#" method="POST">
+<!--<input name="menu_id" id="menu_id" type="hidden" value="">-->
+<input name="order_no" id="order_no" type="hidden" value="<?php $datecodedno; ?>">
+<div class="form-group row">
+<div class="col-sm-12">
+<label for="form-field-8">Plant Name</label>
+<select class="form-control" name="plant_id" id="plant_id" onchange="return get_products(this.value);">
+<option value="">-Select Plant-</option>
+<?php 
+$user_id 	= $this->session->userdata('admin_user_id');
+$plant_data = get_all_active_locations_plant($user_id);
+foreach($plant_data as $res){?>
+<option value="<?php echo $res['location_id'];?>" <?php if($this->uri->segment(3)==$res['location_id']){echo 'selected';}?>><?php echo $res['location_name'];?><?php if($user_id=='1'){ echo " - [" .getUserFullNameById($res['created_by']) . "]"; } ?></option>
+<?php }?>
+</select>
+<br />
+<label for="form-field-8">Product Name</label>
+<select class="form-control" name="product[]" id="product" >
+
+</select>			
+<?php if(!empty($this->uri->segment(3))){?>
+<script>get_products(<?php echo $this->uri->segment(3);?>);</script>
+<?php }?>						
+
+
+<script>
+function get_products(id){
+if(id!=''){
+$.ajax({
+type:'POST',
+url:'<?php echo base_url().'plant_master/getAssignedProductList'?>',
+data:{id:id},
+success:function(msg){
+$("#product").html(msg);
+}
+})
+}
+}
+</script>
+
+
+                                  </div>
+                                  </div>
+
+
+                                  <div class="form-group row">
+                                  <div class="col-sm-12">
+                                  <label for="form-field-8">Survey Type</label>
+								  <select name="quantity" id="quantity" class="form-control">
+										<option value="survey_on_product_video">Survey on Product Video</option>	
+										<option value="survey_on_product_audio">Survey on Product Audio</option>
+										<option value="survey_on_product_pdf">Survey on Product PDF</option>
+										<option value="survey_on_product_image">Survey on Product Image</option>
+										<option value="survey_on_product_description">Survey on Product Description</option>
+									</select>
+                                  </div>
+                                  </div>
+
+
+                                  <div class="form-group row">
+                                  <div class="col-sm-12">
+                                  <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
+                                  <input class="btn btn-info" type="submit" name="submit" value="Submit" id="savemenu" />
+                                  </div></div></div>
+
+                          </form>
+            </div>
+          </div>
+    </div>
+  </div>
+<!--/ myModal Div -->  
+ 
+				
+				
             <div class="footer">
 
                 <div class="footer-inner">

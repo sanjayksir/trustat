@@ -533,33 +533,46 @@
 			} return $result;
 		}
 		
-		function save_push_advertisement($cid,$pid,$Chk){
- 			if($Chk=='0'){
-				$this->db->query("delete from push_advertisements where product_id='".$pid."' ");
-				$this->session->set_flashdata('success', 'Add un-Pushed Successfully!');
+		function save_push_advertisement($customer_id,$product_id,$promotion_id,$Chk){
+ 			if($Chk=='2'){
+				//$this->db->query("delete from push_surveys where promotion_id='".$promotion_id."' ");
+				
+				$data = array(
+               'ad_active' => $Chk,
+               'abandoned_date' => date('Y-m-d H:i:s')
+				);
+
+						$where = array('promotion_id' => $promotion_id);
+						$this->db->where($where);
+						$this->db->update('push_advertisements ', $data); 
+
+
+				$this->session->set_flashdata('success', 'Ad un-Pushed Successfully!');
 				//echo $this->db->last_query();exit;
 				return true;
 			}else{
+				/*
 				$isExists=$this->IsProductAdvertisementOn($cid,$pid); 
 				if($isExists=='false'){
 					return false;
 				}
-				
+				*/
 				/*  new work */
 				
-				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$cid."';");
+				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				
 				foreach ($query->result() as $user)  
 				{  
 				//$consumer_ida = $user->id; 
 				//echo $consumer_ida; exit;
 				$insertData=array(
-					"customer_id"	 => $cid,
+					"customer_id"	 => $customer_id,
 					"consumer_id"	 => $user->consumer_id,
-					"product_id"	 => $pid,
-					"media_type"	 => "Video",
+					"product_id"	 => $product_id,
+					"promotion_id"	 => $promotion_id,
+					"media_type"	 => "Advertisements Video",
 					"ad_push_date"	 => date("Y-m-d H:i:s"),
-					"media_play_date"	 => date("Y-m-d H:i:s"),
+					"media_play_date"	 => "0000-00-00 00:00:00",
 					"ad_feedback_response"	 => "",
 					"ad_active"	 => "1"
 					
@@ -635,15 +648,285 @@
 		
 		
 		function change_status($id, $value) {
-        $this->db->set(array('push_ad_req' => $value));
-        $this->db->where(array('id' => $id));
-        if ($this->db->update('products')) {
+        $this->db->set(array('request_status' => $value));
+        $this->db->where(array('promotion_id' => $id));
+        if ($this->db->update('push_promotion_master')) {
             return $value;
         } else {
             return '';
         }
         //echo '***'.$this->db->last_query();exit;
     }
-				
+	
+	
+	
+	
+	function total_advertisement_listing($srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		 
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(promotion_request_id LIKE '%$srch_string%' OR product_name LIKE '%$srch_string%' OR promotion_media_type LIKE '%$srch_string%') and (user_id=$user_id)");
+			}else{
+				$this->db->where(array('user_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(promotion_request_id LIKE '%$srch_string%' OR product_name LIKE '%$srch_string%' OR promotion_media_type LIKE '%$srch_string%')");
+			}
 		}
+		
+		$this->db->select('count(1) as total_rows');
+		$this->db->from('push_promotion_master');
+		$this->db->where('promotion_type', "Advertisement");
+		if($user_id>1){
+			$this->db->where('user_id', $user_id);
+		}
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+	
+	
+	function advertisement_listing($limit,$start,$srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(promotion_request_id LIKE '%$srch_string%' OR product_name LIKE '%$srch_string%' OR promotion_media_type LIKE '%$srch_string%') and (user_id=$user_id)");
+			}else{
+				$this->db->where(array('user_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(promotion_request_id LIKE '%$srch_string%' OR product_name LIKE '%$srch_string%' OR promotion_media_type LIKE '%$srch_string%')");
+			}
+		}
+		
+		$this->db->select("*");
+		$this->db->from("push_promotion_master");
+		$this->db->where('promotion_type', "Advertisement");
+		if($user_id>1){
+			$this->db->where('user_id', $user_id);
+		}
+		
+		$this->db->order_by("promotion_id", "desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	function save_promotion_request($frmData){ //echo '<pre>';print_r($frmData);exit;
+		$user_id 	=$this->session->userdata('admin_user_id');
+		//$user_exists = $this->checkDuplicateUser($frmData['user_name']);
+		
+		$product_arr = $frmData['product'];
+		// echo '<pre>kam=';print_r($frmData );exit;
+		if(!empty($frmData['promotion_id'])){## edit case
+					foreach($product_arr as $product_id){//echo '---'.$product_id;
+ 						$random_no 				= generate_password(4);
+						$product_arr 			= get_products_sku_by_product_id($product_id);
+						$order_tracking_no 		= $product_arr[0]['product_sku'];
+						
+						##------------ check exists entries--------------##
+						$check_exists_entry 	= $this->check_product_order( $user_id,$product_id,$frmData['promotion_id']);
+						##------------ check exists entries--------------##
+						if(!empty($check_exists_entry)){ 
+							if(!empty($frmData['deliverydate'])){
+								$date = date('Y-m-d',strtotime($frmData['deliverydate']));
+							}else{
+								$date = '0000-00-00';
+							}
+ 							$UpdateData		 	=array(
+								"quantity"				=> $frmData['quantity'],
+								"delivery_date"			=>  $date,
+								"status"				=> 0,
+								"updated_date"			=> date('Y-m-d'),
+								"updated_by"			=> '0'
+							 ); 
+							 $this->db->set($UpdateData);
+							 $this->db->where(array('promotion_id'=>$frmData['promotion_id']));
+  							if($this->db->update("push_promotion_master")){
+								$this->session->set_flashdata('success', 'Push Updated!');
+ 								$result = 1;
+							}else{
+								$this->session->set_flashdata('success', 'Push Not Updated!');
+								$result = 0;
+							}
+						 }else{
+ 							$this->save_promotion_add(json_encode($frmData));
+							$result = 1;
+						}
+					} 
+				}else{
+						$this->save_promotion_add(json_encode($frmData));
+						$result = 1;
+					 }return $result;
+		  }
+		  
+		  
+		  
+		  function save_promotion_add($frmData){//echo '33333==';print_r($frmData);exit;
+		$frmData = json_decode($frmData,true);
+		$product_arr = $frmData['product'];
+		$user_id 	=$this->session->userdata('admin_user_id');
+		foreach($product_arr as $product_id){
+			$check_exists_entry = 0;
+ 			//echo '<pre>';print_r($product_arr);exit;
+						$random_no 				= generate_password(4);
+						$rnpin = mt_rand(1000, 9999);
+						$product_arr 			= get_products_sku_by_product_id($product_id);
+						$order_tracking_no 		= $product_arr[0]['product_sku']/* .'-'.$rnpin*/;
+						$active_status			= $product_arr[0]['code_activation_type'];
+						
+						
+						##------------ check exists entries--------------##
+						$check_exists_entry 	= '';//$this->check_product_order( $user_id,$product_id);
+						##------------ check exists entries--------------##
+						$datecodedno = date('YmdHis');
+						if(empty($check_exists_entry)){
+							$insertData		 	=array(
+								"promotion_request_id"	=> $datecodedno,
+								"request_date_time"		=> date('Y-m-d H:i:s'),
+								"user_id"				=> $user_id,
+								"product_id"			=> $product_id,
+								"product_name"			=> $product_arr[0]['product_name'],
+								"promotion_media_type"	=> $frmData['promotion_media_type'],
+								"number_of_consumers"	=> $frmData['number_of_consumers'],
+								"request_status"		=> 0,
+								"promotion_type"		=> $frmData['promotion_type'],								
+								"updated_by_id"			=> '0'
+							 );//echo '<pre>';print_r($insertData);exit;
+								if($this->db->insert("push_promotion_master", $insertData)){
+									/*
+										$get_user_detail= get_user_email_name($user_id);
+										$last_inserted = $this->db->insert_id();
+										if($last_inserted){
+											$user_name = getUserNameById($user_id);
+											$last_inserted;
+											$this->db->where('promotion_request_id',$last_inserted);
+											//$this->db->set(array('order_tracking_number'=>$order_tracking_no));
+											$this->db->update('push_promotion_master');
+											
+										}
+										if($this->place_order_mail($product_arr[0]['product_sku'], $product_arr[0]['product_name'], $order_tracking_no,$get_user_detail['email_id'], $user_name)
+											 )
+											 {
+									$this->session->set_flashdata('success', 'Request Placed!');
+									$result = 1;
+									}else{
+									$result = 0;
+									}
+								
+								*/
+								$this->session->set_flashdata('success', 'Request Placed!');
+								}else{
+										$this->session->set_flashdata('success', 'Order Not Placed!');
+										$result = 0;
+								}
+							}else{
+								$result = 0;
+							}
+						} 
+		return $result;
+	}
+	 public function place_order_mail($product_code, $product_name, $tracking_no,$email,$user_name)
+	 {//echo '***'.$email;exit;
+		$subject    =  'ISPL Admin:: Welcome to Tracking Portal';
+		$body			=	"<b>Hello <b>".$user_name."</b>,
+								</b><br><br><r>
+								 A Order has been Placed.
+								<br>Product Code is :".$product_code."<br />
+								<br>Product Name is :".$product_name."<br />
+								<br>Tracking Order No is :".$tracking_no."<br />
+ 								 "."".'</b>
+								<br><br><br>Thanks & Regards<br><b>Team ISPL</b>';												
+		$mail_conf =  array(
+		'subject'=>$subject,
+		'to_email'=>$email,
+		'from_email'=>'admin@innovigents.com',
+		'from_name'=> 'ISPL Admin',
+		'body_part'=>$body
+		);
+		if($this->dmailer->mail_notify($mail_conf)){
+		 return true;
+		} return false;//echo redirect('accounts/create');
+	 }
+	
+	
+	function count_advertisement_details($srch_string=''){
+		$pi_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id>1){ 
+ 			$this->db->where("(S.user_name LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.media_type LIKE '%$srch_string%' OR C.ad_feedback_response LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('push_advertisements C');
+		$this->db->join('consumers S', 'S.id = C.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		//$this->db->where(array('C.promotion_id' => $pi_number, 'P.created_by' => $user_id));
+		$this->db->where(array('C.promotion_id' => $pi_number));
+		if($user_id>1){
+			$this->db->where('P.created_by', $user_id);
+		}
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 function get_advertisement_details($limit,$start,$srch_string=''){
+		 $pi_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id>1){ 
+ 			$this->db->where("(S.user_name LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.media_type LIKE '%$srch_string%' OR C.ad_feedback_response LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		}
+		 
+ 		$this->db->select(' C.*, P.product_name, S.user_name',false);
+		$this->db->from('push_advertisements C');
+		$this->db->join('consumers S', 'S.id = C.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		//$this->db->group_by('C.pi_number');
+		//$this->db->where(array('C.promotion_id' => $pi_number, 'P.created_by' => $user_id));
+		
+		$this->db->where(array('C.promotion_id' => $pi_number));
+		if($user_id>1){
+			$this->db->where('P.created_by', $user_id);
+		}
+		
+   		$this->db->order_by('C.promotion_id','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	
+	function review_advertisement_data($id) {
+        $this->db->select('*');
+        $this->db->from('products');
+        $this->db->where(array('id' => $id));
+        $query = $this->db->get(); //echo '**'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            //
+            $res = $query->result_array();
+        }
+        return json_encode($res[0]);
+    }
+	
+	
+				
+}
 		

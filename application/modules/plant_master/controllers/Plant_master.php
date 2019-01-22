@@ -388,6 +388,16 @@
    		 $this->load->view('assign_plant', $data); 
 
      }
+	 
+	 
+	 public function assign_locations() {
+ 		 $data						= array();
+ 		 $data['get_user_details'] 	= $this->plant_master_model->get_location_details_plant();
+   		 $this->load->view('assign_location', $data); 
+
+     }
+	 
+	 
 	  public function save_assign_plant() {
 			$result = '';
 			$plant_array = $this->input->post('plants');
@@ -398,6 +408,18 @@
 			echo  $result;exit;
 	
 		 }
+		 
+		 public function save_assign_location() {
+			$result = '';
+			$plant_array = $this->input->post('locations');
+			$sku_array = $this->input->post('sku_product');
+			if(count($plant_array)>0 && count($sku_array)>0){
+				$result = $this->plant_master_model->save_assign_locations_sku(json_encode($plant_array), json_encode($sku_array));	
+			}
+			echo  $result;exit;
+	
+		 }
+		 
 		 
 		public function save_assign_user_to_pant() {
             $user_id 	= $this->session->userdata('admin_user_id');
@@ -426,7 +448,7 @@
 			$id = $this->input->post('id');
 			$user_id 	= $this->session->userdata('admin_user_id');
 			## assigned products array
-			$assigned_arr = explode(',',get_assigned_products_list($id));
+			$assigned_arr = explode(',',get_assigned_products_list_to_location($id));
 			//print_r($assigned_arr);
 			
 			$product_data = get_all_products_sku($user_id);
@@ -442,7 +464,7 @@
 			$id = $this->input->post('id');
 			$user_id 	= $this->session->userdata('admin_user_id');
 			## assigned products array
-			$assigned_arr = explode(',',get_assigned_products_to_plant($id));
+			$assigned_arr = explode(',',get_assigned_products_list_to_location($id));
 			//print_r($assigned_arr); kk
 			//$res_arr[0]['product_id']
 			$product_data = get_all_products_sku($user_id);
@@ -463,6 +485,14 @@
 			 $data['plant_data'] 	= get_all_plants($user_id);
 			 $this->load->view('list_plant_sku_assign', $data);
      	}
+		
+		public function list_assigned_locations_sku() {
+			 $data					= array();
+			 $user_id 				= $this->session->userdata('admin_user_id');		
+			 $data['plant_data'] 	= get_all_locations_plant($user_id);
+			 $this->load->view('list_location_sku_assign', $data);
+     	}
+		
 		
 		public function change_assign_product_status() {
  		 $id = $this->input->post('id');

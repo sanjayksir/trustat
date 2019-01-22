@@ -181,10 +181,10 @@
         if (empty($srch_string)) {
             $srch_string = '';
         }
-        $total_records = $this->Survey_model->total_product_listing($srch_string);
-        $params["product_list"] = $this->Survey_model->product_listing($limit_per_page, $start_index, $srch_string);
+        $total_records = $this->Survey_model->total_survey_listing($srch_string);
+        $params["orderListing"] = $this->Survey_model->surveys_listing($limit_per_page, $start_index, $srch_string);
         $params["links"] = Utils::pagination('surveys/launch_survey', $total_records);
-        $this->load->view('launch_survey', $params);
+        $this->load->view('launch_surveys_tpl', $params);
     }
 	
 	public function create_Survey() {
@@ -783,14 +783,15 @@ function list_assigned_Surveys() {
 	 	$this->checklogin();		
 		$customer_id=$this->input->post('c_id');
 		$product_id	=$this->input->post('p_id');
+		$promotion_id =$this->input->post('promotion_id');
 		$Chk = $this->input->post('Chk');
-		echo $this->Survey_model->save_push_Survey($customer_id,$product_id,$Chk);
-		if($Chk==0){
-		$value='';
+		echo $this->Survey_model->save_push_Survey($customer_id,$product_id,$promotion_id,$Chk);
+		if($Chk==2){
+		$value=2;
 		} else {
 			$value=1;
 		}
-		 echo $status= $this->Survey_model->change_status($product_id,$value);
+		 echo $status= $this->Survey_model->change_status($promotion_id,$value);
 		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				
 				foreach ($query->result() as $user)  
@@ -810,11 +811,66 @@ function list_assigned_Surveys() {
 		 if(strtolower($status)=='inactive'){
 			 $status ='1';# Now it will be active
 		 }else{
-		 	$status ='0';# Now it will be inactive
+		 	$status ='2';# Now it will be inactive
 		 }
 		 //$user_id 	= $this->session->userdata('admin_user_id');		
 		 echo $status= $this->Survey_model->change_status($id,$status);exit;
      }
+	 
+	 
+	 public function save_promotion_request() {
+		  //print_r($_POST);exit;
+		  $savedData = $this->input->post();
+  		  echo $this->Survey_model->save_promotion_request($savedData);  exit;
+      }
+	  
+	public function change_order_status() {
+ 		 $id = $this->input->post('id');
+		 $status = $this->input->post('value');
+ 		 echo $status= $this->Survey_model->change_order_status($id,$status);exit;
+      }
+	  
+	  
+	  
+	 
+	public function view_survey_details() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Survey_model->count_survey_details($srch_string);
+
+        $params["ScanedCodeListing"] = $this->Survey_model->get_survey_details($limit_per_page, $start_index, $srch_string);
+		
+        $params["links"] = Utils::pagination('surveys/view_survey_details', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('view_survey_details_tpl', $params);
+    }
+	
+	
+	function review_survey($id = '') {
+        if (empty($id)) {
+            redirect('surveys/launch_survey');
+        }
+        $data['detailData'] = $this->Survey_model->review_survey_data($id);
+        $this->load->view('review_survey_tpl', $data);
+    }
+	
 	 
 }
 

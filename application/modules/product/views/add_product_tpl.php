@@ -15,7 +15,7 @@
       <div class="breadcrumbs ace-save-state" id="breadcrumbs">
         <ul class="breadcrumb">
           <li> <i class="ace-icon fa fa-home home-icon"></i> <a href="<?php echo base_url(); ?>dashboard">Home</a> </li>
-          <li class="active">Manage SKU</li>
+          <li class="active">Add Product SKU</li>
         </ul>
         <!-- /.breadcrumb --> 
       </div>
@@ -26,7 +26,7 @@
               <div class="col-xs-12">
                 <div class="accordion-style1 panel-group" id="accordion">
                   <div class="">
-                    <h3 class="header smaller lighter blue">Add Product SKU</h3>
+                   <!-- <h3 class="header smaller lighter blue">Add Product SKU</h3>-->
 					
                     <form name="user_frm" id="user_frm" action="#" method="post">
 
@@ -330,13 +330,54 @@
 				</select>
  		    </div>
   		</div> 
+		<div class="form-group row"> 
+           <div class="col-sm-4">
+				<label for="form-field-8">Registration Pack</label>
+				<select name="registration_pack" id="registration_pack" class="form-control">
+				 <option value="Yes">Yes</option>
+				 <option value="No">No</option> 
+				</select>
+ 		    </div> 
+            
+            <div class="col-sm-4">
+				<label for="form-field-8">Retailer Pack</label>
+				<select name="retailer_pack" id="retailer_pack" class="form-control">
+				 <option value="Yes">Yes</option>
+				 <option value="No">No</option> 
+				</select>
+ 		    </div>
+			
+			<div class="col-sm-4">
+				<label for="form-field-8">Min Shipper Pack Level </label>
+				<input type="number" name="min_shipper_pack_level" min="2" step="1" id="min_shipper_pack_level" class="form-control" value="2" />
+				<!--
+				<select name="min_shipper_pack_level" id="min_shipper_pack_level" class="form-control">
+				 <option value="Single">Single</option>
+				 <option value="Twin">Twin</option>
+				 -->
+				</select>
+ 		    </div>
+  		</div>
+		<div class="form-group row"> 
+           <div class="col-sm-4">
+				<label for="form-field-8">Max Shipper Pack Level </label>
+				<input type="number" name="max_shipper_pack_level" min="2" step="1" id="max_shipper_pack_level" class="form-control" value="2" />
+				<!--
+				<select name="max_shipper_pack_level" id="max_shipper_pack_level" class="form-control">
+				 <option value="serial"> Serial Unique</option>
+				 <option value="random">Random Unique</option> 
+				</select>-->
+ 		    </div> 
+  		</div>
+		<div style="color:red">Note*- You must must need to add at least 1 attribute for this product to make it working.</div> 
 		<!--------------------------------- Essential attributes-----------------------------------> 
 		 <hr>
 		  <div class="form-group row">
 			<div class="col-sm-4">
+			
 			<!--<input type=submit value="Print All" onClick="getChildAttr()">-->
            <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
-            <input class="btn btn-info" type="submit" name="submit" value="Save Product SKU" id="savemenu" />
+            <input class="btn btn-info" type="submit" name="submit" value="Save Product" id="savemenu" />
            </div>
 		   </div>
 		   </div>

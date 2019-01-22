@@ -702,6 +702,7 @@ class Consumer extends ApiController {
         //Utils::debug();
         $data['user_id'] = $user['id'];
         $data['created_date'] = $data['updated_date'] = date('Y-m-d H:i:s');
+		
         if ($this->db->insert('consumer_feedback', $data)) {
             //if(1){     
 
@@ -716,6 +717,8 @@ class Consumer extends ApiController {
 				$TRPoints = $result->$transactionType;
 				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Audio Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
 				$data['transaction_type'] = $questionType;
+				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
+				$data['product_name'] = get_products_name_by_id($data['product_id']);
 				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
             } elseif (strstr($questionType, 'video')) {
                 $transactionType = 'product_video_response_lps';
@@ -725,6 +728,8 @@ class Consumer extends ApiController {
 				$TRPoints = $result->$transactionType;
 				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Video Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
 				$data['transaction_type'] = $questionType;
+				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
+				$data['product_name'] = get_products_name_by_id($data['product_id']);
 				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
             } elseif (strstr($questionType, 'pdf')) {
                 $transactionType = 'product_pdf_response_lps';
@@ -733,6 +738,8 @@ class Consumer extends ApiController {
 				$TRPoints = $result->$transactionType;
 				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Brochure Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
 				$data['transaction_type'] = $questionType;
+				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
+				$data['product_name'] = get_products_name_by_id($data['product_id']);
 				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
             } elseif (strstr($questionType, 'Product Image Feedback')) {
                 $transactionType = 'product_image_response_lps';
@@ -741,6 +748,8 @@ class Consumer extends ApiController {
 				$TRPoints = $result->$transactionType;
 				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Image Promotion. '. $TRPoints .' have been added to your howzzt loyalty program.'; 
 				$data['transaction_type'] = $questionType;
+				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
+				$data['product_name'] = get_products_name_by_id($data['product_id']);
 				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
 		   } elseif (strstr($questionType, 'pushed')) {
                 $transactionType = 'product_ad_response_lps';
@@ -749,6 +758,8 @@ class Consumer extends ApiController {
 				$TRPoints = $result->$transactionType;
 				$mess = 'You have responded to video promotion for ' . $product_brand_name . ' . '. $TRPoints .' Loyalty Points have been added to your howzzt loyalty program.';
 				$data['transaction_type'] = $questionType;
+				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
+				$data['product_name'] = get_products_name_by_id($data['product_id']);
 				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
 			} elseif (strstr($questionType, 'survey')) {
                 $transactionType = 'product_survey_response_lps';
@@ -757,6 +768,8 @@ class Consumer extends ApiController {
 				$TRPoints = $result->$transactionType;
 				$mess = 'You have responded to product survey for ' . $product_brand_name . '. '. $TRPoints .' Loyalty Points have been added to your howzzt loyalty program.';	
 				$data['transaction_type'] = $questionType;
+				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
+				$data['product_name'] = get_products_name_by_id($data['product_id']);
 				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
 			} elseif (strstr($questionType, 'vdemonstration')) {
                 $transactionType = 'product_demo_video_response_lps';
@@ -765,6 +778,8 @@ class Consumer extends ApiController {
 				$TRPoints = $result->$transactionType;
 				$mess = 'Thank you for viewing product video demonstration. Loyalty Point. '. $TRPoints .' have been added to your howzzt loyalty program.';
 				$data['transaction_type'] = $questionType;
+				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
+				$data['product_name'] = get_products_name_by_id($data['product_id']);
 				$this->Productmodel->feedbackLoylityDemo($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
 			} elseif (strstr($questionType, 'ademonstration')) {
                 $transactionType = 'product_demo_audio_response_lps';
@@ -773,6 +788,8 @@ class Consumer extends ApiController {
 				$TRPoints = $result->$transactionType;
 				$mess = 'Thank you for listening product audio demonstration. Loyalty Point '. $TRPoints .' have been added to your howzzt loyalty program.';	
 				$data['transaction_type'] = $questionType;
+				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
+				$data['product_name'] = get_products_name_by_id($data['product_id']);
             $this->Productmodel->feedbackLoylityDemo($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
             } else {
                 $transactionType = 'product_image_response_lps';
@@ -781,6 +798,8 @@ class Consumer extends ApiController {
 				$TRPoints = $result->$transactionType;
 				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Image Promotion. '. $TRPoints .' have been added to your howzzt loyalty program'; 
 				$data['transaction_type'] = "product image feedback";
+				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
+				$data['product_name'] = get_products_name_by_id($data['product_id']);
             $this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
             }
             

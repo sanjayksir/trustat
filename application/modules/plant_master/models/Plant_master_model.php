@@ -34,6 +34,19 @@ class plant_master_model extends CI_Model {
         return $res;
     }
 
+	function get_location_details_plant($id) {
+        $res = 0;
+        $this->db->select('*');
+        $this->db->from('location_master');
+        $this->db->where(array('location_id' => $id, 'location_type' => 'Plant'));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            // $res=1;
+        }
+        return $res;
+    }
 	
 	
     function save_user($frmData) { //echo '<pre>';print_r($frmData);exit;
@@ -631,6 +644,55 @@ class plant_master_model extends CI_Model {
         return '0';
     }
 
+	
+	function save_assign_locations_sku($plant_array, $sku_array) {  //echo '<pre>';print_r($frmData);exit;
+        $plant_arr = json_decode($plant_array, true);
+        //print_r($plant_arr);
+        $sku_arr = json_decode($sku_array, true);
+        $user_id = $this->session->userdata('admin_user_id');
+        //echo 'delete from assign_plants where plant_id="'.$plant_arr.'" and assigned_by="'.$user_id.'"';
+        $this->db->query('delete from assign_locations where location_id="' . $plant_arr[0] . '" and assigned_by="' . $user_id . '"');
+
+        if (!empty($frmData['location_id'])) {
+            /* $UpdateData = array(
+              "plant_id"	=> $frmData['plant_name'],
+              "product_id"		=> $frmData['user_email'],
+              "assigned_by"	=> $user_id
+              );
+
+              $whereData = array(
+              'plant_id' => $frmData['plant_id']
+              );
+
+              $this->db->set($UpdateData);
+              $this->db->where($whereData);
+              if($this->db->update('plant_master')){
+              // echo '***'.$this->db->last_query();exit;
+              $this->session->set_flashdata('success', 'Plant Assigned Successfully!');
+              return 1;
+              } */
+        } else {
+            //$password = generate_password(6);
+            foreach ($plant_arr as $plant) {
+                foreach ($sku_arr as $sku) {
+
+                    $insertData = array(
+                        "location_id" => $plant,
+                        "product_id" => $sku,
+                        "assigned_by" => $user_id
+                    );
+                    if ($this->check_exists($plant, $sku) == 0) {
+                        $this->db->insert("assign_locations", $insertData);
+                    }
+                }
+            }
+            $this->session->set_flashdata('success', 'Location Assigned Successfully!');
+            return 1;
+        }
+        return '0';
+    }
+	
+	
     function save_assign_plants_users($plant_array, $plant_controller_user, $assigned_by, $is_edit = '') {  
         $user_id = $this->session->userdata('admin_user_id');
         $plant_arr = json_decode($plant_array, true); 

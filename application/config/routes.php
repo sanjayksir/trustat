@@ -262,6 +262,7 @@ $route['reports/list_complaint_log'] = 'order_master/barcode/list_complaint_log'
 $route['reports/list_feedback_on_product'] = 'order_master/barcode/list_feedback_on_product';
 $route['reports/list_warranty_claims'] = 'order_master/barcode/list_warranty_claims';
 
-
+$route['surveys/view_survey_details/(:any)'] = 'surveys/view_survey_details/$1';
+$route['surveys/view_advertisement_details/(:any)'] = 'surveys/view_advertisement_details/$1';
 
 

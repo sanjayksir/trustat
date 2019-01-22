@@ -7,6 +7,7 @@ class Backend extends MX_Controller
 		parent::__construct();
 		$this->load->model('myspidey_login_model');
 		$this->load->model('receive_alert/Receive_alert_model', 'alert');
+		$this->load->model('order_master/order_master_model');
 		$this->load->helper(array('form', 'url','email_helper','common_functions_helper', 'wordcloud'));
 		$this->load->library(array('Dmailer','form_validation','email'));
 		$this->load->model('Backend_model');
@@ -177,12 +178,14 @@ class Backend extends MX_Controller
 	{
 
 	//	echo '<pre>';print_r($this->session->userdata());
-
+		
+		
 		$data = array();
 
 		$this->checklogin();
-
-		$this->load->view('backend/dashboard');       
+		$params["orderListing"] = $this->order_master_model->get_order_list_all();
+		$params["PrintedCodeListing"] = $this->order_master_model->get_printed_barqrcodelist();
+		$this->load->view('backend/dashboard', $params);       
 
  	}	 
 

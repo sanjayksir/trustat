@@ -115,11 +115,11 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th class="hidden-480">Product Name</th>
                                     <th class="hidden-480">Product SKU</th>
                                     <th class="hidden-480">View Product Media</th>
-                                    <th>Advertisement on Product Description <a title="Product Description Feedback" href="#" class="btn btn-xs btn-info"><i class="fa 	fa-barcode" aria-hidden="true"></i></a></th>
-                                    <th>Advertisement on Product Image <a title="Product Image Feedback" href="#" class="btn btn-xs btn-info"><i class="glyphicon-picture" aria-hidden="true"></i></a></th>
+                                   <!-- <th>Advertisement on Product Description <a title="Product Description Feedback" href="#" class="btn btn-xs btn-info"><i class="fa 	fa-barcode" aria-hidden="true"></i></a></th>
+                                    <th>Advertisement on Product Image <a title="Product Image Feedback" href="#" class="btn btn-xs btn-info"><i class="glyphicon-picture" aria-hidden="true"></i></a></th>-->
                                     <th>Advertisement on Product Video <a title="Product Video Feedback" href="#" class="btn btn-xs btn-info"><i class="fa fa-video-camera" aria-hidden="true"></i> </a></th>
-                                    <th>Advertisement on Product Audio <a title="Product Audio Feedback" href="#" class="btn btn-xs btn-info"><i class="fa fa-bullhorn" aria-hidden="true"></i> </a></th>
-                                    <th>Advertisement on Product PDF <a title="Advertisement on Product PDF" href="#" class="btn btn-xs btn-info"><i class="fa fa-book" aria-hidden="true"></i> </a>  </th>
+                                   <!-- <th>Advertisement on Product Audio <a title="Product Audio Feedback" href="#" class="btn btn-xs btn-info"><i class="fa fa-bullhorn" aria-hidden="true"></i> </a></th>
+                                    <th>Advertisement on Product PDF <a title="Advertisement on Product PDF" href="#" class="btn btn-xs btn-info"><i class="fa fa-book" aria-hidden="true"></i> </a>  </th>-->
                                 </tr>
                             </thead>
                             <tbody>
@@ -151,8 +151,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
  																<i class="fa fa-eye" aria-hidden="true"></i>
 
  															</a> </td>
-												                                <td><input type="checkbox" name="vehicle" value="Bike"></td>
-                                                 <td><input type="checkbox" name="vehicle" value="Bike"></td>
+												                               <!-- <td><input type="checkbox" name="vehicle" value="Bike"></td>
+                                                 <td><input type="checkbox" name="vehicle" value="Bike"></td>-->
                                        <td>	<?php 
 	$user_id 	= $this->session->userdata('admin_user_id');
 	
@@ -171,10 +171,10 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 	<input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $attr['id'];?>" value="<?php echo $push_ad_req_status ;?>"  onclick="return change_status('<?php echo $attr['id'];?>',this.value);" />
                     	<?php } ?>		
 							  </td>
-                                                  <td> 
+                                                  <!--<td> 
  														<input type="checkbox" name="vehicle" value="Bike">						  </td>
                                                     <td> 
- 														<input type="checkbox" name="vehicle" value="Bike"></td>
+ 														<input type="checkbox" name="vehicle" value="Bike"></td>-->
 													<!--<td><input type="checkbox" name="assignProduct[]" class="assignProduct" /></td>-->
                               </tr>
 

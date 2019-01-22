@@ -22,9 +22,9 @@ class Myspidey_user_master_model extends CI_Model {
 
     function get_user_details($id) {
 
-        $this->db->select(['bu.*','ap.plant_id']);
+        $this->db->select(['bu.*','ap.location_id']);
         $this->db->from('backend_user AS bu');
-        $this->db->join('assign_plants_to_users AS ap', 'ap.user_id = bu.user_id','LEFT');
+        $this->db->join('assign_locations_to_users AS ap', 'ap.user_id = bu.user_id','LEFT');
         $this->db->where(array('bu.user_id' => $id));
         $query = $this->db->get();
         // echo '***'.$this->db->last_query();exit;
