@@ -88,6 +88,30 @@ class BarcodeInventoryModel extends CI_Model {
         return [$total, $items];
     }
 	
+	    public function getBarcodeswithBatchId($limit, $offset, $keyword = null,$status=null) {
+        $user_id = $this->session->userdata('admin_user_id');
+        $this->db->select(['pbq.id','pbq.plant_id', 'pbq.barcode_qr_code_no', 'om.order_no', 'om.created_date', 'pbq.modified_at', 'p.delivery_method', 'pbq.receive_date', 'pbq.active_status', 'pbq.issue_location', 'pbq.batch_id', 'pbq.batch_mfg_date']);
+        $this->db->from('printed_barcode_qrcode AS pbq');
+        $this->db->join('transactions_codes AS tc', 'tc.product_code=pbq.barcode_qr_code_no','left');
+        $this->db->join('products AS p', 'p.id=pbq.product_id');
+        $this->db->join('order_master AS om', 'om.order_id=pbq.order_id');
+        $this->db->where('pbq.plant_id in (SELECT plant_id from assign_plants_to_users WHERE user_id="'.$user_id.'")');
+        if(!empty($status)){
+            $this->db->where('pbq.batch_id!=""');
+        }
+        if (!empty($keyword)) {
+            $this->db->where('om.product_sku LIKE "%'.$keyword.'%" OR pbq.barcode_qr_code_no LIKE "%'.$keyword.'%"');
+        }
+        
+        $this->db->limit($limit, $offset);
+        $this->db->order_by('pbq.id', 'DESC');
+        $query = $this->db->get();
+        $total = $this->countAll($this->db->last_query());
+        //echo "<pre>";print_r($query);die;
+        $items = $query->result_array();
+        return [$total, $items];
+    }
+	
 	public function getAllBarcode($limit, $offset, $keyword = null,$status=null) {
         $user_id = $this->session->userdata('admin_user_id');
         $this->db->select(['pbq.id','pbq.plant_id', 'om.product_sku', 'pbq.barcode_qr_code_no', 'om.order_no', 'om.created_date', 'pbq.modified_at', 'p.delivery_method', 'pbq.receive_date', 'pbq.stock_status', 'pbq.issue_location', 'pbq.active_status', 'p.product_name']);
