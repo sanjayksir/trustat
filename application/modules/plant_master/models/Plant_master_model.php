@@ -266,13 +266,13 @@ class plant_master_model extends CI_Model {
         if ($user_id > 1) {
             //$this->db->where('created_by', $user_id);
             if (!empty($srch_string)) {
-                $this->db->where("(location_type_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%') and (created_by=$user_id)");
+                $this->db->where("(location_type_name LIKE '%$srch_string%') and (created_by=$user_id)");
             } else {
                 $this->db->where(array('created_by' => $user_id));
             }
         } else {
             if (!empty($srch_string)) {
-                $this->db->where("(location_type_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%')");
+                $this->db->where("(location_type_name LIKE '%$srch_string%')");
             }
         }
 
@@ -293,13 +293,13 @@ class plant_master_model extends CI_Model {
         if ($user_id > 1) {
             //$this->db->where('created_by', $user_id);
             if (!empty($srch_string)) {
-                $this->db->where("(location_type_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%'  OR plant_code LIKE '%$srch_string%') and (created_by=$user_id)");
+                $this->db->where("(location_type_name LIKE '%$srch_string%') and (created_by=$user_id)");
             } else {
                 $this->db->where(array('created_by' => $user_id));
             }
         } else {
             if (!empty($srch_string)) {
-                $this->db->where("(location_type_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%')");
+                $this->db->where("(location_type_name LIKE '%$srch_string%')");
             }
         }
 
@@ -354,6 +354,7 @@ class plant_master_model extends CI_Model {
             //$password = generate_password(6);
             $insertData = array(
                 "location_type_name" => $frmData['location_type_name'],
+				"created_by_id" => 1,
 				"status" => 1,
                 "create_date" => date('Y-m-d H:i:s'),
 				"modify_date" => date('Y-m-d H:i:s')

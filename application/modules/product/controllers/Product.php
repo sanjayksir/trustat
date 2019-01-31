@@ -1282,6 +1282,8 @@ function list_assigned_products() {
          $this->load->view('list_loyalty_redemption_requests_tpl', $params);
      }
 
+	 
+	 
 		public function details_loyalty_redemption_requests() {
 		
 		$data = array();
@@ -1522,7 +1524,7 @@ function list_assigned_products() {
         $total_records = $this->Product_model->count_total_list_loyalty_customers($srch_string);
         $params["list_all_consumers"] = $this->Product_model->list_all_loyalty_customers($limit_per_page, $start_index, $srch_string);
         $params["links"] = Utils::pagination('product/list_customer_loyalty_summary', $total_records);
-		$params["total_records"] =  $total_records;
+		$params["total_records"] =  $this->db->count_all_results('consumers');
 		
 			$this->db->select_sum('points');
 			$this->db->from('consumer_passbook');

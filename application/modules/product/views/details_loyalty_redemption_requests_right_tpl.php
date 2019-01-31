@@ -103,7 +103,7 @@
           <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
 
             <input class="btn btn-info" type="submit" name="submit" value="Save Menu" id="savemenu" />
-
+			<a href="<?php echo base_url('product/list_loyalty_redemption_requests') ?>" class="btn btn-info" title="Back to List Loyalty Matrix">Back to List Loyalty Redemption Requests <?php echo $label; ?> </a>
           </div>
 
         </div>

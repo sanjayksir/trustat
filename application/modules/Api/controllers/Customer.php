@@ -214,6 +214,69 @@ class Customer extends ApiController {
 		*/
     }
 	
+		public function ListfollowingCodes(){
+        $user = $this->customerAuth();
+        if(empty($user)){
+            $this->response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        $data = $this->getInput();
+        if(($this->input->method() != 'post') || empty($data)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
+            ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ]
+        ];
+        $errors = $this->Productmodel->validate($data,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+		$userId = $user['user_id'];
+        $result = $this->Productmodel->barcodeProductsInactive($data['bar_code'], $userId);
+		 if(empty($result)){
+            $this->response(['status'=>false,'message'=>'Record not found.'],200);
+        }     
+		 //$userParentId = getUserParentIDById($userId);
+		//echo print_r($result[0]['created_by']) . "<br>"; 
+		//echo print_r($userParentId) . "<br>";
+		//echo print_r($result);
+		//	die;
+			
+			//echo print_r($result[0]['active_status']);
+        
+        /*
+		foreach(explode(',',$data['bar_code']) as $ind => $code){
+           $this->db->or_where('barcode_qr_code_no',$code);
+        }
+		*/
+		
+		$current_active_status = $result[0]['active_status'];
+		
+		if($current_active_status==1){
+		// $isAnyChildAdded = $this->Productmodel->isAnyChildAdded($data['bar_code']);
+		
+		
+        if(!empty($data['bar_code'])){
+			
+			$product_id = $result[0]['product_id'];
+			
+			$data['list_following_codes'] = $this->Productmodel->ListfollowingCodes($data['bar_code'], $userId, $product_id);
+			
+			$this->response(['status'=>true,'message'=>'List of the following Codes is ','list_following_codes'=>$data['list_following_codes']]);
+			
+        }else{
+            $this->response(['status'=>false,'message'=>'System failed to display the data.'],200); 
+        }
+		/*
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to change packaging level because this item already under process to add its children.'],200); 
+        }
+		*/
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to assign batch id because this code is not activated.'],200); 
+        }
+		
+    }
+	
     /**
      * addProductLevel to add level and change status of product by the help of qr bar code
      * 
@@ -322,6 +385,237 @@ class Customer extends ApiController {
             $this->response(['status'=>false,'message'=>'System failed to change packaging level because this item is already activated.'],200); 
         }
     }
+	
+	public function addShipperBoxPackLevel(){
+        $user = $this->customerAuth();
+        if(empty($user)){
+            $this->response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        $data = $this->getInput();
+        if(($this->input->method() != 'post') || empty($data)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
+            ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
+            ['field' =>'pack_level','label'=>'Packet Level','rules' => 'required'],
+            ['field' =>'activation_location_id','label'=>'Location ID','rules' => 'required']
+        ];
+        $errors = $this->Productmodel->validate($data,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+		$userId = $user['user_id'];
+        $result = $this->Productmodel->barcodeProductsInactive($data['bar_code'], $userId);
+		 if(empty($result)){
+            $this->response(['status'=>false,'message'=>'Record not found.'],200);
+        }     
+		 //$userParentId = getUserParentIDById($userId);
+		//echo print_r($result[0]['min_shipper_pack_level']) . "<br>"; 
+		//echo print_r($userParentId) . "<br>";
+		//echo print_r($result);
+		//die;
+			
+			//echo print_r($result[0]['active_status']);
+        
+        /*
+		foreach(explode(',',$data['bar_code']) as $ind => $code){
+           $this->db->or_where('barcode_qr_code_no',$code);
+        }
+		*/
+		
+		$current_active_status = $result[0]['active_status'];
+		if($result[0]['min_shipper_pack_level']==$result[0]['max_shipper_pack_level']){
+		if($current_active_status==1){
+		 $isAnyChildAdded = $this->Productmodel->isAnyChildAdded($data['bar_code']);
+		
+		//if($isAnyChildAdded==true){
+			
+			
+		$this->db->set('active_status',1);
+        $this->db->set('pack_level', $data['pack_level']);
+        $this->db->set('activation_location_id',$data['activation_location_id']);
+        $this->db->set('customer_id',$user['user_id']);
+        //$this->db->set('modified_at', (new DateTime('now'))->format('Y-m-d H:i:s'));
+		$this->db->set('activation_date', (new DateTime('now'))->format('Y-m-d H:i:s'));
+		$this->db->where('barcode_qr_code_no', $data['bar_code']);
+		
+        if($this->db->update('printed_barcode_qrcode')){
+			
+			$tlogdata['trax_slug'] = "addProductLevel"; 
+			$tlogdata['trax_name'] = "Add Product Level Activate";
+			$tlogdata['parent_customer_id'] = $result[0]['created_by']; 
+			$tlogdata['agent_customer_id'] = $userId; 
+			$tlogdata['product_id'] = $result[0]['product_id']; 
+			$tlogdata['product_code'] = $data['bar_code']; 
+			$tlogdata['plant_id'] = getAssignedPlantIDbyProductCode($data['bar_code']); 
+			$tlogdata['location_id'] = $data['activation_location_id']; 
+			$tlogdata['product_sku'] = $result[0]['product_sku']; 
+			$tlogdata['transaction_datetime'] = date('Y-m-d H:i:s'); 
+			
+			$this->db->insert('list_transactions_table', $tlogdata);
+			
+			
+		/*
+			$data2['barcode_qr_code_no'] = $data['bar_code'];
+			$data2['product_id'] = $result[0]['product_id'];
+			$data2['packaging_level'] = $data['pack_level'];
+			$data2['parent_barcode_qr_code'] = 0;
+			$this->db->insert('packaging_codes_pc', $data2);
+		*/	
+			$product_id = $result[0]['product_id'];
+			
+			$pack_level_field_name = "pack_level" . $data['pack_level'];
+			
+			$results2 = $this->db->select($pack_level_field_name)->from('product_packaging_qty_levels')->where('product_id', $product_id)->get()->row();
+			$result['number_of_children'] = $results2->$pack_level_field_name;
+			
+			
+			$data['number_of_children_added'] = $this->db->where('parent_bar_code',$data['bar_code'])->from("packaging_codes_pcr")->count_all_results();
+		
+		
+            //echo $this->db->last_query();die;
+            $this->response(['status'=>true,'message'=>'Level has been added to the Shipper Box.','number_of_children_added'=>$data['number_of_children_added'],'new_pack_level'=>$data['pack_level'],'data'=>$result]);
+        }else{
+            $this->response(['status'=>false,'message'=>'System failed to add level.'],200); 
+        }
+		/*
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to change packaging level because this item already under process to add its children.'],200); 
+        } */
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to change packaging level because this item is already activated.'],200); 
+        }
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to change packaging level because Min Shipper Pack Level and Max Shipper Pack Level are not same defined in the Product Definition.'],200); 
+        }
+    }
+	
+	
+	
+	public function LinkBarcodewithProductionBatchId(){
+        $user = $this->customerAuth();
+        if(empty($user)){
+            $this->response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        $data = $this->getInput();
+        if(($this->input->method() != 'post') || empty($data)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
+            ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
+            ['field' =>'batch_id','label'=>'Packet Level','rules' => 'required'],
+            ['field' =>'location_id','label'=>'Location ID','rules' => 'required'],
+			['field' =>'quantity','label'=>'Number Of Code Items','rules' => 'required']
+        ];
+        $errors = $this->Productmodel->validate($data,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+		$userId = $user['user_id'];
+        $result = $this->Productmodel->barcodeProducts($data['bar_code'], $userId);
+		 if(empty($result)){
+            $this->response(['status'=>false,'message'=>'Record not found.'],200);
+        }     
+		 //$userParentId = getUserParentIDById($userId);
+		//echo print_r($result[0]['created_by']) . "<br>"; 
+		//echo print_r($userParentId) . "<br>";
+		//echo print_r($result);
+		//die;
+			
+			//echo print_r($result[0]['active_status']);
+        
+        /*
+		foreach(explode(',',$data['bar_code']) as $ind => $code){
+           $this->db->or_where('barcode_qr_code_no',$code);
+        }
+		*/
+		
+		$current_active_status = $result[0]['active_status'];
+		
+		if($current_active_status==1){
+		 $isAnyChildAdded = $this->Productmodel->isAnyChildAdded($data['bar_code']);
+		
+		//if($isAnyChildAdded==true){
+			
+			
+		//$this->db->set('active_status',1);
+        $this->db->set('batch_id', $data['batch_id']);
+        $this->db->set('batch_mfg_date', (new DateTime('now'))->format('Y-m-d H:i:s'));
+       // $this->db->set('customer_id',$user['user_id']);
+        //$this->db->set('modified_at', (new DateTime('now'))->format('Y-m-d H:i:s'));
+		//$this->db->set('activation_date', (new DateTime('now'))->format('Y-m-d H:i:s'));
+		$this->db->where('barcode_qr_code_no', $data['bar_code']);
+		
+        if($this->db->update('printed_barcode_qrcode')){
+			
+			$tlogdata['trax_slug'] = "addBatchId"; 
+			$tlogdata['trax_name'] = "Add Batch Id";
+			$tlogdata['parent_customer_id'] = $result[0]['created_by']; 
+			$tlogdata['agent_customer_id'] = $userId; 
+			$tlogdata['product_id'] = $result[0]['product_id']; 
+			$tlogdata['product_code'] = $data['bar_code']; 
+			$tlogdata['plant_id'] = getAssignedPlantIDbyProductCode($data['bar_code']); 
+			$tlogdata['location_id'] = $data['location_id']; 
+			$tlogdata['product_sku'] = $result[0]['product_sku']; 
+			$tlogdata['transaction_datetime'] = date('Y-m-d H:i:s'); 
+			
+			$this->db->insert('list_transactions_table', $tlogdata);
+			
+			
+			$ABilogdata['batch_id'] = $data['batch_id'];  
+			$ABilogdata['product_id'] = $result[0]['product_id']; 
+			$ABilogdata['product_name'] = $data['bar_code'];
+			$ABilogdata['order_id'] = $userId; 
+			$ABilogdata['order_number'] = $userId; 
+			$ABilogdata['order_date'] = date('Y-m-d H:i:s'); 
+			$ABilogdata['print_date'] = date('Y-m-d H:i:s');  
+			$ABilogdata['location_id'] = $data['location_id']; 
+			$ABilogdata['product_sku'] = $result[0]['product_sku'];
+			$ABilogdata['quantity'] = $data['quantity']; 
+			$ABilogdata['first_code_number'] = $data['bar_code'];
+			$ABilogdata['batchid_assigned_by'] = $userId;
+			$ABilogdata['last_code_number'] = $data['bar_code'];
+			$ABilogdata['batch_mfg_date'] = date('Y-m-d H:i:s');  
+			$ABilogdata['status'] = 1;
+				
+			
+			$this->db->insert('link_code_with_batchid_trans', $ABilogdata);
+			
+			
+		/*
+			$data2['barcode_qr_code_no'] = $data['bar_code'];
+			$data2['product_id'] = $result[0]['product_id'];
+			$data2['packaging_level'] = $data['pack_level'];
+			$data2['parent_barcode_qr_code'] = 0;
+			$this->db->insert('packaging_codes_pc', $data2);
+		*/	
+			$product_id = $result[0]['product_id'];
+			/*
+			$pack_level_field_name = "pack_level" . $data['pack_level'];
+			
+			$results2 = $this->db->select($pack_level_field_name)->from('product_packaging_qty_levels')->where('product_id', $product_id)->get()->row();
+			$result['number_of_children'] = $results2->$pack_level_field_name;
+			
+			
+			$data['number_of_children_added'] = $this->db->where('parent_bar_code',$data['bar_code'])->from("packaging_codes_pcr")->count_all_results();
+			
+		
+            //echo $this->db->last_query();die;
+            $this->response(['status'=>true,'message'=>'The Codes Linked with Production Batch Id.','number_of_children_added'=>$data['number_of_children_added'],'new_pack_level'=>$data['pack_level'],'data'=>$result]);
+			*/
+			 $this->response(['status'=>true,'message'=>'The Codes Linked with Production Batch Id.','data'=>$result]);
+        }else{
+            $this->response(['status'=>false,'message'=>'System failed to add level.'],200); 
+        }
+		/*
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to change packaging level because this item already under process to add its children.'],200); 
+        } */
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to Linked the Codes with Production Batch Id because this item is not activated.'],200); 
+        }
+    }
+	
 	
     
 	public function addProductLevelParentActivate(){
@@ -577,6 +871,104 @@ class Customer extends ApiController {
 		
 		
     }
+	
+	
+		public function ShipOutOrder(){
+        $user = $this->customerAuth();
+        if(empty($user)){
+            $this->response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        $data = $this->getInput();
+        if(($this->input->method() != 'post') || empty($data)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
+			['field' =>'request_id','label'=>'Order Number is required','rules' => 'required' ],
+			['field' =>'plant_id','label'=>'plant_id is required','rules' => 'required' ],
+			['field' =>'shipper_box_barcode','label'=>'Shipper Box Barcode is required','rules' => 'required' ],
+			['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
+			['field' =>'invoice_number','label'=>'Invoice Number','rules' => 'required' ],
+			['field' =>'transaction_type','label'=>'Transaction Type','rules' => 'required' ],
+			['field' =>'location_type','label'=>'Location Type','rules' => 'required' ],
+			['field' =>'location_id','label'=>'Location id','rules' => 'required' ],
+			['field' =>'location_name','label'=>'Location Name','rules' => 'required' ],
+			['field' =>'created_by_id','label'=>'Created By','rules' => 'required' ],
+			['field' =>'transfer_out_date','label'=>'Date is not given','rules' => 'required' ]
+        ];
+        $errors = $this->Productmodel->validate($data,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+		$userId = $user['user_id'];
+        $result = $this->Productmodel->barcodeProducts($data['bar_code'], $userId);
+		 if(empty($result)){
+            $this->response(['status'=>false,'message'=>'Record not found.'],200);
+        } 
+				//$data['request_id'] = rand(1111111111,9999999999);
+				$data['created_date_time'] = date("Y-m-d H:i:s");
+				
+		$data['product_id'] = $result[0]['product_id'];	
+		$data['code_packaging_level'] = $result[0]['pack_level'];			
+		 $isItemAlreadyExists = $this->Productmodel->isItemAlreadyExists($data['bar_code']);
+		 
+		  $isitMaster = $this->db->where('parent_bar_code',$data['bar_code'])->from("packaging_codes_pcr")->count_all_results();
+		 
+		//if($isitMaster>0){
+		//if($isItemAlreadyExists==true){
+		    if($this->db->insert('dispatch_stock_transfer_out', $data)){
+				
+				
+			$tlogdata['trax_slug'] = "ShipOutOrder"; 
+			$tlogdata['trax_name'] = "Ship Out Order";
+			$tlogdata['parent_customer_id'] = $result[0]['created_by']; 
+			$tlogdata['agent_customer_id'] = $userId; 
+			$tlogdata['product_id'] = $result[0]['product_id']; 
+			$tlogdata['product_code'] = $data['bar_code']; 
+			$tlogdata['plant_id'] = getAssignedPlantIDbyProductCode($data['bar_code']); 
+			$tlogdata['location_id'] = $data['location_id']; 
+			$tlogdata['product_sku'] = $result[0]['product_sku']; 
+			$tlogdata['transaction_datetime'] = date('Y-m-d H:i:s'); 	
+			
+			$this->db->insert('list_transactions_table', $tlogdata);
+			
+			$product_id = $data['product_id']; 
+			$location_id = $data['location_id'];
+			$code_packaging_level = $data['code_packaging_level'];
+			$isProductExistsinLocation = $this->Productmodel->isProductExistsinLocation($product_id, $location_id, $code_packaging_level);
+			//$isProductExistsinLocation != true;
+			$data2['plant_id'] = $data['plant_id'];
+			$data2['location_id'] = $data['location_id'];
+			$data2['product_id'] = $data['product_id'];
+			$data2['code_packaging_level'] = $data['code_packaging_level'];
+			$data2['created_by_id'] = $data['created_by_id'];
+			$data2['update_date'] = date("Y-m-d H:i:s");
+			if($isProductExistsinLocation==true){
+				
+				$Rstock_transfer_out_qty = $this->db->select('stock_transfer_out_qty')->from('inventory_on_hand')->where(array('location_id' => $data2['location_id'], 'product_id' => $data2['product_id'], 'code_packaging_level' => $data2['code_packaging_level']))->get()->row();
+				$stock_transfer_out_qty = $Rstock_transfer_out_qty->stock_transfer_out_qty;
+				
+				$data2['stock_transfer_out_qty'] = $stock_transfer_out_qty+1;
+				$this->db->where(array('location_id' => $data2['location_id'], 'product_id' => $data2['product_id'], 'code_packaging_level' => $data2['code_packaging_level']));
+				$this->db->update('inventory_on_hand', $data2);
+				
+			} else {
+				$data2['stock_transfer_out_qty'] = 1;
+				$data2['stock_transfer_in_qty'] = 0;
+				$this->db->insert('inventory_on_hand',$data2);
+				
+			}
+            $this->response(['status'=>true,'message'=>'Ship Out Order has been added.','stock_data'=>$data,'code_data'=>$result]);
+        }else{
+            $this->response(['status'=>false,'message'=>'System failed to Ship Out Order.'],200); 
+        } /*
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to add this item Out-Stock because this item already exists.'],200); 
+        } 
+		}else{
+            $this->response(['status'=>false,'message'=>'System failed to add this item Ship Out Order because only master carton can be Dispatch.'],200); 
+        }*/
+    }
+	
 	
 	public function DispatchStockTransferOut(){
         $user = $this->customerAuth();

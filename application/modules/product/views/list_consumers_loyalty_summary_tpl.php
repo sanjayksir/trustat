@@ -79,7 +79,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 			 <table class="table table-striped table-bordered table-hover">
                     <thead>
                            <tr>
-								<th><span class="blue bolder">Total Numer of consumers</span></th>
+								<th><span class="blue bolder">Total Numer of Customers</span></th>
 								<th><span class="blue bolder">Total Earned Points</span></th>
 								<th><span class="blue bolder">Total Points Redeemed</span></th>
 								<th><span class="blue bolder">Total Balance points</span></th>

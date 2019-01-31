@@ -50,7 +50,8 @@
                                             	<td><input name="search" value="<?php if(!empty($this->input->post('search'))){echo $this->input->post('search');}?>" id="searchStr" placeholder="Search Records" class="form-control" type="text"></td>
                                             	<td>
                                                 	<input type="submit" id="btn-filter" value="Search" name="Search" class="btn btn-primary btn-search">&nbsp;
-                                                	<button type="button" id="btn-reset" class="btn btn-default btn-search">Reset</button>
+                                                	<!--<button type="button" id="btn-reset" class="btn btn-default btn-search" onclick="redirect()">Reset</button>-->
+													 <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
                                             	</td>
                                          	</tr>
                                  		 </tbody>

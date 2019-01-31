@@ -318,7 +318,7 @@
 $user_id 	= $this->session->userdata('admin_user_id');
 $plant_data = get_all_active_locations_plant($user_id);
 foreach($plant_data as $res){?>
-<option value="<?php echo $res['location_id'];?>" <?php if($this->uri->segment(3)==$res['location_id']){echo 'selected';}?>><?php echo $res['location_name'];?><?php if($user_id=='1'){ echo " - [" .getUserFullNameById($res['created_by']) . "]"; } ?></option>
+<option value="<?php echo $res['location_id'];?>" <?php if($this->uri->segment(3)==$res['location_id']){echo 'selected';}?>><?php echo $res['location_name'];?><?php if($user_id=='1'){ echo " - [" .getUserFullNameById($res['created_by']) . "]"; } ?>-<?php echo $res['location_id'];?></option>
 <?php }?>
 </select>
 <br />

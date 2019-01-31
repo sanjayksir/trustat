@@ -208,6 +208,10 @@
     	$this->load->view('list_location_type_tpl', $params);
      }
   
+  
+  
+  
+  
      public function add_location_type() {
  		 $data					= array();
    		 $this->load->view('add_location_type', $data); 

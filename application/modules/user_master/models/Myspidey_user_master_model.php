@@ -41,7 +41,7 @@ class Myspidey_user_master_model extends CI_Model {
         $user_id = $this->session->userdata('admin_user_id');
         
         if (!empty($srch_string)) {
-            $this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR CONCAT(f_name, ' ', l_name) LIKE '%$srch_string%' OR f_name LIKE '%$srch_string%' OR l_name LIKE '%$srch_string%') and (is_parent=$user_id)");
+            $this->db->where("transaction_type LIKE '%$srch_string%' OR loyalty_points LIKE '%$srch_string%'");
         } else {
             if (empty($user_id)) {
                 $user_id = 1;
@@ -64,13 +64,17 @@ class Myspidey_user_master_model extends CI_Model {
         $user_id = $this->session->userdata('admin_user_id');
         
         if (!empty($srch_string)) {
-            $this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR CONCAT(f_name, ' ', l_name) LIKE '%$srch_string%' OR f_name LIKE '%$srch_string%' OR l_name LIKE '%$srch_string%') and (is_parent=$user_id)");
+            $this->db->where("transaction_type LIKE '%$srch_string%' OR loyalty_points LIKE '%$srch_string%'");
         } else {
             if (empty($user_id)) {
                 $user_id = 1;
             }
-           // $this->db->where(array('is_parent' => $user_id));
+            //$this->db->where(array('is_parent' => $user_id));
         }
+		
+		
+		
+		
 
         $this->db->select('*');
         $this->db->from('loylties');

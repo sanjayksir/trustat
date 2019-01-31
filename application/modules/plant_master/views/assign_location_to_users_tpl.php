@@ -133,7 +133,7 @@ if( $this->uri->segment(3)!=''){
             <?php }
  			//$plant_data = get_all_plants($user_id);
  			foreach($UserData as $res){?>
-            <option value="<?php echo $res['user_id'];?>" <?php if($this->uri->segment(3)==$res['user_id']){echo 'selected';}?>><?php echo ucfirst($res['user_name']);?></option>
+            <option value="<?php echo $res['user_id'];?>" <?php if($this->uri->segment(3)==$res['user_id']){echo 'selected';}?>><?php echo ucfirst($res['user_name']);?> - (<?php echo get_role_name_by_designation_id(ucfirst($res['designation_id']));?>)</option>
  			<?php }?>
             </select>
 			 

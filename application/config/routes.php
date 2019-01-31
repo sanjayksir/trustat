@@ -161,6 +161,10 @@ $route['api/customer/view-inventory'] = 'Api/Customer/viewInventory';
 $route['api/customer/location-type-master'] = 'Api/Customer/location_type_master';
 $route['api/customer/location-master'] = 'Api/Customer/location_master';
 $route['api/customer/physical-inventory-on-hand'] = 'Api/Customer/PhysicalInventoryOnHand';
+$route['api/customer/link-barcode-with-production-batch-id'] = 'Api/Customer/LinkBarcodewithProductionBatchId';
+$route['api/customer/list-following-codes'] = 'Api/Customer/ListfollowingCodes';
+$route['api/customer/add-shipper-box-pack-level'] = 'Api/Customer/addShipperBoxPackLevel';
+$route['api/customer/ship-out-order'] = 'Api/Customer/ShipOutOrder';
 
 
 $route['api/customer/forgot-password/(:any)'] = 'Api/Customer/forgotPassword/$1';
@@ -265,4 +269,7 @@ $route['reports/list_warranty_claims'] = 'order_master/barcode/list_warranty_cla
 $route['surveys/view_survey_details/(:any)'] = 'surveys/view_survey_details/$1';
 $route['surveys/view_advertisement_details/(:any)'] = 'surveys/view_advertisement_details/$1';
 
+
+$route['reports/ship_out_order_report_list'] = 'order_master/barcode/ship_out_order_report_list';
+$route['reports/ship_out_order_details/(:any)'] = 'order_master/barcode/ship_out_order_details/$1';
 

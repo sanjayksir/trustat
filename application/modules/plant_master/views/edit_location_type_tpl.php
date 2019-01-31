@@ -28,7 +28,7 @@
           <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
 
             <input class="btn btn-info" type="submit" name="submit" value="Submit" id="savemenu" />
-
+			<a href="<?php echo base_url('plant_master/list_location_types') ?>" class="btn btn-info" title="Back to List Location Types">Back to List Location Types <?php echo $label; ?> </a>
           </div>
 
         </div>

@@ -127,7 +127,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="input-group">
-                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Consumer Name,Consumer Phone">
+                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Customer Name">
                                                 <span class="input-group-btn">
                                                     <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                     <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -144,8 +144,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 														<th>S No.</th>
 													   <th>Customer Name</th>
 														<th>Total Spent Points</th>
-														<th>------</th>
-														<th>------</th>
+														
 														
                                                        <th>Loyalty Details</th>
 
@@ -163,7 +162,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                          ?>
                                 <tr id="show<?php echo $attr['id'];?>">
                                 <td><?php echo $sno; ?></td>
-                                <td><?php echo $attr['customer_id']; ?></td>
+                                <td><?php echo getUserFullNameById($attr['customer_id']); ?></td>
                                 <td><?php //echo base_url(); 
 								
 								if(base_url()=='http://localhost/trackingportal/') {
@@ -187,8 +186,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
 
 								?></td>
-                           <td>----</td>
-						   <td>----</td>
+                           
                                                  
                                                  
 													<td><?php echo anchor("product/list_customerwise_consumer_loyalty_details/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Loyalty Details</i>', array('class' => 'btn btn-xs btn-info','title'=>' Loyalty Details')); ?>  

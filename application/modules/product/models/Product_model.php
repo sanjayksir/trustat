@@ -1115,6 +1115,13 @@
 	function list_loyalty_redemption_requests($limit,$start,$srch_string=''){
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
+		//$result_data = 0;
+		
+		
+		$srch_string = trim($srch_string);
+        if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("LR.redemption_id LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%'");
+		}
 		
  		$this->db->select('LR.*, C.*',false);
 		$this->db->from('loyalty_redemption LR');
@@ -1123,7 +1130,7 @@
 		if($user_id!=1){ 
 			$this->db->where(array('P.created_by' => $user_id));
 		} */
-   		$this->db->order_by('LR.l_created_at','desc');
+   		$this->db->order_by('LR.lr_id','desc');
 		$this->db->limit($limit, $start);
    		$query = $this->db->get();  //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
@@ -1136,13 +1143,14 @@
 	function count_loyalty_redemption_requests($srch_string=''){
 		$result_data = 0;
 		$user_id 	= $this->session->userdata('admin_user_id');
-		/*
+		
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
+ 			$this->db->where("LR.redemption_id LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%'");
 		}
-		*/
+		
  		$this->db->select('count(1) as total_rows');
-		$this->db->from('loyalty_redemption');
+		$this->db->from('loyalty_redemption LR');
+		$this->db->join('consumers C', 'C.id = LR.user_id');
 		//$this->db->join('consumers C', 'C.id = LR.user_id');
 		/*
 		$this->db->join('products P', 'P.id = PP.product_id');
@@ -1415,13 +1423,13 @@
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR product_description LIKE '%$srch_string%') and (created_by=$user_id)");
+ 				$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%'");
 			}else{
-				$this->db->where(array('created_by'=>$user_id));
+				//$this->db->where(array('created_by'=>$user_id));
 			}			
 		}else{
 			if(!empty($srch_string)){ 
- 			$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR product_description LIKE '%$srch_string%')");
+ 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%'");
 			}
 		}
 		
@@ -1431,7 +1439,7 @@
 			//$this->db->where('created_by', $user_id);
 		//}
 		
-		$this->db->order_by("created_at", " desc");
+		//$this->db->order_by("created_at", " desc");
 		$this->db->limit($limit, $start);
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 		return $resultDt ;
@@ -1443,13 +1451,13 @@
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR product_description LIKE '%$srch_string%') and (created_by=$user_id)");
+ 				$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%'");
 			}else{
-				$this->db->where(array('created_by'=>$user_id));
+				//$this->db->where(array('created_by'=>$user_id));
 			}			
 		}else{
 			if(!empty($srch_string)){ 
- 			$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR product_description LIKE '%$srch_string%')");
+ 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%'");
 			}
 		}
 		$this->db->select('count(1) as total_rows');
@@ -1595,14 +1603,16 @@
 		
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(selected_answer LIKE '%$srch_string%') and (user_id=$id)");
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR fqb.question LIKE '%$srch_string%' OR CF.selected_answer LIKE '%$srch_string%') and (user_id=$id)");
 			}else{
 				$this->db->where(array('user_id'=>$id));
-			}			
+			}		
 		
 		$this->db->select('count(1) as total_rows');
-		$this->db->from('consumer_feedback');
-		$this->db->where('user_id', $id);
+		$this->db->from("consumer_feedback AS CF");
+		$this->db->join('products AS P', 'P.id = CF.product_id','LEFT');
+		$this->db->join('feedback_question_bank AS fqb', 'fqb.question_id = CF.question_id','LEFT');
+		$this->db->where('CF.user_id', $id);
     		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -1618,15 +1628,17 @@
 			//$id = 88;
 			//$id = $this->uri->segment(3);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(selected_answer LIKE '%$srch_string%') and (user_id=$id)");
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR fqb.question LIKE '%$srch_string%' OR CF.selected_answer LIKE '%$srch_string%') and (user_id=$id)");
 			}else{
 				$this->db->where(array('user_id'=>$id));
 			}
 			
-		$this->db->select("*");
-		$this->db->from("consumer_feedback");
-		$this->db->where('user_id', $id);
-		$this->db->order_by("created_date", "desc");
+		$this->db->select("CF.*, P.product_name, fqb.question");
+		$this->db->from("consumer_feedback AS CF");
+		$this->db->join('products AS P', 'P.id = CF.product_id','LEFT');
+		$this->db->join('feedback_question_bank AS fqb', 'fqb.question_id = CF.question_id','LEFT');
+		$this->db->where('CF.user_id', $id);
+		$this->db->order_by("CF.created_date", "desc");
 		$this->db->limit($limit_per_page, $start_index);
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 		return $resultDt ;

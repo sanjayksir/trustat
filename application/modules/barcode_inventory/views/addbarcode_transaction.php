@@ -5,7 +5,7 @@
             <div class="form-group">
                 <label>Plant Name</label>
                 <select class="form-control" name="plant_id" id="plant_id" onchange="barcode.getOrder(this,'order_id')">
-                    <?php echo Utils::selectOptions('plant_id',['options'=>$plantcontroller,'empty'=>'Select plant']) ?>
+                    <?php echo Utils::selectOptions('location_id',['options'=>$locationcontroller,'empty'=>'Select plant']) ?>
                 </select>
             </div>
             <div class="form-group">

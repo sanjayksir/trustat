@@ -1,7 +1,8 @@
 <?php  // echo '<pre>';print_r($get_user_details);exit;?>
 <!---------- Edit Link------------>
 <div class="col-xs-12" id="show_country_form">
-	<a class="btn btn-info pull-right" href="<?php echo base_url().'user_master/edit_profile_user';?>" data-toggle="modal">Edit Profile</a>
+	<a href="<?php echo base_url('/backend/dashboard') ?>" class="btn btn-info  pull-right" title="Back to List Loyalty Matrix"> | Back to Home <?php echo $label; ?> </a> <a class="btn btn-info pull-right" href="<?php echo base_url().'user_master/edit_profile_user';?>" data-toggle="modal"> Edit Profile</a>
+	
 </div>
 <!---------- Edit Link------------>
 <div class="col-xs-12">

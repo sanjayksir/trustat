@@ -877,6 +877,9 @@ class Consumer extends ApiController {
 		$redemtionData['mobile_no'] = getConsumerMobileNumberById($user['id']);
         $redemtionData['l_status'] = 0;
         $redemtionData['user_id'] = $user['id'];
+		
+		$checkifrquestinprocess = $this->db->where(array('user_id' => $user['id'], 'l_status' => 0))->count_all_results('loyalty_redemption');
+		if ($checkifrquestinprocess < 1) {
         if ($this->db->insert('loyalty_redemption', $redemtionData)) {
             $redemptionId = $this->db->insert_id();
             //$this->db->update('consumers',$consumerData,['id'=>$user['id']]);
@@ -885,9 +888,14 @@ class Consumer extends ApiController {
         }else{
             Utils::response(['status'=>false,'message'=>'Failed to accept the redemption request.Please contact support team.']);
         }
-        
-
-    }
+		}else{
+            Utils::response(['status'=>false,'message'=>'Failed to accept the redemption request because your request is already in process.']);
+        }
+		}
+		
+		
+		
+		
     public function redemption() {
         //Utils::debug();
         $user = $this->auth();

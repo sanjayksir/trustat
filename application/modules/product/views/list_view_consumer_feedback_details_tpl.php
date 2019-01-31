@@ -70,35 +70,20 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                 <?php } ?>
 	
-                <b>Consumer Name :</b> <?php echo $consumer_details['user_name'];?>, <b>Consumer Phone :</b> <?php echo $consumer_details['mobile_no'];?>,  <b>Consumer GEO Location :</b> <?php $ip = $consumer_details['ip'];
-				
-				
-$url = "https://ipapi.co/" . $ip . "/json/";
- $ch = curl_init();  
- 
-    curl_setopt($ch,CURLOPT_URL,$url);
-    curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
- 
-    $output=curl_exec($ch);
- 
-    if($output === false)
+                <b>Consumer Name :</b> <?php echo $consumer_details['user_name'];?>, <b>Consumer Phone :</b> <?php echo $consumer_details['mobile_no'];?>,  <b>Consumer GEO Location :</b> <?php //echo $consumer_details['ip'];?><?php
+    $ip = '157.38.220.26'; // your ip address here
+    $query = @unserialize(file_get_contents('http://ip-api.com/php/'.$ip));
+    if($query && $query['status'] == 'success')
     {
-        echo "Error Number:".curl_errno($ch)."<br>";
-        echo "Error String:".curl_error($ch);
+        echo $query['city'] . "-" . $query['zip'];
+       // echo '<br />';
+       // echo 'Your State is ' . $query['region'];
+       // echo '<br />';
+        //echo 'Your Zipcode is ' . $query['zip'];
+      //  echo '<br />';
+       // echo 'Your Coordinates are ' . $query['lat'] . ', ' . $query['lon'];
     }
-    curl_close($ch);
-    $data = json_decode($output,true);
-				
-				echo $data['city'] . ", "; echo $data['region']; echo " - " . $data['postal'];  //echo $data['latitude']; echo $data['longitude'];
-				
-				?>, <b>Consumer Gender :</b> <?php echo $consumer_details['gender'];?>, <b>Consumer DOB :</b> <?php //echo $consumer_details['dob'];
-				
-				$cls_date = $consumer_details['dob'];
-				$date = strtotime($cls_date); 
-				$new_date = date('F j, Y', $date); 
-				echo $new_date;
+    ?>, <b>Consumer Gender :</b> <?php echo $consumer_details['gender'];?>, <b>Consumer DOB :</b> <?php if($consumer_details['dob']=='0001-01-01') { echo "N/A"; } else { echo date('j M Y D', strtotime($consumer_details['dob'])); } 
 				?>, <b>Consumer Email :</b> <?php echo $consumer_details['email'];?> <!--Consumer marital status :--> <?php //echo $consumer_details['user_name'];?> <!-- Consumer Annual Income :--> <?php //echo $consumer_details['user_name'];?>
 
                  <div class="row">
@@ -124,7 +109,7 @@ $url = "https://ipapi.co/" . $ip . "/json/";
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="input-group">
-                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Event Name, Transaction Type">
+                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Name, Question or Answer ">
                                                 <span class="input-group-btn">
                                                     <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                     <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>

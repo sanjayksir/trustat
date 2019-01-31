@@ -276,6 +276,43 @@ class Productmodel extends CI_Model {
         return $items;
     }
 	
+	public function ListfollowingCodes($barCodes = null, $userId = null, $product_id = null) {
+        if ($barCodes == null) {
+            return false;
+        }
+        if(!is_array($barCodes)){
+            $barCodes = explode(',', $barCodes);
+        }
+        $userParentId = getUserParentIDById($userId);
+        $query = $this->db->select('barcode_qr_code_no')
+                ->from('printed_barcode_qrcode')
+                //->join('products AS p', 'p.id=pbq.product_id')
+				->where_in("active_status",1)
+                //->where('pbq.barcode_qr_code_no IN ("'.implode('", "',$barCodes).'")')
+				//->where('p.created_by ="'.$userParentId.'"') 
+				//->where('product_id ="'.$product_id.'"', 'batch_id', "")
+				->where('product_id ="'.$product_id.'" AND batch_id=""')
+				//->where('batch_id', 0) 				
+                ->get()
+                ->result();
+        //echo $this->db->last_query();die;
+      // echo print_r($query);die;
+        if (empty($query)) {
+            return false;
+        }
+        $items = [];
+        foreach($query as $row){
+            $item = [
+                'bar_code' => $row->barcode_qr_code_no,
+                
+            ];
+           
+           
+            
+            $items[] = $item;
+        }
+        return $items;
+    }
 	
 	public function barcodeProductsInactive($barCodes = null, $userId = null) {
         if ($barCodes == null) {
@@ -314,6 +351,8 @@ class Productmodel extends CI_Model {
                 'product_sku' => $row->product_sku,
 				'created_by' => $row->created_by,
                 'product_description' => $row->product_description,
+				'min_shipper_pack_level' => $row->min_shipper_pack_level,
+				'max_shipper_pack_level' => $row->max_shipper_pack_level,
             ];
             if (!empty($row->attribute_list)) {
                 $attributesids = implode(',', json_decode($row->attribute_list, true));

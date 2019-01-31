@@ -161,7 +161,7 @@
           <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
 
             <input class="btn btn-info" type="submit" name="submit" value="Submit" id="savemenu" />
-
+			<a href="<?php echo base_url('user_master/list_user/') ?>" class="btn btn-info" title="Back to List Loyalty Matrix">Back to List Users <?php echo $label; ?> </a>	
           </div>
 
         </div>

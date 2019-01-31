@@ -1,10 +1,6 @@
 <div class="widget-box widget-color-blue">
-    <div class="alert alert-msg" style="display:none;"></div>
     <div class="widget-header widget-header-flat">
         <h5 class="widget-title bigger lighter"><?php echo $title;?></h5>
-        <div class="widget-toolbar">
-            <a href="<?php echo base_url('barcode_inventory/list_assign_batchid_transactions') ?>" class="btn btn-sm btn-success" title="Receive More Codes">List Linked Barcode Batch Id Master</a> | <a href="<?php echo base_url('barcode_inventory/addlinkcode_with_batchid_transaction/Assigned') ?>" class="btn btn-sm btn-success btnadd" title="Receive More Codes">Link Barcode Batch Id</a>
-        </div>
     </div>
     <div class="widget-body">
         <div class="row filter-box">
@@ -31,21 +27,23 @@
         <table id="missing_people" class="table table-striped table-bordered table-hover">
             <thead>
                 <tr>
-                    <th>Sno</th>
+                    <th>SN</th>
                     <th>Batch Id</th>
-					<th>Batch Mfg Date</th>
+                    <th>Location Name</th>
                     <th>Product Name</th>
-                    <th>Product Code</th>                    
-                    <th>Batch ID Assigned User Name</th>
-                   <!-- <th>Recieve Date</th>
-                    <th>Code Status</th>
-                    <th>Action</th>-->
+                   <!-- <th>Product Code</th>-->
+                    <th>Quantity</th>
+                    <th>First Code</th>                    
+                    <th>Last Code</th>
+                    <th>Assigned By</th>
+                    <th>Assignment Date</th>
+                    
                 </tr>
             </thead>
             <tbody>            
             <?php
             if(empty($items)):
-                echo '<tr><td colspan="11"><h3 class="text-center">There is no record.</h3></td></tr>';
+                echo '<tr><td colspan="12"><h3 class="text-center">There is no record.</h3></td></tr>';
             endif;
             $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
             $sno =  $page + 1;            
@@ -54,23 +52,36 @@
             <tr>
                 <td><?php echo $sno; ?></td>
                 <td><?php echo $row['batch_id'];?></td>
-				<td><?php echo date('j M Y H:i:s D', strtotime($row['batch_mfg_date']));  ?></td>
+                <td><?php echo get_locations_name_by_id($row['location_id']);?></td>
                 <td><?php echo $row['product_name'];?></td>
-				<td><?php echo $row['barcode_qr_code_no'];?></td>
+               <!-- <td><?php echo $row['product_name'];?></td>-->
+                <td><?php echo $row['quantity'];?></td>
+				 <td><?php echo $row['first_code_number'];?></td>
+				 <td><?php echo $row['last_code_number'];?></td>
                 <td><?php echo getUserFullNameById($row['batchid_assigned_by']);?></td>
+                <td><?php echo date('j M Y H:i:s D', strtotime($row['batch_mfg_date']));  ?><?php //echo date('d/M/Y',strtotime($row['batch_mfg_date'])); ?></td>
+                <td><?php
+                if($row['source_received_from'] == 1){
+                    echo 'Super Admin';
+                }elseif($row['source_received_from'] ==2){
+                    echo 'Plant Controller';
+                }elseif($row['source_received_from'] == 3){
+                    echo 'CCC Admin';
+                }
                 
+                ?></td>
                <!-- <td><?php echo date('d/M/Y',strtotime($row['receive_date'])); ?></td>
                 <td><?php echo $row['stock_status'];?></td>
                 <td>                    
                     <?php
-                    $sString = 'Inactive';
+                    $sString = 'Issued';
                     $sClass = 'danger';
-                    if($row['active_status'] == 1){
-                        $sString = 'Active';
+                    if($row['status'] == 1){
+                        $sString = 'Recieved';
                         $sClass = 'success';
                     }
                     ?>
-                    <a href="<?php echo site_url('barcode_inventory/barcode_order_status/'.$row['id'].'/barcode'); ?>" class="label label-<?php echo $sClass; ?> bostatus"><?php echo $sString ?></a>
+                    <a href="<?php //echo site_url('barcode_inventory/barcode_order_status/'.$row['id'].'/transactions'); ?>" class="label label-<?php echo $sClass; ?> bostatus"><?php echo $sString ?></a>
                 </td>-->
             </tr>
             <?php $sno++; ?>
@@ -83,30 +94,14 @@
         </div>
     </div>
 </div>
-<div id="modalbox" class="modal fade" tabindex="-1" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Link Activated Barcode with Production Batch Id</h4>
-            </div>
-            <div class="modal-body"></div>
-        </div>
-    </div>
-</div>
 <script type="text/javascript">
     $(document).ready(function(){
-        $('.btnadd').on('click',function(e){
-            e.preventDefault();
-            $('.modal-body').load($(this).attr('href'),function(result){
-                $('#modalbox').modal('toggle');
-            });
-        });
         $(".bostatus").on('click',function(e){
             e.preventDefault();
             var currentElem = $(this);
             var url = $(this).attr('href');
-            bootbox.confirm("Are you sure want to change the status?", function(result){
+            //bootbox.confirm("Are you sure want to change the status?", function(result){
+				 bootbox.confirm("Have you seen the status?", function(result){
                 if(!result){
                     return;
                 }

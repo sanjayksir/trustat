@@ -63,6 +63,24 @@ class BarcodeInventoryModel extends CI_Model {
         $items = $query->result_array();
         return [$total, $items];
     }
+	
+	public function getTransactionAssignBatchIdtoCodes($limit, $offset, $keyword = null) {
+        $this->db->select(['tc.id','tc.batch_id','tc.product_id', 'tc.id AS transaction_id', 'tc.first_code_number', 'tc.last_code_number', 'tc.batchid_assigned_by', 'tc.location_id', 'tc.product_name', 'tc.quantity', 'tc.status', 'tc.order_id', 'tc.batch_mfg_date']);
+        $this->db->from('link_code_with_batchid_trans AS tc');
+        if (!empty($keyword)) {
+            $this->db->where('tc.batch_id LIKE "%'.$keyword.'%" OR tc.product_name LIKE "%'.$keyword.'%"');
+        }
+        $this->db->group_by('tc.id');
+        $this->db->limit($limit, $offset);
+        $this->db->order_by('tc.id', 'DESC');
+        $query = $this->db->get();
+        $items = $query->result_array();
+        $total = $this->countAll($this->db->last_query());
+        //echo "<pre>";print_r($query);die;
+        $items = $query->result_array();
+        return [$total, $items];
+    }
+	
 
     public function getBarcode($limit, $offset, $keyword = null,$status=null) {
         $user_id = $this->session->userdata('admin_user_id');
@@ -90,21 +108,21 @@ class BarcodeInventoryModel extends CI_Model {
 	
 	    public function getBarcodeswithBatchId($limit, $offset, $keyword = null,$status=null) {
         $user_id = $this->session->userdata('admin_user_id');
-        $this->db->select(['pbq.id','pbq.plant_id', 'pbq.barcode_qr_code_no', 'om.order_no', 'om.created_date', 'pbq.modified_at', 'p.delivery_method', 'pbq.receive_date', 'pbq.active_status', 'pbq.issue_location', 'pbq.batch_id', 'pbq.batch_mfg_date']);
+        $this->db->select(['pbq.id','pbq.plant_id', 'pbq.barcode_qr_code_no', 'om.order_no', 'om.created_date', 'pbq.modified_at', 'p.delivery_method', 'pbq.receive_date', 'pbq.active_status', 'tc.issue_location', 'tc.batch_id', 'tc.batch_mfg_date', 'tc.product_name', 'tc.batchid_assigned_by']);
         $this->db->from('printed_barcode_qrcode AS pbq');
-        $this->db->join('transactions_codes AS tc', 'tc.product_code=pbq.barcode_qr_code_no','left');
+        $this->db->join('link_code_with_batchid_trans AS tc', 'tc.batch_id=pbq.batch_id','left');
         $this->db->join('products AS p', 'p.id=pbq.product_id');
         $this->db->join('order_master AS om', 'om.order_id=pbq.order_id');
-        $this->db->where('pbq.plant_id in (SELECT plant_id from assign_plants_to_users WHERE user_id="'.$user_id.'")');
+        $this->db->where('tc.batchid_assigned_by="'.$user_id.'"');
         if(!empty($status)){
-            $this->db->where('pbq.batch_id!=""');
+            $this->db->where('tc.batch_id!=""');
         }
         if (!empty($keyword)) {
             $this->db->where('om.product_sku LIKE "%'.$keyword.'%" OR pbq.barcode_qr_code_no LIKE "%'.$keyword.'%"');
         }
         
         $this->db->limit($limit, $offset);
-        $this->db->order_by('pbq.id', 'DESC');
+        $this->db->order_by('tc.id', 'DESC');
         $query = $this->db->get();
         $total = $this->countAll($this->db->last_query());
         //echo "<pre>";print_r($query);die;
@@ -174,7 +192,26 @@ class BarcodeInventoryModel extends CI_Model {
         $this->db->select(['pm.location_id', 'pm.location_code', 'pm.location_name']);
         $this->db->from('location_master AS pm');
         $this->db->join('assign_locations_to_users AS ap', 'ap.location_id=pm.location_id');
-        $this->db->where(['ap.status' => 1, 'ap.assigned_by' => $ParentID]);
+        $this->db->where(['ap.status' => 1, 'ap.assigned_by' => $ParentID, 'pm.location_type' => 'Plant']);
+        $sql = $this->db->get();
+        $items = [];
+        if ($sql->num_rows() > 0) {
+            $items = $sql->result_array();
+        }
+        return $items;
+    }
+	
+	
+	
+	public function getCCCLocation() {
+        //if (is_null($userId)) {
+            $userId = $this->session->userdata('admin_user_id');
+        //}
+		$ParentID = get_parent_id($userId);
+        $this->db->select(['location_id', 'location_code', 'location_name']);
+        $this->db->from('location_master');
+       // $this->db->join('assign_locations_to_users AS ap', 'ap.location_id=pm.location_id');
+        $this->db->where(array('status' => 1, 'location_type' => 'Plant', 'created_by'=> $userId));
         $sql = $this->db->get();
         $items = [];
         if ($sql->num_rows() > 0) {

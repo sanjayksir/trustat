@@ -40,7 +40,7 @@ class Barcode_inventory extends MX_Controller {
 	
 	    public function link_code_with_batchid() {
         #Utils::debug();
-        $data['title'] = 'Linked Codes with Batch Id';
+        $data['title'] = 'List Linked Codes with Batch Id Detailed';
         $data['view'] = 'link_code_with_batchid_tpl';
         if (!empty($this->input->get('page_limit'))) {
             $limit = $this->input->get('page_limit');
@@ -82,11 +82,12 @@ class Barcode_inventory extends MX_Controller {
 	
 
     public function addbarcode_transaction() {
-        $data['plants'] = $this->BarcodeInventoryModel->getAssignedPlant();
+       /*
+	   $data['plants'] = $this->BarcodeInventoryModel->getAssignedPlant();
         foreach ($data['plants'] as $row) {
             $data['plantcontroller'][$row['plant_id']] = $row['plant_name'];
         }
-		
+		*/
 		$data['locations'] = $this->BarcodeInventoryModel->getAssignedLocation();
         foreach ($data['locations'] as $row) {
             $data['locationcontroller'][$row['location_id']] = $row['location_name'];
@@ -104,7 +105,7 @@ class Barcode_inventory extends MX_Controller {
             $data['plantcontroller'][$row['plant_id']] = $row['plant_name'];
         }
 		
-		$data['locations'] = $this->BarcodeInventoryModel->getAssignedLocation();
+		$data['locations'] = $this->BarcodeInventoryModel->getCCCLocation();
         foreach ($data['locations'] as $row) {
             $data['locationcontroller'][$row['location_id']] = $row['location_name'];
         }
@@ -206,6 +207,7 @@ class Barcode_inventory extends MX_Controller {
 	
 	
 	public function save_link_code_with_batchid_mt() {
+		$user_id 	= $this->session->userdata('admin_user_id');
         $post = $this->input->post();
         if (empty($post['plant_id'])) {
             Utils::response(['status' => false, 'message' => 'Please select plant.']);
@@ -227,20 +229,20 @@ class Barcode_inventory extends MX_Controller {
         $tData = [
             'batch_id' => $post['batch_id'],
             'product_id' => $barcodeDetails['product_id'],
-            'product_code' => $barcodeDetails['barcode_qr_code_no'],
+            'product_name' => get_products_name_by_id($barcodeDetails['product_id']),
             'order_id' => $post['order_id'],
             'order_number' => $barcodeDetails['order_no'],
             'order_date' => $barcodeDetails['created_date'],
             'print_date' => $barcodeDetails['modified_at'],
-            'plant_id' => $barcodeDetails['plant_id'],
+            'location_id' => $barcodeDetails['plant_id'],
             'product_sku' => $barcodeDetails['product_sku'],
             'quantity' => $barcodeDetails['quantity'],
-            'source_received_from' => $barcodeDetails['delivery_method'],
+            'batchid_assigned_by' => $user_id,
             'batch_mfg_date' => date("Y-m-d H:i:s"),
             'first_code_number' => current($post['printed_code']),
             'last_code_number' => end($post['printed_code']),
-			'issue_location' => ($post['status_type'] == 'Issued')?$post['issue_location']:0,
-            'status' => ($post['status_type'] == 'Received')?1:2
+			'issue_location' => $barcodeDetails['plant_id'],
+            'status' => 1
         ];
         if ($this->db->insert('link_code_with_batchid_trans', $tData)) {
             $this->db->update("printed_barcode_qrcode", ['batch_id' => $post['batch_id'],'batch_mfg_date'=>date('Y-m-d H:i:s')], 'print_id ="'.$post['printed_order'].'"');
@@ -267,6 +269,26 @@ class Barcode_inventory extends MX_Controller {
         $data["links"] = Utils::pagination('barcode_inventory/received_codes', $data['total']);
         $data['breadcrumb'] = [
             ['title' => 'Recieve Barcode Inventory', 'url' => null]
+        ];
+        $this->load->view('template', $data);
+    }
+	
+ public function list_assign_batchid_transactions() {
+        $data['title'] = 'List Assign Batch Id Transactions';
+        $data['view'] = 'list_assign_batchid_transactions_tpl';
+        if (!empty($this->input->get('page_limit'))) {
+            $limit = $this->input->get('page_limit');
+        } else {
+            $limit = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit);
+        $offset = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $query = $this->input->get('search', null);
+        list($data['total'], $data['items']) = $this->BarcodeInventoryModel->getTransactionAssignBatchIdtoCodes($limit, $offset, $query);
+        //echo "<pre>";print_r($data['items']);die;
+        $data["links"] = Utils::pagination('barcode_inventory/list_assign_batchid_transactions', $data['total']);
+        $data['breadcrumb'] = [
+            ['title' => 'List Assign Batch Id Transactions', 'url' => null]
         ];
         $this->load->view('template', $data);
     }

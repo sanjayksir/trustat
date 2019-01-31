@@ -94,7 +94,7 @@
                                                        <td><?php echo $listData['barcode_qr_code_no']; ?></td>
                                                             <td><?php echo $listData['product_name']; ?></td>
                                                             <td><?php echo $listData['user_name']; ?></td>
-                                                            <td><?php echo get_locations_name_by_id($listData['location_id']); ?></td>
+                                                            <td><?php echo $listData['location_name']; ?></td>
                                                             <td>
 
                                                             <?php 												

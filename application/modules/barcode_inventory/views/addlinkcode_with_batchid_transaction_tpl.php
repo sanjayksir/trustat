@@ -4,12 +4,12 @@
         <form name="frm" id="order-form" action="#" method="POST">
 			<div class="form-group">
                 <label>Batch Id</label>
-				<input type="text" class="form-control" name="batch_id" id="batch_id" placeholder="Please enter Batch Id" />
+				<input type="text" class="form-control" name="batch_id" id="batch_id" placeholder="Please enter Batch Id" required />
             </div>
             <div class="form-group">
                 <label>Plant Name</label>
                 <select class="form-control" name="plant_id" id="plant_id" onchange="barcode.getOrder(this,'order_id')">
-                    <?php echo Utils::selectOptions('plant_id',['options'=>$plantcontroller,'empty'=>'Select plant']) ?>
+                    <?php echo Utils::selectOptions('location_id',['options'=>$locationcontroller,'empty'=>'Select plant']) ?>
                 </select>
             </div>
             <div class="form-group">
@@ -27,7 +27,7 @@
 			
             <div class="form-group">
                 <label>Printed Code <a href="javascript:void(0);" id="checkall" class="hide checked" onclick="barcode.checkAll(this)">|&nbsp;Toggle Selection</a></label>
-                <div class="col-sm-12" id="printed-code"></div>
+                <div class="col-sm-12" id="printed-code" style="height: 100px; overflow-x:hidden;"></div>
             </div>
 			<?php if($this->uri->segment(3)=="Issued") { ?>
            <div class="form-group">
