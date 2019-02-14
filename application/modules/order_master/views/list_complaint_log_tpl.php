@@ -67,11 +67,16 @@
  												<thead>
 													<tr>
 														<th>#</th>
-														<th>Complaint Product Code</th>
+														<th>Product Code</th>
+														<th>Complaint Code</th>
 														<th>Product Name</th>
 														<th>Consumer Name</th>
+														<th>Complaint Status</th>
  														<!--<th>Location-latitude/longitude</th>-->
-														<th>date time of the Complaint</th>
+														<th>date time - Complaint</th>
+														 <th>Complaint Description (Remarks)</th>
+														 <th>Complaint type</th>
+														 
                                                        <!-- <th>Action</th> -->
   													</tr>
 												</thead>
@@ -88,14 +93,18 @@
                                                <tr id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['bar_code']; ?></td>
+											   <td><?php echo $listData['complain_code']; ?></td>
 												<td><?php echo $listData['product_name']; ?></td>
 												<td><?php echo $listData['user_name']; ?></td>
+												<td><?php echo $listData['status']; ?></td>
 												<!--<td>
 																								
 												<?php //echo $listData['latitude']. " / "; ?><?php //echo $listData['longitude']; ?>
 												</td>-->
-												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['created_at']))); ?></td>
- 												 
+												<td><?php echo (date('j M Y H:i:s', strtotime($listData['created_at']))); ?></td>
+ 												 <td><?php echo $listData['description']; ?> -<?php echo anchor("order_master/reply_consumer_complaint/" . $listData['id'], 'Reply <i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?></td>
+												 <td><?php echo $listData['type']; ?></td>
+												 
                                               </tr>
                                          <?php }
 										}else{ ?>

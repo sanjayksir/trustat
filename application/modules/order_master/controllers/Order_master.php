@@ -1388,6 +1388,56 @@ $pdf->Output('example_050.pdf', 'I');
 		echo $data = $this->order_master_model->update_customer_code($data);exit;
 		
     }
+	
+	
+	
+	
+	
+	
+		public function reply_consumer_complaint() {
+		
+		$data = array();
+        $id = $this->uri->segment(3);
+		
+
+        $data['get_registered_products_by_consumers_details'] = $this->order_master_model->get_reply_consumer_complaint_details($id);
+		
+		 $data['get_responses_consumer_complaint'] = $this->order_master_model->get_responses_consumer_details($id);
+		 
+        $this->load->view('reply_consumer_complaint_tpl', $data);
+    }
+
+	 public function save_reply_consumer_complaint_by_customer() {
+        $data					= array();
+		$data = $this->input->post();
+		$consumer_id = $data['consumer_id'];
+		echo "Sanjay";
+			
+			//$transactionType = "successful-verification-of-invoice-uploaded-for-product-registration";
+			$transactionType = "product_registration_lps";
+			$transactionTypeName = "Successful verification of invoice uploaded for product registration ";
+				//$this->Product_model->saveProductLoylty($transactionType, $ProductID, $consumer_id, ['transaction_date' => date("Y-m-d H:i:s"),'consumer_id' => $consumer_id,'product_id' => $ProductID], $customer_id);
+				//$this->Product_model->saveConsumerPassbookLoyalty($transactionType, $transactionTypeName, $ProductID, $consumer_id, ['verification_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $bar_code], $customer_id, 'Loyalty');
+				
+			//$vquery = "Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in 'my purchase list' in howzzt App.";	
+			
+			$vquery = "Hey, the product owner has responded on your complaint in howzzt App and check";
+		
+		//print_r($data);exit;
+		$data = $this->order_master_model->update_save_reply_consumer_complaint_by_customer($data);
+		
+		//$consumer_id = $user->consumer_id;
+		 $fb_token = getConsumerFb_TokenById($consumer_id);
+		 
+		 $this->order_master_model->sendFVPNotification($vquery, $fb_token);
+		
+		exit;
+		
+    }	
+	
 	 
-   }?>
+   }
+   
+   
+   ?>
 

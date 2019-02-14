@@ -1584,6 +1584,23 @@ function list_assigned_products() {
     }
 	
 	
+	public function checkDuplicateQuestion() {
+        $user_id = $this->session->userdata('admin_user_id');
+       // $Question = $this->session->userdata('Question');
+
+       $Product_id = $this->uri->segment(3);
+	   //echo $Product_id;
+		$Question = $this->input->post('Question');
+        $qid = $this->input->post('questionid');
+		$Product_id = $this->input->post('Productid');
+
+        $isExists = $this->Product_model->checkDuplicateQuestion($Question, $qid, $Product_id);
+
+        echo $isExists;
+        exit;
+    }
+	
+	
 	
 }
 

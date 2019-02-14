@@ -297,10 +297,10 @@ $("#product").html(msg);
 								  <select name="promotion_media_type" id="promotion_media_type" class="form-control">
 										<option value="">- Please Select Promotion Media Type -</option>
 										<option value="Survey on Product Video">Survey on Product Video</option>	
-										<option value="Survey on Product Audio">Survey on Product Audio</option>
+										<!--<option value="Survey on Product Audio">Survey on Product Audio</option>
 										<option value="Survey on Product PDF">Survey on Product PDF</option>
 										<option value="Survey on Product Image">Survey on Product Image</option>
-										<option value="Survey on Product Description">Survey on Product Description</option>
+										<option value="Survey on Product Description">Survey on Product Description</option>-->
 									</select>
                                   </div>
                                   </div>
@@ -420,6 +420,7 @@ $("#product").html(msg);
 			}
 		
 		});
+		 window.location.href="<?php echo base_url().'surveys/launch_survey/';?>";
 	} else{
 		return false;
 	} 

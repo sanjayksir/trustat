@@ -125,6 +125,10 @@ $route['api/loylties'] = 'Api/Consumer/loylty';
 $route['api/consumer-loylty'] = 'Api/Consumer/consumerLoylty';
 $route['api/redemption/add'] = 'Api/Consumer/redemptionAdd';
 $route['api/redemption'] = 'Api/Consumer/redemption';
+$route['api/complaints'] = 'Api/Consumer/Complaints';
+$route['api/complaint/reply'] = 'Api/Consumer/ConsumerResponseComplaint';
+$route['api/list-responses-on-complaint/(:any)'] = 'Api/Consumer/ListResponsesOnComplaint/$1';
+
 $route['api/faqs_otherafterlogindata'] = 'Api/Consumer/FaqsAndOtherData';
 $route['api/terms_and_conditions'] = 'Api/Consumer/TermsAndConditions';
 
@@ -139,6 +143,7 @@ $route['api/products-surveys'] = 'Api/ScannedProduct/productsSurveys';
 
 
 $route['api/scan-product'] = 'Api/ScannedProduct/productScanning';
+$route['api/delete-scaned-product'] = 'Api/ScannedProduct/DeleteScanedProduct';
 $route['api/view-scanned-product'] = 'Api/ScannedProduct/viewScannedProduct';
 $route['api/register-product'] = 'Api/ScannedProduct/registerProduct';
 $route['api/purchased-product'] = 'Api/ScannedProduct/purchasedProduct';

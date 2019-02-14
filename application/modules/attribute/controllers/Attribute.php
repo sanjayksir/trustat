@@ -120,5 +120,21 @@
  		   $res		    		= $this->Attribute_model->deleteMenu($parentId, $child_id);
 		   echo $res;exit;
       } 
+	  
+
+	
+		public function checkAttribute() {
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+
+        $parent = $this->input->post('product_id');
+
+        $mobile = $this->input->post('attribute');
+
+        $isExists = $this->Attribute_model->checkAttribute($mobile, $parent);
+
+        echo $isExists;
+        exit;
+    }
 	
  }

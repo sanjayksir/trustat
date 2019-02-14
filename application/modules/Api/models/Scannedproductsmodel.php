@@ -466,7 +466,7 @@ return $result;
         $query = $this->db->select("sp.bar_code,sp.latitude,sp.longitude,sp.created_at,pr.*")
                 ->from($this->table.' AS sp')
                 ->join('products AS pr', 'pr.id=sp.product_id')
-                ->where(['sp.consumer_id' => $userid])
+                ->where(['sp.consumer_id' => $userid, 'sp.del_by_cs' => 0])
 				->order_by('created_at', 'desc')
                 ->get()
                 ->result();

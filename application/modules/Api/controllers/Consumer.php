@@ -66,7 +66,7 @@ class Consumer extends ApiController {
                 $this->signupMail($data);
                 $smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
                 Utils::sendSMS($data['mobile_no'], $smstext);
-                //$this->ConsumerModel->sendFCM("Congratulations! You registration is complete, and -- Loyalty Points have been added in your howzzt loyalty program.", $fb_tokenr);
+                $this->ConsumerModel->sendFCM("Congratulations! You registration is complete, and -- Loyalty Points have been added in your howzzt loyalty program.", $fb_tokenr);
                 Utils::response(['status' => true, 'message' => 'You are re-registered with this device.', 'data' => $data]);
                
             } else {
@@ -882,7 +882,7 @@ class Consumer extends ApiController {
 		if ($checkifrquestinprocess < 1) {
         if ($this->db->insert('loyalty_redemption', $redemtionData)) {
             $redemptionId = $this->db->insert_id();
-            //$this->db->update('consumers',$consumerData,['id'=>$user['id']]);
+            $this->db->update('consumers',$consumerData,['id'=>$user['id']]);
             //$this->Productmodel->saveLoylty('loyalty-redemption', $user['id'], ['user_id' => $user['id'],'redemption_id'=>$redemptionId]);
             Utils::response(['status'=>true,'message'=>'Thank you for your redemption request, after validation, your request will be processed in next 7-10 Working days.']);
         }else{
@@ -893,7 +893,56 @@ class Consumer extends ApiController {
         }
 		}
 		
+	public function ConsumerResponseComplaint() {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'post')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $data = $this->getInput();
+        $cSchema = ['status'];
+        $rSchema = ['complaint_id','complain_code','product_id','bar_code','customer_id','reply_by','comments'];
+        $consumerData = array_intersect_key($data, array_flip($cSchema));
+        //$consumerData['modified_at'] = date("Y-m-d H:i:s");
+        $redemtionData = array_intersect_key($data, array_flip($rSchema));
+        $redemtionData['date_time'] = date("Y-m-d H:i:s");
+		//$redemtionData['redemption_id'] = mt_rand(1111111111,9999999999);
+        //$redemtionData['modified_at'] = date("Y-m-d H:i:s");
+		//$redemtionData['request_date'] = date("Y-m-d H:i:s");
+		//$redemtionData['mobile_no'] = getConsumerMobileNumberById($user['id']);
+        //$redemtionData['l_status'] = 0;
+        $redemtionData['consumer_id'] = $user['id'];
 		
+        if ($this->db->insert('consumer_complaint_reply', $redemtionData)) {
+            $redemptionId = $this->db->insert_id();
+            $this->db->update('consumer_complaint',$consumerData,['id'=>$data['complaint_id']]);
+            //$this->Productmodel->saveLoylty('loyalty-redemption', $user['id'], ['user_id' => $user['id'],'redemption_id'=>$redemptionId]);
+            Utils::response(['status'=>true,'message'=>'Thank you for responding on complaint, we will review your response in next 7-10 Working days.']);
+        }else{
+            Utils::response(['status'=>false,'message'=>'Failed to respond on the complaint. Please contact support team.']);
+        }
+		
+		}
+
+
+	
+	
+	   public function ListResponsesOnComplaint($complaintid = null) {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $items = $this->Productmodel->getResponsesOnComplaint($complaintid);
+        Utils::response(['status'=>true,'message'=>'List of Responses On Complaint','data'=>$items]);
+       
+    }
 		
 		
     public function redemption() {
@@ -907,6 +956,21 @@ class Consumer extends ApiController {
         }
         $items = $this->Productmodel->getRedemption($user['id']);
         Utils::response(['status'=>true,'message'=>'List of redemption','data'=>$items]);
+       
+    }
+	
+	
+	    public function Complaints() {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $items = $this->Productmodel->getComplaints($user['id']);
+        Utils::response(['status'=>true,'message'=>'List of complaints','data'=>$items]);
        
     }
 	
@@ -983,10 +1047,14 @@ class Consumer extends ApiController {
         if (($this->input->method() != 'get')) {
             Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
         }
+		
+		$checkifrquestinprocess = $this->db->where(array('user_id' => $user['id'], 'l_status' => 0))->count_all_results('loyalty_redemption');
+		
         $data = [];
         $data = $this->Productmodel->getConsumerPassBook($user['id']);
+		
         if (!empty($data)) {
-            Utils::response(['status' => true, 'min_max_redemption_points_consumer' => '500', 'message' => 'User gain loylties.', 'data' => $data]);
+            Utils::response(['status' => true, 'min_max_redemption_points_consumer' => '500', 'count_lyalty_request_in_process' => $checkifrquestinprocess, 'message' => 'User gain loylties.', 'data' => $data]);
         } else {
             Utils::response(['status' => false, 'message' => 'There is no record found.'], 200);
         }

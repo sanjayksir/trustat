@@ -6,6 +6,9 @@
 		 $this->load->helper('common_functions_helper');
 		 $this->load->library('pagination');
      }
+	 
+	 
+
 
      function set_attributes() {
 		 $this->checklogin();
@@ -779,6 +782,17 @@ function list_assigned_Surveys() {
 	}
 	
 	
+		 function check4(){ 	
+		 
+		  $fb_token = "cdPQ1CE_uwM:APA91bFRbTrm0v3EN0jirO3ZrU6LvQxumlcmu6LPVqtggECBcDH6PZlk4RfHj7uFwa8hu72Wnscg1YOA-itG6Am7JUMl3a9lfjuJTS9Q9Kz8FRvda5fo3JHaDL62lFjsVuKqHFqwMUkF";
+		  
+		//echo $this->Survey_model->sendFCM("Sanjay....A Survey Posted!!", $fb_token);
+		 echo $this->Survey_model->sendFCM('Congratulations! Your registration is complete, and Loyalty Points have been added in your howzzt loyalty program.', $fb_token);
+		 
+		// $this->Survey_model->sendFCM("A Survey Posted!!", $fb_token);
+		 
+		 	}
+			
 	function save_push_survey(){
 	 	$this->checklogin();		
 		$customer_id=$this->input->post('c_id');

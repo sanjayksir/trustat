@@ -1178,6 +1178,45 @@ return $result;
         $result = $query->result_array();
         return $result;
     }
+	
+    public function getComplaints($userId){
+        if(empty($userId)){
+            return false;
+        }
+        $query = $this->db->select('P.product_name, lr.*, c.user_name')
+                ->from('consumer_complaint AS lr')
+                ->join('consumers as c','c.id=lr.consumer_id')
+				->join('products as P','P.id=lr.product_id')
+                ->where('consumer_id ="'.$userId.'"')
+				->order_by('lr.created_at', 'desc')
+                ->get();
+        if( $query->num_rows() <= 0 ){
+            return [];
+        }
+        $result = $query->result_array();
+        return $result;
+    }
+	
+	
+	
+	   public function getResponsesOnComplaint($complaint_id){
+        if(empty($complaint_id)){
+            return false;
+        }
+        $query = $this->db->select('*')
+                ->from('consumer_complaint_reply')
+                //->join('consumers as c','c.id=lr.consumer_id')
+				//->join('products as P','P.id=lr.product_id')
+                ->where('complaint_id ="'.$complaint_id.'"')
+				//->order_by('lr.id', 'desc')
+                ->get();
+        if( $query->num_rows() <= 0 ){
+            return [];
+        }
+        $result = $query->result_array();
+        return $result;
+    }
+	
 	/*
 	public function getConsumerPassBook($userId){
         if(empty($userId)){

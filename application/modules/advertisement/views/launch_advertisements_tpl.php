@@ -127,7 +127,7 @@
 														 
 														 <input <?php 
 	$answerQuery = $this->db->get_where('push_advertisements',"promotion_id='".$listData['promotion_id']."'");
-	if($answerQuery->num_rows() > 0){ ?>checked="checked"<?php } else {} ?> id="product_<?php echo $listData['product_id'];?>"name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $listData['user_id'];?>','<?php echo $listData['product_id'];?>','<?php echo $listData['promotion_id'];?>');" type="checkbox"   <?php if($listData['request_status']==2){ echo "disabled"; }   ?> >
+	if($answerQuery->num_rows() > 0){ ?>checked="checked"<?php } else {} ?> id="product_<?php echo $listData['product_id'];?>" name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $listData['user_id'];?>','<?php echo $listData['product_id'];?>','<?php echo $listData['promotion_id'];?>');" type="checkbox"   <?php if($listData['request_status']==2){ echo "disabled"; }   ?> >
 	<span class="lbl"></span> <?php echo promotion_status($listData['request_status']); ?>
 	
 	
@@ -297,10 +297,10 @@ $("#product").html(msg);
 								  <select name="promotion_media_type" id="promotion_media_type" class="form-control">
 										<option value="">- Please Select Promotion Media Type -</option>
 										<option value="Advertisement on Product Video">Advertisement on Product Video</option>	
-										<option value="Advertisement on Product Audio">Advertisement on Product Audio</option>
+										<!--<option value="Advertisement on Product Audio">Advertisement on Product Audio</option>
 										<option value="Advertisement on Product PDF">Advertisement on Product PDF</option>
 										<option value="Advertisement on Product Image">Advertisement on Product Image</option>
-										<option value="Advertisement on Product Description">Advertisement on Product Description</option>
+										<option value="Advertisement on Product Description">Advertisement on Product Description</option>-->
 									</select>
                                   </div>
                                   </div>
@@ -420,6 +420,7 @@ $("#product").html(msg);
 			}
 		
 		});
+		 window.location.href="<?php echo base_url().'advertisement/launch_advertisement/';?>";
 	} else{
 		return false;
 	} 

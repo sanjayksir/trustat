@@ -1704,13 +1704,13 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%') AND P.created_by LIKE '%$user_id%'"); 
+ 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' OR S.description LIKE '%$srch_string%' OR S.type LIKE '%$srch_string%') AND P.created_by LIKE '%$user_id%'"); 
 			}else{
 				$this->db->where(array('P.created_by'=>$user_id));
 			}			
 		}else{
 			if(!empty($srch_string)){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')"); 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' OR S.description LIKE '%$srch_string%' OR S.type LIKE '%$srch_string%')"); 
 			}
 		}
 		
@@ -1742,13 +1742,13 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')"); 
+ 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' OR S.description LIKE '%$srch_string%' OR S.type LIKE '%$srch_string%') AND P.created_by LIKE '%$user_id%'");
 			}else{
 				$this->db->where(array('P.created_by'=>$user_id));
 			}			
 		}else{
 			if(!empty($srch_string)){ 
- 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')"); 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' OR S.description LIKE '%$srch_string%' OR S.type LIKE '%$srch_string%')"); 
 			}
 		}
 		 
@@ -1757,6 +1757,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->join('consumer_complaint S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = S.product_id');
 		$this->db->where(array('P.created_by'=>$user_id));
+		$this->db->order_by("S.id", " desc");
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -2190,6 +2191,105 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 			$result = $this->db->get('packaging_codes_pcr')->result_array();
 			return $result;
 	}
+	
+	
+	
+		 function get_reply_consumer_complaint_details($id) {
 
+        $this->db->select('*');
+        $this->db->from('consumer_complaint');
+        //$this->db->join('assign_plants_to_users AS ap', 'ap.user_id = bu.user_id','LEFT');
+        $this->db->where(array('id' => $id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            //$res = $res[0];
+        }
+        return $res;
+    }
+	
+	function get_responses_consumer_details($id) {
+
+        $this->db->select('*');
+        $this->db->from('consumer_complaint_reply');
+        //$this->db->join('assign_plants_to_users AS ap', 'ap.user_id = bu.user_id','LEFT');
+        $this->db->where(array('complaint_id' => $id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            //$res = $res[0];
+        }
+        return $res;
+    }
+
+		function update_save_reply_consumer_complaint_by_customer($data) {
+        $user_id = $this->session->userdata('admin_user_id');
+			$id = $data['complaint_id'];
+               // $this->db->set('profile_photo', $frmData['profile_photo']);
+                $UpdateData = array(
+                    
+					"status" 				=> $data['status']
+                );
+             
+            $whereData = array(
+                'id' => $id
+            );
+
+            $this->db->where('id', $id);
+				if($this->db->update('consumer_complaint', $UpdateData)) {// echo '===query===='.$this->db->last_query();
+				
+				
+					$insertData=array(
+					"complaint_id"		=> $data['complaint_id'],
+					"complain_code"		=> $data['complain_code'],
+					"product_id"		=> $data['product_id'],
+					"bar_code"		  	=> $data['bar_code'],
+					"consumer_id"		=> $data['consumer_id'],
+					"customer_id"		=> $user_id,
+					"reply_by"		  	=> $data['reply_by'],
+					"comments"		  	=> $data['comments'],
+					"date_time"		  	=> date('Y-m-d h:i:s')
+					
+				); //echo '<pre>';print_r($insertData);exit;
+				$this->db->insert("consumer_complaint_reply", $insertData);
+
+					
+				
+					$this->session->set_flashdata('success', 'Reply Updated Successfully!');
+					return true;
+	
+				} return false; 
+        
+    }
+	
+	
+		public function sendFVPNotification($mess,$id) {
+		$url = 'https://fcm.googleapis.com/fcm/send';
+		
+		$fields = array (
+		        'to' => $id,
+		         
+		         'notification' => array('title' => 'howzzt product verifiction', 'body' =>  $mess ,'sound'=>'Default')
+		       
+		);
+		$fields = json_encode ( $fields );
+		
+		$headers = array (
+		        'Authorization: key=' . "AAAA446l5pE:APA91bE3nQ0T5E9fOH-y4w_dkOLU1e9lV7Wn0OmVLaKNnE8tXcZ0eC3buduhCwHL1ICaJ882IHfLy-akAe7Nih7M1RewkO9IzAR-ELdPgmORtb7KjriRrQspVHkIb9GRZPOjXuqfPInlOAly5-65sEEUbGlcoujMgw", 'Content-Type: application/json'
+		);
+		
+		$ch = curl_init ();
+		curl_setopt ( $ch, CURLOPT_URL, $url );
+		curl_setopt ( $ch, CURLOPT_POST, true );
+		curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+		
+		$result = curl_exec ( $ch );
+		//curl_close ( $ch );
+		return $result;
+		}
 	 
   }

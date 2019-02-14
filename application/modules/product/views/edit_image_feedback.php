@@ -272,7 +272,16 @@
    	$("form#user_frm").validate({
 		rules:{
 			QuestionType:{valueNotEquals: "0" },
-			Question:{required: true},
+			Question:{required: true, 
+						remote: {
+
+                       	 	url: "<?php echo base_url().'product/';?>checkDuplicateQuestion",
+
+                         	type: "post",
+
+							data: {  questionid: $( "#question_id" ).val(), Productid: $( "#ProductID" ).val() }
+
+                    	 }},
 			answer1:{required: true},
 			answer2:{required: true},
 			answer3:{required: true} ,
@@ -281,7 +290,7 @@
  		},
  		messages: {
 				QuestionType: {valueNotEquals: "Please Choose Question Type"},
-				Question: {required: "Please enter Question"},
+				Question: {required: "Please enter Question", remote: "This Question already exists for the same product!"},
 				answer1: {required: "Please enter Option 1"},
 				answer2: {required: "Please enter Option 2"}, 
 				answer3: {required: "Please enter Option 3" },

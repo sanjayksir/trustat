@@ -723,4 +723,24 @@
  	 }
 
 	 
+	function checkAttribute($mobile, $parent) {
+        $result = 'true';
+        $this->db->select('name,product_id');
+        $this->db->from('attribute_name');
+        if ($parent!=0) {
+            $this->db->where(array('product_id' => $parent, 'name' => $mobile));
+        } else {
+        $this->db->where(array('name' => $mobile, 'parent' => 0));
+		}
+        $query = $this->db->get();
+        //echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            $result = $res[0]['name'];
+            $result = 'false';
+        }
+        return $result;
+    }
+	
+	 
   }

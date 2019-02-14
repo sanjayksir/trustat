@@ -127,12 +127,20 @@
 	$("form#frm").validate({
 		rules: {
 			attribute: {
-					required: true
+					required: true,
+					remote: {
+
+                       	 	url: "<?php echo base_url().'attribute/';?>checkAttribute",
+                          	type: "post",
+ 							data: {  product_id: $( "#product_id" ).val() }
+
+                    	 }
 				} 
 		},
 		messages: {
 			attribute: {
-					required: "Please enter attribute"
+					required: "Please enter attribute",
+					remote: "This attribute already exists!" 
 				} 
 		},
 		submitHandler: function(form) {

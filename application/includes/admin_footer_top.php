@@ -8,7 +8,7 @@
 
 							<span class="blue bolder">Tracking Portal</span>
 
-							2017
+							<?php echo date('Y');?>
 
 						</span>
 

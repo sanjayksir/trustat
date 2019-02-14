@@ -77,20 +77,20 @@ $this->load->view('../includes/admin_top_navigation'); ?>
     <div id="ajax_msg"></div>
 
       </div>
-
+ <h4 class="widget-title">Send Text Message</h4>
       <form name="user_frm" id="user_frm" action="#" method="POST">
-
+	  <?php $customer_id 	= $this->session->userdata('admin_user_id'); ?>
+		<input type="hidden" value="<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>" name="quantity" id="quantity" />
         <div class="widget-main">
-		
 		 <div class="col-sm-6">
-			 <label for="form-field-8">Remark</label>
+			 <label for="form-field-8">This Message will be delivered to <b><?php $customer_id 	= $this->session->userdata('admin_user_id');
+			echo NumberOfAllConsumersOfACustomer($customer_id); ?> Consumers</b>, who are already aware about your Products</label>
 			  <textarea  class="form-control" name="text_message" placeholder="Write your text message..." maxlength="500" required ></textarea>
 			<br /><input class="btn btn-info" type="submit" name="submit" value="Send" id="savemenu" />
 			</div>
 		
-		         
-				 <br /><br /><br /><br /><br /><br />
-
+		     <div style="height:210px">    
+				</div>
         
       </form>
 	  
@@ -157,7 +157,7 @@ function validateSrch(){
 	}
 }	
 
-function add_question_to_product(text_message){
+function add_question_to_product(text_message,quantity){
 	var r = confirm("Please confirm to Send this Text Message");
 	if (r == true) {
 		
@@ -166,7 +166,7 @@ function add_question_to_product(text_message){
 			dataType:'html',
 			type:'POST',
 			url:'<?php echo base_url().'textmessages/push_text_message_request/';?>',
-			data:{text_message:text_message},
+			data:{text_message:text_message,quantity:quantity},
 			success:function (msg){
 			}
 		

@@ -97,7 +97,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="input-group">
-                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Name Or Product SKU">
+                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Customer Name, Text Message">
                                                 <span class="input-group-btn">
                                                     <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                     <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -114,6 +114,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th>S No.</th>
                                     <th class="hidden-480">Customer Name</th>
                                     <th class="hidden-480">Text Message</th>
+									<th class="hidden-480">Delivery Qty.</th>
                                     <th class="hidden-480">Send/Un-push</th>
                                     <th>Date Time of request</th>
 									<th>Sent Status</th>
@@ -141,8 +142,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 												?>
                             <tr id="show<?php echo $attr['id'];?>">
                                 <td><?php echo $sno; ?></td>
-                                <td><?php echo $attr['customer_id']; ?></td>
+                                <td><?php echo $attr['customer_name']; ?></td>
                                 <td><?php echo $attr['text_message']; ?></td>
+								<td><?php echo $attr['quantity']; ?></td>
 												                                
 												                                
                                        <td>	<?php 

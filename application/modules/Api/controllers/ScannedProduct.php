@@ -113,6 +113,7 @@ class ScannedProduct extends ApiController {
         $data['product_id'] = $result->id;
 		$data['customer_id'] = $result->created_by;
         $data['created_at'] = date("Y-m-d H:i:s");
+		$data['del_by_cs'] = 0;
         //$result->pack_level = $result->pack_level;
 		
 		$consumer_id = $data['consumer_id'];
@@ -392,8 +393,8 @@ class ScannedProduct extends ApiController {
 		$transactionType = 'product_registration_lps';
 		$transactionTypeName = 'Product Registration';
 				
-		$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
-		$TRPoints = $result->$transactionType;
+		$result2 = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+		$TRPoints = $result2->$transactionType;
 		$data['loyalty_points_earned'] = $TRPoints;
 		
         if(!empty($warrenty)){
@@ -573,6 +574,41 @@ class ScannedProduct extends ApiController {
             $this->response(['status'=>true,'message'=>'Your feedback submitted successfully.','data'=>$data]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to log the complaint.'],200); 
+        }
+    }
+	
+	// Scanned product deleted by the consumer from scanned product list 
+	
+	
+	
+	    public function DeleteScanedProduct() {
+        $user = $this->auth();
+        if(empty($this->auth())){
+            Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+        $data = $this->getInput();
+        if(($this->input->method() != 'post') || empty($data)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
+            ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
+           
+        ];
+        $errors = $this->ScannedproductsModel->validate($data,$validate);
+        if(is_array($errors)){
+            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+        }
+        $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
+        $bar_code_data = $data['bar_code'];
+		
+		$this->db->set('del_by_cs', 1);
+        $this->db->set('del_by_cs_date', date("Y-m-d H:i:s"));
+        $this->db->where('bar_code', $bar_code_data);
+        if ($this->db->update('scanned_products')) {
+
+            Utils::response(['status' => true, 'message' => 'Record Deleted Successfully.', 'data' => $bar_code_data]);
+        } else {
+            Utils::response(['status' => false, 'message' => 'System failed to Deleted.'], 200);
         }
     }
 	

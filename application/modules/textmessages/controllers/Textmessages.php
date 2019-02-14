@@ -917,10 +917,11 @@ function list_assigned_Advertisements() {
 		//echo "kk";
 		$customer_id 	= $this->session->userdata('admin_user_id');
 		$text_message	=$this->input->post('text_message');
+		$quantity	=$this->input->post('quantity');
 		if($text_message==''){
 		$this->load->view('send_text_message');
 		} else {
-		$this->Textmessage_model->save_push_text_message_request($customer_id,$text_message);
+		$this->Textmessage_model->save_push_text_message_request($customer_id,$text_message,$quantity);
 		 
 		//echo  $this->text_message_model->sendFCM("Advertisement pushed!",$fb_token);
 		redirect(base_url().'textmessages/push_text_message_request');	exit;
@@ -959,7 +960,7 @@ function list_assigned_Advertisements() {
 		
 		$total_records = $this->Textmessage_model->total_text_messages_request_listing($srch_string);
         $params["product_list"] = $this->Textmessage_model->text_messages_request_listing($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('textmessages/text_messages_listing', $total_records);
+        $params["links"] = Utils::pagination('textmessages/approve_text_messages', $total_records);
         $this->load->view('text_messages_listing', $params);
     }
 	 

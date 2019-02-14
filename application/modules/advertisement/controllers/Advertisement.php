@@ -823,13 +823,9 @@ function list_assigned_Advertisements() {
 		$product_id	=$this->input->post('p_id');
 		$promotion_id =$this->input->post('promotion_id');
 		$Chk = $this->input->post('Chk');
-		echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$promotion_id,$Chk);
-		if($Chk==2){
-		$value=2;
-		} else {
-			$value=1;
-		}
-		 echo $status= $this->Advertisement_model->change_status($promotion_id,$value);
+		
+		 echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$promotion_id,$Chk);
+		 echo $status= $this->Advertisement_model->change_status2($promotion_id,$Chk);
 		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				
 				foreach ($query->result() as $user)  
@@ -840,6 +836,7 @@ function list_assigned_Advertisements() {
 		 $this->Advertisement_model->sendFCM("An Advertisement Posted!!..", $fb_token);
 		 }
 		//echo  $this->Advertisement_model->sendFCM("Advertisement pushed!",$fb_token);
+		//redirect('advertisement/launch_advertisement');
 		exit;
  	}
 	
@@ -860,7 +857,7 @@ function list_assigned_Advertisements() {
 				foreach ($query->result() as $user)  
 				{
 		 $consumer_id = $user->consumer_id;
-		 $fb_token = getConsumerFb_TokenById($consumer_id);
+		 $fb_token = getConsumerFb_TokenById(34);
 		 
 		 $this->Advertisement_model->sendTextFCM($text_message, $fb_token);
 		 }

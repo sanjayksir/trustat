@@ -585,6 +585,8 @@
 				
 					$this->session->set_flashdata('success', 'Ad Pushed Successfully!');
 					return true;
+					//redirect('advertisement/launch_advertisement');
+					
 			}
 			return false; 
 		}
@@ -596,7 +598,7 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess ,'sound'=>'Default')
+		         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess ,'sound'=>'Default', 'timestamp'=>date('Y-m-d G:i:s'))
 		       
 		);
 		$fields = json_encode ( $fields );
@@ -647,7 +649,7 @@
 		}
 		
 		
-		function change_status($id, $value) {
+		function change_status2($id, $value) {
         $this->db->set(array('request_status' => $value));
         $this->db->where(array('promotion_id' => $id));
         if ($this->db->update('push_promotion_master')) {

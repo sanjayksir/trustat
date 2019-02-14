@@ -184,13 +184,13 @@
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(text_message LIKE '%$srch_string%' OR customer_id LIKE '%$srch_string%' OR consumer_id LIKE '%$srch_string%') and (created_by=$user_id)");
+ 				$this->db->where("(customer_name LIKE '%$srch_string%' OR text_message LIKE '%$srch_string%') and (customer_id=$user_id)");
 			}else{
-				$this->db->where(array('created_by'=>$user_id));
+				$this->db->where(array('customer_id'=>$user_id));
 			}			
 		}else{
 			if(!empty($srch_string)){ 
- 			$this->db->where("(text_message LIKE '%$srch_string%' OR customer_id LIKE '%$srch_string%' OR consumer_id LIKE '%$srch_string%')");
+ 			$this->db->where("(customer_name LIKE '%$srch_string%' OR text_message LIKE '%$srch_string%')");
 			}
 		}
 		
@@ -212,18 +212,20 @@
 	function total_text_messages_request_listing($srch_string='') {
 		$user_id 	= $this->session->userdata('admin_user_id');
 		 
+		
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(text_message LIKE '%$srch_string%' OR customer_id LIKE '%$srch_string%' OR consumer_id LIKE '%$srch_string%') and (created_by=$user_id)");
+ 				$this->db->where("(customer_name LIKE '%$srch_string%' OR text_message LIKE '%$srch_string%') and (customer_id=$user_id)");
 			}else{
-				$this->db->where(array('created_by'=>$user_id));
+				$this->db->where(array('customer_id'=>$user_id));
 			}			
 		}else{
 			if(!empty($srch_string)){ 
- 			$this->db->where("(text_message LIKE '%$srch_string%' OR customer_id LIKE '%$srch_string%' OR consumer_id LIKE '%$srch_string%')");
+ 			$this->db->where("(customer_name LIKE '%$srch_string%' OR text_message LIKE '%$srch_string%')");
 			}
 		}
+		
 		$this->db->select('count(1) as total_rows');
 		$this->db->from('push_text_message_request');
     		$query = $this->db->get(); //echo '***'.$this->db->last_query();
@@ -536,14 +538,15 @@
 			}
 		}
 			
-			function save_push_text_message_request($customer_id,$text_message){
+			function save_push_text_message_request($customer_id,$text_message,$quantity){
  				
 				$insertData=array(
 					"customer_id"	 => $customer_id,
+					"customer_name"	 => getUserFullNameById($customer_id),
 					"text_message"	 => $text_message,
+					"quantity"	 	 => $quantity,
 					"request_date"	 => date("Y-m-d H:i:s"),
 					"send_status"	 => "0"
-					
 					);
 				  $this->db->insert("push_text_message_request", $insertData);
 				

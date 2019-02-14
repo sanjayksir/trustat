@@ -1732,7 +1732,25 @@ public function findLoylityBySlug($transactionType = null){
         return $this->db->insert('loylty_points',$input);
     }	
 	
+	function checkDuplicateQuestion($Question, $qid = '', $Product_id) {
 		
+        $result = 'true';
+        $this->db->select('question_id');
+        $this->db->from('feedback_question_bank');
+        if (!empty($qid)) {
+            $this->db->where(array('question_id!=' => $qid, 'product_id' => $Product_id));
+        }
+        $this->db->where(array('question' => $Question, 'product_id' => $Product_id));
+        $query = $this->db->get();
+        //echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            $result = $res[0]['question_id'];
+            $result = 'false';
+        }
+        return $result;
+    }
+	
 		
 }
 

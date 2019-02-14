@@ -143,9 +143,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                 <tr>
 														<th>S No.</th>
 													   <th>Customer Name</th>
-														<th>Total Spent Points</th>
-														
-														
+														<th>Points awarded to Consumers</th>
+														<th>Total Purchased Points</th>
+														<th>Closing Balance</th>
                                                        <th>Loyalty Details</th>
 
                                 </tr>
@@ -187,8 +187,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
 								?></td>
                            
-                                                 
-                                                 
+                                       <td><?php echo 10000; ?> </td>          
+                                                 <td><?php echo 10000 - $TE_Points; ?> </td> 
 													<td><?php echo anchor("product/list_customerwise_consumer_loyalty_details/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Loyalty Details</i>', array('class' => 'btn btn-xs btn-info','title'=>' Loyalty Details')); ?>  
 													<?php //echo anchor("product/list_view_consumer_feedback_details/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> Feedback Report data</i>', array('class' => 'btn btn-xs btn-info','title'=>' Feedback Report data')); ?>
 													<br />
