@@ -1211,6 +1211,14 @@ function list_assigned_products() {
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Product_model->sendFVPNotification($vquery, $fb_token);
+		 
+			$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "howzzt product verifiction";
+			$NTFdata['body'] = $vquery; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 1; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);
 		
 		exit;
 		
@@ -1248,6 +1256,14 @@ function list_assigned_products() {
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Product_model->sendFBLRNotification($vquery, $fb_token);
+		 
+			$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "howzzt loyalty verification";
+			$NTFdata['body'] = $vquery; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 1; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);
 		
 		exit;
 		
@@ -1524,7 +1540,12 @@ function list_assigned_products() {
         $total_records = $this->Product_model->count_total_list_loyalty_customers($srch_string);
         $params["list_all_consumers"] = $this->Product_model->list_all_loyalty_customers($limit_per_page, $start_index, $srch_string);
         $params["links"] = Utils::pagination('product/list_customer_loyalty_summary', $total_records);
-		$params["total_records"] =  $this->db->count_all_results('consumers');
+		$params["total_consumers"] =  $this->db->count_all_results('consumers');
+		//$params["total_customers"] =  $this->db->count_all('backend_user', array('designation_id' =>'2'));
+		//$params["total_customers"] =  $this->db->count_all_results('backend_user', array('designation_id' =>'2'));
+		
+			$query5 = $this->db->where('designation_id', '2')->get('backend_user');
+			$params["total_customers"] = $query5->num_rows();
 		
 			$this->db->select_sum('points');
 			$this->db->from('consumer_passbook');
@@ -1544,6 +1565,8 @@ function list_assigned_products() {
 			$result = $this->db->select('loyalty_points')->from('loylties')->where('transaction_type_slug', 'minimum_locking_balance')->limit(1)->get()->row();
 			$minimum_locking_balance = $result->loyalty_points;
 			$params["minimum_locking_balance"] = $minimum_locking_balance;
+			
+			
 		
         $this->load->view('list_customer_loyalty_summary_tpl', $params);
     }

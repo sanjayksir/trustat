@@ -7357,14 +7357,24 @@ function isProductCodeRegistered($bar_code_data){
 
 
 
-function NumberOfAllConsumersOfACustomer($customer_id){
-	$ci = & get_instance();
-	$ci->db->select('customer_id');
-	$ci->db->from('consumer_customer_link');
-	$ci->db->where(array('customer_id'=>$customer_id));
-	$query = $ci->db->get();//echo $ci->db->last_query();
-	return $query->num_rows();
+   function NumberOfAllConsumersOfACustomer($customer_id){
+		$ci = & get_instance();
+		$ci->db->select('customer_id');
+		$ci->db->from('consumer_customer_link');
+		$ci->db->where(array('customer_id'=>$customer_id));
+		$query = $ci->db->get();//echo $ci->db->last_query();
+		return $query->num_rows();
 }
+
+
+	function total_approved_points2($user_id) {
+		$ci = & get_instance();
+				$ci->db->select_sum('purchasing_points');
+				$ci->db->from('purchased_loyalty_points');
+				$ci->db->where(array('customer_id'=> $user_id, 'approval_status'=> 1));
+				$query=$ci->db->get();		
+			return $query->row()->purchasing_points;
+    }
 
 
   

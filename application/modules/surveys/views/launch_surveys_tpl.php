@@ -18,7 +18,7 @@
                                 </li>
 
                                 <li>
-                                 Manage <?php echo $label;?>
+                                 Manage <?php echo $label;?> <?php //echo date("Y-m-d H:i:s",time()); ?>
                                 </li>
                         </ul><!-- /.breadcrumb -->
 
@@ -113,7 +113,7 @@
 												    <td><?php  echo $listData['promotion_request_id']; ?></td>
 												    <td><?php echo date('j M Y H:i:s D',strtotime($listData['request_date_time'])); ?></td>
 													
-                                                        <td><?php echo $listData['product_name']; ?></td>
+                                                        <td><?php echo $listData['product_name'];  ?></td>
                                                         <td><?php echo $listData['promotion_media_type']; ?></td>
 														<td><?php echo $listData['number_of_consumers']; ?></td>
                                                        

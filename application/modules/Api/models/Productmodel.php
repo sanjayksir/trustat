@@ -656,7 +656,8 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 $fields = array (
         'to' => $id,
          
-         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess ,'sound'=>'Default')
+         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+				  'data' => array('title' => 'howzzt notification', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
        
 );
 $fields = json_encode ( $fields );
@@ -685,7 +686,8 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 $fields = array (
         'to' => $id,
          
-         'notification' => array('title' => 't2', 'body' =>  $mess ,'sound'=>'Default')
+         'notification' => array('title' => 't2', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+		 'data' => array('title' => 'howzzt survey', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
        
 );
 $fields = json_encode ( $fields );
@@ -1197,6 +1199,24 @@ return $result;
         return $result;
     }
 	
+	
+	    public function getConsumerNotifications($userId){
+        if(empty($userId)){
+            return false;
+        }
+        $query = $this->db->select('*')
+                ->from('list_notifications_table')
+                //->join('consumers as c','c.id=lr.consumer_id')
+				//->join('products as P','P.id=lr.product_id')
+                ->where('consumer_id ="'.$userId.'"')
+				->order_by('id', 'desc')
+                ->get();
+        if( $query->num_rows() <= 0 ){
+            return [];
+        }
+        $result = $query->result_array();
+        return $result;
+    }
 	
 	
 	   public function getResponsesOnComplaint($complaint_id){

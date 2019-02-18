@@ -1430,6 +1430,14 @@ $pdf->Output('example_050.pdf', 'I');
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->order_master_model->sendFVPNotification($vquery, $fb_token);
+		 
+		 $NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "howzzt product verifiction";
+			$NTFdata['body'] = $vquery; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 1; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);
 		
 		exit;
 		

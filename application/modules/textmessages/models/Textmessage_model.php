@@ -558,11 +558,11 @@
 		function update_push_text_message_request($message_id,$send_status){
  				
 				$insertData=array(
-					"sent_date"	 => date("Y-m-d H:i:s"),
-					"send_status"	 => $send_status
+					"approval_date"	 => date("Y-m-d H:i:s"),
+					"approval_status"	 => $send_status
 					);
 					$this->db->where('id', $message_id);
-				  $this->db->update("push_text_message_request", $insertData);
+				  $this->db->update("purchased_loyalty_points", $insertData);
 				
 					$this->session->set_flashdata('success', 'Text Message Push Request sent Successfully!');
 					return true;
@@ -576,7 +576,8 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'howzzt text message', 'body' =>  $mess ,'sound'=>'Default')
+		         'notification' => array('title' => 'howzzt text message', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+				  'data' => array('title' => 'howzzt text message', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
 		       
 		);
 		$fields = json_encode ( $fields );
@@ -604,7 +605,8 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'howzzt text message received', 'body' =>  $mess ,'sound'=>'Default')
+		         'notification' => array('title' => 'howzzt text message received', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+				  'data' => array('title' => 'howzzt text message received', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
 		       
 		);
 		$fields = json_encode ( $fields );
@@ -636,6 +638,156 @@
         }
         //echo '***'.$this->db->last_query();exit;
     }
+	
+	
+	function send_purchase_points_request($customer_id,$text_comments,$purchasing_points){
+ 				$random_no = random_num(10);
+				$insertData=array(
+					"request_id"	 	=> $random_no,
+					"customer_id"	 	=> $customer_id,
+					"customer_name"	 	=> getUserFullNameById($customer_id),
+					"purchasing_points"	=> $purchasing_points,
+					"text_comments"	 	=> $text_comments,
+					"request_date"	 	=> date("Y-m-d H:i:s"),
+					"approval_date"	 	=> "0000-00-00 00:00:00",
+					"approval_status"	=> "0"
+					);
+				  $this->db->insert("purchased_loyalty_points", $insertData);
 				
+					$this->session->set_flashdata('success', 'Purchase Points Request sent Successfully!');
+					return true;
+			}
+			
+			
+			
+	function get_purchase_points_requests_listing($limit,$start,$srch_string='') {
+		
+		$user_id 	= $this->session->userdata('admin_user_id');
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(request_id LIKE '%$srch_string%' OR customer_name LIKE '%$srch_string%' OR purchasing_points LIKE '%$srch_string%' OR text_comments LIKE '%$srch_string%') and (customer_id=$user_id)");
+			}else{
+				$this->db->where(array('customer_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(request_id LIKE '%$srch_string%' OR customer_name LIKE '%$srch_string%' OR purchasing_points LIKE '%$srch_string%' OR text_comments LIKE '%$srch_string%')");
+			}
 		}
+		
+		$this->db->select("*");
+		$this->db->from("purchased_loyalty_points");
+		if($user_id>1){
+			$this->db->where('customer_id', $user_id);
+		}
+		
+		$this->db->order_by("id", " desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	
+			
+	
+	function total_purchase_points_request_listing($srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		 
+		
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(request_id LIKE '%$srch_string%' OR customer_name LIKE '%$srch_string%' OR purchasing_points LIKE '%$srch_string%' OR text_comments LIKE '%$srch_string%') and (customer_id=$user_id)");
+			}else{
+				$this->db->where(array('customer_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(request_id LIKE '%$srch_string%' OR customer_name LIKE '%$srch_string%' OR purchasing_points LIKE '%$srch_string%' OR text_comments LIKE '%$srch_string%')");
+			}
+		}
+		
+		$this->db->select('count(1) as total_rows');
+		$this->db->from('purchased_loyalty_points');
+		if($user_id>1){
+			$this->db->where('customer_id', $user_id);
+		}
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }		
+
+
+	function total_approved_points($user_id) {
+				$this->db->select_sum('purchasing_points');
+				$this->db->from('purchased_loyalty_points');
+				$this->db->where(array('customer_id'=> $user_id, 'approval_status'=> 1));
+				$query=$this->db->get();		
+		return $query->row()->purchasing_points;
+    }
+	
+	function waiting_approval_points($user_id) {
+				$this->db->select_sum('purchasing_points');
+				$this->db->from('purchased_loyalty_points');
+				$this->db->where(array('customer_id'=> $user_id, 'approval_status'=> 0));
+				$query=$this->db->get();		
+		return $query->row()->purchasing_points;
+    }
+	
+	
+
+	
+			
+	
+
+
+	function get_approved_purchases_by_customer_listing($id,$limit,$start,$srch_string='') {
+		//echo $id;
+			//$this->db->where('created_by', $user_id);
+			//$id = 88;
+			//$id = $this->uri->segment(3);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%') and (customer_id=$id)");
+			}else{
+				$this->db->where(array('customer_id'=>$id));
+			}
+			
+		$this->db->select("*");
+		$this->db->from("purchased_loyalty_points");	
+		
+		$this->db->where('customer_id', $id);
+		$this->db->order_by("id", " desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	function total_approved_purchases_by_customer_listing($id,$srch_string='') {
+		
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%') and (customer_id=$id)");
+			}else{
+				$this->db->where(array('customer_id'=>$id));
+			}			
+		
+		$this->db->select('count(1) as total_rows');
+		$this->db->from('purchased_loyalty_points');
+		$this->db->where('customer_id', $id);
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+
+
+
+	
+}
 		

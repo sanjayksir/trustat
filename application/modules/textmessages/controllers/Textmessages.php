@@ -813,6 +813,15 @@ function list_assigned_Advertisements() {
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Textmessage_model->sendFCM("An Advertisement Posted!!..", $fb_token);
+		 
+		 $NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "howzzt text message";
+			$NTFdata['body'] = "A Text Message Posted!!.."; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 1; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);
+			
 		 }
 		//echo  $this->text_message_model->sendFCM("Advertisement pushed!",$fb_token);
 		exit;
@@ -844,6 +853,14 @@ function list_assigned_Advertisements() {
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
+			$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "howzzt text message";
+			$NTFdata['body'] = $text_message; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 1; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);
+		 
 		 }
 		//echo  $this->Advertisement_model->sendFCM("Advertisement pushed!",$fb_token);
 		exit;
@@ -886,6 +903,14 @@ function list_assigned_Advertisements() {
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
+		 $NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "howzzt text message";
+			$NTFdata['body'] = $text_message; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 1; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);
+		 
 		 }
 		//echo  $this->Textmessage_model->sendFCM("tmp",$fb_token);
 		redirect(base_url().'textmessages/send_text_message2');	exit;
@@ -963,6 +988,156 @@ function list_assigned_Advertisements() {
         $params["links"] = Utils::pagination('textmessages/approve_text_messages', $total_records);
         $this->load->view('text_messages_listing', $params);
     }
+	
+	
+		 function purchase_points(){
+		//echo "test";
+	 	$this->checklogin();		
+		//$customer_id=$this->input->post('c_id');
+		//$product_id	=$this->input->post('p_id');
+		//$Chk = $this->input->post('Chk');
+		//echo "kk";
+		$customer_id 	= $this->session->userdata('admin_user_id');
+		$text_comments	=$this->input->post('text_comments');
+		$purchasing_points	=$this->input->post('purchasing_points');
+		if($purchasing_points==''){
+		$this->load->view('send_request_purchase_points');
+		} else {
+		$this->Textmessage_model->send_purchase_points_request($customer_id,$text_comments,$purchasing_points);
+		 
+		//echo  $this->text_message_model->sendFCM("Advertisement pushed!",$fb_token);
+		redirect(base_url().'textmessages/purchase_points');	exit;
+		
+		}
+ 	}
+	
+	
+	public function approve_purchase_points_requests() {
+		 //echo "aaaa";
+		 /*
+        $this->checklogin();
+        if (!empty($this->input->post('del_submit'))) {
+            if ($this->db->query("delete from push_text_message where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Text Message Deleted Successfully!');
+            }
+        }
+		*/
+        ##--------------- pagination start ----------------##
+        // init params
+		$user_id 	= $this->session->userdata('admin_user_id');
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+       
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+       // $total_records = $this->Textmessage_model->total_product_listing($srch_string);
+        //$params["product_list"] = $this->Textmessage_model->product_listing($limit_per_page, $start_index, $srch_string);
+		
+		$total_records = $this->Textmessage_model->total_purchase_points_request_listing($srch_string);
+        $params["product_list"] = $this->Textmessage_model->get_purchase_points_requests_listing($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('textmessages/approve_purchase_points_requests', $total_records);
+		$params["total_approved_points"] = $this->Textmessage_model->total_approved_points($user_id);
+		$params["waiting_approval_points"] = $this->Textmessage_model->waiting_approval_points($user_id);
+		
+        $this->load->view('purchase_points_request_listing', $params);
+    }
+	
+
+	
+	
+	public function list_approved_purchases_by_customer() {
+        $this->checklogin();
+		$user_id 	= $this->session->userdata('admin_user_id');
+		//if($user_id==1){ $id = 1; }
+		
+       $id = $this->uri->segment(3);
+		//echo $id;
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Textmessage_model->total_approved_purchases_by_customer_listing($id,$srch_string);
+        $params["list_approved_purchases_by_customer"] = $this->Textmessage_model->get_approved_purchases_by_customer_listing($id, $limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('product/list_approved_purchases_by_customer/' . $id, $total_records, null, 4);
+		//echo $user_id;
+        $this->load->view('list_approved_purchases_by_customer_tpl', $params);
+    }	
+	
+	
+function save_approve_purchase_points_requests(){
+		//echo "test";
+	 	$this->checklogin();		
+		$customer_id=$this->input->post('c_id');
+		$message_id	=$this->input->post('m_id');
+		$Chk = $this->input->post('Chk');
+		$text_message	=$this->input->post('text_comments');
+		$this->load->view('purchase_points_request_listing');
+			if($Chk==1){
+			$send_status=1;
+		}else{
+			
+			$send_status=0;
+		}
+		
+		//$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status);
+	
+		$this->Textmessage_model->update_push_text_message_request($message_id,$send_status);
+		/*
+		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+				
+				foreach ($query->result() as $user)  
+				{
+		 $consumer_id = $user->consumer_id;
+		 $fb_token = getConsumerFb_TokenById($consumer_id);
+		 
+		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
+			$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "howzzt text message";
+			$NTFdata['body'] = $text_message; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 1; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);
+		 
+		 }
+		//echo  $this->Advertisement_model->sendFCM("Advertisement pushed!",$fb_token);
+		//exit;
+		
+		
+		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+				
+				foreach ($query->result() as $user)  
+				{
+		 $consumer_id = $user->consumer_id;
+		  $fb_token = getConsumerFb_TokenById(17);
+		 $this->Textmessage_model->sendFCM($consumer_id, $fb_token);
+		
+		redirect(base_url().'textmessages/approve_text_messages');	exit;
+		
+		
+		}
+		*/
+ 	}
+	
 	 
 }
 

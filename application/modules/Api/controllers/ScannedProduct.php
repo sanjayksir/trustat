@@ -426,6 +426,14 @@ class ScannedProduct extends ApiController {
 				
 				$fb_token = getConsumerFb_TokenById($userId);
                $this->ConsumerModel->sendFCM('Thank you for Product Registration, Please check the details in "my purchase list" in howzzt App', $fb_token);
+				$NTFdata['consumer_id'] = $userId; 
+				$NTFdata['title'] = "howzzt notification";
+				$NTFdata['body'] = 'Thank you for Product Registration, Please check the details in "my purchase list" in howzzt App'; 
+				$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+				$NTFdata['status'] = 1; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);
+			   
 				
 				}else{
 				// $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();
@@ -592,7 +600,7 @@ class ScannedProduct extends ApiController {
         }
         $validate = [
             ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
-           
+            ['field' =>'scan_id','label'=>'Scan ID','rules' => 'required' ],
         ];
         $errors = $this->ScannedproductsModel->validate($data,$validate);
         if(is_array($errors)){
@@ -600,10 +608,11 @@ class ScannedProduct extends ApiController {
         }
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
         $bar_code_data = $data['bar_code'];
+		$scan_id = $data['scan_id'];
 		
 		$this->db->set('del_by_cs', 1);
         $this->db->set('del_by_cs_date', date("Y-m-d H:i:s"));
-        $this->db->where('bar_code', $bar_code_data);
+        $this->db->where('bar_code', $scan_id);
         if ($this->db->update('scanned_products')) {
 
             Utils::response(['status' => true, 'message' => 'Record Deleted Successfully.', 'data' => $bar_code_data]);

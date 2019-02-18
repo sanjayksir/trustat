@@ -132,7 +132,8 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 $fields = array (
         'to' => $id,
          
-         'notification' => array('title' => 'howzzt Ad', 'body' =>  $mess ,'sound'=>'Default')
+         'notification' => array('title' => 'howzzt Ad', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+		 'data' => array('title' => 'howzzt Ad', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
        
 );
 $fields = json_encode ( $fields );
@@ -228,7 +229,8 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 $fields = array (
         'to' => $consumer_id,
          
-         'notification' => array('title' => 'howzzt Survey', 'body' =>  $mess ,'sound'=>'Default')
+         'notification' => array('title' => 'howzzt Survey', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+		 'data' => array('title' => 'howzzt survey', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
        
 );
 $fields = json_encode ( $fields );
@@ -463,7 +465,7 @@ return $result;
             return false;
         }
         
-        $query = $this->db->select("sp.bar_code,sp.latitude,sp.longitude,sp.created_at,pr.*")
+        $query = $this->db->select("sp.scan_id,sp.bar_code,sp.latitude,sp.longitude,sp.created_at,pr.*")
                 ->from($this->table.' AS sp')
                 ->join('products AS pr', 'pr.id=sp.product_id')
                 ->where(['sp.consumer_id' => $userid, 'sp.del_by_cs' => 0])
@@ -477,6 +479,7 @@ return $result;
         $items = [];
         foreach($query as $row){
             $item = [
+				'scan_id' => $row->scan_id,
                 'product_id' => $row->id,
                 'bar_code' => $row->bar_code,
                 'latitude' => $row->latitude,

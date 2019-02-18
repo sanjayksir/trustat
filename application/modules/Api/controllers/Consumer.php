@@ -114,8 +114,9 @@ class Consumer extends ApiController {
                 $smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
                 Utils::sendSMS($data['mobile_no'], $smstext);
 				$fb_token = getConsumerFb_TokenById($userId);
-               $this->ConsumerModel->sendFCM('Congratulations! Your registration is complete, and ' . $loylty['loyalty_points'] . ' Loyalty Points have been added in your howzzt loyalty program.', $fb_token);
+               //$this->ConsumerModel->sendFCM('Congratulations! Your registration is complete, and ' . $loylty['loyalty_points'] . ' Loyalty Points have been added in your howzzt loyalty program.', $fb_token);
                 Utils::response(['status' => true, 'message' => 'Your account has been registered.', 'data' => $data], 200);
+
                 
                 
             } else {
@@ -973,6 +974,21 @@ class Consumer extends ApiController {
         Utils::response(['status'=>true,'message'=>'List of complaints','data'=>$items]);
        
     }
+	
+		  public function ListConsumerNotifications() {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $items = $this->Productmodel->getConsumerNotifications($user['id']);
+        Utils::response(['status'=>true,'message'=>'List of Consumer Notifications.','data'=>$items]);
+       
+    }
+	
 	
 	    public function FaqsAndOtherData() {
         //Utils::debug();

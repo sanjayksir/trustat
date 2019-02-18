@@ -800,6 +800,9 @@ function list_assigned_Surveys() {
 		$promotion_id =$this->input->post('promotion_id');
 		$Chk = $this->input->post('Chk');
 		echo $this->Survey_model->save_push_Survey($customer_id,$product_id,$promotion_id,$Chk);
+		
+			
+			
 		if($Chk==2){
 		$value=2;
 		} else {
@@ -814,7 +817,19 @@ function list_assigned_Surveys() {
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Survey_model->sendFCM("A Survey Posted!!", $fb_token);
+		 
+			$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "howzzt survey";
+			$NTFdata['body'] = "A Survey Posted!!"; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 1; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);
+			
 		 }
+		 
+		 
+		 
 		
 		exit;
  	}

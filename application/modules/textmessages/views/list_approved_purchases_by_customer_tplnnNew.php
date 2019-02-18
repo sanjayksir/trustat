@@ -34,11 +34,11 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                     <li>
 
-                        <a href="#">Loyalty Mgmt</a>
+                        <a href="#">Master</a>
 
                     </li>
 
-                    <li class="active">Customer Loyalty Mgmt</li>
+                    <li class="active">List View Consumer Passbook </li>
 
                 </ul><!-- /.breadcrumb -->
 
@@ -69,46 +69,14 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     </div>
 
                 <?php } ?>
-
-                
+	
+               
 
                  <div class="row">
 
-                   
-				
-			 <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                           <tr> 
-								<th><span class="blue bolder">Total Numer of Customers</span></th>
-								<th><span class="blue bolder">Total Numer of consumers</span></th>
-								<th><span class="blue bolder">Total Earned Points</span></th>
-								<th><span class="blue bolder">Total Points Redeemed</span></th>
-								<th><span class="blue bolder">Total Balance points</span></th>
-								<th><span class="blue bolder">Total Points to Redeem</span></th>
-							</tr>
-                     </thead>
-                            <tbody>
-								<tr>
-									<td><?php echo $total_customers; ?></td>
-									<td><?php echo $total_consumers; ?></td>
-									<td><?php echo $Total_Earned_Points; ?></td>
-									<td><?php echo $Total_Points_Redeemed; ?></td>
-									<td><?php echo $Total_Earned_Points - $Total_Points_Redeemed; ?></td>
-									<td><?php echo ($Total_Earned_Points - $Total_Points_Redeemed)- $minimum_locking_balance*$total_records; ?></td>
-								</tr>
-							</tbody>
-			 </table>
-							
-
-
-
+                    <div class="col-xs-12">
 
                         <div class="widget-box widget-color-blue">
-						
-						
-							
-							
-							
                             <!--<div class="widget-header widget-header-flat">
                                 <h5 class="widget-title bigger lighter">MANAGE PRODUCTS</h5>
                                 <div class="widget-toolbar">
@@ -129,7 +97,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="input-group">
-                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Customer Name">
+                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Event Name, Transaction Type">
                                                 <span class="input-group-btn">
                                                     <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                     <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -143,62 +111,65 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                         <table id="dynamic-table" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-														<th>S No.</th>
-													   <th>Customer Name</th>
-													   <th>Total Purchased Points</th>
-														<th>Points awarded to Consumers</th>
-														<th>Closing Balance</th>
-                                                       <th>Loyalty Details</th>
-
+                                    <th>S No.</th>
+                                    <th class="hidden-480">Transuction Date</th>
+                                    <th class="hidden-480">Event Name</th>
+                                    <th class="hidden-480">Event Detail</th>
+                                    <th>Points </th>
+                                    <th>Transaction Type (Earned/Redeemed) </th>
+									<td>Total accumulated points</td>
+								   <td>Total redeemed points</td>
+								    <td>Current balance</td>
+									 <td>Points redeemable</td>
+									 <td>Points short of redemption</td>
+                                   <!-- <th>Balance Available for Redemption</th>
+									Points req. for next Redemption-->
                                 </tr>
                             </thead>
                             <tbody>
 									  
                         <?php
-                        if(count($list_all_consumers)>0){
-                            $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+						//echo $list_all_consumers; 
+                        if(count($list_approved_purchases_by_customer)>0){
+                            $page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
                             $sno =  $page + 1;
                         $i=0;
-                        foreach ($list_all_consumers as $attr){
+                        foreach ($list_approved_purchases_by_customer as $attr){
                         $i++;
-                         ?>
+                         ?> 
                                 <tr id="show<?php echo $attr['id'];?>">
                                 <td><?php echo $sno; ?></td>
-                                <td><?php echo getUserFullNameById($attr['customer_id']); ?></td>
-								<td><?php echo total_approved_points2($attr['customer_id']);  ?> </td>  
-                                <td><?php //echo base_url(); 
-								
-								if(base_url()=='http://localhost/trackingportal/') {
-								mysql_connect("localhost", "root", "");
-								mysql_select_db("trackingportaldb2");
-								} else {
-									mysql_connect("localhost", "tpdbuser", "india@123");
-								mysql_select_db("trackingprortaldb");
-								}
-								
-								$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where customer_id = '".$attr['customer_id']."' AND transaction_lr_type = 'Loyalty'";
-
-							$results = mysql_query($some_q) or die(mysql_error());
-
-							while($row = mysql_fetch_array($results)){
-							$TE_Points = $row['points'];
+                                <td><?php echo $attr['transaction_date']; ?></td>
+                                <td><?php echo $attr['transaction_type_name']; ?></td>
+                                <td><?php //echo $attr['params'];
+						//echo json_decode($attr['params']);
+							$character = json_decode($attr['params']);		
+							//if($character->transaction_date!=''){echo $character->transaction_date . ".";}	
+							if($character->passbook_title!=''){echo  $character->passbook_title . ", ";}	
+							if($character->consumer_phone!=''){echo  $character->consumer_phone;}
+	if(getConsumerNameById($character->consumer_id)!='') {echo ", " . getConsumerNameById($character->consumer_id);}
+	
+							//if($character->brand_name!=''){echo  $character->brand_name;}
+							//if($character->product_name!=''){echo ", " . $character->product_name;}
 							
-							echo $TE_Points;
+							if($character->product_id!=''){echo  get_products_brand_name_by_id($character->product_id);}
+							if($character->product_id!=''){echo ", " . get_products_name_by_id($character->product_id);}
 							
-							}
-
-
+							if($character->points_redeemed!=''){echo $character->points_redeemed;}
+							if($character->coupon_number!=''){echo ", " . $character->coupon_number;}
+							
+							
 								?></td>
-                           
-                                               
-                                                 <td><?php echo total_approved_points2($attr['customer_id']) - $TE_Points; ?> </td> 
-													<td><?php //echo anchor("product/list_customerwise_consumer_loyalty_details/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Loyalty Details</i>', array('class' => 'btn btn-xs btn-info','title'=>' Loyalty Details')); ?>  
-													<?php echo anchor("textmessages/list_approved_purchases_by_customer/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Customer Purchase</i>', array('class' => 'btn btn-xs btn-info','title'=>'Customer Purchase')); ?>
-													<?php //echo anchor("product/list_view_consumer_feedback_details/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> Feedback Report data</i>', array('class' => 'btn btn-xs btn-info','title'=>' Feedback Report data')); ?>
-													<br />
-												
-												
-													</td>
+                                 <td><?php echo $attr['points']; ?></td>
+                                   <td><?php echo $attr['transaction_lr_type']; ?></td>
+								   <td><?php echo $attr['total_accumulated_points']; ?></td>
+								   <td><?php echo $attr['total_redeemed_points']; ?></td>
+								    <td><?php echo $attr['current_balance']; ?></td>
+									 <td><?php echo $attr['points_redeemable']; ?></td>
+									 <td><?php echo $attr['points_short_of_redumption']; ?></td>
+                                                 
+													<!--<td><input type="checkbox" name="assignConsumer[]" class="assignConsumer" /></td>-->
+
                                              </tr>
 
                                         <?php
@@ -207,10 +178,21 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 										}else{?>
 											<tr><td align="center" colspan="8" class="color error">No Records Founds</td></tr>
 										<?php }?>
-										  <!--<tr id="show<?php //echo $attr['id']; ?>"><td colspan="8"><input class="btn btn-primary pull-right" type="button" id="assign" name="assign" value="Assign Product" /></td></tr>-->
+										  <!--<tr id="show<?php echo $attr['id']; ?>"><td colspan="8"><input class="btn btn-primary pull-right" type="button" id="assign" name="assign" value="Assign Product" /></td></tr>-->
 
                                     </tbody>
                                 </table>
+								<?php  
+									
+								$user_id = $this->session->userdata('admin_user_id');
+								if($user_id>1) {
+								echo anchor("product/view_customer_loyalties/", '<i class="ace-icon fa fa-list bigger-130"> Back to List</i>', array('class' => 'btn btn-xs btn-info','title'=>'Back')); 
+								} else {
+								echo anchor("product/list_customer_loyalty_summary/", '<i class="ace-icon fa fa-list bigger-130"> Back to List</i>', array('class' => 'btn btn-xs btn-info','title'=>'Back')); 
+									}
+									
+
+								?>
                             <div class="row paging-box">
                             <?php echo $links ?>
                             </div>    

@@ -128,6 +128,8 @@ $route['api/redemption'] = 'Api/Consumer/redemption';
 $route['api/complaints'] = 'Api/Consumer/Complaints';
 $route['api/complaint/reply'] = 'Api/Consumer/ConsumerResponseComplaint';
 $route['api/list-responses-on-complaint/(:any)'] = 'Api/Consumer/ListResponsesOnComplaint/$1';
+$route['api/list-consumer-notifications'] = 'Api/Consumer/ListConsumerNotifications';
+
 
 $route['api/faqs_otherafterlogindata'] = 'Api/Consumer/FaqsAndOtherData';
 $route['api/terms_and_conditions'] = 'Api/Consumer/TermsAndConditions';

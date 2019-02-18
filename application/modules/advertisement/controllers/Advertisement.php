@@ -834,6 +834,15 @@ function list_assigned_Advertisements() {
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Advertisement_model->sendFCM("An Advertisement Posted!!..", $fb_token);
+		 
+			$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "howzzt advertisement";
+			$NTFdata['body'] = "An Advertisement Posted!!.."; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 1; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);
+			
 		 }
 		//echo  $this->Advertisement_model->sendFCM("Advertisement pushed!",$fb_token);
 		//redirect('advertisement/launch_advertisement');
@@ -857,7 +866,7 @@ function list_assigned_Advertisements() {
 				foreach ($query->result() as $user)  
 				{
 		 $consumer_id = $user->consumer_id;
-		 $fb_token = getConsumerFb_TokenById(34);
+		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Advertisement_model->sendTextFCM($text_message, $fb_token);
 		 }
