@@ -798,8 +798,9 @@ function list_assigned_Surveys() {
 		$customer_id=$this->input->post('c_id');
 		$product_id	=$this->input->post('p_id');
 		$promotion_id =$this->input->post('promotion_id');
+		$promotion_title =$this->input->post('promotion_title');
 		$Chk = $this->input->post('Chk');
-		echo $this->Survey_model->save_push_Survey($customer_id,$product_id,$promotion_id,$Chk);
+		echo $this->Survey_model->save_push_Survey($customer_id,$product_id,$promotion_id,$promotion_title,$Chk);
 		
 			
 			

@@ -89,7 +89,22 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                      </thead>
                             <tbody>
 								<tr>
-									<td><?php echo $total_customers; ?></td>
+									<td><?php echo $total_customers;
+									/*
+									$purchased_points = total_approved_points2(221);
+									$consumed_points = get_total_consumed_points(221);
+									$closing_balance = $purchased_points - $consumed_points;				
+									if($purchased_points > ($consumed_points+$TRPoints)){
+									echo ",";
+									echo $purchased_points;
+									echo ",";
+									echo $consumed_points;
+									echo ",";
+									echo $closing_balance;
+									echo ",";
+									}
+									*/
+									?></td>
 									<td><?php echo $total_consumers; ?></td>
 									<td><?php echo $Total_Earned_Points; ?></td>
 									<td><?php echo $Total_Points_Redeemed; ?></td>
@@ -170,7 +185,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 								
 								if(base_url()=='http://localhost/trackingportal/') {
 								mysql_connect("localhost", "root", "");
-								mysql_select_db("trackingportaldb2");
+								mysql_select_db("trackingprortaldb20a");
 								} else {
 									mysql_connect("localhost", "tpdbuser", "india@123");
 								mysql_select_db("trackingprortaldb");
@@ -192,7 +207,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                            
                                                
                                                  <td><?php echo total_approved_points2($attr['customer_id']) - $TE_Points; ?> </td> 
-													<td><?php //echo anchor("product/list_customerwise_consumer_loyalty_details/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Loyalty Details</i>', array('class' => 'btn btn-xs btn-info','title'=>' Loyalty Details')); ?>  
+													<td><?php echo anchor("product/list_customerwise_consumer_loyalty_details/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Loyalty Details</i>', array('class' => 'btn btn-xs btn-info','title'=>' Loyalty Details')); ?>  
 													<?php echo anchor("textmessages/list_approved_purchases_by_customer/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Customer Purchase</i>', array('class' => 'btn btn-xs btn-info','title'=>'Customer Purchase')); ?>
 													<?php //echo anchor("product/list_view_consumer_feedback_details/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> Feedback Report data</i>', array('class' => 'btn btn-xs btn-info','title'=>' Feedback Report data')); ?>
 													<br />

@@ -6,7 +6,7 @@
 			</script>
 			<?php 
 			if($this->session->userdata('admin_user_id')==1){
-				$label = 'CCC Admin';
+				$label = 'Customer';
 			}else{
 				$label = 'User';
 			}
@@ -52,7 +52,7 @@
 							<div class="col-xs-12">
  								<div class="widget-box widget-color-blue">
                                                                     <div class="widget-header widget-header-flat">
-                                                                    <h5 class="widget-title bigger lighter">List <?php echo $label;?></h5>
+                                                                    <h5 class="widget-title bigger lighter">List <?php echo $label;?>s</h5>
                                                                     <div class="widget-toolbar">
                                                                         <a href="<?php echo base_url('user_master/add_user') ?>" class="btn btn-xs btn-warning" title="Add User">Add <?php echo $label; ?> </a>
                                                                     </div>
@@ -98,7 +98,7 @@
                                             <th>User Name</th>
                                             <th>Email ID</th>
                                             <th>Phone</th>
-                                            <th>Location name with type</th>
+                                            <th>Important Links</th>
                                             <th>Action</th>
                                     </tr>
                             </thead>
@@ -126,19 +126,27 @@
                                                 <td><?php echo $listData['mobile_no']; ?></td>
                                                 <td><?php if($this->session->userdata('admin_user_id')==1){
 				
-												$location_name = get_all_active_locations($listData['user_id']);
+												//$location_name = get_all_active_locations($listData['user_id']);
 															//echo $location_name['location_name'];
 															//print_r($array['location_name']);
 															
-															
+															/*
 															foreach ($location_name as $key => $value) {
 																echo $value['location_name'] . ' [' .  $value['location_type']. ']' . '<br/>';
 															}
+															*/
+															?>
+															[List Users], 
+															[List Products], [List Orders], [List Locations]
+															<?php
 															}else{
 																echo assigned_locations($listData['user_id']);
 															}
 
-												?></td>
+												?>
+												
+												
+												</td>
                                                  <td>
 
                                                     <div class="hidden-sm hidden-xs action-buttons">

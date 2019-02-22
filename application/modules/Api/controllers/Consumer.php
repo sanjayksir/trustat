@@ -45,13 +45,20 @@ class Consumer extends ApiController {
             $emailid = $this->getInput('email');
             $emailidr = $emailid['email'];
 			
+			$longitude = $this->getInput('longitude');
+			$longituder = $longitude['longitude'];
+			$latitude = $this->getInput('latitude');
+            $latituder = $latitude['latitude'];
+			
 			$fb_token1 = $this->getInput('fb_token');
             $fb_tokenr = $fb_token1['fb_token'];
 			
 			$iemi1 = $this->getInput('iemi');
             $iemir = $iemi1['iemi'];
 			
-            $this->db->set('email', $emailidr);
+			$this->db->set('email', $emailidr);
+            $this->db->set('longitude', $longituder);
+			$this->db->set('latitude', $latituder);
 			$this->db->set('fb_token', $fb_tokenr);
 			$this->db->set('iemi', $iemir);
             $data['verification_code'] = Utils::randomNumber(5);
@@ -66,7 +73,7 @@ class Consumer extends ApiController {
                 $this->signupMail($data);
                 $smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
                 Utils::sendSMS($data['mobile_no'], $smstext);
-                $this->ConsumerModel->sendFCM("Congratulations! You registration is complete, and -- Loyalty Points have been added in your howzzt loyalty program.", $fb_tokenr);
+                $this->ConsumerModel->sendFCM("Congratulations! Your re-registration is successfully completed, and you are logged in.", $fb_tokenr);
                 Utils::response(['status' => true, 'message' => 'You are re-registered with this device.', 'data' => $data]);
                
             } else {
@@ -86,14 +93,20 @@ class Consumer extends ApiController {
 			$fb_tokend = $this->getInput('fb_token');
 			$data['fb_token'] = $fb_tokend['fb_token'];
 			$iemid = $this->getInput('iemi');
-			$data['iemi'] = $iemid['iemi'];    
+			$data['iemi'] = $iemid['iemi'];
+
+			$longitudeN = $this->getInput('longitude');
+			$data['longitude'] = $longitudeN['longitude'];
+
+			$latitudeN = $this->getInput('latitude');
+			$data['latitude'] = $latitudeN['latitude'];			
 			
             $data['verification_code'] = Utils::randomNumber(5);
             $data['password'] = md5($data['verification_code']);
             if ($this->db->insert('consumers', $data)) {
                 $userId = $this->db->insert_id();
-                $this->Productmodel->saveLoyltyReg('user-registration', $userId, ['consumer_id' => $userId]);
-				$this->Productmodel->saveConsumerPassbookLoyaltyReg('user-registration', $userId, ['consumer_id' => $userId, 'consumer_phone' => $checkmobileno2, 'passbook_title' => "howzzt Registration", 'passbook_event' => "User Registration"], 'Loyalty');
+                $this->Productmodel->saveLoyltyReg('user-registration', $userId, ['consumer_id' => $userId, 'consumer_id' =>$data['latitude'], 'consumer_id' => $data['longitude']]);
+				$this->Productmodel->saveConsumerPassbookLoyaltyReg('user-registration', $userId, ['consumer_id' => $userId, 'consumer_phone' => $checkmobileno2, 'passbook_title' => "howzzt Registration", 'passbook_event' => "User Registration", 'consumer_id' =>$data['latitude'], 'consumer_id' => $data['longitude']], 'Loyalty');
                 //$data['password'] = $data['mobile_no'];
                 //$data['token'] = $this->ConsumerModel->authIdentifyDR($data);
                 /*
@@ -114,7 +127,7 @@ class Consumer extends ApiController {
                 $smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
                 Utils::sendSMS($data['mobile_no'], $smstext);
 				$fb_token = getConsumerFb_TokenById($userId);
-               //$this->ConsumerModel->sendFCM('Congratulations! Your registration is complete, and ' . $loylty['loyalty_points'] . ' Loyalty Points have been added in your howzzt loyalty program.', $fb_token);
+               $this->ConsumerModel->sendFCM('Congratulations! Your registration is complete, and ' . $loylty['loyalty_points'] . ' Loyalty Points have been added in your howzzt loyalty program.', $fb_token);
                 Utils::response(['status' => true, 'message' => 'Your account has been registered.', 'data' => $data], 200);
 
                 
@@ -670,6 +683,8 @@ class Consumer extends ApiController {
             ['field' => 'product_qr_code', 'label' => 'Product QR Code', 'rules' => 'trim|required'],
             ['field' => 'question_id', 'label' => 'Question', 'rules' => 'trim|required|integer'],
             ['field' => 'selected_answer', 'label' => 'User answer', 'rules' => 'trim|required'],
+			['field' => 'latitude', 'label' => 'User latitude', 'rules' => 'trim|required'],
+			['field' => 'longitude', 'label' => 'User longitude', 'rules' => 'trim|required'],
         ];
         $errors = $this->ConsumerModel->validate($data, $validate);
         if (is_array($errors)) {
@@ -704,8 +719,12 @@ class Consumer extends ApiController {
         $data['user_id'] = $user['id'];
         $data['created_date'] = $data['updated_date'] = date('Y-m-d H:i:s');
 		
+		
         if ($this->db->insert('consumer_feedback', $data)) {
-            //if(1){     
+           
+		   $purchased_points = total_approved_points2($customer_id);
+			$consumed_points = get_total_consumed_points($customer_id);
+			if($purchased_points > ($consumed_points+$TRPoints)){  
 
 				$consumer_id = $user['id'];
 			    $product_brand_name = get_products_brand_name_by_id($ProductID);
@@ -812,6 +831,10 @@ class Consumer extends ApiController {
 			//$this->Productmodel->feedbackLoylityPassbook($user['id'], $transactionType, $data, $ProductID, $transactionTypeName, 'Loyalty');
             Utils::response(['status' => true, 'message' => 'Feedback answer has been saved successfully.', 'data' => $data]);
         } else {
+           Utils::response(['status' => true, 'message' => 'Feedback answer has been saved successfully.', 'data' => $data]);
+        }
+		
+		} else {
             Utils::response(['status' => false, 'message' => 'System failed to proccess the request.'], 200);
         }
 		

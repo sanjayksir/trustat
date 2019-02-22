@@ -1572,10 +1572,12 @@
 		$this->db->select("*");
 		$this->db->from("consumer_passbook");	
 		if($user_id==1){
-			$this->db->where('customer_id', $user_id);
+			//$this->db->where('customer_id', $user_id);
+			$this->db->where(array('customer_id'=>$id, 'transaction_lr_type'=>"Loyalty"));
 		}
-		$this->db->where('customer_id', $id);
-		$this->db->order_by("transaction_date", " desc");
+		//$this->db->where('customer_id', $id);
+		$this->db->where(array('customer_id'=>$id, 'transaction_lr_type'=>"Loyalty"));
+		$this->db->order_by("id", " desc");
 		$this->db->limit($limit, $start);
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 		return $resultDt ;
@@ -1592,7 +1594,8 @@
 		
 		$this->db->select('count(1) as total_rows');
 		$this->db->from('consumer_passbook');
-		$this->db->where('customer_id', $id);
+		//$this->db->where('customer_id', $id);
+		$this->db->where(array('customer_id'=>$id, 'transaction_lr_type'=>"Loyalty"));
     		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();

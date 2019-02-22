@@ -87,10 +87,10 @@ return $result;
 	public function signupValidateNew($data){
         $validate = [
             ['field' =>'user_name','label'=>'User Name','rules' => 'min_length[8]' ],
-            ['field' =>'email','label'=>'Email','rules' => 'trim|valid_email' ],
+           // ['field' =>'email','label'=>'Email','rules' => 'trim|valid_email' ],
             ['field' =>'mobile_no','label'=>'Mobile No','rules' => 'trim|required|integer|exact_length[10]' ],
-            ['field' =>'dob','label'=>'Date of birth','rules' => [['dob_check',[$this,'dob_check']]] ],
-            ['field' =>'gender','label'=>'Gender','rules' => 'trim|in_list[male,female]' ],
+            //['field' =>'dob','label'=>'Date of birth','rules' => [['dob_check',[$this,'dob_check']]] ],
+            //['field' =>'gender','label'=>'Gender','rules' => 'trim|in_list[male,female,other,noinfo]' ],
             ['field' =>'terms_conditions','label'=>'Terms and Conditions','rules' => 'trim' ],
         ];        
         $this->load->library('form_validation');        

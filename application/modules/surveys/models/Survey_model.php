@@ -594,7 +594,7 @@
 			} return $result;
 		}
 		
-		function save_push_survey($customer_id,$product_id,$promotion_id,$Chk){
+		function save_push_survey($customer_id,$product_id,$promotion_id,$promotion_title,$Chk){
  			if($Chk=='2'){
 				//$this->db->query("delete from push_surveys where promotion_id='".$promotion_id."' ");
 				
@@ -632,6 +632,7 @@
 					"consumer_id"	 => $user->consumer_id,
 					"product_id"	 => $product_id,
 					"promotion_id"	 => $promotion_id,
+					"promotion_title"	 => $promotion_title,
 					"media_type"	 => "Survey Video",
 					"survey_push_date"	 => date('Y-m-d H:i:s'),
 					"media_play_date"	 => "0000-00-00 00:00:00",
@@ -764,6 +765,7 @@
 						if(empty($check_exists_entry)){
 							$insertData		 	=array(
 								"promotion_request_id"	=> $datecodedno,
+								"promotion_title"	=> $frmData['promotion_title'],
 								"request_date_time"		=> date('Y-m-d H:i:s'),
 								"user_id"				=> $user_id,
 								"product_id"			=> $product_id,

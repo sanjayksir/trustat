@@ -822,9 +822,10 @@ function list_assigned_Advertisements() {
 		$customer_id=$this->input->post('c_id');
 		$product_id	=$this->input->post('p_id');
 		$promotion_id =$this->input->post('promotion_id');
+		$promotion_title =$this->input->post('promotion_title');
 		$Chk = $this->input->post('Chk');
 		
-		 echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$promotion_id,$Chk);
+		 echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$promotion_id,$promotion_title,$Chk);
 		 echo $status= $this->Advertisement_model->change_status2($promotion_id,$Chk);
 		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				

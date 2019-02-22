@@ -22,7 +22,7 @@
 			//mysql_select_db("trackingprortaldb");
 			
 			mysql_connect("localhost", "root", "");
-			mysql_select_db("trackingportaldb2");
+			mysql_select_db("trackingprortaldb20a");
 			
 			
 			//$query = mysql_query("SELECT MAX( plant_id ) FROM plant_master;");

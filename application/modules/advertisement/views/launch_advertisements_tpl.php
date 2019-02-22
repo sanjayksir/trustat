@@ -80,6 +80,7 @@
 																<th>Request No</th>
 																<th>Date Time</th>
                                                                 <th>Product Name</th>
+																<th>Advertisement Title</th>
                                                                 <th>Type of Advertisement</th>
                                                                 <th>Number of Consumers</th>
                                                                 <th>Status</th>
@@ -114,6 +115,7 @@
 												    <td><?php echo date('j M Y H:i:s D',strtotime($listData['request_date_time'])); ?></td>
 													
                                                         <td><?php echo $listData['product_name']; ?></td>
+														<td><?php echo $listData['promotion_title']; ?></td>
                                                         <td><?php echo $listData['promotion_media_type']; ?></td>
 														<td><?php echo $listData['number_of_consumers']; ?></td>
                                                        
@@ -127,7 +129,7 @@
 														 
 														 <input <?php 
 	$answerQuery = $this->db->get_where('push_advertisements',"promotion_id='".$listData['promotion_id']."'");
-	if($answerQuery->num_rows() > 0){ ?>checked="checked"<?php } else {} ?> id="product_<?php echo $listData['product_id'];?>" name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $listData['user_id'];?>','<?php echo $listData['product_id'];?>','<?php echo $listData['promotion_id'];?>');" type="checkbox"   <?php if($listData['request_status']==2){ echo "disabled"; }   ?> >
+	if($answerQuery->num_rows() > 0){ ?>checked="checked"<?php } else {} ?> id="product_<?php echo $listData['product_id'];?>" name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $listData['user_id'];?>','<?php echo $listData['product_id'];?>','<?php echo $listData['promotion_id'];?>','<?php echo $listData['promotion_title'];?>');" type="checkbox"   <?php if($listData['request_status']==2){ echo "disabled"; }   ?> >
 	<span class="lbl"></span> <?php echo promotion_status($listData['request_status']); ?>
 	
 	
@@ -289,7 +291,15 @@ $("#product").html(msg);
 
                                   </div>
                                   </div>
-
+									
+									
+								  <div class="form-group row">
+                                  <div class="col-sm-12">
+                                  <label for="form-field-8">Advertisement Subject/Title</label>
+								  <input name="promotion_title" id="promotion_title" type="text" value="", placeholder="Please enter Survey Subject/Title" class="form-control">
+                                  </div>
+                                  </div>
+								  
 
                                   <div class="form-group row">
                                   <div class="col-sm-12">
@@ -402,7 +412,7 @@ $("#product").html(msg);
     var table;
 
 
-	function add_question_to_product(created_by, id, promotion_id){
+	function add_question_to_product(created_by, id, promotion_id, promotion_title){
 	var r = confirm("Are Sure to process your action?");
 	if (r == true) {
 		if ($("#product_"+id).prop('checked')==true){ 
@@ -415,7 +425,7 @@ $("#product").html(msg);
 			dataType:'html',
 			type:'POST',
 			url:'<?php echo base_url().'advertisement/save_push_advertisement/';?>',
-			data:{c_id:created_by,p_id:id,promotion_id:promotion_id,Chk:Chk},
+			data:{c_id:created_by,p_id:id,promotion_id:promotion_id,promotion_title:promotion_title,Chk:Chk},
 			success:function (msg){
 			}
 		
@@ -442,12 +452,14 @@ $("#product").html(msg);
     rules: {
 			plant_id: {required: true},
             "product[]":{required: true},
+			promotion_title: {required: true},
         promotion_media_type: {required: true}
             } ,
 
     messages: {
 			plant_id: {	required: "Please Select a Plant"} ,
             "product[]": {required: "Please Select Product" } , 
+			promotion_title: {	required: "Please Enter Promotion Title"} ,
             promotion_media_type: {	required: "Please Select Media Type"} 
     },
     submitHandler: function(form) {

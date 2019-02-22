@@ -7375,6 +7375,16 @@ function isProductCodeRegistered($bar_code_data){
 				$query=$ci->db->get();		
 			return $query->row()->purchasing_points;
     }
+	
+	
+	function get_total_consumed_points($user_id) {
+		$ci = & get_instance();
+				$ci->db->select_sum('points');
+				$ci->db->from('consumer_passbook');
+				$ci->db->where(array('customer_id'=> $user_id, 'transaction_lr_type'=> "Loyalty"));
+				$query=$ci->db->get();		
+			return $query->row()->points;
+    }
 
 
   

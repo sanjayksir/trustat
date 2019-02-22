@@ -858,8 +858,7 @@ return $result;
             'modified_at' => $now,
             'created_at' => $now,
             'date_expire' => $date->format('Y-m-d H:i:s')
-        ];
-        
+        ];        
         return $this->db->insert('consumer_passbook',$input);
     }
 	

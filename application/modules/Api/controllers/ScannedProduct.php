@@ -314,6 +314,10 @@ class ScannedProduct extends ApiController {
             }            
         }
         */
+				$purchased_points = total_approved_points2($customer_id);
+				$consumed_points = get_total_consumed_points($customer_id);
+				//$closing_balance = $purchased_points - $consumed_points;
+		
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
         
         if(empty($result)){
@@ -395,7 +399,11 @@ class ScannedProduct extends ApiController {
 				
 		$result2 = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 		$TRPoints = $result2->$transactionType;
-		$data['loyalty_points_earned'] = $TRPoints;
+				
+		if($purchased_points > ($consumed_points+$TRPoints)){
+				$data['loyalty_points_earned'] = $TRPoints;
+				}
+				$data['loyalty_points_earned'] = 0;
 		
         if(!empty($warrenty)){
             $data['status'] = 0;
@@ -413,16 +421,28 @@ class ScannedProduct extends ApiController {
             if(is_null($warrenty)){
 				if($result->stock_status!='Customer_Code'){
                 //$loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();
+				
+				
+				if($purchased_points > ($consumed_points+$TRPoints)){
                 $message = 'Thank You for Product Registration. '. $TRPoints .' loyalty points will be added to your howzzt loyalty account';
-               // $transactionType = 'product-registration-without-warranty'; 
+				}
+				$message = 'Thank You for Product Registration!';
+			   // $transactionType = 'product-registration-without-warranty'; 
 				$transactionType = "product_registration_lps";
 			    $transactionTypeName = "Scan for product registration";
 			   
 				$userId = $user['id'];
+				
+				
+				
+				
+				if($purchased_points > ($consumed_points+$TRPoints)){
 				$this->Productmodel->saveLoyltyProductReg($transactionType, $userId, $ProductID, ['verification_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code']], $customer_id);
 				//$this->Productmodel->saveConsumerPassbookLoyalty($transactionType, $userId, ['user_id' => $userId, 'brand_name' => $result->brand_name, 'product_name' => $result->product_name, 'product_code' => $data['bar_code'], 'user_id' => $userId], 'Loyalty');
 				
+				
 				$this->Productmodel->saveConsumerPassbookLoyaltyProductReg($transactionType, ['verification_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code']], $customer_id, $ProductID, $userId, $transactionTypeName,  'Loyalty');
+				}
 				
 				$fb_token = getConsumerFb_TokenById($userId);
                $this->ConsumerModel->sendFCM('Thank you for Product Registration, Please check the details in "my purchase list" in howzzt App', $fb_token);
@@ -445,7 +465,11 @@ class ScannedProduct extends ApiController {
             }else{
 				if($result->stock_status!='Customer_Code'){
                 //$loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-with-warranty'])->row();
-                $message = 'Thank you for uploading the invoice, your product warranty will be activated and '. $TRPoints .' loyalty points will be added to your loyalty account after validation of uploaded invoice';
+               
+				if($purchased_points > ($consumed_points+$TRPoints)){
+				$message = 'Thank you for uploading the invoice, your product warranty will be activated and '. $TRPoints .' loyalty points will be added to your loyalty account after validation of uploaded invoice';
+				}
+				$message = 'Thank you for uploading the invoice, your product warranty will be activated';
                 $transactionType = 'product-registration-with-warranty';
                 $data['message1'] = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
 				}else {
@@ -524,7 +548,7 @@ class ScannedProduct extends ApiController {
         $data['complain_code']= Utils::randomNumber(5);
         $data['status']= 'pending';
         if($this->db->insert('consumer_complaint', $data)){
-            Utils::sendSMS($user['mobile_no'], 'Your complaint code is '.$data['complain_code'].'. Our team will contact to you shortly.');
+            Utils::sendSMS($user['mobile_no'], 'Your complaint code is '.$data['complain_code'].'. The compliant has been transfered to the respective brand owner for quick redressal.');
             //Utils::sendSMS($this->config->item('adminMobile'), 'A consumer has looged a complain with compoain code '.$data['complain_code'].' with following description '.$data['description']);
             $this->response(['status'=>true,'message'=>'Your complaint has been logged successfully.','data'=>$data]);
         }else{
@@ -544,6 +568,8 @@ class ScannedProduct extends ApiController {
         $validate = [
             ['field' =>'bar_code','label'=>'Product Code','rules' => 'trim|required'],
             ['field' =>'rating','label'=>'Product Rating','rules' => 'required'],
+			['field' => 'latitude', 'label' => 'User latitude', 'rules' => 'trim|required'],
+			['field' => 'longitude', 'label' => 'User longitude', 'rules' => 'trim|required'],
 			//['field' =>'type','label'=>'Latitude','rules' => 'required'],
             ['field' =>'description','label'=>'Product Description','rules' => 'trim|required' ],
         ];
@@ -567,17 +593,25 @@ class ScannedProduct extends ApiController {
         //$data['status']= 'pending';
 		$transactionType = "feedback_on_product_lps";
 		$transactionTypeName = "Product Feedback";
-		
+		$customer_id = get_customer_id_by_product_id($ProductID);
 		$result3 = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 		$TRPoints = $result3->$transactionType;
-				
+			$purchased_points = total_approved_points2($customer_id);
+			$consumed_points = get_total_consumed_points($customer_id);
+			if($purchased_points > ($consumed_points+$TRPoints)){		
 		$mess = 'Thank you for posting your product experince. Loyalty Point '. $TRPoints .' have been added to your howzzt loyalty program.'; 
-		$customer_id = get_customer_id_by_product_id($ProductID);
+			}
+			$mess = 'Thank you for posting your product experince.'; 
+		
         if($this->db->insert('feedback_on_product', $data)){
             //Utils::sendSMS($user['mobile_no'], 'Your feedback submitted successfully.');
             //Utils::sendSMS($this->config->item('adminMobile'), 'A consumer has looged a complain with compoain code '.$data['complain_code'].' with following description '.$data['description']);
 			$data['product_id'] = $ProductID;
+			$purchased_points = total_approved_points2($customer_id);
+			$consumed_points = get_total_consumed_points($customer_id);
+			if($purchased_points > ($consumed_points+$TRPoints)){
 			$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
+			}
 			
             $this->response(['status'=>true,'message'=>'Your feedback submitted successfully.','data'=>$data]);
         }else{
@@ -612,7 +646,7 @@ class ScannedProduct extends ApiController {
 		
 		$this->db->set('del_by_cs', 1);
         $this->db->set('del_by_cs_date', date("Y-m-d H:i:s"));
-        $this->db->where('bar_code', $scan_id);
+        $this->db->where('scan_id', $scan_id);
         if ($this->db->update('scanned_products')) {
 
             Utils::response(['status' => true, 'message' => 'Record Deleted Successfully.', 'data' => $bar_code_data]);

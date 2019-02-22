@@ -38,7 +38,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                     </li>
 
-                    <li class="active">List View Consumer Passbook </li>
+                    <li class="active">List View Consumer Loyalties </li>
 
                 </ul><!-- /.breadcrumb -->
 
@@ -97,7 +97,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="input-group">
-                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Event Name, Transaction Type">
+                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Event Name">
                                                 <span class="input-group-btn">
                                                     <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                     <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -115,14 +115,17 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th class="hidden-480">Transuction Date</th>
                                     <th class="hidden-480">Event Name</th>
                                     <th class="hidden-480">Event Detail</th>
-                                    <th>Points </th>
-                                    <th>Transaction Type (Earned/Redeemed) </th>
+                                    <th>Points</th>
+									<th>Consumer Name</th>
+									<th>Consumer Phone</th>
+									<th>Consumer Geo location</th>
+                                   <!-- <th>Transaction Type (Earned/Redeemed) </th>
 									<td>Total accumulated points</td>
 								   <td>Total redeemed points</td>
 								    <td>Current balance</td>
 									 <td>Points redeemable</td>
 									 <td>Points short of redemption</td>
-                                   <!-- <th>Balance Available for Redemption</th>
+                                    <th>Balance Available for Redemption</th>
 									Points req. for next Redemption-->
                                 </tr>
                             </thead>
@@ -143,7 +146,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                 <td><?php echo $attr['transaction_type_name']; ?></td>
                                 <td><?php //echo $attr['params'];
 						//echo json_decode($attr['params']);
-							$character = json_decode($attr['params']);		
+							$character = json_decode($attr['params']);	
+ 					
 							//if($character->transaction_date!=''){echo $character->transaction_date . ".";}	
 							if($character->passbook_title!=''){echo  $character->passbook_title . ", ";}	
 							if($character->consumer_phone!=''){echo  $character->consumer_phone;}
@@ -161,14 +165,21 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 							
 								?></td>
                                  <td><?php echo $attr['points']; ?></td>
-                                   <td><?php echo $attr['transaction_lr_type']; ?></td>
+								 <td><?php echo getConsumerNameById($attr['consumer_id']); ?></td>
+								 <td><?php echo getConsumerMobileNumberById($attr['consumer_id']); ?></td>
+								 <td><?php echo $character->longitude; echo ", ";	echo $character->latitude; 								
+
+ ?>
+								 
+								 </td>
+                                   <!--<td><?php echo $attr['transaction_lr_type']; ?></td>
 								   <td><?php echo $attr['total_accumulated_points']; ?></td>
 								   <td><?php echo $attr['total_redeemed_points']; ?></td>
 								    <td><?php echo $attr['current_balance']; ?></td>
 									 <td><?php echo $attr['points_redeemable']; ?></td>
 									 <td><?php echo $attr['points_short_of_redumption']; ?></td>
                                                  
-													<!--<td><input type="checkbox" name="assignConsumer[]" class="assignConsumer" /></td>-->
+													<td><input type="checkbox" name="assignConsumer[]" class="assignConsumer" /></td>-->
 
                                              </tr>
 
