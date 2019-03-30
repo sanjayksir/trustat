@@ -377,6 +377,57 @@ function getProductCodeActicationLevelbyCode($ProductCode){
 	return $res;
 }
 
+function getOrderIDbyCode($ProductCode){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('order_id');
+	$ci->db->from('printed_barcode_qrcode');
+	$ci->db->where(array('barcode_qr_code_no'=>$ProductCode));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['order_id']);
+
+ 	}
+	return $res;
+}
+
+function getProductIDbyProductCode($ProductCode){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('product_id');
+	$ci->db->from('printed_barcode_qrcode');
+	$ci->db->where(array('barcode_qr_code_no'=>$ProductCode));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['product_id']);
+
+ 	}
+	return $res;
+}
+
+function getCodeIDbyProductCode($ProductCode){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('id');
+	$ci->db->from('printed_barcode_qrcode');
+	$ci->db->where(array('barcode_qr_code_no'=>$ProductCode));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['id']);
+
+ 	}
+	return $res;
+}
+
 
 function getProductCodeActicationLevelbyProductID($ProductID){
 	$res = 0;
@@ -433,12 +484,12 @@ function getConsumerMobileNumberById($id){
 }
 
 
-function getConsumerFb_TokenById($id){
+function getConsumerFb_TokenById($consumer_id){
 	$res = 0;
 	$ci = & get_instance();
 	$ci->db->select('fb_token');
 	$ci->db->from('consumers');
-	$ci->db->where(array('id'=>$id));
+	$ci->db->where(array('id'=>$consumer_id));
 	$query = $ci->db->get();
 
 	if ($query->num_rows() > 0) {
@@ -7364,6 +7415,79 @@ function isProductCodeRegistered($bar_code_data){
 		$ci->db->where(array('customer_id'=>$customer_id));
 		$query = $ci->db->get();//echo $ci->db->last_query();
 		return $query->num_rows();
+}
+
+   function NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob){
+	   	
+	
+		$ci = & get_instance();
+		$ci->db->select('CCL.customer_id');		
+		$ci->db->from('consumer_customer_link CCL');
+		//$ci->db->join('consumer_selection_criteria CSC', 'CSC.customer_id = CCL.customer_id');
+		$ci->db->join('consumers C', 'C.id = CCL.consumer_id');
+		$array = array('CCL.customer_id' => $customer_id);
+		$ci->db->where($array);
+		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
+		$ci->db->where('C.gender', $csc_consumer_gender);
+			}
+			
+		if(!empty($csc_consumer_city)){ 			
+		$ci->db->where('C.city', $csc_consumer_city);
+			}
+			
+		if($csc_consumer_pin!=0){ 			
+		$ci->db->where('C.pin_code', $csc_consumer_pin);
+			}	
+			
+		if(!empty($csc_consumer_min_dob)){ 			
+		$ci->db->where('C.dob <', $csc_consumer_min_dob);
+			}	
+		
+		if(!empty($csc_consumer_max_dob)){ 			
+		$ci->db->where('C.dob >', $csc_consumer_max_dob);
+			}
+		
+		
+
+		//$ci->db->where("$CurrentAge BETWEEN $minvalue AND $maxvalue");
+		
+		//$ci->db->where("$CurrentAge BETWEEN $minvalue AND $maxvalue");
+		$query = $ci->db->get();//echo $ci->db->last_query();
+		return $query->num_rows();
+}
+
+
+   function AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob){
+		$ci = & get_instance();
+		$ci->db->select('CCL.consumer_id');		
+		$ci->db->from('consumer_customer_link CCL');
+		//$ci->db->join('consumer_selection_criteria CSC', 'CSC.customer_id = CCL.customer_id');
+		$ci->db->join('consumers C', 'C.id = CCL.consumer_id');
+		$array = array('CCL.customer_id' => $customer_id);
+		$ci->db->where($array);
+		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
+		$ci->db->where('C.gender', $csc_consumer_gender);
+			}
+			
+		if(!empty($csc_consumer_city)){ 			
+		$ci->db->where('C.city', $csc_consumer_city);
+			}
+			
+		if($csc_consumer_pin!=0){ 			
+		$ci->db->where('C.pin_code', $csc_consumer_pin);
+			}	
+			
+		if(!empty($csc_consumer_min_dob)){ 			
+		$ci->db->where('C.dob <', $csc_consumer_min_dob);
+			}	
+		
+		if(!empty($csc_consumer_max_dob)){ 			
+		$ci->db->where('C.dob >', $csc_consumer_max_dob);
+			}
+		
+		$query = $ci->db->get();//echo $ci->db->last_query();
+		//return $query->num_rows();
+		return $query->row();
 }
 
 

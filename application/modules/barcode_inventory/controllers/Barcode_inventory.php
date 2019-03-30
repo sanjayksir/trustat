@@ -18,7 +18,7 @@ class Barcode_inventory extends MX_Controller {
 
     public function receive_codes() {
         #Utils::debug();
-        $data['title'] = 'List of recieve codes';
+        $data['title'] = 'List of recieved codes';
         $data['view'] = 'receive_codes_tpl';
         if (!empty($this->input->get('page_limit'))) {
             $limit = $this->input->get('page_limit');
@@ -40,6 +40,25 @@ class Barcode_inventory extends MX_Controller {
 	
 	    public function link_code_with_batchid() {
         #Utils::debug();
+		
+		$barcodeDetailsByProductID = $this->BarcodeInventoryModel->permissionssss(217);
+		
+		
+   
+		/*
+		//Print
+		echo getProductIDbyProductCode('8pw-7956-5118-6');
+		//print($barcodeDetailsByProductID);
+		
+		
+		
+		foreach ($barcodeDetailsByProductID as $key => $value) {
+				echo $value->barcode_qr_code_no;
+			}
+			
+			exit;
+			*/
+			
         $data['title'] = 'List Linked Codes with Batch Id Detailed';
         $data['view'] = 'link_code_with_batchid_tpl';
         if (!empty($this->input->get('page_limit'))) {
@@ -209,22 +228,32 @@ class Barcode_inventory extends MX_Controller {
 	public function save_link_code_with_batchid_mt() {
 		$user_id 	= $this->session->userdata('admin_user_id');
         $post = $this->input->post();
-        if (empty($post['plant_id'])) {
-            Utils::response(['status' => false, 'message' => 'Please select plant.']);
-        } elseif (empty($post['order_id'])) {
-            Utils::response(['status' => false, 'message' => 'Please select order.']);
-        } elseif (empty($post['printed_order'])) {
-            Utils::response(['status' => false, 'message' => 'Please select printed order.']);
-        }elseif (empty($post['printed_code'])) {
-            Utils::response(['status' => false, 'message' => 'Please select printed code.']);
+		$last_code_number = getCodeIDbyProductCode($post['last_code_number']);
+		$first_code_number = getCodeIDbyProductCode($post['first_code_number']);
+        if (empty($post['first_code_number'])) {
+            Utils::response(['status' => false, 'message' => 'Please Enter From Barcode.']);
+        } elseif (empty($post['last_code_number'])) {
+            Utils::response(['status' => false, 'message' => 'Please Enter To Barcode.']);
+        } elseif (empty($post['batch_id'])) {
+            Utils::response(['status' => false, 'message' => 'Please Enter Batch Id.']);
+        }elseif (empty($post['batch_mfg_date'])) {
+            Utils::response(['status' => false, 'message' => 'Please Enter Batch Mfg Date.']);
+        } elseif ($first_code_number > $last_code_number) {
+            Utils::response(['status' => false, 'message' => 'Please Enter The Codes in correct serial.']);
         }
+		/*
         $stExQuery = $this->db->get_where('printed_barcode_qrcode','print_id="'.$post['printed_order'].'" AND stock_status ="'.trim($post['status_type']).'"');
         if($stExQuery->num_rows()){
             $statusExist = $stExQuery->row_array();
             Utils::response(['status' => false, 'message' => 'This order already has been '.trim($post['status_type'])]);
         }
+		*/
+		//getOrderIDbyCode($ProductCode);
         
-        $barcodeDetails = $this->BarcodeInventoryModel->barcodeDetails($post['order_id']);
+        $barcodeDetails = $this->BarcodeInventoryModel->barcodeDetails(getOrderIDbyCode($post['first_code_number']));
+		
+		$quantity = $last_code_number - $first_code_number;
+			
         $BatchID = Utils::randomNumber(6);
         $tData = [
             'batch_id' => $post['batch_id'],
@@ -232,21 +261,65 @@ class Barcode_inventory extends MX_Controller {
             'product_name' => get_products_name_by_id($barcodeDetails['product_id']),
             'order_id' => $post['order_id'],
             'order_number' => $barcodeDetails['order_no'],
-            'order_date' => $barcodeDetails['created_date'],
+            'print_id' => $barcodeDetails['print_id'],
+			'order_date' => $barcodeDetails['created_date'],
             'print_date' => $barcodeDetails['modified_at'],
             'location_id' => $barcodeDetails['plant_id'],
             'product_sku' => $barcodeDetails['product_sku'],
-            'quantity' => $barcodeDetails['quantity'],
+            'quantity' => $quantity,
             'batchid_assigned_by' => $user_id,
-            'batch_mfg_date' => date("Y-m-d H:i:s"),
-            'first_code_number' => current($post['printed_code']),
-            'last_code_number' => end($post['printed_code']),
+			'batchid_assign_date' => date('Y-m-d H:i:s'),
+            'batch_mfg_date' => $post['batch_mfg_date'],			
+            'first_code_number' => $post['first_code_number'],
+            'last_code_number' => $post['last_code_number'],
 			'issue_location' => $barcodeDetails['plant_id'],
             'status' => 1
         ];
         if ($this->db->insert('link_code_with_batchid_trans', $tData)) {
-            $this->db->update("printed_barcode_qrcode", ['batch_id' => $post['batch_id'],'batch_mfg_date'=>date('Y-m-d H:i:s')], 'print_id ="'.$post['printed_order'].'"');
-            Utils::response(['status' => true, 'message' => 'Batch Id has been '.$post['status_type'].'.']);
+			
+			
+			$this->db->update("printed_barcode_qrcode", ['batch_id' => $post['batch_id'],'batch_mfg_date' => $post['batch_mfg_date']], 'id BETWEEN "'. $first_code_number .'" AND "'. $last_code_number .'" AND batch_id="" AND active_status="1"');
+			
+			
+			/*
+			$barcodeDetailsByProductID = $this->BarcodeInventoryModel->barcodeIDProductID(getProductIDbyProductCode($post['first_code_number']));
+			//$first_code_number = null;
+			/*
+			foreach ($barcodeDetailsByProductID as $key => $value) {
+				echo $key . ' contains ' . $value . '<br/>';
+			}
+			
+			//for ($i = $first_code_number; $i <= $last_code_number; $i++){
+				//for ($i = 0; $i < 10; $i++){
+			foreach($barcodeDetailsByProductID as $key => $value){
+				// if(strstr(strtolower($value->barcode_qr_code_no), $post['first_code_number'])){
+            if((($value->id) == $first_code_number)){
+                //$first_code_number = $list;
+                //break;
+				
+				
+		$this->db->update("printed_barcode_qrcode", ['batch_id' => $post['batch_id'],'batch_mfg_date' => $post['batch_mfg_date']], 'id ="'. $first_code_number .'"');
+				 
+				 
+			//foreach($barcodeDetailsByProductID as $key => $value){
+				// if(strstr(strtolower($value->barcode_qr_code_no), $post['last_code_number'])){
+            if((($value->id) == $last_code_number)){
+                //$last_code_number = $list;
+                break;				
+				
+            }else{
+                continue;
+            }
+			//}	
+            }else{
+                continue;
+            }
+			}
+				//}
+		
+		*/
+			
+            Utils::response(['status' => true, 'message' => 'Activated Barcodes of the given range linked with Production Batch Id '.$post['batch_id'].'.']);
         } else {
             
         }
@@ -295,7 +368,7 @@ class Barcode_inventory extends MX_Controller {
 
     public function issue_codes() {
         #Utils::debug();
-        $data['title'] = 'List of issue codes';
+        $data['title'] = 'List of issued codes';
         $data['view'] = 'issue_codes_tpl';
         if (!empty($this->input->get('page_limit'))) {
             $limit = $this->input->get('page_limit');

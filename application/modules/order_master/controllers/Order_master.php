@@ -24,6 +24,8 @@
 	 
 	 
      public function list_orders() {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
         $params = array();
         if(!empty($this->input->get('page_limit'))){
             $limit_per_page = $this->input->get('page_limit');
@@ -31,7 +33,11 @@
             $limit_per_page = $this->config->item('pageLimit');
         }
         $this->config->set_item('pageLimit', $limit_per_page);
-        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+       if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
         $srch_string = $this->input->get('search');
         
         if (empty($srch_string)) {
@@ -40,7 +46,15 @@
         $total_records = $this->order_master_model->get_total_order_list_all($srch_string);
 
         $params["orderListing"] = $this->order_master_model->get_order_list_all($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('order_master/list_orders', $total_records);
+		
+		if($user_id>1){
+		$params["links"] = Utils::pagination('order_master/list_orders', $total_records);
+			}else{
+				$params["links"] = Utils::pagination('order_master/list_orders/' . $customer_id, $total_records, null, 4);
+			
+			}
+			
+        
 
         ##--------------- pagination End ----------------##
         $data = array();
@@ -48,6 +62,42 @@
         $params['user_id'] = $user_id;
         //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
         $this->load->view('list_order_tpl', $params);
+    }
+	
+	
+	
+	     public function approve_print_orders() {
+		
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->get_total_approve_print_orders_list_all($srch_string);
+
+        $params["orderListing"] = $this->order_master_model->get_approve_print_orders_list_all($limit_per_page, $start_index, $srch_string);
+		
+		
+		$params["links"] = Utils::pagination('order_master/approve_print_orders', $total_records);
+			
+			
+        
+
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        $params['user_id'] = $user_id;
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_approve_print_orders_tpl', $params);
     }
 
 	
@@ -467,7 +517,7 @@
  			
 			// set style for barcode
 			 $style = array(
-								'border' => true,
+								'border' => false,
 								'vpadding' => 'auto',
 								'hpadding' => 'auto',
 								'fgcolor' => array(0,0,0), 
@@ -476,7 +526,8 @@
 								'module_height' => 1, // height of a single module in points
 								'text' => true,
 								'font' => 'helvetica',
-								'fontsize' => 8,
+								'fontsize' => 4,
+								'fontweight' => 1,
 								'stretchtext' => 4
 						  ); 
 						  
@@ -547,7 +598,7 @@
 						</div>
  						</body>
 						</html>';
- 			$pdf->writeHTML($html, false); 
+ 			//$pdf->writeHTML($html, false); 
 			$post = $this->input->post();
 			##----------------------------------------------------------------------------------##
 			if($this->input->post('qty')>0){
@@ -573,13 +624,14 @@
 					//$pdf->Cell(287,50, 'If already Scratched ^', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
 					
 					} else {
-					
-					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, $barcodesize, $style, 'N');
-					$pdf->Text(115, $y, $qrcode.'-'.$i);
+					$pdf->SetFont('', '1', 5);
+					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->SetFont('helvetica', '', 5);
+					$pdf->Text(149, $y+14, $qrcode.'-'.$i);
 					}
 					
 					$pdf->SetXY($x,$y);
-					$pdf->Cell(287,50, '', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
+					$pdf->Cell(287,25, '', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
 					$pdf->Ln();
 			$this->order_master_model->insert_printed_barcode_qrcode($post,$qrcode.'-'.$i,$qrcode2.'-'.$i,'Qrcode',$product_id,$active_status,$plant_id,$user_id);
 				}
@@ -1052,10 +1104,11 @@
 					//$pdf->write1DBarcode('Sanjay1234'.'-'.$i, 'C128B', 60, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
 					//$pdf->write1DBarcode('Sanjay56789'.'-'.$i, 'C128B', 140, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
 					
-					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
-					$pdf->Text(110, $y, 'This is First Code');
-					$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
-					$pdf->Text(150, $y, 'This is Second Code');
+					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->SetFont('helvetica', '', 5);
+					$pdf->Text(100, $y+11, 'This is First Code');
+					//$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
+					//$pdf->Text(150, $y, 'This is Second Code');
 					
 					//$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,L', 20, 150, 50, 50, $style, 'N');
 					//$pdf->Text(20, 145, 'QRCODE Q-Sanjay');
@@ -1193,6 +1246,7 @@ $style = array(
 
 // QRCODE,Q : QR-CODE Better error correction
 $pdf->write2DBarcode('Sanjay Testing Code 1', 'QRCODE,Q', 20, 150, 50, 50, $style, 'N');
+$pdf->SetFont('helvetica', '', 4);
 $pdf->Text(20, 145, 'QRCODE Q-Sanjay');
 
 // -------------------------------------------------------------------

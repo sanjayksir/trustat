@@ -29,11 +29,6 @@ class ConsumerModel extends CI_Model {
     
     
 	
-	
-	
-	
-	
-	
     public function sendFCM($mess,$id) {
 $url = 'https://fcm.googleapis.com/fcm/send';
 
@@ -246,5 +241,47 @@ return $result;
         return $items;
     }	
 
-
+	
+	
+	public function findConsumerKids($userid){
+        if($userid == null){
+            return false;
+        }
+        
+   $query = $this->db->select('*')
+                ->from('consumer_kid_details')               
+                ->where_in('consumer_id', $userid)
+                ->get()
+                ->result();
+        if(empty($query)){
+            return false;
+        }
+        //echo "<pre>";print_r($query);die;
+        $items = [];
+        foreach($query as $row){
+            $item = [
+				'kid_id' => $row->kid_id,
+				'consumer_id' => $row->consumer_id,
+				'kid_name' => $row->kid_name,
+                'kid_gender' => $row->kid_gender,
+                'kid_phone_number' => $row->kid_phone_number,
+                'kid_dob' => $row->kid_dob,
+                'kid_height' => $row->kid_height,
+				'kid_weight' => $row->kid_weight,
+				'kid_hobbies' => $row->kid_hobbies,
+				'kid_sports_like' => $row->kid_sports_like,
+				'kid_entertainment_like' => $row->kid_entertainment_like,
+				'create_date' => $row->create_date,
+				'modified_date' => $row->modified_date,
+				'ip' => $row->ip,
+				'status' => $row->status,
+            ];
+                       
+            $items[] = $item;
+        }
+        return $items;
+    }
+	
+	
+	
 }

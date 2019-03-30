@@ -315,10 +315,55 @@ $("#product").html(msg);
 								<?php $customer_id = $this->session->userdata('admin_user_id'); ?>
 								  <div class="form-group row">
                                   <div class="col-sm-12">
-                                  <label for="form-field-8">Select Consumers</label>
+                           <label for="form-field-8">Select Consumers</label><?php 
+						   
+						   function reverse_birthday( $years ){
+								return date('Y-m-d', strtotime($years . ' years ago'));
+								}
+								if($csc_consumer_min_age=='0') {
+								$csc_consumer_min_dob = '';
+									} else {
+								$csc_consumer_min_dob = reverse_birthday( $csc_consumer_min_age );
+									}
+								if($csc_consumer_max_age=='0') {
+								$csc_consumer_max_dob = '';
+									} else {
+								$csc_consumer_max_dob = reverse_birthday( $csc_consumer_max_age );
+									}
+								
+
+								
+									
+						   $AllSelectedConsumersByACustomer = AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob);
+				
+				foreach ($AllSelectedConsumersByACustomer as $consumer_id)  
+				{  				
+					//echo $consumer_id . ", ";
+				  
+				} 
+				
+				
+						  // echo $csc_consumer_min_age . "<br>";
+							 
+									
+								
+								//echo $bd;
+						    
+	
+						   //echo $csc_consumer_min_age . "<br>";
+						    //echo $csc_consumer_max_age . "<br>";
+							 //echo $csc_consumer_max_age . "<br>";
+							 // echo $csc_consumer_city . "<br>";
+							  // echo $csc_consumer_pin . "<br>";
+						   
+						   //$gender = "female";
+						   
+						  // echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_age, $csc_consumer_max_age); ?>
                                   <select name="number_of_consumers" id="number_of_consumers" class="form-control">
 										<option value="<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>	
+										<option value="<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>">Filtered Consumers (<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>)</option>
 								  </select>
+								  
                                   </div>
                                   </div>
 
@@ -433,8 +478,6 @@ $("#product").html(msg);
 		return false;
 	} 
 }
-
-
     </script>
 
     <script>$(function () {
@@ -443,8 +486,6 @@ $("#product").html(msg);
     //initializing datepicker
     $('.datepicker').datepicker({format:'yyyy-mm-dd', startDate: today,minDate: new Date()  });
     });
-
-
 
     $("form#frm").validate({
     rules: {

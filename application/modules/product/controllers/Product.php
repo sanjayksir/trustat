@@ -231,6 +231,8 @@
         }
         ##--------------- pagination start ----------------##
         // init params
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
         $params = array();
         if(!empty($this->input->get('page_limit'))){
             $limit_per_page = $this->input->get('page_limit');
@@ -238,7 +240,14 @@
             $limit_per_page = $this->config->item('pageLimit');
         }
         $this->config->set_item('pageLimit', $limit_per_page);
-        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		
+		if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+		
+		 
         $srch_string = $this->input->get('search');
 
         if (empty($srch_string)) {
@@ -246,7 +255,13 @@
         }
         $total_records = $this->Product_model->total_product_listing($srch_string);
         $params["product_list"] = $this->Product_model->product_listing($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('product/list_product', $total_records);
+		if($user_id>1){
+		$params["links"] = Utils::pagination('product/list_product', $total_records);
+			}else{
+			$params["links"] = Utils::pagination('product/list_product/' . $customer_id, $total_records, null, 4);
+			}
+		
+        
         $this->load->view('product_list', $params);
     }
 // list assigned products to Plant controller
@@ -1244,7 +1259,7 @@ function list_assigned_products() {
 		
 				
 		// this message for app$vquery = "Congratulations! Your Loyalty Points redumption request is processed successfully, we will update you for further information.";	
-		$vquery = $coupon_vendor . " Voucher for Rs." . $points_redeemed . "has been sent to your address" .$consumer_address. "vide courier number". $courier_number;  
+		$vquery = $coupon_vendor . " voucher for Rs." . $points_redeemed . " has been sent to your address " .$consumer_address. " vide courier number ". $courier_number;  
 		} else{
 			$vquery = "Your Loyalty Points redumption request is still pending...";	
 		}
@@ -1447,7 +1462,9 @@ function list_assigned_products() {
 
 	 public function list_all_consumers() {
         $this->checklogin();
-        
+       $user_id = $this->session->userdata('admin_user_id');
+	   $customer_id = $this->uri->segment(3);
+		
         ##--------------- pagination start ----------------##
         // init params
         $params = array();
@@ -1457,7 +1474,14 @@ function list_assigned_products() {
             $limit_per_page = $this->config->item('pageLimit');
         }
         $this->config->set_item('pageLimit', $limit_per_page);
-        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        //$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		
+		if(($user_id==1) && ($customer_id!="")){
+		$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}else{
+			$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}
+			
         $srch_string = $this->input->get('search');
 
         if (empty($srch_string)) {
@@ -1465,7 +1489,15 @@ function list_assigned_products() {
         }
         $total_records = $this->Product_model->total_all_concumers($srch_string);
         $params["list_all_consumers"] = $this->Product_model->list_all_consumers($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('product/list_all_consumers_tpl', $total_records);
+		
+		if(($user_id==1) && ($customer_id!="")){
+		 $params["links"] = Utils::pagination('product/list_all_consumers/' . $customer_id, $total_records, null, 4);
+			}else{
+			 $params["links"] = Utils::pagination('product/list_all_consumers', $total_records);
+			}
+       
+		
+		
         $this->load->view('list_all_consumers_tpl', $params);
     }
 	

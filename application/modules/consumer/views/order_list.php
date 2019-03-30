@@ -42,11 +42,11 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                     <li>
 
-                        <a href="#">Order list</a>
+                        <a href="#">coming soon... </a>
 
                     </li>
 
-                    <li class="active">List Customers</li>
+                    <li class="active">coming soon...</li>
 
                 </ul><!-- /.breadcrumb -->
 
@@ -73,7 +73,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
 
 
-                        Comming Soon....
+                        coming soon....
 
                     </div>
 

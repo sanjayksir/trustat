@@ -93,7 +93,7 @@
 				//echo get_industry_name_by_id($string);
 				
 				?></td>
-                <td align="center"><a class="green" href="#" onClick="edit_menu(<?php echo $val['product_id'];?>);" title="Edit Menu"><i class="ace-icon fa fa-pencil bigger-130"></i> </a> &nbsp; <a class="green del_atert" href="javascript:void(0);"  onclick="return deleteAlert('<?php echo $val['product_id'];?>');"  title="Delete Attribute"><i class="ace-icon fa fa-trash-o bigger-120"></i></a> </td>
+                <td align="center"><a class="green" href="#" onClick="edit_menu(<?php echo $val['product_id'];?>);" title="Edit Assigned Industries"><i class="ace-icon fa fa-pencil-square-o bigger-130"></i> </a> &nbsp; <!--<a class="green" href="#" onClick="edit_attribute_name(<?php echo $val['product_id'];?>);" title="Edit Attribute Name"><i class="ace-icon fa fa-pencil bigger-130"></i> </a> --> &nbsp; <a class="green del_atert" href="javascript:void(0);"  onclick="return deleteAlert('<?php echo $val['product_id'];?>');"  title="Delete Attribute"><i class="ace-icon fa fa-trash-o bigger-120"></i></a> </td>
 
           </tr>
 
@@ -131,6 +131,12 @@
 function edit_menu(id){
 
  	window.location.href="<?php echo base_url(); ?>attribute/get_edit_section/"+id;
+
+ }
+ 
+ function edit_attribute_name(id){
+
+ 	window.location.href="<?php echo base_url(); ?>attribute/edit_attribute_name/"+id;
 
  }
 

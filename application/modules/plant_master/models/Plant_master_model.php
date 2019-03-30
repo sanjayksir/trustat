@@ -395,14 +395,24 @@ class plant_master_model extends CI_Model {
 	function total_get_location_list_all($srch_string = '') {
         $result = '';
         $user_id = $this->session->userdata('admin_user_id');
+		 $customer_id = $this->uri->segment(3);
         $srch_string = trim($srch_string);
         if ($user_id > 1) {
+			 if (!empty($customer_id)) {
             //$this->db->where('created_by', $user_id);
             if (!empty($srch_string)) {
+                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%') and (created_by=$customer_id)");
+            } else {
+               // $this->db->where(array('created_by' => $user_id));
+            }
+			} else {
+                if (!empty($srch_string)) {
                 $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%') and (created_by=$user_id)");
             } else {
                 $this->db->where(array('created_by' => $user_id));
             }
+            }
+			
         } else {
             if (!empty($srch_string)) {
                 $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%')");
@@ -411,6 +421,11 @@ class plant_master_model extends CI_Model {
 
         $this->db->select('count(1) as total_rows');
         $this->db->from('location_master');
+		if($user_id>1){
+			if(!empty($customer_id)){ 
+			$this->db->where('created_by', $customer_id);
+			}
+		}
         $query = $this->db->get(); //echo '***'.$this->db->last_query();
         if ($query->num_rows() > 0) {
             $result = $query->result_array();
@@ -423,13 +438,24 @@ class plant_master_model extends CI_Model {
         $result = '';
         $srch_string = trim($srch_string);
         $user_id = $this->session->userdata('admin_user_id');
+        $customer_id = $this->uri->segment(3);
+        
         if ($user_id > 1) {
+			 if (!empty($customer_id)) {
             //$this->db->where('created_by', $user_id);
             if (!empty($srch_string)) {
-                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%'  OR plant_code LIKE '%$srch_string%') and (created_by=$user_id)");
+                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%') and (created_by=$customer_id)");
+            } else {
+               // $this->db->where(array('created_by' => $user_id));
+            }
+			} else {
+                if (!empty($srch_string)) {
+                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%') and (created_by=$user_id)");
             } else {
                 $this->db->where(array('created_by' => $user_id));
             }
+            }
+			
         } else {
             if (!empty($srch_string)) {
                 $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%')");
@@ -438,6 +464,11 @@ class plant_master_model extends CI_Model {
 
         $this->db->select('*');
         $this->db->from('location_master');
+		if($user_id>1){
+			if(!empty($customer_id)){ 
+			$this->db->where('created_by', $customer_id);
+			}
+		}
         $this->db->order_by('location_id', 'asc');
         if (empty($srch_string)) {
             $this->db->limit($limit, $start);

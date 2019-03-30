@@ -248,17 +248,25 @@
  // Location Work 
 	  public function list_locations() {
  		 $data					= array();
-		 
+		 $user_id = $this->session->userdata('admin_user_id');
+		 $customer_id = $this->uri->segment(3);
 		 #--------------- pagination start ----------------##
 		 // init params
         $params = array();
         $limit_per_page = 20;
-        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        //$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		if(($user_id==1) && ($customer_id!="")){
+		$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}else{
+			$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}
+			
 		$srch_string =  $this->input->post('search'); 
 		if(empty($srch_string)){
 			$srch_string ='';
 		}
-		  $user_id 	= $this->session->userdata('admin_user_id');	
+		  //$user_id 	= $this->session->userdata('admin_user_id');	
+			
 		 // $total_records 	= $this->plant_master_model->total_get_user_list_all($srch_string);
 		  $total_records 	= $this->plant_master_model->total_get_location_list_all($srch_string);
 		 
@@ -271,7 +279,14 @@
   			
 			//$data['listingData']=$this->Category_model->load_listingData();
              
-            $config['base_url'] = base_url() . 'plant_master/list_locations';
+            //$config['base_url'] = base_url() . 'plant_master/list_locations';
+			
+			if(($user_id==1) && ($customer_id!="")){
+		           $config['base_url'] = base_url() . 'plant_master/list_locations/' . $customer_id;
+			}else{
+			        $config['base_url'] = base_url() . 'plant_master/list_locations';
+			}
+			
             $config['total_rows'] = $total_records;
             $config['per_page'] = $limit_per_page;
             $config["uri_segment"] = 3;

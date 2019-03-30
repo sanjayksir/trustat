@@ -77,13 +77,13 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="col-xs-12">
 
                         <div class="widget-box widget-color-blue">
-                            <!--<div class="widget-header widget-header-flat">
+                            <div class="widget-header widget-header-flat">
                                 <h5 class="widget-title bigger lighter">MANAGE PRODUCTS</h5>
                                 <div class="widget-toolbar">
-                                    <a href="<?php echo base_url('product/add_product') ?>" class="btn btn-xs btn-warning" title="Add Product">Add <?php echo $label; ?> </a>
+                                    <a href="<?php echo base_url('product/add_product') ?>" class="btn btn-xs btn-warning" title="Add Product">Add New Product<?php //echo $label; ?> </a>
                                 </div>
                             </div>
-							-->
+							
                             <div class="widget-body">
                                 <div class="row filter-box">
                                     <form id="form-filter" action="" method="get" class="form-horizontal" >
@@ -115,7 +115,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th class="hidden-480">Product Name</th>
                                     <th class="hidden-480">Product SKU</th>
                                     <th class="hidden-480">Product Industry</th>
-                                    <th>Created By</th>
+                                    <!-- <th>Created By</th>-->
                                     <th>Creation Date</th>
                                     <th>Edit/DeleteProduct </th>
                                     <th>Product Review (View/Edit/Add)</th>
@@ -126,9 +126,18 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 									  
                         <?php
                         if(count($product_list)>0){
-                            $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+						$user_id = $this->session->userdata('admin_user_id');
+						$customer_id = $this->uri->segment(3);
+					if($user_id>1){
+					$page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+						}else{
+					$page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
+					}
+							
+                            
+							
                             $sno =  $page + 1;
-                        $i=0;
+							$i=0;
                         foreach ($product_list as $attr){
                         $i++;
                          ?>
@@ -150,7 +159,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                    echo $indus;
                                    ?></div>
                                 </td>
-                                             <td><?php echo getUserFullNameById($attr['created_by']);?></td>
+                                              <!--<td><?php echo getUserFullNameById($attr['created_by']);?></td>-->
                                                  <td><?php echo(date('j M Y H:i:s D', strtotime($attr['created_date'])));  ?></td>
                                                   <td><form name="frm_<?php echo $attr['id'];?>" id="frm_<?php echo $attr['id'];?>" method="post" action="">
  														<div class="hidden-sm hidden-xs btn-group">

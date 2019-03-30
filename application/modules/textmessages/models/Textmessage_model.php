@@ -509,6 +509,11 @@
 			} return $result;
 		}
 		
+		
+		function reverse_birthday( $years ){
+								return date('Y-m-d', strtotime($years . ' years ago'));
+								}
+								
 		function save_push_sent_text_message($customer_id,$text_message,$send_status){
 				if($send_status=='0'){
 				$this->db->query("delete from push_text_message where customer_id='".$customer_id."' ");
@@ -517,15 +522,47 @@
 				return true;
 			}else{
 			
-			
+			/*
  				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				foreach ($query->result() as $user)  
 				{  
 				//$consumer_ida = $user->id; 
 				//echo $consumer_ida; exit;
+				*/
+				
+				
+				
+			$this->db->select('*');
+			$this->db->from('consumer_selection_criteria');
+			//$this->db->where('transaction_lr_type', "Loyalty");
+			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Communication-Text"));
+			$query=$this->db->get();						   
+        $csc_consumer_gender = $query->row()->consumer_gender;
+		$csc_consumer_min_age = $query->row()->consumer_min_age;
+		$csc_consumer_max_age = $query->row()->consumer_max_age;
+		$csc_consumer_city = $query->row()->consumer_city;
+		$csc_consumer_pin = $query->row()->consumer_pin;
+		
+							
+								if($csc_consumer_min_age=='0') {
+								$csc_consumer_min_dob = '';
+									} else {
+								$csc_consumer_min_dob = $this->reverse_birthday( $csc_consumer_min_age );
+									}
+								if($csc_consumer_max_age=='0') {
+								$csc_consumer_max_dob = '';
+									} else {
+								$csc_consumer_max_dob = $this->reverse_birthday( $csc_consumer_max_age );
+									}
+		
+		//$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+		$AllSelectedConsumersByACustomer = AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob);
+				
+				foreach ($AllSelectedConsumersByACustomer as $consumer_id)  
+				{ 
 				$insertData=array(
 					"customer_id"	 => $customer_id,
-					"consumer_id"	 => $user->consumer_id,
+					"consumer_id"	 => $consumer_id,
 					"text_message"	 => $text_message,
 					"message_push_date"	 => date("Y-m-d H:i:s"),
 					"message_active"	 => "1"
@@ -555,7 +592,22 @@
 			}
 		
 		
-		function update_push_text_message_request($message_id,$send_status){
+		
+		function update_push_text_message_request($message_id, $send_status){
+ 				
+				$insertData=array(
+					"sent_date"	 => date("Y-m-d H:i:s"),
+					"send_status"	 => $send_status
+					);
+					$this->db->where('id', $message_id);
+				  $this->db->update("push_text_message_request", $insertData);
+				
+					$this->session->set_flashdata('success', 'Text Message sent Successfully!');
+					return true;
+			 
+			}
+			
+		function update_purchased_purchased_loyalty_points($message_id,$send_status){
  				
 				$insertData=array(
 					"approval_date"	 => date("Y-m-d H:i:s"),
@@ -564,10 +616,13 @@
 					$this->db->where('id', $message_id);
 				  $this->db->update("purchased_loyalty_points", $insertData);
 				
-					$this->session->set_flashdata('success', 'Text Message Push Request sent Successfully!');
+					$this->session->set_flashdata('success', 'Text Message sent Successfully!');
 					return true;
 			 
 			}
+			
+			
+			
 		
 		
 		public function sendFCM($mess,$id) {

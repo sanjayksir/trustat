@@ -3,9 +3,26 @@
         <div class="alert mdl-alert-msg"></div>
         <form name="frm" id="order-form" action="#" method="POST">
 			<div class="form-group">
+                <label>From Barcode</label>
+				<input type="text" class="form-control" name="first_code_number" id="first_code_number" placeholder="Please enter From Barcode" required />
+            </div>
+			
+			<div class="form-group">
+                <label>To Barcode</label>
+				<input type="text" class="form-control" name="last_code_number" id="last_code_number" placeholder="Please enter To Barcode" required />
+            </div>
+			
+			<div class="form-group">
                 <label>Batch Id</label>
 				<input type="text" class="form-control" name="batch_id" id="batch_id" placeholder="Please enter Batch Id" required />
             </div>
+			
+								<div class="form-group">
+             <label>Batch Mfg Date</label>
+				<input type="text" class="form-control" name="batch_mfg_date" id="batch_mfg_date" placeholder="Please enter Batch Mfg Date" value=" <?php echo date('Y-m-d'); ?>" required />
+            </div>
+			
+			<!--
             <div class="form-group">
                 <label>Plant Name</label>
                 <select class="form-control" name="plant_id" id="plant_id" onchange="barcode.getOrder(this,'order_id')">
@@ -25,6 +42,7 @@
 			
 			
 			
+			
             <div class="form-group">
                 <label>Printed Code <a href="javascript:void(0);" id="checkall" class="hide checked" onclick="barcode.checkAll(this)">|&nbsp;Toggle Selection</a></label>
                 <div class="col-sm-12" id="printed-code" style="height: 100px; overflow-x:hidden;"></div>
@@ -37,6 +55,8 @@
                 </select>
             </div>
 			<?php } ?>
+			-->
+			
             <div class="form-group">
                     <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
                         <input class="btn btn-info" type="submit" name="submit" value="Submit" id="savebtn" onclick="event.preventDefault();barcode.saveForm(this.event)" />
@@ -48,6 +68,8 @@
         </form>
     </div>
 </div>
+
+
 <script type="text/javascript">
     var barcode = {};
     $('.alert').hide();

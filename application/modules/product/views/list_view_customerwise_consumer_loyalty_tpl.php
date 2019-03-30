@@ -167,10 +167,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                  <td><?php echo $attr['points']; ?></td>
 								 <td><?php echo getConsumerNameById($attr['consumer_id']); ?></td>
 								 <td><?php echo getConsumerMobileNumberById($attr['consumer_id']); ?></td>
-								 <td><?php echo $character->longitude; echo ", ";	echo $character->latitude; 								
-
- ?>
-								 
+								 <td><?php echo $character->registration_address;	?>
+								 <!--<a href="https://www.mapdevelopers.com/geocode_tool.php?lat=<?php echo $character->latitude; ?>&lng=<?php echo $character->longitude; ?>" target="_blank"><?php echo $character->latitude; echo ", ";	echo $character->longitude;	?></a>-->
 								 </td>
                                    <!--<td><?php echo $attr['transaction_lr_type']; ?></td>
 								   <td><?php echo $attr['total_accumulated_points']; ?></td>

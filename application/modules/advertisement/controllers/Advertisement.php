@@ -211,6 +211,22 @@
         if (empty($srch_string)) {
             $srch_string = '';
         }
+		
+		$customer_id = $this->session->userdata('admin_user_id');
+		
+			$this->db->select('*');
+			$this->db->from('consumer_selection_criteria');
+			//$this->db->where('transaction_lr_type', "Loyalty");
+			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Advertisement-Video"));
+			$query=$this->db->get();
+						   
+        $params["csc_consumer_gender"] = $ConsumerSelectionCriteria=$query->row()->consumer_gender;
+		$params["csc_consumer_min_age"] = $ConsumerSelectionCriteria=$query->row()->consumer_min_age;
+		$params["csc_consumer_max_age"] = $ConsumerSelectionCriteria=$query->row()->consumer_max_age;
+		$params["csc_consumer_city"] = $ConsumerSelectionCriteria=$query->row()->consumer_city;
+		$params["csc_consumer_pin"] = $ConsumerSelectionCriteria=$query->row()->consumer_pin;
+		
+		
         $total_records = $this->Advertisement_model->total_advertisement_listing($srch_string);
         $params["orderListing"] = $this->Advertisement_model->advertisement_listing($limit_per_page, $start_index, $srch_string);
         $params["links"] = Utils::pagination('advertisement/launch_advertisement', $total_records);
@@ -813,10 +829,15 @@ function list_assigned_Advertisements() {
 	 	
 		echo $this->Advertisement_model->sendFCM("addddd...",'AAAA446l5pE:APA91bE3nQ0T5E9fOH-y4w_dkOLU1e9lV7Wn0OmVLaKNnE8tXcZ0eC3buduhCwHL1ICaJ882IHfLy-akAe7Nih7M1RewkO9IzAR-ELdPgmORtb7KjriRrQspVHkIb9GRZPOjXuqfPInlOAly5-65sEEUbGlcoujMgw');
 		 
-		
 		 	}
 		 	
 	
+	
+	function reverse_birthday( $years ){
+			return date('Y-m-d', strtotime($years . ' years ago'));
+							}
+							
+							
 	function save_push_advertisement(){
 	 	$this->checklogin();		
 		$customer_id=$this->input->post('c_id');
@@ -826,19 +847,63 @@ function list_assigned_Advertisements() {
 		$Chk = $this->input->post('Chk');
 		
 		 echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$promotion_id,$promotion_title,$Chk);
+		 
+		 if($Chk==2){
+		$value=2;
+		} else {
+			$value=1;
+		}
+		
 		 echo $status= $this->Advertisement_model->change_status2($promotion_id,$Chk);
+		 
+		 /*
 		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				
 				foreach ($query->result() as $user)  
 				{
 		 $consumer_id = $user->consumer_id;
-		 $fb_token = getConsumerFb_TokenById($consumer_id);
-		 
-		 $this->Advertisement_model->sendFCM("An Advertisement Posted!!..", $fb_token);
+		*/
+		
+		$this->db->select('*');
+			$this->db->from('consumer_selection_criteria');
+			//$this->db->where('transaction_lr_type', "Loyalty");
+			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Advertisement-Video"));
+			$query=$this->db->get();						   
+        $csc_consumer_gender = $query->row()->consumer_gender;
+		$csc_consumer_min_age = $query->row()->consumer_min_age;
+		$csc_consumer_max_age = $query->row()->consumer_max_age;
+		$csc_consumer_city = $query->row()->consumer_city;
+		$csc_consumer_pin = $query->row()->consumer_pin;
+									
+								
+								if($csc_consumer_min_age=='0') {
+								$csc_consumer_min_dob = '';
+									} else {
+								$csc_consumer_min_dob = $this->reverse_birthday( $csc_consumer_min_age );
+									}
+									
+								if($csc_consumer_max_age=='0') {
+								$csc_consumer_max_dob = '';
+									} else {
+								$csc_consumer_max_dob = $this->reverse_birthday( $csc_consumer_max_age );
+									}
+		
+		//$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+		$AllSelectedConsumersByACustomer = AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob);
+		
+				
+				foreach ($AllSelectedConsumersByACustomer as $consumer_id) 
+				{
+
+		$fb_token = getConsumerFb_TokenById($consumer_id);
+		$mnv51_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 51)->get()->row();
+		$mnvtext51 = $mnv51_result->message_notification_value;
+		 //$this->Advertisement_model->sendFCM("Here is a Advertisement for you from howzzt.", $fb_token);
+		 $this->Advertisement_model->sendFCM($mnvtext51, $fb_token);
 		 
 			$NTFdata['consumer_id'] = $consumer_id; 
 			$NTFdata['title'] = "howzzt advertisement";
-			$NTFdata['body'] = "An Advertisement Posted!!.."; 
+			$NTFdata['body'] = $mnvtext51; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
 			$NTFdata['status'] = 1; 
 			

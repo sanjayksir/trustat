@@ -621,15 +621,43 @@
 				*/
 				/*  new work */
 				
-				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+				//$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				
-				foreach ($query->result() as $user)  
+				$this->db->select('*');
+			$this->db->from('consumer_selection_criteria');
+			//$this->db->where('transaction_lr_type', "Loyalty");
+			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Survey-Video"));
+			$query=$this->db->get();						   
+        $csc_consumer_gender = $query->row()->consumer_gender;
+		$csc_consumer_min_age = $query->row()->consumer_min_age;
+		$csc_consumer_max_age = $query->row()->consumer_max_age;
+		$csc_consumer_city = $query->row()->consumer_city;
+		$csc_consumer_pin = $query->row()->consumer_pin;
+		
+		function reverse_birthday( $years ){
+								return date('Y-m-d', strtotime($years . ' years ago'));
+								}
+								if($csc_consumer_min_age=='0') {
+								$csc_consumer_min_dob = '';
+									} else {
+								$csc_consumer_min_dob = reverse_birthday( $csc_consumer_min_age );
+									}
+								if($csc_consumer_max_age=='0') {
+								$csc_consumer_max_dob = '';
+									} else {
+								$csc_consumer_max_dob = reverse_birthday( $csc_consumer_max_age );
+									}
+		
+		//$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+		$AllSelectedConsumersByACustomer = AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob);
+				
+				foreach ($AllSelectedConsumersByACustomer as $consumer_id)  
 				{  
-				//$consumer_ida = $user->id; 
+				//$consumer_id = $user; 
 				//echo $consumer_ida; exit;
 				$insertData=array(
 					"customer_id"	 => $customer_id,
-					"consumer_id"	 => $user->consumer_id,
+					"consumer_id"	 => $consumer_id,
 					"product_id"	 => $product_id,
 					"promotion_id"	 => $promotion_id,
 					"promotion_title"	 => $promotion_title,

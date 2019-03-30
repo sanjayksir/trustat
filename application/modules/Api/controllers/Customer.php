@@ -413,10 +413,10 @@ class Customer extends ApiController {
 		//echo print_r($result[0]['min_shipper_pack_level']) . "<br>"; 
 		//echo print_r($userParentId) . "<br>";
 		//echo print_r($result);
-		//die;
+		
 			
-			//echo print_r($result[0]['active_status']);
-        
+		//	echo print_r($result[0]['active_status']);
+        //die;
         /*
 		foreach(explode(',',$data['bar_code']) as $ind => $code){
            $this->db->or_where('barcode_qr_code_no',$code);
@@ -425,7 +425,7 @@ class Customer extends ApiController {
 		
 		$current_active_status = $result[0]['active_status'];
 		if($result[0]['min_shipper_pack_level']==$result[0]['max_shipper_pack_level']){
-		if($current_active_status==1){
+		if($current_active_status==0){
 		 $isAnyChildAdded = $this->Productmodel->isAnyChildAdded($data['bar_code']);
 		
 		//if($isAnyChildAdded==true){
@@ -505,6 +505,7 @@ class Customer extends ApiController {
             ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
             ['field' =>'batch_id','label'=>'Packet Level','rules' => 'required'],
             ['field' =>'location_id','label'=>'Location ID','rules' => 'required'],
+			['field' =>'batch_mfg_date','label'=>'Batch ID Date','rules' => 'required'],
 			['field' =>'quantity','label'=>'Number Of Code Items','rules' => 'required']
         ];
         $errors = $this->Productmodel->validate($data,$validate);
@@ -540,7 +541,7 @@ class Customer extends ApiController {
 			
 		//$this->db->set('active_status',1);
         $this->db->set('batch_id', $data['batch_id']);
-        $this->db->set('batch_mfg_date', (new DateTime('now'))->format('Y-m-d H:i:s'));
+        $this->db->set('batch_mfg_date', $data['batch_mfg_date']);
        // $this->db->set('customer_id',$user['user_id']);
         //$this->db->set('modified_at', (new DateTime('now'))->format('Y-m-d H:i:s'));
 		//$this->db->set('activation_date', (new DateTime('now'))->format('Y-m-d H:i:s'));
@@ -564,18 +565,21 @@ class Customer extends ApiController {
 			
 			$ABilogdata['batch_id'] = $data['batch_id'];  
 			$ABilogdata['product_id'] = $result[0]['product_id']; 
-			$ABilogdata['product_name'] = $data['bar_code'];
+			$ABilogdata['product_name'] = get_products_name_by_id($result[0]['product_id']);
 			$ABilogdata['order_id'] = $userId; 
 			$ABilogdata['order_number'] = $userId; 
 			$ABilogdata['order_date'] = date('Y-m-d H:i:s'); 
+			$ABilogdata['print_id'] = $userId; 
 			$ABilogdata['print_date'] = date('Y-m-d H:i:s');  
 			$ABilogdata['location_id'] = $data['location_id']; 
 			$ABilogdata['product_sku'] = $result[0]['product_sku'];
 			$ABilogdata['quantity'] = $data['quantity']; 
 			$ABilogdata['first_code_number'] = $data['bar_code'];
 			$ABilogdata['batchid_assigned_by'] = $userId;
+			$ABilogdata['batchid_assign_date'] = date('Y-m-d H:i:s'); 
+			$ABilogdata['issue_location'] = $data['location_id']; 
 			$ABilogdata['last_code_number'] = $data['bar_code'];
-			$ABilogdata['batch_mfg_date'] = date('Y-m-d H:i:s');  
+			$ABilogdata['batch_mfg_date'] = $data['batch_mfg_date'];  
 			$ABilogdata['status'] = 1;
 				
 			

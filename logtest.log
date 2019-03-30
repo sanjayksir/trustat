@@ -1,0 +1,23 @@
+couldn't create error file for command: permission denied
+couldn't create error file for command: permission denied
+    while executing
+"open [concat [list | ] $opt $cmdp $args] w"
+    (procedure "git_write" line 23)
+    invoked from within
+"git_write update-index --add --remove -z --stdin"
+    (procedure "update_index" line 13)
+    invoked from within
+"update_index  $txt  $pathList  [concat $after {ui_status [mc "Ready to commit."]}]"
+    (procedure "add_helper" line 32)
+    invoked from within
+"add_helper [mc "Adding all changed files"] $paths"
+    (procedure "do_add_all" line 33)
+    invoked from within
+"do_add_all"
+    invoked from within
+".vpane.lower.commarea.buttons.incall invoke "
+    invoked from within
+".vpane.lower.commarea.buttons.incall instate !disabled { .vpane.lower.commarea.buttons.incall invoke } "
+    invoked from within
+".vpane.lower.commarea.buttons.incall instate pressed { .vpane.lower.commarea.buttons.incall state !pressed; .vpane.lower.commarea.buttons.incall insta..."
+    (command bound to event)

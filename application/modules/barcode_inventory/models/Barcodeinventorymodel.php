@@ -89,7 +89,9 @@ class BarcodeInventoryModel extends CI_Model {
         $this->db->join('transactions_codes AS tc', 'tc.product_code=pbq.barcode_qr_code_no','left');
         $this->db->join('products AS p', 'p.id=pbq.product_id');
         $this->db->join('order_master AS om', 'om.order_id=pbq.order_id');
+		if($user_id>1){
         $this->db->where('pbq.plant_id in (SELECT plant_id from assign_plants_to_users WHERE user_id="'.$user_id.'")');
+		}
         if(!empty($status)){
             $this->db->where('pbq.stock_status="'.$status.'"');
         }
@@ -122,7 +124,7 @@ class BarcodeInventoryModel extends CI_Model {
         }
         
         $this->db->limit($limit, $offset);
-        $this->db->order_by('tc.id', 'DESC');
+        $this->db->order_by('pbq.id', 'DESC');
         $query = $this->db->get();
         $total = $this->countAll($this->db->last_query());
         //echo "<pre>";print_r($query);die;
@@ -137,7 +139,9 @@ class BarcodeInventoryModel extends CI_Model {
         $this->db->join('transactions_codes AS tc', 'tc.product_code=pbq.barcode_qr_code_no','left');
         $this->db->join('products AS p', 'p.id=pbq.product_id');
         $this->db->join('order_master AS om', 'om.order_id=pbq.order_id');
+		if($user_id>1){
         $this->db->where('pbq.plant_id in (SELECT plant_id from assign_plants_to_users WHERE user_id="'.$user_id.'")');
+		}
         if(!empty($status)){
            $this->db->where('pbq.stock_status!="Customer_Code"');
 		   $this->db->where('pbq.stock_status!="Not Received"');
@@ -157,7 +161,7 @@ class BarcodeInventoryModel extends CI_Model {
 	
 	
     public function barcodeDetails($orderId) {
-        $this->db->select(['pbq.plant_id','pbq.product_id', 'om.product_sku', 'pbq.barcode_qr_code_no', 'om.order_no','om.quantity', 'om.created_date', 'pbq.modified_at', 'p.delivery_method', 'pbq.stock_status', 'pbq.active_status']);
+        $this->db->select(['pbq.print_id','pbq.plant_id','pbq.product_id', 'om.product_sku', 'pbq.barcode_qr_code_no', 'om.order_no','om.quantity', 'om.created_date', 'pbq.modified_at', 'p.delivery_method', 'pbq.stock_status', 'pbq.active_status']);
         $this->db->from('printed_barcode_qrcode AS pbq');
         $this->db->join('products AS p', 'p.id=pbq.product_id');
         $this->db->join('order_master AS om', 'om.order_id=pbq.order_id');
@@ -167,6 +171,37 @@ class BarcodeInventoryModel extends CI_Model {
         //echo $this->db->last_query();die(' END');
         return $items;
     }
+	
+	    public function barcodeDetailsByProductID($ProductID) {
+        $this->db->select('barcode_qr_code_no');
+        $this->db->from('printed_barcode_qrcode');
+        //$this->db->join('products AS p', 'p.id=pbq.product_id');
+        //$this->db->join('order_master AS om', 'om.order_id=pbq.order_id');
+        $this->db->where(['product_id'=>$ProductID]);
+        $query = $this->db->get();
+        $items = $query->row_array();        
+        //echo $this->db->last_query();die(' END');
+        return $items;
+    }
+	
+function permissionssss($ProductID) {
+   $this->db->select("barcode_qr_code_no");
+   $this->db->from("printed_barcode_qrcode");
+   $this->db->where('product_id', $ProductID);
+   $query = $this->db->get();        
+   return $query->result();
+}
+
+
+function barcodeIDProductID($ProductID) {
+   $this->db->select("id");
+   $this->db->from("printed_barcode_qrcode");
+   $this->db->where('product_id', $ProductID);
+   $query = $this->db->get();        
+   return $query->result();
+}
+
+
 
     public function getAssignedPlant($userId = null) {
         if (is_null($userId)) {

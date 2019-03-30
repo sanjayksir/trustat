@@ -17,7 +17,7 @@ $parent  		= getCategoryParentName_ATTR($edited_data['parent']);
         <div class="widget-main">
           <div>
             <label for="form-field-8">Attribute Name</label>
-            <input name="attribute" id="attribute" type="text" class="form-control" value="<?php echo $menu;?>" placeholder="Attribute Name">
+            <input name="attribute" id="attribute" type="text" readonly class="form-control" value="<?php echo $menu;?>" placeholder="Attribute Name">
           </div>
           <hr>
           

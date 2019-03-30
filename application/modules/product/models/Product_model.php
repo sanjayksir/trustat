@@ -401,6 +401,7 @@
 	
 	function product_listing($limit,$start,$srch_string='') {
 		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
@@ -416,9 +417,11 @@
 		
 		$this->db->select("*");
 		$this->db->from("products");
-		//if($user_id>1){
-			//$this->db->where('created_by', $user_id);
-		//}
+		if($user_id>1){
+		$this->db->where('created_by', $user_id);
+			}else{
+			$this->db->where('created_by', $customer_id);
+			}
 		
 		$this->db->order_by("created_date", " desc");
 		$this->db->limit($limit, $start);
@@ -459,7 +462,7 @@
 	
 	function total_product_listing($srch_string='') {
 		$user_id 	= $this->session->userdata('admin_user_id');
-		 
+		 $customer_id = $this->uri->segment(3);
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
@@ -474,6 +477,11 @@
 		}
 		$this->db->select('count(1) as total_rows');
 		$this->db->from('products');
+		if($user_id>1){
+		$this->db->where('created_by', $user_id);
+			}else{
+			$this->db->where('created_by', $customer_id);
+			}
     		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -1420,28 +1428,42 @@
 		
     }
 	
-		function list_all_consumers($limit,$start,$srch_string='') {
+	function list_all_consumers($limit,$start,$srch_string='') {
 		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
+			if(!empty($customer_id)){ 
+			
 			if(!empty($srch_string)){ 
+ 				$this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%') and (created_by=$customer_id)");
+			}else{
+				$this->db->where(array('created_by'=>$customer_id));
+			}
+			
+			}else{
+				if(!empty($srch_string)){ 
  				$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%'");
 			}else{
-				//$this->db->where(array('created_by'=>$user_id));
-			}			
+				//$this->db->where(array('created_by'=>$customer_id));
+			}
+			}
+				
 		}else{
 			if(!empty($srch_string)){ 
- 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%'");
+ 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%' OR aadhaar_number LIKE '%$srch_string%' OR gender LIKE '%$srch_string%' OR dob LIKE '%$srch_string%' OR registration_address LIKE '%$srch_string%' OR alternate_mobile_no LIKE '%$srch_string%' OR street_address LIKE '%$srch_string%' OR city LIKE '%$srch_string%' OR state LIKE '%$srch_string%' OR pin_code LIKE '%$srch_string%' OR monthly_earnings LIKE '%$srch_string%' OR job_profile LIKE '%$srch_string%' OR education_qualification LIKE '%$srch_string%' OR type_vehicle LIKE '%$srch_string%' OR profession LIKE '%$srch_string%' OR marital_status LIKE '%$srch_string%' OR no_of_family_members LIKE '%$srch_string%' OR loan_car_housing LIKE '%$srch_string%' OR personal_loan LIKE '%$srch_string%' OR credit_card_loan LIKE '%$srch_string%' OR own_a_car LIKE '%$srch_string%' OR house_type LIKE '%$srch_string%' OR last_location LIKE '%$srch_string%' OR life_insurance LIKE '%$srch_string%' OR medical_insurance LIKE '%$srch_string%' OR height_in_inches LIKE '%$srch_string%' OR weight_in_kg LIKE '%$srch_string%' OR hobbies LIKE '%$srch_string%' OR sports LIKE '%$srch_string%' OR entertainment LIKE '%$srch_string%' OR spouse_gender LIKE '%$srch_string%' OR spouse_phone LIKE '%$srch_string%' OR spouse_dob LIKE '%$srch_string%' OR marriage_anniversary LIKE '%$srch_string%' OR spouse_work_status LIKE '%$srch_string%' OR spouse_edu_qualification LIKE '%$srch_string%' OR spouse_monthly_income LIKE '%$srch_string%' OR spouse_loan LIKE '%$srch_string%' OR spouse_personal_loan LIKE '%$srch_string%' OR spouse_credit_card_loan LIKE '%$srch_string%' OR spouse_own_a_car LIKE '%$srch_string%' OR spouse_house_type LIKE '%$srch_string%' OR spouse_height_inches LIKE '%$srch_string%' OR spouse_weight_kg LIKE '%$srch_string%' OR spouse_hobbies LIKE '%$srch_string%' OR spouse_sports LIKE '%$srch_string%' OR spouse_entertainment LIKE '%$srch_string%' OR modified_at LIKE '%$srch_string%'");
 			}
 		}
 		
 		$this->db->select("*");
 		$this->db->from("consumers");
-		//if($user_id>1){
-			//$this->db->where('created_by', $user_id);
-		//}
+		if($user_id>1){
+			if(!empty($customer_id)){ 
+			$this->db->where('created_by', $customer_id);
+			}
+		}
 		
-		//$this->db->order_by("created_at", " desc");
+		$this->db->order_by("id", " desc");
 		$this->db->limit($limit, $start);
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 		return $resultDt ;
@@ -1449,21 +1471,37 @@
 	
 	function total_all_concumers($srch_string='') {
 		$user_id 	= $this->session->userdata('admin_user_id');
-		 
+		$customer_id = $this->uri->segment(3);
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
+			if(!empty($customer_id)){ 
+			
 			if(!empty($srch_string)){ 
+ 				$this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%') and (created_by=$customer_id)");
+			}else{
+				$this->db->where(array('created_by'=>$customer_id));
+			}
+			
+			}else{
+				if(!empty($srch_string)){ 
  				$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%'");
 			}else{
-				//$this->db->where(array('created_by'=>$user_id));
-			}			
+				//$this->db->where(array('created_by'=>$customer_id));
+			}
+			}
+				
 		}else{
 			if(!empty($srch_string)){ 
- 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%'");
+ 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%' OR aadhaar_number LIKE '%$srch_string%' OR gender LIKE '%$srch_string%' OR dob LIKE '%$srch_string%' OR registration_address LIKE '%$srch_string%' OR alternate_mobile_no LIKE '%$srch_string%' OR street_address LIKE '%$srch_string%' OR city LIKE '%$srch_string%' OR state LIKE '%$srch_string%' OR pin_code LIKE '%$srch_string%' OR monthly_earnings LIKE '%$srch_string%' OR job_profile LIKE '%$srch_string%' OR education_qualification LIKE '%$srch_string%' OR type_vehicle LIKE '%$srch_string%' OR profession LIKE '%$srch_string%' OR marital_status LIKE '%$srch_string%' OR no_of_family_members LIKE '%$srch_string%' OR loan_car_housing LIKE '%$srch_string%' OR personal_loan LIKE '%$srch_string%' OR credit_card_loan LIKE '%$srch_string%' OR own_a_car LIKE '%$srch_string%' OR house_type LIKE '%$srch_string%' OR last_location LIKE '%$srch_string%' OR life_insurance LIKE '%$srch_string%' OR medical_insurance LIKE '%$srch_string%' OR height_in_inches LIKE '%$srch_string%' OR weight_in_kg LIKE '%$srch_string%' OR hobbies LIKE '%$srch_string%' OR sports LIKE '%$srch_string%' OR entertainment LIKE '%$srch_string%' OR spouse_gender LIKE '%$srch_string%' OR spouse_phone LIKE '%$srch_string%' OR spouse_dob LIKE '%$srch_string%' OR marriage_anniversary LIKE '%$srch_string%' OR spouse_work_status LIKE '%$srch_string%' OR spouse_edu_qualification LIKE '%$srch_string%' OR spouse_monthly_income LIKE '%$srch_string%' OR spouse_loan LIKE '%$srch_string%' OR spouse_personal_loan LIKE '%$srch_string%' OR spouse_credit_card_loan LIKE '%$srch_string%' OR spouse_own_a_car LIKE '%$srch_string%' OR spouse_house_type LIKE '%$srch_string%' OR spouse_height_inches LIKE '%$srch_string%' OR spouse_weight_kg LIKE '%$srch_string%' OR spouse_hobbies LIKE '%$srch_string%' OR spouse_sports LIKE '%$srch_string%' OR spouse_entertainment LIKE '%$srch_string%' OR modified_at LIKE '%$srch_string%'");
 			}
 		}
 		$this->db->select('count(1) as total_rows');
 		$this->db->from('consumers');
+		if($user_id>1){
+			if(!empty($customer_id)){ 
+			$this->db->where('created_by', $customer_id);
+			}
+		}
     		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -1474,6 +1512,8 @@
 	
 	
 		function list_all_loyalty_customers($id,$limit,$start,$srch_string='') {
+			 $user_id = $this->session->userdata('admin_user_id');
+			$customer_id = $this->uri->segment(3);
 		//echo $id;
 			//$this->db->where('created_by', $user_id);
 			//$id = 88;
@@ -1497,7 +1537,8 @@
     }
 	
 	function count_total_list_loyalty_customers($id,$srch_string='') {
-		
+			 $user_id = $this->session->userdata('admin_user_id');
+			 $customer_id = $this->uri->segment(3);
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
  				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%') and (consumer_id=$id)");

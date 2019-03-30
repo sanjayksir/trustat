@@ -40,7 +40,12 @@
  								<div class="row">
 									<div class="col-xs-12">
 										<h3 class="header smaller lighter blue">List <?php echo $label;?></h3>
- 										<div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/add_location" class="btn btn-primary pull-right" title="Add Location">Add Location</a></div>
+ 										<div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/add_location" class="btn btn-primary pull-right" title="Add New Location">Add New Location</a>
+										<a href="<?php echo base_url()?>plant_master/list_assigned_locations_user" class="btn btn-primary pull-right" title="Add New Location">Assign Location</a>
+										
+										
+										</div>
+										
 										<!--------------- Search Tab start----------------->
                             <div class="row"><form id="form-filter" action="" method="post" class="form-horizontal" onsubmit="return validateSrch();">
                                 <table id="search" class="table table-hover display">

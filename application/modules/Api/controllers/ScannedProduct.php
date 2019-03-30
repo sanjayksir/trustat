@@ -33,6 +33,7 @@ class ScannedProduct extends ApiController {
             ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
             ['field' =>'latitude','label'=>'Latitude','rules' => 'required'],
             ['field' =>'longitude','label'=>'Longitude','rules' => 'trim|required' ],
+			//['field' =>'registration_address','label'=>'Registration Address','rules' => 'trim|required' ],
         ];
         $errors = $this->ScannedproductsModel->validate($data,$validate);
         if(is_array($errors)){
@@ -53,12 +54,28 @@ class ScannedProduct extends ApiController {
 		$isLoyaltyForProductSurveyFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductSurveyFeedbackQuesGiven($consumerId,$product_id);
 		$isLoyaltyForProductDemoVideoFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductDemoVideoFeedbackQuesGiven($consumerId,$product_id);
 		$isLoyaltyForProductDemoAudioFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductDemoAudioFeedbackQuesGiven($consumerId,$product_id);
+		
+		$mnv25_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 25)->get()->row();
+		$mnvtext25 = $mnv25_result->message_notification_value;
+		$mnv26_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 26)->get()->row();
+		$mnvtext26 = $mnv26_result->message_notification_value;
+		$mnv27_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 27)->get()->row();
+		$mnvtext27 = $mnv27_result->message_notification_value;
+		$mnv28_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 28)->get()->row();
+		$mnvtext28 = $mnv28_result->message_notification_value;
+		$mnv29_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 29)->get()->row();
+		$mnvtext29 = $mnv29_result->message_notification_value;
+		$mnv30_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 30)->get()->row();
+		$mnvtext30 = $mnv30_result->message_notification_value;
         
         if(empty($result)){
             $data['user_id'] = $user['id'];
             $data['created'] = date('Y-m-d H:i:s');
             $this->db->insert('scanned_product_logs', $data);
-            $this->response(['status'=>false,'message'=>'This product and barcode is not supported by howzzt .'],200);
+		$mnv24_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 24)->get()->row();
+		$mnvtext24 = $mnv24_result->message_notification_value;
+            //$this->response(['status'=>false,'message'=>'This product and barcode is not supported by howzzt.'],200);
+			$this->response(['status'=>false,'message'=>$mnvtext24],200);
         }
 		if(!empty($result->product_thumb_images)){
             $result->product_thumb_images = Utils::setFileUrl($result->product_thumb_images);
@@ -140,18 +157,23 @@ class ScannedProduct extends ApiController {
 					
 					if( $isRegistered == completed ){
 					
-                    $result->message1 = 'This product is already registered, please contact your retailer/manufacturer for further details';
+                    //$result->message1 = 'This product is already registered, please contact your retailer/manufacturer for further details.';
+					$result->message1 = $mnvtext25;
                 }else {
-					$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process';
+					//$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process.';
+					$result->message1 = $mnvtext26;
 				}
 				}else{
-                    $result->message1 = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
+                    //$result->message1 = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty.';
+					$result->message1 = $mnvtext27;
                 }
             }elseif( $result->pack_level == 1 ){
                 //$result->message1 = 'Scanned product details for lavel '.$result->pack_level.'.';
-				$result->message1 = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration.';
+				//$result->message1 = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration.';
+				$result->message1 = $mnvtext29;
             }elseif($result->pack_level > 1){
-                $result->message1 = 'This is not a product barcode for consumer, Please scan barcode placed on consumer pack';
+                //$result->message1 = 'This is not a product barcode for consumer, Please scan barcode placed on consumer pack';
+				$result->message1 = $mnvtext30;
             }
 			} else {
 				
@@ -160,25 +182,36 @@ class ScannedProduct extends ApiController {
 					
 					if( $isRegistered == completed ){
 					
-                    $result->message1 = 'This product is already registered, please contact your retailer/manufacturer for further details';
+                    //$result->message1 = 'This product is already registered, please contact your retailer/manufacturer for further details';
+					$result->message1 = $mnvtext25;
                 }else {
-					$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process';
+					//$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process';
+					$result->message1 = $mnvtext26;
 				}
 				}else{
-                    $result->message1 = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
+                   // $result->message1 = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
+					 $result->message1 = $mnvtext27;
                 }
             }elseif( $result->pack_level2 == 1 ){
                 //$result->message1 = 'Scanned product details for lavel '.$result->pack_level.'.';
-				$result->message1 = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration.';
+				//$result->message1 = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration.';
+				$result->message1 = $mnvtext29;
             }elseif($result->pack_level2 > 1){
-                $result->message1 = 'This is not a product barcode for consumer, Please scan barcode placed on consumer pack';
+                //$result->message1 = 'This is not a product barcode for consumer, Please scan barcode placed on consumer pack';
+				$result->message1 = $mnvtext30;
             }	
 			}
 			
             //$this->response(['status'=>true,'message'=>'Scanned product details for lavel '.$result->pack_level.'.','data'=>$result]);
-			$this->response(['status'=>true,'message'=>'Thanks for scanning the product','data'=>$result]);
+		$mnv31_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 31)->get()->row();
+		$mnvtext31 = $mnv31_result->message_notification_value;
+			//$this->response(['status'=>true,'message'=>'Thanks for scanning the product.','data'=>$result]);
+			$this->response(['status'=>true,'message'=>$mnvtext31,'data'=>$result]);
         }else{
-            $this->response(['status'=>false,'message'=>'System failed to scan the record.'],200); 
+		$mnv32_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 32)->get()->row();
+		$mnvtext32 = $mnv32_result->message_notification_value;	
+           // $this->response(['status'=>false,'message'=>'System failed to scan the record.'],200); 
+			$this->response(['status'=>false,'message'=>$mnvtext32],200); 
         }
     }
    
@@ -302,6 +335,7 @@ class ScannedProduct extends ApiController {
             ['field' =>'expiry_date','label'=>'Expiry date','rules' => ['',['date',[$this->ScannedproductsModel,'validDate']]]],
 			['field' =>'latitude','label'=>'Latitude','rules' => 'required'],
 			['field' =>'longitude','label'=>'Longitude','rules' => 'required'],
+			['field' =>'registration_address','label'=>'Registration Address','rules' => 'trim|required' ],
         ];
         
         $errors = $this->ScannedproductsModel->validate($data,$validate);
@@ -314,6 +348,23 @@ class ScannedProduct extends ApiController {
             }            
         }
         */
+		
+		$mnv33_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 33)->get()->row();
+		$mnvtext33 = $mnv33_result->message_notification_value;
+		
+		$mnv34_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 34)->get()->row();
+		$mnvtext34 = $mnv34_result->message_notification_value;
+		
+		$mnv35_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 35)->get()->row();
+		$mnvtext35 = $mnv35_result->message_notification_value;
+		
+		$mnv36_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 36)->get()->row();
+		$mnvtext36 = $mnv36_result->message_notification_value;
+		
+		$mnv37_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 37)->get()->row();
+		$mnvtext37 = $mnv37_result->message_notification_value;
+		
+		
 				$purchased_points = total_approved_points2($customer_id);
 				$consumed_points = get_total_consumed_points($customer_id);
 				//$closing_balance = $purchased_points - $consumed_points;
@@ -329,19 +380,27 @@ class ScannedProduct extends ApiController {
         $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data, $bar_code2_data); 
 		if($result->barcode_qr_code_no == $data['bar_code']){
         if( $result->pack_level == 1 ){
-            $data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
-            $this->response(['status'=>true,'message'=>'Product registration failed for pack level '.$result->pack_level.'.','data'=>$data]);
+            //$data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
+			$data['message1'] = $mnvtext33;
+           // $this->response(['status'=>true,'message'=>'Product registration failed for pack level '.$result->pack_level.'.','data'=>$data]);
+			$this->response(['status'=>true,'message'=>$mnvtext34.' '.$result->pack_level.'.','data'=>$data]);
         }elseif($result->pack_level > 1){
-            $data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
-            $this->response(['status'=>true,'message'=>'Product registration failed for pack level '.$result->pack_level.'.','data'=>$data]);
+           // $data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
+			 $data['message1'] = $mnvtext33;
+            //$this->response(['status'=>true,'message'=>'Product registration failed for pack level '.$result->pack_level.'.','data'=>$data]);
+			$this->response(['status'=>true,'message'=>$mnvtext34.' '.$result->pack_level.'.','data'=>$data]);
         }
 		} else {
 		if( $result->pack_level2 == 1 ){
-            $data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
-            $this->response(['status'=>false,'message'=>'Product registration failed for pack level '.$result->pack_level2.'.','data'=>$data]);
+            //$data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
+			$data['message1'] = $mnvtext33;
+            //$this->response(['status'=>false,'message'=>'Product registration failed for pack level '.$result->pack_level2.'.','data'=>$data]);
+			$this->response(['status'=>false,'message'=>$mnvtext34.' '.$result->pack_level2.'.','data'=>$data]);
         }elseif($result->pack_level2 > 1){
-            $data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
-            $this->response(['status'=>false,'message'=>'Product registration failed for pack level '.$result->pack_level2.'.','data'=>$data]);
+            //$data['message1'] = 'The barcode you have scanned is on the product packing, please scan the barcode on the product for registration upon purchase for loyalty rewards';
+			$data['message1'] = $mnvtext33;
+           // $this->response(['status'=>false,'message'=>'Product registration failed for pack level '.$result->pack_level2.'.','data'=>$data]);
+			$this->response(['status'=>false,'message'=> $mnvtext34.' '.$result->pack_level2.'.','data'=>$data]);
         }	
 			
 		}	
@@ -349,9 +408,11 @@ class ScannedProduct extends ApiController {
 		if($result->stock_status!='Customer_Code'){
         if(!empty($isRegistered)){
             if($isRegistered['status'] == 0){
-                $data['message1'] = $message = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process.';
+                //$data['message1'] = $message = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process.';
+				$data['message1'] = $message = $mnvtext35;
             }elseif($isRegistered['status'] == 1){
-                $data['message1']  = $message = 'This product is already registered, please contact your retailer/manufacturer for further details';
+                //$data['message1']  = $message = 'This product is already registered, please contact your retailer/manufacturer for further details.';
+				$data['message1']  = $message = $mnvtext35;
             }
             $this->response(['status'=>true,'message'=>$message,'data'=>$data]);
         }
@@ -445,10 +506,11 @@ class ScannedProduct extends ApiController {
 				}
 				
 				$fb_token = getConsumerFb_TokenById($userId);
-               $this->ConsumerModel->sendFCM('Thank you for Product Registration, Please check the details in "my purchase list" in howzzt App', $fb_token);
+              // $this->ConsumerModel->sendFCM('Thank you for Product Registration, Please check the details in "my purchase list" in howzzt App.', $fb_token);
+			    $this->ConsumerModel->sendFCM($mnvtext37, $fb_token);
 				$NTFdata['consumer_id'] = $userId; 
 				$NTFdata['title'] = "howzzt notification";
-				$NTFdata['body'] = 'Thank you for Product Registration, Please check the details in "my purchase list" in howzzt App'; 
+				$NTFdata['body'] = $mnvtext37; 
 				$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
 				$NTFdata['status'] = 1; 
 			
@@ -467,16 +529,28 @@ class ScannedProduct extends ApiController {
                 //$loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-with-warranty'])->row();
                
 				if($purchased_points > ($consumed_points+$TRPoints)){
-				$message = 'Thank you for uploading the invoice, your product warranty will be activated and '. $TRPoints .' loyalty points will be added to your loyalty account after validation of uploaded invoice';
+		$mnv38_result = $this->db->select('message_notification_value,message_notification_value_part2')->from('message_notification_master')->where('id', 38)->get()->row();
+		$mnvtext38_1 = $mnv38_result->message_notification_value;
+		$mnvtext38_2 = $mnv38_result->message_notification_value_part2;		
+				//$message = 'Thank you for uploading the invoice, your product warranty will be activated and '. $TRPoints .' loyalty points will be added to your loyalty account after validation of uploaded invoice';
+				$message = $mnvtext38_1 . ' '. $TRPoints .' ' . $mnvtext38_2;
 				}
-				$message = 'Thank you for uploading the invoice, your product warranty will be activated';
+		$mnv39_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 39)->get()->row();
+		$mnvtext39 = $mnv39_result->message_notification_value;
+				//$message = 'Thank you for uploading the invoice, your product warranty will be activated';
+				$message = $mnvtext39;
                 $transactionType = 'product-registration-with-warranty';
-                $data['message1'] = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
+                //$data['message1'] = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty.';
+				$data['message1'] = $mnvtext28;
 				}else {
 				//$loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-with-warranty'])->row();
-                $message = 'Thank you for uploading the invoice, your product warranty will be activated and after validation of uploaded invoice';
+        $mnv40_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 40)->get()->row();
+		$mnvtext40 = $mnv40_result->message_notification_value;
+				//$message = 'Thank you for uploading the invoice, your product warranty will be activated and after validation of uploaded invoice';
+				$message = $mnvtext40;
                 $transactionType = 'product-registration-with-warranty';
-                $data['message1'] = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';	
+                //$data['message1'] = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty.';
+				$data['message1'] = $mnvtext28;				
 					
 					
 				}
@@ -501,7 +575,10 @@ class ScannedProduct extends ApiController {
         if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found'],200);
         }
-        $this->response(['status'=>true,'message'=>'List of purchased products.','data'=>$result]);
+		$mnv41_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 41)->get()->row();
+		$mnvtext41 = $mnv41_result->message_notification_value;
+        //$this->response(['status'=>true,'message'=>'List of purchased products.','data'=>$result]);
+		$this->response(['status'=>true,'message'=>$mnvtext41,'data'=>$result]);
     }
 	
 	
@@ -517,7 +594,10 @@ class ScannedProduct extends ApiController {
         if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found'],200);
         }
-        $this->response(['status'=>true,'message'=>'List of purchased products.','data'=>$result]);
+		$mnv42_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 42)->get()->row();
+		$mnvtext42 = $mnv42_result->message_notification_value;
+        //$this->response(['status'=>true,'message'=>'Purchased products details are','data'=>$result]);
+		$this->response(['status'=>true,'message'=>$mnvtext42,'data'=>$result]);
     }
     
     public function complaint(){
@@ -550,7 +630,10 @@ class ScannedProduct extends ApiController {
         if($this->db->insert('consumer_complaint', $data)){
             Utils::sendSMS($user['mobile_no'], 'Your complaint code is '.$data['complain_code'].'. The compliant has been transfered to the respective brand owner for quick redressal.');
             //Utils::sendSMS($this->config->item('adminMobile'), 'A consumer has looged a complain with compoain code '.$data['complain_code'].' with following description '.$data['description']);
-            $this->response(['status'=>true,'message'=>'Your complaint has been logged successfully.','data'=>$data]);
+	   $mnv43_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 43)->get()->row();
+		$mnvtext43 = $mnv43_result->message_notification_value;
+            //$this->response(['status'=>true,'message'=>'Your complaint has been logged successfully.','data'=>$data]);
+			$this->response(['status'=>true,'message'=>$mnvtext43,'data'=>$data]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to log the complaint.'],200); 
         }
@@ -570,6 +653,7 @@ class ScannedProduct extends ApiController {
             ['field' =>'rating','label'=>'Product Rating','rules' => 'required'],
 			['field' => 'latitude', 'label' => 'User latitude', 'rules' => 'trim|required'],
 			['field' => 'longitude', 'label' => 'User longitude', 'rules' => 'trim|required'],
+			['field' =>'registration_address','label'=>'Registration Address','rules' => 'trim|required' ],
 			//['field' =>'type','label'=>'Latitude','rules' => 'required'],
             ['field' =>'description','label'=>'Product Description','rules' => 'trim|required' ],
         ];
@@ -598,10 +682,18 @@ class ScannedProduct extends ApiController {
 		$TRPoints = $result3->$transactionType;
 			$purchased_points = total_approved_points2($customer_id);
 			$consumed_points = get_total_consumed_points($customer_id);
-			if($purchased_points > ($consumed_points+$TRPoints)){		
-		$mess = 'Thank you for posting your product experince. Loyalty Point '. $TRPoints .' have been added to your howzzt loyalty program.'; 
+			if($purchased_points > ($consumed_points+$TRPoints)){	
+		$mnv44_result = $this->db->select('message_notification_value,message_notification_value_part2')->from('message_notification_master')->where('id', 44)->get()->row();
+		$mnvtext44_1 = $mnv44_result->message_notification_value;	
+		$mnvtext44_2 = $mnv44_result->message_notification_value_part2;		
+		//$mess = 'Thank you for posting your product experince. Loyalty Point '. $TRPoints .' have been added to your howzzt loyalty program.'; 
+		$mess = $mnvtext44_1 .' '. $TRPoints .' '. $mnvtext44_2;
 			}
-			$mess = 'Thank you for posting your product experince.'; 
+			
+		$mnv45_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 45)->get()->row();
+		$mnvtext45 = $mnv45_result->message_notification_value;
+		
+			$mess = $mnvtext45; 
 		
         if($this->db->insert('feedback_on_product', $data)){
             //Utils::sendSMS($user['mobile_no'], 'Your feedback submitted successfully.');
@@ -612,10 +704,15 @@ class ScannedProduct extends ApiController {
 			if($purchased_points > ($consumed_points+$TRPoints)){
 			$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
 			}
-			
-            $this->response(['status'=>true,'message'=>'Your feedback submitted successfully.','data'=>$data]);
+		$mnv46_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 46)->get()->row();
+		$mnvtext46 = $mnv46_result->message_notification_value;
+           //$this->response(['status'=>true,'message'=>'Your feedback submitted successfully.','data'=>$data]);
+			$this->response(['status'=>true,'message'=>$mnvtext46,'data'=>$data]);
         }else{
-            $this->response(['status'=>false,'message'=>'System failed to log the complaint.'],200); 
+		$mnv47_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 47)->get()->row();
+		$mnvtext47 = $mnv47_result->message_notification_value;
+            //$this->response(['status'=>false,'message'=>'System failed to log the complaint.'],200); 
+			$this->response(['status'=>false,'message'=>$mnvtext47],200);
         }
     }
 	
@@ -648,10 +745,13 @@ class ScannedProduct extends ApiController {
         $this->db->set('del_by_cs_date', date("Y-m-d H:i:s"));
         $this->db->where('scan_id', $scan_id);
         if ($this->db->update('scanned_products')) {
-
-            Utils::response(['status' => true, 'message' => 'Record Deleted Successfully.', 'data' => $bar_code_data]);
+		$mnv48_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 48)->get()->row();
+		$mnvtext48 = $mnv48_result->message_notification_value;
+            Utils::response(['status' => true, 'message' => $mnvtext48, 'data' => $bar_code_data]);
         } else {
-            Utils::response(['status' => false, 'message' => 'System failed to Deleted.'], 200);
+		$mnv49_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 49)->get()->row();
+		$mnvtext49 = $mnv49_result->message_notification_value;	
+            Utils::response(['status' => false, 'message' => $mnvtext49], 200);
         }
     }
 	

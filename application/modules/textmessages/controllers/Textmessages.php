@@ -791,7 +791,8 @@ function list_assigned_Advertisements() {
 		 
 		
 		 	}
-		 	
+	
+			
 	
 	function save_push_advertisement(){
 	 	$this->checklogin();		
@@ -827,11 +828,16 @@ function list_assigned_Advertisements() {
 		exit;
  	}
 	
+	function reverse_birthday( $years ){
+			return date('Y-m-d', strtotime($years . ' years ago'));
+							}
+							
+	
 	function send_text_message(){
 		//echo "test";
 	 	$this->checklogin();		
-		$customer_id=$this->input->post('c_id');
-		$message_id	=$this->input->post('m_id');
+		$customer_id = $this->input->post('c_id');
+		$message_id	= $this->input->post('m_id');
 		$Chk = $this->input->post('Chk');
 		$text_message	=$this->input->post('text_message');
 		$this->load->view('text_messages_listing');
@@ -840,19 +846,56 @@ function list_assigned_Advertisements() {
 		}else{
 			
 			$send_status=0;
+			$send_status=0;
 		}
 		
 		$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status);
 	
-		$this->Textmessage_model->update_push_text_message_request($message_id,$send_status);
+		$this->Textmessage_model->update_push_text_message_request($message_id, $send_status);
+		
+		/*
 		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				
 				foreach ($query->result() as $user)  
 				{
 		 $consumer_id = $user->consumer_id;
+		 
+		 */
+		 $this->db->select('*');
+			$this->db->from('consumer_selection_criteria');
+			//$this->db->where('transaction_lr_type', "Loyalty");
+			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Communication-Text"));
+			$query=$this->db->get();						   
+        $csc_consumer_gender = $query->row()->consumer_gender;
+		$csc_consumer_min_age = $query->row()->consumer_min_age;
+		$csc_consumer_max_age = $query->row()->consumer_max_age;
+		$csc_consumer_city = $query->row()->consumer_city;
+		$csc_consumer_pin = $query->row()->consumer_pin;
+									
+								
+								if($csc_consumer_min_age=='0') {
+								$csc_consumer_min_dob = '';
+									} else {
+								$csc_consumer_min_dob = $this->reverse_birthday( $csc_consumer_min_age );
+									}
+									
+								if($csc_consumer_max_age=='0') {
+								$csc_consumer_max_dob = '';
+									} else {
+								$csc_consumer_max_dob = $this->reverse_birthday( $csc_consumer_max_age );
+									}
+		
+		//$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+		$AllSelectedConsumersByACustomer = AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob);
+		
+				
+				foreach ($AllSelectedConsumersByACustomer as $consumer_id) 
+				{
+		 
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
+		 
 			$NTFdata['consumer_id'] = $consumer_id; 
 			$NTFdata['title'] = "howzzt text message";
 			$NTFdata['body'] = $text_message; 
@@ -944,7 +987,23 @@ function list_assigned_Advertisements() {
 		$text_message	=$this->input->post('text_message');
 		$quantity	=$this->input->post('quantity');
 		if($text_message==''){
-		$this->load->view('send_text_message');
+			
+			$customer_id = $this->session->userdata('admin_user_id');
+		
+			$this->db->select('*');
+			$this->db->from('consumer_selection_criteria');
+			//$this->db->where('transaction_lr_type', "Loyalty");
+			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Communication-Text"));
+			$query=$this->db->get();
+						   
+        $params["csc_consumer_gender"] = $ConsumerSelectionCriteria=$query->row()->consumer_gender;
+		$params["csc_consumer_min_age"] = $ConsumerSelectionCriteria=$query->row()->consumer_min_age;
+		$params["csc_consumer_max_age"] = $ConsumerSelectionCriteria=$query->row()->consumer_max_age;
+		$params["csc_consumer_city"] = $ConsumerSelectionCriteria=$query->row()->consumer_city;
+		$params["csc_consumer_pin"] = $ConsumerSelectionCriteria=$query->row()->consumer_pin;
+		
+			
+		$this->load->view('send_text_message', $params);
 		} else {
 		$this->Textmessage_model->save_push_text_message_request($customer_id,$text_message,$quantity);
 		 
@@ -1100,7 +1159,7 @@ function save_approve_purchase_points_requests(){
 		
 		//$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status);
 	
-		$this->Textmessage_model->update_push_text_message_request($message_id,$send_status);
+		$this->Textmessage_model->update_purchased_purchased_loyalty_points($message_id,$send_status);
 		/*
 		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				

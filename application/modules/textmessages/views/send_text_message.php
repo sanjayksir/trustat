@@ -80,11 +80,42 @@ $this->load->view('../includes/admin_top_navigation'); ?>
  <h4 class="widget-title">Send Text Message</h4>
       <form name="user_frm" id="user_frm" action="#" method="POST">
 	  <?php $customer_id 	= $this->session->userdata('admin_user_id'); ?>
+		<!--
 		<input type="hidden" value="<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>" name="quantity" id="quantity" />
         <div class="widget-main">
 		 <div class="col-sm-6">
 			 <label for="form-field-8">This Message will be delivered to <b><?php $customer_id 	= $this->session->userdata('admin_user_id');
 			echo NumberOfAllConsumersOfACustomer($customer_id); ?> Consumers</b>, who are already aware about your Products</label>
+			  -->
+			  <div class="form-group row">
+                                  <div class="col-sm-12">
+                                  <label for="form-field-8">Select Consumers</label><?php 
+						  // echo $csc_consumer_min_age . "<br>";
+						    //echo $csc_consumer_max_age . "<br>";
+							 //echo $csc_consumer_gender . "<br>";
+							  //echo $csc_consumer_city . "<br>";
+							  //echo $csc_consumer_pin . "<br>";
+							 function reverse_birthday( $years ){
+								return date('Y-m-d', strtotime($years . ' years ago'));
+								}
+								if($csc_consumer_min_age=='0') {
+								$csc_consumer_min_dob = '';
+									} else {
+								$csc_consumer_min_dob = reverse_birthday( $csc_consumer_min_age );
+									}
+								if($csc_consumer_max_age=='0') {
+								$csc_consumer_max_dob = '';
+									} else {
+								$csc_consumer_max_dob = reverse_birthday( $csc_consumer_max_age );
+									}
+									 ?>
+                                  <select name="quantity" id="quantity" class="form-control">
+										<option value="<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>
+										<option value="<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>">Filtered Consumers (<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>)</option>	
+								  </select>
+                                  </div>
+                                  </div>				 
+			  
 			  <textarea  class="form-control" name="text_message" placeholder="Write your text message..." maxlength="500" required ></textarea>
 			<br /><input class="btn btn-info" type="submit" name="submit" value="Send" id="savemenu" />
 			</div>

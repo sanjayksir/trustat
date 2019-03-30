@@ -158,8 +158,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                         <table id="dynamic-table" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-														<th>S No.</th>
-													   <th>Customer Name</th>
+														<!--<th>S No.</th>-->
+													   <th>Customer Namecc<?php echo $list_all_consumers->customer_id; ?></th>
 													   <th>Total Purchased Points</th>
 														<th>Points awarded to Consumers</th>
 														<th>Closing Balance</th>
@@ -176,19 +176,24 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                         $i=0;
                         foreach ($list_all_consumers as $attr){
                         $i++;
+						
+						$user_id = $this->session->userdata('admin_user_id');
+						$customer_id = $this->uri->segment(3);
+							
                          ?>
-                                <tr id="show<?php echo $attr['id'];?>">
-                                <td><?php echo $sno; ?></td>
+                                <tr id="show<?php echo $attr['id'];?>" <?php if (!empty($customer_id)) { if($attr['customer_id']!=$customer_id) {  ?> style="display:none;" <?php } } ?>>
+                                <!--<td><?php echo $sno; ?></td>-->
                                 <td><?php echo getUserFullNameById($attr['customer_id']); ?></td>
 								<td><?php echo total_approved_points2($attr['customer_id']);  ?> </td>  
                                 <td><?php //echo base_url(); 
 								
-								if(base_url()=='http://localhost/trackingportal/') {
+								if(base_url()=='http://innovigents.com/') {
+								mysql_connect("localhost", "tpdbuser", "india@123");
+								mysql_select_db("trackingprortaldb");
+								} else {
+								
 								mysql_connect("localhost", "root", "");
 								mysql_select_db("trackingprortaldb20a");
-								} else {
-									mysql_connect("localhost", "tpdbuser", "india@123");
-								mysql_select_db("trackingprortaldb");
 								}
 								
 								$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where customer_id = '".$attr['customer_id']."' AND transaction_lr_type = 'Loyalty'";

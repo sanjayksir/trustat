@@ -51,7 +51,7 @@
                     <div class="col-xs-12">
                         <div class="widget-box widget-color-blue">
                             <div class="widget-header widget-header-flat">
-                                <h5 class="widget-title bigger lighter">Manage Users</h5>
+                                <h5 class="widget-title bigger lighter">Manage Users<?php echo $this->uri->segment(3); ?></h5>
                                 <div class="widget-toolbar">
                                     <a href="<?php echo base_url('user_master/add_plant_controller/') ?>" class="btn btn-xs btn-warning" title="Add Users">Add <?php echo $label; ?> </a>
                                 </div>

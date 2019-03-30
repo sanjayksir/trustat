@@ -98,7 +98,7 @@
                                             <th>User Name</th>
                                             <th>Email ID</th>
                                             <th>Phone</th>
-                                            <th>Important Links</th>
+                                            <th>Select</th>
                                             <th>Action</th>
                                     </tr>
                             </thead>
@@ -136,8 +136,7 @@
 															}
 															*/
 															?>
-															[List Users], 
-															[List Products], [List Orders], [List Locations]
+															<a href="<?php  echo base_url().'user_master/view_user/'.$listData['user_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> Select </i></a>
 															<?php
 															}else{
 																echo assigned_locations($listData['user_id']);

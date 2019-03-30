@@ -140,6 +140,12 @@ $route['api/user/add_consumer_relative'] = 'Api/Consumer/addConsumerRelative';
 $route['api/user/edit_consumer_relative/(:any)'] = 'Api/Consumer/editConsumerRelative/$1';
 $route['api/user/delete_consumer_relative/(:any)'] = 'Api/Consumer/DeleteConsumerRelative/$1';
 $route['api/user/list_consumer_relatives'] = 'Api/Consumer/ListConsumerRelatives';
+
+$route['api/user/add_consumer_kid'] = 'Api/Consumer/addConsumerKid';
+$route['api/user/edit_consumer_kid/(:any)'] = 'Api/Consumer/editConsumerKid/$1';
+$route['api/user/delete_consumer_kid/(:any)'] = 'Api/Consumer/DeleteConsumerKid/$1';
+$route['api/user/list_consumer_kids'] = 'Api/Consumer/ListConsumerKids';
+
 $route['api/products-advertisements'] = 'Api/ScannedProduct/productsAdvertisements';
 $route['api/products-surveys'] = 'Api/ScannedProduct/productsSurveys';
 

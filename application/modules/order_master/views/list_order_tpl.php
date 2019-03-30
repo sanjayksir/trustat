@@ -45,9 +45,16 @@
                                             <div class="widget-header widget-header-flat">
                                                 <h5 class="widget-title bigger lighter">List Order</h5>
                                                 <div class="widget-toolbar">
-                                                   <a href="<?php echo base_url('order_master/list_orders_plant_controlllers_CC') ?>" class="btn btn-xs btn-warning" title="List Plant Controllers Orders">List Plant Controllers Orders </a>
+                                                   <!--<a href="<?php echo base_url('order_master/list_orders_plant_controlllers_CC') ?>" class="btn btn-xs btn-warning" title="List Plant Controllers Orders">List Plant Controllers Orders </a>-->
+												  <?php
+													$user_id 	= $this->session->userdata('admin_user_id');
+
+												  if($user_id>1){  ?>
                                                     <a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Make Order" data-toggle="modal" data-target="#myModal">Make Order</a>
 													<a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Upload Customer Codes" data-toggle="modal" data-target="#myUploadModal">Upload Customer Codes</a>
+												  <?php } ?>
+													
+													<a href="<?php echo base_url('backend/dashboard') ?>" class="btn btn-xs btn-warning" title="List Plant Controllers Orders">Back to Home </a>
                                                 </div>
                                             </div>
                                             <div class="widget-body">
@@ -94,10 +101,21 @@
                                                         <tbody>
 
                                         <?php 
+										$user_id = $this->session->userdata('admin_user_id');
+										$customer_id = $this->uri->segment(3);
                                         $i = 0; 
 
                                         if(count($orderListing)>0){
-                                            $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+                                           // $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+										   
+										   
+					if(($user_id==1) && ($customer_id!="")){
+				$page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
+			}else{
+			
+			$page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+			}
+			
                                             $sno =  $page + 1;
                                             foreach ($orderListing as $listData){
                                                 $essentialAttributeArr = array();
@@ -216,9 +234,17 @@
                                                         ?>
                  <span id="order_status_<?php echo $listData['order_id'];?>" style="display:<?php echo $display;?>"> 
 
-
-                                                        <a class="btn btn-primary pull-right modellink" data-toggle="modal" href="#printMyModal" id="" onclick="return print_order('<?php echo $listData['order_id'];?>');"><i style="cursor:pointer" title="print Order" class="fa fa-print icon-2x"></i></a>
-                                                        </span>
+				<?php	if($user_id>1){ ?>
+                  <a class="btn btn-primary pull-right modellink" data-toggle="modal" href="#printMyModal" id="" onclick="return print_order('<?php echo $listData['order_id'];?>');"><i style="cursor:pointer" title="print Order" class="fa fa-print icon-2x"></i></a>
+				  <?php
+				  }else{
+				echo "Please Print from Approvals -> Approve & Print Orders Menu ";
+			
+			}
+			?>
+				  
+                </span>
+																
          <?php if($display	!= "block;"){echo $lable;}?>
 
         </td>
@@ -230,8 +256,6 @@
                  <?php 
 				 if((order_status($listData['order_status']))=="Pending") {
 				 echo anchor("order_master/edit_product/" . $listData['order_id'], '<i class="ace-icon fa fa-pencil"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); }
-	
-
 				 ?>
 				 
 				 

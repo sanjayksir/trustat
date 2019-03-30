@@ -33,7 +33,7 @@
 				   <div class="form-group">
 					<label for="message-text">Print Size:</label>
 					<div class="form-control"><?php if( strtolower($printEssentialAttributes['code_size'])=='s'){
-													$size = 25;
+													$size = 15;
 													echo 'Small';
 													}else if(strtolower($printEssentialAttributes['code_size'])=='m'){
 													$size = 30;

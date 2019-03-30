@@ -135,7 +135,94 @@ class Myspidey_user_master_model extends CI_Model {
         
     }
 	
+	function get_total_message_notification_list_all($srch_string = '') {
+        $result_data = 0;
+        $user_id = $this->session->userdata('admin_user_id');
+        
+        if (!empty($srch_string)) {
+            $this->db->where("message_type LIKE '%$srch_string%' OR module_submodule_location_details LIKE '%$srch_string%' OR message_notification_value LIKE '%$srch_string%'");
+        } else {
+            
+        }
 
+        $this->db->select('count(1) as total_rows');
+        $this->db->from('message_notification_master');
+        $query = $this->db->get(); //echo '***'.$this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            $result_data = $result[0]['total_rows'];
+        }
+        return $result_data;
+    }
+	
+	function get_message_notification_list_all($limit,$start,$srch_string = '') {
+        $result_data = 0;
+        $user_id = $this->session->userdata('admin_user_id');
+        
+        if (!empty($srch_string)) {
+            $this->db->where("message_type LIKE '%$srch_string%' OR module_submodule_location_details LIKE '%$srch_string%' OR message_notification_value LIKE '%$srch_string%'");
+        } else {
+            
+        }
+				
+        $this->db->select('*');
+        $this->db->from('message_notification_master');
+       // $this->db->order_by('id', 'desc');
+        if (empty($srch_string)) {
+            $this->db->limit($limit, $start);
+        }
+        //echo $this->db->last_query();die;
+        $query = $this->db->get(); //echo '***'.$this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result_data = $query->result_array();
+        }
+        return $result_data;
+    }
+	
+	
+		function get_message_notification_details($id) {
+
+        $this->db->select(['*']);
+        $this->db->from('message_notification_master');
+        $this->db->where(array('id' => $id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            //$res = $res[0];
+        }
+        return $res;
+    }
+	
+	
+		function update_message_notification_details_data($frmData) {
+           
+                $UpdateData = array(
+                    
+					"message_notification_value" => $frmData['message_notification_value'],
+					"message_notification_value_part2" => $frmData['message_notification_value_part2'],
+					"modified_at" => date('Y-m-d H:i:s')
+                );
+            
+
+
+			$id = $this->uri->segment(3);
+            $whereData = array(
+                'id' => $frmData['id']
+            );
+
+            $this->db->set($UpdateData);
+            $this->db->where($whereData);
+            if ($this->db->update('message_notification_master')) {
+                //echo '***'.$this->db->last_query();exit;
+                $this->session->set_flashdata('success', 'Data Updated Successfully!');
+                return true;
+            }
+        
+    }
+	
+	
+	
     function save_user($frmData) {   //echo '<pre>';print_r($frmData);exit;
         $user_id = $this->session->userdata('admin_user_id');
         $is_parent = $this->session->userdata('admin_user_id');
@@ -518,6 +605,74 @@ class Myspidey_user_master_model extends CI_Model {
 
         return $result;
     }
+	
+	
+    function get_total_tracek_users_list_all($srch_string = '') {
+        $result_data = 0;
+        $user_id = $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+        /* if(!empty($srch_string) && $user_id==1){ 
+          $this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%') and (is_parent=$user_id)");
+          }
+          if($user_id>1){
+          if(!empty($srch_string)){
+          $this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%') and (is_parent=$user_id)");
+          }else{
+          $this->db->where(array('is_parent'=>$user_id));
+          }
+          } */
+        if ($user_id == 1) {
+            $is_parent = "is_parent=$customer_id";
+        } else {
+            $is_parent = "is_parent=$user_id";
+        }
+        if (!empty($srch_string)) {
+            $this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR f_name LIKE '%$srch_string%' OR l_name LIKE '%$srch_string%') and ($is_parent)");
+        } else {
+            $this->db->where($is_parent);
+        }
+
+        $this->db->select('count(1) as total_rows');
+        $this->db->from('backend_user');
+        $query = $this->db->get(); //echo '***'.$this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            $result_data = $result[0]['total_rows'];
+        }
+        return $result_data;
+    }
+
+    function get_tracek_user_list_all($limit, $start, $srch_string = '') {
+        $user_id = $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+        $result = '';
+        if ($user_id == 1) {
+            $is_parent = "is_parent=$customer_id";
+        } else {
+            $is_parent = "is_parent=$user_id";
+        }
+
+        if (!empty($srch_string)) {
+            $this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR f_name LIKE '%$srch_string%' OR l_name LIKE '%$srch_string%') and ($is_parent)");
+        } else {
+            $this->db->where($is_parent);
+        }
+        $this->db->select('*');
+        $this->db->from('backend_user');
+
+        $this->db->order_by("status asc,created_on desc");
+
+        $this->db->limit($limit, $start);
+        $query = $this->db->get();
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+        }
+
+        return $result;
+    }
+	
+
+
 
     ##----------------------------------plant list end-------------------##
 

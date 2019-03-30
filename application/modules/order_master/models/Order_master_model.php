@@ -288,12 +288,13 @@
 	 function get_total_order_list_all($srch_string=''){
 		$result_data = 0;
 		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR O.order_no LIKE '%$srch_string%')");
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%')");
 		}
 		if($user_id>1){
 			if(!empty($srch_string)){ 
-				$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR O.order_no LIKE '%$srch_string%') and (user_id=$user_id)");
+				$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%') and (user_id=$user_id)");
 			}else{
 				$this->db->where(array('user_id'=>$user_id));
 			}
@@ -302,8 +303,13 @@
 		//$this->db->from('order_master');
 		
 		$this->db->select('count(1) as total_rows');
-		$this->db->from('order_master O');
+		$this->db->from('order_master');
 		//$this->db->join('print_orders_history P', 'O.order_id= P.order_id');
+		if($user_id>1){
+		$this->db->where('user_id', $user_id);
+			}else{
+			$this->db->where('user_id', $customer_id);
+			}
 		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -319,17 +325,18 @@
 		$resultData = array();
 		
 		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
 		/*if($user_id>1){
 			$this->db->where(array('user_id'=>$user_id));
 	 	}*/
 		if(!empty($srch_string) && $user_id==1){ 
- 			$this->db->where("(O.product_name LIKE '%$srch_string%' OR O.order_tracking_number LIKE '%$srch_string%' OR O.product_sku LIKE '%$srch_string%' OR O.order_no LIKE '%$srch_string%')");
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%')");
 		}
 		if($user_id>1){
 			if(!empty($srch_string)){ 
-				$this->db->where("(O.product_name LIKE '%$srch_string%' OR O.order_tracking_number LIKE '%$srch_string%' OR O.product_sku LIKE '%$srch_string%' OR O.order_no LIKE '%$srch_string%') and (O.user_id=$user_id)");
+				$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%') and (user_id=$user_id)");
 			}else{
-				$this->db->where(array('O.user_id'=>$user_id));
+				$this->db->where(array('user_id'=>$user_id));
 			}
 	 	}
 		/*"SELECT O.`order_tracking_number` , O.`product_name` , O.`product_sku` , O.`quantity` , O.`delivery_date` , O.`status` , P.code_type
@@ -337,11 +344,12 @@ FROM `order_master` O
 LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
  */
 		
-		$this->db->select(' O.user_id,O.product_id, O.order_id, O.order_no, O.order_tracking_number , O.product_name, O.product_sku , O.quantity , O.delivery_date , O.created_date , O.order_status ',false);
-		$this->db->from('order_master O');
+		$this->db->select('user_id, product_id, order_id, order_no, order_tracking_number, product_name, product_sku, quantity, delivery_date, created_date, order_status ',false);
+		$this->db->from('order_master');
 		//$this->db->join('print_orders_history P', 'O.order_id= P.order_id');
 		
- 		$this->db->order_by('O.created_date','desc');
+		
+ 		$this->db->order_by('created_date','desc');
 		$this->db->limit($limit, $start);
    		$query = $this->db->get();  //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
@@ -350,8 +358,65 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		return $resultData;
 	 }
 	 
+	//============sssss 
+	 	 function get_total_approve_print_orders_list_all($srch_string=''){
+		$result_data = 0;
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%')");
+		}
+		
+		//$this->db->select('count(1) as total_rows');
+		//$this->db->from('order_master');
+		
+		$this->db->select('count(1) as total_rows');
+		$this->db->from('order_master');
+		//$this->db->join('print_orders_history P', 'O.order_id= P.order_id');
+		
+		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
 	 
 	 
+	 
+	 
+	 function get_approve_print_orders_list_all($limit,$start,$srch_string=''){
+		$resultData = array();
+		
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		/*if($user_id>1){
+			$this->db->where(array('user_id'=>$user_id));
+	 	}*/
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%')");
+		}
+		
+		/*"SELECT O.`order_tracking_number` , O.`product_name` , O.`product_sku` , O.`quantity` , O.`delivery_date` , O.`status` , P.code_type
+FROM `order_master` O
+LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
+ */
+		
+		$this->db->select('user_id, product_id, order_id, order_no, order_tracking_number, product_name, product_sku, quantity, delivery_date, created_date, order_status ',false);
+		$this->db->from('order_master');
+		//$this->db->join('print_orders_history P', 'O.order_id= P.order_id');
+		
+		
+ 		$this->db->order_by('created_date','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get();  //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 //===================sss
 	 
 	 
 	 ## For plnat controller
@@ -886,7 +951,9 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->from('consumers C');
 		$this->db->join('scanned_products S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = S.product_id');
+		if($user_id>1){
 		$this->db->where(array('P.created_by'=>$user_id));
+		}
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -922,7 +989,9 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->from('consumers C');
 		$this->db->join('scanned_products S', 'C.id = S.consumer_id');
 		$this->db->join('products P', 'P.id = S.product_id');
+		if($user_id>1){
 		$this->db->where(array('P.created_by'=>$user_id));
+		}
    		$this->db->order_by('S.created_at','desc');
 		$this->db->limit($limit, $start);
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();

@@ -26,6 +26,10 @@ class Consumer extends ApiController {
         if (($this->input->method() != 'post') || empty($data)) {
             Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
         }
+		
+			
+			
+			
         // if number already exists 
         $checkmobileno = $this->getInput('mobile_no');
         $checkmobileno2 = $checkmobileno['mobile_no'];
@@ -50,6 +54,9 @@ class Consumer extends ApiController {
 			$latitude = $this->getInput('latitude');
             $latituder = $latitude['latitude'];
 			
+			$registration_address = $this->getInput('registration_address');
+            $registration_addressr = $registration_address['registration_address'];
+			
 			$fb_token1 = $this->getInput('fb_token');
             $fb_tokenr = $fb_token1['fb_token'];
 			
@@ -59,6 +66,7 @@ class Consumer extends ApiController {
 			$this->db->set('email', $emailidr);
             $this->db->set('longitude', $longituder);
 			$this->db->set('latitude', $latituder);
+			$this->db->set('registration_address', $registration_addressr);
 			$this->db->set('fb_token', $fb_tokenr);
 			$this->db->set('iemi', $iemir);
             $data['verification_code'] = Utils::randomNumber(5);
@@ -71,13 +79,30 @@ class Consumer extends ApiController {
                 //$data['password2'] = $checkmobileno[mobile_no];
                 //$data['token'] = $data['token'];
                 $this->signupMail($data);
-                $smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
+               
+				
+		$mnv1_result = $this->db->select('message_notification_value, message_notification_value_part2')->from('message_notification_master')->where('id', 1)->get()->row();
+		$message_notification_value = $mnv1_result->message_notification_value;
+		$message_notification_value_part2 = $mnv1_result->message_notification_value_part2;
+		
+		 //$smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
+		  $smstext = $message_notification_value . $data['verification_code'] . $message_notification_value_part2;
+		
                 Utils::sendSMS($data['mobile_no'], $smstext);
-                $this->ConsumerModel->sendFCM("Congratulations! Your re-registration is successfully completed, and you are logged in.", $fb_tokenr);
-                Utils::response(['status' => true, 'message' => 'You are re-registered with this device.', 'data' => $data]);
+                //$this->ConsumerModel->sendFCM("Congratulations! Your re-registration is successfully completed, and you are logged in.", $fb_tokenr);
+		$mnv2_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 2)->get()->row();
+				$mnvtext2 = $mnv2_result->message_notification_value;
+		 //$this->ConsumerModel->sendFCM("Congratulations! Your re-registration is successfully completed, and you are logged in.", $fb_tokenr);
+		  $this->ConsumerModel->sendFCM($mnvtext2, $fb_tokenr);
+		  $mnv3_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 3)->get()->row();
+				$mnvtext3 = $mnv3_result->message_notification_value;
+               // Utils::response(['status' => true, 'message' => 'You are re-registered with this device, and you are logged in.', 'data' => $data]);
+				Utils::response(['status' => true, 'message' => $mnvtext3, 'data' => $data]);
                
             } else {
-                Utils::response(['status' => false, 'message' => 'System failed to update.'], 200);
+				$mnv4_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 4)->get()->row();
+				$mnvtext4 = $mnv4_result->message_notification_value;
+                Utils::response(['status' => false, 'message' => $mnvtext4], 200);
             }
         } else {
 
@@ -99,14 +124,17 @@ class Consumer extends ApiController {
 			$data['longitude'] = $longitudeN['longitude'];
 
 			$latitudeN = $this->getInput('latitude');
-			$data['latitude'] = $latitudeN['latitude'];			
+			$data['latitude'] = $latitudeN['latitude'];	
+
+			$registrationAddressN = $this->getInput('registration_address');
+			$data['registration_address'] = $registrationAddressN['registration_address'];			
 			
             $data['verification_code'] = Utils::randomNumber(5);
             $data['password'] = md5($data['verification_code']);
             if ($this->db->insert('consumers', $data)) {
                 $userId = $this->db->insert_id();
-                $this->Productmodel->saveLoyltyReg('user-registration', $userId, ['consumer_id' => $userId, 'consumer_id' =>$data['latitude'], 'consumer_id' => $data['longitude']]);
-				$this->Productmodel->saveConsumerPassbookLoyaltyReg('user-registration', $userId, ['consumer_id' => $userId, 'consumer_phone' => $checkmobileno2, 'passbook_title' => "howzzt Registration", 'passbook_event' => "User Registration", 'consumer_id' =>$data['latitude'], 'consumer_id' => $data['longitude']], 'Loyalty');
+                $this->Productmodel->saveLoyltyReg('user-registration', $userId, ['consumer_id' => $userId, 'latitude' =>$data['latitude'], 'longitude' => $data['longitude'], 'registration_address' => $data['registration_address']]);
+				$this->Productmodel->saveConsumerPassbookLoyaltyReg('user-registration', $userId, ['consumer_id' => $userId, 'consumer_phone' => $checkmobileno2, 'passbook_title' => "howzzt Registration", 'passbook_event' => "User Registration", 'latitude' =>$data['latitude'], 'longitude' => $data['longitude'], 'registration_address' => $data['registration_address']], 'Loyalty');
                 //$data['password'] = $data['mobile_no'];
                 //$data['token'] = $this->ConsumerModel->authIdentifyDR($data);
                 /*
@@ -124,16 +152,27 @@ class Consumer extends ApiController {
 				$loylty = $this->Productmodel->findLoylityBySlug('user-registration');
 				//$getloylty = $loylty['loyalty_points'];
                 $this->signupMail($data);
-                $smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
-                Utils::sendSMS($data['mobile_no'], $smstext);
+                //$mnvtext5 = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
+				$mnv5_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 5)->get()->row();
+				$mnvtext5 = $mnv5_result->message_notification_value;
+                Utils::sendSMS($data['mobile_no'], $mnvtext5);
 				$fb_token = getConsumerFb_TokenById($userId);
-               $this->ConsumerModel->sendFCM('Congratulations! Your registration is complete, and ' . $loylty['loyalty_points'] . ' Loyalty Points have been added in your howzzt loyalty program.', $fb_token);
-                Utils::response(['status' => true, 'message' => 'Your account has been registered.', 'data' => $data], 200);
-
+				$mnv6_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 6)->get()->row();
+				$mnvtext6 = $mnv6_result->message_notification_value;
+               //$this->ConsumerModel->sendFCM('Congratulations! Your registration is complete, and ' . $loylty['loyalty_points'] . ' Loyalty Points have been added in your howzzt loyalty program.', $fb_token);
+			   $this->ConsumerModel->sendFCM($mnvtext5, $fb_token);
+			   
+			   $mnv7_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 7)->get()->row();
+				$mnvtext7 = $mnv7_result->message_notification_value;
+                //Utils::response(['status' => true, 'message' => 'Your account has been registered successfully.', 'data' => $data], 200);
+				Utils::response(['status' => true, 'message' => $mnvtext7, 'data' => $data], 200);
                 
                 
             } else {
-                Utils::response(['status' => false, 'message' => 'Registration has been failed.'], 200);
+		$mnv8_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 8)->get()->row();
+		$mnvtext8 = $mnv8_result->message_notification_value;
+                //Utils::response(['status' => false, 'message' => 'Registration has been failed.'], 200);
+				Utils::response(['status' => false, 'message' => $mnvtext8], 200);
             }
         }
     }
@@ -148,7 +187,10 @@ class Consumer extends ApiController {
         if (empty($this->auth())) {
             Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
         }
-        Utils::response(['status' => true, 'message' => 'Your account details.', 'data' => $this->auth()]);
+		$mnv9_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 9)->get()->row();
+		$mnvtext9 = $mnv9_result->message_notification_value;
+        //Utils::response(['status' => true, 'message' => 'Your account details.', 'data' => $this->auth()]);
+		Utils::response(['status' => true, 'message' => $mnvtext9, 'data' => $this->auth()]);
     }
 
     /**
@@ -170,7 +212,49 @@ class Consumer extends ApiController {
             ['field' => 'user_name', 'label' => 'User Name', 'rules' => 'min_length[2]'],
             ['field' => 'email', 'label' => 'Email', 'rules' => 'min_length[2]'],
             ['field' => 'dob', 'label' => 'Date of birth', 'rules' => [$this->ConsumerModel, 'dob_check']],
-            ['field' => 'gender', 'label' => 'Gender', 'rules' => 'trim|in_list[male,female]'],
+            ['field' => 'gender', 'label' => 'Gender', 'rules' => 'trim|min_length[2]'],
+			['field' => 'alternate_mobile_no', 'label' => 'Alternate Mobile Number', 'rules' => 'min_length[10]'],
+			['field' => 'street_address', 'label' => 'Street Address', 'rules' => 'min_length[2]'],
+			['field' => 'city', 'label' => 'City', 'rules' => 'min_length[2]'],
+			['field' => 'state', 'label' => 'State', 'rules' => 'min_length[2]'],
+			['field' => 'pin_code', 'label' => 'Pin Code', 'rules' => 'min_length[2]'],
+			['field' => 'monthly_earnings', 'label' => 'Monthly Earnings', 'rules' => 'min_length[2]'],
+			['field' => 'job_profile', 'label' => 'Job Profile', 'rules' => 'min_length[2]'],
+			['field' => 'education_qualification', 'label' => 'Education Qualification', 'rules' => 'min_length[2]'],
+			['field' => 'type_vehicle', 'label' => 'Type Vehicle', 'rules' => 'min_length[2]'],
+			['field' => 'profession', 'label' => 'Profession', 'rules' => 'min_length[2]'],
+			['field' => 'marital_status', 'label' => 'Marital  Status', 'rules' => 'min_length[2]'],
+			['field' => 'no_of_family_members', 'label' => 'Number of Family Members', 'rules' => 'min_length[1]'],
+			['field' => 'loan_car_housing', 'label' => 'Loan Type', 'rules' => 'min_length[2]'],
+			['field' => 'personal_loan', 'label' => 'Personal Loan', 'rules' => 'min_length[2]'],
+			['field' => 'credit_card_loan', 'label' => 'Credit Card Loan', 'rules' => 'min_length[2]'],
+			['field' => 'own_a_car', 'label' => 'Own a Car', 'rules' => 'min_length[2]'],
+			['field' => 'house_type', 'label' => 'House Type', 'rules' => 'min_length[2]'],
+			['field' => 'last_location', 'label' => 'Last Location', 'rules' => 'min_length[2]'],
+			['field' => 'life_insurance', 'label' => 'Life Insurance', 'rules' => 'min_length[2]'],
+			['field' => 'medical_insurance', 'label' => 'Medical Insurance', 'rules' => 'min_length[2]'],
+			['field' => 'height_in_inches', 'label' => 'Height in Inches', 'rules' => 'min_length[2]'],
+			['field' => 'weight_in_kg', 'label' => 'Weight in Kgs', 'rules' => 'min_length[2]'],
+			['field' => 'hobbies', 'label' => 'Hobbies', 'rules' => 'min_length[2]'],
+			['field' => 'sports', 'label' => 'Sports', 'rules' => 'min_length[2]'],
+			['field' => 'entertainment', 'label' => 'Entertainment', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_gender', 'label' => 'Spouse Gender', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_phone', 'label' => 'Spouse Phone', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_dob', 'label' => 'Spouse DOB', 'rules' => 'min_length[2]'],
+			['field' => 'marriage_anniversary', 'label' => 'Marriage Anniversary', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_work_status', 'label' => 'Spouse Work Status', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_edu_qualification', 'label' => 'Spouse Educational Qualification', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_monthly_income', 'label' => 'Spouse Monthly Income', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_loan', 'label' => 'Spouse Loan', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_personal_loan', 'label' => 'Spouse Personal Loan', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_credit_card_loan', 'label' => 'Spouse Credit Card Loan', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_own_a_car', 'label' => 'Spouse Own a Car', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_house_type', 'label' => 'Spouse House Type', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_height_inches', 'label' => 'Spouse Height in Inches', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_weight_kg', 'label' => 'Spouse Weight in Kg', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_hobbies', 'label' => 'Spouse Hobbies', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_sports', 'label' => 'Spouse Sports', 'rules' => 'min_length[2]'],
+			['field' => 'spouse_entertainment', 'label' => 'Spouse Entertainment', 'rules' => 'min_length[2]'],
         ];
         $errors = $this->ConsumerModel->validate($input, $validate);
         if (is_array($errors)) {
@@ -180,10 +264,57 @@ class Consumer extends ApiController {
         $this->db->set('user_name', Utils::getVar('user_name', $input));
         $this->db->set('email', Utils::getVar('email', $input));
         $this->db->set('dob', Utils::getVar('dob', $input));
-        $this->db->set('gender', Utils::getVar('gender', $input));
+		$this->db->set('gender', Utils::getVar('gender', $input));		
+		$this->db->set('alternate_mobile_no', Utils::getVar('alternate_mobile_no', $input));
+		$this->db->set('street_address', Utils::getVar('street_address', $input));
+		$this->db->set('city', Utils::getVar('city', $input));
+		$this->db->set('state', Utils::getVar('state', $input));
+		$this->db->set('pin_code', Utils::getVar('pin_code', $input));
+		$this->db->set('monthly_earnings', Utils::getVar('monthly_earnings', $input));
+		$this->db->set('job_profile', Utils::getVar('job_profile', $input));
+		$this->db->set('education_qualification', Utils::getVar('education_qualification', $input));
+		$this->db->set('type_vehicle', Utils::getVar('type_vehicle', $input));
+		$this->db->set('profession', Utils::getVar('profession', $input));
+		$this->db->set('marital_status', Utils::getVar('marital_status', $input));
+		$this->db->set('no_of_family_members', Utils::getVar('no_of_family_members', $input));
+		$this->db->set('loan_car_housing', Utils::getVar('loan_car_housing', $input));
+		$this->db->set('personal_loan', Utils::getVar('personal_loan', $input));
+		$this->db->set('credit_card_loan', Utils::getVar('credit_card_loan', $input));
+		$this->db->set('own_a_car', Utils::getVar('own_a_car', $input));
+		$this->db->set('house_type', Utils::getVar('house_type', $input));
+		$this->db->set('last_location', Utils::getVar('last_location', $input));
+		$this->db->set('life_insurance', Utils::getVar('life_insurance', $input));
+		$this->db->set('medical_insurance', Utils::getVar('medical_insurance', $input));
+		$this->db->set('height_in_inches', Utils::getVar('height_in_inches', $input));
+		$this->db->set('weight_in_kg', Utils::getVar('weight_in_kg', $input));
+		$this->db->set('hobbies', Utils::getVar('hobbies', $input));
+		$this->db->set('sports', Utils::getVar('sports', $input));
+		$this->db->set('entertainment', Utils::getVar('entertainment', $input));
+		$this->db->set('spouse_gender', Utils::getVar('spouse_gender', $input));
+		$this->db->set('spouse_phone', Utils::getVar('spouse_phone', $input));
+		$this->db->set('spouse_dob', Utils::getVar('spouse_dob', $input));
+		$this->db->set('marriage_anniversary', Utils::getVar('marriage_anniversary', $input));
+		$this->db->set('spouse_work_status', Utils::getVar('spouse_work_status', $input));
+		$this->db->set('spouse_edu_qualification', Utils::getVar('spouse_edu_qualification', $input));
+		$this->db->set('spouse_monthly_income', Utils::getVar('spouse_monthly_income', $input));
+		$this->db->set('spouse_loan', Utils::getVar('spouse_loan', $input));
+		$this->db->set('spouse_personal_loan', Utils::getVar('spouse_personal_loan', $input));
+		$this->db->set('spouse_credit_card_loan', Utils::getVar('spouse_credit_card_loan', $input));
+		$this->db->set('spouse_own_a_car', Utils::getVar('spouse_own_a_car', $input));
+		$this->db->set('spouse_house_type', Utils::getVar('spouse_house_type', $input));
+		$this->db->set('spouse_height_inches', Utils::getVar('spouse_height_inches', $input));
+		$this->db->set('spouse_weight_kg', Utils::getVar('spouse_weight_kg', $input));
+		$this->db->set('spouse_hobbies', Utils::getVar('spouse_hobbies', $input));
+		$this->db->set('spouse_sports', Utils::getVar('spouse_sports', $input));
+		$this->db->set('spouse_entertainment', Utils::getVar('spouse_entertainment', $input));
+		
+        
         $this->db->where('id', $user['id']);
         if ($this->db->update($this->ConsumerModel->table)) {
-            Utils::response(['status' => true, 'message' => 'Your account has been updated.', 'data' => $input]);
+			$mnv10_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 10)->get()->row();
+		$mnvtext10 = $mnv10_result->message_notification_value;		
+            //Utils::response(['status' => true, 'message' => 'Your account has been updated.', 'data' => $input]);
+			 Utils::response(['status' => true, 'message' => $mnvtext10, 'data' => $input]);
         } else {
             Utils::response(['status' => false, 'message' => 'System failed to update.'], 200);
         }
@@ -279,7 +410,7 @@ class Consumer extends ApiController {
             $smstext = 'You have added ' . $mobile_no . ' as ' . $data['relation'] . ' relation with you.';
             Utils::sendSMS($data['phone_number'], $smstext);
             $userId = $user['id'];
-            $this->Productmodel->saveLoylty('user-registration', $userId, ['user_id' => $userId]);
+            //$this->Productmodel->saveLoylty('user-registration', $userId, ['user_id' => $userId]);
             Utils::response(['status' => true, 'message' => 'Your Family member has been added successfully.', 'data' => $data], 200);
         } else {
             Utils::response(['status' => false, 'message' => 'Adding relative failed.'], 200);
@@ -372,6 +503,165 @@ class Consumer extends ApiController {
         $this->response(['status' => true, 'message' => 'Relative are-', 'data' => $result]);
     }
 
+	    // add Consumer Kid Details function 
+    public function addConsumerKid() {
+        $user = $this->auth();
+        $data = $this->getInput();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+
+        $input = $this->getInput();
+        if (($this->input->method() != 'post') || empty($input)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $validate = [
+            ['field' => 'kid_name', 'label' => 'Kid Name', 'rules' => 'min_length[2]'],
+            ['field' => 'kid_gender', 'label' => 'Kid Gender', 'rules' => 'min_length[2]'],
+            ['field' => 'kid_phone_number', 'label' => 'Kid Phone Number', 'rules' => 'trim|required|integer|exact_length[10]'],
+			['field' => 'kid_dob', 'label' => 'Kid Date of birth', 'rules' => [$this->ConsumerModel, 'dob_check']],
+			['field' => 'kid_height', 'label' => 'Kid Height ', 'rules' => 'min_length[2]'],
+			['field' => 'kid_weight', 'label' => 'Kid Weight ', 'rules' => 'min_length[2]'],
+			['field' => 'kid_hobbies', 'label' => 'Kid Hobbies', 'rules' => 'min_length[2]'],
+			['field' => 'kid_sports_like', 'label' => 'Sports Like', 'rules' => 'min_length[2]'],
+			['field' => 'kid_entertainment_like', 'label' => 'Kid Entertainment Like', 'rules' => 'min_length[2]'],
+           
+        ];
+        $errors = $this->ConsumerModel->validate($input, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }
+
+        $phone_number = $this->getInput('phone_number');
+
+        //$emailid = $this->getInput('email');
+        $phone_numberr = $phone_number['phone_number'];
+
+        $isRegistered = $this->ConsumerModel->isHowzztMember($phone_numberr);
+
+        
+
+        $data['consumer_id'] = $user['id'];
+        $data['status'] = "1";
+		$data['create_date'] = date("Y-m-d H:i:s");
+        $data['ip'] = $this->input->ip_address();
+
+        if ($this->db->insert('consumer_kid_details', $data)) {
+            //$this->signupMail($data);
+           // $smstext = 'You have added ' . $data['relation'] . ' as ' . $data['relation'] . ' relation with you.';
+            //Utils::sendSMS($data['phone_number'], $smstext);
+           // $userId = $user['id'];
+            //$this->Productmodel->saveLoylty('user-registration', $userId, ['user_id' => $userId]);
+			$mnv11_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 11)->get()->row();
+		$mnvtext11 = $mnv11_result->message_notification_value;	
+            //Utils::response(['status' => true, 'message' => 'Your Kid has been added successfully.', 'data' => $data], 200);
+			Utils::response(['status' => true, 'message' => $mnvtext11, 'data' => $data], 200);
+        } else {
+			$mnv12_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 12)->get()->row();
+		$mnvtext12 = $mnv12_result->message_notification_value;	
+            //Utils::response(['status' => false, 'message' => 'Adding Kid failed.'], 200);
+			Utils::response(['status' => false, 'message' => $mnvtext12], 200);
+        }
+    }
+
+// edit Consumer Kid function
+    public function editConsumerKid($kid_id) {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+
+        $input = $this->getInput();
+        if (($this->input->method() != 'post') || empty($input)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $validate = [
+            ['field' => 'kid_name', 'label' => 'Kid Name', 'rules' => 'min_length[2]'],
+            ['field' => 'kid_gender', 'label' => 'Kid Gender', 'rules' => 'min_length[2]'],
+            ['field' => 'kid_phone_number', 'label' => 'Kid Phone Number', 'rules' => 'trim|required|integer|exact_length[10]'],
+			['field' => 'kid_dob', 'label' => 'Kid Date of birth', 'rules' => [$this->ConsumerModel, 'dob_check']],
+			['field' => 'kid_height', 'label' => 'Kid Height ', 'rules' => 'min_length[2]'],
+			['field' => 'kid_weight', 'label' => 'Kid Weight ', 'rules' => 'min_length[2]'],
+			['field' => 'kid_hobbies', 'label' => 'Kid Hobbies', 'rules' => 'min_length[2]'],
+			['field' => 'kid_sports_like', 'label' => 'Sports Like', 'rules' => 'min_length[2]'],
+			['field' => 'kid_entertainment_like', 'label' => 'Kid Entertainment Like', 'rules' => 'min_length[2]'],
+        ];
+        $errors = $this->ConsumerModel->validate($input, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }
+        $phone_number = $this->getInput('phone_number');
+        //$emailid = $this->getInput('email');
+        $phone_numberr = $phone_number['phone_number'];
+        $isRegistered = $this->ConsumerModel->isHowzztMember($phone_numberr);       
+
+        $this->db->set('modified_date', date("Y-m-d H:i:s"));
+        $this->db->set('kid_name', Utils::getVar('kid_name', $input));
+        $this->db->set('kid_gender', Utils::getVar('kid_gender', $input));
+        $this->db->set('kid_phone_number', Utils::getVar('kid_phone_number', $input));
+		$this->db->set('kid_dob', Utils::getVar('kid_dob', $input));
+        $this->db->set('kid_height', Utils::getVar('kid_height', $input));
+        $this->db->set('kid_weight', Utils::getVar('kid_weight', $input));
+		$this->db->set('kid_hobbies', Utils::getVar('kid_hobbies', $input));
+        $this->db->set('kid_sports_like', Utils::getVar('kid_sports_like', $input));
+        $this->db->set('kid_entertainment_like', Utils::getVar('kid_entertainment_like', $input));
+        $this->db->where('kid_id', $kid_id);
+        if ($this->db->update('consumer_kid_details')) {
+	$mnv13_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 13)->get()->row();
+		$mnvtext13 = $mnv13_result->message_notification_value;	
+            //Utils::response(['status' => true, 'message' => 'Your Kid details have been updated successfully.', 'data' => $input]);
+			Utils::response(['status' => true, 'message' => $mnvtext13, 'data' => $input]);
+        } else {
+			$mnv14_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 14)->get()->row();
+		$mnvtext14 = $mnv14_result->message_notification_value;	
+            //Utils::response(['status' => false, 'message' => 'System failed to update.'], 200);
+			 Utils::response(['status' => false, 'message' => $mnvtext14], 200);
+        }
+    }
+
+// Delete Consumer Kid function
+
+    public function DeleteConsumerKid($kid_id) {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }
+
+        if ($this->db->delete('consumer_kid_details', array('kid_id' => $kid_id))) {
+		$mnv15_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 15)->get()->row();
+		$mnvtext15 = $mnv15_result->message_notification_value;	
+            //Utils::response(['status' => true, 'message' => 'The Kid Deleted Successfully.']);
+			 Utils::response(['status' => true, 'message' => $mnvtext15]);
+        } else {
+		$mnv16_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 16)->get()->row();
+		$mnvtext16 = $mnv16_result->message_notification_value;
+            //Utils::response(['status' => false, 'message' => 'System failed to delete.'], 200);
+			Utils::response(['status' => false, 'message' => 'System failed to delete.'], 200);
+        }
+    }
+
+    public function ListConsumerKids() {
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        $userid = $user['id'];
+        $result = $this->ConsumerModel->findConsumerKids($userid);
+        if (empty($result)) {
+            $this->response(['status' => false, 'message' => 'Record not found'], 200);
+        }
+        $this->response(['status' => true, 'message' => 'Kid are-', 'data' => $result]);
+    }
+	
+	
+	
     public function changePassword() {
         $user = $this->auth();
         if (empty($user)) {
@@ -645,9 +935,15 @@ class Consumer extends ApiController {
         if ($this->db->update($this->ConsumerModel->table)) {
             unset($data['avatar']);
             $data['avatar_url'] = base_url($data['avatar_url']);
-            Utils::response(['status' => true, 'message' => 'Image has been uploaded successfully.', 'data' => $data]);
+		$mnv17_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 17)->get()->row();
+		$mnvtext17 = $mnv17_result->message_notification_value;
+           // Utils::response(['status' => true, 'message' => 'Image has been uploaded successfully.', 'data' => $data]);
+			 Utils::response(['status' => true, 'message' => $mnvtext17, 'data' => $data]);
         } else {
-            Utils::response(['status' => false, 'message' => 'System failed to upload.'], 200);
+		$mnv18_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 18)->get()->row();
+		$mnvtext18 = $mnv18_result->message_notification_value;
+            //Utils::response(['status' => false, 'message' => 'System failed to upload.'], 200);
+			Utils::response(['status' => false, 'message' => $mnvtext18], 200);
         }
     }
 
@@ -685,6 +981,7 @@ class Consumer extends ApiController {
             ['field' => 'selected_answer', 'label' => 'User answer', 'rules' => 'trim|required'],
 			['field' => 'latitude', 'label' => 'User latitude', 'rules' => 'trim|required'],
 			['field' => 'longitude', 'label' => 'User longitude', 'rules' => 'trim|required'],
+			['field' => 'registration_address', 'label' => 'Registration Address', 'rules' => 'trim|required'],
         ];
         $errors = $this->ConsumerModel->validate($data, $validate);
         if (is_array($errors)) {
@@ -908,12 +1205,21 @@ class Consumer extends ApiController {
             $redemptionId = $this->db->insert_id();
             $this->db->update('consumers',$consumerData,['id'=>$user['id']]);
             //$this->Productmodel->saveLoylty('loyalty-redemption', $user['id'], ['user_id' => $user['id'],'redemption_id'=>$redemptionId]);
-            Utils::response(['status'=>true,'message'=>'Thank you for your redemption request, after validation, your request will be processed in next 7-10 Working days.']);
+		$mnv19_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 19)->get()->row();
+		$mnvtext19 = $mnv19_result->message_notification_value;
+            //Utils::response(['status'=>true,'message'=>'Thank you for your redemption request, after validation, your request will be processed in next 7-10 Working days.']);
+			Utils::response(['status'=>true,'message'=>$mnvtext19]);
         }else{
-            Utils::response(['status'=>false,'message'=>'Failed to accept the redemption request.Please contact support team.']);
+		$mnv20_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 20)->get()->row();
+		$mnvtext20 = $mnv20_result->message_notification_value;
+           // Utils::response(['status'=>false,'message'=>'Failed to accept the redemption request.Please contact support team.']);
+			Utils::response(['status'=>false,'message'=>$mnvtext20]);
         }
 		}else{
-            Utils::response(['status'=>false,'message'=>'Failed to accept the redemption request because your request is already in process.']);
+		$mnv21_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 21)->get()->row();
+		$mnvtext21 = $mnv21_result->message_notification_value;
+            //Utils::response(['status'=>false,'message'=>'Failed to accept the redemption request because your request is already in process.']);
+			Utils::response(['status'=>false,'message'=>$mnvtext21]);
         }
 		}
 		
@@ -944,9 +1250,16 @@ class Consumer extends ApiController {
             $redemptionId = $this->db->insert_id();
             $this->db->update('consumer_complaint',$consumerData,['id'=>$data['complaint_id']]);
             //$this->Productmodel->saveLoylty('loyalty-redemption', $user['id'], ['user_id' => $user['id'],'redemption_id'=>$redemptionId]);
-            Utils::response(['status'=>true,'message'=>'Thank you for responding on complaint, we will review your response in next 7-10 Working days.']);
+           
+		$mnv22_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 22)->get()->row();
+		$mnvtext22 = $mnv22_result->message_notification_value;
+		//Utils::response(['status'=>true,'message'=>'Thank you for responding on complaint, we will review your response in next 7-10 Working days.']);
+		Utils::response(['status'=>true,'message'=>$mnvtext22]);
         }else{
-            Utils::response(['status'=>false,'message'=>'Failed to respond on the complaint. Please contact support team.']);
+		$mnv23_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 23)->get()->row();
+		$mnvtext23 = $mnv23_result->message_notification_value;
+            //Utils::response(['status'=>false,'message'=>'Failed to respond on the complaint. Please contact support team.']);
+			Utils::response(['status'=>false,'message'=>$mnvtext23]);
         }
 		
 		}

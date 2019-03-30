@@ -20,11 +20,11 @@
            <div class="col-xs-12">
              <div class="row">
                <div class="col-xs-12">
-                 <h3 class="header smaller lighter blue"><?php echo $constant;?></h3>
+                 <!--<h3 class="header smaller lighter blue"><?php echo $constant;?></h3>
                    
-                  <!--<div class="table-header">
+                  <div class="table-header">
  											Results for "Locations"
- 										</div>--><br>
+ 										</div>-->
                  <div class="row">
 
                   <div class="col-xs-12">
@@ -34,7 +34,34 @@
                       <div class="tab-pane fade active in">
 
                         <?php //echo '<pre>';print_r($get_user_details);exit;//$this->load->view('add_menu_form_tpl');?>
-							<div style="clear:both;height:40px;"><a href="<?php echo base_url()?>user_master/list_user/" class="btn btn-primary pull-right" title="List Users">List Users </a></div>
+							<div style="clear:both;height:40px;">
+							
+							<?php if($this->session->userdata('admin_user_id')==1){?>
+									<a href="<?php echo base_url()?>customer/bill_list/<?php echo $get_user_details[0]['user_id'];?>" class="btn btn-primary pull-right" title="List Users">ISPL Billing</a>
+							
+							<a href="<?php echo base_url()?>customer/payment_list/<?php echo $get_user_details[0]['user_id'];?>" class="btn btn-primary pull-right" title="List Users">Payments</a>
+							
+							<a href="<?php echo base_url()?>product/list_customer_loyalty_summary/<?php echo $get_user_details[0]['user_id'];?>" class="btn btn-primary pull-right" title="List Users">Customer Passbook</a>
+							
+							<a href="<?php echo base_url()?>plant_master/list_locations/<?php echo $get_user_details[0]['user_id'];?>" class="btn btn-primary pull-right" title="List Users">Locations</a>
+							
+							<a href="<?php echo base_url()?>product/list_all_consumers/<?php echo $get_user_details[0]['user_id'];?>" class="btn btn-primary pull-right" title="List Users">Consumer Profile</a>
+							
+							<a href="<?php echo base_url()?>order_master/list_orders/<?php echo $get_user_details[0]['user_id'];?>" class="btn btn-primary pull-right" title="List Users">Order Mgt</a>
+							
+							<a href="<?php echo base_url()?>product/list_product/<?php echo $get_user_details[0]['user_id'];?>" class="btn btn-primary pull-right" title="List Users">Product Mgt</a>
+							
+							<a href="<?php echo base_url()?>user_master/list_tracek_users/<?php echo $get_user_details[0]['user_id'];?>" class="btn btn-primary pull-right" title="List Users">Tracek User Mgt</a>
+							
+							
+							
+							<a href="<?php echo base_url()?>user_master/add_plant_controller/<?php echo $get_user_details[0]['user_id'];?>" class="btn btn-primary pull-right" title="List Users">Add Tracek User</a>
+							
+							
+							
+							
+							<?php } ?>
+							</div>
                         <div class="row">
 
                           <div class="col-xs-12">
@@ -53,62 +80,65 @@
 				 
         <div class="widget-main">
 		<div class="form-group row">
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			<label for="form-field-8"><b>Customer Code</b></label>
 			<div class=""><?php echo $get_user_details[0]['customer_code'];?></div>
 			 
 			</div>
 			
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			  <label for="form-field-8"><b>Phone#</b></label>
              <div class=""><?php echo $get_user_details[0]['mobile_no'];?></div>
 			</div>
-		</div>
-		<div class="form-group row">
-			<div class="col-sm-6">
+			
+			<div class="col-sm-4">
 			  <label for="form-field-8"><b>User Name</b></label>
              <div class=""><?php echo $get_user_details[0]['user_name'];?></div>
 			</div>
-			 
-			
-			<div class="col-sm-6">
+		</div>
+		<div class="form-group row">
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>First Name</b></label>
+			<div class=""><?php echo $get_user_details[0]['f_name'];?></div>
+			</div>
+ 			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Last Name</b></label>
+			 <div class=""><?php echo $get_user_details[0]['l_name'];?></div>
+			</div>
+			<div class="col-sm-4">
 			  <label for="form-field-8"><b>Email ID</b></label>
 
             <div class=""><?php echo $get_user_details[0]['email_id'];?></div>
 			</div>
 		</div>
 		<div class="form-group row">
-			<div class="col-sm-6">
-			  <label for="form-field-8"><b>First Name</b></label>
-			<div class=""><?php echo $get_user_details[0]['f_name'];?></div>
-			</div>
- 			<div class="col-sm-6">
-			  <label for="form-field-8"><b>Last Name</b></label>
-			 <div class=""><?php echo $get_user_details[0]['l_name'];?></div>
-			</div>
-			<div class="col-sm-6">
+			
+			<div class="col-sm-4">
 			  <label for="form-field-8"><b>Role of user</b></label>
 			 <div class=""><?php echo getRoleNameById($get_user_details[0]['designation_id']);?></div>
 			</div>
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			  <label for="form-field-8"><b>Assigned Locations</b></label>
 			 <div class=""><?php echo get_locations_name_by_id(get_assigned_location_user_list($get_user_details[0]['user_id'])); ?></div>
 			</div>
+			<div class="col-sm-4"><?php //print_r($show_city_name);?>
+			 <label for="form-field-9"><b>City</b></label>
+              <div class=""><?php  echo $show_city_name[0]['ci_name'];?></div>
+ 			</div>
 		</div>
 		<?php if($this->session->userdata('admin_user_id')==1){?>
 		<div class="form-group row">
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			<label for="form-field-8"><b>Industry</b></label>
 			<div class=""><?php echo $get_user_details[0]['industry'];?></div>
 			</div>
 			
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			  <label for="form-field-8"><b>Pan</b></label>
              <div class=""><?php echo $get_user_details[0]['pan'];?></div>
 			</div>
-		</div>
-  		<div class="form-group row">
-			<div class="col-sm-6">
+			
+			<div class="col-sm-4">
 			 <label for="form-field-9"><b>State</b></label>
 			 <?php $states = get_state_name(31);?>
    		  		<?php foreach($states as $val){
@@ -116,19 +146,20 @@
 					<div class=""><?php  echo $val['state_name'];?></div>
 				<?php }}?>
  			</div>
+			
+		</div>
+  		<div class="form-group row">
+			
 			 
 			
-			<div class="col-sm-6"><?php //print_r($show_city_name);?>
-			 <label for="form-field-9"><b>City</b></label>
-              <div class=""><?php  echo $show_city_name[0]['ci_name'];?></div>
- 			</div>
+			
 		</div>
 		
 		<?php }?>
 		 
 		
 		<div class="form-group row">
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			<?php if(empty($get_user_details[0]['profile_photo']) || !file_exists('./uploads/rwaprofilesettings/thumb/thumb_'.$get_user_details[0]['profile_photo'])){?>
 			<?php }else{?>
 			  <label for="form-field-8">Profile Image</label>

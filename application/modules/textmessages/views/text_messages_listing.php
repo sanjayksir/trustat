@@ -265,6 +265,7 @@ function add_question_to_product(customer_id, id, text_message){
 			}
 		
 		});
+		window.location.href="<?php echo base_url().'textmessages/approve_text_messages/';?>";
 	} else{
 		return false;
 	} 

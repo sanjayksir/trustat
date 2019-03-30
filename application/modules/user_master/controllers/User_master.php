@@ -92,6 +92,103 @@ class User_master extends MX_Controller {
         ##--------------- pagination End ----------------##
         $this->load->view('list_plant_con_tpl', $params);
     }
+	
+	
+    public function list_tracek_users() {
+
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+        if (empty($user_id) || empty($user_name)) {
+
+            redirect('login');
+            exit;
+        }
+		$customer_id = $this->uri->segment(3);
+        $data = array();
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->myspidey_user_master_model->get_total_tracek_users_list_all($srch_string);
+
+       // if ($total_records > 0) {
+            // get current page records
+            $params['userListing'] = $this->myspidey_user_master_model->get_tracek_user_list_all($limit_per_page, $start_index, $srch_string);
+            //$params["orderListing"] = $this->order_master_model->get_order_list_all($limit_per_page, $start_index,$srch_string);
+            $params["links"] = Utils::pagination('user_master/list_tracek_users/' . $customer_id, $total_records, null, 4);
+       // }
+        ##--------------- pagination End ----------------##
+        $this->load->view('list_tracek_users_tpl', $params);
+    }
+	
+	
+		public function list_tracek_usersold() {
+        $this->checklogin();
+       $customer_id = $this->uri->segment(3);
+	
+		//echo $id;
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->myspidey_user_master_model->get_total_tracek_users_list_all($customer_id, $srch_string);
+        $params["userListing"] = $this->myspidey_user_master_model->get_tracek_user_list_all($customer_id, $limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('user_master/list_tracek_users/' . $customer_id, $total_records);
+		//echo "test";
+        $this->load->view('list_plant_con_tpl', $params);
+    }
+	
+	
+	public function list_view_consumer_passbook() {
+        $this->checklogin();
+       $id = $this->uri->segment(3);
+	
+		//echo $id;
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->myspidey_user_master_model->count_total_list_view_consumer_passbook($id,$srch_string);
+        $params["list_view_consumer_passbook"] = $this->myspidey_user_master_model->list_view_consumer_passbook($id, $limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('product/list_view_consumer_passbook/' . $id, $total_records);
+		//echo "test";
+        $this->load->view('list_view_consumer_passbook_tpl', $params);
+    }
+	
+	
 
     public function list_customer_app_users() {
 
@@ -670,7 +767,91 @@ class User_master extends MX_Controller {
         exit;
     }
 	
+	
+	public function list_message_notification_master() {
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+        if (empty($user_id) || empty($user_name)) {
+
+            redirect('login');
+            exit;
+        }
+        $data = array();
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->myspidey_user_master_model->get_total_message_notification_list_all($srch_string);
+
+        if ($total_records > 0) {
+            // get current page records
+            $params['userListing'] = $this->myspidey_user_master_model->get_message_notification_list_all($limit_per_page, $start_index, $srch_string);
+            
+            // build paging links
+            $params["links"] = Utils::pagination('user_master/list_message_notification_master', $total_records);;
+        }
+        ##--------------- pagination End ----------------##
 		
+		$result = $this->db->select('loyalty_points')->from('loylties')->where('transaction_type_slug', 'user-registration')->limit(1)->get()->row();
+			$user_registration_points = $result->loyalty_points;
+			$params["user_registration_points"] = $user_registration_points;
+
+        $user_id = $this->session->userdata('admin_user_id');
+        $this->load->view('list_message_notification_master_tpl', $params);
+    }
+	
+	
+		public function edit_message_notification() {
+
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+        if (empty($user_id) || empty($user_name)) {
+
+            redirect('login');
+            exit;
+        }
+
+        $data = array();
+        $id = $this->uri->segment(3); //$this->session->userdata('admin_user_id');
+        //$data['ownership'] 	= $this->myspidey_user_group_permissions_model->get_ownership_user();
+        
+       // $data['get_user_details'] = $this->myspidey_user_master_model->get_user_details($id);
+		$data['get_user_details'] = $this->myspidey_user_master_model->get_message_notification_details($id);
+		
+		$result = $this->db->select('loyalty_points')->from('loylties')->where('transaction_type_slug', 'user-registration')->limit(1)->get()->row();
+			$user_registration_points = $result->loyalty_points;
+			$data["user_registration_points"] = $user_registration_points;
+			
+
+        $this->load->view('edit_message_notification_tpl', $data);
+    }
+	
+  public function update_message_notification_details() {
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+        if (empty($user_id) || empty($user_name)) {
+
+            redirect('login');
+            exit;
+        }
+        parse_str($_POST['newdata'], $searcharray);
+       
+		//$id = $this->uri->segment(3);
+
+        echo $this->myspidey_user_master_model->update_message_notification_details_data($searcharray);
+        exit;
+    }	
 
 }
 ?>

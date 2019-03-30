@@ -2,9 +2,25 @@
     <div class="alert alert-msg" style="display:none;"></div>
     <div class="widget-header widget-header-flat">
         <h5 class="widget-title bigger lighter"><?php echo $title;?></h5>
-        <div class="widget-toolbar">
-            <!--<a href="<?php echo base_url('barcode_inventory/addbarcode_transaction/Received') ?>" class="btn btn-sm btn-success btnadd" title="Receive More Codes">Receive More Codes</a>-->
-        </div>
+		
+		
+								<div class="widget-toolbar">
+                                   <a href="<?php echo base_url('barcode_inventory/receive_codes') ?>" class="btn btn-xs btn-warning" title="Add Product">List Received Codes<?php //echo $label; ?> </a>
+                                </div>
+								
+								<div class="widget-toolbar">
+                                   <a href="<?php echo base_url('barcode_inventory/received_codes') ?>" class="btn btn-xs btn-warning" title="Add Product">Received Codes Master<?php //echo $label; ?> </a>
+                                </div>
+								
+								<div class="widget-toolbar">
+                                   <a href="<?php echo base_url('barcode_inventory/issue_codes') ?>" class="btn btn-xs btn-warning" title="Add Product">List Issues Codes<?php //echo $label; ?> </a>
+                                </div>
+								
+								<div class="widget-toolbar">
+                                   <a href="<?php echo base_url('barcode_inventory/issued_codes') ?>" class="btn btn-xs btn-warning" title="Add Product">Issues Codes Master<?php //echo $label; ?> </a>
+                                </div>
+							
+			
     </div>
     <div class="widget-body">
         <div class="row filter-box">

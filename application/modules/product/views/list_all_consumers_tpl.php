@@ -108,6 +108,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                 </div>
 
                       <!--------------- Search Tab start----------------->
+					  <div style="overflow-x:auto;">
                         <table id="dynamic-table" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
@@ -118,13 +119,77 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th>Consumer Photo</th>
                                     <th>Date of Registration</th>
                                     <th>Consumer Aadhaar Number </th>
+									<?php 
+									$user_id = $this->session->userdata('admin_user_id');
+									if($user_id==1){
+													   ?>
+													     <th class="hidden-480">Consumer Gender</th>
+														 <th class="hidden-480">Consumer dob</th>
+														 <th class="hidden-480">Consumer Registration Address</th> 
+														 <th class="hidden-480">Consumer Alternate Mobile Number</th>
+														 <th class="hidden-480">Consumer Street Address</th>
+														 <th class="hidden-480">Consumer City</th>
+														 <th class="hidden-480">Consumer State</th>
+														 <th class="hidden-480">Consumer Pin Code</th>
+														 <th class="hidden-480">Consumer Monthly Earnings</th>
+														 <th class="hidden-480">Consumer Job Profile</th> 
+														 <th class="hidden-480">Consumer Education Qualification</th>
+														 <th class="hidden-480">Consumer Type Vehicle</th>
+														 <th class="hidden-480">Consumer Profession</th>
+														 <th class="hidden-480">Consumer Marital Mtatus</th>
+														 <th class="hidden-480">Number of Family Members</th>
+														 <th class="hidden-480">Consumer Loan Car Housing</th>
+														 <th class="hidden-480">Consumer Personal Loan</th> 
+														 <th class="hidden-480">Consumer Credit Card Loan</th>
+														 <th class="hidden-480">Consumer Own a Car</th>
+														 <th class="hidden-480">Consumer House Type</th>
+													     <th class="hidden-480">Consumer Last Location</th>
+														 <th class="hidden-480">Consumer Life Insurance</th>
+														 <th class="hidden-480">Consumer Medical Insurance</th>
+														 <th class="hidden-480">Consumer Height in inches</th>
+														 <th class="hidden-480">Consumer Weight in Kg</th>
+														 <th class="hidden-480">Consumer Hobbies</th>
+														 <th class="hidden-480">Consumer Sports</th>
+														 <th class="hidden-480">Consumer Entertainment</th>
+														 <th class="hidden-480">Spouse Gender</th>
+														 <th class="hidden-480">Spouse Phone</th>
+														 <th class="hidden-480">Spouse dob</th>
+														 <th class="hidden-480">Marriage Anniversary</th>
+														 <th class="hidden-480">Spouse Work Status</th>
+														 <th class="hidden-480">Spouse Work Status</th>
+														 <th class="hidden-480">Spouse Monthly Income</th>
+														 <th class="hidden-480">Spouse Loan</th>
+														 <th class="hidden-480">Spouse Personal Loan</th>
+														 <th class="hidden-480">Spouse Credit Card Loan</th>
+														 <th class="hidden-480">Spouse Own a Car</th>
+														 <th class="hidden-480">Spouse House Type</th>
+														 <th class="hidden-480">Spouse Height Inches</th>
+														 <th class="hidden-480">Spouse Weight Kg</th>
+														 <th class="hidden-480">Spouse Hobbies</th>
+														 <th class="hidden-480">Spouse Sports</th>
+														 <th class="hidden-480">Spouse Entertainment</th>
+														 <th class="hidden-480">Last Modified at</th>
+													   
+												  <?php }  ?>
                                 </tr>
                             </thead>
                             <tbody>
 									  
                         <?php
+						
+						$user_id = $this->session->userdata('admin_user_id');
+						$customer_id = $this->uri->segment(3);
+										
                         if(count($list_all_consumers)>0){
-                            $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+                           // $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+						   
+						   if(($user_id==1) && ($customer_id!="")){
+				$page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
+			}else{
+			
+			$page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+			}
+			
                             $sno =  $page + 1;
                         $i=0;
                         foreach ($list_all_consumers as $attr){
@@ -135,10 +200,63 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                 <td><?php echo $attr['user_name']; ?></td>
                                 <td><?php echo $attr['mobile_no']; ?></td>
                                 <td><?php echo $attr['email']; ?></td>
-                                             <td><img src="<?php echo base_url(); ?><?php echo $attr['avatar_url']; ?>" alt="Consumer Photo Not found" height="42" width="42"></td>
-                                                 <td><?php echo $attr['created_at']; ?></td>
-                                                 <td><?php echo $attr['aadhaar_number']; ?></td>
-                                                 
+                                <td><img src="<?php echo base_url(); ?><?php echo $attr['avatar_url']; ?>" alt="Consumer Photo Not found" height="42" width="42"></td>
+                                <td><?php echo $attr['created_at']; ?></td>
+                                <td><?php echo $attr['aadhaar_number']; ?></td>
+                                                  <?php if($user_id==1){
+													   ?>
+													    <td><?php echo $attr['gender']; ?></td>
+														<td><?php echo $attr['dob']; ?></td>
+														<td><?php echo $attr['registration_address']; ?></td>
+														<td><?php echo $attr['alternate_mobile_no']; ?></td>
+														<td><?php echo $attr['street_address']; ?></td>
+														<td><?php echo $attr['city']; ?></td>
+														<td><?php echo $attr['state']; ?></td>
+														<td><?php echo $attr['pin_code']; ?></td>
+														<td><?php echo $attr['monthly_earnings']; ?></td>
+														<td><?php echo $attr['job_profile']; ?></td>
+														<td><?php echo $attr['education_qualification']; ?></td>
+														<td><?php echo $attr['type_vehicle']; ?></td>
+														<td><?php echo $attr['profession']; ?></td>
+														<td><?php echo $attr['marital_status']; ?></td>
+														<td><?php echo $attr['no_of_family_members']; ?></td>
+														<td><?php echo $attr['loan_car_housing']; ?></td>
+														<td><?php echo $attr['personal_loan']; ?></td>
+														<td><?php echo $attr['credit_card_loan']; ?></td>
+														<td><?php echo $attr['own_a_car']; ?></td>
+														<td><?php echo $attr['house_type']; ?></td>
+														<td><?php echo $attr['last_location']; ?></td>
+														<td><?php echo $attr['life_insurance']; ?></td>
+														<td><?php echo $attr['medical_insurance']; ?></td>
+														<td><?php echo $attr['height_in_inches']; ?></td>
+														<td><?php echo $attr['weight_in_kg']; ?></td>
+														<td><?php echo $attr['hobbies']; ?></td>
+														<td><?php echo $attr['sports']; ?></td>
+														<td><?php echo $attr['entertainment']; ?></td>
+														<td><?php echo $attr['spouse_gender']; ?></td>
+														<td><?php echo $attr['spouse_phone']; ?></td>
+														<td><?php echo $attr['spouse_dob']; ?></td>
+														<td><?php echo $attr['marriage_anniversary']; ?></td>
+														<td><?php echo $attr['spouse_work_status']; ?></td>
+														<td><?php echo $attr['spouse_edu_qualification']; ?></td>
+														<td><?php echo $attr['spouse_monthly_income']; ?></td>
+														<td><?php echo $attr['spouse_loan']; ?></td>
+														<td><?php echo $attr['spouse_personal_loan']; ?></td>
+														<td><?php echo $attr['spouse_credit_card_loan']; ?></td>
+														<td><?php echo $attr['spouse_own_a_car']; ?></td>
+														<td><?php echo $attr['spouse_house_type']; ?></td>
+														<td><?php echo $attr['spouse_height_inches']; ?></td>
+														<td><?php echo $attr['spouse_weight_kg']; ?></td>
+														<td><?php echo $attr['spouse_hobbies']; ?></td>
+														<td><?php echo $attr['spouse_sports']; ?></td>
+														<td><?php echo $attr['spouse_entertainment']; ?></td>
+														<td><?php echo $attr['modified_at'];
+				
+
+
+														?></td>
+													   
+												  <?php }  ?>
 													<!--<td><input type="checkbox" name="assignConsumer[]" class="assignConsumer" /></td>-->
 
                                              </tr>
@@ -153,6 +271,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                                     </tbody>
                                 </table>
+								</div>
                             <div class="row paging-box">
                             <?php echo $links ?>
                             </div>    
