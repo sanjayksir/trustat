@@ -116,6 +116,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th class="hidden-480">Event Name</th>
                                     <th class="hidden-480">Event Detail</th>
                                     <th>Points </th>
+									<th>Loyalty Source</th>
                                     <th>Transaction Type (Earned/Redeemed) </th>
 									<td>Total accumulated points</td>
 								   <td>Total redeemed points</td>
@@ -161,6 +162,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 							
 								?></td>
                                  <td><?php echo $attr['points']; ?></td>
+								 <td><?php echo getUserFullNameById($attr['customer_id']); ?></td>
                                    <td><?php echo $attr['transaction_lr_type']; ?></td>
 								   <td><?php echo $attr['total_accumulated_points']; ?></td>
 								   <td><?php echo $attr['total_redeemed_points']; ?></td>
