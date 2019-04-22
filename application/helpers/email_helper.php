@@ -19,7 +19,7 @@
 						  <tr bgcolor="#fdb302">
 							<td><table cellpadding="0" cellspacing="0" style="margin:10px;" >
 								<tr>
-								  <td><a href="http://www.cityspidey.com" target="_blank"><img src="http://www.cityspidey.com/images/logo_notice_news.jpg" alt="www.CitySpidey.com"  title="www.CitySpidey.com" style="100%" /></a></td>
+								  <td><a href="http://www.innovigents.com" target="_blank"><img src="http://www.innovigents.com/images/logo_notice_news.jpg" alt="www.innovigents.com"  title="www.innovigents.com" style="100%" /></a></td>
 								</tr>
 								<tr>
 								  <td bgcolor="#4a4a4a" style="color:#FFF; text-align:center;padding:3px; font-family:Arial, Helvetica, sans-serif; font-size:14px;">' . date("jS F Y") . '</td>
@@ -27,11 +27,11 @@
 							  </table></td>
 							<td><table cellpadding="0" cellspacing="0"  align="right" style="margin:10px;">
 								<tr>
-								  <td><a href="https://www.facebook.com/CitySpidey-794449920700906/?ref=bookmarks" target="_blank"><img src="http://cityspidey.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
+								  <td><a href="https://www.facebook.com/CitySpidey-794449920700906/?ref=bookmarks" target="_blank"><img src="http://innovigents.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
 								  <td>&nbsp;</td>
-								  <td><a href="https://twitter.com/city_spidey" target="_blank"><img src="http://www.cityspidey.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
+								  <td><a href="https://twitter.com/city_spidey" target="_blank"><img src="http://www.innovigents.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
 									<td>&nbsp;</td>
-								  <td><a href="https://www.instagram.com/cityspidey_stevemedius/" target="_blank"><img src="http://www.cityspidey.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
+								  <td><a href="https://www.instagram.com/cityspidey_stevemedius/" target="_blank"><img src="http://www.innovigents.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
 								</tr>
 							  </table></td>
 						  </tr>';
@@ -40,7 +40,7 @@
         $content .= '<tr>
 									<td colspan="2" style="text-align:left; padding:15px 0 15px 0"><p> Hi Spidey City-zen ' . ',</p>
 									<p>Your password has been changed! You\'re new password is: ' .$password . '.</b></p>
-<p>We hope you\'ll enjoy our network and features responsibly. There are a few  <a href=\'http://www.cityspidey.com/terms-and-conditions.php\'> rules </a> to remember to keep our network healthy. </p>
+<p>We hope you\'ll enjoy our network and features responsibly. There are a few  <a href=\'http://www.innovigents.com/terms-and-conditions.php\'> rules </a> to remember to keep our network healthy. </p>
 <p>You are advised to change your password after logging in. </p>
 <p>See you around! </br>
 Spidey	</p></td></tr>';
@@ -155,7 +155,7 @@ function decrypt_url($url){
 
 // Send Receive Alert emails
 function receiveAlert($emails, $category, $storydata) {
-	$from = "no-reply@cityspidey.com";
+	$from = "no-reply@innovigents.com";
 	$fromname = "Spidey Buzz";
 	$to = $emails; //Recipients list (semicolon separated)
 	$url = base_url().'home/';
@@ -269,7 +269,7 @@ function receiveAlert($emails, $category, $storydata) {
 	                    <tr>
 	                      <td><span style="font-size:18px;font-family: \'Roboto\';color:#FFFFFF">For any queries contact <br />
 	                        Customer Support: <br />
-	                        <a href="#" style="text-decoration:none; color:#fea800;">cs@cityspidey.com</a></span></td>
+	                        <a href="#" style="text-decoration:none; color:#fea800;">cs@innovigents.com</a></span></td>
 	                    </tr>
 	                    <tr>
 	                      <td height="20"></td>
@@ -325,7 +325,7 @@ function unsubscribeAlert($email, $category, $category_id, $reason) {
 	$ci =& get_instance();
     $ci->load->library('encryption');
 
-	$from = "no-reply@cityspidey.com";
+	$from = "no-reply@innovigents.com";
 	$fromname = "Spidey Buzz";
 	$to = $email; //Recipients list (semicolon separated)
 	$url = base_url().'home/';
@@ -387,7 +387,7 @@ function unsubscribeAlert($email, $category, $category_id, $reason) {
 			                    <tr>
 			                      <td><span style="font-size:18px;font-family: \'Roboto\';color:#FFFFFF">For any queries contact <br />
 			                        Customer Support: <br />
-			                        <a href="#" style="text-decoration:none; color:#fea800;">cs@cityspidey.com</a></span></td>
+			                        <a href="#" style="text-decoration:none; color:#fea800;">cs@innovigents.com</a></span></td>
 			                    </tr>
 			                    <tr>
 			                      <td height="20"></td>
@@ -440,7 +440,7 @@ function unsubscribeAlert($email, $category, $category_id, $reason) {
 
 // Send Receive Newsletter emails
 function subscribeNewsletter($emails) {
-	$from = "no-reply@cityspidey.com";
+	$from = "no-reply@innovigents.com";
 	$fromname = "Spidey Buzz";
 	$to = $emails; //Recipients list (semicolon separated)
 	$url = base_url().'home/';
@@ -553,7 +553,7 @@ function subscribeNewsletter($emails) {
 	                    <tr>
 	                      <td><span style="font-size:18px;font-family: \'Roboto\';color:#FFFFFF">For any queries contact <br />
 	                        Customer Support: <br />
-	                        <a href="#" style="text-decoration:none; color:#fea800;">cs@cityspidey.com</a></span></td>
+	                        <a href="#" style="text-decoration:none; color:#fea800;">cs@innovigents.com</a></span></td>
 	                    </tr>
 	                    <tr>
 	                      <td height="20"></td>
@@ -609,7 +609,7 @@ function unsubscribeNewsletter($email, $reason) {
 	$ci =& get_instance();
     $ci->load->library('encryption');
 
-	$from = "no-reply@cityspidey.com";
+	$from = "no-reply@innovigents.com";
 	$fromname = "Spidey Buzz";
 	$to = $email; //Recipients list (semicolon separated)
 	$url = base_url().'home/';
@@ -671,7 +671,7 @@ function unsubscribeNewsletter($email, $reason) {
 			                    <tr>
 			                      <td><span style="font-size:18px;font-family: \'Roboto\';color:#FFFFFF">For any queries contact <br />
 			                        Customer Support: <br />
-			                        <a href="#" style="text-decoration:none; color:#fea800;">cs@cityspidey.com</a></span></td>
+			                        <a href="#" style="text-decoration:none; color:#fea800;">cs@innovigents.com</a></span></td>
 			                    </tr>
 			                    <tr>
 			                      <td height="20"></td>

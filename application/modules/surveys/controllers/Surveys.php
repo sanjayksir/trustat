@@ -820,15 +820,32 @@ function list_assigned_Surveys() {
 		$product_id	=$this->input->post('p_id');
 		$promotion_id =$this->input->post('promotion_id');
 		$promotion_title =$this->input->post('promotion_title');
+		$consumer_selection_criteria =$this->input->post('sent_to');
 		$Chk = $this->input->post('Chk');
-		echo $this->Survey_model->save_push_Survey($customer_id,$product_id,$promotion_id,$promotion_title,$Chk);
+		echo $this->Survey_model->save_push_Survey($customer_id,$product_id,$promotion_id,$promotion_title,$Chk,$consumer_selection_criteria);
 		
 		if($Chk==2){
 		$value=2;
 		} else {
 			$value=1;
 		}
-		 echo $status= $this->Survey_model->change_status($promotion_id,$value);
+		echo $status= $this->Survey_model->change_status($promotion_id,$value);
+		if($consumer_selection_criteria=="All") {
+		
+		//echo $status= $this->Survey_model->change_status($promotion_id,$value);
+		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+				
+				foreach ($query->result() as $user)  
+				{
+		  $consumer_id = $user->consumer_id;
+		 $fb_token = getConsumerFb_TokenById($consumer_id);
+		 
+		 $this->Survey_model->sendFCM("A Survey Posted!!", $fb_token);
+		 }
+			}else{
+				
+			
+		// echo $status= $this->Survey_model->change_status($promotion_id,$value);
 		 
 		 $this->db->select('*');
 			$this->db->from('consumer_selection_criteria');
@@ -876,8 +893,9 @@ function list_assigned_Surveys() {
 			$this->db->insert('list_notifications_table', $NTFdata);
 			
 		 }
-		
+		}
 		exit;
+		
  	}
 	
 	public function change_status() {

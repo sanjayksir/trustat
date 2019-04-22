@@ -295,14 +295,14 @@
 
 		rules: {
   			promotion_type:{
- 						 required: true,
+ 						 required: true/*, 
 						 remote: {
 
                        	 	url: "<?php echo base_url().'consumer/';?>checkPromotionType",
                           	type: "post",
  							data: {  criteriaid: $( "#criteria_id" ).val() }
 
-                    	 }
+                    	 } */
 
 					  },
 
@@ -312,8 +312,8 @@
  
 				promotion_type: {
 
-					required: "Please Select Consumer Selection Criteria.",
-					remote: "You have already added this Promotion Type!" 
+					required: "Please Select Consumer Selection Criteria." /*,
+					remote: "You have already added this Promotion Type!" */
 
 				}, 
 

@@ -99,6 +99,7 @@
                                             <th>Consumer Age</th>
                                             <th>Consumer City</th>
                                             <th>Consumer Pin</th>
+											<th>Number of Consuers</th>
                                             <th>Action</th>
                                     </tr>
                             </thead>
@@ -125,6 +126,10 @@
                                            <td><?php echo $listData['consumer_min_age']; ?> to <?php echo $listData['consumer_max_age']; ?></td>
                                            <td><?php echo $listData['consumer_city']; ?></td>
 										    <td><?php echo $listData['consumer_pin']; ?></td>
+											<td><?php //echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>
+								<?php echo NumberOfSelectedConsumersByACustomer2($listData['customer_id'],$listData['consumer_gender'],$listData['consumer_city'],$listData['consumer_pin'],$listData['consumer_max_age'],$listData['consumer_city']); ?>
+											
+											</td>
                                        <!--    <td><?php if($this->session->userdata('admin_user_id')==1){
 				
 												//$location_name = get_all_active_locations($listData['user_id']);

@@ -56,7 +56,7 @@ define({ "api": [
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/customer/logout"
+        "url": "https://innovigents.com/api/customer/logout"
       }
     ],
     "error": {
@@ -214,7 +214,7 @@ define({ "api": [
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/customer/login"
+        "url": "https://innovigents.com/api/customer/login"
       }
     ]
   },
@@ -334,7 +334,7 @@ define({ "api": [
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/customer/add-inventory"
+        "url": "https://innovigents.com/api/customer/add-inventory"
       }
     ]
   },
@@ -454,7 +454,7 @@ define({ "api": [
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/customer/add-product-level"
+        "url": "https://innovigents.com/api/customer/add-product-level"
       }
     ]
   },
@@ -509,7 +509,7 @@ define({ "api": [
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/customer/view-inventory?offset=:offset&limit=:limit"
+        "url": "https://innovigents.com/api/customer/view-inventory?offset=:offset&limit=:limit"
       }
     ],
     "error": {
@@ -633,7 +633,7 @@ define({ "api": [
     "groupTitle": "Customer_App",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/customer/view-product?offset=:offset&limit=:limit"
+        "url": "https://innovigents.com/api/customer/view-product?offset=:offset&limit=:limit"
       }
     ]
   },
@@ -701,7 +701,7 @@ define({ "api": [
     "groupTitle": "Product",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/product-details/:product_id"
+        "url": "https://innovigents.com/api/product-details/:product_id"
       }
     ],
     "error": {
@@ -800,7 +800,7 @@ define({ "api": [
     "groupTitle": "Product",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/purchased-product"
+        "url": "https://innovigents.com/api/purchased-product"
       }
     ],
     "error": {
@@ -899,7 +899,7 @@ define({ "api": [
     "groupTitle": "Product",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/redemption"
+        "url": "https://innovigents.com/api/redemption"
       }
     ],
     "error": {
@@ -998,7 +998,7 @@ define({ "api": [
     "groupTitle": "Product",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/view-scanned-product"
+        "url": "https://innovigents.com/api/view-scanned-product"
       }
     ],
     "error": {
@@ -1131,7 +1131,7 @@ define({ "api": [
     "groupTitle": "Product",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/complaint"
+        "url": "https://innovigents.com/api/complaint"
       }
     ],
     "error": {
@@ -1271,7 +1271,7 @@ define({ "api": [
     "groupTitle": "Product",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/feedback-answer"
+        "url": "https://innovigents.com/api/feedback-answer"
       }
     ],
     "error": {
@@ -1460,7 +1460,7 @@ define({ "api": [
     "groupTitle": "Product",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/redemption/add"
+        "url": "https://innovigents.com/api/redemption/add"
       }
     ],
     "error": {
@@ -1600,7 +1600,7 @@ define({ "api": [
     "groupTitle": "Product",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/register-product"
+        "url": "https://innovigents.com/api/register-product"
       }
     ],
     "error": {
@@ -1733,7 +1733,7 @@ define({ "api": [
     "groupTitle": "Product",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/scan-product"
+        "url": "https://innovigents.com/api/scan-product"
       }
     ],
     "error": {
@@ -1825,7 +1825,7 @@ define({ "api": [
     "groupTitle": "Product",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/consumer-loylty"
+        "url": "https://innovigents.com/api/consumer-loylty"
       }
     ],
     "error": {
@@ -1930,7 +1930,7 @@ define({ "api": [
     "groupTitle": "Product",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/feedback-question/(:product_id)"
+        "url": "https://innovigents.com/api/feedback-question/(:product_id)"
       }
     ],
     "error": {
@@ -2022,7 +2022,7 @@ define({ "api": [
     "groupTitle": "Product",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/loylties"
+        "url": "https://innovigents.com/api/loylties"
       }
     ],
     "error": {
@@ -2114,7 +2114,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/forgot-password/(:mobile_no|:email)"
+        "url": "https://innovigents.com/api/forgot-password/(:mobile_no|:email)"
       }
     ],
     "error": {
@@ -2206,7 +2206,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/logout"
+        "url": "https://innovigents.com/api/logout"
       }
     ],
     "error": {
@@ -2298,7 +2298,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/resendotp/(:mobile_no)"
+        "url": "https://innovigents.com/api/resendotp/(:mobile_no)"
       }
     ],
     "error": {
@@ -2390,7 +2390,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/user/view"
+        "url": "https://innovigents.com/api/user/view"
       }
     ],
     "error": {
@@ -2509,7 +2509,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/change-password"
+        "url": "https://innovigents.com/api/change-password"
       }
     ],
     "error": {
@@ -2628,7 +2628,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/user/edit"
+        "url": "https://innovigents.com/api/user/edit"
       }
     ],
     "error": {
@@ -2786,7 +2786,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/login"
+        "url": "https://innovigents.com/api/login"
       }
     ]
   },
@@ -2847,7 +2847,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/resendmail"
+        "url": "https://innovigents.com/api/resendmail"
       }
     ],
     "error": {
@@ -2988,7 +2988,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/register"
+        "url": "https://innovigents.com/api/register"
       }
     ],
     "error": {
@@ -3094,7 +3094,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/verifyotp"
+        "url": "https://innovigents.com/api/verifyotp"
       }
     ],
     "error": {
@@ -3199,7 +3199,7 @@ define({ "api": [
     "groupTitle": "User",
     "sampleRequest": [
       {
-        "url": "http://innovigents.com/api/upload-avatar"
+        "url": "https://innovigents.com/api/upload-avatar"
       }
     ],
     "error": {

@@ -143,7 +143,7 @@ class Register extends MX_Controller
 				$this->session->unset_userdata('forgot_user');
 				$this->session->unset_userdata('user_id');
 				 $this->session->set_userdata('forgot_user',$chcekVal[0]['user_id']);
-				 $this->forgotemail('User',$userID,"Forgot password - Spideybuzz",$getOTP);
+				 $this->forgotemail('User',$userID,"Forgot password - Tracek Portal",$getOTP);
 				echo 2;exit;
 			
 		}
@@ -173,9 +173,9 @@ class Register extends MX_Controller
  	}
 	function forgotemail($firstname,$to,$sub,$getOTP)
  	{
- 		$from = "no-reply@cityspidey.com";
-		$reply = "no-reply@cityspidey.com";
-		$fromname = "Spideybuzz";
+ 		$from = "no-reply@innovigents.com";
+		$reply = "no-reply@innovigents.com";
+		$fromname = "Tracek Portal";
 		//$to = $emails; //Recipients list (semicolon separated)
 		$url = base_url().'home/';
 		$api_key = "0cde1eb63c50a026f79a0e95e19456b4";
@@ -197,18 +197,18 @@ class Register extends MX_Controller
 				  </table></td>
 				<td><table cellpadding="0" cellspacing="0"  align="right" style="margin:10px;">
 					<tr>
-					  <td><a href="#" target="_blank"><img src="http://cityspidey.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://innovigents.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
 					  <td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.cityspidey.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
 						<td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.cityspidey.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
 					</tr>
 				  </table></td>
 			  </tr>';
 					
 					 
 			$content .= '<tr>
-			<td colspan="2" style="text-align:left; padding:15px 0 15px 0"><p> Dear SpideyBuzz '.ucfirst($firstname).',</p>
+			<td colspan="2" style="text-align:left; padding:15px 0 15px 0"><p> Dear Tracek Portal '.ucfirst($firstname).',</p>
 			<p>OTP: '.$getOTP.'</p>
 			<p>See you around! </br>
 			Spidey	</p></td></tr>';
@@ -217,7 +217,7 @@ class Register extends MX_Controller
 		$content .= '
 		  <tr bgcolor="#fdb302">
 			<td colspan="2" style="text-align:center; height:50px; line-height:50px;">
-				<span>@ '.date("Y").' SpideyBuzz All Rights Reserved</span>
+				<span>@ '.date("Y").' Tracek Portal All Rights Reserved</span>
 			</td>
 		  </tr>
 		</table>';

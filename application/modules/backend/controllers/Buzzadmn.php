@@ -83,7 +83,7 @@ class Buzzadmn extends MX_Controller
 		if ($this->form_validation->run() == TRUE){
 			return $this->myspidey_login_model->getLogin();
 		}else{
-			 $this->load->view('buzzadmn/login_tpl',$data);
+			 $this->load->view('backend/login_tpl',$data);
 		}
  	}
 	
@@ -489,7 +489,7 @@ class Buzzadmn extends MX_Controller
     function preview($spidey_pic_id) {
 		$this->checklogin();
         $spidey_title = $this->Buzzadmn_model->getSpideyTitle($spidey_pic_id);
-        redirect('http://www.cityspidey.com/spideypick_detail.php?id=' . $spidey_pic_id . '&sef=' . $spidey_title[0]['spidyName']);
+        redirect('http://www.innovigents.com/spideypick_detail.php?id=' . $spidey_pic_id . '&sef=' . $spidey_title[0]['spidyName']);
     }
 	
 	 private function _flashAndRedirect($successful, $successmsg, $failmsg) {
@@ -506,7 +506,7 @@ class Buzzadmn extends MX_Controller
         // Create JSON FILE IN API In Add New Story//
         //$this->create_detail_file($lastid);
         $type = 'all';
-        $title = 'Fresh on SpideyBuzz: ' . strip_tags($title);
+        $title = 'Fresh on Tracek Portal: ' . strip_tags($title);
         $remoturl = 'com.cityspidey://spideybuzz?id=' . $spidey_id;
         //$this->db->pushNotification('', '', '', '', '', $title, '', $type, $remoturl);
         pushNotification('', '', '', '', '', $title, '', $type, $remoturl, $states);

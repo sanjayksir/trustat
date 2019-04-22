@@ -7456,6 +7456,45 @@ function isProductCodeRegistered($bar_code_data){
 		return $query->num_rows();
 }
 
+   function NumberOfSelectedConsumersByACustomer2($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob, $promotion_type){
+	   	
+	
+		$ci = & get_instance();
+		$ci->db->select('CCL.consumer_id');		
+		$ci->db->from('consumer_customer_link CCL');
+		//$ci->db->join('consumer_selection_criteria CSC', 'CSC.customer_id = CCL.customer_id');
+		$ci->db->join('consumers C', 'C.id = CCL.consumer_id');
+		//$array = array('CCL.customer_id' => $customer_id);
+		$ci->db->where('CCL.customer_id', $customer_id);
+		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
+		$ci->db->where('C.gender', $csc_consumer_gender);
+			}
+			
+		if(!empty($csc_consumer_city)){ 			
+		$ci->db->where('C.city', $csc_consumer_city);
+			}
+			
+		//if(!empty($promotion_type)){ 			
+		//$ci->db->where('CSC.promotion_type', $promotion_type);
+		//	}	
+			
+		if($csc_consumer_pin!=0){ 			
+		$ci->db->where('C.pin_code', $csc_consumer_pin);
+			}	
+			
+		if(!empty($csc_consumer_min_dob)){ 			
+		$ci->db->where('C.dob <', $csc_consumer_min_dob);
+			}	
+		
+		if(!empty($csc_consumer_max_dob)){ 			
+		$ci->db->where('C.dob >', $csc_consumer_max_dob);
+			}
+		//$ci->db->where("$CurrentAge BETWEEN $minvalue AND $maxvalue");
+		
+		//$ci->db->where("$CurrentAge BETWEEN $minvalue AND $maxvalue");
+		$query = $ci->db->get();//echo $ci->db->last_query();
+		return $query->num_rows();
+}
 
    function AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob){
 		$ci = & get_instance();
@@ -7463,8 +7502,8 @@ function isProductCodeRegistered($bar_code_data){
 		$ci->db->from('consumer_customer_link CCL');
 		//$ci->db->join('consumer_selection_criteria CSC', 'CSC.customer_id = CCL.customer_id');
 		$ci->db->join('consumers C', 'C.id = CCL.consumer_id');
-		$array = array('CCL.customer_id' => $customer_id);
-		$ci->db->where($array);
+		//$array = array('CCL.customer_id' => $customer_id);
+		$ci->db->where('CCL.customer_id', $customer_id);
 		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
 		$ci->db->where('C.gender', $csc_consumer_gender);
 			}
@@ -7510,6 +7549,22 @@ function isProductCodeRegistered($bar_code_data){
 			return $query->row()->points;
     }
 
-
-  
+	function get_total_consumer_loyalty_points_customerwise($consumer_id, $customer_id) {
+		$ci = & get_instance();	
+		$ci->db->select_sum('points');
+		$ci->db->from('consumer_passbook');
+		$ci->db->where(array('consumer_id'=> $consumer_id, 'customer_id'=> $customer_id));
+		$query=$ci->db->get();
+		return $query->row()->points;
+	} 
+	
+	function get_total_consumer_loyalty_points_all($consumer_id) {
+		$ci = & get_instance();	
+		$ci->db->select_sum('points');
+		$ci->db->from('consumer_passbook');
+		$ci->db->where('consumer_id', $consumer_id);
+		$query=$ci->db->get();
+		return $query->row()->points;
+	}
+	
 ?>

@@ -959,7 +959,7 @@ class Backend extends MX_Controller
 
         $spidey_title = $this->backend_model->getSpideyTitle($spidey_pic_id);
 
-        redirect('http://www.cityspidey.com/spideypick_detail.php?id=' . $spidey_pic_id . '&sef=' . $spidey_title[0]['spidyName']);
+        redirect('http://www.innovigents.com/spideypick_detail.php?id=' . $spidey_pic_id . '&sef=' . $spidey_title[0]['spidyName']);
 
     }
 
@@ -993,9 +993,9 @@ class Backend extends MX_Controller
 
         $type = 'all';
 
-        $title = 'Fresh on SpideyBuzz: ' . strip_tags($title);
+        $title = 'Fresh on Tracek Portal: ' . strip_tags($title);
 
-        $remoturl = 'com.cityspidey://spideybuzz?id=' . $spidey_id;
+        $remoturl = 'https://innovigents.com/backend/getLoggedIn' . $spidey_id;
 
         //$this->db->pushNotification('', '', '', '', '', $title, '', $type, $remoturl);
 

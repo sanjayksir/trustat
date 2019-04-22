@@ -370,6 +370,16 @@ class Customer extends ApiController {
 			
 			
 			$data['number_of_children_added'] = $this->db->where('parent_bar_code',$data['bar_code'])->from("packaging_codes_pcr")->count_all_results();
+			$transactionType = "add_product_level_and_activate";	
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$product_name = get_products_name_by_id($product_id);
+			$transactionTypeName = "Add Product Level and Activate";
+			$parent_customer_id = get_customer_id_by_product_id($product_id);
+				
+			
+			$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['activation_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName,  'Loyalty');
+			
+			
 		
 		
             //echo $this->db->last_query();die;
@@ -662,7 +672,7 @@ class Customer extends ApiController {
 			$data['product_id'] = $result[0]['product_id'];
 			$data['unpackaging_status'] = "Packaged";
 			//$data['packaging_level'] = $data['pack_level'];
-			
+			$product_id = $data['product_id'];
 			$packaging_level = $data['packaging_level'] + 1;
 			$parent_pack_level = $data['parent_pack_level'];
 			$code_unity_type = $result[0]['code_unity_type'];
@@ -735,9 +745,26 @@ class Customer extends ApiController {
 			
 			$this->db->insert('list_transactions_table', $tlogdata);
 			
+			
+			
+			$transactionType = "add_product_level_parent_activate";	
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$product_name = get_products_name_by_id($product_id);
+			$transactionTypeName = "add Product Level Parent Activate";
+			$parent_customer_id = get_customer_id_by_product_id($product_id);
+				
+			$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['activation_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName,  'Loyalty');
+			
+			
+			
+			
 			$data['number_of_children_added'] = $this->db->where('parent_bar_code',$data['parent_bar_code'])->from("packaging_codes_pcr")->count_all_results();
 		
             $this->response(['status'=>true,'message'=>'Level has been added.','number_of_children_added'=>$data['number_of_children_added'],'data'=>$result]);
+			
+			
+			
+			
         }else{
             $this->response(['status'=>false,'message'=>'System failed to add level.'],200); 
         }
@@ -853,6 +880,16 @@ class Customer extends ApiController {
 			$tlogdata['transaction_datetime'] = date('Y-m-d H:i:s'); 
 			
 			$this->db->insert('list_transactions_table', $tlogdata);
+			
+			
+			$transactionType = "add_product_level_parent_activate";	
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$product_name = get_products_name_by_id($product_id);
+			$transactionTypeName = "add Product Level Parent Activate";
+			$parent_customer_id = get_customer_id_by_product_id($product_id);
+				
+			$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['activation_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName,  'Loyalty');
+			
 			
 			$data['number_of_children_added'] = $this->db->where('parent_bar_code',$data['parent_bar_code'])->from("packaging_codes_pcr")->count_all_results();
 		

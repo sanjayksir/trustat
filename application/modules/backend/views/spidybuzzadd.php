@@ -414,14 +414,14 @@ You have <input readonly type="text" name="countdown2" size="3" value="60" style
                                                                 <div class="col-xs-12">
                                                                     
                                                                         <div class="push-to-checkbox">
-                                                                            <label for="SpideyBuzz">SpideyBuzz</label>
-                                                                            <input id="SpideyBuzz" type="checkbox" class="story_for_chk" value="2" <?php if($buzz[0]['story_for']==2 || $buzz[0]['story_for']==3)echo 'checked';?> >
+                                                                            <label for="Tracek Portal">Tracek Portal</label>
+                                                                            <input id="Tracek Portal" type="checkbox" class="story_for_chk" value="2" <?php if($buzz[0]['story_for']==2 || $buzz[0]['story_for']==3)echo 'checked';?> >
                                                                                                                                                                                                                                                                                                 </div>
                                                                                                                                                                                                                                                                                                 <div class="push-to-checkboxd">                                                                                            
                                                                                                                                                                                                                                                                                                                 <label for="Cityspidey">Cityspidey</label>
                                                                             <input id="Cityspidey"  type="checkbox" class="story_for_chk" value="1" <?php if($buzz[0]['story_for']==1 || $buzz[0]['story_for']==3)echo 'checked';?>>
                                                                                                                                                                                                                                                                                                 </div>                                                                                                                                                                                                                                                                                               <!--div>             
-                                                                                                                                                                                                                                                                                                                <label for="bothsbcs">Both SpideyBuzz/Cityspidey</label>
+                                                                                                                                                                                                                                                                                                                <label for="bothsbcs">Both Tracek Portal/Cityspidey</label>
                                                                             <input id="bothsbcs"  type="radio" class="state_chk" name="story_for" value="3">
                                                                         </div-->
                                                                                                                                                                                                                                                                <input type="hidden" name="story_for" id="story_for" value="<?php echo $buzz[0]['story_for'];?>" />
@@ -732,7 +732,7 @@ $(document).ready(function(){
 	
 	<!-----rockey-->
 	$('.story_for_chk').click(function(){
-                                var _chk1 = document.getElementById('SpideyBuzz');
+                                var _chk1 = document.getElementById('Tracek Portal');
                                 var _chk2 = document.getElementById('Cityspidey');
                                 var _story_for = document.getElementById('story_for');
                                 _story_for.value='';
@@ -763,7 +763,7 @@ function addCategory() {
         // Ajax call function
         $.ajax({
             type: "POST",
-            url: "<?php echo base_url(); ?>spideybuzz_category/add_category_name",
+            url: "<?php echo base_url(); ?>Tracek Portal_category/add_category_name",
             dataType: 'JSON',
             data: {new_cat:new_cat},
             async: true,
@@ -808,7 +808,7 @@ function addSubCategory() {
         // Ajax call function
         $.ajax({
             type: "POST",
-            url: "<?php echo base_url(); ?>spideybuzz_category/add_subcategory_name",
+            url: "<?php echo base_url(); ?>Tracek Portal_category/add_subcategory_name",
             dataType: 'JSON',
             data: {new_subcat:new_subcat,parent_id:category_id},
             async: true,

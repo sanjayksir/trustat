@@ -49,6 +49,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 // ------------------------------------------------------------------------
 
+if (! function_exists('secure_base_url'))
+{
+    function secure_base_url()
+    {
+        if ($_SERVER["SERVER_PORT"] != 443)
+        {
+            return str_replace("http://", "https://" , base_url());
+        }
+    }
+}
+
 if ( ! function_exists('site_url'))
 {
 	/**

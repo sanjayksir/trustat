@@ -57,7 +57,7 @@
 	
   	function sendemail($firstname,$to,$password,$rwaname,$sub,$getOTP)
  	{
- 		$from = "no-reply@cityspidey.com";
+ 		$from = "no-reply@innovigents.com";
 		$reply =  $_SESSION['email'];
 		$fromname = $_SESSION['rwaname'];
 		//$to = $emails; //Recipients list (semicolon separated)
@@ -81,18 +81,18 @@
 				  </table></td>
 				<td><table cellpadding="0" cellspacing="0"  align="right" style="margin:10px;">
 					<tr>
-					  <td><a href="#" target="_blank"><img src="http://cityspidey.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://innovigents.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
 					  <td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.cityspidey.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
 						<td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.cityspidey.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
 					</tr>
 				  </table></td>
 			  </tr>';
 					
 					 
 			$content .= '<tr>
-			<td colspan="2" style="text-align:left; padding:15px 0 15px 0"><p> Dear SpideyBuzz '.ucfirst($firstname).',</p>
+			<td colspan="2" style="text-align:left; padding:15px 0 15px 0"><p> Dear Tracek Portal '.ucfirst($firstname).',</p>
 			<p>Congratulations! You\'re now a member of <a href="'.$url.'">'.$url.'</a></p>
 			<p>Click on this link and put the OTP below to verify!<br> <a href="'.$verify_url.'">Verify Me</a></p>
 			<p>Email: '.$to.'</p>
@@ -104,7 +104,7 @@
 		$content .= '
 		  <tr bgcolor="#fdb302">
 			<td colspan="2" style="text-align:center; height:50px; line-height:50px;">
-				<span>@ '.date("Y").' SpideyBuzz All Rights Reserved</span>
+				<span>@ '.date("Y").' Tracek Portal All Rights Reserved</span>
 			</td>
 		  </tr>
 		</table>';
@@ -128,7 +128,7 @@
   
   function emailMessage($firstname,$to,$sub,$name,$email,$phone,$message)
  	{
- 		$from = "no-reply@cityspidey.com";
+ 		$from = "no-reply@innovigents.com";
 		$reply =  $to;
 		$fromname = "Spidey Buzz";
 		//$to = $emails; //Recipients list (semicolon separated)
@@ -152,18 +152,18 @@
 				  </table></td>
 				<td><table cellpadding="0" cellspacing="0"  align="right" style="margin:10px;">
 					<tr>
-					  <td><a href="#" target="_blank"><img src="http://cityspidey.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://innovigents.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
 					  <td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.cityspidey.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
 						<td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.cityspidey.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
 					</tr>
 				  </table></td>
 			  </tr>';
 					
 					 
 			$content .= '<tr>
-			<td colspan="2" style="text-align:left; padding:15px 0 15px 0"><p> Dear SpideyBuzz '.ucfirst($firstname).',</p>
+			<td colspan="2" style="text-align:left; padding:15px 0 15px 0"><p> Dear Tracek Portal '.ucfirst($firstname).',</p>
 			<p>Congratulations! Feedback Details are: </p>
 			<p>Name: '.$name.'</p>
 			<p>Email: '.$email.'</p>
@@ -175,7 +175,7 @@
 		$content .= '
 		  <tr bgcolor="#fdb302">
 			<td colspan="2" style="text-align:center; height:50px; line-height:50px;">
-				<span>@ '.date("Y").' SpideyBuzz All Rights Reserved</span>
+				<span>@ '.date("Y").' Tracek Portal All Rights Reserved</span>
 			</td>
 		  </tr>
 		</table>';
@@ -193,7 +193,7 @@
   
   function emailCareer($to,$sub,$name,$age,$message,$attachment)
  	{
- 		$from = "no-reply@cityspidey.com";
+ 		$from = "no-reply@innovigents.com";
 		$reply =  $to;
 		$fromname = "Spidey Buzz";
 		//$to = $emails; //Recipients list (semicolon separated)
@@ -217,11 +217,11 @@
 				  </table></td>
 				<td><table cellpadding="0" cellspacing="0"  align="right" style="margin:10px;">
 					<tr>
-					  <td><a href="#" target="_blank"><img src="http://cityspidey.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://innovigents.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
 					  <td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.cityspidey.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
 						<td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.cityspidey.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
 					</tr>
 				  </table></td>
 			  </tr>';
@@ -240,7 +240,7 @@
 		$content .= '
 		  <tr bgcolor="#fdb302">
 			<td colspan="2" style="text-align:center; height:50px; line-height:50px;">
-				<span>@ '.date("Y").' SpideyBuzz All Rights Reserved</span>
+				<span>@ '.date("Y").' Tracek Portal All Rights Reserved</span>
 			</td>
 		  </tr>
 		</table>';

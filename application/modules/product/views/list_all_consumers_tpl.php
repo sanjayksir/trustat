@@ -118,6 +118,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th class="hidden-480">Consumer Email</th>
                                     <th>Consumer Photo</th>
                                     <th>Date of Registration</th>
+									<th>Earned Loyalty Points</th>
                                     <th>Consumer Aadhaar Number </th>
 									<?php 
 									$user_id = $this->session->userdata('admin_user_id');
@@ -201,7 +202,17 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                 <td><?php echo $attr['mobile_no']; ?></td>
                                 <td><?php echo $attr['email']; ?></td>
                                 <td><img src="<?php echo base_url(); ?><?php echo $attr['avatar_url']; ?>" alt="Consumer Photo Not found" height="42" width="42"></td>
-                                <td><?php echo $attr['created_at']; ?></td>
+                                <td><?php 
+								
+								
+								echo $attr['created_at']; ?></td>
+								<td><?php if($user_id==1){
+									echo get_total_consumer_loyalty_points_all($attr['id']);
+									}else{
+											echo get_total_consumer_loyalty_points_customerwise($attr['id'], $user_id);
+										 }
+										 ?>
+									</td>
                                 <td><?php echo $attr['aadhaar_number']; ?></td>
                                                   <?php if($user_id==1){
 													   ?>

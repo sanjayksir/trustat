@@ -81,11 +81,11 @@ $this->load->view('../includes/admin_top_navigation'); ?>
       <form name="user_frm" id="user_frm" action="#" method="POST">
 	  <?php $customer_id 	= $this->session->userdata('admin_user_id'); ?>
 		<!--
-		<input type="hidden" value="<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>" name="quantity" id="quantity" />
+		<input type="hidden" value="<?php //echo NumberOfAllConsumersOfACustomer($customer_id); ?>" name="quantity" id="quantity" />
         <div class="widget-main">
 		 <div class="col-sm-6">
-			 <label for="form-field-8">This Message will be delivered to <b><?php $customer_id 	= $this->session->userdata('admin_user_id');
-			echo NumberOfAllConsumersOfACustomer($customer_id); ?> Consumers</b>, who are already aware about your Products</label>
+			 <label for="form-field-8">This Message will be delivered to <b><?php //$customer_id 	= $this->session->userdata('admin_user_id');
+			//echo NumberOfAllConsumersOfACustomer($customer_id); ?> Consumers</b>, who are already aware about your Products</label>
 			  -->
 			  <div class="form-group row">
                                   <div class="col-sm-12">
@@ -110,9 +110,10 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 									}
 									 ?>
                                   <select name="quantity" id="quantity" class="form-control">
-										<option value="<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>
-										<option value="<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>">Filtered Consumers (<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>)</option>	
+										<option value="All <?php echo NumberOfAllConsumersOfACustomer($customer_id); ?> Consumers">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>
+										<option value="Filtered <?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?> Consumers">Filtered Consumers (<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>)</option>	
 								  </select>
+								  
                                   </div>
                                   </div>				 
 			  

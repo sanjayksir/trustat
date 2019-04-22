@@ -14,7 +14,7 @@ if(!empty($user_id)){
 <div class="wide-container gray-bg">
     <div class="container">
         <header>
-            <div class="logo flt"><a href="<?php echo base_url(); ?>"  title="Spideybuzz" ><img src="<?php echo ASSETS_PATH;?>sb-images/spidey-buzz.png" alt="Spideybuzz" title="Spideybuzz" /></a></div>
+            <div class="logo flt"><a href="<?php echo base_url(); ?>"  title="Tracek Portal" ><img src="<?php echo ASSETS_PATH;?>sb-images/spidey-buzz.png" alt="Tracek Portal" title="Tracek Portal" /></a></div>
             <div class="top-ads flt">
                 <span>Advertisement</span>
                 <img src="<?php echo ASSETS_PATH;?>sb-images/top-ads.png" width="728" height="90" title="Advertisement" alt="Advertisement"/>
@@ -260,7 +260,7 @@ if(!empty($user_id)){
     <div class="container" >
     <nav>
         <ul style="display:block;">
-            <li class="fixed-logo"><a href="<?php echo base_url();?>" title="Spideybuzz"><img src="<?php echo ASSETS_PATH;?>sb-images/fixed-logo.png" alt="Spideybuzz" title="Spideybuzz" style="margin-top:5px;" /></a></li>
+            <li class="fixed-logo"><a href="<?php echo base_url();?>" title="Tracek Portal"><img src="<?php echo ASSETS_PATH;?>sb-images/fixed-logo.png" alt="Tracek Portal" title="Tracek Portal" style="margin-top:5px;" /></a></li>
             <li <?php echo (uri_string()=='')?'class="active"':'';?>><a href="<?php echo base_url();?>" title="Home">Home</a></li>
             <li class="newstab <?php echo (uri_string()=='trending/today') ? 'active' : ''; ?>">
                 <a href="<?php echo base_url();?>trending/today" title="News">News</a>

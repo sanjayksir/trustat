@@ -31,7 +31,7 @@ $inbrief= get_share($this->uri->segment(3));
 <meta property="og:title" content="<?php echo $inbrief['title'];?>" />
 <meta property="og:url" content="<?php echo base_url();?>inbrief/share/<?php echo $inbrief['id'];?>" />
 <?php }else{ ?>
-<title>Spideybuzz</title>
+<title>Tracek Portal</title>
 <?php }?>
    
 	

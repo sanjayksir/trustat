@@ -533,7 +533,7 @@
 			} return $result;
 		}
 		
-		function save_push_advertisement($customer_id,$product_id,$promotion_id,$promotion_title,$Chk){
+		function save_push_advertisement($customer_id,$product_id,$promotion_id,$promotion_title,$Chk,$consumer_selection_criteria){
  			if($Chk=='2'){
 				//$this->db->query("delete from push_surveys where promotion_id='".$promotion_id."' ");
 				
@@ -566,8 +566,35 @@
 				//$consumer_ida = $user->id; 
 				//echo $consumer_ida; exit;
 				*/
+				if($consumer_selection_criteria=="All") {
+					$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
 				
-								$this->db->select('*');
+				foreach ($query->result() as $user)  
+				{  
+				//$consumer_ida = $user->id; 
+				//echo $consumer_ida; exit;
+				$insertData=array(
+					"customer_id"	 => $customer_id,
+					"consumer_id"	 => $user->consumer_id,
+					"product_id"	 => $product_id,
+					"promotion_id"	 => $promotion_id,
+					"promotion_title"	 => $promotion_title,					
+					"media_type"	 => "Advertisements Video",
+					"ad_push_date"	 => date("Y-m-d H:i:s"),
+					"media_play_date"	 => "0000-00-00 00:00:00",
+					"ad_feedback_response"	 => "",
+					"ad_active"	 => "1"
+					
+					);
+				  
+				  $this->db->insert("push_advertisements", $insertData);
+				  
+				  
+				}
+					
+					}else{
+						
+			$this->db->select('*');
 			$this->db->from('consumer_selection_criteria');
 			//$this->db->where('transaction_lr_type', "Loyalty");
 			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Advertisement-Video"));
@@ -616,7 +643,7 @@
 				  
 				  
 				} 
-				
+				}
 					$this->session->set_flashdata('success', 'Ad Pushed Successfully!');
 					return true;
 					//redirect('advertisement/launch_advertisement');

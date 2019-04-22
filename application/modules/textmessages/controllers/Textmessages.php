@@ -839,7 +839,8 @@ function list_assigned_Advertisements() {
 		$customer_id = $this->input->post('c_id');
 		$message_id	= $this->input->post('m_id');
 		$Chk = $this->input->post('Chk');
-		$text_message	=$this->input->post('text_message');
+		$text_message	= $this->input->post('text_message');
+		$consumer_selection_criteria = $this->input->post('sent_to');
 		$this->load->view('text_messages_listing');
 			if($Chk==1){
 			$send_status=1;
@@ -849,6 +850,28 @@ function list_assigned_Advertisements() {
 			$send_status=0;
 		}
 		
+		
+		
+		if($consumer_selection_criteria=="All") {		
+		
+		$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status,$consumer_selection_criteria);
+		$this->Textmessage_model->update_push_text_message_request($message_id,$send_status);
+
+		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+		
+				
+				foreach ($query->result() as $user)  
+				{
+		 $consumer_id = $user->consumer_id;
+		 $fb_token = getConsumerFb_TokenById($consumer_id);
+		 
+		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
+		 }	
+			
+		
+		exit;
+		
+		}else{
 		$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status);
 	
 		$this->Textmessage_model->update_push_text_message_request($message_id, $send_status);
@@ -858,7 +881,7 @@ function list_assigned_Advertisements() {
 				
 				foreach ($query->result() as $user)  
 				{
-		 $consumer_id = $user->consumer_id;
+				$consumer_id = $user->consumer_id;
 		 
 		 */
 		 $this->db->select('*');
@@ -921,7 +944,10 @@ function list_assigned_Advertisements() {
 		
 		
 		}
-		*/
+		*/	
+			
+		}
+		
  	}
 	
 	

@@ -1406,4 +1406,72 @@ return $result;
 		//return false;
     }
 	
+	
+	
+		public function saveCustomerLoyaltyPassbookProductScan($transactionType = null, $params = [], $parent_customer_id = null, $ProductID = null, $userId = null, $transactionTypeName = null,  $transaction_lr_type = null){
+          
+		/*
+		if( empty($transactionType) || empty($consumer_id) ){
+            return false;
+        } 
+       $loylty = $this->findLoylityBySlugAndProductID($transactionType,$ProductID);
+        if(empty($loylty)){
+            return false;
+        }
+		*/
+		
+		// Find Current transuction type
+		//$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
+		$TRPoints = 1;
+		
+		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('customer_passbook')->where(array('customer_user_id'=>$userId, 'transaction_lr_type'=>"Loyalty"))->get()->row();
+		$TotalRedeemedPoints = $this->db->select_sum('points')->from('customer_passbook')->where(array('customer_user_id'=>$userId, 'transaction_lr_type'=>"Redemption"))->get()->row();
+		
+		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
+		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
+		
+		
+		$FinalTotalAccumulatedPoints = ($TotalAccumulatedPoints->points) + $TRPoints;
+		if(($TotalRedeemedPoints->points)!='')
+		{
+			$FinalTotalRedeemedPoints = $TotalRedeemedPoints->points;
+		} else {
+			$FinalTotalRedeemedPoints =0;
+			}
+			
+		$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
+		$Min_Locking_Balance = $result2->loyalty_points;
+		
+		$CurrentBalanceAfterMinBalanceLocking = $CurrentBalance - $Min_Locking_Balance;
+		$Points_Redeemed_in_Multiple_of = $result3->loyalty_points;
+				
+		$remainder = $CurrentBalanceAfterMinBalanceLocking % $Points_Redeemed_in_Multiple_of;
+		$quotient = ($CurrentBalanceAfterMinBalanceLocking - $remainder) / $Points_Redeemed_in_Multiple_of;
+
+		$Points_Redeemable = $Points_Redeemed_in_Multiple_of * $quotient;
+		$PointsShortOfRedumption =$Points_Redeemed_in_Multiple_of - $remainder;
+		//testing
+		$date = new DateTime();
+        $now = $date->format('Y-m-d H:i:s');
+       // $date->modify('+3    month');
+        $input = [
+			'parent_customer_id' => $parent_customer_id,
+            'customer_user_id' => $userId,
+            'points' => $TRPoints,
+            'transaction_type_name' => $transactionTypeName,
+			'transaction_type_slug' => $transactionType,
+            'params' => json_encode($params),
+            'transaction_lr_type' => $transaction_lr_type,
+			'total_accumulated_points' => $FinalTotalAccumulatedPoints,
+			'total_redeemed_points' => $FinalTotalRedeemedPoints,
+            'current_balance' => $CurrentBalance,
+			'points_redeemable' => $Points_Redeemable,
+			'points_short_of_redumption' => $PointsShortOfRedumption,
+            'transaction_date' => $now
+        ];
+        
+        return $this->db->insert('customer_passbook',$input);
+		
+    }
+	
 }

@@ -187,7 +187,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 								<td><?php echo total_approved_points2($attr['customer_id']);  ?> </td>  
                                 <td><?php //echo base_url(); 
 								
-								if(base_url()=='http://innovigents.com/') {
+								if(base_url()=='https://innovigents.com/') {
 								mysql_connect("localhost", "tpdbuser", "india@123");
 								mysql_select_db("trackingprortaldb");
 								} else {

@@ -125,11 +125,18 @@
                                                                 ?>
 
                                                          <td>
-														 
+	<?php //echo $attr['quantity']; 
+		$myvalue = $listData['number_of_consumers']; 
+		$arr = explode(' ',trim($myvalue));
+		$sent_to = $arr[0];
+		//echo $sent_to;
+		//echo $listData['promotion_title'];
+	
+	?>
 														 
 														 <input <?php 
 	$answerQuery = $this->db->get_where('push_surveys',"promotion_id='".$listData['promotion_id']."'");
-	if($answerQuery->num_rows() > 0){ ?>checked="checked"<?php } else {} ?> id="product_<?php echo $listData['product_id'];?>"name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $listData['user_id'];?>','<?php echo $listData['product_id'];?>','<?php echo $listData['promotion_id'];?>','<?php echo $listData['promotion_title'];?>');" type="checkbox"   <?php if($listData['request_status']==2){ echo "disabled"; }   ?> >
+	if($answerQuery->num_rows() > 0){ ?>checked="checked"<?php } else {} ?> id="product_<?php echo $listData['product_id'];?>"name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $listData['user_id'];?>','<?php echo $listData['product_id'];?>','<?php echo $listData['promotion_id'];?>','<?php echo $listData['promotion_title'];?>','<?php echo $sent_to; ?>');" type="checkbox"   <?php if($listData['request_status']==2){ echo "disabled"; }   ?> >
 	<span class="lbl"></span> <?php echo promotion_status($listData['request_status']); ?>
 	
 	
@@ -315,7 +322,7 @@ $("#product").html(msg);
 								<?php $customer_id = $this->session->userdata('admin_user_id'); ?>
 								  <div class="form-group row">
                                   <div class="col-sm-12">
-                           <label for="form-field-8">Select Consumers</label><?php 
+                           <label for="form-field-8">Select Consumers-</label><?php 
 						   
 						   function reverse_birthday( $years ){
 								return date('Y-m-d', strtotime($years . ' years ago'));
@@ -338,7 +345,7 @@ $("#product").html(msg);
 				
 				foreach ($AllSelectedConsumersByACustomer as $consumer_id)  
 				{  				
-					//echo $consumer_id . ", ";
+					echo $consumer_id . ", ";
 				  
 				} 
 				
@@ -360,8 +367,8 @@ $("#product").html(msg);
 						   
 						  // echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_age, $csc_consumer_max_age); ?>
                                   <select name="number_of_consumers" id="number_of_consumers" class="form-control">
-										<option value="<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>	
-										<option value="<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>">Filtered Consumers (<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>)</option>
+										<option value="All <?php echo NumberOfAllConsumersOfACustomer($customer_id); ?> Consumers">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>	
+										<option value="Filtered <?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?> Consumers">Filtered Consumers (<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>)</option>
 								  </select>
 								  
                                   </div>
@@ -455,7 +462,7 @@ $("#product").html(msg);
     var table;
 
 
-	function add_question_to_product(created_by, id, promotion_id, promotion_title){
+	function add_question_to_product(created_by, id, promotion_id, promotion_title, sent_to){
 	var r = confirm("Are Sure to process your action?");
 	if (r == true) {
 		if ($("#product_"+id).prop('checked')==true){ 
@@ -468,7 +475,7 @@ $("#product").html(msg);
 			dataType:'html',
 			type:'POST',
 			url:'<?php echo base_url().'surveys/save_push_survey/';?>',
-			data:{c_id:created_by,p_id:id,promotion_id:promotion_id,promotion_title:promotion_title,Chk:Chk},
+			data:{c_id:created_by,p_id:id,promotion_id:promotion_id,promotion_title:promotion_title,sent_to:sent_to,Chk:Chk},
 			success:function (msg){
 			}
 		

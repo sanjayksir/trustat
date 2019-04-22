@@ -514,13 +514,33 @@
 								return date('Y-m-d', strtotime($years . ' years ago'));
 								}
 								
-		function save_push_sent_text_message($customer_id,$text_message,$send_status){
+		function save_push_sent_text_message($customer_id,$text_message,$send_status,$consumer_selection_criteria){
 				if($send_status=='0'){
 				$this->db->query("delete from push_text_message where customer_id='".$customer_id."' ");
 				$this->session->set_flashdata('success', 'Text un-Pushed Successfully!');
 				//echo $this->db->last_query();exit;
 				return true;
 			}else{
+			if($consumer_selection_criteria=="All") {
+				
+				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+				foreach ($query->result() as $user)  
+				{  
+				//$consumer_ida = $user->id; 
+				//echo $consumer_ida; exit;
+				$insertData=array(
+					"customer_id"	 => $customer_id,
+					"consumer_id"	 => $user->consumer_id,
+					"text_message"	 => $text_message,
+					"message_push_date"	 => date("Y-m-d H:i:s"),
+					"message_active"	 => "1"
+					
+					);
+				  $this->db->insert("push_text_message", $insertData);
+				 }
+				
+				}else{
+			
 			
 			/*
  				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
@@ -570,6 +590,8 @@
 					);
 				  $this->db->insert("push_text_message", $insertData);
 				 }
+				}
+				 
 					$this->session->set_flashdata('success', 'Ad Pushed Successfully!');
 					return true;
 			}

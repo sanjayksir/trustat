@@ -114,7 +114,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th>S No.</th>
                                     <th class="hidden-480">Customer Name</th>
                                     <th class="hidden-480">Text Message</th>
-									<th class="hidden-480">Delivery Qty.</th>
+									<th class="hidden-480">Deliver to</th>
                                     <th class="hidden-480">Send/Un-push</th>
                                     <th>Date Time of request</th>
 									<th>Sent Status</th>
@@ -154,9 +154,16 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
 		//if($attr['push_ad_req']!=''){
 	?>
+	<?php //echo $attr['quantity']; 
+		$myvalue = $attr['quantity']; 
+		$arr = explode(' ',trim($myvalue));
+		$sent_to = $arr[0];
+		//echo $attr['customer_id'];
+	
+	?>
 	<input <?php 
 	
-	if($attr['send_status']==1){ ?>checked="checked"<?php } ?> id="product_<?php echo $attr['id'];?>"name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $attr['customer_id'];?>','<?php echo $attr['id'];?>','<?php echo $attr['text_message']; ?>');" type="checkbox">
+						if($attr['send_status']==1){ ?>checked="checked"<?php } ?> id="product_<?php echo $attr['id'];?>"name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $attr['customer_id'];?>','<?php echo $attr['id'];?>','<?php echo $attr['text_message']; ?>','<?php echo $sent_to; ?>');" type="checkbox">
 	<span class="lbl"></span>
 	<?php //} else { echo "No Ad Push Request"; } ?>
 	
@@ -247,7 +254,7 @@ function validateSrch(){
 	}
 }	
 
-function add_question_to_product(customer_id, id, text_message){
+function add_question_to_product(customer_id, id, text_message, sent_to){
 	var r = confirm("Are Sure to do this?");
 	if (r == true) {
 		if ($("#product_"+id).prop('checked')==true){ 
@@ -260,7 +267,7 @@ function add_question_to_product(customer_id, id, text_message){
 			dataType:'html',
 			type:'POST',
 			url:'<?php echo base_url().'textmessages/send_text_message/';?>',
-			data:{c_id:customer_id,m_id:id,text_message:text_message,Chk:Chk},
+			data:{c_id:customer_id, m_id:id, text_message:text_message, sent_to:sent_to, Chk:Chk},
 			success:function (msg){
 			}
 		

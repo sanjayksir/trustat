@@ -3,8 +3,8 @@ define({
   "version": "0.1.0",
   "description": "",
   "title": "Tracking Portal API",
-  "url": "http://innovigents.com/api",
-  "sampleUrl": "http://innovigents.com/api",
+  "url": "https://innovigents.com/api",
+  "sampleUrl": "https://innovigents.com/api",
   "template": {
     "withCompare": false,
     "withGenerator": false

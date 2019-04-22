@@ -844,9 +844,10 @@ function list_assigned_Advertisements() {
 		$product_id	=$this->input->post('p_id');
 		$promotion_id =$this->input->post('promotion_id');
 		$promotion_title =$this->input->post('promotion_title');
+		$consumer_selection_criteria =$this->input->post('sent_to');
 		$Chk = $this->input->post('Chk');
 		
-		 echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$promotion_id,$promotion_title,$Chk);
+		 echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$promotion_id,$promotion_title,$Chk,$consumer_selection_criteria);
 		 
 		 if($Chk==2){
 		$value=2;
@@ -863,6 +864,20 @@ function list_assigned_Advertisements() {
 				{
 		 $consumer_id = $user->consumer_id;
 		*/
+		if($consumer_selection_criteria=="All") {
+			//echo $status= $this->Advertisement_model->change_status($promotion_id,$value);
+		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+				
+				foreach ($query->result() as $user)  
+				{
+		 $consumer_id = $user->consumer_id;
+		 $fb_token = getConsumerFb_TokenById($consumer_id);
+		 
+		 $this->Advertisement_model->sendFCM("An Advertisement Posted!!..", $fb_token);
+		 }
+			
+			
+			}else{
 		
 		$this->db->select('*');
 			$this->db->from('consumer_selection_criteria');
@@ -910,6 +925,7 @@ function list_assigned_Advertisements() {
 			$this->db->insert('list_notifications_table', $NTFdata);
 			
 		 }
+			}
 		//echo  $this->Advertisement_model->sendFCM("Advertisement pushed!",$fb_token);
 		//redirect('advertisement/launch_advertisement');
 		exit;

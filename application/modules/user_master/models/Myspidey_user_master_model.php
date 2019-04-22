@@ -377,7 +377,7 @@ class Myspidey_user_master_model extends CI_Model {
 								
 								Regards <br />
 								<b>Team Admin</b><br /> 
-								<img src="http://innovigents.com/uploads/rwaprofilesettings/thumb/thumb_tlogo_1523866687.jpg" alt="ISPL Admin" height="40" width="80">';
+								<img src="https://innovigents.com/uploads/rwaprofilesettings/thumb/thumb_tlogo_1523866687.jpg" alt="ISPL Admin" height="40" width="80">';
         $mail_conf = array(
             'subject' => $subject,
             'to_email' => $email,
