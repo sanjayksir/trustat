@@ -259,13 +259,10 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 														<td><?php echo $attr['spouse_sports']; ?></td>
 														<td><?php echo $attr['spouse_entertainment']; ?></td>
 														<td><?php echo $attr['modified_at'];
-														?></td>
-													   
+														?></td>													   
 												  <?php }  ?>
 													<!--<td><input type="checkbox" name="assignConsumer[]" class="assignConsumer" /></td>-->
-
                                              </tr>
-
                                         <?php
                                         $sno++;
                                         } 
