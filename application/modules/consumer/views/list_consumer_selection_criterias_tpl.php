@@ -98,8 +98,7 @@
                                             <th>Consumer Gender</th>
                                             <th>Consumer Age</th>
                                             <th>Consumer City</th>
-                                            <th>Consumer Pin</th>
-											<th>Number of Consuers</th>
+                                           <th>Number of Consuers</th>
                                             <th>Action</th>
                                     </tr>
                             </thead>
@@ -125,9 +124,15 @@
                                            <td><?php echo $listData['consumer_gender']; ?></td>
                                            <td><?php echo $listData['consumer_min_age']; ?> to <?php echo $listData['consumer_max_age']; ?></td>
                                            <td><?php echo $listData['consumer_city']; ?></td>
-										    <td><?php echo $listData['consumer_pin']; ?></td>
-											<td><?php //echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>
-								<?php echo NumberOfSelectedConsumersByACustomer2($listData['customer_id'],$listData['consumer_gender'],$listData['consumer_city'],$listData['consumer_pin'],$listData['consumer_max_age'],$listData['consumer_city']); ?>
+										   <td><?php //echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>
+								<?php echo NumberOfSelectedConsumersByACustomer2($listData['customer_id'],$listData['consumer_gender'],$listData['consumer_city'],$listData['consumer_min_age'],$listData['consumer_max_age']); ?>
+											 <?php 
+											//echo "sanjay";
+//$date = strtotime("+".$listData['consumer_min_age']." years", strtotime($date));
+//echo date('Y-m-d', strtotime("-".$listData['consumer_min_age']." years"));
+//echo $date;
+											?>
+											<a href="<?php  echo base_url().'product/list_consumers_as_per_selection_criterias/'.$listData['criteria_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"> <i class="fa fa-eye"> View List Consuers</i></a>
 											
 											</td>
                                        <!--    <td><?php if($this->session->userdata('admin_user_id')==1){

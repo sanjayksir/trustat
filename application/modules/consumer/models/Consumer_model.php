@@ -132,7 +132,7 @@
     }
 	
 	
-	    function checkPromotionType($uname, $uid = '') {
+	    function checkPromotionType($promotion_type, $user_id, $uid = '') {
         $result = 'true';
         if ($this->input->post('register_username') != '') {
             $uname = $this->input->post('register_username');
@@ -142,7 +142,7 @@
         if (!empty($uid)) {
             $this->db->where(array('criteria_id!=' => $uid));
         }
-        $this->db->where(array('promotion_type' => $uname));
+        $this->db->where(array('promotion_type' => $promotion_type, 'customer_id' => $user_id));
         $query = $this->db->get();
         //echo '***'.$this->db->last_query();exit;
         if ($query->num_rows() > 0) {

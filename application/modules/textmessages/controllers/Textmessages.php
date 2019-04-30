@@ -832,7 +832,25 @@ function list_assigned_Advertisements() {
 			return date('Y-m-d', strtotime($years . ' years ago'));
 							}
 							
-	
+	function AllSelectedConsumersByACustomer2($customer_id, $csc_consumer_gender, $csc_consumer_city){
+		$this->db->select('C.id');	
+		$this->db->from('consumers C');		
+		$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		$this->db->where('CCL.customer_id', $customer_id);
+		
+		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
+		$this->db->where('C.gender', $csc_consumer_gender);
+			}
+			
+		if(!empty($csc_consumer_city)){ 			
+		$this->db->where('C.city', $csc_consumer_city);
+			}
+			
+			$query = $this->db->get();
+		$result = $query->result();
+		return $result;
+}
+
 	function send_text_message(){
 		//echo "test";
 	 	$this->checklogin();		
@@ -847,11 +865,7 @@ function list_assigned_Advertisements() {
 		}else{
 			
 			$send_status=0;
-			$send_status=0;
 		}
-		
-		
-		
 		if($consumer_selection_criteria=="All") {		
 		
 		$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status,$consumer_selection_criteria);
@@ -872,7 +886,7 @@ function list_assigned_Advertisements() {
 		exit;
 		
 		}else{
-		$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status);
+		$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status,$consumer_selection_criteria);
 	
 		$this->Textmessage_model->update_push_text_message_request($message_id, $send_status);
 		
@@ -884,18 +898,18 @@ function list_assigned_Advertisements() {
 				$consumer_id = $user->consumer_id;
 		 
 		 */
-		 $this->db->select('*');
+			$this->db->select('*');
 			$this->db->from('consumer_selection_criteria');
 			//$this->db->where('transaction_lr_type', "Loyalty");
 			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Communication-Text"));
 			$query=$this->db->get();						   
         $csc_consumer_gender = $query->row()->consumer_gender;
-		$csc_consumer_min_age = $query->row()->consumer_min_age;
-		$csc_consumer_max_age = $query->row()->consumer_max_age;
+		//$csc_consumer_min_age = $query->row()->consumer_min_age;
+		//$csc_consumer_max_age = $query->row()->consumer_max_age;
 		$csc_consumer_city = $query->row()->consumer_city;
-		$csc_consumer_pin = $query->row()->consumer_pin;
+		//$csc_consumer_pin = $query->row()->consumer_pin;
 									
-								
+								/*
 								if($csc_consumer_min_age=='0') {
 								$csc_consumer_min_dob = '';
 									} else {
@@ -907,14 +921,15 @@ function list_assigned_Advertisements() {
 									} else {
 								$csc_consumer_max_dob = $this->reverse_birthday( $csc_consumer_max_age );
 									}
-		
+							*/
 		//$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
-		$AllSelectedConsumersByACustomer = AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob);
+		$AllSelectedConsumersByACustomer = $this->AllSelectedConsumersByACustomer2($customer_id, $csc_consumer_gender, $csc_consumer_city);
 		
 				
-				foreach ($AllSelectedConsumersByACustomer as $consumer_id) 
+				foreach ($AllSelectedConsumersByACustomer as $consumer_idArray) 
 				{
-		 
+					$consumer_id = $consumer_idArray->id;
+		
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
@@ -1026,7 +1041,7 @@ function list_assigned_Advertisements() {
 		$params["csc_consumer_min_age"] = $ConsumerSelectionCriteria=$query->row()->consumer_min_age;
 		$params["csc_consumer_max_age"] = $ConsumerSelectionCriteria=$query->row()->consumer_max_age;
 		$params["csc_consumer_city"] = $ConsumerSelectionCriteria=$query->row()->consumer_city;
-		$params["csc_consumer_pin"] = $ConsumerSelectionCriteria=$query->row()->consumer_pin;
+		//$params["csc_consumer_pin"] = $ConsumerSelectionCriteria=$query->row()->consumer_pin;
 		
 			
 		$this->load->view('send_text_message', $params);

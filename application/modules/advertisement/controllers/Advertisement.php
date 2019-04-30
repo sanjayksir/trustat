@@ -885,12 +885,12 @@ function list_assigned_Advertisements() {
 			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Advertisement-Video"));
 			$query=$this->db->get();						   
         $csc_consumer_gender = $query->row()->consumer_gender;
-		$csc_consumer_min_age = $query->row()->consumer_min_age;
-		$csc_consumer_max_age = $query->row()->consumer_max_age;
+		//$csc_consumer_min_age = $query->row()->consumer_min_age;
+		//$csc_consumer_max_age = $query->row()->consumer_max_age;
 		$csc_consumer_city = $query->row()->consumer_city;
-		$csc_consumer_pin = $query->row()->consumer_pin;
+		//$csc_consumer_pin = $query->row()->consumer_pin;
 									
-								
+								/*
 								if($csc_consumer_min_age=='0') {
 								$csc_consumer_min_dob = '';
 									} else {
@@ -902,13 +902,15 @@ function list_assigned_Advertisements() {
 									} else {
 								$csc_consumer_max_dob = $this->reverse_birthday( $csc_consumer_max_age );
 									}
-		
+								*/
 		//$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
-		$AllSelectedConsumersByACustomer = AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob);
+		//$AllSelectedConsumersByACustomer = AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob);
 		
+				$AllSelectedConsumersByACustomer = $this->Advertisement_model->AllSelectedConsumersByACustomer2($customer_id, $csc_consumer_gender, $csc_consumer_city);
 				
-				foreach ($AllSelectedConsumersByACustomer as $consumer_id) 
-				{
+				foreach ($AllSelectedConsumersByACustomer as $consumer_idArray)  
+				{ 
+				$consumer_id = $consumer_idArray->id;
 
 		$fb_token = getConsumerFb_TokenById($consumer_id);
 		$mnv51_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 51)->get()->row();

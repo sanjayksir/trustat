@@ -513,7 +513,29 @@
 		function reverse_birthday( $years ){
 								return date('Y-m-d', strtotime($years . ' years ago'));
 								}
-								
+			
+
+
+function AllSelectedConsumersByACustomer1($customer_id, $csc_consumer_gender, $csc_consumer_city){
+		$this->db->select('C.id');	
+		$this->db->from('consumers C');		
+		$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		$this->db->where('CCL.customer_id', $customer_id);
+		
+		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
+		$this->db->where('C.gender', $csc_consumer_gender);
+			}
+			
+		if(!empty($csc_consumer_city)){ 			
+		$this->db->where('C.city', $csc_consumer_city);
+			}	
+			$query = $this->db->get();
+		$result = $query->result();
+		return $result;
+}
+
+
+			
 		function save_push_sent_text_message($customer_id,$text_message,$send_status,$consumer_selection_criteria){
 				if($send_status=='0'){
 				$this->db->query("delete from push_text_message where customer_id='".$customer_id."' ");
@@ -558,12 +580,12 @@
 			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Communication-Text"));
 			$query=$this->db->get();						   
         $csc_consumer_gender = $query->row()->consumer_gender;
-		$csc_consumer_min_age = $query->row()->consumer_min_age;
-		$csc_consumer_max_age = $query->row()->consumer_max_age;
+		//$csc_consumer_min_age = $query->row()->consumer_min_age;
+		//$csc_consumer_max_age = $query->row()->consumer_max_age;
 		$csc_consumer_city = $query->row()->consumer_city;
-		$csc_consumer_pin = $query->row()->consumer_pin;
+		//$csc_consumer_pin = $query->row()->consumer_pin;
 		
-							
+								/*
 								if($csc_consumer_min_age=='0') {
 								$csc_consumer_min_dob = '';
 									} else {
@@ -574,12 +596,13 @@
 									} else {
 								$csc_consumer_max_dob = $this->reverse_birthday( $csc_consumer_max_age );
 									}
-		
+									*/
 		//$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
-		$AllSelectedConsumersByACustomer = AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob);
+		$AllSelectedConsumersByACustomer = $this->AllSelectedConsumersByACustomer1($customer_id, $csc_consumer_gender, $csc_consumer_city);
 				
-				foreach ($AllSelectedConsumersByACustomer as $consumer_id)  
+				foreach ($AllSelectedConsumersByACustomer as $consumer_idArray)  
 				{ 
+				$consumer_id = $consumer_idArray->id;
 				$insertData=array(
 					"customer_id"	 => $customer_id,
 					"consumer_id"	 => $consumer_id,
@@ -609,7 +632,7 @@
 					);
 				  $this->db->insert("push_text_message_request", $insertData);
 				
-					$this->session->set_flashdata('success', 'Text Message Push Request sent Successfully!');
+					$this->session->set_flashdata('success', 'Request to Text Push Message sent Successfully, waiting gor approval');
 					return true;
 			}
 		

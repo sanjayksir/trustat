@@ -139,8 +139,8 @@
         $user_name = $this->session->userdata('user_name');
 
         $uid = $this->input->post('criteriaid');
-        $username = $this->input->post('promotion_type');
-        $isExists = $this->Consumer_model->checkPromotionType($username, $uid);
+        $promotion_type = $this->input->post('promotion_type');
+        $isExists = $this->Consumer_model->checkPromotionType($promotion_type, $user_id, $uid);
         echo $isExists;
         exit;
     }

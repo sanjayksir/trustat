@@ -117,7 +117,38 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 									<th class="hidden-480">Deliver to</th>
                                     <th class="hidden-480">Send/Un-push</th>
                                     <th>Date Time of request</th>
-									<th>Sent Status</th>
+									<th>Sent Status
+											<?php 
+											//$csc_consumer_min_dob = 5;
+											//$csc_consumer_max_dob = 99;
+											
+											//if(!empty($csc_consumer_min_dob)){
+				//$dobthenMin = date('Y-m-d h:i:s', strtotime("-".$csc_consumer_min_dob." years"));
+		//$ci->db->where('C.dob  <=', $dobthenMin);
+		//echo $dobthenMin;
+		//	}	
+		
+		//if(!empty($csc_consumer_max_dob)){ 	
+		//$dobthenMax = date('Y-m-d h:i:s', strtotime("-".$csc_consumer_max_dob."years"));		
+		//$ci->db->where('C.dob >=', $dobthenMax);
+		//echo $dobthenMax;
+		//echo AllSelectedConsumersByACustomer(341, "male", "Faridabad");
+			//}
+			$customer_id = 341;
+			$csc_consumer_gender = "male";
+			$csc_consumer_city = "Faridabad";
+			
+			$AllSelectedConsumersByACustomer = AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city);
+			foreach ($AllSelectedConsumersByACustomer as $consumer_id) 
+				{
+		// echo $consumer_id->id . ",";
+		
+		 
+		 }
+			
+			
+					?>				
+									</th>
                                 </tr>
                             </thead>
                             <tbody>

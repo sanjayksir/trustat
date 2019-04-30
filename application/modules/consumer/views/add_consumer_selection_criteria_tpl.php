@@ -295,14 +295,14 @@
 
 		rules: {
   			promotion_type:{
- 						 required: true/*, 
+ 						 required: true, 
 						 remote: {
 
                        	 	url: "<?php echo base_url().'consumer/';?>checkPromotionType",
                           	type: "post",
  							data: {  criteriaid: $( "#criteria_id" ).val() }
 
-                    	 } */
+                    	 } 
 
 					  },
 

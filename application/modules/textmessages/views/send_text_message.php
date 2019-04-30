@@ -111,7 +111,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 									 ?>
                                   <select name="quantity" id="quantity" class="form-control">
 										<option value="All <?php echo NumberOfAllConsumersOfACustomer($customer_id); ?> Consumers">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>
-										<option value="Filtered <?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?> Consumers">Filtered Consumers (<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>)</option>	
+										<option value="Filtered <?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_min_dob, $csc_consumer_max_dob); ?> Consumers">Filtered Consumers (<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>)</option>	
 								  </select>
 								  
                                   </div>

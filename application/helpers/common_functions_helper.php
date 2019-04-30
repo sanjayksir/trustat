@@ -5842,6 +5842,26 @@ function getAllRoles(){
 }
 
 
+function getAllCities(){	
+ 	$res 		= '';
+ 	$ci 		= & get_instance();
+	//$ci->db->distinct('city');
+	$ci->db->select('*');
+	$ci->db->from('scanned_product_logs');	
+	$ci->db->group_by('scan_city');
+	$ci->db->order_by("id", " desc");
+		//$ci->db->where(array('status'=>'1','id!='=>'2'));
+		//$ci->db->where('status',1);
+	   //$ci->db->where(array('status'=>'1','spideyImage!='=>''));	
+	$query = $ci->db->get();  echo $ci->db->last_query(); 
+	if ($query->num_rows() > 0) {
+ 		$res = $query->result_array();
+ 	//	$res = $res[0]['categoryName'];
+	}		
+ 	return $res;
+}
+
+
 function getAllLocationTypes(){
 	
  	$res 		= '';
@@ -7417,7 +7437,7 @@ function isProductCodeRegistered($bar_code_data){
 		return $query->num_rows();
 }
 
-   function NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob){
+   function NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_min_dob, $csc_consumer_max_dob){
 	   	
 	
 		$ci = & get_instance();
@@ -7434,11 +7454,11 @@ function isProductCodeRegistered($bar_code_data){
 		if(!empty($csc_consumer_city)){ 			
 		$ci->db->where('C.city', $csc_consumer_city);
 			}
-			
+			/*
 		if($csc_consumer_pin!=0){ 			
 		$ci->db->where('C.pin_code', $csc_consumer_pin);
 			}	
-			
+			*/
 		if(!empty($csc_consumer_min_dob)){ 			
 		$ci->db->where('C.dob <', $csc_consumer_min_dob);
 			}	
@@ -7456,14 +7476,16 @@ function isProductCodeRegistered($bar_code_data){
 		return $query->num_rows();
 }
 
-   function NumberOfSelectedConsumersByACustomer2($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob, $promotion_type){
+   function NumberOfSelectedConsumersByACustomer2($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_min_dob, $csc_consumer_max_dob){
 	   	
 	
 		$ci = & get_instance();
-		$ci->db->select('CCL.consumer_id');		
-		$ci->db->from('consumer_customer_link CCL');
-		//$ci->db->join('consumer_selection_criteria CSC', 'CSC.customer_id = CCL.customer_id');
-		$ci->db->join('consumers C', 'C.id = CCL.consumer_id');
+		$ci->db->select('C.*');	
+		$ci->db->from('consumers C');		
+		//$ci->db->from('consumer_customer_link CCL');
+		//$ci->db->join('consumer_selection_criteria CSC', 'CSC.consumer_id = CCL.consumer_id');
+		$ci->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		//$ci->db->join('consumers C', 'C.id = CCL.consumer_id');
 		//$array = array('CCL.customer_id' => $customer_id);
 		$ci->db->where('CCL.customer_id', $customer_id);
 		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
@@ -7473,22 +7495,28 @@ function isProductCodeRegistered($bar_code_data){
 		if(!empty($csc_consumer_city)){ 			
 		$ci->db->where('C.city', $csc_consumer_city);
 			}
+			
+			//$dobthenMin = date('Y-m-d', strtotime("-".$csc_consumer_min_dob." years"));
+			//$dobthenMax = date('Y-m-d', strtotime("-".$csc_consumer_max_dob." years"));
+		//$ci->db->where('C.dob BETWEEN "'. date('Y-m-d', strtotime($dobthenMin)). '" and "'. date('Y-m-d', strtotime($dobthenMax)).'"');	
 			
 		//if(!empty($promotion_type)){ 			
 		//$ci->db->where('CSC.promotion_type', $promotion_type);
 		//	}	
 			
-		if($csc_consumer_pin!=0){ 			
-		$ci->db->where('C.pin_code', $csc_consumer_pin);
-			}	
-			
-		if(!empty($csc_consumer_min_dob)){ 			
-		$ci->db->where('C.dob <', $csc_consumer_min_dob);
+			/*
+		if(!empty($csc_consumer_min_dob)){
+				$dobthenMin = date('Y-m-d', strtotime("-".$csc_consumer_min_dob." years"));
+		//$ci->db->where('C.dob  >=', $dobthenMin);
+		$ci->db->where(' C.dob >= date("'.$dobthenMin.'")');
 			}	
 		
-		if(!empty($csc_consumer_max_dob)){ 			
-		$ci->db->where('C.dob >', $csc_consumer_max_dob);
+		if(!empty($csc_consumer_max_dob)){ 	
+		$dobthenMax = date('Y-m-d', strtotime("-".$csc_consumer_max_dob." years"));		
+		//$ci->db->where('C.dob <=', $dobthenMax);
+		$ci->db->where(' C.dob >= date("'.$dobthenMax.'")');
 			}
+			*/
 		//$ci->db->where("$CurrentAge BETWEEN $minvalue AND $maxvalue");
 		
 		//$ci->db->where("$CurrentAge BETWEEN $minvalue AND $maxvalue");
@@ -7496,21 +7524,70 @@ function isProductCodeRegistered($bar_code_data){
 		return $query->num_rows();
 }
 
-   function AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob){
+
+   function consumer_selection_criteria_values($criteria_id){	   		
 		$ci = & get_instance();
-		$ci->db->select('CCL.consumer_id');		
-		$ci->db->from('consumer_customer_link CCL');
-		//$ci->db->join('consumer_selection_criteria CSC', 'CSC.customer_id = CCL.customer_id');
-		$ci->db->join('consumers C', 'C.id = CCL.consumer_id');
-		//$array = array('CCL.customer_id' => $customer_id);
+		$ci->db->select('*');
+		$ci->db->from('consumer_selection_criteria');
+		$ci->db->where('criteria_id', $criteria_id);
+		//$ci->db->limit(1);// only apply if you have more than same id in your table othre wise comment this line
+		$query = $ci->db->get();
+		return $query->row();
+}
+
+//Sanjay
+   function AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob){
+	   
+		$ci = & get_instance();
+		$ci->db->select('C.id');	
+		$ci->db->from('consumers C');		
+		$ci->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
 		$ci->db->where('CCL.customer_id', $customer_id);
 		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
 		$ci->db->where('C.gender', $csc_consumer_gender);
-			}
-			
+			}			
 		if(!empty($csc_consumer_city)){ 			
 		$ci->db->where('C.city', $csc_consumer_city);
 			}
+			
+		if(!empty($csc_consumer_min_dob)){ 			
+		//$ci->db->where('C.dob <', $csc_consumer_min_dob);
+		$ci->db->where('C.dob  <=', $csc_consumer_min_dob);
+			}	
+		
+		if(!empty($csc_consumer_max_dob)){ 			
+		//$ci->db->where('C.dob >', $csc_consumer_max_dob);
+		$ci->db->where('C.dob >=', $csc_consumer_max_dob);
+			}
+			
+		//$dobthenMin = date('Y-m-d', strtotime("-".$csc_consumer_min_dob." years"));
+		//$dobthenMax = date('Y-m-d', strtotime("-".$csc_consumer_max_dob." years"));
+		//$ci->db->where('C.dob BETWEEN "'. date('Y-m-d', strtotime($csc_consumer_min_dob)). '" and "'. date('Y-m-d', strtotime($csc_consumer_max_dob)).'"');	
+			//$ci->db->where("C.dob BETWEEN $csc_consumer_min_dob AND $csc_consumer_max_dob");	
+			/*
+			if(!empty($csc_consumer_min_dob)){
+				$dobthenMin = date('Y-m-d', strtotime("-".$csc_consumer_min_dob." years"));
+		$ci->db->where('C.dob  >=', $dobthenMin);
+		//$ci->db->where(' C.dob >= date("'.$dobthenMin.'")');
+			}	
+		
+		if(!empty($csc_consumer_max_dob)){ 	
+		$dobthenMax = date('Y-m-d', strtotime("-".$csc_consumer_max_dob." years"));		
+		$ci->db->where('C.dob <=', $dobthenMax);
+		//$ci->db->where(' C.dob <= date("'.$dobthenMax.'")');
+			}
+			
+			/*
+		if(!empty($csc_consumer_min_dob)){
+				$dobthenMin = date('Y-m-d', strtotime("-".$csc_consumer_min_dob." years"));
+		$ci->db->where('C.dob  >=', $dobthenMin);
+			}	
+		
+		if(!empty($csc_consumer_max_dob)){ 	
+		$dobthenMax = date('Y-m-d', strtotime("-".$csc_consumer_max_dob." years"));		
+		$ci->db->where('C.dob <=', $dobthenMax);
+			}	
+			
 			
 		if($csc_consumer_pin!=0){ 			
 		$ci->db->where('C.pin_code', $csc_consumer_pin);
@@ -7523,10 +7600,14 @@ function isProductCodeRegistered($bar_code_data){
 		if(!empty($csc_consumer_max_dob)){ 			
 		$ci->db->where('C.dob >', $csc_consumer_max_dob);
 			}
-		
+		*/
 		$query = $ci->db->get();//echo $ci->db->last_query();
 		//return $query->num_rows();
-		return $query->row();
+		//return $query->row();
+		$result = $query->result();
+		return $result;
+
+
 }
 
 

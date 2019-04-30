@@ -47,11 +47,11 @@
 			  <label for="form-field-8"><b>Maximum Age in Years</b></label> :
 			  
 			</div>
-			-->
+			
 			<div class="col-sm-4">
 			  <label for="form-field-8"><b>Pin Code of Consumer</b></label>:
 			<?php echo $get_user_details[0]['consumer_pin'];?>
-			</div>
+			</div>-->
 		</div>
 		
 		

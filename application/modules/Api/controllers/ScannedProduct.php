@@ -31,8 +31,9 @@ class ScannedProduct extends ApiController {
         }
         $validate = [
             ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
-            ['field' =>'latitude','label'=>'Latitude','rules' => 'required'],
-            ['field' =>'longitude','label'=>'Longitude','rules' => 'trim|required' ],
+			['field' =>'scan_city','label'=>'Scan City','rules' => 'trim' ],
+            ['field' =>'latitude','label'=>'Latitude','rules' => 'trim'],
+            ['field' =>'longitude','label'=>'Longitude','rules' => 'trim' ],
 			//['field' =>'registration_address','label'=>'Registration Address','rules' => 'trim|required' ],
         ];
         $errors = $this->ScannedproductsModel->validate($data,$validate);

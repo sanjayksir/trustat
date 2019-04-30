@@ -1491,17 +1491,51 @@ function list_assigned_products() {
         $params["list_all_consumers"] = $this->Product_model->list_all_consumers($limit_per_page, $start_index, $srch_string);
 		
 		if(($user_id==1) && ($customer_id!="")){
-		 $params["links"] = Utils::pagination('product/list_all_consumers/' . $customer_id, $total_records, null, 4);
+		 $params["links"] = Utils::pagination('product/list_all_consumers/', $total_records, null, 4);
 			}else{
 			 $params["links"] = Utils::pagination('product/list_all_consumers', $total_records);
 			}
        
-		
-		
         $this->load->view('list_all_consumers_tpl', $params);
     }
 	
 	
+		public function list_consumers_as_per_selection_criterias() {
+        $this->checklogin();
+       $user_id = $this->session->userdata('admin_user_id');
+	   $criteria_id = $this->uri->segment(3);
+	   $customer_id = $this->session->userdata('admin_user_id');
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        //$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+		
+		//$csc_consumer_gender = consumer_selection_criteria_values($criteria_id)->consumer_gender;
+	//$csc_consumer_city = consumer_selection_criteria_values($criteria_id)->consumer_city;
+	//$csc_consumer_min_dob = consumer_selection_criteria_values($criteria_id)->consumer_min_age;
+	//$csc_consumer_max_dob = consumer_selection_criteria_values($criteria_id)->consumer_max_age;
+
+   	
+        $total_records = $this->Product_model->total_consumers_as_per_selection_criterias($srch_string);
+        $params["list_all_consumers"] = $this->Product_model->list_consumers_as_per_selection_criterias($limit_per_page, $start_index, $srch_string,null,4);
+		
+	  $params["links"] = Utils::pagination('product/list_consumers_as_per_selection_criterias'.$criteria_id, $total_records);
+			
+       
+        $this->load->view('list_consumers_as_per_selection_criterias_tpl', $params);
+    }
 	
 	
 	public function list_consumers_loyalty_summary() {
