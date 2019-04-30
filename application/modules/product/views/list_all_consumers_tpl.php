@@ -137,7 +137,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 														 <th class="hidden-480">Consumer Education Qualification</th>
 														 <th class="hidden-480">Consumer Type Vehicle</th>
 														 <th class="hidden-480">Consumer Profession</th>
-														 <th class="hidden-480">Consumer Marital Mtatus</th>
+														 <th class="hidden-480">Consumer Marital Status</th>
 														 <th class="hidden-480">Number of Family Members</th>
 														 <th class="hidden-480">Consumer Loan Car Housing</th>
 														 <th class="hidden-480">Consumer Personal Loan</th> 
@@ -157,7 +157,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 														 <th class="hidden-480">Spouse dob</th>
 														 <th class="hidden-480">Marriage Anniversary</th>
 														 <th class="hidden-480">Spouse Work Status</th>
-														 <th class="hidden-480">Spouse Work Status</th>
+														 <th class="hidden-480">Spouse Education Qualification</th>
 														 <th class="hidden-480">Spouse Monthly Income</th>
 														 <th class="hidden-480">Spouse Loan</th>
 														 <th class="hidden-480">Spouse Personal Loan</th>
