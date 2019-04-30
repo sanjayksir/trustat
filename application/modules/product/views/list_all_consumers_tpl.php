@@ -112,14 +112,14 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                         <table id="dynamic-table" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>S No.</th>
-                                    <th class="hidden-480">Consumer Name</th>
-                                    <th class="hidden-480">Consumer Phone</th>
-                                    <th class="hidden-480">Consumer Email</th>
-                                    <th>Consumer Photo</th>
-                                    <th>Date of Registration</th>
-									<th>Earned Loyalty Points</th>
-                                    <th>Consumer Aadhaar Number </th>
+														<th>S No.</th>
+														<th class="hidden-480">Consumer Name</th>
+														<th class="hidden-480">Consumer Phone</th>
+														<th class="hidden-480">Consumer Email</th>
+														<th>Consumer Photo</th>
+														<th>Date of Registration</th>
+														<th>Earned Loyalty Points</th>
+														<th>Consumer Aadhaar Number </th>
 									<?php 
 									$user_id = $this->session->userdata('admin_user_id');
 									if($user_id==1){
@@ -196,24 +196,21 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                         foreach ($list_all_consumers as $attr){
                         $i++;
                          ?>
-                                <tr id="show<?php echo $attr['id'];?>">
-                                <td><?php echo $sno; ?></td>
-                                <td><?php echo $attr['user_name']; ?></td>
-                                <td><?php echo $attr['mobile_no']; ?></td>
-                                <td><?php echo $attr['email']; ?></td>
-                                <td><img src="<?php echo base_url(); ?><?php echo $attr['avatar_url']; ?>" alt="Consumer Photo Not found" height="42" width="42"></td>
-                                <td><?php 
-								
-								
-								echo $attr['created_at']; ?></td>
-								<td><?php if($user_id==1){
-									echo get_total_consumer_loyalty_points_all($attr['id']);
-									}else{
-											echo get_total_consumer_loyalty_points_customerwise($attr['id'], $user_id);
-										 }
-										 ?>
-									</td>
-                                <td><?php echo $attr['aadhaar_number']; ?></td>
+													<tr id="show<?php echo $attr['id'];?>">
+													<td><?php echo $sno; ?></td>
+													<td><?php echo $attr['user_name']; ?></td>
+													<td><?php echo $attr['mobile_no']; ?></td>
+													<td><?php echo $attr['email']; ?></td>
+													<td><img src="<?php echo base_url(); ?><?php echo $attr['avatar_url']; ?>" alt="Consumer Photo Not found" height="42" width="42"></td>
+													<td><?php echo $attr['created_at']; ?></td>
+													<td><?php if($user_id==1){
+														echo get_total_consumer_loyalty_points_all($attr['id']);
+														}else{
+																echo get_total_consumer_loyalty_points_customerwise($attr['id'], $user_id);
+															 }
+															 ?>
+														</td>
+													<td><?php echo $attr['aadhaar_number']; ?></td>
                                                   <?php if($user_id==1){
 													   ?>
 													    <td><?php echo $attr['gender']; ?></td>
@@ -262,9 +259,6 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 														<td><?php echo $attr['spouse_sports']; ?></td>
 														<td><?php echo $attr['spouse_entertainment']; ?></td>
 														<td><?php echo $attr['modified_at'];
-				
-
-
 														?></td>
 													   
 												  <?php }  ?>
