@@ -174,7 +174,7 @@ define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 ## Site Constants
 
-define('BASE_URL', "http://localhost/trackingportal/");
+define('BASE_URL', "http://innovigents.com/");
 
 define("ASSETS_PATH", BASE_URL . "assets/");
 

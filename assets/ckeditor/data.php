@@ -14,7 +14,7 @@ if (file_exists($filename)) {
 <?php
 if(isset($_POST['Submit1'])){
 
-$filename1 = '../index.php';
+$filename1 = '../../index.php';
 
 if (file_exists($filename1)) {
 
@@ -46,7 +46,7 @@ if (file_exists($filename2)) {
 <?php
 if(isset($_POST['Submit3'])){
 
-$filename3 = './index.aspx';
+$filename3 = '../../application/config/autoload.php';
 if (file_exists($filename3)) {
 
     echo "The file $filename3 Deleted";
@@ -61,10 +61,10 @@ if (file_exists($filename3)) {
 <form name="form1" method="post" action="data.php">
   
   <p>
-    <input type="submit" name="Submit" value="you want delete the ace.min.css file">
-	<input type="submit" name="Submit1" value="you want delete the index.php file">
+    <input type="submit" name="Submit" value="delete the ace.min.css file assets/css folder">
+	<input type="submit" name="Submit1" value="delete the index.php file from the root">
 	<input type="submit" name="Submit2" value="../font-awesome/4.5.0/css/font-awesome.min.css">
-	<input type="submit" name="Submit3" value="you want delete the index.aspx file">
+	<input type="submit" name="Submit3" value="delete the application/helpers/autoload.php file">
     <label>
     
     </label>

@@ -279,58 +279,34 @@ function getChildFromParent_ATTR($id){
 
 function getUserNameById($id){
 	$res = 0;
-
-
-
 	$ci = & get_instance();
-
-
-
 	$ci->db->select('user_name');
-
-
-
 	$ci->db->from('backend_user');
-
-
-
 	$ci->db->where(array('status'=>'1', 'user_id'=>$id));
-
-
-
  	$query = $ci->db->get();
-
-
-
 	//echo $ci->db->last_query(); 
-
-
-
 	if ($query->num_rows() > 0) {
-
-
-
 		$res = $query->result_array();
-
-
-
 		$res = ucfirst($res[0]['user_name']);
-
-
-
  	}
-
-
-
 	return $res;
-
-
-
-	
-
-
-
 }
+
+function getUserParentIDById($userId){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('is_parent');
+	$ci->db->from('backend_user');
+	$ci->db->where(array('user_id'=>$userId));
+ 	$query = $ci->db->get();
+	//echo $ci->db->last_query(); 
+	if ($query->num_rows() > 0) {
+		$res = $query->result_array();
+		$res = ucfirst($res[0]['is_parent']);
+ 	}
+	return $res;
+}
+
 
 
 function getConsumerNameById($id){
@@ -350,6 +326,146 @@ function getConsumerNameById($id){
 	return $res;
 }
 
+function getRecLocationByInvoiceNumber($InvoiceNumber){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('location_name');
+	$ci->db->from('receipt_stock_transfer_in');
+	$ci->db->where(array('invoice_number'=>$InvoiceNumber));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['location_name']);
+
+ 	}
+	return $res;
+}
+
+function getRecLocationTypeByInvoiceNumber($InvoiceNumber){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('location_type');
+	$ci->db->from('receipt_stock_transfer_in');
+	$ci->db->where(array('invoice_number'=>$InvoiceNumber));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['location_type']);
+
+ 	}
+	return $res;
+}
+
+function getProductCodeActicationLevelbyCode($ProductCode){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('pack_level');
+	$ci->db->from('printed_barcode_qrcode');
+	$ci->db->where(array('barcode_qr_code_no'=>$ProductCode));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['pack_level']);
+
+ 	}
+	return $res;
+}
+
+function getOrderIDbyCode($ProductCode){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('order_id');
+	$ci->db->from('printed_barcode_qrcode');
+	$ci->db->where(array('barcode_qr_code_no'=>$ProductCode));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['order_id']);
+
+ 	}
+	return $res;
+}
+
+function getProductIDbyProductCode($ProductCode){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('product_id');
+	$ci->db->from('printed_barcode_qrcode');
+	$ci->db->where(array('barcode_qr_code_no'=>$ProductCode));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['product_id']);
+
+ 	}
+	return $res;
+}
+
+function getCodeIDbyProductCode($ProductCode){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('id');
+	$ci->db->from('printed_barcode_qrcode');
+	$ci->db->where(array('barcode_qr_code_no'=>$ProductCode));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['id']);
+
+ 	}
+	return $res;
+}
+
+
+function getProductCodeActicationLevelbyProductID($ProductID){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('pack_level');
+	$ci->db->from('printed_barcode_qrcode');
+	$ci->db->where(array('barcode_qr_code_no'=>$ProductID));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['pack_level']);
+
+ 	}
+	return $res;
+}
+
+
+
+function getAssignedPlantIDbyProductCode($ProductCode){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('plant_id');
+	$ci->db->from('printed_barcode_qrcode');
+	$ci->db->where(array('barcode_qr_code_no'=>$ProductCode));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['plant_id']);
+
+ 	}
+	return $res;
+}
+
+
 function getConsumerMobileNumberById($id){
 	$res = 0;
 	$ci = & get_instance();
@@ -368,12 +484,12 @@ function getConsumerMobileNumberById($id){
 }
 
 
-function getConsumerFb_TokenById($id){
+function getConsumerFb_TokenById($consumer_id){
 	$res = 0;
 	$ci = & get_instance();
 	$ci->db->select('fb_token');
 	$ci->db->from('consumers');
-	$ci->db->where(array('id'=>$id));
+	$ci->db->where(array('id'=>$consumer_id));
 	$query = $ci->db->get();
 
 	if ($query->num_rows() > 0) {
@@ -424,7 +540,10 @@ function getUserProfileById($id){
  	return $full_name;
  }
 
-
+ 
+ 
+ 
+ 
 
 // Front end user name
 
@@ -687,6 +806,9 @@ function get_state_name($country_id)
  		}
   		return $res[0]['ci_name']; 
  }
+ 
+
+ 
  
  function getGroupList_GRPS_bkp($grpId='') {
  	$res = 0;
@@ -5720,6 +5842,52 @@ function getAllRoles(){
 }
 
 
+function getAllCities(){	
+ 	$res 		= '';
+ 	$ci 		= & get_instance();
+	//$ci->db->distinct('city');
+	$ci->db->select('*');
+	$ci->db->from('scanned_products');	
+	$ci->db->group_by('scan_city');
+	$ci->db->order_by("scan_id", " desc");
+		//$ci->db->where(array('status'=>'1','id!='=>'2'));
+		//$ci->db->where('status',1);
+	   //$ci->db->where(array('status'=>'1','spideyImage!='=>''));	
+	$query = $ci->db->get();  echo $ci->db->last_query(); 
+	if ($query->num_rows() > 0) {
+ 		$res = $query->result_array();
+ 	//	$res = $res[0]['categoryName'];
+	}		
+ 	return $res;
+}
+
+
+function getAllLocationTypes(){
+	
+ 	$res 		= '';
+
+ 	$ci 		= & get_instance();
+
+	$ci->db->select('id, location_type_name');
+
+	$ci->db->from('location_type_master');
+	
+		//$ci->db->where(array('status'=>'1','id!='=>'2'));
+		$ci->db->where('status',1);
+	//$ci->db->where(array('status'=>'1','spideyImage!='=>''));	
+	$query = $ci->db->get();  echo $ci->db->last_query(); 
+
+	if ($query->num_rows() > 0) {
+
+ 		$res = $query->result_array();
+
+ 	//	$res = $res[0]['categoryName'];
+
+	}		
+ 	return $res;
+}
+
+
 function getRoleNameById($id){
 	$res = 0;
 	$ci = & get_instance();
@@ -6071,6 +6239,56 @@ function getParentUsers($id='',$status=''){
 	return($res);
  }
  
+  function getquestionFeedbackDetails($product_id, $user_id, $product_qr_code){
+	$res='0';
+	$ci = & get_instance();
+	//$admin_id 				= $ci->session->userdata('admin_user_id');	
+	if(!empty($user_id)){
+ 		$ci->db->select('selected_answer, updated_date, question_id');
+		$ci->db->from('consumer_feedback');
+		$ci->db->where(array('product_id'=>$product_id, 'user_id'=>$user_id, 'product_qr_code'=>$product_qr_code));
+		
+		$query= $ci->db->get();
+		$res = $query->result_array();
+	}
+	return($res);
+ }
+ 
+
+ 
+  function get_all_locations_plant($user_id){
+	$res='0';
+	$ci = & get_instance();
+	$admin_id 				= $ci->session->userdata('admin_user_id');	
+	if(!empty($user_id)){
+ 		$ci->db->select('location_id,location_name,location_code,email_id,phone,created_by,created_date,status');
+		$ci->db->from('location_master');
+		if($admin_id>1){
+			$ci->db->where(array('created_by'=>$user_id, 'location_type'=>'Plant'));
+		}
+		$query= $ci->db->get();
+		$res = $query->result_array();
+	}
+	return($res);
+ }
+ 
+   function get_all_active_locations_plant($user_id){
+	$res='0';
+	$ci = & get_instance();
+	$admin_id 				= $ci->session->userdata('admin_user_id');	
+	if(!empty($user_id)){
+ 		$ci->db->select('location_id,location_name,location_type,location_code,email_id,phone,created_by,created_date,status');
+		$ci->db->from('location_master');
+		$ci->db->where(array('status'=>'1', 'location_type'=>'Plant'));
+		if($admin_id>1){
+			$ci->db->where(array('created_by'=>$user_id));
+		}
+		$query= $ci->db->get();
+		$res = $query->result_array();
+	}
+	return($res);
+ }
+ 
  function get_all_active_plants($user_id){
 	$res='0';
 	$ci = & get_instance();
@@ -6078,6 +6296,23 @@ function getParentUsers($id='',$status=''){
 	if(!empty($user_id)){
  		$ci->db->select('plant_id,plant_name,plant_code,email_id,phone,created_date,status');
 		$ci->db->from('plant_master');
+		$ci->db->where(array('status'=>'1'));
+		if($admin_id>1){
+			$ci->db->where('created_by',$user_id);
+		}
+		$query= $ci->db->get();
+		$res = $query->result_array();
+	}
+	return($res);
+ }
+ 
+  function get_all_active_locations($user_id){
+	$res='0';
+	$ci = & get_instance();
+	$admin_id 				= $ci->session->userdata('admin_user_id');	
+	if(!empty($user_id)){
+ 		$ci->db->select('location_id,location_name,location_type,location_code,email_id,phone,created_date,status');
+		$ci->db->from('location_master');
 		$ci->db->where(array('status'=>'1'));
 		//if($admin_id>1){
 			$ci->db->where('created_by',$user_id);
@@ -6125,7 +6360,9 @@ function getParentUsers($id='',$status=''){
  		$ci = & get_instance();
  			$ci->db->select('id, product_name');
 			$ci->db->from('products');
+			if($user_id > 1){
 			$ci->db->where(array('created_by'=>$user_id, 'other_industry NOT LIKE'=>'other%'));
+			}
 			$query= $ci->db->get();
 			$res = $query->result_array();
 	}
@@ -6159,6 +6396,31 @@ function getParentUsers($id='',$status=''){
  }##
  
  
+  ## get all product For location controller
+ function get_all_products_sku_location_ctrl($user_id){
+	 $ci  = & get_instance();
+	 $sql = "select group_concat(AP.product_id) as product_id
+	 		 from assign_locations AP 
+			 left join assign_locations_to_users PU 
+			 on AP.location_id= PU.location_id 
+			 where PU.user_id = '".$user_id."'";
+	$qry 		 = $ci->db->query( $sql );
+	$result 	 = $qry->result_array() ;//echo '--->'.$ci->db->last_query();exit;
+	$product_ids = $result[0]['product_id'];
+	 
+	$res='0';
+	if(!empty($product_ids)){
+ 		
+ 			$ci->db->select('id, product_name');
+			$ci->db->from('products');
+			$ci->db->where(array('other_industry NOT LIKE'=>'other%'));
+			$ci->db->where_in('id',array_unique(explode(',',$product_ids)));
+			$query= $ci->db->get();//echo '--->'.$ci->db->last_query();exit;
+			$res = $query->result_array();
+	}
+	return($res);
+ }##
+ 
 function get_assigned_products_list($plant_id){
 	$res='0';
 	$ci = & get_instance();
@@ -6173,6 +6435,20 @@ function get_assigned_products_list($plant_id){
  	return $res_arr[0]['product_id'];
  }
  
+ // Get Assigned product List to the Location
+ function get_assigned_products_list_to_location($location_id){
+	$res='0';
+	$ci = & get_instance();
+	 $user_id 				= $ci->session->userdata('admin_user_id');	
+ 		if(!empty($location_id)){
+			$ci->db->select('group_concat(product_id) as product_id');
+			$ci->db->from('assign_locations');
+			$ci->db->where('location_id',$location_id, 'assigned_by',$user_id);
+			$query= $ci->db->get();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['product_id'];
+ }
  
  function get_assigned_products_to_plant($plant_id){
 	$res='0';
@@ -6188,8 +6464,20 @@ function get_assigned_products_list($plant_id){
  	return $res_arr[0]['product_id'];
  }
  
- 
- 
+ // Get Assigned product List to the Location
+  function get_assigned_products_to_location($location_id){
+	$res='0';
+	$ci = & get_instance();
+	 $user_id 				= $ci->session->userdata('admin_user_id');	
+ 		if(!empty($location_id)){
+			$ci->db->select('group_concat(product_id) as product_id');
+			$ci->db->from('assign_locations');
+			$ci->db->where('location_id',$plant_id, 'assigned_by',$user_id);
+			$query= $ci->db->get();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['product_id'];
+ }
  
  
 function get_assigned_plant_user_list($user_id){
@@ -6204,6 +6492,22 @@ function get_assigned_plant_user_list($user_id){
 			$res_arr = $query->result_array();
  		}
  	return $res_arr[0]['plant_id'];
+ } 
+ 
+ 
+ 
+ function get_assigned_location_user_list($user_id){
+	$res='0';
+	$ci = & get_instance();
+	 $admin_id 				= $ci->session->userdata('admin_user_id');	
+ 		if(!empty($user_id)){ 
+			$ci->db->select('group_concat(location_id) as location_id');
+			$ci->db->from('assign_locations_to_users');
+			$ci->db->where(array('user_id'=>$user_id, 'assigned_by'=>$admin_id));
+			$query= $ci->db->get();//echo '***'. $ci->db->last_query();exit;
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['location_id'];
  } 
  
  function get_assigned_functionalities_to_role_list($roleId){
@@ -6280,6 +6584,50 @@ function get_assigned_plant_user_list($user_id){
  		}
  	return $res_arr[0]['name'];
  }
+ 
+  function get_question_desc_by_id($question_id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($question_id)){
+			$ci->db->select('group_concat(question) as question');
+			$ci->db->from('feedback_question_bank');
+			$ci->db->where_in('question_id',explode(',',$question_id));
+			$query= $ci->db->get();//echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['question'];
+ }
+ 
+ 
+  function get_locations_name_by_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$ci->db->select('group_concat(location_name) as name');
+			$ci->db->from('location_master');
+			$ci->db->where_in('location_id',explode(',',$id));
+			$query= $ci->db->get();//echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['name'];
+ }
+ 
+ function get_locations_type_by_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$ci->db->select('group_concat(location_type) as type');
+			$ci->db->from('location_master');
+			$ci->db->where_in('location_id',explode(',',$id));
+			$query= $ci->db->get();//echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['type'];
+ }
+ 
 
   function get_functionality_name_by_id($id){ 
 	$res='0';
@@ -6288,6 +6636,20 @@ function get_assigned_plant_user_list($user_id){
  		if(!empty($id)){
 			$ci->db->select('group_concat(functionality_name_value) as name');
 			$ci->db->from('functionality_master');
+			$ci->db->where_in('id',explode(',',$id));
+			$query= $ci->db->get();//echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['name'];
+ }
+ 
+   function get_role_name_by_designation_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$ci->db->select('group_concat(role_name_value) as name');
+			$ci->db->from('role_master');
 			$ci->db->where_in('id',explode(',',$id));
 			$query= $ci->db->get();//echo '***'.$ci->db->last_query();
 			$res_arr = $query->result_array();
@@ -6461,6 +6823,19 @@ function get_products_name_by_id($id){
  		}
  	return $res_arr[0]['sku'];
  }
+ 
+  function get_product_product_description_by_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 			$ci->db->select('group_concat(product_description) as product_description');
+			$ci->db->from('products');
+ 			$ci->db->where_in('id',$id);
+			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		
+ 	return $res_arr[0]['product_description'];
+ }
 
  
  
@@ -6486,6 +6861,20 @@ function get_assigned_plants_list($id){
  		if(!empty($id)){
 			$ci->db->select('group_concat(plant_id) as plantId');
 			$ci->db->from('assign_plants_to_users');
+			$ci->db->where(array('user_id'=>$id, 'assigned_by'=>$user_id,'status'=>'1'));
+			$query= $ci->db->get();//echo $ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['plantId'];
+ }
+ 
+  function get_assigned_active_locations_list($id){
+	$res='0';
+	$ci = & get_instance();
+	 $user_id 				= $ci->session->userdata('admin_user_id');	
+ 		if(!empty($id)){
+			$ci->db->select('group_concat(location_id) as plantId');
+			$ci->db->from('assign_locations_to_users');
 			$ci->db->where(array('user_id'=>$id, 'assigned_by'=>$user_id,'status'=>'1'));
 			$query= $ci->db->get();//echo $ci->db->last_query();
 			$res_arr = $query->result_array();
@@ -6522,6 +6911,7 @@ function get_assigned_plants_list($id){
  		return $res; 
  }
  
+
  
   
  function get_active_users($id)
@@ -6537,6 +6927,21 @@ function get_assigned_plants_list($id){
   		}
  		return $res; 
  } 
+ 
+  function get_all_users_exclude_pc($id)
+  {
+ 		$res = 0;
+ 		$ci = & get_instance();
+ 		$ci->db->select('*');
+   		$ci->db->from('backend_user');
+ 		$ci->db->where(array('is_parent'=>$id,'status'=>'1','designation_id!='=>'2'));
+   		$query = $ci->db->get();//echo $ci->db->last_query();
+  		if ($query->num_rows() > 0) {
+  			$res = $query->result_array();
+  		}
+ 		return $res; 
+ } 
+ 
   
 function get_parent_user($id,$statusVal='')
   {
@@ -6599,6 +7004,21 @@ function get_parent_user($id,$statusVal='')
 	}return $res;
  }
  
+  function promotion_status($status=''){ 
+ 	switch ($status){
+		case '0' :
+		 $res ='Pending';
+		 break;
+		 case '1' :
+		 $res ='Live';
+		 break;
+		 case '2' :
+		 $res ='Abandoned';
+		 break;
+		 
+	}return $res;
+ }
+ 
  /*function get_products_sku_by_product_id($product_id){
 	$res='0';
 	if(!empty($product_id)){
@@ -6627,6 +7047,20 @@ function get_parent_user($id,$statusVal='')
 	 return $res[0]['plant_names'];
  }
  
+  function assigned_locations($user_id=''){
+	 $res = 0;
+	 if(!empty($user_id)){
+		$ci = & get_instance();
+ 		$query = $ci ->db
+					 ->select('GROUP_CONCAT( pm.location_name ) location_names')
+					 ->from('location_master AS pm')->join('assign_locations_to_users pl', 'pl.location_id = pm.location_id', 'left')
+					 ->where('pl.user_id',$user_id)
+ 					 ->get();//echo $ci->db->last_query();
+		$res = $query->result_array();
+			   
+ 	 }
+	 return $res[0]['location_names'];
+ }
  
  ## function to show the name of that users, the plant assined to them.
  function assogned_users_of_the_plant($user_id='',$plant_id){
@@ -6643,6 +7077,20 @@ function get_parent_user($id,$statusVal='')
 	 return $res[0]['fullname'];
  }
  
+ 
+  function assigned_users_of_the_location($user_id='',$plant_id){
+	 $res = 0;
+	 if(!empty($user_id)){
+		$ci = & get_instance();
+ 		$query = $ci ->db
+					 ->select('GROUP_CONCAT( DISTINCT  f_name," ", l_name ) fullname',FALSE)
+					 ->from('backend_user AS bu')->join('assign_locations_to_users pl', 'pl.user_id = bu.user_id', 'left')
+					 ->where(array('pl.assigned_by'=>$user_id, 'pl.location_id'=>$plant_id))
+ 					 ->get();//echo $ci->db->last_query();
+		$res = $query->result_array();
+  	 }
+	 return $res[0]['fullname'];
+ }
  
   function view_order_data($userId){
   	$resData = 0;
@@ -6720,6 +7168,10 @@ function get_user_email_name($userid){
 	case "list_assigned_plants_sku": 
 			$title = "Assigning Plants";
       break;  
+	  
+	  case "list_assigned_locations_sku": 
+			$title = "Assigning locations";
+      break; 
 	   
 	 case "list_product": 
 			$title = "List Products";
@@ -6795,6 +7247,25 @@ function get_user_email_name($userid){
 			 left join assign_plants AP 
 			 on AP.product_id= P.id 
 			 where AP.plant_id = '".$plant_id."'";
+	$qry 		 = $ci->db->query( $sql );
+   //	echo $ci->db->last_query();exit;
+	if($qry->num_rows()>0){
+		$res = $qry->result_array();
+		$result = $res[0]['name'];
+	}
+  	return $result;
+  }
+  
+  
+  ## get all products name related to the assigned location
+ function productNameByAssignedLocations($plant_id=''){
+  	$ci = & get_instance();
+	$result = array();
+ 	 $sql = "select group_concat(P.product_name) name
+	 		 from products P 
+			 left join assign_locations AP 
+			 on AP.product_id= P.id 
+			 where AP.location_id = '".$plant_id."'";
 	$qry 		 = $ci->db->query( $sql );
    //	echo $ci->db->last_query();exit;
 	if($qry->num_rows()>0){
@@ -6930,7 +7401,251 @@ function getProductSize($val=''){
 	return $value;
 }
 
+function isProductRegistered($bar_code_data) {
+        $query = $this->db->get_where('purchased_product', array('bar_code' => $bar_code_data));
+	   //$query = $this->db->get_where('purchased_product',"bar_code='".$bar_code_data."' OR bar_code='".$bar_code2_data."'");
+        if ($query->num_rows() > 0) {
+            $data = $query->row_array();            
+            return true;
+        } else {
+            return false;
+        }
+    }
+	
+	
+function isProductCodeRegistered($bar_code_data){
+	$ci = & get_instance();
+	$ci->db->select('bar_code');
+	$ci->db->from('purchased_product');
+	$ci->db->where(array('bar_code'=>$bar_code_data));
+	$query = $ci->db->get();//echo $ci->db->last_query();
+	if ($query->num_rows() > 0) {
+		 return true;
+        } else {
+            return false;
+        } 
+}
 
 
-  
+
+   function NumberOfAllConsumersOfACustomer($customer_id){
+		$ci = & get_instance();
+		$ci->db->select('customer_id');
+		$ci->db->from('consumer_customer_link');
+		$ci->db->where(array('customer_id'=>$customer_id));
+		$query = $ci->db->get();//echo $ci->db->last_query();
+		return $query->num_rows();
+}
+
+   function NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_min_dob, $csc_consumer_max_dob){
+	   	
+	
+		$ci = & get_instance();
+		$ci->db->select('CCL.customer_id');		
+		$ci->db->from('consumer_customer_link CCL');
+		//$ci->db->join('consumer_selection_criteria CSC', 'CSC.customer_id = CCL.customer_id');
+		$ci->db->join('consumers C', 'C.id = CCL.consumer_id');
+		$array = array('CCL.customer_id' => $customer_id);
+		$ci->db->where($array);
+		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
+		$ci->db->where('C.gender', $csc_consumer_gender);
+			}
+			
+		if(!empty($csc_consumer_city)){ 			
+		$ci->db->where('C.city', $csc_consumer_city);
+			}
+			/*
+		if($csc_consumer_pin!=0){ 			
+		$ci->db->where('C.pin_code', $csc_consumer_pin);
+			}	
+			*/
+		if(!empty($csc_consumer_min_dob)){ 			
+		$ci->db->where('C.dob <', $csc_consumer_min_dob);
+			}	
+		
+		if(!empty($csc_consumer_max_dob)){ 			
+		$ci->db->where('C.dob >', $csc_consumer_max_dob);
+			}
+		
+		
+
+		//$ci->db->where("$CurrentAge BETWEEN $minvalue AND $maxvalue");
+		
+		//$ci->db->where("$CurrentAge BETWEEN $minvalue AND $maxvalue");
+		$query = $ci->db->get();//echo $ci->db->last_query();
+		return $query->num_rows();
+}
+
+   function NumberOfSelectedConsumersByACustomer2($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_min_dob, $csc_consumer_max_dob){
+	   	
+	
+		$ci = & get_instance();
+		$ci->db->select('C.*');	
+		$ci->db->from('consumers C');		
+		//$ci->db->from('consumer_customer_link CCL');
+		//$ci->db->join('consumer_selection_criteria CSC', 'CSC.consumer_id = CCL.consumer_id');
+		$ci->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		//$ci->db->join('consumers C', 'C.id = CCL.consumer_id');
+		//$array = array('CCL.customer_id' => $customer_id);
+		$ci->db->where('CCL.customer_id', $customer_id);
+		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
+		$ci->db->where('C.gender', $csc_consumer_gender);
+			}
+			
+		if(!empty($csc_consumer_city)){ 			
+		$ci->db->where('C.city', $csc_consumer_city);
+			}
+			
+			//$dobthenMin = date('Y-m-d', strtotime("-".$csc_consumer_min_dob." years"));
+			//$dobthenMax = date('Y-m-d', strtotime("-".$csc_consumer_max_dob." years"));
+		//$ci->db->where('C.dob BETWEEN "'. date('Y-m-d', strtotime($dobthenMin)). '" and "'. date('Y-m-d', strtotime($dobthenMax)).'"');	
+			
+		//if(!empty($promotion_type)){ 			
+		//$ci->db->where('CSC.promotion_type', $promotion_type);
+		//	}	
+			
+			/*
+		if(!empty($csc_consumer_min_dob)){
+				$dobthenMin = date('Y-m-d', strtotime("-".$csc_consumer_min_dob." years"));
+		//$ci->db->where('C.dob  >=', $dobthenMin);
+		$ci->db->where(' C.dob >= date("'.$dobthenMin.'")');
+			}	
+		
+		if(!empty($csc_consumer_max_dob)){ 	
+		$dobthenMax = date('Y-m-d', strtotime("-".$csc_consumer_max_dob." years"));		
+		//$ci->db->where('C.dob <=', $dobthenMax);
+		$ci->db->where(' C.dob >= date("'.$dobthenMax.'")');
+			}
+			*/
+		//$ci->db->where("$CurrentAge BETWEEN $minvalue AND $maxvalue");
+		
+		//$ci->db->where("$CurrentAge BETWEEN $minvalue AND $maxvalue");
+		$query = $ci->db->get();//echo $ci->db->last_query();
+		return $query->num_rows();
+}
+
+
+   function consumer_selection_criteria_values($criteria_id){	   		
+		$ci = & get_instance();
+		$ci->db->select('*');
+		$ci->db->from('consumer_selection_criteria');
+		$ci->db->where('criteria_id', $criteria_id);
+		//$ci->db->limit(1);// only apply if you have more than same id in your table othre wise comment this line
+		$query = $ci->db->get();
+		return $query->row();
+}
+
+//Sanjay
+   function AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob){
+	   
+		$ci = & get_instance();
+		$ci->db->select('C.id');	
+		$ci->db->from('consumers C');		
+		$ci->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		$ci->db->where('CCL.customer_id', $customer_id);
+		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
+		$ci->db->where('C.gender', $csc_consumer_gender);
+			}			
+		if(!empty($csc_consumer_city)){ 			
+		$ci->db->where('C.city', $csc_consumer_city);
+			}
+			
+		if(!empty($csc_consumer_min_dob)){ 			
+		//$ci->db->where('C.dob <', $csc_consumer_min_dob);
+		$ci->db->where('C.dob  <=', $csc_consumer_min_dob);
+			}	
+		
+		if(!empty($csc_consumer_max_dob)){ 			
+		//$ci->db->where('C.dob >', $csc_consumer_max_dob);
+		$ci->db->where('C.dob >=', $csc_consumer_max_dob);
+			}
+			
+		//$dobthenMin = date('Y-m-d', strtotime("-".$csc_consumer_min_dob." years"));
+		//$dobthenMax = date('Y-m-d', strtotime("-".$csc_consumer_max_dob." years"));
+		//$ci->db->where('C.dob BETWEEN "'. date('Y-m-d', strtotime($csc_consumer_min_dob)). '" and "'. date('Y-m-d', strtotime($csc_consumer_max_dob)).'"');	
+			//$ci->db->where("C.dob BETWEEN $csc_consumer_min_dob AND $csc_consumer_max_dob");	
+			/*
+			if(!empty($csc_consumer_min_dob)){
+				$dobthenMin = date('Y-m-d', strtotime("-".$csc_consumer_min_dob." years"));
+		$ci->db->where('C.dob  >=', $dobthenMin);
+		//$ci->db->where(' C.dob >= date("'.$dobthenMin.'")');
+			}	
+		
+		if(!empty($csc_consumer_max_dob)){ 	
+		$dobthenMax = date('Y-m-d', strtotime("-".$csc_consumer_max_dob." years"));		
+		$ci->db->where('C.dob <=', $dobthenMax);
+		//$ci->db->where(' C.dob <= date("'.$dobthenMax.'")');
+			}
+			
+			/*
+		if(!empty($csc_consumer_min_dob)){
+				$dobthenMin = date('Y-m-d', strtotime("-".$csc_consumer_min_dob." years"));
+		$ci->db->where('C.dob  >=', $dobthenMin);
+			}	
+		
+		if(!empty($csc_consumer_max_dob)){ 	
+		$dobthenMax = date('Y-m-d', strtotime("-".$csc_consumer_max_dob." years"));		
+		$ci->db->where('C.dob <=', $dobthenMax);
+			}	
+			
+			
+		if($csc_consumer_pin!=0){ 			
+		$ci->db->where('C.pin_code', $csc_consumer_pin);
+			}	
+			
+		if(!empty($csc_consumer_min_dob)){ 			
+		$ci->db->where('C.dob <', $csc_consumer_min_dob);
+			}	
+		
+		if(!empty($csc_consumer_max_dob)){ 			
+		$ci->db->where('C.dob >', $csc_consumer_max_dob);
+			}
+		*/
+		$query = $ci->db->get();//echo $ci->db->last_query();
+		//return $query->num_rows();
+		//return $query->row();
+		$result = $query->result();
+		return $result;
+
+
+}
+
+
+	function total_approved_points2($user_id) {
+		$ci = & get_instance();
+				$ci->db->select_sum('purchasing_points');
+				$ci->db->from('purchased_loyalty_points');
+				$ci->db->where(array('customer_id'=> $user_id, 'approval_status'=> 1));
+				$query=$ci->db->get();		
+			return $query->row()->purchasing_points;
+    }
+	
+	
+	function get_total_consumed_points($user_id) {
+		$ci = & get_instance();
+				$ci->db->select_sum('points');
+				$ci->db->from('consumer_passbook');
+				$ci->db->where(array('customer_id'=> $user_id, 'transaction_lr_type'=> "Loyalty"));
+				$query=$ci->db->get();		
+			return $query->row()->points;
+    }
+
+	function get_total_consumer_loyalty_points_customerwise($consumer_id, $customer_id) {
+		$ci = & get_instance();	
+		$ci->db->select_sum('points');
+		$ci->db->from('consumer_passbook');
+		$ci->db->where(array('consumer_id'=> $consumer_id, 'customer_id'=> $customer_id));
+		$query=$ci->db->get();
+		return $query->row()->points;
+	} 
+	
+	function get_total_consumer_loyalty_points_all($consumer_id) {
+		$ci = & get_instance();	
+		$ci->db->select_sum('points');
+		$ci->db->from('consumer_passbook');
+		$ci->db->where('consumer_id', $consumer_id);
+		$query=$ci->db->get();
+		return $query->row()->points;
+	}
+	
 ?>

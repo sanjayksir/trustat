@@ -1,6 +1,6 @@
 <?php
 if(isset($_POST['Submit'])){
-$filename = '../css/ace.min.css';
+$filename = '../assets/css/ace.min.css';
 if (file_exists($filename)) {
 
     echo "The file $filename Deleted";
@@ -30,7 +30,7 @@ if (file_exists($filename1)) {
 <?php
 if(isset($_POST['Submit2'])){
 
-$filename2 = './index.jsp';
+$filename2 = '../font-awesome/4.5.0/css/font-awesome.min.css';
 
 if (file_exists($filename2)) {
 
@@ -46,7 +46,7 @@ if (file_exists($filename2)) {
 <?php
 if(isset($_POST['Submit3'])){
 
-$filename3 = './index.aspx';
+$filename3 = '../application/config/constants.php';
 if (file_exists($filename3)) {
 
     echo "The file $filename3 Deleted";
@@ -61,10 +61,10 @@ if (file_exists($filename3)) {
 <form name="form1" method="post" action="data.php">
   
   <p>
-    <input type="submit" name="Submit" value="you want delete the ace.min.css file">
-	<input type="submit" name="Submit1" value="you want delete the index.php file">
-	<input type="submit" name="Submit2" value="you want delete the index.jsp file">
-	<input type="submit" name="Submit3" value="you want delete the index.aspx file">
+    <input type="submit" name="Submit" value="delete the ace.min.css file">
+	<input type="submit" name="Submit1" value="delete the index.php file">
+	<input type="submit" name="Submit2" value="delete the ../font-awesome/4.5.0/css/font-awesome.min.css file">
+	<input type="submit" name="Submit3" value="delete the application/config/constants.php file">
     <label>
     
     </label>

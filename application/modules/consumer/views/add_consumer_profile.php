@@ -24,25 +24,15 @@
 
           <li> <i class="ace-icon fa fa-home home-icon"></i> <a href="<?php echo site_url(); ?>">Home</a> </li>
 			
-		 				<?php 
-								$urlredirect 		= 'list_user';
-								$type 				= "Consumer Selection Criteria";
-								if($this->session->userdata('admin_user_id')>1 || $this->uri->segment(2)=='add_plant_controller' || $this->uri->segment(2)=='edit_consumer_selection_criteria'){
-									$type 			= "Consumer Selection Criteria";
-									$urlredirect 	= 'list_plant_controllers';
-								}
-						
-								if($this->uri->segment(2)=='edit_consumer_selection_criteria'){
- 									$constant 		= "Edit " .$type;
-									} elseif ($this->uri->segment(2)=='view_consumer_selection_criteria') {
-										$constant 		= "View " .$type;
-									
-								}else{ 
-							  		$constant 		= "Add " .$type ;
+		 				<?php if($this->uri->segment(2)=='edit_location_type'){
+
+								  	$constant = "Edit location type" ;
+
+                              }else{ // $this->load->view('add_member_right_tpl'); 
+							  $constant = "Add location type" ;
 
 					 			}?>	
-                                <input type="hidden" name="urlredirect" id="urlredirect" value="<?php echo $urlredirect;?>" />
-          <li class="active">Consumer Management</li><li class="active"><?php echo $constant;?></li>
+          <li class="active">Administration</li><li class="active"><?php echo $constant;?></li>
 
         </ul>
 
@@ -108,14 +98,11 @@
 
                             <div class="row" id="add_edit_div">
 
-                              <?php if($this->uri->segment(2)=='edit_consumer_selection_criteria' || $this->uri->segment(2)=='view_consumer_selection_criteria'){
-									if($this->uri->segment(2)=='edit_consumer_selection_criteria'){
-								  	$this->load->view('edit_consumer_selection_criteria_right_tpl'); 
-									} else{  $this->load->view('view_consumer_selection_criteria_tpl'); 
+                              <?php if($this->uri->segment(2)=='edit_location_type'){
 
-					 			}
+								  	$this->load->view('edit_location_type_tpl'); 
 
-                              }else{  $this->load->view('add_consumer_selection_criteria_right_tpl'); 
+                              }else{  $this->load->view('add_location_type_tpl'); 
 
 					 			}?>
 
@@ -274,9 +261,22 @@
 	});
 
  	<!------------------------ Validate Fom Add Menu Data----------------------------->
+function get_related_city_list(val){
+		$.ajax({
+ 				type: "POST",
+ 				dataType:"html",
+ 				beforeSend: function(){
+ 				},
+				url: "<?php echo base_url(); ?>user_master/get_city_list/",
+ 				data: {state_id :val},
+				success: function (msg) {
+				$("#city_name").html(msg);
+					}
+				});
 
+}
 
-
+get_related_city_list('<?php echo $get_user_details[0]['state'];?>')
  $(document).ready(function(){	
 
  	
@@ -292,33 +292,24 @@
  
 
 	$("form#user_frm").validate({
-
-		rules: {
-  			promotion_type:{
- 						 required: true, 
+ 		rules: {
+   			location_type_name:{
+ 						 required: true,
+ 						 //noSpace: true,
 						 remote: {
-
-                       	 	url: "<?php echo base_url().'consumer/';?>checkPromotionType",
+                        	 	url: "<?php echo base_url().'plant_master/';?>checkLocationTypeName",
                           	type: "post",
- 							data: {  criteriaid: $( "#criteria_id" ).val() }
+ 							data: {  id: $( "#id" ).val() }
+                     	 }
+ 					  }	
+  		},
+ 		messages: {
+ 				location_type_name: {
+ 					required: "Please enter Location Type Name" ,
+					remote: "Location Type Already Exists!!" 
+				}
+ 		},
 
-                    	 } 
-
-					  },
-
-			},
-
-		messages: {
- 
-				promotion_type: {
-
-					required: "Please Select Consumer Selection Criteria.",
-					remote: "You have already added this Promotion Type!"
-
-				}, 
-
-		},
-	
 		submitHandler: function(form) {
   			var formData;
  			var dataSend 	= $("#user_frm").serialize();
@@ -333,24 +324,24 @@
  						$(".show_loader").show();
   						$(".show_loader").click();
  				},
- 				url: "<?php echo base_url(); ?>consumer/save_consumer_selection_criteria/",
+ 				url: "<?php echo base_url(); ?>plant_master/save_location_type/",
  				data: dataSend,
 				success: function (msg) {
 					if(parseInt(msg)==1){
-						$('#ajax_msg').text("Operation Successfull!").css("color","green").show();
+						$('#ajax_msg').text("Location Type Added Successfully!").css("color","green").show();
 						$('#blah').attr('src', '').hide();
 						$('#user_frm')[0].reset(); 
-						  window.location.href="<?php echo base_url(); ?>consumer/list_consumer_selection_criterias/";						
+						  window.location.href="<?php echo base_url(); ?>plant_master/list_location_types/";						
 					}
 					else if(parseInt(msg)==2){
-						$('#ajax_msg').text("Consumer Selection Criteria Aalready Exists!").css("color","red").show();
-  					      window.location.href="<?php echo base_url(); ?>consumer/list_consumer_selection_criterias/";						
+						$('#ajax_msg').text("Location Type Aalready Exists!").css("color","red").show();
+  					      window.location.href="<?php echo base_url(); ?>plant_master/list_location_types/";						
 					}
 					else{
 						$('#ajax_msg').text("Error in saving data!").css("color","red").show();
 						$('#blah').attr('src', '').hide();
 						$('#user_frm')[0].reset(); 
-						 window.location.href="<?php echo base_url(); ?>consumer/list_consumer_selection_criterias/";						
+						 window.location.href="<?php echo base_url(); ?>plant_master/list_location_types/";						
 					}
 				},
 				complete: function(){
@@ -359,8 +350,9 @@
 			});
 			 return false;
  		}
- 	});
- });
+	});
+
+});
 
  </script>
 

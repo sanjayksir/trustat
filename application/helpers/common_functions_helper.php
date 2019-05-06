@@ -5847,9 +5847,9 @@ function getAllCities(){
  	$ci 		= & get_instance();
 	//$ci->db->distinct('city');
 	$ci->db->select('*');
-	$ci->db->from('scanned_product_logs');	
+	$ci->db->from('scanned_products');	
 	$ci->db->group_by('scan_city');
-	$ci->db->order_by("id", " desc");
+	$ci->db->order_by("scan_id", " desc");
 		//$ci->db->where(array('status'=>'1','id!='=>'2'));
 		//$ci->db->where('status',1);
 	   //$ci->db->where(array('status'=>'1','spideyImage!='=>''));	
