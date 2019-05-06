@@ -1487,7 +1487,7 @@ function list_assigned_products() {
         if (empty($srch_string)) {
             $srch_string = '';
         }
-        $total_records = $this->Product_model->total_all_concumers($srch_string);
+        $total_records = '';//$this->Product_model->total_all_concumers($srch_string);
         $params["list_all_consumers"] = $this->Product_model->list_all_consumers($limit_per_page, $start_index, $srch_string);
 		
 		if(($user_id==1) && ($customer_id!="")){

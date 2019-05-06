@@ -125,10 +125,7 @@ class Backend extends MX_Controller
 
 	 
 
-	function getLoggedIn()
-
-	{ // echo '<pre>';print_r($_POST);exit; 
-
+	function getLoggedIn(){
 		$data = array();
 
 		$this->form_validation->set_error_delimiters('<div class="error">', '</div>');
