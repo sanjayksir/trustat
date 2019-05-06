@@ -1470,7 +1470,7 @@
 		
 		
 		$this->db->order_by("id", " desc");
-		$this->db->limit($limit, $start);
+		// $this->db->limit($limit, $start);
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 		return $resultDt ;
     }

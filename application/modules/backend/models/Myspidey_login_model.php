@@ -14,16 +14,15 @@ class Myspidey_login_model extends CI_Model
 
     }
 
-     function getLogin()
-     { 
-  		$user_name = $this->input->post('username');
+     function getLogin(){ 
+		$user_name = $this->input->post('username');
  		$user_pass = $this->input->post('password');
  		$pass='';
  		if(!empty($user_pass)){
  			$pass = md5($user_pass);
  		}
 		
-		$qry  				= $this->db->select("status, is_verified")->from('backend_user')->where(array('user_name'=>$user_name, 'password'=>$pass))->limit(1)->get();
+		$qry  = $this->db->select("status, is_verified")->from('backend_user')->where(array('user_name'=>$user_name, 'password'=>$pass))->limit(1)->get();
 		$res  				= $qry->result_array();
 		$resultArStatus 	= $res[0]['status'];
 		$resultArVerified 	= $res[0]['is_verified'];
