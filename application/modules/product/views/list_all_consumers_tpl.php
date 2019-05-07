@@ -25,7 +25,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
 						<i class="ace-icon fa fa-home home-icon"></i>
 
-						<a href="<?php echo DASH_B; ?>">Home</a>
+						<a href="<?php echo DASH_B; ?>">Home></a>
 
 					</li>
 
@@ -37,7 +37,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
 					</li>
 
-					<li class="active">All Consumers</li>
+					<li class="active">All Consumers - [Export all consumers to excel (<a href="<?php echo base_url(''); ?>exportallconsumerstoexcel.php">Click Here</a>)]</li>
 
 				</ul><!-- /.breadcrumb -->
 
