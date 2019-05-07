@@ -673,7 +673,6 @@
 				  
 				  $this->db->insert("push_surveys", $insertData);
 				  
-				  
 				} 
 					
 					}else{

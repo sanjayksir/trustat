@@ -26,15 +26,15 @@
 			
 		 				<?php 
 								$urlredirect 		= 'list_user';
-								$type 				= "Consumer Selection Criteria";
-								if($this->session->userdata('admin_user_id')>1 || $this->uri->segment(2)=='add_plant_controller' || $this->uri->segment(2)=='edit_consumer_selection_criteria'){
-									$type 			= "Consumer Selection Criteria";
+								$type 				= "Consumer Profile Attributes";
+								if($this->session->userdata('admin_user_id')>1 || $this->uri->segment(2)=='add_plant_controller' || $this->uri->segment(2)=='edit_consumer_profile_attribute'){
+									$type 			= "Consumer Profile Attributes";
 									$urlredirect 	= 'list_plant_controllers';
 								}
 						
-								if($this->uri->segment(2)=='edit_consumer_selection_criteria'){
+								if($this->uri->segment(2)=='edit_consumer_profile_attribute'){
  									$constant 		= "Edit " .$type;
-									} elseif ($this->uri->segment(2)=='view_consumer_selection_criteria') {
+									} elseif ($this->uri->segment(2)=='view_consumer_profile_attribute') {
 										$constant 		= "View " .$type;
 									
 								}else{ 
@@ -108,14 +108,14 @@
 
                             <div class="row" id="add_edit_div">
 
-                              <?php if($this->uri->segment(2)=='edit_consumer_selection_criteria' || $this->uri->segment(2)=='view_consumer_selection_criteria'){
-									if($this->uri->segment(2)=='edit_consumer_selection_criteria'){
-								  	$this->load->view('edit_consumer_selection_criteria_right_tpl'); 
-									} else{  $this->load->view('view_consumer_selection_criteria_tpl'); 
+                              <?php if($this->uri->segment(2)=='edit_consumer_profile_attribute' || $this->uri->segment(2)=='view_consumer_profile_attribute'){
+									if($this->uri->segment(2)=='edit_consumer_profile_attribute'){
+								  	$this->load->view('edit_consumer_profile_attribute_right_tpl'); 
+									} else{  $this->load->view('view_consumer_profile_attribute_tpl'); 
 
 					 			}
 
-                              }else{  $this->load->view('add_consumer_selection_criteria_right_tpl'); 
+                              }else{  $this->load->view('add_consumer_profile_attribute_right_tpl'); 
 
 					 			}?>
 
@@ -278,9 +278,6 @@
 
 
  $(document).ready(function(){	
-
- 	
-
 	jQuery.validator.addMethod("noSpace", function(value, element) { 
 
 	return value.indexOf(" ") < 0 && value != ""; 
@@ -288,19 +285,15 @@
 	}, "No space please");
 
  
-
- 
-
 	$("form#user_frm").validate({
-
 		rules: {
-  			promotion_type:{
+  			attribute_name:{
  						 required: true, 
 						 remote: {
 
-                       	 	url: "<?php echo base_url().'consumer/';?>checkPromotionType",
+                       	 	url: "<?php echo base_url().'consumer/';?>checkProfileAttribute",
                           	type: "post",
- 							data: {  criteriaid: $( "#criteria_id" ).val() }
+ 							data: {  cpm_id: $( "#cpm_id" ).val() }
 
                     	 } 
 
@@ -310,10 +303,10 @@
 
 		messages: {
  
-				promotion_type: {
+				attribute_name: {
 
-					required: "Please Select Consumer Selection Criteria.",
-					remote: "You have already added this Promotion Type!"
+					required: "Please Enter Consumer Profile Attribute.",
+					remote: "This Attribute already exists!"
 
 				}, 
 
@@ -325,7 +318,7 @@
  		/*	formData 		= new FormData();
  			formData.append('file', $('#file')[0].files[0]);
   			formData.append("newdata",dataSend);*/
- 
+	
  			$.ajax({
  				type: "POST",
  				dataType:"json",
@@ -333,30 +326,32 @@
  						$(".show_loader").show();
   						$(".show_loader").click();
  				},
- 				url: "<?php echo base_url(); ?>consumer/save_consumer_selection_criteria/",
+ 				url: "<?php echo base_url(); ?>consumer/save_consumer_profile_attribute/",
  				data: dataSend,
 				success: function (msg) {
 					if(parseInt(msg)==1){
 						$('#ajax_msg').text("Operation Successfull!").css("color","green").show();
 						$('#blah').attr('src', '').hide();
 						$('#user_frm')[0].reset(); 
-						  window.location.href="<?php echo base_url(); ?>consumer/list_consumer_selection_criterias/";						
+						  window.location.href="<?php echo base_url(); ?>consumer/list_consumer_profile_attributes/";						
 					}
 					else if(parseInt(msg)==2){
-						$('#ajax_msg').text("Consumer Selection Criteria Aalready Exists!").css("color","red").show();
-  					      window.location.href="<?php echo base_url(); ?>consumer/list_consumer_selection_criterias/";						
+						$('#ajax_msg').text("Consumer Profile Attribute Aalready Exists!").css("color","red").show();
+  					      window.location.href="<?php echo base_url(); ?>consumer/list_consumer_profile_attributes/";						
 					}
 					else{
 						$('#ajax_msg').text("Error in saving data!").css("color","red").show();
 						$('#blah').attr('src', '').hide();
 						$('#user_frm')[0].reset(); 
-						 window.location.href="<?php echo base_url(); ?>consumer/list_consumer_selection_criterias/";						
+						 window.location.href="<?php echo base_url(); ?>consumer/list_consumer_profile_attributes/";						
 					}
 				},
+				
 				complete: function(){
 					$(".show_loader").hide();
 				}
 			});
+			
 			 return false;
  		}
  	});

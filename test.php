@@ -1,1 +1,0 @@
-ALTER TABLE `consumers`  ADD `aadhaar_number` VARCHAR(50) NULL  AFTER `avatar_url`,  ADD `alternate_mobile_no` VARCHAR(20) NULL  AFTER `aadhaar_number`,  ADD `street_address` VARCHAR(200) NULL  AFTER `alternate_mobile_no`,  ADD `city` VARCHAR(100) NULL  AFTER `street_address`,  ADD `state` VARCHAR(50) NULL  AFTER `city`,  ADD `pin_code` VARCHAR(50) NULL  AFTER `state`;

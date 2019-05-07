@@ -10,7 +10,7 @@
 						<div id="ajax_msg"></div>
 				</div>
 				<form name="user_frm" id="user_frm" action="#" method="POST">
-		<input type="hidden" name="id" id="id" value="<?php echo  $get_user_details[0]['id']?>" />
+<input type="hidden" name="id" id="id" value="<?php echo  $get_user_details[0]['id']?>" />
         <div class="widget-main">
 		<div class="form-group row">
 			
