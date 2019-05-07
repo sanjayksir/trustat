@@ -435,47 +435,25 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 			}
 			var title = $(this).text();
 			if($(this).hasClass("fmember")){
-				$(this).html(title + select_option(family_members_range,title,"family_member"));					
+				// $(this).html(title + select_option(family_members_range,title,"family_member"));					
 			}else if($(this).hasClass("loyalty-points-c")){
-				$(this).html(title + select_option(loyalty_points_range,title,"loyalty_points"));
+				// $(this).html(title + select_option(loyalty_points_range,title,"loyalty_points"));
 			}else if($(this).hasClass("monthly-earnings-c")){
-				$(this).html(title + select_option(monthly_earnings_range,title,"monthly_earnings"));
+				// $(this).html(title + select_option(monthly_earnings_range,title,"monthly_earnings"));
 			}else if($(this).hasClass("spo-gender-c")){
-				$(this).html(title + select_option(gender_range,title,"spo_gender"));		
+				// $(this).html(title + select_option(gender_range,title,"spo_gender"));		
 			}else if($(this).hasClass("con-gender-c")){
-				$(this).html(title + select_option(gender_range,title,"con_gender"));			
+				// $(this).html(title + select_option(gender_range,title,"con_gender"));			
 			}else{
-				$(this).html(title+' <input type="text" class="text-input" placeholder="Search ' + title + '" />');
+				// $(this).html(title+' <input type="text" class="text-input" placeholder="Search ' + title + '" />');
 			}
+			$(this).html(title+' <input type="text" class="text-input" placeholder="Search ' + title + '" />');
 		});
 		var table = $('#dynamic-table').DataTable({
 			"ordering": false			
 		});
-		$.fn.dataTable.ext.search.push(function( settings, data, dataIndex ) {
-			var memFamily = parseInt(data[22]);	
-			var fmember = getrange($('#family_member').val());
-			familyMember = (fmember[0] == parseInt(7) && memFamily >= fmember[0]) || (fmember[0] == memFamily) || (fmember[0] == null);
-
-			var lps = parseInt(data[6]);			
-			var lPoints = getrange($('#loyalty_points').val());
-			loyaltyPoints = ((lPoints[1] !== null) && (lps >= lPoints[0] && lps <= lPoints[1])) || ((lPoints[1] === null) &&  (lps >= lPoints[0]));
-
-			var m_earningCol = parseInt(data[16]);			
-			var m_earnings = getrange($('#monthly_earnings').val());
-			monthlyEarnings = ((m_earnings[1] !== null) && (m_earningCol >= m_earnings[0] && m_earningCol <= m_earnings[1])) || ((m_earnings[1] === null) &&  (m_earningCol >= m_earnings[0]));
-
-			var conGenderCol = data[8];			
-			var con_gender_val = $('#con_gender').val();
-			
-			ConGender = (con_gender_val.length > 0)? (conGenderCol === con_gender_val): conGenderCol;
-
-			// var spoGenderCol = parseInt(data[36]);			
-			// var spo_gender_val = $('#spo_gender').val();
-			// spoGender = (spo_gender_val.length > 0)? (spoGenderCol === spo_gender_val): spoGenderCol;
-			
-			return familyMember && loyaltyPoints && monthlyEarnings && ConGender;
-		})		
-		$('.select-input').on('change', table.draw);
+		
+		// $('.select-input').on('change', table.draw);
 		table.columns().every(function () {
 			var table = this;
 			$('input', this.header()).on('keyup change', function () {
@@ -487,3 +465,4 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 	});
 	</script>
 	<!-- http://jsfiddle.net/1rr3qpjx/2/ -->
+	<!-- https://datatables.net/examples/api/regex.html -->
