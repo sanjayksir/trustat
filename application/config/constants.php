@@ -174,7 +174,7 @@ define('EXIT__AUTO_MAX', 125); // highest automatically-assigned error code
 
 ## Site Constants
 
-define('BASE_URL', "http://innovigents.com/");
+define('BASE_URL', "http://localhost/trackingportal/");
 
 define("ASSETS_PATH", BASE_URL . "assets/");
 
@@ -192,9 +192,9 @@ define('IMAGEDISKPATH', $img_file_path.'/uploads/');
 
 define("VIDEO_URL", BASE_URL . "uploads/");
 
-define('INBRIEF_DIR',$img_file_path.'/uploads/spidey/thumb_300x149/');
+define('INBRIEF_DIR',$img_file_path.'/uploads/howzzt/thumb_300x149/');
 
-define("INBRIEF_URL", BASE_URL . "uploads/spidey/thumb_300x149/");
+define("INBRIEF_URL", BASE_URL . "uploads/howzzt/thumb_300x149/");
 
 define('TEMP_URL',BASE_URL .'/uploads/');
 
@@ -210,7 +210,7 @@ define('TWITTER_PAGE', 'https://twitter.com/_news');         // Twitter Page
 
 define('INSTAGRAM_PAGE', 'https://www.instagram.com/');     // Instagram Page
 
-define('YOUTUBE_CHANNEL', 'https://www.youtube.com/channel/UCgZWMlJDgQSGtNUEyxqf18g'); // Youtube Channel
+define('YOUTUBE_CHANNEL', 'https://www.youtube.com/channel/id'); // Youtube Channel
 
 
 
