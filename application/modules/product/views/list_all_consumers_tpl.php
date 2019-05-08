@@ -435,19 +435,18 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 			}
 			var title = $(this).text();
 			if($(this).hasClass("fmember")){
-				// $(this).html(title + select_option(family_members_range,title,"family_member"));					
+				$(this).html(title + select_option(family_members_range,title,"family_member"));					
 			}else if($(this).hasClass("loyalty-points-c")){
-				// $(this).html(title + select_option(loyalty_points_range,title,"loyalty_points"));
+				$(this).html(title + select_option(loyalty_points_range,title,"loyalty_points"));
 			}else if($(this).hasClass("monthly-earnings-c")){
-				// $(this).html(title + select_option(monthly_earnings_range,title,"monthly_earnings"));
+				$(this).html(title + select_option(monthly_earnings_range,title,"monthly_earnings"));
 			}else if($(this).hasClass("spo-gender-c")){
-				// $(this).html(title + select_option(gender_range,title,"spo_gender"));		
+				$(this).html(title + select_option(gender_range,title,"spo_gender"));		
 			}else if($(this).hasClass("con-gender-c")){
-				// $(this).html(title + select_option(gender_range,title,"con_gender"));			
+				$(this).html(title + select_option(gender_range,title,"con_gender"));			
 			}else{
-				// $(this).html(title+' <input type="text" class="text-input" placeholder="Search ' + title + '" />');
+				$(this).html(title+' <input type="text" class="text-input" placeholder="Search ' + title + '" />');
 			}
-			$(this).html(title+' <input type="text" class="text-input" placeholder="Search ' + title + '" />');
 		});
 		var table = $('#dynamic-table').DataTable({
 			"ordering": false			
