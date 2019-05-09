@@ -448,10 +448,36 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 				$(this).html(title+' <input type="text" class="text-input" placeholder="Search ' + title + '" />');
 			}
 		});
+		$.fn.dataTable.ext.search.push(function( settings, data, dataIndex ) {
+			var memFamily = parseInt(data[22]);	
+			var fmember = getrange($('#family_member').val());
+			
+			familyMember = (fmember[0] != null)?(fmember[0] == parseInt(7) && memFamily >= fmember[0]) || (memFamily == fmember[0]):true;
+			
+			var lps = parseInt(data[6]);			
+			var lPoints = getrange($('#loyalty_points').val());
+			loyaltyPoints = (lPoints[1] != null && lPoints.length > 0) ? (lps >= lPoints[0] && lps <= lPoints[1]) : (lPoints[1] == null && lPoints.length > 0)? lps >= lPoints[0]:true;
+			
+			var m_earningCol = parseInt(data[16]);			
+			var m_earnings = getrange($('#monthly_earnings').val());
+			monthlyEarnings = (m_earnings[1] != null && m_earnings.length > 0) ? (m_earningCol >= m_earnings[0] && m_earningCol <= m_earnings[1]) : (m_earnings[1] == null && m_earnings.length > 0)? m_earningCol >= m_earnings[0]:true;
+
+			var conGenderCol = data[8];			
+			var con_gender_val = $('#con_gender').val();
+			ConGender = (con_gender_val.length > 0)? (con_gender_val == conGenderCol):true;
+
+			var spGenderCol = data[36];			
+			var sp_gender_val = $('#spo_gender').val();	
+			SpGender = (sp_gender_val.length > 0)? (sp_gender_val == spGenderCol):true;
+			
+			return familyMember && loyaltyPoints && monthlyEarnings && ConGender && SpGender;
+		});
 		var table = $('#dynamic-table').DataTable({
 			"ordering": false			
 		});
-		
+		$(document).on("change",".select-input",function(){
+			table.draw();
+		});
 		// $('.select-input').on('change', table.draw);
 		table.columns().every(function () {
 			var table = this;
