@@ -7648,4 +7648,22 @@ function isProductCodeRegistered($bar_code_data){
 		return $query->row()->points;
 	}
 	
+	
+ 
+ function get_all_consumer_profile_attribute_types(){	
+		$res 		= '';
+		$ci 		= & get_instance();
+		$ci->db->select('cpatm_id, cpatm_name');
+		$ci->db->from('consumer_profile_attribute_type_master');	
+		//$ci->db->where(array('status'=>'1','id!='=>'2'));
+		//$ci->db->where('status',1);
+		//$ci->db->where(array('status'=>'1','spideyImage!='=>''));	
+	$query = $ci->db->get();  echo $ci->db->last_query(); 
+	if ($query->num_rows() > 0) {
+ 		$res = $query->result_array();
+ 	//	$res = $res[0]['categoryName'];
+	}		
+ 	return $res;
+}
+	
 ?>

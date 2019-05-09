@@ -28,6 +28,10 @@
 			<label for="form-field-8">Attribute Type</label>
 		<select  name="attribute_type" id="attribute_type" class="form-control" required>
 			<option value="">-Select Attributes Type-</option>	
+			<?php foreach(get_all_consumer_profile_attribute_types('0') as $val){?>
+				<option value="<?php echo $val['cpatm_name'];?>"><?php  echo $val['cpatm_name'];?></option> 
+			<?php }?>
+			<!--
 			<option value="Gender">Gender</option>
 			<option value="City">City</option>
 			<option value="State">State</option>
@@ -65,7 +69,8 @@
 			<option value="Spouse Weight Kg">Spouse Weight Kg</option>
 			<option value="Spouse Hobbies">Spouse Hobbies</option>
 			<option value="Spouse Sports">Spouse Sports</option>
-			<option value="Spouse Entertainment">Spouse Entertainment</option>		 
+			<option value="Spouse Entertainment">Spouse Entertainment</option>	
+				-->
          </select>
 			</div>
 			
