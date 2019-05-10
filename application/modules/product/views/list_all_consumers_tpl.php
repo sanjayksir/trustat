@@ -105,8 +105,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 											</div>
 										</div>
 									</form>
-								</div> -->
-
+								</div> -->						
 								<!--------------- Search Tab start----------------->
 								<div style="overflow-x:auto;">
 									<table id="dynamic-table" class="table table-striped table-bordered table-hover">
