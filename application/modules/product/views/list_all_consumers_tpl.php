@@ -434,45 +434,49 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 				return;
 			}
 			var title = $(this).text();
+			var field_id = title.toLowerCase().replace(/[^\w ]+/g,'').replace(/ +/g,'-');
 			if($(this).hasClass("fmember")){
-				$(this).html(title + select_option(family_members_range,title,"family_member"));					
+				$(this).html(title + select_option(family_members_range,title,field_id));					
 			}else if($(this).hasClass("loyalty-points-c")){
-				$(this).html(title + select_option(loyalty_points_range,title,"loyalty_points"));
+				$(this).html(title + select_option(loyalty_points_range,title,field_id));
 			}else if($(this).hasClass("monthly-earnings-c")){
-				$(this).html(title + select_option(monthly_earnings_range,title,"monthly_earnings"));
+				$(this).html(title + select_option(monthly_earnings_range,title,field_id));
 			}else if($(this).hasClass("spo-gender-c")){
-				$(this).html(title + select_option(gender_range,title,"spo_gender"));		
+				$(this).html(title + select_option(gender_range,title,field_id));		
 			}else if($(this).hasClass("con-gender-c")){
-				$(this).html(title + select_option(gender_range,title,"con_gender"));			
+				$(this).html(title + select_option(gender_range,title,field_id));			
 			}else{
-				$(this).html(title+' <input type="text" class="text-input" placeholder="Search ' + title + '" />');
+				$(this).html(title+' <input type="text" id="'+field_id+'" name="'+field_id+'" class="text-input" placeholder="Search ' + title + '" />');
 			}
 		});
 		$.fn.dataTable.ext.search.push(function( settings, data, dataIndex ) {
 			var memFamily = parseInt(data[22]);	
-			var fmember = getrange($('#family_member').val());
+			var fmember = getrange($('#number-of-family-members').val());
 			
 			familyMember = (fmember[0] != null)?(fmember[0] == parseInt(7) && memFamily >= fmember[0]) || (memFamily == fmember[0]):true;
 			
 			var lps = parseInt(data[6]);			
-			var lPoints = getrange($('#loyalty_points').val());
+			var lPoints = getrange($('#earned-loyalty-points').val());
 			loyaltyPoints = (lPoints[1] != null && lPoints.length > 0) ? (lps >= lPoints[0] && lps <= lPoints[1]) : (lPoints[1] == null && lPoints.length > 0)? lps >= lPoints[0]:true;
 			
 			var m_earningCol = parseInt(data[16]);			
-			var m_earnings = getrange($('#monthly_earnings').val());
-			monthlyEarnings = (m_earnings[1] != null && m_earnings.length > 0) ? (m_earningCol >= m_earnings[0] && m_earningCol <= m_earnings[1]) : (m_earnings[1] == null && m_earnings.length > 0)? m_earningCol >= m_earnings[0]:true;
+			var m_earnings = getrange($('#consumer-monthly-earnings').val());
+			monthlyEarnings = (m_earnings[1] != null && m_earnings[0] != null) ? (m_earningCol >= m_earnings[0] && m_earningCol <= m_earnings[1]) : (m_earnings[1] == null && m_earnings[0] != null)? m_earningCol >= m_earnings[0]:true;
 
 			var conGenderCol = data[8];			
-			var con_gender_val = $('#con_gender').val();
+			var con_gender_val = $('#consumer-gender').val();
 			ConGender = (con_gender_val.length > 0)? (con_gender_val == conGenderCol):true;
 
 			var spGenderCol = data[36];			
-			var sp_gender_val = $('#spo_gender').val();	
+			var sp_gender_val = $('#spouse-gender').val();	
 			SpGender = (sp_gender_val.length > 0)? (sp_gender_val == spGenderCol):true;
 			
-			return familyMember && loyaltyPoints && monthlyEarnings && ConGender && SpGender;
+			return familyMember && loyaltyPoints && ConGender && SpGender && monthlyEarnings;
 		});
 		var table = $('#dynamic-table').DataTable({
+			"language": {                
+				"infoFiltered": ""
+			},
 			"ordering": false			
 		});
 		$(document).on("change",".select-input",function(){
@@ -487,6 +491,11 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 				}
 			});			
 		});
+		table.on( 'order.dt search.dt', function () {
+			table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+				cell.innerHTML = i+1;
+			} );
+		} ).draw();
 	});
 	</script>
 	<!-- http://jsfiddle.net/1rr3qpjx/2/ -->
