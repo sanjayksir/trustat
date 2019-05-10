@@ -6,9 +6,9 @@
 			</script>
 			<?php 
 			if($this->session->userdata('admin_user_id')==1){
-				$label = 'Consumer Profile Attribute';
+				$label = 'Consumer Profile Attribute Type';
 			}else{
-				$label = 'Consumer Profile Attribute';
+				$label = 'Consumer Profile Attribute Type';
 			}
 			?>
 
@@ -54,7 +54,7 @@
                                                                     <div class="widget-header widget-header-flat">
                                                                     <h5 class="widget-title bigger lighter">List <?php echo $label;?>s</h5>
                                                                     <div class="widget-toolbar">
-                                                                  <a href="<?php echo base_url('consumer/add_consumer_profile_attribute') ?>" class="btn btn-xs btn-warning" title="Add User">Add <?php echo $label; ?> </a> |  <a href="<?php echo base_url('consumer/list_consumer_profile_attribute_types') ?>" class="btn btn-xs btn-warning" title="Add User">Consumer Profile Attribute Type Master <?php // echo $label; ?> </a>
+                                                                <a href="<?php echo base_url('consumer/add_consumer_profile_attribute_type') ?>" class="btn btn-xs btn-warning" title="Add User">Add <?php echo $label; ?> </a>
                                                                     </div>
                                                                 </div>
 									<div class="widget-body">
@@ -94,8 +94,7 @@
                             <thead>
                                     <tr>
                                             <th>#</th>
-                                            <th>Attributes Type</th>
-                                            <th>Attributes Name</th>                                           
+                                            <th>Attributes Type Name</th>                                           
                                             <th>Action</th>
                                     </tr>
                             </thead>
@@ -117,8 +116,7 @@
                                         }?>
 										<tr id="show<?php echo $listData['cpm_id']; ?>">
                                            <td><?php echo $sno;$sno++; ?></td>
-                                           <td><?php echo $listData['cpm_type_name']; ?></td>
-                                           <td><?php echo $listData['cpm_name']; ?></td>
+                                           <td><?php echo $listData['cpatm_name']; ?></td>
                                           
 										   
 
@@ -129,9 +127,9 @@
 												 
 
                                                        <!-- <a href="<?php //echo base_url().'consumer/view_consumer_profile_attribute/'.$listData['cpm_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>-->
-                                                         <?php echo anchor("consumer/edit_consumer_profile_attribute/" . $listData['cpm_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>
+                                <?php echo anchor("consumer/edit_consumer_profile_attribute_type/" . $listData['cpatm_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>
 														 
-                                                       <a title="Delete User" href="javascript:void(0);" onclick="return confirmDelete('<?php echo base64_encode($listData['cpm_id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
+                                                       <a title="Delete User" href="javascript:void(0);" onclick="return confirmDelete('<?php echo base64_encode($listData['cpatm_id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
                                                     </div>
 
                                                 </td>
@@ -199,7 +197,7 @@ function confirmDelete(val='')
 	if(val!=''){
 		var x = confirm("Are you sure you want to delete?");
 		 if (x){
-		 		window.location.href="<?php echo base_url().'consumer/Del_Attribute/';?>"+val;
+		 		window.location.href="<?php echo base_url().'consumer/Del_AttributeType/';?>"+val;
  			  //return true;
 		 }
 		 else{

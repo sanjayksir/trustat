@@ -236,7 +236,7 @@
                 $UpdateData = array(
                     "cpm_type_name" => $frmData['attribute_type'],
                     "cpm_name" => $frmData['attribute_name'],	
-					"updated_by_id" => $user_id,
+					"created_by_id" => $user_id,
 					"modify_date" => date('Y-m-d H:i:s'),
                     "status" => 1                    
                 );
@@ -293,6 +293,144 @@
 	
 	
 	// end consumer profile master 
+	
+	
+	// Consumer Profile Attribute Type Master Work Start
+	    function get_total_consumer_profile_attribute_types_all($srch_string = '') {
+        $result_data = 0;
+        $user_id = $this->session->userdata('admin_user_id');
+        
+        if (!empty($srch_string)) {
+            $this->db->where("(cpatm_name LIKE '%$srch_string%') and (created_by_id=$user_id)");
+        } else {
+            if (empty($user_id)) {
+                $user_id = 1;
+            }
+            $this->db->where(array('created_by_id' => $user_id));
+        }
+
+        $this->db->select('count(1) as total_rows');
+        $this->db->from('consumer_profile_attribute_type_master');
+        $query = $this->db->get(); //echo '***'.$this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            $result_data = $result[0]['total_rows'];
+        }
+        return $result_data;
+    }
+    function get_list_consumer_profile_attribute_types_all($limit,$start,$srch_string = '') {
+        $result_data = 0;
+        $user_id = $this->session->userdata('admin_user_id');
+        
+        if (!empty($srch_string)) {
+            $this->db->where("(cpatm_name LIKE '%$srch_string%') and (created_by_id=$user_id)");
+        } else {
+            if (empty($user_id)) {
+                $user_id = 1;
+            }
+            $this->db->where(array('created_by_id' => $user_id));
+        }
+
+        $this->db->select('*');
+        $this->db->from('consumer_profile_attribute_type_master');
+        $this->db->order_by('cpatm_id', 'desc');
+        if (empty($srch_string)) {
+            $this->db->limit($limit, $start);
+        }
+        //echo $this->db->last_query();die;
+        $query = $this->db->get(); //echo '***'.$this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result_data = $query->result_array();
+        }
+        return $result_data;
+    }
+	
+	
+	
+	
+ function checkProfileAttributeType($Profile_AttributeType, $user_id, $cpatmid = '') {
+        $result = 'true';
+        if ($this->input->post('register_username') != '') {
+            $uname = $this->input->post('register_username');
+        }
+        $this->db->select('cpatm_id');
+        $this->db->from('consumer_profile_attribute_type_master');
+		/*
+        if (!empty($cpatmid)) {
+            $this->db->where(array('cpatm_id!=' => $cpatmid));
+        }
+		*/
+        $this->db->where(array('cpatm_name' => $Profile_AttributeType));
+        $query = $this->db->get();
+        //echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            $result = $res[0]['cpatm_id'];
+            $result = 'false';
+        }
+        return $result;
+    }
+	
+
+	function save_consumer_profile_attribute_types($frmData) {   
+        $user_id = $this->session->userdata('admin_user_id');        
+        if (!empty($frmData['cpatm_id'])) {           
+                $UpdateData = array(
+                    "cpatm_name" => $frmData['cpatm_name'],	
+					"created_by_id" => $user_id,
+					"modify_date" => date('Y-m-d H:i:s'),
+                    "status" => 1                    
+                );
+            $whereData = array(
+                'cpatm_id' => $frmData['cpatm_id']
+            );
+
+            $this->db->set($UpdateData);
+            $this->db->where($whereData);
+            if ($this->db->update('consumer_profile_attribute_type_master')) {
+                //echo '***'.$this->db->last_query();exit;
+                $this->session->set_flashdata('success', 'Consumer Profile Attribute Type Updated Successfully!');
+                return 1;
+            }
+        } else {            
+            $insertData = array(
+                    "cpatm_name" => $frmData['cpatm_name'],					                  
+					"created_by_id" => $user_id,
+					"create_date" => date('Y-m-d H:i:s'),
+                    "status" => 1
+            ); //echo '<pre>';print_r($insertData);exit;
+            if ($this->db->insert("consumer_profile_attribute_type_master", $insertData)) {
+                $this->session->set_flashdata('success', 'Consumer Profile Attribute Type Added Successfully!');
+                return 1;
+            }
+            return 0;
+        }
+    }
+	
+	
+	    function get_consumer_profile_attribute_type_details($id) {
+        $this->db->select('*');
+        $this->db->from('consumer_profile_attribute_type_master');
+       // $this->db->join('assign_locations_to_users AS ap', 'ap.user_id = bu.user_id','LEFT');
+        $this->db->where(array('cpatm_id' => $id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            //$res = $res[0];
+        }
+        return $res;
+    }
+	
+	    function Del_AttributeType($id) {
+        $this->db->where('cpatm_id', $id);
+        if ($this->db->delete('consumer_profile_attribute_type_master')) {
+            return '1';
+        }
+    }
+	
+	
+	// Consumer Profile Attribute Type Master Work end
 
 
 }
