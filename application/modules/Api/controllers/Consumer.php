@@ -1175,7 +1175,26 @@ class Consumer extends ApiController {
             Utils::response(['status' => false, 'message' => 'There is no record found.'], 200);
         }
     }
-
+	
+	/*
+	public function consumerLoyltyDeals() {
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+		$mobile_no = "7678665537";
+        $data = [];
+        $data = $this->Productmodel->userLoyltyDeals($user['id'],$mobile_no);
+        if (!empty($data)) {
+            Utils::response(['status' => true, 'message' => 'User gain loylties.', 'data' => $data]);
+        } else {
+            Utils::response(['status' => false, 'message' => 'There is no record found.'], 200);
+        }
+    }
+	*/
     public function redemptionAdd() {
         //Utils::debug();
         $user = $this->auth();
@@ -1410,6 +1429,73 @@ class Consumer extends ApiController {
         } else {
             Utils::response(['status' => false, 'message' => 'There is no record found.'], 200);
         }
+    }
+	
+	//Sanjay
+		public function consumerLoyltyDeals($mobile_no = null) {
+			
+        $user = $this->auth();
+		/*
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+		*/
+		//$checkifrquestinprocess = $this->db->where(array('user_id' => $user['id'], 'l_status' => 0))->count_all_results('loyalty_redemption');
+			//$mobile_no = '7678665537';
+
+			$customer_id = '341';
+		
+			$this->db->select_sum('cpb.points');
+			$this->db->from('consumer_passbook as cpb');
+			$this->db->join('consumers as c','c.id=cpb.consumer_id');
+	$this->db->where(array('c.mobile_no' => $mobile_no, 'cpb.customer_id' => $customer_id, 'cpb.transaction_lr_type' =>  "Loyalty"));
+			$query=$this->db->get();
+			$Total_Earned_Points=$query->row()->points;	
+			
+			$this->db->select_sum('cpb.points');
+			$this->db->from('consumer_passbook as cpb');
+			$this->db->join('consumers as c','c.id=cpb.consumer_id');
+	$this->db->where(array('c.mobile_no' => $mobile_no, 'cpb.customer_id' => $customer_id, 'cpb.transaction_lr_type' =>  "Redemption"));
+	
+			$query2=$this->db->get();
+			$Total_Points_Redeemed=$query2->row()->points;
+			
+			//$Earned_Loyalty_Points = $this->Productmodel->getconsumerEarnedLoyaltyPoints();
+			//$Redeemed_Loyalty_Points = $this->Productmodel->getconsumerRedeemedLoyaltyPoints();
+			if($Total_Points_Redeemed==0){
+			$Balance_Loyalty_Points = $Total_Earned_Points;
+			} else {
+				$Balance_Loyalty_Points = $Total_Earned_Points - $Total_Points_Redeemed;
+			}
+		
+        //$data = [];
+        //$data = $this->Productmodel->getconsumerLoyltyDeals($user['id']);
+		
+        if (!empty($mobile_no)) {
+             Utils::response(['status' => true, 'message' => 'Your Balance Loyalty Points: ', 'balance_loyalty_points' => $Balance_Loyalty_Points/*, 'data' => $data*/]);
+        } else {
+            Utils::response(['status' => false, 'message' => 'There is no record found.'], 200);
+        }
+    }
+	
+	
+	    public function ListConsumerProfileMasterData() {
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        $userid = $user['id'];
+        $result = $this->ConsumerModel->findConsumerProfileMasterData($userid);
+        if (empty($result)) {
+            $this->response(['status' => false, 'message' => 'Record not found'], 200);
+        }
+        $this->response(['status' => true, 'message' => 'Consumer Profile Master Data List is below-', 'data' => $result]);
     }
 	
 	
