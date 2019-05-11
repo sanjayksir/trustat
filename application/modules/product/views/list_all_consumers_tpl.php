@@ -440,7 +440,11 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 	}
 	function getColDate(val){
 		if(val.length > 3){
-			return moment().diff(new Date(val).toISOString(), 'years',false);
+			if(isNaN(Date.parse(val))){
+				return "";
+			}else{
+				return moment().diff(new Date(val).toISOString(), 'years',false);
+			}			
 		}else{
 			return "";
 		}
