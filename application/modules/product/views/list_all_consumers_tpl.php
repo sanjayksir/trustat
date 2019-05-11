@@ -535,5 +535,3 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 		} ).draw();
 	});
 	</script>
-	<!-- http://jsfiddle.net/1rr3qpjx/2/ -->
-	<!-- https://datatables.net/examples/api/regex.html -->
