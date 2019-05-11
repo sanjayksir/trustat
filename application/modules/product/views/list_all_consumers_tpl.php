@@ -372,6 +372,18 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
 	</div><!-- /.main-container -->
 	<script type="text/javascript">
+	var age_range = {
+		"15_20":"15 to 20",
+		"21_25":"21 to 25",
+		"26_30":"26 to 30",
+		"31_35":"31 to 35",
+		"36_40":"36 to 40",
+		"41_45":"41 to 45",
+		"46_50":"46 to 50",
+		"51_55":"51 to 55",
+		"56_60":"56 to 60",
+		"60+":"Above 60",
+	};
 	var loyalty_points_range = {
 		"0_100":"0 to 100",
 		"101_200":"101 to 200",
@@ -426,8 +438,22 @@ $this->load->view('../includes/admin_top_navigation'); ?>
     	}
 		return [from,to]
 	}
+	function getColDate(val){
+		if(val.length > 3){
+			return moment().diff(new Date(val).toISOString(), 'years',false);
+		}else{
+			return "";
+		}
+		
+	}
 	
-	$(document).ready(function(){		
+	$(document).ready(function(){
+		var table = $('#dynamic-table').DataTable({
+			"language": {                
+				"infoFiltered": ""
+			},
+			"ordering": false			
+		});
 		$('#dynamic-table thead th').each(function () {
 			if($(this).hasClass("skip-col")){
 				return;
@@ -444,10 +470,13 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 				$(this).html(title + select_option(gender_range,title,field_id));		
 			}else if($(this).hasClass("con-gender-c")){
 				$(this).html(title + select_option(gender_range,title,field_id));			
+			}else if(field_id == 'consumer-dob' || field_id == 'spouse-dob'){
+				$(this).html(title + select_option(age_range,title,field_id));				
 			}else{
 				$(this).html(title+' <input type="text" id="'+field_id+'" name="'+field_id+'" class="text-input" placeholder="Search ' + title + '" />');
 			}
 		});
+		
 		$.fn.dataTable.ext.search.push(function( settings, data, dataIndex ) {
 			var memFamily = parseInt(data[22]);	
 			var fmember = getrange($('#number-of-family-members').val());
@@ -461,7 +490,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 			var m_earningCol = parseInt(data[16]);			
 			var m_earnings = getrange($('#consumer-monthly-earnings').val());
 			monthlyEarnings = (m_earnings[1] != null && m_earnings[0] != null) ? (m_earningCol >= m_earnings[0] && m_earningCol <= m_earnings[1]) : (m_earnings[1] == null && m_earnings[0] != null)? m_earningCol >= m_earnings[0]:true;
-
+ 
 			var conGenderCol = data[8];			
 			var con_gender_val = $('#consumer-gender').val();
 			ConGender = (con_gender_val.length > 0)? (con_gender_val == conGenderCol):true;
@@ -469,22 +498,31 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 			var spGenderCol = data[36];			
 			var sp_gender_val = $('#spouse-gender').val();	
 			SpGender = (sp_gender_val.length > 0)? (sp_gender_val == spGenderCol):true;
-			
-			return familyMember && loyaltyPoints && ConGender && SpGender && monthlyEarnings;
-		});
-		var table = $('#dynamic-table').DataTable({
-			"language": {                
-				"infoFiltered": ""
-			},
-			"ordering": false			
-		});
+		
+			var consDobCol = getColDate(data[$("#consumer-dob").closest("th").index()]);
+			var cons_dob_val = getrange($('#consumer-dob').val());
+			consumerAge = (cons_dob_val[1] != null && cons_dob_val[0] != null) ? (consDobCol >= cons_dob_val[0] && consDobCol <= cons_dob_val[1]) : (cons_dob_val[1] == null && cons_dob_val[0] != null)? consDobCol >= cons_dob_val[0]:true;
+
+			var spouseDobCol = getColDate(data[$("#spouse-dob").closest("th").index()]);
+			var spouse_dob_val = getrange($('#spouse-dob').val());
+			spouseAge = (spouse_dob_val[1] != null && spouse_dob_val[0] != null) ? (spouseDobCol >= spouse_dob_val[0] && spouseDobCol <= spouse_dob_val[1]) : (spouse_dob_val[1] == null && spouse_dob_val[0] != null)? spouseDobCol >= spouse_dob_val[0]:true;
+
+			return familyMember && loyaltyPoints && ConGender && SpGender && monthlyEarnings && consumerAge && spouseAge;
+		});		
 		$(document).on("change",".select-input",function(){
 			table.draw();
+		});	
+		var btnClear = $('<button class="btn btn-xs btn-primary clear-all">Clear All</button>');
+		btnClear.appendTo($('#dynamic-table').parents('.dataTables_wrapper').find('.dataTables_filter'));	
+		$(document).on("click",".clear-all",function(){
+			$(".text-input").val('');
+			$(".select-input").val('');
+			table.search( '' ).columns().search( '' ).draw();
 		});
 		// $('.select-input').on('change', table.draw);
 		table.columns().every(function () {
 			var table = this;
-			$('input', this.header()).on('keyup change', function () {
+			$('.text-input', this.header()).on('keyup change', function () {
 				if (table.search() !== this.value) { 
 					table.search(this.value).draw();
 				}
