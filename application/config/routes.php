@@ -130,11 +130,16 @@ $route['api/complaint/reply'] = 'Api/Consumer/ConsumerResponseComplaint';
 $route['api/list-responses-on-complaint/(:any)'] = 'Api/Consumer/ListResponsesOnComplaint/$1';
 $route['api/list-consumer-notifications'] = 'Api/Consumer/ListConsumerNotifications';
 
+$route['api/consumer_loylty_deals/(:any)'] = 'Api/Consumer/consumerLoyltyDeals/$1';
+//$route['api/list-responses-on-complaint/(:any)'] = 'Api/Consumer/ListResponsesOnComplaint/$1';
+//$route['api/consumerpassbook'] = 'Api/Consumer/ConsumerPassBook';
 
 $route['api/faqs_otherafterlogindata'] = 'Api/Consumer/FaqsAndOtherData';
 $route['api/terms_and_conditions'] = 'Api/Consumer/TermsAndConditions';
 
 $route['api/consumerpassbook'] = 'Api/Consumer/ConsumerPassBook';
+
+$route['api/consumer_profile_profile_master_data'] = 'Api/Consumer/ListConsumerProfileMasterData';
 
 $route['api/user/add_consumer_relative'] = 'Api/Consumer/addConsumerRelative';
 $route['api/user/edit_consumer_relative/(:any)'] = 'Api/Consumer/editConsumerRelative/$1';

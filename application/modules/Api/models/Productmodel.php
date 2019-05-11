@@ -1277,6 +1277,59 @@ return $result;
         
     }
 	
+	// Sanjay 
+		public function getconsumerLoyltyDeals($userId=null){
+        if(empty($userId)){
+            return [];
+        }
+		$mobile_no = '7678665537';
+		$customer_id = '221';
+		$query = $this->db->select('c.id,c.mobile_no,cpb.points')
+                ->from('consumer_passbook cpb')
+				->join('consumers as c','c.id=cpb.consumer_id')
+                ->where('c.mobile_no ="'.$mobile_no.'"')
+				->where('cpb.customer_id ="'.$customer_id.'"')
+				->order_by('transaction_date', 'desc')
+               // ->where('status =1')
+                ->get();
+        if( $query->num_rows() <= 0 ){
+            return [];
+        }
+        $result = $query->result();
+        $items = array_map(function($obj){
+            $obj->params = json_decode($obj->params);
+            return $obj;
+        }, $result);
+        return $items;
+        
+    }
+	/*
+	public function getconsumerEarnedLoyaltyPoints($userId=null){
+        if(empty($userId)){
+            return [];
+        }
+		$mobile_no = '7678665537';
+		$customer_id = '221';
+		$query = $this->db->select_sum('c.id,c.mobile_no,cpb.points')
+                ->from('consumer_passbook cpb')
+				->join('consumers as c','c.id=cpb.consumer_id')
+                ->where('c.mobile_no ="'.$mobile_no.'"')
+				->where('cpb.customer_id ="'.$customer_id.'"')
+				->order_by('transaction_date', 'desc')
+               // ->where('status =1')
+                ->get();
+        if( $query->num_rows() <= 0 ){
+            return [];
+        }
+        $result = $query->result();
+        $items = array_map(function($obj){
+            $obj->params = json_decode($obj->params);
+            return $obj;
+        }, $result);
+        return $items;
+        
+    }
+	*/
 	
 	Public function isPackLevelSeted($bar_code=null, $parent_bar_code=null) {
 		// $answerQuery = $this->db->get_where('packaging_codes_pcr', array('bar_code' => $bar_code, 'parent_bar_code' => $parent_bar_code));

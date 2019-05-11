@@ -282,6 +282,29 @@ return $result;
         return $items;
     }
 	
-	
+		public function findConsumerProfileMasterData($userid){
+        if($userid == null){
+            return false;
+        }        
+		$query = $this->db->select('*')
+                ->from('consumer_profile_master')               
+               // ->where_in('consumer_id', $userid)
+                ->get()
+                ->result();
+        if(empty($query)){
+            return false;
+        }
+        //echo "<pre>";print_r($query);die;
+        $items = [];
+        foreach($query as $row){
+            $item = [
+				'cpm_type_name' => $row->cpm_type_name,
+				'cpm_name' => $row->cpm_name,
+            ];
+                       
+            $items[] = $item;
+        }
+        return $items;
+    }
 	
 }
