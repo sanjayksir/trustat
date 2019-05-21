@@ -364,12 +364,16 @@ class ScannedProduct extends ApiController {
 		
 		$mnv37_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 37)->get()->row();
 		$mnvtext37 = $mnv37_result->message_notification_value;
-		
-		
-				$purchased_points = total_approved_points2($customer_id);
-				$consumed_points = get_total_consumed_points($customer_id);
+			$Product_id = getProductIDbyProductCode($data['bar_code']);
+			$customerId = get_customer_id_by_product_id($Product_id);
+			
+				$purchased_points = total_approved_points2($customerId);
+				$consumed_points = get_total_consumed_points($customerId);
+				$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customerId);
+				//$data['customer_loyalty_type'] = $customer_loyalty_type;
 				//$closing_balance = $purchased_points - $consumed_points;
-		
+			//echo "<pre>";print_r($customer_loyalty_type); die;
+		 
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
         
         if(empty($result)){
@@ -451,10 +455,10 @@ class ScannedProduct extends ApiController {
 		$consumer_id = $user['id'];
 		$ProductID = $result->id;
 		$product_brand_name = get_products_brand_name_by_id($ProductID);
+		$customer_name = getUserFullNameById($customerId);
 		$customer_id = get_customer_id_by_product_id($ProductID);
 		$product_name = get_products_name_by_id($ProductID);
-		$consumer_name = getConsumerNameById($consumer_id);
-		
+		$consumer_name = getConsumerNameById($consumer_id);		
 		
 		$transactionType = 'product_registration_lps';
 		$transactionTypeName = 'Product Registration';
@@ -464,8 +468,10 @@ class ScannedProduct extends ApiController {
 				
 		if($purchased_points > ($consumed_points+$TRPoints)){
 				$data['loyalty_points_earned'] = $TRPoints;
+				 }else{
+            $data['loyalty_points_earned'] = 0;			
 				}
-				$data['loyalty_points_earned'] = 0;
+				
 		
         if(!empty($warrenty)){
             $data['status'] = 0;
@@ -483,27 +489,32 @@ class ScannedProduct extends ApiController {
             if(is_null($warrenty)){
 				if($result->stock_status!='Customer_Code'){
                 //$loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();
+				$LPconsumed_points = $consumed_points+$TRPoints;
+				//echo "<pre>";print_r($LPconsumed_points); die;
 				
 				
 				if($purchased_points > ($consumed_points+$TRPoints)){
                 $message = 'Thank You for Product Registration. '. $TRPoints .' loyalty points will be added to your howzzt loyalty account';
-				}
-				$message = 'Thank You for Product Registration!';
+				//echo "<pre>Jyada";print_r($LPconsumed_points); die;
+				}else{
+					$message = 'Thank You for Product Registration!';
+					//echo "<pre>kam";print_r($LPconsumed_points); die;
+					}
+				
 			   // $transactionType = 'product-registration-without-warranty'; 
 				$transactionType = "product_registration_lps";
 			    $transactionTypeName = "Scan for product registration";
 			   
-				$userId = $user['id'];
-				
+				$userId = $user['id'];	
 				
 				
 				
 				if($purchased_points > ($consumed_points+$TRPoints)){
-				$this->Productmodel->saveLoyltyProductReg($transactionType, $userId, $ProductID, ['verification_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code']], $customer_id);
+	$this->Productmodel->saveLoyltyProductReg($transactionType, $userId, $ProductID, ['verification_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code'],'customer_loyalty_type' => $customer_loyalty_type], $customer_id, $customer_loyalty_type);
 				//$this->Productmodel->saveConsumerPassbookLoyalty($transactionType, $userId, ['user_id' => $userId, 'brand_name' => $result->brand_name, 'product_name' => $result->product_name, 'product_code' => $data['bar_code'], 'user_id' => $userId], 'Loyalty');
 				
 				
-				$this->Productmodel->saveConsumerPassbookLoyaltyProductReg($transactionType, ['verification_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code']], $customer_id, $ProductID, $userId, $transactionTypeName,  'Loyalty');
+				$this->Productmodel->saveConsumerPassbookLoyaltyProductReg($transactionType, ['verification_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code'],'customer_loyalty_type' => $customer_loyalty_type], $customer_id, $ProductID, $userId, $transactionTypeName,  'Loyalty', $customer_loyalty_type);
 				}
 				
 				$fb_token = getConsumerFb_TokenById($userId);
@@ -702,8 +713,12 @@ class ScannedProduct extends ApiController {
 			$data['product_id'] = $ProductID;
 			$purchased_points = total_approved_points2($customer_id);
 			$consumed_points = get_total_consumed_points($customer_id);
+			$data['customer_name'] = getUserFullNameById($customer_id);
+		
+			$data['customer_loyalty_type'] = get_customer_loyalty_type_by_customer_id($customer_id);
+			$customer_loyalty_type = $data['customer_loyalty_type'];
 			if($purchased_points > ($consumed_points+$TRPoints)){
-			$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id);
+			$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $customer_loyalty_type);
 			}
 		$mnv46_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 46)->get()->row();
 		$mnvtext46 = $mnv46_result->message_notification_value;

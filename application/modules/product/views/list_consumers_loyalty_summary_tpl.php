@@ -73,9 +73,62 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                 
 
                  <div class="row">
+ <?php 
+ /*
+                   mysql_connect("localhost", "root", "");
+				mysql_select_db("trackingprortaldb20a");								
+$query  = "SELECT params FROM consumer_passbook WHERE consumer_id='65'";
+$result = mysql_query($query) or trigger_error(mysql_error().$query);
 
-                   
+$row = mysql_fetch_array($result);
+
+//and finally
+//$fieldname = "customer_loyalty_type";
+$retval = $row[6];
+
+
+
+//$dt = $product_data[0];
+$attr_list = implode(',',json_decode($retval,true));
+echo $retval . "-";
+*/
+
+
+				 ?>
+				 
+				 <?php /*
+$link = mysqli_connect("localhost", "root", "", "trackingprortaldb20a"); 
+  
+if($link === false){ 
+    die("ERROR: Could not connect. " 
+                . mysqli_connect_error()); 
+} 
+  
+$sql = "SELECT * FROM consumer_passbook WHERE consumer_id='65' AND transaction_lr_type = 'Loyalty'"; 
+if($res = mysqli_query($link, $sql)){ 
+    if(mysqli_num_rows($res) > 0){ 
+       
+        while($row = mysqli_fetch_array($res)){ 
+            
+                echo "-" . $row['consumer_id'] . "-"; 
+                echo "-" . $row['points'] . "-"; 
+                 //$row['params']
+						$arr = json_decode($row['params'], true);					
 				
+				echo "-" . $arr["customer_loyalty_type"] . "-<br>"; 
+        } 
+        mysqli_free_result($res); 
+    } else{ 
+        echo "No Matching records are found."; 
+    } 
+} else{ 
+    echo "ERROR: Could not able to execute $sql. "  
+                                . mysqli_error($link); 
+} 
+  
+mysqli_close($link); 
+*/
+?> 
 			 <table class="table table-striped table-bordered table-hover">
                     <thead>
                            <tr>
@@ -142,11 +195,14 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                             <thead>
                                 <tr>
 														<th>S No.</th>
-													   <th>Consumer Name</th>
+													    <th>Consumer Name</th>
 														<th>Phone Number</th>
-														<th>Total Earned Points</th>
-														<th>Total Redeemed Points</th>
-														<th>Balance Points</th>
+														<th>Total HLP Earned</th>
+														<th>Total HLP Redeemed</th>
+														<th>Total HLP O/S</th>
+														<th>Total BLP Earned</th>
+														<th>Total BLP Redeemed</th>
+														<th>Total BLP O/S</th>
 														
                                                        <th>Consumer Passbook & Feedback Report data </th>
 
@@ -168,40 +224,56 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                 <td><?php echo $attr['mobile_no']; ?></td>
                                 <td><?php //echo base_url(); 
 								
-								if(base_url()=='http://localhost/trackingportal/') {
+								// MySQL connect info
+								//mysql_connect("localhost", "tpdbuser", "india@123");
+								//mysql_select_db("trackingprortaldb");								
 								mysql_connect("localhost", "root", "");
-								mysql_select_db("trackingprortaldb20a");
-								} else {
-									mysql_connect("localhost", "tpdbuser", "india@123");
-								mysql_select_db("trackingprortaldb");
-								}
+								mysql_select_db("trackingprortaldb20a");	
+												
+							//$character = json_decode($attr['params']);
+							//$searchdata = $character->customer_loyalty_type;
+							//echo $searchdata;
+		$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND customer_loyalty_type = 'General' AND transaction_lr_type = 'Loyalty'";
+								$results = mysql_query($some_q) or die(mysql_error());
+								while($row = mysql_fetch_array($results)){
+								$TE_Points = $row['points'];							
+								echo $TE_Points;
+								//echo $query_getShows;								
+								} ?>
+								</td>
+								<td><?php $some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."'  AND customer_loyalty_type = 'General' AND transaction_lr_type = 'Redemption'";
+								$results = mysql_query($some_q) or die(mysql_error());
+								while($row = mysql_fetch_array($results)){
+								$TR_Points = $row['points'];
+								echo $TR_Points;			
+								} ?>
+								</td>
+								<td><?php $TBalance_Points = $TE_Points - $TR_Points;												 
+												 echo $TBalance_Points; ?>
+								</td>
+								 <td><?php //echo base_url(); 
 								
-								$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND transaction_lr_type = 'Loyalty'";
-
-					$results = mysql_query($some_q) or die(mysql_error());
-
-					while($row = mysql_fetch_array($results)){
-			$TE_Points = $row['points'];
-							
-							echo $TE_Points;
-							
-							}
-
-
-								?></td>
-                           <td><?php $some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND transaction_lr_type = 'Redemption'";
-
-					$results = mysql_query($some_q) or die(mysql_error());
-
-					while($row = mysql_fetch_array($results)){
-			$TR_Points = $row['points'];
-			echo $TR_Points;
-			
-							} ?></td>
-                                                 <td><?php 
-												$TBalance_Points = $TE_Points - $TR_Points;
-												 
-												 echo $TBalance_Points; ?></td>
+								// MySQL connect info
+								//mysql_connect("localhost", "tpdbuser", "india@123");
+								//mysql_select_db("trackingprortaldb");								
+								//mysql_connect("localhost", "root", "");
+								//mysql_select_db("trackingprortaldb20a");								
+								$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND customer_loyalty_type = 'Brand' AND transaction_lr_type = 'Loyalty'";
+								$results = mysql_query($some_q) or die(mysql_error());
+								while($row = mysql_fetch_array($results)){
+								$TE_PointsBLP  = $row['points'];							
+								echo $TE_PointsBLP ;							
+								} ?>
+								</td>
+								<td><?php $some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND customer_loyalty_type = 'Brand' AND transaction_lr_type = 'Redemption'";
+								$results = mysql_query($some_q) or die(mysql_error());
+								while($row = mysql_fetch_array($results)){
+								$TR_Points = $row['points'];
+								echo $TR_PointsBLP ;			
+								} ?>
+								</td>
+								<td><?php $TBalance_PointsBLP  = $TE_PointsBLP  - $TR_PointsBLP ;											echo $TBalance_PointsBLP ; // Sanjay ?>
+								</td> 
                                                  
                                                  
 													<td><?php echo anchor("product/list_view_consumer_passbook/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> View Passbook</i>', array('class' => 'btn btn-xs btn-info','title'=>' View Passbook')); ?>  

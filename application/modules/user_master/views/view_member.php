@@ -173,7 +173,13 @@
                 </div>
 				<?php }?>
 			</div>
-			<div class="col-sm-6">
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Customer Loyalty Type</b></label>
+             <div class=""><?php echo $get_user_details[0]['customer_loyalty_type'];?></div>
+			</div> 
+			
+			<div class="col-sm-4">
 			  <label for="form-field-8"><b>Remark</b></label>
              <div class="" style="height: 100px;overflow: scroll;"><?php echo $get_user_details[0]['remark'];?></div>
 			</div> 

@@ -322,7 +322,7 @@ $("#product").html(msg);
 								<?php $customer_id = $this->session->userdata('admin_user_id'); ?>
 								  <div class="form-group row">
                                   <div class="col-sm-12">
-                           <label for="form-field-8">Select Consumers-</label><?php 
+                           <label for="form-field-8">Select Consumers</label><?php 
 						   
 						   function reverse_birthday( $years ){
 								return date('Y-m-d', strtotime($years . ' years ago'));
@@ -336,16 +336,13 @@ $("#product").html(msg);
 								$csc_consumer_max_dob = '';
 									} else {
 								$csc_consumer_max_dob = reverse_birthday( $csc_consumer_max_age );
-									}
-								
-
-								
-									
+									}						
+																	
 						   $AllSelectedConsumersByACustomer = AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob);
 				
 				foreach ($AllSelectedConsumersByACustomer as $consumer_id)  
 				{  				
-					echo $consumer_id . ", ";
+					//echo $consumer_id . ", ";
 				  
 				} 
 				

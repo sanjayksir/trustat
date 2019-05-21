@@ -503,6 +503,62 @@ class Consumer extends ApiController {
         $this->response(['status' => true, 'message' => 'Relative are-', 'data' => $result]);
     }
 
+	// Redeem Loylty Points
+	
+	public function RedeemLoyltyPoints($consumer_mobile,$customer_id,$points_redeemed) {
+		
+		//echo "<pre>";print_r(get_consumer_id_by_mobile_number($consumer_mobile)); die;
+		$consumer_id = get_consumer_id_by_mobile_number($consumer_mobile);
+		
+		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty"))->get()->row();
+		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption"))->get()->row();
+		
+		$FinalTotalAccumulatedPoints = $TotalAccumulatedPoints->points;
+		$FinalTotalRedeemedPoints = $TotalRedeemedPoints->points + $points_redeemed;
+		
+		$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
+		$Min_Locking_Balance = 100;
+		
+		$CurrentBalanceAfterMinBalanceLocking = $CurrentBalance - $Min_Locking_Balance;
+		$Points_Redeemed_in_Multiple_of = 500;
+				
+		$remainder = $CurrentBalanceAfterMinBalanceLocking % $Points_Redeemed_in_Multiple_of;
+		$quotient = ($CurrentBalanceAfterMinBalanceLocking - $remainder) / $Points_Redeemed_in_Multiple_of;
+
+		$Points_Redeemable = $Points_Redeemed_in_Multiple_of * $quotient;
+		$PointsShortOfRedumption =$Points_Redeemed_in_Multiple_of-$remainder;
+		
+		       
+		$data['customer_id'] = $customer_id;
+		$data['consumer_id'] = $consumer_id;
+		$data['points'] = $points_redeemed;
+        $data['transaction_type_name'] = "Loylty Redemption";
+		$data['transaction_type_slug'] = "loylty_redemption";
+		$data['params'] = $this->input->ip_address();
+		$data['transaction_lr_type'] = "Redemption";
+		//$data['customer_loyalty_type'] = get_customer_loyalty_type_by_customer_id($customer_id);
+		$data['customer_loyalty_type'] = "Brand";
+		$data['total_accumulated_points'] = $FinalTotalAccumulatedPoints;
+		$data['total_redeemed_points'] = $FinalTotalRedeemedPoints;
+		$data['current_balance'] = $CurrentBalance;
+		$data['points_redeemable'] = $Points_Redeemable;
+		$data['points_short_of_redumption'] = $PointsShortOfRedumption;
+		$data['transaction_date'] = date("Y-m-d H:i:s");
+        //$data['ip'] = $this->input->ip_address();
+
+        if ($this->db->insert('consumer_passbook', $data)) {
+            $this->signupMail($data);
+           // $smstext = 'You have added ' . $mobile_no . ' as ' . $data['relation'] . ' relation with you.';
+            //Utils::sendSMS($data['phone_number'], $smstext);
+            //$userId = $user['id'];
+            //$this->Productmodel->saveLoylty('user-registration', $userId, ['user_id' => $userId]);
+            Utils::response(['status' => true, 'message' => 'Points Reddemed.', 'data' => $data], 200);
+        } else {
+            Utils::response(['status' => false, 'message' => 'Redemption failed.'], 200);
+        }
+    }
+
+	
 	    // add Consumer Kid Details function 
     public function addConsumerKid() {
         $user = $this->auth();
@@ -1330,6 +1386,20 @@ class Consumer extends ApiController {
        
     }
 	
+		public function ListAllCustomers() {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $items = $this->Productmodel->getListAllCustomers($user['id']);
+        Utils::response(['status'=>true,'message'=>'List all Customers-','data'=>$items]);
+       
+    }
+	
 		  public function ListConsumerNotifications() {
         //Utils::debug();
         $user = $this->auth();
@@ -1432,7 +1502,7 @@ class Consumer extends ApiController {
     }
 	
 	//Sanjay
-		public function consumerLoyltyDeals($mobile_no = null) {
+		public function consumerLoyltyDeals($mobile_no = null, $customer_id = null) {
 			
         $user = $this->auth();
 		/*
@@ -1446,7 +1516,7 @@ class Consumer extends ApiController {
 		//$checkifrquestinprocess = $this->db->where(array('user_id' => $user['id'], 'l_status' => 0))->count_all_results('loyalty_redemption');
 			//$mobile_no = '7678665537';
 
-			$customer_id = '341';
+			//$customer_id = '363';
 		
 			$this->db->select_sum('cpb.points');
 			$this->db->from('consumer_passbook as cpb');

@@ -163,7 +163,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 								?></td>
                                  <td><?php echo $attr['points']; ?></td>
 								 <td><?php echo getUserFullNameById($attr['customer_id']); ?></td>
-                                   <td><?php echo $attr['transaction_lr_type']; ?></td>
+                                   <td><?php echo $attr['transaction_lr_type']; ?>-<?php echo $attr['customer_loyalty_type']; ?></td>
 								   <td><?php echo $attr['total_accumulated_points']; ?></td>
 								   <td><?php echo $attr['total_redeemed_points']; ?></td>
 								    <td><?php echo $attr['current_balance']; ?></td>

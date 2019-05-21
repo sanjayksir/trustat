@@ -72,7 +72,7 @@
 		
 		<?php if($this->session->userdata('admin_user_id')==1){?>
 		<div class="form-group row">
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			<label for="form-field-8">Your Industry</label>
 			<!--<input name="industry" id="industry" type="text" class="form-control" placeholder="Industry Name" value="<?php //echo $get_user_details[0]['industry'];?>"  maxlength="100">-->
 			
@@ -82,12 +82,19 @@
 				<option value="<?php echo $val['categoryName'];?>"><?php  echo $val['categoryName'];?></option> 
 			<?php }?>
             <option value="Other">Other</option>
-            </select>
-			
-			
+            </select>		
 			</div>
 			
-			<div class="col-sm-6">
+			<div class="col-sm-4">
+			  <label for="form-field-8">Customer Loyalty Type</label>
+			  <select  name="Customer_Loyalty_Type" id="Customer_Loyalty_Type" class="form-control" required>
+			<option value="<?php echo $get_user_details[0]['customer_loyalty_type'];?>" selected><?php echo $get_user_details[0]['customer_loyalty_type'];?></option>
+			<option value="General">General</option>
+            <option value="Brand">Brand</option>
+            </select>
+			</div>
+			
+			<div class="col-sm-4">
 			  <label for="form-field-8">Pan</label>
              <input name="pan" id="pan" type="text" value="<?php echo $get_user_details[0]['pan'];?>" class="form-control" placeholder="Pan No." maxlength="12">
 			</div>

@@ -872,8 +872,15 @@ function list_assigned_Advertisements() {
 				{
 		 $consumer_id = $user->consumer_id;
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
-		 
+		$mnv51_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 51)->get()->row();
+		$mnvtext51 = $mnv51_result->message_notification_value;
 		 $this->Advertisement_model->sendFCM("An Advertisement Posted!!..", $fb_token);
+		 	$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "howzzt advertisement";
+			$NTFdata['body'] = $mnvtext51; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 1; 			
+			$this->db->insert('list_notifications_table', $NTFdata);
 		 }
 			
 			
@@ -922,8 +929,7 @@ function list_assigned_Advertisements() {
 			$NTFdata['title'] = "howzzt advertisement";
 			$NTFdata['body'] = $mnvtext51; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
-			$NTFdata['status'] = 1; 
-			
+			$NTFdata['status'] = 1; 			
 			$this->db->insert('list_notifications_table', $NTFdata);
 			
 		 }

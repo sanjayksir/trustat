@@ -78,7 +78,7 @@
 		
 		<?php if($this->session->userdata('admin_user_id')==1){?>
 		<div class="form-group row">
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			<label for="form-field-8">Select the Industry of user</label>
 			<!--<input name="industry" id="industry" type="text" class="form-control" placeholder="Industry Name"  maxlength="100">-->
 		   <select  name="industry" id="industry" class="form-control" required>
@@ -90,10 +90,17 @@
             </select>
 			</div>
 			
+			<div class="col-sm-4">
+			  <label for="form-field-8">Customer Loyalty Type</label>
+			  <select  name="Customer_Loyalty_Type" id="Customer_Loyalty_Type" class="form-control" required>
+			<option value="">-Select Customer Loyalty Type-</option>
+			<option value="General">General</option>
+            <option value="Brand">Brand</option>
+            </select>
+			</div>
 			
 			
-			
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			  <label for="form-field-8">Pan</label>
              <input name="pan" id="pan" type="text" class="form-control" placeholder="Pan No." maxlength="12">
 			</div>

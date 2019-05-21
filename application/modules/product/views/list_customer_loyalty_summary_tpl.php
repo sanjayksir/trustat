@@ -186,7 +186,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                 <td><?php echo getUserFullNameById($attr['customer_id']); ?></td>
 								<td><?php echo total_approved_points2($attr['customer_id']);  ?> </td>  
                                 <td><?php //echo base_url(); 
-								
+								/*
 								if(base_url()=='https://innovigents.com/') {
 								mysql_connect("localhost", "tpdbuser", "india@123");
 								mysql_select_db("trackingprortaldb");
@@ -195,7 +195,14 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 								mysql_connect("localhost", "root", "");
 								mysql_select_db("trackingprortaldb20a");
 								}
+								*/
+								// MySQL connect info
+								mysql_connect("localhost", "tpdbuser", "india@123");
+								mysql_select_db("trackingprortaldb");
 								
+								//mysql_connect("localhost", "root", "");
+								//mysql_select_db("trackingprortaldb20a");
+			
 								$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where customer_id = '".$attr['customer_id']."' AND transaction_lr_type = 'Loyalty'";
 
 							$results = mysql_query($some_q) or die(mysql_error());

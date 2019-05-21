@@ -879,7 +879,15 @@ function list_assigned_Advertisements() {
 		 $consumer_id = $user->consumer_id;
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
-		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
+		 $this->Textmessage_model->sendFCM($text_message, $fb_token);	
+		 
+		 	$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "howzzt text message";
+			$NTFdata['body'] = $text_message; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 1; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);
 		 }	
 			
 		

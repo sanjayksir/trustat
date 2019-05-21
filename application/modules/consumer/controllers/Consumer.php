@@ -335,6 +335,7 @@
     }
 	
 
+
 	
 	public function save_consumer_profile_attribute_types() {
 		  //print_r($_POST);exit;

@@ -839,8 +839,16 @@ function list_assigned_Surveys() {
 				{
 		  $consumer_id = $user->consumer_id;
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
-		 
+		 $mnv50_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 50)->get()->row();
+		$mnvtext50 = $mnv50_result->message_notification_value;
 		 $this->Survey_model->sendFCM("A Survey Posted!!", $fb_token);
+		 	$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "howzzt survey";
+			$NTFdata['body'] = $mnvtext50; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s"); 
+			$NTFdata['status'] = 1; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);
 		 }
 			}else{
 				

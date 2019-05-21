@@ -6786,7 +6786,20 @@ function get_products_name_by_id($id){
  	return $res_arr[0]['created_by'];
  }
  
-
+   function get_customer_loyalty_type_by_customer_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$ci->db->select('group_concat(customer_loyalty_type) as customer_loyalty_type');
+			$ci->db->from('backend_user');
+ 			$ci->db->where_in('user_id',$id);
+			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['customer_loyalty_type'];
+ }
+ 
  
  function get_products_attribute_list_by_id($id){ 
 	$res='0';
@@ -7115,6 +7128,20 @@ function get_user_email_name($userid){
 	}
 	return $resdata;
  }
+ 
+ 
+ //sanjay
+ function get_consumer_id_by_mobile_number($consumer_mobile){
+	$ci = & get_instance();
+	$resdata=array();
+	$query =$ci->db->select('id')->from("consumers")->where(array('mobile_no'=>$consumer_mobile))->get();
+ 	if ($query->num_rows() > 0) {
+		$result = $query->result_array();
+		$resdata=$result[0]['id'];
+	}
+	return $resdata;
+ }
+ 
  
  
  function getSeoTitle($url='',$params=''){
