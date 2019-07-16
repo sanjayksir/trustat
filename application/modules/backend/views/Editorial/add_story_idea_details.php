@@ -100,7 +100,7 @@ $medisUrl = $this->config->item('media_location');
 									
 									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Push Ad Video</h6>
+                                        <h6 class="widget-title smaller lighter">Product Advertisement Video</h6>
                                     </div>
                                     <div class="widget-body">                                        
                                         <div class="widget-main">
@@ -111,7 +111,53 @@ $medisUrl = $this->config->item('media_location');
                                             </div>
                                         </div>
                                     </div>
-									 </div> 
+									 </div>
+
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        <h6 class="widget-title smaller lighter">Product Advertisement Audio</h6>
+                                    </div>
+                                    <div class="widget-body">                                        
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_push_ad_audio"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+									 </div>
+
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        <h6 class="widget-title smaller lighter">Product Advertisement PDF</h6>
+                                    </div>
+                                    <div class="widget-body">                                        
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_push_ad_pdf"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+									 </div>
+
+
+								<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        <h6 class="widget-title smaller lighter">Product Advertisement Image</h6>
+                                    </div>
+                                    <div class="widget-body">                                        
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_push_ad_image"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+									 </div>									 
 									
 									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
@@ -127,8 +173,51 @@ $medisUrl = $this->config->item('media_location');
                                         </div>
                                     </div>	
 									 </div> 
-									
-									
+									 
+									 <div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        <h6 class="widget-title smaller lighter">Product Survey Audio</h6>
+                                    </div>
+                                    <div class="widget-body">                                        
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_survey_audio"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>	
+									 </div> 
+									 
+									 <div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        <h6 class="widget-title smaller lighter">Product Survey PDF</h6>
+                                    </div>
+                                    <div class="widget-body">                                        
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_survey_pdf"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>	
+									 </div> 
+									 
+									 <div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        <h6 class="widget-title smaller lighter">Product Survey Image</h6>
+                                    </div>
+                                    <div class="widget-body">                                        
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_survey_image"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>	
+									 </div> 
 									
 									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									 <div class="widget-header widget-header-small">
@@ -256,12 +345,35 @@ $medisUrl = $this->config->item('media_location');
 								<label for="form-field-description">Product Brochure Response Loyalty Points : <input type="text" name="product_pdf_response_lps" id="product_pdf_response_lps" value="<?php echo $product_pdf_response_lps; ?>" style="width:80px" /></label>
 								  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_pdf_response_fbqq" id="product_pdf_response_fbqq" value="<?php echo $product_pdf_response_fbqq; ?>" style="width:40px" /> </label><br />
 								
-								 <label for="form-field-description">Product Ad Response Loyalty Points : <input type="text" name="product_ad_response_lps" id="product_ad_response_lps" value="<?php echo $product_ad_response_lps; ?>" style="width:80px" /></label>
-								 <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_ad_response_fbqq" id="product_ad_response_fbqq" value="<?php echo $product_ad_response_fbqq; ?>" style="width:40px" /> </label><br />
+								
+								 <label for="form-field-description">Product Ad Video Response Loyalty Points : <input type="text" name="product_ad_video_response_lps" id="product_ad_video_response_lps" value="<?php echo $product_ad_video_response_lps; ?>" style="width:80px" /></label>
+								 <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_ad_video_response_fbqq" id="product_ad_video_response_fbqq" value="<?php echo $product_ad_video_response_fbqq; ?>" style="width:40px" /> </label><br />
 								 
 								 
-								  <label for="form-field-description">Product Survey Response Loyalty Points : <input type="text" name="product_survey_response_lps" id="product_survey_response_lps" value="<?php echo $product_survey_response_lps; ?>" style="width:80px" /></label>
-								  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_survey_response_fbqq" id="product_survey_response_fbqq" value="<?php echo $product_survey_response_fbqq; ?>" style="width:40px" /> </label><br />
+								 <label for="form-field-description">Product Ad Audio Response Loyalty Points : <input type="text" name="product_ad_audio_response_lps" id="product_ad_audio_response_lps" value="<?php echo $product_ad_audio_response_lps; ?>" style="width:80px" /></label>
+								 <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_ad_audio_response_fbqq" id="product_ad_audio_response_fbqq" value="<?php echo $product_ad_audio_response_fbqq; ?>" style="width:40px" /> </label><br />
+								 
+								 
+								 <label for="form-field-description">Product Ad PDF Response Loyalty Points : <input type="text" name="product_ad_pdf_response_lps" id="product_ad_pdf_response_lps" value="<?php echo $product_ad_pdf_response_lps; ?>" style="width:80px" /></label>
+								 <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_ad_pdf_response_fbqq" id="product_ad_pdf_response_fbqq" value="<?php echo $product_ad_pdf_response_fbqq; ?>" style="width:40px" /> </label><br />
+								 
+								 <label for="form-field-description">Product Ad Image Response Loyalty Points : <input type="text" name="product_ad_image_response_lps" id="product_ad_image_response_lps" value="<?php echo $product_ad_image_response_lps; ?>" style="width:80px" /></label>
+								 <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_ad_image_response_fbqq" id="product_ad_image_response_fbqq" value="<?php echo $product_ad_image_response_fbqq; ?>" style="width:40px" /> </label><br />
+								 
+								 
+								  <label for="form-field-description">Product Survey Video Response Loyalty Points : <input type="text" name="product_survey_video_response_lps" id="product_survey_video_response_lps" value="<?php echo $product_survey_video_response_lps; ?>" style="width:80px" /></label>
+								  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_survey_video_response_fbqq" id="product_survey_video_response_fbqq" value="<?php echo $product_survey_video_response_fbqq; ?>" style="width:40px" /> </label><br />
+								  
+								   <label for="form-field-description">Product Survey Audio Response Loyalty Points : <input type="text" name="product_survey_audio_response_lps" id="product_survey_audio_response_lps" value="<?php echo $product_survey_audio_response_lps; ?>" style="width:80px" /></label>
+								  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_survey_audio_response_fbqq" id="product_survey_audio_response_fbqq" value="<?php echo $product_survey_audio_response_fbqq; ?>" style="width:40px" /> </label><br />
+								  
+								  
+								   <label for="form-field-description">Product Survey PDF Response Loyalty Points : <input type="text" name="product_survey_pdf_response_lps" id="product_survey_pdf_response_lps" value="<?php echo $product_survey_pdf_response_lps; ?>" style="width:80px" /></label>
+								  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_survey_pdf_response_fbqq" id="product_survey_pdf_response_fbqq" value="<?php echo $product_survey_pdf_response_fbqq; ?>" style="width:40px" /> </label><br />
+								  
+								  
+								   <label for="form-field-description">Product Survey Image Response Loyalty Points : <input type="text" name="product_survey_image_response_lps" id="product_survey_image_response_lps" value="<?php echo $product_survey_image_response_lps; ?>" style="width:80px" /></label>
+								  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_survey_image_response_fbqq" id="product_survey_image_response_fbqq" value="<?php echo $product_survey_image_response_fbqq; ?>" style="width:40px" /> </label><br />
 								  
 								  
 								  <label for="form-field-description">Product Demo Video Response Loyalty Points : <input type="text" name="product_demo_video_response_lps" id="product_demo_video_response_lps" value="<?php echo $product_demo_video_response_lps; ?>" style="width:80px" /></label>
@@ -534,6 +646,120 @@ $medisUrl = $this->config->item('media_location');
                     pd.statusbar.hide(); //You choice.
                 }
             });  // product_push_ad_video
+			$("#product_push_ad_audio").uploadFile({
+                uploadStr:"Product Push Ad Audio",
+                url:site_url+"backend/product_attrribute/media_attribute/product_push_ad_audio/<?php echo base64_encode($id); ?>",
+                fileName:"product_push_ad_audio",
+                showDelete: true,
+                acceptFiles:"audio/*",
+                showPreview:true,
+                previewHeight: "100px",
+                previewWidth: "100px",
+                onLoad:function(obj){
+                    $.ajax({
+                        cache: false,
+                        url:site_url+"backend/product_attrribute/view_media_file/product_push_ad_audio/<?php echo base64_encode($id); ?>",
+                        dataType: "json",
+                        success: function(data){
+                            for(var i=0;i<data.length;i++){
+                                obj.createProgress(data[i]["name"],data[i]["path"],data[i]["size"]);
+                            }
+                        } 
+                    });
+                },
+                deleteCallback: function (data, pd) {
+                    $(".alert-box").removeClass('alert-success').removeClass('alert-danger');
+                    for (var i = 0; i < data.length; i++) {
+                        $.post(site_url+"backend/product_attrribute/delete_media_file/product_push_ad_audio/<?php echo base64_encode($id); ?>", {
+                            file: data[i]
+                        },function (resp,textStatus, jqXHR) {
+                            if(resp.status){
+                                $(".alert-box").addClass('alert-success').html('<p>'+resp.message+'</p>');
+                            }else{
+                                $(".alert-box").addClass('alert-danger').html('<p>'+resp.message+'</p>');
+                            }
+                            
+                        });
+                    }
+                    pd.statusbar.hide(); //You choice.
+                }
+            });  // product_push_ad_audio
+			$("#product_push_ad_pdf").uploadFile({
+                uploadStr:"Product Push Ad PDF",
+                url:site_url+"backend/product_attrribute/media_attribute/product_push_ad_pdf/<?php echo base64_encode($id); ?>",
+                fileName:"product_push_ad_pdf",
+                showDelete: true,
+                acceptFiles:"pdf/*",
+                showPreview:true,
+                previewHeight: "100px",
+                previewWidth: "100px",
+                onLoad:function(obj){
+                    $.ajax({
+                        cache: false,
+                        url:site_url+"backend/product_attrribute/view_media_file/product_push_ad_pdf/<?php echo base64_encode($id); ?>",
+                        dataType: "json",
+                        success: function(data){
+                            for(var i=0;i<data.length;i++){
+                                obj.createProgress(data[i]["name"],data[i]["path"],data[i]["size"]);
+                            }
+                        } 
+                    });
+                },
+                deleteCallback: function (data, pd) {
+                    $(".alert-box").removeClass('alert-success').removeClass('alert-danger');
+                    for (var i = 0; i < data.length; i++) {
+                        $.post(site_url+"backend/product_attrribute/delete_media_file/product_push_ad_pdf/<?php echo base64_encode($id); ?>", {
+                            file: data[i]
+                        },function (resp,textStatus, jqXHR) {
+                            if(resp.status){
+                                $(".alert-box").addClass('alert-success').html('<p>'+resp.message+'</p>');
+                            }else{
+                                $(".alert-box").addClass('alert-danger').html('<p>'+resp.message+'</p>');
+                            }
+                            
+                        });
+                    }
+                    pd.statusbar.hide(); //You choice.
+                }
+            });  // product_push_ad_pdf
+			$("#product_push_ad_image").uploadFile({
+                uploadStr:"Product Push Ad Image",
+                url:site_url+"backend/product_attrribute/media_attribute/product_push_ad_image/<?php echo base64_encode($id); ?>",
+                fileName:"product_push_ad_image",
+                showDelete: true,
+                acceptFiles:"image/*",
+                showPreview:true,
+                previewHeight: "100px",
+                previewWidth: "100px",
+                onLoad:function(obj){
+                    $.ajax({
+                        cache: false,
+                        url:site_url+"backend/product_attrribute/view_media_file/product_push_ad_image/<?php echo base64_encode($id); ?>",
+                        dataType: "json",
+                        success: function(data){
+                            for(var i=0;i<data.length;i++){
+                                obj.createProgress(data[i]["name"],data[i]["path"],data[i]["size"]);
+                            }
+                        } 
+                    });
+                },
+                deleteCallback: function (data, pd) {
+                    $(".alert-box").removeClass('alert-success').removeClass('alert-danger');
+                    for (var i = 0; i < data.length; i++) {
+                        $.post(site_url+"backend/product_attrribute/delete_media_file/product_push_ad_image/<?php echo base64_encode($id); ?>", {
+                            file: data[i]
+                        },function (resp,textStatus, jqXHR) {
+                            if(resp.status){
+                                $(".alert-box").addClass('alert-success').html('<p>'+resp.message+'</p>');
+                            }else{
+                                $(".alert-box").addClass('alert-danger').html('<p>'+resp.message+'</p>');
+                            }
+                            
+                        });
+                    }
+                    pd.statusbar.hide(); //You choice.
+                }
+            });  // product_push_ad_image
 			$("#product_survey_video").uploadFile({
                 uploadStr:"Product Survey Video",
                 url:site_url+"backend/product_attrribute/media_attribute/product_survey_video/<?php echo base64_encode($id); ?>",
@@ -572,6 +798,120 @@ $medisUrl = $this->config->item('media_location');
                     pd.statusbar.hide(); //You choice.
                 }
             }); // product_survey_video
+			$("#product_survey_audio").uploadFile({
+                uploadStr:"Product Survey Audio",
+                url:site_url+"backend/product_attrribute/media_attribute/product_survey_audio/<?php echo base64_encode($id); ?>",
+                fileName:"product_survey_audio",
+                showDelete: true,
+                acceptFiles:"audio/*",
+                showPreview:true,
+                previewHeight: "100px",
+                previewWidth: "100px",
+                onLoad:function(obj){
+                    $.ajax({
+                        cache: false,
+                        url:site_url+"backend/product_attrribute/view_media_file/product_survey_audio/<?php echo base64_encode($id); ?>",
+                        dataType: "json",
+                        success: function(data){
+                            for(var i=0;i<data.length;i++){
+                                obj.createProgress(data[i]["name"],data[i]["path"],data[i]["size"]);
+                            }
+                        } 
+                    });
+                },
+                deleteCallback: function (data, pd) {
+                    $(".alert-box").removeClass('alert-success').removeClass('alert-danger');
+                    for (var i = 0; i < data.length; i++) {
+                        $.post(site_url+"backend/product_attrribute/delete_media_file/product_survey_audio/<?php echo base64_encode($id); ?>", {
+                            file: data[i]
+                        },function (resp,textStatus, jqXHR) {
+                            if(resp.status){
+                                $(".alert-box").addClass('alert-success').html('<p>'+resp.message+'</p>');
+                            }else{
+                                $(".alert-box").addClass('alert-danger').html('<p>'+resp.message+'</p>');
+                            }
+                            
+                        });
+                    }
+                    pd.statusbar.hide(); //You choice.
+                }
+            }); // product_survey_audio
+			$("#product_survey_pdf").uploadFile({
+                uploadStr:"Product Survey PDF",
+                url:site_url+"backend/product_attrribute/media_attribute/product_survey_pdf/<?php echo base64_encode($id); ?>",
+                fileName:"product_survey_pdf",
+                showDelete: true,
+                acceptFiles:"pdf/*",
+                showPreview:true,
+                previewHeight: "100px",
+                previewWidth: "100px",
+                onLoad:function(obj){
+                    $.ajax({
+                        cache: false,
+                        url:site_url+"backend/product_attrribute/view_media_file/product_survey_pdf/<?php echo base64_encode($id); ?>",
+                        dataType: "json",
+                        success: function(data){
+                            for(var i=0;i<data.length;i++){
+                                obj.createProgress(data[i]["name"],data[i]["path"],data[i]["size"]);
+                            }
+                        } 
+                    });
+                },
+                deleteCallback: function (data, pd) {
+                    $(".alert-box").removeClass('alert-success').removeClass('alert-danger');
+                    for (var i = 0; i < data.length; i++) {
+                        $.post(site_url+"backend/product_attrribute/delete_media_file/product_survey_pdf/<?php echo base64_encode($id); ?>", {
+                            file: data[i]
+                        },function (resp,textStatus, jqXHR) {
+                            if(resp.status){
+                                $(".alert-box").addClass('alert-success').html('<p>'+resp.message+'</p>');
+                            }else{
+                                $(".alert-box").addClass('alert-danger').html('<p>'+resp.message+'</p>');
+                            }
+                            
+                        });
+                    }
+                    pd.statusbar.hide(); //You choice.
+                }
+            }); // product_survey_pdf
+			$("#product_survey_image").uploadFile({
+                uploadStr:"Product Survey Image",
+                url:site_url+"backend/product_attrribute/media_attribute/product_survey_image/<?php echo base64_encode($id); ?>",
+                fileName:"product_survey_image",
+                showDelete: true,
+                acceptFiles:"image/*",
+                showPreview:true,
+                previewHeight: "100px",
+                previewWidth: "100px",
+                onLoad:function(obj){
+                    $.ajax({
+                        cache: false,
+                        url:site_url+"backend/product_attrribute/view_media_file/product_survey_image/<?php echo base64_encode($id); ?>",
+                        dataType: "json",
+                        success: function(data){
+                            for(var i=0;i<data.length;i++){
+                                obj.createProgress(data[i]["name"],data[i]["path"],data[i]["size"]);
+                            }
+                        } 
+                    });
+                },
+                deleteCallback: function (data, pd) {
+                    $(".alert-box").removeClass('alert-success').removeClass('alert-danger');
+                    for (var i = 0; i < data.length; i++) {
+                        $.post(site_url+"backend/product_attrribute/delete_media_file/product_survey_image/<?php echo base64_encode($id); ?>", {
+                            file: data[i]
+                        },function (resp,textStatus, jqXHR) {
+                            if(resp.status){
+                                $(".alert-box").addClass('alert-success').html('<p>'+resp.message+'</p>');
+                            }else{
+                                $(".alert-box").addClass('alert-danger').html('<p>'+resp.message+'</p>');
+                            }
+                            
+                        });
+                    }
+                    pd.statusbar.hide(); //You choice.
+                }
+            }); // product_survey_image
             $("#product_audio").uploadFile({
                 uploadStr:"Product Audio",
                 url:site_url+"backend/product_attrribute/media_attribute/product_audio/<?php echo base64_encode($id); ?>",
@@ -696,7 +1036,7 @@ $medisUrl = $this->config->item('media_location');
                 $.ajax({
                     url:site_url+"backend/product_attrribute/media_description/<?php echo base64_encode($id); ?>",
                     type: "POST",
-                    data: {"product_description":$("#product-description").val(),"product_registration_lps":$("#product_registration_lps").val(),"product_image_response_lps":$("#product_image_response_lps").val(),"product_audio_response_lps":$("#product_audio_response_lps").val(),"product_video_response_lps":$("#product_video_response_lps").val(),"product_ad_response_lps":$("#product_ad_response_lps").val(),"product_survey_response_lps":$("#product_survey_response_lps").val(),"product_pdf_response_lps":$("#product_pdf_response_lps").val(),"product_demo_video_response_lps":$("#product_demo_video_response_lps").val(),"product_demo_audio_response_lps":$("#product_demo_audio_response_lps").val(),"product_image_response_fbqq":$("#product_image_response_fbqq").val(),"product_audio_response_fbqq":$("#product_audio_response_fbqq").val(),"product_video_response_fbqq":$("#product_video_response_fbqq").val(),"product_pdf_response_fbqq":$("#product_pdf_response_fbqq").val(),"product_ad_response_fbqq":$("#product_ad_response_fbqq").val(),"product_survey_response_fbqq":$("#product_survey_response_fbqq").val(),"product_demo_video_response_fbqq":$("#product_demo_video_response_fbqq").val(),"product_demo_audio_response_fbqq":$("#product_demo_audio_response_fbqq").val(),"feedback_on_product_lps":$("#feedback_on_product_lps").val()},
+                    data: {"product_description":$("#product-description").val(),"product_registration_lps":$("#product_registration_lps").val(),"product_image_response_lps":$("#product_image_response_lps").val(),"product_audio_response_lps":$("#product_audio_response_lps").val(),"product_video_response_lps":$("#product_video_response_lps").val(),"product_ad_video_response_lps":$("#product_ad_video_response_lps").val(),"product_ad_audio_response_lps":$("#product_ad_audio_response_lps").val(),"product_ad_pdf_response_lps":$("#product_ad_pdf_response_lps").val(),"product_ad_image_response_lps":$("#product_ad_image_response_lps").val(),"product_survey_video_response_lps":$("#product_survey_video_response_lps").val(),"product_survey_audio_response_lps":$("#product_survey_audio_response_lps").val(),"product_survey_pdf_response_lps":$("#product_survey_pdf_response_lps").val(),"product_survey_image_response_lps":$("#product_survey_image_response_lps").val(),"product_pdf_response_lps":$("#product_pdf_response_lps").val(),"product_demo_video_response_lps":$("#product_demo_video_response_lps").val(),"product_demo_audio_response_lps":$("#product_demo_audio_response_lps").val(),"product_image_response_fbqq":$("#product_image_response_fbqq").val(),"product_audio_response_fbqq":$("#product_audio_response_fbqq").val(),"product_video_response_fbqq":$("#product_video_response_fbqq").val(),"product_pdf_response_fbqq":$("#product_pdf_response_fbqq").val(),"product_ad_video_response_fbqq":$("#product_ad_video_response_fbqq").val(),"product_ad_audio_response_fbqq":$("#product_ad_audio_response_fbqq").val(),"product_ad_pdf_response_fbqq":$("#product_ad_pdf_response_fbqq").val(),"product_ad_image_response_fbqq":$("#product_ad_image_response_fbqq").val(),"product_survey_video_response_fbqq":$("#product_survey_video_response_fbqq").val(),"product_survey_audio_response_fbqq":$("#product_survey_audio_response_fbqq").val(),"product_survey_pdf_response_fbqq":$("#product_survey_pdf_response_fbqq").val(),"product_survey_image_response_fbqq":$("#product_survey_image_response_fbqq").val(),"product_demo_video_response_fbqq":$("#product_demo_video_response_fbqq").val(),"product_demo_audio_response_fbqq":$("#product_demo_audio_response_fbqq").val(),"feedback_on_product_lps":$("#feedback_on_product_lps").val()},
                     dataType:"json"
                 }).done(function( data ) {
                     $("#media-description").removeClass('disabled');

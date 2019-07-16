@@ -63,7 +63,7 @@
                                                     <div class="space"></div>
                                                     <div class="form-group">
 														<div class="add-spidey">
-														<!-- Product Survey Video -->
+														<!-- Product Advertisement Video -->
 															<?php if($details['product_survey_video']!=''){?>
 															<div class="row">
 																<div class="col-xs-12"> 
@@ -76,13 +76,76 @@
 								<source src="<?php echo base_url().'uploads/'.$details['product_push_ad_video'];?>" type="video/mp4">
 																		  
 																		  Your browser does not support the video tag.
-																		</video> &nbsp &nbsp The Consumer will get <b><?php echo $details['product_ad_response_lps']; ?></b> Loyalty Points on Product  Feedback.
+																		</video> &nbsp &nbsp The Consumer will get <b><?php echo $details['product_ad_video_response_lps']; ?></b> Loyalty Points on Product  Feedback.
 																	<?php //echo base_url().'uploads/'.$details['product_demo_video'];?>
 																	</div>
   																</div>
 															</div>
 															<?php }?>
-															<!-- /Product Survey Video -->	
+															<!-- /Product Advertisement Video -->
+
+															<!-- Product Advertisement audio -->
+															<?php if($details['product_survey_audio']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product Advertisement Audio</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	
+										<audio width="320" height="240" controls>
+								<source src="<?php echo base_url().'uploads/'.$details['product_push_ad_audio'];?>" type="audio/mp4">
+																		  
+																		  Your browser does not support the audio tag.
+																		</audio> &nbsp &nbsp The Consumer will get <b><?php echo $details['product_ad_audio_response_lps']; ?></b> Loyalty Points on Product  Feedback.
+																	<?php //echo base_url().'uploads/'.$details['product_demo_audio'];?>
+																	</div>
+  																</div>
+															</div>
+															<?php }?>
+															<!-- /Product Advertisement audio -->
+
+															<!-- Product Advertisement pdf -->
+															<?php if($details['product_survey_pdf']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product Advertisement pdf</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	
+										<pdf width="320" height="240" controls>
+								<source src="<?php echo base_url().'uploads/'.$details['product_push_ad_pdf'];?>" type="pdf/mp4">
+																		  
+																		  Your browser does not support the pdf tag.
+																		</pdf> &nbsp &nbsp The Consumer will get <b><?php echo $details['product_ad_pdf_response_lps']; ?></b> Loyalty Points on Product  Feedback.
+																	<?php //echo base_url().'uploads/'.$details['product_demo_pdf'];?>
+																	</div>
+  																</div>
+															</div>
+															<?php }?>
+															<!-- /Product Advertisement pdf -->
+
+															<!-- Product Advertisement image -->
+															<?php if($details['product_survey_image']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product Advertisement image</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	
+										<image width="320" height="240" controls>
+								<source src="<?php echo base_url().'uploads/'.$details['product_push_ad_image'];?>" type="image/mp4">
+																		  
+																		  Your browser does not support the image tag.
+																		</image> &nbsp &nbsp The Consumer will get <b><?php echo $details['product_ad_image_response_lps']; ?></b> Loyalty Points on Product  Feedback.
+																	<?php //echo base_url().'uploads/'.$details['product_demo_image'];?>
+																	</div>
+  																</div>
+															</div>
+															<?php }?>
+															<!-- /Product Advertisement image -->															
 														</div>
                                                         
 														 <hr />

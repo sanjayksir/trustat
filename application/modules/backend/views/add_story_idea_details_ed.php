@@ -87,11 +87,39 @@ $medisUrl = $this->config->item('media_location');
                                                 <div class="thumbnail">
                                                 <a href="<?php echo !empty($product_push_ad_video)? site_url($medisUrl.'/'.$product_push_ad_video):"#"; ?>" id="thumb-video" data-toggle="image" class="img-thumbnail" mime-type="video">
                                                     <img src="<?php echo !empty($product_push_ad_video)? site_url('assets/images/mp4.jpg'):site_url('assets/images/mp4-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp4-upload.png'); ?>" />
-                                                    <span class="media-info">Product Push Ad Video</span>
+                                                    <span class="media-info">Product Advertisements Video</span>
                                                 </a>
                                                     <input type="hidden" name="product_push_ad_video" value="<?php echo $product_push_ad_video; ?>" id="input-video" />
                                                 </div>
                                             </div>
+											<div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_push_ad_audio)? site_url($medisUrl.'/'.$product_push_ad_audio):"#"; ?>" id="thumb-audio" data-toggle="image" class="img-thumbnail" mime-type="audio">
+                                                    <img src="<?php echo !empty($product_push_ad_audio)? site_url('assets/images/mp4.jpg'):site_url('assets/images/mp4-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp4-upload.png'); ?>" />
+                                                    <span class="media-info">Product Advertisements Audio</span>
+                                                </a>
+                                                    <input type="hidden" name="product_push_ad_audio" value="<?php echo $product_push_ad_audio; ?>" id="input-audio" />
+                                                </div>
+                                            </div>
+											<div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_push_ad_pdf)? site_url($medisUrl.'/'.$product_push_ad_pdf):"#"; ?>" id="thumb-pdf" data-toggle="image" class="img-thumbnail" mime-type="pdf">
+                                                    <img src="<?php echo !empty($product_push_ad_pdf)? site_url('assets/images/mp4.jpg'):site_url('assets/images/mp4-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp4-upload.png'); ?>" />
+                                                    <span class="media-info">Product Advertisements PDF</span>
+                                                </a>
+                                                    <input type="hidden" name="product_push_ad_pdf" value="<?php echo $product_push_ad_pdf; ?>" id="input-pdf" />
+                                                </div>
+                                            </div>
+											<div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_push_ad_image)? site_url($medisUrl.'/'.$product_push_ad_image):"#"; ?>" id="thumb-image" data-toggle="image" class="img-thumbnail" mime-type="image">
+                                                    <img src="<?php echo !empty($product_push_ad_image)? site_url('assets/images/mp4.jpg'):site_url('assets/images/mp4-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp4-upload.png'); ?>" />
+                                                    <span class="media-info">Product Advertisements Image</span>
+                                                </a>
+                                                    <input type="hidden" name="product_push_ad_image" value="<?php echo $product_push_ad_image; ?>" id="input-image" />
+                                                </div>
+                                            </div>
+											
 											<div class="col-sm-2">
                                                 <div class="thumbnail">
                                                 <a href="<?php echo !empty($product_survey_video)? site_url($medisUrl.'/'.$product_survey_video):"#"; ?>" id="thumb-video" data-toggle="image" class="img-thumbnail" mime-type="video">
@@ -99,6 +127,33 @@ $medisUrl = $this->config->item('media_location');
                                                     <span class="media-info">Product Survey Video</span>
                                                 </a>
                                                     <input type="hidden" name="product_survey_video" value="<?php echo $product_survey_video; ?>" id="input-video" />
+                                                </div>
+                                            </div>
+											<div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_survey_audio)? site_url($medisUrl.'/'.$product_survey_audio):"#"; ?>" id="thumb-audio" data-toggle="image" class="img-thumbnail" mime-type="audio">
+                                                    <img src="<?php echo !empty($product_survey_audio)? site_url('assets/images/mp4.jpg'):site_url('assets/images/mp4-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp4-upload.png'); ?>" />
+                                                    <span class="media-info">Product Survey Audio</span>
+                                                </a>
+                                                    <input type="hidden" name="product_survey_audio" value="<?php echo $product_survey_audio; ?>" id="input-audio" />
+                                                </div>
+                                            </div>
+											<div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_survey_pdf)? site_url($medisUrl.'/'.$product_survey_pdf):"#"; ?>" id="thumb-pdf" data-toggle="image" class="img-thumbnail" mime-type="pdf">
+                                                    <img src="<?php echo !empty($product_survey_pdf)? site_url('assets/images/mp4.jpg'):site_url('assets/images/mp4-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp4-upload.png'); ?>" />
+                                                    <span class="media-info">Product Survey PDF</span>
+                                                </a>
+                                                    <input type="hidden" name="product_survey_pdf" value="<?php echo $product_survey_pdf; ?>" id="input-pdf" />
+                                                </div>
+                                            </div>
+											<div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_survey_image)? site_url($medisUrl.'/'.$product_survey_image):"#"; ?>" id="thumb-image" data-toggle="image" class="img-thumbnail" mime-type="image">
+                                                    <img src="<?php echo !empty($product_survey_image)? site_url('assets/images/mp4.jpg'):site_url('assets/images/mp4-upload.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/mp4-upload.png'); ?>" />
+                                                    <span class="media-info">Product Survey Image</span>
+                                                </a>
+                                                    <input type="hidden" name="product_survey_image" value="<?php echo $product_survey_image; ?>" id="input-image" />
                                                 </div>
                                             </div>
                                             <div class="col-sm-2">
@@ -182,22 +237,43 @@ $medisUrl = $this->config->item('media_location');
 							    <label for="form-field-description">Product Video Response Loyalty Points : <input type="text" name="product_video_response_lps" id="product_video_response_lps" value="<?php echo $product_video_response_lps; ?>" /></label>
 								<label for="form-field-description"> FbQQ  : <input type="text" name="product_video_response_fbqq" id="product_video_response_fbqq" value="<?php echo $product_video_response_fbqq; ?>" /></label>
 								<br />
-								 <label for="form-field-description">Product Ad Response Loyalty Points : <input type="text" name="product_ad_response_lps" id="product_ad_response_lps" value="<?php echo $product_ad_response_lps; ?>" /></label>
-								 <label for="form-field-description"> FbQQ  : <input type="text" name="product_ad_response_fbqq" id="product_ad_response_fbqq" value="<?php echo $product_ad_response_fbqq; ?>" /></label>
+								 <label for="form-field-description">Product Ad Video Response Loyalty Points : <input type="text" name="product_ad_video_response_lps" id="product_ad_video_response_lps" value="<?php echo $product_ad_video_response_lps; ?>" /></label>
+								 <label for="form-field-description"> FbQQ  : <input type="text" name="product_ad_video_response_fbqq" id="product_ad_video_response_fbqq" value="<?php echo $product_ad_video_response_fbqq; ?>" /></label>
 								 <br />
-								  <label for="form-field-description">Product Survey Response Loyalty Points : <input type="text" name="product_survey_response_lps" id="product_survey_response_lps" value="<?php echo $product_survey_response_lps; ?>" /></label>
-								  <label for="form-field-description"> FbQQ  : <input type="text" name="product_survey_response_fbqq" id="product_survey_response_fbqq" value="<?php echo $product_survey_response_fbqq; ?>" /></label>
+								 <label for="form-field-description">Product Ad audio Response Loyalty Points : <input type="text" name="product_ad_audio_response_lps" id="product_ad_audio_response_lps" value="<?php echo $product_ad_audio_response_lps; ?>" /></label>
+								 <label for="form-field-description"> FbQQ  : <input type="text" name="product_ad_audio_response_fbqq" id="product_ad_audio_response_fbqq" value="<?php echo $product_ad_audio_response_fbqq; ?>" /></label>
+								 <br />
+								 <label for="form-field-description">Product Ad PDF Response Loyalty Points : <input type="text" name="product_ad_pdf_response_lps" id="product_ad_pdf_response_lps" value="<?php echo $product_ad_pdf_response_lps; ?>" /></label>
+								 <label for="form-field-description"> FbQQ  : <input type="text" name="product_ad_pdf_response_fbqq" id="product_ad_pdf_response_fbqq" value="<?php echo $product_ad_pdf_response_fbqq; ?>" /></label>
+								 <br />
+								 <label for="form-field-description">Product Ad image Response Loyalty Points : <input type="text" name="product_ad_image_response_lps" id="product_ad_image_response_lps" value="<?php echo $product_ad_image_response_lps; ?>" /></label>
+								 <label for="form-field-description"> FbQQ  : <input type="text" name="product_ad_image_response_fbqq" id="product_ad_image_response_fbqq" value="<?php echo $product_ad_image_response_fbqq; ?>" /></label>
+								 <br />
+								  <label for="form-field-description">Product Survey Video Response Loyalty Points : <input type="text" name="product_survey_video_response_lps" id="product_survey_video_response_lps" value="<?php echo $product_survey_video_response_lps; ?>" /></label>
+								  <label for="form-field-description"> FbQQ  : <input type="text" name="product_survey_video_response_fbqq" id="product_survey_video_response_fbqq" value="<?php echo $product_survey_video_response_fbqq; ?>" /></label>
 								  <br />
 								  
-								   <label for="form-field-description">Product Survey Response Loyalty Points : <input type="text" name="product_pdf_response_lps" id="product_pdf_response_lps" value="<?php echo $product_pdf_response_lps; ?>" /></label>
+								   <label for="form-field-description">Product Survey Audio Response Loyalty Points : <input type="text" name="product_survey_audio_response_lps" id="product_survey_audio_response_lps" value="<?php echo $product_survey_audio_response_lps; ?>" /></label>
+								  <label for="form-field-description"> FbQQ  : <input type="text" name="product_survey_audio_response_fbqq" id="product_survey_audio_response_fbqq" value="<?php echo $product_survey_audio_response_fbqq; ?>" /></label>
+								  <br />
+								  
+								   <label for="form-field-description">Product Survey PDF Response Loyalty Points : <input type="text" name="product_survey_pdf_response_lps" id="product_survey_pdf_response_lps" value="<?php echo $product_survey_pdf_response_lps; ?>" /></label>
+								  <label for="form-field-description"> FbQQ  : <input type="text" name="product_survey_pdf_response_fbqq" id="product_survey_pdf_response_fbqq" value="<?php echo $product_survey_pdf_response_fbqq; ?>" /></label>
+								  <br />
+								  
+								   <label for="form-field-description">Product Survey Image Response Loyalty Points : <input type="text" name="product_survey_image_response_lps" id="product_survey_image_response_lps" value="<?php echo $product_survey_image_response_lps; ?>" /></label>
+								  <label for="form-field-description"> FbQQ  : <input type="text" name="product_survey_image_response_fbqq" id="product_survey_image_response_fbqq" value="<?php echo $product_survey_image_response_fbqq; ?>" /></label>
+								  <br />
+								  
+								   <label for="form-field-description">Product Image Response Loyalty Points : <input type="text" name="product_pdf_response_lps" id="product_pdf_response_lps" value="<?php echo $product_pdf_response_lps; ?>" /></label>
 								   <label for="form-field-description"> FbQQ  : <input type="text" name="product_image_response_lps" id="product_image_response_lps" value="<?php echo $product_image_response_lps; ?>" /></label>
 								   <br />
 								   
-								    <label for="form-field-description">Product Survey Response Loyalty Points : <input type="text" name="product_demo_video_response_lps" id="product_demo_video_response_lps" value="<?php echo $product_demo_video_response_lps; ?>" /></label>
+								    <label for="form-field-description">Product Demo Video Response Loyalty Points : <input type="text" name="product_demo_video_response_lps" id="product_demo_video_response_lps" value="<?php echo $product_demo_video_response_lps; ?>" /></label>
 									<label for="form-field-description"> FbQQ  : <input type="text" name="product_demo_video_response_fbqq" id="product_demo_video_response_fbqq" value="<?php echo $product_demo_video_response_fbqq; ?>" /></label>
 									<br />
 									
-									 <label for="form-field-description">Product Survey Response Loyalty Points : <input type="text" name="product_demo_audio_response_lps" id="product_demo_audio_response_lps" value="<?php echo $product_demo_audio_response_lps; ?>" /></label>
+									 <label for="form-field-description">Product Demo Audio Response Loyalty Points : <input type="text" name="product_demo_audio_response_lps" id="product_demo_audio_response_lps" value="<?php echo $product_demo_audio_response_lps; ?>" /></label>
 									 <label for="form-field-description"> FbQQ  : <input type="text" name="product_image_response_lps" id="product_image_response_lps" value="<?php echo $product_image_response_lps; ?>" /></label>
 									 <br />
 									<label for="form-field-description">Add Product Description :</label><br />

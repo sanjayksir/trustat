@@ -35,8 +35,8 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 $fields = array (
         'to' => $id,
          
-         'notification' => array('title' => 'howzzt notification', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
-				  'data' => array('title' => 'howzzt notification', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
+         'notification' => array('title' => 'TRUSTAT notification', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+				  'data' => array('title' => 'TRUSTAT notification', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
        
 );
 $fields = json_encode ( $fields );
@@ -195,7 +195,7 @@ return $result;
     }
 	
 	
-	public function isHowzztMember($phone_numberr) {
+	public function ishowzztMember($phone_numberr) {
 		
 		 $query = $this->db->get_where('consumers', array('mobile_no' => $phone_numberr)); 
 
@@ -299,7 +299,10 @@ return $result;
         foreach($query as $row){
             $item = [
 				'cpm_type_name' => $row->cpm_type_name,
+				'cpm_type_slug' => $row->cpm_type_slug,
 				'cpm_name' => $row->cpm_name,
+				'cpm_slug' => $row->cpm_slug,
+				'profile_bucket' => $row->profile_bucket,
             ];
                        
             $items[] = $item;

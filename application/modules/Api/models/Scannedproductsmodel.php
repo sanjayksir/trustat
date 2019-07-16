@@ -92,18 +92,27 @@ class ScannedproductsModel extends CI_Model {
         foreach($query as $row){
             $item = [
                 'product_id' => $row->product_id,
+				'promotion_id' => $row->promotion_id,
 				'product_name' => $row->product_name,
+				'promotion_type' => $row->promotion_type,
+				'media_type' => $row->media_type,
 				'push_date' => $row->ad_push_date,
 				'promotion_title' => $row->promotion_title,
 				'brand_name' => $row->brand_name,
-				'product_ad_response_fbqq' => $row->product_ad_response_fbqq,
+				'product_ad_video_response_fbqq' => $row->product_ad_video_response_fbqq,
+				'product_ad_audio_response_fbqq' => $row->product_ad_audio_response_fbqq,
+				'product_ad_pdf_response_fbqq' => $row->product_ad_pdf_response_fbqq,
+				'product_ad_image_response_fbqq' => $row->product_ad_image_response_fbqq,
 				//'product_demo_audio_response_fbqq' => $row->product_demo_audio_response_fbqq,
                // 'ad_active' => Utils::exists('push_advertisements', ['product_id'=>$row->id,'consumer_id'=>$consumer_id]),
             ];
            
 		  // $consumerId = $row->id;
 		   $product_id = $row->product_id;
-			$item['isGiven'] = $this->isLoyaltyForProductPushedAdFeedbackQuesGiven($consumer_id, $product_id);
+			$item['isPushedAdVideoFeedbackGiven'] = $this->isLoyaltyForProductPushedAdVideoFeedbackQuesGiven($consumer_id, $product_id);
+			$item['isPushedAdAudioFeedbackGiven'] = $this->isLoyaltyForProductPushedAdAudioFeedbackQuesGiven($consumer_id, $product_id);
+			$item['isPushedAdPDFFeedbackGiven'] = $this->isLoyaltyForProductPushedAdPDFFeedbackQuesGiven($consumer_id, $product_id);
+			$item['isPushedAdImageFeedbackGiven'] = $this->isLoyaltyForProductPushedAdImageFeedbackQuesGiven($consumer_id, $product_id);
             if(!empty($row->product_thumb_images)){
                 $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
             }else{
@@ -115,11 +124,26 @@ class ScannedproductsModel extends CI_Model {
                 $item['product_images'] = '';
             }
             if(!empty($row->product_push_ad_video)){
-                $item['product_video'] = Utils::setFileUrl($row->product_push_ad_video);
+                $item['product_push_ad_video'] = Utils::setFileUrl($row->product_push_ad_video);
             }else{
-                $item['product_video'] = '';
+                $item['product_push_ad_video'] = '';
             }
-            
+            if(!empty($row->product_push_ad_audio)){
+                $item['product_push_ad_audio'] = Utils::setFileUrl($row->product_push_ad_audio);
+            }else{
+                $item['product_push_ad_audio'] = '';
+            }
+			if(!empty($row->product_push_ad_pdf)){
+                $item['product_push_ad_pdf'] = Utils::setFileUrl($row->product_push_ad_pdf);
+            }else{
+                $item['product_push_ad_pdf'] = '';
+            }
+			if(!empty($row->product_push_ad_image)){
+                $item['product_push_ad_image'] = Utils::setFileUrl($row->product_push_ad_image);
+            }else{
+                $item['product_push_ad_image'] = '';
+            }
+			
             $items[] = $item;
         }
         return $items;
@@ -133,8 +157,8 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 $fields = array (
         'to' => $id,
          
-         'notification' => array('title' => 'howzzt Ad', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
-		 'data' => array('title' => 'howzzt Ad', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
+         'notification' => array('title' => 'TRUSTAT Ad', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+		 'data' => array('title' => 'TRUSTAT Ad', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
        
 );
 $fields = json_encode ( $fields );
@@ -185,19 +209,46 @@ return $result;
         foreach($query as $row){
             $item = [
                 'product_id' => $row->product_id,
+				'promotion_id' => $row->promotion_id,
 				'product_name' => $row->product_name,
+				'promotion_type' => $row->promotion_type,
+				'media_type' => $row->media_type,
 				'push_date' => $row->survey_push_date,
 				'promotion_title' => $row->promotion_title,
 				'brand_name' => $row->brand_name,
-				'product_survey_response_fbqq' => $row->product_survey_response_fbqq,
+				'product_survey_video_response_fbqq' => $row->product_survey_video_response_fbqq,
+				'product_survey_audio_response_fbqq' => $row->product_survey_audio_response_fbqq,
+				'product_survey_pdf_response_fbqq' => $row->product_survey_pdf_response_fbqq,
+				'product_survey_image_response_fbqq' => $row->product_survey_image_response_fbqq,
 				//'product_demo_audio_response_fbqq' => $row->product_demo_audio_response_fbqq,
                // 'ad_active' => Utils::exists('push_advertisements', ['product_id'=>$row->id,'consumer_id'=>$consumer_id]),
             ];
 			
-			
 	//$consumerId = 29;
 	$product_id = $row->product_id;
-	$item['isGiven'] = $this->isLoyaltyForProductSurveyFeedbackQuesGiven($consumer_id, $product_id);
+	$customerId = get_customer_id_by_product_id($product_id);
+	$customer_purchased_points = total_approved_points2($customerId);
+	$customer_consumed_points = get_total_consumed_points($customerId);
+	$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customerId);
+	$customer_loyalty_balance = $customer_purchased_points - $customer_consumed_points;	
+	/*
+	if($customer_loyalty_type=="General"){
+				$item['GiveLoyalty'] = "Yes";
+			}else{
+			$item['GiveLoyalty'] = "No";
+			}
+		*/
+		/*
+		if($customer_loyalty_type=="General"){
+			if(($customer_loyalty_balance-($row->product_survey_video_response_lps))< 0){
+				$item['GiveLoyalty'] = "Yes";
+			} else{
+				$item['GiveLoyalty'] = "No";
+		    } } else {
+			$item['GiveLoyalty'] = "No";
+		}
+		*/
+	$item['isGiven'] = $this->isLoyaltyForProductSurveyVideoFeedbackQuesGiven($consumer_id, $product_id);
 			
 			$item['cid'] = $consumer_id;
 		
@@ -213,9 +264,24 @@ return $result;
                 $item['product_images'] = '';
             }
             if(!empty($row->product_survey_video)){
-                $item['product_video'] = Utils::setFileUrl($row->product_survey_video);
+                $item['product_survey_video'] = Utils::setFileUrl($row->product_survey_video);
             }else{
-                $item['product_video'] = '';
+                $item['product_survey_video'] = '';
+            }
+			if(!empty($row->product_survey_audio)){
+                $item['product_survey_audio'] = Utils::setFileUrl($row->product_survey_audio);
+            }else{
+                $item['product_survey_audio'] = '';
+            }
+			if(!empty($row->product_survey_pdf)){
+                $item['product_survey_pdf'] = Utils::setFileUrl($row->product_survey_pdf);
+            }else{
+                $item['product_survey_pdf'] = '';
+            }
+			if(!empty($row->product_survey_image)){
+                $item['product_survey_image'] = Utils::setFileUrl($row->product_survey_image);
+            }else{
+                $item['product_survey_image'] = '';
             }
             
             $items[] = $item;
@@ -231,8 +297,8 @@ $url = 'https://fcm.googleapis.com/fcm/send';
 $fields = array (
         'to' => $consumer_id,
          
-         'notification' => array('title' => 'howzzt Survey', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
-		 'data' => array('title' => 'howzzt survey', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
+         'notification' => array('title' => 'TRUSTAT Survey', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+		 'data' => array('title' => 'TRUSTAT survey', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
        
 );
 $fields = json_encode ( $fields );
@@ -359,9 +425,9 @@ return $result;
         return "Not Given";
     }
 	
-	// checking if the Loyalty given to the user on on Survey Product Pushed Ad Feedback type questions on code 
-    Public function isLoyaltyForProductPushedAdFeedbackQuesGiven($consumer_id, $product_id) {
-        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumer_id."' AND transaction_type='product_ad_response_lps'");
+	// checking if the Loyalty given to the user on on Advertisement Video Product Pushed Ad Feedback type questions on code 
+    Public function isLoyaltyForProductPushedAdVideoFeedbackQuesGiven($consumer_id, $product_id, $promotion_id) {
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumer_id."' AND transaction_type='product_ad_video_response_lps' AND transaction_type='".$promotion_id."'");
         if($answerQuery->num_rows() > 0){
             $dataItems = $answerQuery->result();
             foreach($dataItems as $row){
@@ -378,9 +444,133 @@ return $result;
         return "Not Given";
     }
 	
-	// checking if the Loyalty given to the user on on Product Survey Feedback type questions on code 
-    Public function isLoyaltyForProductSurveyFeedbackQuesGiven($consumerId, $product_id) {
-        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_survey_response_lps'");
+		// checking if the Loyalty given to the user on on Advertisement Audio Product Pushed Ad Feedback type questions on code 
+    Public function isLoyaltyForProductPushedAdAudioFeedbackQuesGiven($consumer_id, $product_id, $promotion_id) {
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumer_id."' AND transaction_type='product_ad_video_response_lps' AND transaction_type='".$promotion_id."'");
+        if($answerQuery->num_rows() > 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                if(($paramsValue['product_id'] == $product_id)){
+                    $row->params = $paramsValue;
+                    if($paramsValue != ''){
+						//return $row;
+						return "Given";
+					}
+                }                
+            }
+        }
+        return "Not Given";
+    }
+	
+		// checking if the Loyalty given to the user on on Advertisement PDF Product Pushed Ad Feedback type questions on code 
+    Public function isLoyaltyForProductPushedAdPDFFeedbackQuesGiven($consumer_id, $product_id, $promotion_id) {
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumer_id."' AND transaction_type='product_ad_video_response_lps' AND transaction_type='".$promotion_id."'");
+        if($answerQuery->num_rows() > 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                if(($paramsValue['product_id'] == $product_id)){
+                    $row->params = $paramsValue;
+                    if($paramsValue != ''){
+						//return $row;
+						return "Given";
+					}
+                }                
+            }
+        }
+        return "Not Given";
+    }
+	
+		// checking if the Loyalty given to the user on on Advertisement Image Product Pushed Ad Feedback type questions on code 
+    Public function isLoyaltyForProductPushedAdImageFeedbackQuesGiven($consumer_id, $product_id, $promotion_id) {
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumer_id."' AND transaction_type='product_ad_video_response_lps' AND transaction_type='".$promotion_id."'");
+        if($answerQuery->num_rows() > 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                if(($paramsValue['product_id'] == $product_id)){
+                    $row->params = $paramsValue;
+                    if($paramsValue != ''){
+						//return $row;
+						return "Given";
+					}
+                }                
+            }
+        }
+        return "Not Given";
+    }
+	
+	// checking if the Loyalty given to the user on on Product Video Survey Feedback type questions on code 
+    Public function isLoyaltyForProductSurveyVideoFeedbackQuesGiven($consumerId, $product_id, $promotion_id) {
+       // $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_survey_video_response_lps'");
+		$answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_survey_video_response_lps' AND transaction_type='".$promotion_id."'");
+        if($answerQuery->num_rows() > 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                if(($paramsValue['product_id'] == $product_id)){
+                    $row->params = $paramsValue;
+					if($paramsValue != ''){
+						//return $row;
+						return "Given";
+					}
+					
+                    
+                }                
+            }
+        }
+        return "Not Given";
+    }
+	
+	// checking if the Loyalty given to the user on on Product Audio Survey Feedback type questions on code 
+    Public function isLoyaltyForProductSurveyAudioFeedbackQuesGiven($consumerId, $product_id, $promotion_id) {
+       // $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_survey_video_response_lps'");
+		$answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_survey_video_response_lps' AND transaction_type='".$promotion_id."'");
+        if($answerQuery->num_rows() > 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                if(($paramsValue['product_id'] == $product_id)){
+                    $row->params = $paramsValue;
+					if($paramsValue != ''){
+						//return $row;
+						return "Given";
+					}
+					
+                    
+                }                
+            }
+        }
+        return "Not Given";
+    }
+	
+	// checking if the Loyalty given to the user on on Product PDF Survey Feedback type questions on code 
+    Public function isLoyaltyForProductSurveyPDFFeedbackQuesGiven($consumerId, $product_id, $promotion_id) {
+       // $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_survey_video_response_lps'");
+		$answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_survey_video_response_lps' AND transaction_type='".$promotion_id."'");
+        if($answerQuery->num_rows() > 0){
+            $dataItems = $answerQuery->result();
+            foreach($dataItems as $row){
+                $paramsValue = json_decode($row->params,true);                
+                if(($paramsValue['product_id'] == $product_id)){
+                    $row->params = $paramsValue;
+					if($paramsValue != ''){
+						//return $row;
+						return "Given";
+					}
+					
+                    
+                }                
+            }
+        }
+        return "Not Given";
+    }
+	
+	// checking if the Loyalty given to the user on on Product Image Survey Feedback type questions on code 
+    Public function isLoyaltyForProductSurveyImageFeedbackQuesGiven($consumerId, $product_id, $promotion_id) {
+       // $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_survey_video_response_lps'");
+		$answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_survey_video_response_lps' AND transaction_type='".$promotion_id."'");
         if($answerQuery->num_rows() > 0){
             $dataItems = $answerQuery->result();
             foreach($dataItems as $row){

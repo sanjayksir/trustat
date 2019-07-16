@@ -56,8 +56,14 @@
 													<input type="hidden" name="all_product_demo_video_list[]" id="all_product_demo_video_list" value="" />
 													
 													<input type="hidden" name="all_product_push_ad_video_list[]" id="all_product_push_ad_video_list" value="" />
+													<input type="hidden" name="all_product_push_ad_audio_list[]" id="all_product_push_ad_audio_list" value="" />
+													<input type="hidden" name="all_product_push_ad_pdf_list[]" id="all_product_push_ad_pdf_list" value="" />
+													<input type="hidden" name="all_product_push_ad_image_list[]" id="all_product_push_ad_image_list" value="" />
 													
 													<input type="hidden" name="all_product_survey_video_list[]" id="all_product_survey_video_list" value="" />
+													<input type="hidden" name="all_product_survey_audio_list[]" id="all_product_survey_audio_list" value="" />
+													<input type="hidden" name="all_product_survey_pdf_list[]" id="all_product_survey_pdf_list" value="" />
+													<input type="hidden" name="all_product_survey_image_list[]" id="all_product_survey_image_list" value="" />
 													
                                                     <input type="hidden" name="all_product_demo_audio_list[]" id="all_product_demo_audio_list" value="" />
                                                     <input type="hidden" name="all_product_user_manual_list[]" id="all_product_user_manual_list" value="" />

@@ -221,6 +221,8 @@
 
 </div>
 
+
+ <?php $unique_system_selection_criteria_id = $this->uri->segment(3); ?>
 <script>
 
 	$(document).ready(function() {
@@ -294,26 +296,26 @@
 	$("form#user_frm").validate({
 
 		rules: {
-  			promotion_type:{
- 						 required: true, 
+  			name_of_selection_criteria:{
+ 						 required: true /*, 
 						 remote: {
 
                        	 	url: "<?php echo base_url().'consumer/';?>checkPromotionType",
                           	type: "post",
  							data: {  criteriaid: $( "#criteria_id" ).val() }
 
-                    	 } 
+                    	 } */
 
 					  },
 
 			},
 
-		messages: {
+		name_of_selection_criteria: {
  
 				promotion_type: {
 
-					required: "Please Select Consumer Selection Criteria.",
-					remote: "You have already added this Promotion Type!"
+					required: "Consumer Selection Criteria Name is required."
+					//remote: "You have already added this Promotion Type!"
 
 				}, 
 
@@ -340,17 +342,17 @@
 						$('#ajax_msg').text("Operation Successfull!").css("color","green").show();
 						$('#blah').attr('src', '').hide();
 						$('#user_frm')[0].reset(); 
-						  window.location.href="<?php echo base_url(); ?>consumer/list_consumer_selection_criterias/";						
+						  window.location.href="<?php echo base_url(); ?>consumer/number_of_consumers_selected/<?php echo $unique_system_selection_criteria_id; ?>";						
 					}
 					else if(parseInt(msg)==2){
 						$('#ajax_msg').text("Consumer Selection Criteria Aalready Exists!").css("color","red").show();
-  					      window.location.href="<?php echo base_url(); ?>consumer/list_consumer_selection_criterias/";						
+  					  window.location.href="<?php echo base_url(); ?>consumer/number_of_consumers_selected/<?php echo $unique_system_selection_criteria_id; ?>";						
 					}
 					else{
 						$('#ajax_msg').text("Error in saving data!").css("color","red").show();
 						$('#blah').attr('src', '').hide();
 						$('#user_frm')[0].reset(); 
-						 window.location.href="<?php echo base_url(); ?>consumer/list_consumer_selection_criterias/";						
+						 window.location.href="<?php echo base_url(); ?>consumer/number_of_consumers_selected/<?php echo $unique_system_selection_criteria_id; ?>";						
 					}
 				},
 				complete: function(){

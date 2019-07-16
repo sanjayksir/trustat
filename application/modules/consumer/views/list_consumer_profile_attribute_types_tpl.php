@@ -6,9 +6,9 @@
 			</script>
 			<?php 
 			if($this->session->userdata('admin_user_id')==1){
-				$label = 'Consumer Profile Attribute Type';
+				$label = 'Consumer Profile';
 			}else{
-				$label = 'Consumer Profile Attribute Type';
+				$label = 'Consumer Profile';
 			}
 			?>
 
@@ -52,9 +52,10 @@
 							<div class="col-xs-12">
  								<div class="widget-box widget-color-blue">
                                                                     <div class="widget-header widget-header-flat">
-                                                                    <h5 class="widget-title bigger lighter">List <?php echo $label;?>s</h5>
+                                                                    <h5 class="widget-title bigger lighter">List <?php echo $label;?></h5>
                                                                     <div class="widget-toolbar">
-                                                                <a href="<?php echo base_url('consumer/add_consumer_profile_attribute_type') ?>" class="btn btn-xs btn-warning" title="Add User">Add <?php echo $label; ?> </a>
+                                                                <a href="<?php echo base_url('consumer/list_consumer_profile_attribute_types') ?>" class="btn btn-xs btn-warning" title="Add User">Add Consumer Profile QUERY <?php // echo $label; ?> </a> | <a href="<?php echo base_url('consumer/add_consumer_profile_attribute') ?>" class="btn btn-xs btn-warning" title="Add User">Add Consumer Profile RESPONSES <?php //echo //$label; ?> </a> 
+                                                                    </div>
                                                                     </div>
                                                                 </div>
 									<div class="widget-body">
@@ -78,7 +79,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="input-group">
-                        <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Attributes Type or Attributes Name">
+                        <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Consumer Profile QUERY">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                             <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -94,8 +95,9 @@
                             <thead>
                                     <tr>
                                             <th>#</th>
-                                            <th>Attributes Type Name</th>                                           
-                                            <th>Action</th>
+                                            <th>Consumer Profile QUERY</th>    
+											<th>Profile Bucket</th>	
+                                            <th>Edit</th>
                                     </tr>
                             </thead>
                             <tbody>
@@ -117,6 +119,7 @@
 										<tr id="show<?php echo $listData['cpm_id']; ?>">
                                            <td><?php echo $sno;$sno++; ?></td>
                                            <td><?php echo $listData['cpatm_name']; ?></td>
+										   <td><?php echo $listData['profile_bucket']; ?></td>
                                           
 										   
 
@@ -129,7 +132,7 @@
                                                        <!-- <a href="<?php //echo base_url().'consumer/view_consumer_profile_attribute/'.$listData['cpm_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>-->
                                 <?php echo anchor("consumer/edit_consumer_profile_attribute_type/" . $listData['cpatm_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>
 														 
-                                                       <a title="Delete User" href="javascript:void(0);" onclick="return confirmDelete('<?php echo base64_encode($listData['cpatm_id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
+                                                      <!-- <a title="Delete User" href="javascript:void(0);" onclick="return confirmDelete('<?php //echo base64_encode($listData['cpatm_id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a> -->
                                                     </div>
 
                                                 </td>

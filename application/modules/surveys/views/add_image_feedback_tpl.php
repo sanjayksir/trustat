@@ -20,11 +20,11 @@
 			<select name="QuestionType" id="questiontype" class="form-control">
               <option value="0">-Select Question Type</option>
 				           
-                    <option value="Product Description Feedback">Product Description Feedback</option>
-					<option value="Product Image Feedback" selected>Product Image Feedback</option>
-					<option value="Product Video Feedback">Product Video Feedback</option>
-					<option value="Product Audio Feedback">Product Audio Feedback</option>
-					<option value="Product PDF Feedback">Product PDF Feedback</option>
+                    <!--<option value="Product Description Feedback">Product Description Feedback</option>-->
+					<option value="Product" selected>Product Image Feedback</option>
+					<option value="Product">Product Video Feedback</option>
+					<option value="Product">Product Audio Feedback</option>
+					<option value="Product">Product PDF Feedback</option>
                   
              </select>
 			 

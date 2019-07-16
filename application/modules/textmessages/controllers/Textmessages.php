@@ -816,7 +816,7 @@ function list_assigned_Advertisements() {
 		 $this->Textmessage_model->sendFCM("An Advertisement Posted!!..", $fb_token);
 		 
 		 $NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "howzzt text message";
+			$NTFdata['title'] = "TRUSTAT text message";
 			$NTFdata['body'] = "A Text Message Posted!!.."; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
 			$NTFdata['status'] = 1; 
@@ -831,7 +831,7 @@ function list_assigned_Advertisements() {
 	function reverse_birthday( $years ){
 			return date('Y-m-d', strtotime($years . ' years ago'));
 							}
-							
+/*							
 	function AllSelectedConsumersByACustomer2($customer_id, $csc_consumer_gender, $csc_consumer_city){
 		$this->db->select('C.id');	
 		$this->db->from('consumers C');		
@@ -846,7 +846,301 @@ function list_assigned_Advertisements() {
 		$this->db->where('C.city', $csc_consumer_city);
 			}
 			
-			$query = $this->db->get();
+		$query = $this->db->get();
+		$result = $query->result();
+		return $result;
+}
+*/
+
+function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_criteria){
+	   	
+			
+		$this->db->select('C.id');	
+		$this->db->from('consumers C');		
+		$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		$this->db->where('CCL.customer_id', $customer_id);
+		
+		
+		
+		$query = $this->db->query("SELECT * FROM consumer_selection_criteria WHERE unique_system_selection_criteria_id =  '$consumer_selection_criteria'");
+		$row = $query->row();
+		//$row->item_id
+		
+		//$this->db->where('CCL.customer_id', $customer_id);
+		
+		if($row->consumer_gender!='all') {
+		$this->db->where('C.gender', $row->consumer_gender);
+			}
+		if($row->consumer_city!='all') {
+		$this->db->where('C.city', $row->consumer_city);
+			}
+		
+		$consumer_min_dob = date('Y-m-d', strtotime('-' . $row->consumer_min_age . ' years'));
+		$consumer_max_dob = date('Y-m-d', strtotime('-' . $row->consumer_max_age . ' years'));
+		
+		if(!empty($row->consumer_max_age)){ 
+		$this->db->where('C.dob >=', $consumer_max_dob);
+		//$this->db->or_where('C.dob =', 'NULL');
+			}
+		if(!empty($row->consumer_min_age)){ 
+		$this->db->where('C.dob <=', $consumer_min_dob);
+		//$this->db->or_where('C.dob =', 'NULL');
+			}
+			
+			/*
+			$arr = explode(' ',trim($earned_loyalty_points_clubbed));
+			$ELP_from = $arr[0];
+			$ELP_to = $arr[2];			
+			if($earned_loyalty_points_clubbed!='all') { 
+			$this->db->where('C.total_accumulated_points BETWEEN "'. $ELP_from . '" and "'. $ELP_to .'"');
+				}
+			*/
+			$arr1 = explode(' ',trim($row->monthly_earnings));
+			$ME_from = $arr1[0];
+			$ME_to = $arr1[2];			
+			if($row->monthly_earnings!='all') { $this->db->where('C.monthly_earnings BETWEEN "'. $ME_from . '" and "'. $ME_to .'"');}	
+						
+			if($row->job_profile!='all') { $this->db->where('C.job_profile', $row->job_profile); }
+			if($row->education_qualification!='all') { $this->db->where('C.education_qualification', $row->education_qualification); }
+			if($row->type_vehicle!='all') { $this->db->where('C.type_vehicle', $row->type_vehicle); }
+			if($row->profession!='all') { $this->db->where('C.profession', $row->profession); }
+			if($row->marital_status!='all') { $this->db->where('C.marital_status', $row->marital_status); }
+			if($row->no_of_family_members!='all') { $this->db->where('C.no_of_family_members', $row->no_of_family_members); }
+			if($row->loan_car!='all') { $this->db->where('C.loan_car', $row->loan_car); }
+			if($row->loan_housing!='all') { $this->db->where('C.loan_housing', $row->loan_housing); }
+			if($row->personal_loan!='all') { $this->db->where('C.personal_loan', $row->personal_loan); }
+			if($row->credit_card_loan!='all') { $this->db->where('C.credit_card_loan', $row->credit_card_loan); }
+			if($row->own_a_car!='all') { $this->db->where('C.own_a_car', $row->own_a_car); }
+			if($row->house_type!='all') { $this->db->where('C.house_type', $row->house_type); }
+			if($row->last_location!='all') { $this->db->where('C.last_location', $row->last_location); }
+			if($row->life_insurance!='all') { $this->db->where('C.life_insurance', $row->life_insurance); }
+			if($row->medical_insurance!='all') { $this->db->where('C.medical_insurance', $row->medical_insurance); }
+			if($row->height_in_inches!='all') { $this->db->where('C.height_in_inches', $row->height_in_inches); }
+			if($row->weight_in_kg!='all') { $this->db->where('C.weight_in_kg', $row->weight_in_kg); }
+			if($row->hobbies!='all') { $this->db->where('C.hobbies', $row->hobbies); }
+			if($row->sports!='all') { $this->db->where('C.sports', $row->sports); }
+			if($row->entertainment!='all') { $this->db->where('C.entertainment', $row->entertainment); }
+			if($row->spouse_gender!='all') { $this->db->where('C.spouse_gender', $row->spouse_gender); }
+			if($row->spouse_phone!='all') { $this->db->where('C.spouse_phone', $row->spouse_phone); }
+			if($row->spouse_dob!='all') { $this->db->where('C.spouse_dob', $row->spouse_dob); }
+			if($row->marriage_anniversary!='all') { $this->db->where('C.marriage_anniversary', $row->marriage_anniversary); }
+			if($row->spouse_work_status!='all') { $this->db->where('C.spouse_work_status', $row->spouse_work_status); }
+			if($row->spouse_edu_qualification!='all') { $this->db->where('C.spouse_edu_qualification', $row->spouse_edu_qualification); }
+			if($row->spouse_monthly_income!='all') { $this->db->where('C.spouse_monthly_income', $row->spouse_monthly_income); }
+			if($row->spouse_loan!='all') { $this->db->where('C.spouse_loan', $row->spouse_loan); }
+			if($row->spouse_personal_loan!='all') { $this->db->where('C.spouse_personal_loan', $row->spouse_personal_loan); }
+			if($row->spouse_credit_card_loan!='all') { $this->db->where('C.spouse_credit_card_loan', $row->spouse_credit_card_loan); }
+			if($row->spouse_own_a_car!='all') { $this->db->where('C.spouse_own_a_car', $row->spouse_own_a_car); }
+			if($row->spouse_house_type!='all') { $this->db->where('C.spouse_house_type', $row->spouse_house_type); }
+			if($row->spouse_height_inches!='all') { $this->db->where('C.spouse_height_inches', $row->spouse_height_inches); }
+			if($row->spouse_weight_kg!='all') { $this->db->where('C.spouse_weight_kg', $row->spouse_weight_kg); }
+			if($row->spouse_hobbies!='all') { $this->db->where('C.spouse_hobbies', $row->spouse_hobbies); }
+			if($row->spouse_sports!='all') { $this->db->where('C.spouse_sports', $row->spouse_sports); }
+			if($row->spouse_entertainment!='all') { $this->db->where('C.spouse_entertainment', $row->spouse_entertainment); }
+			if($row->field_1!='all') { $this->db->where('C.field_1', $row->field_1); }
+			if($row->field_2!='all') { $this->db->where('C.field_2', $row->field_2); }
+			if($row->field_3!='all') { $this->db->where('C.field_3', $row->field_3); }
+			if($row->field_4!='all') { $this->db->where('C.field_4', $row->field_4); }
+			if($row->field_5!='all') { $this->db->where('C.field_5', $row->field_5); }
+			if($row->field_6!='all') { $this->db->where('C.field_6', $row->field_6); }
+			if($row->field_7!='all') { $this->db->where('C.field_7', $row->field_7); }
+			if($row->field_8!='all') { $this->db->where('C.field_8', $row->field_8); }
+			if($row->field_9!='all') { $this->db->where('C.field_9', $row->field_9); }
+			if($row->field_10!='all') { $this->db->where('C.field_10', $row->field_10); }
+			if($row->field_11!='all') { $this->db->where('C.field_11', $row->field_11); }
+			if($row->field_12!='all') { $this->db->where('C.field_12', $row->field_12); }
+			if($row->field_13!='all') { $this->db->where('C.field_13', $row->field_13); }
+			if($row->field_14!='all') { $this->db->where('C.field_14', $row->field_14); }
+			if($row->field_15!='all') { $this->db->where('C.field_15', $row->field_15); }
+			if($row->field_16!='all') { $this->db->where('C.field_16', $row->field_16); }
+			if($row->field_17!='all') { $this->db->where('C.field_17', $row->field_17); }
+			if($row->field_18!='all') { $this->db->where('C.field_18', $row->field_18); }
+			if($row->field_19!='all') { $this->db->where('C.field_19', $row->field_19); }
+			if($row->field_20!='all') { $this->db->where('C.field_20', $row->field_20); }
+			if($row->field_21!='all') { $this->db->where('C.field_21', $row->field_21); }
+			if($row->field_22!='all') { $this->db->where('C.field_22', $row->field_22); }
+			if($row->field_23!='all') { $this->db->where('C.field_23', $row->field_23); }
+			if($row->field_24!='all') { $this->db->where('C.field_24', $row->field_24); }
+			if($row->field_25!='all') { $this->db->where('C.field_25', $row->field_25); }
+			if($row->field_26!='all') { $this->db->where('C.field_26', $row->field_26); }
+			if($row->field_27!='all') { $this->db->where('C.field_27', $row->field_27); }
+			if($row->field_28!='all') { $this->db->where('C.field_28', $row->field_28); }
+			if($row->field_29!='all') { $this->db->where('C.field_29', $row->field_29); }
+			if($row->field_30!='all') { $this->db->where('C.field_30', $row->field_30); }
+			if($row->field_31!='all') { $this->db->where('C.field_31', $row->field_31); }
+			if($row->field_32!='all') { $this->db->where('C.field_32', $row->field_32); }
+			if($row->field_33!='all') { $this->db->where('C.field_33', $row->field_33); }
+			if($row->field_34!='all') { $this->db->where('C.field_34', $row->field_34); }
+			if($row->field_35!='all') { $this->db->where('C.field_35', $row->field_35); }
+			if($row->field_36!='all') { $this->db->where('C.field_36', $row->field_36); }
+			if($row->field_37!='all') { $this->db->where('C.field_37', $row->field_37); }
+			if($row->field_38!='all') { $this->db->where('C.field_38', $row->field_38); }
+			if($row->field_39!='all') { $this->db->where('C.field_39', $row->field_39); }
+			if($row->field_40!='all') { $this->db->where('C.field_40', $row->field_40); }
+			if($row->field_41!='all') { $this->db->where('C.field_41', $row->field_41); }
+			if($row->field_42!='all') { $this->db->where('C.field_42', $row->field_42); }
+			if($row->field_43!='all') { $this->db->where('C.field_43', $row->field_43); }
+			if($row->field_44!='all') { $this->db->where('C.field_44', $row->field_44); }
+			if($row->field_45!='all') { $this->db->where('C.field_45', $row->field_45); }
+			if($row->field_46!='all') { $this->db->where('C.field_46', $row->field_46); }
+			if($row->field_47!='all') { $this->db->where('C.field_47', $row->field_47); }
+			if($row->field_48!='all') { $this->db->where('C.field_48', $row->field_48); }
+			if($row->field_49!='all') { $this->db->where('C.field_49', $row->field_49); }
+			if($row->field_50!='all') { $this->db->where('C.field_50', $row->field_50); }
+			if($row->field_51!='all') { $this->db->where('C.field_51', $row->field_51); }
+			if($row->field_52!='all') { $this->db->where('C.field_52', $row->field_52); }
+			if($row->field_53!='all') { $this->db->where('C.field_53', $row->field_53); }
+			if($row->field_54!='all') { $this->db->where('C.field_54', $row->field_54); }
+			if($row->field_55!='all') { $this->db->where('C.field_55', $row->field_55); }
+			if($row->field_56!='all') { $this->db->where('C.field_56', $row->field_56); }
+			if($row->field_57!='all') { $this->db->where('C.field_57', $row->field_57); }
+			if($row->field_58!='all') { $this->db->where('C.field_58', $row->field_58); }
+			if($row->field_59!='all') { $this->db->where('C.field_59', $row->field_59); }
+			if($row->field_60!='all') { $this->db->where('C.field_60', $row->field_60); }
+			if($row->field_61!='all') { $this->db->where('C.field_61', $row->field_61); }
+			if($row->field_62!='all') { $this->db->where('C.field_62', $row->field_62); }
+			if($row->field_63!='all') { $this->db->where('C.field_63', $row->field_63); }
+			if($row->field_64!='all') { $this->db->where('C.field_64', $row->field_64); }
+			if($row->field_65!='all') { $this->db->where('C.field_65', $row->field_65); }
+			if($row->field_66!='all') { $this->db->where('C.field_66', $row->field_66); }
+			if($row->field_67!='all') { $this->db->where('C.field_67', $row->field_67); }
+			if($row->field_68!='all') { $this->db->where('C.field_68', $row->field_68); }
+			if($row->field_69!='all') { $this->db->where('C.field_69', $row->field_69); }
+			if($row->field_70!='all') { $this->db->where('C.field_70', $row->field_70); }
+			if($row->field_71!='all') { $this->db->where('C.field_71', $row->field_71); }
+			if($row->field_72!='all') { $this->db->where('C.field_72', $row->field_72); }
+			if($row->field_73!='all') { $this->db->where('C.field_73', $row->field_73); }
+			if($row->field_74!='all') { $this->db->where('C.field_74', $row->field_74); }
+			if($row->field_75!='all') { $this->db->where('C.field_75', $row->field_75); }
+			if($row->field_76!='all') { $this->db->where('C.field_76', $row->field_76); }
+			if($row->field_77!='all') { $this->db->where('C.field_77', $row->field_77); }
+			if($row->field_78!='all') { $this->db->where('C.field_78', $row->field_78); }
+			if($row->field_79!='all') { $this->db->where('C.field_79', $row->field_79); }
+			if($row->field_80!='all') { $this->db->where('C.field_80', $row->field_80); }
+			if($row->field_81!='all') { $this->db->where('C.field_81', $row->field_81); }
+			if($row->field_82!='all') { $this->db->where('C.field_82', $row->field_82); }
+			if($row->field_83!='all') { $this->db->where('C.field_83', $row->field_83); }
+			if($row->field_84!='all') { $this->db->where('C.field_84', $row->field_84); }
+			if($row->field_85!='all') { $this->db->where('C.field_85', $row->field_85); }
+			if($row->field_86!='all') { $this->db->where('C.field_86', $row->field_86); }
+			if($row->field_87!='all') { $this->db->where('C.field_87', $row->field_87); }
+			if($row->field_88!='all') { $this->db->where('C.field_88', $row->field_88); }
+			if($row->field_89!='all') { $this->db->where('C.field_89', $row->field_89); }
+			if($row->field_90!='all') { $this->db->where('C.field_90', $row->field_90); }
+			if($row->field_91!='all') { $this->db->where('C.field_91', $row->field_91); }
+			if($row->field_92!='all') { $this->db->where('C.field_92', $row->field_92); }
+			if($row->field_93!='all') { $this->db->where('C.field_93', $row->field_93); }
+			if($row->field_94!='all') { $this->db->where('C.field_94', $row->field_94); }
+			if($row->field_95!='all') { $this->db->where('C.field_95', $row->field_95); }
+			if($row->field_96!='all') { $this->db->where('C.field_96', $row->field_96); }
+			if($row->field_97!='all') { $this->db->where('C.field_97', $row->field_97); }
+			if($row->field_98!='all') { $this->db->where('C.field_98', $row->field_98); }
+			if($row->field_99!='all') { $this->db->where('C.field_99', $row->field_99); }
+			if($row->field_100!='all') { $this->db->where('C.field_100', $row->field_100); }
+			if($row->field_101!='all') { $this->db->where('C.field_101', $row->field_101); }
+			if($row->field_102!='all') { $this->db->where('C.field_102', $row->field_102); }
+			if($row->field_103!='all') { $this->db->where('C.field_103', $row->field_103); }
+			if($row->field_104!='all') { $this->db->where('C.field_104', $row->field_104); }
+			if($row->field_105!='all') { $this->db->where('C.field_105', $row->field_105); }
+			if($row->field_106!='all') { $this->db->where('C.field_106', $row->field_106); }
+			if($row->field_107!='all') { $this->db->where('C.field_107', $row->field_107); }
+			if($row->field_108!='all') { $this->db->where('C.field_108', $row->field_108); }
+			if($row->field_109!='all') { $this->db->where('C.field_109', $row->field_109); }
+			if($row->field_110!='all') { $this->db->where('C.field_110', $row->field_110); }
+			if($row->field_111!='all') { $this->db->where('C.field_111', $row->field_111); }
+			if($row->field_112!='all') { $this->db->where('C.field_112', $row->field_112); }
+			if($row->field_113!='all') { $this->db->where('C.field_113', $row->field_113); }
+			if($row->field_114!='all') { $this->db->where('C.field_114', $row->field_114); }
+			if($row->field_115!='all') { $this->db->where('C.field_115', $row->field_115); }
+			if($row->field_116!='all') { $this->db->where('C.field_116', $row->field_116); }
+			if($row->field_117!='all') { $this->db->where('C.field_117', $row->field_117); }
+			if($row->field_118!='all') { $this->db->where('C.field_118', $row->field_118); }
+			if($row->field_119!='all') { $this->db->where('C.field_119', $row->field_119); }
+			if($row->field_120!='all') { $this->db->where('C.field_120', $row->field_120); }
+			if($row->field_121!='all') { $this->db->where('C.field_121', $row->field_121); }
+			if($row->field_122!='all') { $this->db->where('C.field_122', $row->field_122); }
+			if($row->field_123!='all') { $this->db->where('C.field_123', $row->field_123); }
+			if($row->field_124!='all') { $this->db->where('C.field_124', $row->field_124); }
+			if($row->field_125!='all') { $this->db->where('C.field_125', $row->field_125); }
+			if($row->field_126!='all') { $this->db->where('C.field_126', $row->field_126); }
+			if($row->field_127!='all') { $this->db->where('C.field_127', $row->field_127); }
+			if($row->field_128!='all') { $this->db->where('C.field_128', $row->field_128); }
+			if($row->field_129!='all') { $this->db->where('C.field_129', $row->field_129); }
+			if($row->field_130!='all') { $this->db->where('C.field_130', $row->field_130); }
+			if($row->field_131!='all') { $this->db->where('C.field_131', $row->field_131); }
+			if($row->field_132!='all') { $this->db->where('C.field_132', $row->field_132); }
+			if($row->field_133!='all') { $this->db->where('C.field_133', $row->field_133); }
+			if($row->field_134!='all') { $this->db->where('C.field_134', $row->field_134); }
+			if($row->field_135!='all') { $this->db->where('C.field_135', $row->field_135); }
+			if($row->field_136!='all') { $this->db->where('C.field_136', $row->field_136); }
+			if($row->field_137!='all') { $this->db->where('C.field_137', $row->field_137); }
+			if($row->field_138!='all') { $this->db->where('C.field_138', $row->field_138); }
+			if($row->field_139!='all') { $this->db->where('C.field_139', $row->field_139); }
+			if($row->field_140!='all') { $this->db->where('C.field_140', $row->field_140); }
+			if($row->field_141!='all') { $this->db->where('C.field_141', $row->field_141); }
+			if($row->field_142!='all') { $this->db->where('C.field_142', $row->field_142); }
+			if($row->field_143!='all') { $this->db->where('C.field_143', $row->field_143); }
+			if($row->field_144!='all') { $this->db->where('C.field_144', $row->field_144); }
+			if($row->field_145!='all') { $this->db->where('C.field_145', $row->field_145); }
+			if($row->field_146!='all') { $this->db->where('C.field_146', $row->field_146); }
+			if($row->field_147!='all') { $this->db->where('C.field_147', $row->field_147); }
+			if($row->field_148!='all') { $this->db->where('C.field_148', $row->field_148); }
+			if($row->field_149!='all') { $this->db->where('C.field_149', $row->field_149); }
+			if($row->field_150!='all') { $this->db->where('C.field_150', $row->field_150); }
+			if($row->field_151!='all') { $this->db->where('C.field_151', $row->field_151); }
+			if($row->field_152!='all') { $this->db->where('C.field_152', $row->field_152); }
+			if($row->field_153!='all') { $this->db->where('C.field_153', $row->field_153); }
+			if($row->field_154!='all') { $this->db->where('C.field_154', $row->field_154); }
+			if($row->field_155!='all') { $this->db->where('C.field_155', $row->field_155); }
+			if($row->field_156!='all') { $this->db->where('C.field_156', $row->field_156); }
+			if($row->field_157!='all') { $this->db->where('C.field_157', $row->field_157); }
+			if($row->field_158!='all') { $this->db->where('C.field_158', $row->field_158); }
+			if($row->field_159!='all') { $this->db->where('C.field_159', $row->field_159); }
+			if($row->field_160!='all') { $this->db->where('C.field_160', $row->field_160); }
+			if($row->field_161!='all') { $this->db->where('C.field_161', $row->field_161); }
+			if($row->field_162!='all') { $this->db->where('C.field_162', $row->field_162); }
+			if($row->field_163!='all') { $this->db->where('C.field_163', $row->field_163); }
+			if($row->field_164!='all') { $this->db->where('C.field_164', $row->field_164); }
+			if($row->field_165!='all') { $this->db->where('C.field_165', $row->field_165); }
+			if($row->field_166!='all') { $this->db->where('C.field_166', $row->field_166); }
+			if($row->field_167!='all') { $this->db->where('C.field_167', $row->field_167); }
+			if($row->field_168!='all') { $this->db->where('C.field_168', $row->field_168); }
+			if($row->field_169!='all') { $this->db->where('C.field_169', $row->field_169); }
+			if($row->field_170!='all') { $this->db->where('C.field_170', $row->field_170); }
+			if($row->field_171!='all') { $this->db->where('C.field_171', $row->field_171); }
+			if($row->field_172!='all') { $this->db->where('C.field_172', $row->field_172); }
+			if($row->field_173!='all') { $this->db->where('C.field_173', $row->field_173); }
+			if($row->field_174!='all') { $this->db->where('C.field_174', $row->field_174); }
+			if($row->field_175!='all') { $this->db->where('C.field_175', $row->field_175); }
+			if($row->field_176!='all') { $this->db->where('C.field_176', $row->field_176); }
+			if($row->field_177!='all') { $this->db->where('C.field_177', $row->field_177); }
+			if($row->field_178!='all') { $this->db->where('C.field_178', $row->field_178); }
+			if($row->field_179!='all') { $this->db->where('C.field_179', $row->field_179); }
+			if($row->field_180!='all') { $this->db->where('C.field_180', $row->field_180); }
+			if($row->field_181!='all') { $this->db->where('C.field_181', $row->field_181); }
+			if($row->field_182!='all') { $this->db->where('C.field_182', $row->field_182); }
+			if($row->field_183!='all') { $this->db->where('C.field_183', $row->field_183); }
+			if($row->field_184!='all') { $this->db->where('C.field_184', $row->field_184); }
+			if($row->field_185!='all') { $this->db->where('C.field_185', $row->field_185); }
+			if($row->field_186!='all') { $this->db->where('C.field_186', $row->field_186); }
+			if($row->field_187!='all') { $this->db->where('C.field_187', $row->field_187); }
+			if($row->field_188!='all') { $this->db->where('C.field_188', $row->field_188); }
+			if($row->field_189!='all') { $this->db->where('C.field_189', $row->field_189); }
+			if($row->field_190!='all') { $this->db->where('C.field_190', $row->field_190); }
+			if($row->field_191!='all') { $this->db->where('C.field_191', $row->field_191); }
+			if($row->field_192!='all') { $this->db->where('C.field_192', $row->field_192); }
+			if($row->field_193!='all') { $this->db->where('C.field_193', $row->field_193); }
+			if($row->field_194!='all') { $this->db->where('C.field_194', $row->field_194); }
+			if($row->field_195!='all') { $this->db->where('C.field_195', $row->field_195); }
+			if($row->field_196!='all') { $this->db->where('C.field_196', $row->field_196); }
+			if($row->field_197!='all') { $this->db->where('C.field_197', $row->field_197); }
+			if($row->field_198!='all') { $this->db->where('C.field_198', $row->field_198); }
+			if($row->field_199!='all') { $this->db->where('C.field_199', $row->field_199); }
+			if($row->field_200!='all') { $this->db->where('C.field_200', $row->field_200); }
+			if($row->field_201!='all') { $this->db->where('C.field_201', $row->field_201); }
+			
+
+		$query = $this->db->get();
 		$result = $query->result();
 		return $result;
 }
@@ -858,7 +1152,7 @@ function list_assigned_Advertisements() {
 		$message_id	= $this->input->post('m_id');
 		$Chk = $this->input->post('Chk');
 		$text_message	= $this->input->post('text_message');
-		$consumer_selection_criteria = $this->input->post('sent_to');
+		$consumer_selection_criteria = $this->input->post('unique_system_selection_criteria_id');
 		$this->load->view('text_messages_listing');
 			if($Chk==1){
 			$send_status=1;
@@ -882,7 +1176,7 @@ function list_assigned_Advertisements() {
 		 $this->Textmessage_model->sendFCM($text_message, $fb_token);	
 		 
 		 	$NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "howzzt text message";
+			$NTFdata['title'] = "TRUSTAT text message";
 			$NTFdata['body'] = $text_message; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
 			$NTFdata['status'] = 1; 
@@ -906,32 +1200,12 @@ function list_assigned_Advertisements() {
 				$consumer_id = $user->consumer_id;
 		 
 		 */
-			$this->db->select('*');
-			$this->db->from('consumer_selection_criteria');
-			//$this->db->where('transaction_lr_type', "Loyalty");
-			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Communication-Text"));
-			$query=$this->db->get();						   
-        $csc_consumer_gender = $query->row()->consumer_gender;
-		//$csc_consumer_min_age = $query->row()->consumer_min_age;
-		//$csc_consumer_max_age = $query->row()->consumer_max_age;
-		$csc_consumer_city = $query->row()->consumer_city;
-		//$csc_consumer_pin = $query->row()->consumer_pin;
+			
+
+		
 									
-								/*
-								if($csc_consumer_min_age=='0') {
-								$csc_consumer_min_dob = '';
-									} else {
-								$csc_consumer_min_dob = $this->reverse_birthday( $csc_consumer_min_age );
-									}
-									
-								if($csc_consumer_max_age=='0') {
-								$csc_consumer_max_dob = '';
-									} else {
-								$csc_consumer_max_dob = $this->reverse_birthday( $csc_consumer_max_age );
-									}
-							*/
-		//$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
-		$AllSelectedConsumersByACustomer = $this->AllSelectedConsumersByACustomer2($customer_id, $csc_consumer_gender, $csc_consumer_city);
+								
+		$AllSelectedConsumersByACustomer = $this->AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_criteria);
 		
 				
 				foreach ($AllSelectedConsumersByACustomer as $consumer_idArray) 
@@ -943,7 +1217,7 @@ function list_assigned_Advertisements() {
 		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
 		 
 			$NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "howzzt text message";
+			$NTFdata['title'] = "TRUSTAT text message";
 			$NTFdata['body'] = $text_message; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
 			$NTFdata['status'] = 1; 
@@ -996,7 +1270,7 @@ function list_assigned_Advertisements() {
 		 
 		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
 		 $NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "howzzt text message";
+			$NTFdata['title'] = "TRUSTAT text message";
 			$NTFdata['body'] = $text_message; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
 			$NTFdata['status'] = 1; 
@@ -1035,26 +1309,25 @@ function list_assigned_Advertisements() {
 		$customer_id 	= $this->session->userdata('admin_user_id');
 		$text_message	=$this->input->post('text_message');
 		$quantity	=$this->input->post('quantity');
+		
+				$arr = explode('-',trim($quantity));
+				$qty = $arr[0];
+				$unique_system_selection_criteria_id = $arr[1];
+				
 		if($text_message==''){
 			
 			$customer_id = $this->session->userdata('admin_user_id');
 		
 			$this->db->select('*');
 			$this->db->from('consumer_selection_criteria');
-			//$this->db->where('transaction_lr_type', "Loyalty");
-			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Communication-Text"));
+			$this->db->where('customer_id', $customer_id);
+			//$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Communication-Text"));
 			$query=$this->db->get();
-						   
-        $params["csc_consumer_gender"] = $ConsumerSelectionCriteria=$query->row()->consumer_gender;
-		$params["csc_consumer_min_age"] = $ConsumerSelectionCriteria=$query->row()->consumer_min_age;
-		$params["csc_consumer_max_age"] = $ConsumerSelectionCriteria=$query->row()->consumer_max_age;
-		$params["csc_consumer_city"] = $ConsumerSelectionCriteria=$query->row()->consumer_city;
-		//$params["csc_consumer_pin"] = $ConsumerSelectionCriteria=$query->row()->consumer_pin;
 		
 			
 		$this->load->view('send_text_message', $params);
 		} else {
-		$this->Textmessage_model->save_push_text_message_request($customer_id,$text_message,$quantity);
+		$this->Textmessage_model->save_push_text_message_request($customer_id,$text_message,$qty,$unique_system_selection_criteria_id);
 		 
 		//echo  $this->text_message_model->sendFCM("Advertisement pushed!",$fb_token);
 		redirect(base_url().'textmessages/push_text_message_request');	exit;
@@ -1219,7 +1492,7 @@ function save_approve_purchase_points_requests(){
 		 
 		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
 			$NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "howzzt text message";
+			$NTFdata['title'] = "TRUSTAT text message";
 			$NTFdata['body'] = $text_message; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
 			$NTFdata['status'] = 1; 

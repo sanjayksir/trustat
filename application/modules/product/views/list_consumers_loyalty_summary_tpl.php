@@ -76,7 +76,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
  <?php 
  /*
                    mysql_connect("localhost", "root", "");
-				mysql_select_db("trackingprortaldb20a");								
+				mysql_select_db("trackingportaldb");								
 $query  = "SELECT params FROM consumer_passbook WHERE consumer_id='65'";
 $result = mysql_query($query) or trigger_error(mysql_error().$query);
 
@@ -97,7 +97,7 @@ echo $retval . "-";
 				 ?>
 				 
 				 <?php /*
-$link = mysqli_connect("localhost", "root", "", "trackingprortaldb20a"); 
+$link = mysqli_connect("localhost", "root", "", "trackingportaldb"); 
   
 if($link === false){ 
     die("ERROR: Could not connect. " 
@@ -203,8 +203,8 @@ mysqli_close($link);
 														<th>Total BLP Earned</th>
 														<th>Total BLP Redeemed</th>
 														<th>Total BLP O/S</th>
-														
-                                                       <th>Consumer Passbook & Feedback Report data </th>
+														<th>HLP Consumer Passbook & Feedback Report data</th>
+														<th>BLP Consumer Passbook & Feedback Report data</th>
 
                                 </tr>
                             </thead>
@@ -223,12 +223,14 @@ mysqli_close($link);
                                 <td><?php echo $attr['user_name']; ?></td>
                                 <td><?php echo $attr['mobile_no']; ?></td>
                                 <td><?php //echo base_url(); 
-								
-								// MySQL connect info
-								//mysql_connect("localhost", "tpdbuser", "india@123");
-								//mysql_select_db("trackingprortaldb");								
-								mysql_connect("localhost", "root", "");
-								mysql_select_db("trackingprortaldb20a");	
+								//echo "<br>"; 
+								if(base_url()=='http://localhost/trackingportal/') {									
+							mysql_connect("localhost", "root", "");
+								mysql_select_db("trackingportaldb");								
+								} else {								
+								mysql_connect("localhost", "tpdbuser", "india@123");
+								mysql_select_db("trackingprortaldb");
+								}
 												
 							//$character = json_decode($attr['params']);
 							//$searchdata = $character->customer_loyalty_type;
@@ -257,7 +259,7 @@ mysqli_close($link);
 								//mysql_connect("localhost", "tpdbuser", "india@123");
 								//mysql_select_db("trackingprortaldb");								
 								//mysql_connect("localhost", "root", "");
-								//mysql_select_db("trackingprortaldb20a");								
+								//mysql_select_db("trackingportaldb");								
 								$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND customer_loyalty_type = 'Brand' AND transaction_lr_type = 'Loyalty'";
 								$results = mysql_query($some_q) or die(mysql_error());
 								while($row = mysql_fetch_array($results)){
@@ -268,20 +270,18 @@ mysqli_close($link);
 								<td><?php $some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND customer_loyalty_type = 'Brand' AND transaction_lr_type = 'Redemption'";
 								$results = mysql_query($some_q) or die(mysql_error());
 								while($row = mysql_fetch_array($results)){
-								$TR_Points = $row['points'];
+								$TR_PointsBLP = $row['points'];
 								echo $TR_PointsBLP ;			
 								} ?>
 								</td>
 								<td><?php $TBalance_PointsBLP  = $TE_PointsBLP  - $TR_PointsBLP ;											echo $TBalance_PointsBLP ; // Sanjay ?>
 								</td> 
-                                                 
-                                                 
-													<td><?php echo anchor("product/list_view_consumer_passbook/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> View Passbook</i>', array('class' => 'btn btn-xs btn-info','title'=>' View Passbook')); ?>  
-													<?php echo anchor("product/list_view_consumer_feedback_details/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> Feedback Report data</i>', array('class' => 'btn btn-xs btn-info','title'=>' Feedback Report data')); ?>
-													<br />
-												
-												
-													</td>
+									<td><?php echo anchor("product/list_view_consumer_passbook/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> View Passbook</i>', array('class' => 'btn btn-xs btn-info','title'=>' View Passbook')); ?>  
+										<?php echo anchor("product/list_view_consumer_feedback_details/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> Feedback Report data</i>', array('class' => 'btn btn-xs btn-info','title'=>' Feedback Report data')); ?>
+										</td>
+										<td><?php echo anchor("product/list_view_blp_consumer_passbook/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> View Passbook</i>', array('class' => 'btn btn-xs btn-info','title'=>' View Passbook')); ?>  
+										<?php echo anchor("product/list_view_consumer_feedback_details/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> Feedback Report data</i>', array('class' => 'btn btn-xs btn-info','title'=>' Feedback Report data')); ?>
+										</td>
                                              </tr>
 
                                         <?php

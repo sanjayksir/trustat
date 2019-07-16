@@ -272,6 +272,7 @@
    	$("form#user_frm").validate({
 		rules:{
 			QuestionType:{valueNotEquals: "0" },
+			MediaType:{valueNotEquals: "0" },
 			Question:{required: true, 
 						remote: {
 
@@ -290,6 +291,7 @@
  		},
  		messages: {
 				QuestionType: {valueNotEquals: "Please Choose Question Type"},
+				MediaType: {valueNotEquals: "Please Choose Media Type"},
 				Question: {required: "Please enter Question", remote: "This Question already exists for the same product!"},
 				answer1: {required: "Please enter Option 1"},
 				answer2: {required: "Please enter Option 2"}, 

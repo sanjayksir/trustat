@@ -51,8 +51,16 @@ class ScannedProduct extends ApiController {
         $isLoyaltyForAudioFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForAudioFBQuesGiven($consumerId,$product_id);
         $isLoyaltyForImageFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForImageFBQuesGiven($consumerId,$product_id);
         $isLoyaltyForPDFFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForPDFFBQuesGiven($consumerId,$product_id);
-		$isLoyaltyForProductPushedAdFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductPushedAdFeedbackQuesGiven($consumerId,$product_id);
-		$isLoyaltyForProductSurveyFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductSurveyFeedbackQuesGiven($consumerId,$product_id);
+		$isLoyaltyForProductPushedAdVideoFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductPushedAdVideoFeedbackQuesGiven($consumerId,$product_id);
+		$isLoyaltyForProductPushedAdAudioFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductPushedAdAudioFeedbackQuesGiven($consumerId,$product_id);
+		$isLoyaltyForProductPushedAdPDFFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductPushedAdPDFFeedbackQuesGiven($consumerId,$product_id);
+		$isLoyaltyForProductPushedAdImageFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductPushedAdImageFeedbackQuesGiven($consumerId,$product_id);
+		
+		$isLoyaltyForProductSurveyVideoFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductSurveyVideoFeedbackQuesGiven($consumerId,$product_id);
+		$isLoyaltyForProductSurveyAudioFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductSurveyAudioFeedbackQuesGiven($consumerId,$product_id);
+		$isLoyaltyForProductSurveyPDFFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductSurveyPDFFeedbackQuesGiven($consumerId,$product_id);
+		$isLoyaltyForProductSurveyImageFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductSurveyImageFeedbackQuesGiven($consumerId,$product_id);
+		
 		$isLoyaltyForProductDemoVideoFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductDemoVideoFeedbackQuesGiven($consumerId,$product_id);
 		$isLoyaltyForProductDemoAudioFeedbackQuesGiven = $this->ScannedproductsModel->isLoyaltyForProductDemoAudioFeedbackQuesGiven($consumerId,$product_id);
 		
@@ -75,7 +83,7 @@ class ScannedProduct extends ApiController {
             $this->db->insert('scanned_product_logs', $data);
 		$mnv24_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 24)->get()->row();
 		$mnvtext24 = $mnv24_result->message_notification_value;
-            //$this->response(['status'=>false,'message'=>'This product and barcode is not supported by howzzt.'],200);
+            //$this->response(['status'=>false,'message'=>'This product and barcode is not supported by TRUSTAT.'],200);
 			$this->response(['status'=>false,'message'=>$mnvtext24],200);
         }
 		if(!empty($result->product_thumb_images)){
@@ -109,8 +117,16 @@ class ScannedProduct extends ApiController {
 		$result->isLoyaltyForAudioFBQuesGiven = $isLoyaltyForAudioFBQuesGiven;
 		$result->isLoyaltyForImageFBQuesGiven = $isLoyaltyForImageFBQuesGiven;
 		$result->isLoyaltyForPDFFBQuesGiven = $isLoyaltyForPDFFBQuesGiven;
-		$result->isLoyaltyForProductPushedAdFeedbackQuesGiven = $isLoyaltyForProductPushedAdFeedbackQuesGiven;
-		$result->isLoyaltyForProductSurveyFeedbackQuesGiven = $isLoyaltyForProductSurveyFeedbackQuesGiven;
+		$result->isLoyaltyForProductPushedAdVideoFeedbackQuesGiven = $isLoyaltyForProductPushedAdVideoFeedbackQuesGiven;
+		$result->isLoyaltyForProductPushedAdAudioFeedbackQuesGiven = $isLoyaltyForProductPushedAdAudioFeedbackQuesGiven;
+		$result->isLoyaltyForProductPushedAdPDFFeedbackQuesGiven = $isLoyaltyForProductPushedAdPDFFeedbackQuesGiven;
+		$result->isLoyaltyForProductPushedAdImageFeedbackQuesGiven = $isLoyaltyForProductPushedAdImageFeedbackQuesGiven;
+		
+		$result->isLoyaltyForProductSurveyVideoFeedbackQuesGiven = $isLoyaltyForProductSurveyVideoFeedbackQuesGiven;
+		$result->isLoyaltyForProductSurveyAudioFeedbackQuesGiven = $isLoyaltyForProductSurveyAudioFeedbackQuesGiven;
+		$result->isLoyaltyForProductSurveyPDFFeedbackQuesGiven = $isLoyaltyForProductSurveyPDFFeedbackQuesGiven;
+		$result->isLoyaltyForProductSurveyImageFeedbackQuesGiven = $isLoyaltyForProductSurveyImageFeedbackQuesGiven;
+		
 		$result->isLoyaltyForProductDemoVideoFeedbackQuesGiven = $isLoyaltyForProductDemoVideoFeedbackQuesGiven;
 		$result->isLoyaltyForProductDemoAudioFeedbackQuesGiven = $isLoyaltyForProductDemoAudioFeedbackQuesGiven;
 		
@@ -161,7 +177,7 @@ class ScannedProduct extends ApiController {
                     //$result->message1 = 'This product is already registered, please contact your retailer/manufacturer for further details.';
 					$result->message1 = $mnvtext25;
                 }else {
-					//$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process.';
+					//$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to TRUSTAT member, who had initiated the registration process.';
 					$result->message1 = $mnvtext26;
 				}
 				}else{
@@ -186,7 +202,7 @@ class ScannedProduct extends ApiController {
                     //$result->message1 = 'This product is already registered, please contact your retailer/manufacturer for further details';
 					$result->message1 = $mnvtext25;
                 }else {
-					//$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process';
+					//$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to TRUSTAT member, who had initiated the registration process';
 					$result->message1 = $mnvtext26;
 				}
 				}else{
@@ -377,7 +393,7 @@ class ScannedProduct extends ApiController {
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
         
         if(empty($result)){
-            $this->response(['status'=>false,'message'=>'This product and barcode is not supported by howzzt.'],200);
+            $this->response(['status'=>false,'message'=>'This product and barcode is not supported by TRUSTAT.'],200);
         }
         //echo "<pre>";print_r($result);die;
         $bar_code_data = $result->barcode_qr_code_no;
@@ -413,7 +429,7 @@ class ScannedProduct extends ApiController {
 		if($result->stock_status!='Customer_Code'){
         if(!empty($isRegistered)){
             if($isRegistered['status'] == 0){
-                //$data['message1'] = $message = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process.';
+                //$data['message1'] = $message = 'This product registration is already under process. Outcome of product registration will be notified to TRUSTAT member, who had initiated the registration process.';
 				$data['message1'] = $message = $mnvtext35;
             }elseif($isRegistered['status'] == 1){
                 //$data['message1']  = $message = 'This product is already registered, please contact your retailer/manufacturer for further details.';
@@ -494,7 +510,7 @@ class ScannedProduct extends ApiController {
 				
 				
 				if($purchased_points > ($consumed_points+$TRPoints)){
-                $message = 'Thank You for Product Registration. '. $TRPoints .' loyalty points will be added to your howzzt loyalty account';
+                $message = 'Thank You for Product Registration. '. $TRPoints .' loyalty points will be added to your TRUSTAT loyalty account';
 				//echo "<pre>Jyada";print_r($LPconsumed_points); die;
 				}else{
 					$message = 'Thank You for Product Registration!';
@@ -518,10 +534,10 @@ class ScannedProduct extends ApiController {
 				}
 				
 				$fb_token = getConsumerFb_TokenById($userId);
-              // $this->ConsumerModel->sendFCM('Thank you for Product Registration, Please check the details in "my purchase list" in howzzt App.', $fb_token);
+              // $this->ConsumerModel->sendFCM('Thank you for Product Registration, Please check the details in "my purchase list" in TRUSTAT App.', $fb_token);
 			    $this->ConsumerModel->sendFCM($mnvtext37, $fb_token);
 				$NTFdata['consumer_id'] = $userId; 
-				$NTFdata['title'] = "howzzt notification";
+				$NTFdata['title'] = "TRUSTAT notification";
 				$NTFdata['body'] = $mnvtext37; 
 				$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
 				$NTFdata['status'] = 1; 
@@ -698,7 +714,7 @@ class ScannedProduct extends ApiController {
 		$mnv44_result = $this->db->select('message_notification_value,message_notification_value_part2')->from('message_notification_master')->where('id', 44)->get()->row();
 		$mnvtext44_1 = $mnv44_result->message_notification_value;	
 		$mnvtext44_2 = $mnv44_result->message_notification_value_part2;		
-		//$mess = 'Thank you for posting your product experince. Loyalty Point '. $TRPoints .' have been added to your howzzt loyalty program.'; 
+		//$mess = 'Thank you for posting your product experince. Loyalty Point '. $TRPoints .' have been added to your TRUSTAT loyalty program.'; 
 		$mess = $mnvtext44_1 .' '. $TRPoints .' '. $mnvtext44_2;
 			}
 			

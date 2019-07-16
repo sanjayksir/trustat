@@ -200,8 +200,16 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 															<a title="Product Video Feedback" href="<?php echo base_url();?>product/ask_video_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-video-camera" aria-hidden="true"></i> </a>
 															<a title="Product Audio Feedback" href="<?php echo base_url();?>product/ask_audio_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-bullhorn" aria-hidden="true"></i> </a>&nbsp;
 															<a title="Product PDF Feedback" href="<?php echo base_url();?>product/ask_pdf_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-book" aria-hidden="true"></i> </a>
-															<a title="Product Pushed Ad Feedback" href="<?php echo base_url();?>product/ask_pushed_ad_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-globe " aria-hidden="true"></i> </a>
+															<a title="Product Advertisement Feedback" href="<?php echo base_url();?>product/ask_pushed_ad_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-globe " aria-hidden="true"></i> </a>
 															<a title="Product Survey Feedback" href="<?php echo base_url();?>product/ask_survey_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-laptop" aria-hidden="true"></i> </a>
+															
+															<!--
+															<a title="Product Image Survey Feedback" href="<?php echo base_url();?>product/ask_survey_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-laptop" aria-hidden="true"></i> </a>
+															
+															<a title="Product Image Survey Feedback" href="<?php echo base_url();?>product/ask_survey_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-laptop" aria-hidden="true"></i> </a>
+															
+															<a title="Product PDF Survey Feedback" href="<?php echo base_url();?>product/ask_survey_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-laptop" aria-hidden="true"></i> </a>
+															-->
 															<a title="Product Demo Video Feedback" href="<?php echo base_url();?>product/ask_demo_video_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-video-camera" aria-hidden="true"></i> </a>
 															<a title="Product Demo Audio Feedback" href="<?php echo base_url();?>product/ask_demo_audio_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-bullhorn" aria-hidden="true"></i> </a>
  														</div>

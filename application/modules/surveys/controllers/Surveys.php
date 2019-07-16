@@ -186,18 +186,8 @@
         }
 		$customer_id = $this->session->userdata('admin_user_id');
 		
-			$this->db->select('*');
-			$this->db->from('consumer_selection_criteria');
-			//$this->db->where('transaction_lr_type', "Loyalty");
-			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Survey-Video"));
-			$query=$this->db->get();
-						   
-        $params["csc_consumer_gender"] = $ConsumerSelectionCriteria=$query->row()->consumer_gender;
-		$params["csc_consumer_min_age"] = $ConsumerSelectionCriteria=$query->row()->consumer_min_age;
-		$params["csc_consumer_max_age"] = $ConsumerSelectionCriteria=$query->row()->consumer_max_age;
-		$params["csc_consumer_city"] = $ConsumerSelectionCriteria=$query->row()->consumer_city;
-		$params["csc_consumer_pin"] = $ConsumerSelectionCriteria=$query->row()->consumer_pin;
-		
+			
+				
 		
         $total_records = $this->Survey_model->total_survey_listing($srch_string);
         $params["orderListing"] = $this->Survey_model->surveys_listing($limit_per_page, $start_index, $srch_string);
@@ -802,7 +792,7 @@ function list_assigned_Surveys() {
 		  $fb_token = "cdPQ1CE_uwM:APA91bFRbTrm0v3EN0jirO3ZrU6LvQxumlcmu6LPVqtggECBcDH6PZlk4RfHj7uFwa8hu72Wnscg1YOA-itG6Am7JUMl3a9lfjuJTS9Q9Kz8FRvda5fo3JHaDL62lFjsVuKqHFqwMUkF";
 		  
 		//echo $this->Survey_model->sendFCM("Sanjay....A Survey Posted!!", $fb_token);
-		 echo $this->Survey_model->sendFCM('Congratulations! Your registration is complete, and Loyalty Points have been added in your howzzt loyalty program.', $fb_token);
+		 echo $this->Survey_model->sendFCM('Congratulations! Your registration is complete, and Loyalty Points have been added in your TRUSTAT loyalty program.', $fb_token);
 		 
 		// $this->Survey_model->sendFCM("A Survey Posted!!", $fb_token);
 		 
@@ -821,8 +811,9 @@ function list_assigned_Surveys() {
 		$promotion_id =$this->input->post('promotion_id');
 		$promotion_title =$this->input->post('promotion_title');
 		$consumer_selection_criteria =$this->input->post('sent_to');
+		$promotion_media_type =$this->input->post('promotion_media_type');
 		$Chk = $this->input->post('Chk');
-		echo $this->Survey_model->save_push_Survey($customer_id,$product_id,$promotion_id,$promotion_title,$Chk,$consumer_selection_criteria);
+		echo $this->Survey_model->save_push_Survey($customer_id,$product_id,$promotion_id,$promotion_title,$consumer_selection_criteria,$promotion_media_type,$Chk);
 		
 		if($Chk==2){
 		$value=2;
@@ -843,7 +834,7 @@ function list_assigned_Surveys() {
 		$mnvtext50 = $mnv50_result->message_notification_value;
 		 $this->Survey_model->sendFCM("A Survey Posted!!", $fb_token);
 		 	$NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "howzzt survey";
+			$NTFdata['title'] = "TRUSTAT survey";
 			$NTFdata['body'] = $mnvtext50; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s"); 
 			$NTFdata['status'] = 1; 
@@ -855,33 +846,9 @@ function list_assigned_Surveys() {
 			
 		// echo $status= $this->Survey_model->change_status($promotion_id,$value);
 		 
-		 $this->db->select('*');
-			$this->db->from('consumer_selection_criteria');
-			//$this->db->where('transaction_lr_type', "Loyalty");
-			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Survey-Video"));
-			$query=$this->db->get();						   
-        $csc_consumer_gender = $query->row()->consumer_gender;
-		//$csc_consumer_min_age = $query->row()->consumer_min_age;
-		//$csc_consumer_max_age = $query->row()->consumer_max_age;
-		$csc_consumer_city = $query->row()->consumer_city;
-		$csc_consumer_pin = $query->row()->consumer_pin;
-									
-								/*
-								if($csc_consumer_min_age=='0') {
-								$csc_consumer_min_dob = '';
-									} else {
-								$csc_consumer_min_dob = $this->reverse_birthday( $csc_consumer_min_age );
-									}
-									
-								if($csc_consumer_max_age=='0') {
-								$csc_consumer_max_dob = '';
-									} else {
-								$csc_consumer_max_dob = $this->reverse_birthday( $csc_consumer_max_age );
-									}
-						*/
-		//$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
-		//$AllSelectedConsumersByACustomer = $this->Survey_model->AllSelectedConsumersByACustomer2($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob);
-		$AllSelectedConsumersByACustomer = $this->Survey_model->AllSelectedConsumersByACustomer2($customer_id, $csc_consumer_gender, $csc_consumer_city);
+		
+		
+		$AllSelectedConsumersByACustomer = $this->Survey_model->AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_criteria);
 				
 				foreach ($AllSelectedConsumersByACustomer as $consumer_idArray)  
 				{ 
@@ -891,10 +858,10 @@ function list_assigned_Surveys() {
 		 
 		$mnv50_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 50)->get()->row();
 		$mnvtext50 = $mnv50_result->message_notification_value;
-		 //$this->Survey_model->sendFCM("Here is a Survey for you from howzzt.", $fb_token);
+		 //$this->Survey_model->sendFCM("Here is a Survey for you from TRUSTAT.", $fb_token);
 		 $this->Survey_model->sendFCM($mnvtext50, $fb_token);
 			$NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "howzzt survey";
+			$NTFdata['title'] = "TRUSTAT survey";
 			$NTFdata['body'] = $mnvtext50; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s"); 
 			$NTFdata['status'] = 1; 
@@ -903,8 +870,7 @@ function list_assigned_Surveys() {
 			
 		 }
 		}
-		exit;
-		
+		exit;		
  	}
 	
 	public function change_status() {
@@ -962,6 +928,69 @@ function list_assigned_Surveys() {
         $user_id = $this->session->userdata('admin_user_id');
         //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
         $this->load->view('view_survey_details_tpl', $params);
+    }
+	
+	
+	public function view_survey_response_by_question_answer() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Survey_model->count_survey_details_by_question_answer($srch_string);
+
+        $params["ScanedCodeListing"] = $this->Survey_model->get_survey_details_by_question_answer($limit_per_page, $start_index, $srch_string);
+		
+        $params["links"] = Utils::pagination('surveys/view_survey_response_by_question_answer', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+		$promotion_id = $this->uri->segment(3);
+		
+		$this->db->select('*');
+			$this->db->from('push_promotion_master');
+			$this->db->where('promotion_id', $promotion_id);
+			//$this->db->where(array('promotion_id' => $promotion_id, 'promotion_type' => "Survey"));
+			$query=$this->db->get(); 
+		
+		 $params["promotion_type"] = $query->row()->promotion_type;
+		 $params["promotion_media_type"] = $query->row()->promotion_media_type;
+		 $params["promotion_title"] = $query->row()->promotion_title;
+		 $params["promotion_request_id"] = $query->row()->promotion_request_id;
+		 $params["request_date_time"] = $query->row()->request_date_time;
+		 $params["request_update_datetime"] = $query->row()->request_update_datetime;
+		 $params["promotion_launch_date_time"] = $query->row()->promotion_launch_date_time;
+		 $params["promotion_closure_date_time"] = $query->row()->promotion_closure_date_time;
+		 $params["number_of_consumers"] = $query->row()->number_of_consumers;
+		 $params["unique_system_selection_criteria_id"] = $query->row()->unique_system_selection_criteria_id;
+		 
+		  $product_id = $query->row()->product_id;
+		  
+		  $this->db->select('*');
+			$this->db->from('products');
+			$this->db->where('id', $product_id);
+			//$this->db->where(array('promotion_id' => $promotion_id, 'promotion_type' => "Survey"));
+			$query1=$this->db->get(); 
+		$params["product_name"] = $query1->row()->product_name;
+		$params["product_survey_video"] = $query1->row()->product_survey_video;
+		$params["product_survey_audio"] = $query1->row()->product_survey_audio;
+		$params["product_survey_pdf"] = $query1->row()->product_survey_pdf;
+		$params["product_survey_image"] = $query1->row()->product_survey_image;
+		$params["Number_of_responses_from_consumers"] = $total_records;
+		  
+		
+        $this->load->view('view_survey_response_by_question_answer_tpl', $params);
     }
 	
 	

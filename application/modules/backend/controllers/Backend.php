@@ -1418,7 +1418,7 @@ $this->image_lib->initialize($config);
 		'subject'=>$subject,
 		'to_email'=>$email,
 		'from_email'=>'admin@innovigents.com',
-		'from_name'=> 'Howzzt System Portal',
+		'from_name'=> 'TRUSTAT System Portal',
 		'body_part'=>$body
 		);
 		if($this->dmailer->mail_notify($mail_conf)){
@@ -1430,12 +1430,12 @@ $this->image_lib->initialize($config);
 	 {
 	 	$link = $this->create_link($username, $password);
 		$subject    =  'User Reggistration:Tracking Portal';
-		$body			=	"<b>Hello Howzzt,</b><br><br>You have successfully registered!<br> Your login credentials are: User Name:<b>".$username.'</b><br>Password:'.$password.'.<br>Verify your email by clicking here:'.$link.'<br>Please Login with your credentials!<br><br>Thanks & Regards<br><b>Team Admin</b>';												
+		$body			=	"<b>Hello TRUSTAT,</b><br><br>You have successfully registered!<br> Your login credentials are: User Name:<b>".$username.'</b><br>Password:'.$password.'.<br>Verify your email by clicking here:'.$link.'<br>Please Login with your credentials!<br><br>Thanks & Regards<br><b>Team Admin</b>';												
 		$mail_conf =  array(
 		'subject'=>$subject,
 		'to_email'=>$email,
 		'from_email'=>'admin@innovigents.com',
-		'from_name'=> 'Howzzt System Portal',
+		'from_name'=> 'TRUSTAT System Portal',
 		'body_part'=>$body
 		);
 		if($this->dmailer->mail_notify($mail_conf)){

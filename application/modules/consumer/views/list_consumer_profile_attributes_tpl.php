@@ -6,9 +6,9 @@
 			</script>
 			<?php 
 			if($this->session->userdata('admin_user_id')==1){
-				$label = 'Consumer Profile Attribute';
+				$label = 'Consumer Profile RESPONSES';
 			}else{
-				$label = 'Consumer Profile Attribute';
+				$label = 'Consumer Profile RESPONSES';
 			}
 			?>
 
@@ -24,7 +24,7 @@
 							</li>
 
 							<li>
-							 Manage <?php echo $label;?>
+							 Manage <?php echo "Consumer Profile";?>
 							</li>
 							 
 							
@@ -52,9 +52,9 @@
 							<div class="col-xs-12">
  								<div class="widget-box widget-color-blue">
                                                                     <div class="widget-header widget-header-flat">
-                                                                    <h5 class="widget-title bigger lighter">List <?php echo $label;?>s</h5>
+                                                                    <h5 class="widget-title bigger lighter">List <?php echo "Consumer Profile";?></h5>
                                                                     <div class="widget-toolbar">
-                                                                  <a href="<?php echo base_url('consumer/add_consumer_profile_attribute') ?>" class="btn btn-xs btn-warning" title="Add User">Add <?php echo $label; ?> </a> |  <a href="<?php echo base_url('consumer/list_consumer_profile_attribute_types') ?>" class="btn btn-xs btn-warning" title="Add User">Consumer Profile Attribute Type Master <?php // echo $label; ?> </a>
+                                                                 <a href="<?php echo base_url('consumer/list_consumer_profile_attribute_types') ?>" class="btn btn-xs btn-warning" title="Add User">Add Consumer Profile QUERY <?php // echo $label; ?> </a> | <a href="<?php echo base_url('consumer/add_consumer_profile_attribute') ?>" class="btn btn-xs btn-warning" title="Add User">Add <?php echo $label; ?> </a> 
                                                                     </div>
                                                                 </div>
 									<div class="widget-body">
@@ -78,7 +78,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="input-group">
-                        <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Attributes Type or Attributes Name">
+                        <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Consumer Profile QUERY or RESPONSES">
                         <span class="input-group-btn">
                             <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                             <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -94,8 +94,9 @@
                             <thead>
                                     <tr>
                                             <th>#</th>
-                                            <th>Attributes Type</th>
-                                            <th>Attributes Name</th>                                           
+											<th>Profile Bucket</th>
+                                            <th>Consumer Profile QUERY</th>
+                                            <th>Consumer Profile RESPONSES</th>                                           
                                             <th>Action</th>
                                     </tr>
                             </thead>
@@ -117,6 +118,7 @@
                                         }?>
 										<tr id="show<?php echo $listData['cpm_id']; ?>">
                                            <td><?php echo $sno;$sno++; ?></td>
+										   <td><?php echo $listData['profile_bucket']; ?></td>
                                            <td><?php echo $listData['cpm_type_name']; ?></td>
                                            <td><?php echo $listData['cpm_name']; ?></td>
                                           

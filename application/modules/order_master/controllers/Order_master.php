@@ -1473,9 +1473,9 @@ $pdf->Output('example_050.pdf', 'I');
 				//$this->Product_model->saveProductLoylty($transactionType, $ProductID, $consumer_id, ['transaction_date' => date("Y-m-d H:i:s"),'consumer_id' => $consumer_id,'product_id' => $ProductID], $customer_id);
 				//$this->Product_model->saveConsumerPassbookLoyalty($transactionType, $transactionTypeName, $ProductID, $consumer_id, ['verification_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $bar_code], $customer_id, 'Loyalty');
 				
-			//$vquery = "Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in 'my purchase list' in howzzt App.";	
+			//$vquery = "Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in 'my purchase list' in TRUSTAT App.";	
 			
-			$vquery = "Hey, the product owner has responded on your complaint in howzzt App and check";
+			$vquery = "Hey, the product owner has responded on your complaint in TRUSTAT App and check";
 		
 		//print_r($data);exit;
 		$data = $this->order_master_model->update_save_reply_consumer_complaint_by_customer($data);
@@ -1486,7 +1486,7 @@ $pdf->Output('example_050.pdf', 'I');
 		 $this->order_master_model->sendFVPNotification($vquery, $fb_token);
 		 
 		 $NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "howzzt product verifiction";
+			$NTFdata['title'] = "TRUSTAT product verifiction";
 			$NTFdata['body'] = $vquery; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
 			$NTFdata['status'] = 1; 

@@ -19,18 +19,26 @@
 			<label for="form-field-8">Question Type</label> <?php //echo basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)); ?>
 			<select name="QuestionType" id="questiontype" class="form-control">
               <option value="0">-Select Question Type</option>
-				           
-                    <option value="Product Description Feedback">Product Description Feedback</option>
-					<option value="Product Image Feedback">Product Image Feedback</option>
-					<option value="Product Video Feedback">Product Video Feedback</option>
-					<option value="Product Audio Feedback">Product Audio Feedback</option>
-					<option value="Product PDF Feedback" selected>Product PDF Feedback</option>
-                  
+                    <!--<option value="Product Description Feedback">Product Description Feedback</option>-->
+					<option value="Product">Product Image Feedback</option>
+					<option value="Product">Product Video Feedback</option>
+					<option value="Product">Product Audio Feedback</option>
+					<option value="Product" selected>Product PDF Feedback</option>
              </select>
-			 
 			</div>
-			
-			
+		</div>
+		
+		<div class="form-group row">
+			<div class="col-sm-12">
+			<label for="form-field-8">Media Type</label> <?php //echo basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)); ?>
+			<select name="MediaType" id="MediaType" class="form-control">
+              <option value="0">-Select Media Type</option>				           
+                    <option value="Video">Video</option>
+					<option value="Audio">Audio</option>
+					<option value="Image">Image</option>
+					<option value="PDF" selected>PDF</option>					
+             </select>			 
+			</div>	
 		</div>
 		 
  		<div class="form-group row">

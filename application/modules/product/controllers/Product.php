@@ -1209,9 +1209,9 @@ function list_assigned_products() {
 				$this->Product_model->saveProductLoylty($transactionType, $ProductID, $consumer_id, ['transaction_date' => date("Y-m-d H:i:s"),'consumer_id' => $consumer_id,'product_id' => $ProductID], $customer_id);
 				$this->Product_model->saveConsumerPassbookLoyalty($transactionType, $transactionTypeName, $ProductID, $consumer_id, ['verification_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $bar_code], $customer_id, 'Loyalty');
 				
-			//$vquery = "Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in 'my purchase list' in howzzt App.";	
+			//$vquery = "Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in 'my purchase list' in TRUSTAT App.";	
 			
-			$vquery = "Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in 'my purchase list' in howzzt App";
+			$vquery = "Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in 'my purchase list' in TRUSTAT App";
 		
 		
 		} else{
@@ -1228,7 +1228,7 @@ function list_assigned_products() {
 		 $this->Product_model->sendFVPNotification($vquery, $fb_token);
 		 
 			$NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "howzzt product verifiction";
+			$NTFdata['title'] = "TRUSTAT product verifiction";
 			$NTFdata['body'] = $vquery; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
 			$NTFdata['status'] = 1; 
@@ -1273,7 +1273,7 @@ function list_assigned_products() {
 		 $this->Product_model->sendFBLRNotification($vquery, $fb_token);
 		 
 			$NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "howzzt loyalty verification";
+			$NTFdata['title'] = "TRUSTAT loyalty verification";
 			$NTFdata['body'] = $vquery; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
 			$NTFdata['status'] = 1; 
@@ -1364,6 +1364,32 @@ function list_assigned_products() {
         $this->load->view('list_view_consumer_passbook_tpl', $params);
     }
 	
+	public function list_view_blp_consumer_passbook() {
+        $this->checklogin();
+       $id = $this->uri->segment(3);
+	
+		//echo $id;
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->count_total_list_view_blp_consumer_passbook($id,$srch_string);
+        $params["list_view_consumer_passbook"] = $this->Product_model->list_view_blp_consumer_passbook($id, $limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('product/list_view_consumer_passbook/' . $id, $total_records);
+		//echo "test";
+        $this->load->view('list_view_consumer_passbook_tpl', $params);
+    }
 	
 	public function list_customerwise_consumer_loyalty_details() {
         $this->checklogin();
@@ -1522,12 +1548,6 @@ function list_assigned_products() {
             $srch_string = '';
         }
 		
-		//$csc_consumer_gender = consumer_selection_criteria_values($criteria_id)->consumer_gender;
-	//$csc_consumer_city = consumer_selection_criteria_values($criteria_id)->consumer_city;
-	//$csc_consumer_min_dob = consumer_selection_criteria_values($criteria_id)->consumer_min_age;
-	//$csc_consumer_max_dob = consumer_selection_criteria_values($criteria_id)->consumer_max_age;
-
-   	
         $total_records = $this->Product_model->total_consumers_as_per_selection_criterias($srch_string);
         $params["list_all_consumers"] = $this->Product_model->list_consumers_as_per_selection_criterias($limit_per_page, $start_index, $srch_string,null,4);
 		

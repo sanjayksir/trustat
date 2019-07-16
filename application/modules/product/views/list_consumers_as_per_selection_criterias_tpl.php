@@ -77,13 +77,13 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="col-xs-12">
 
                         <div class="widget-box widget-color-blue">
-                            <!--<div class="widget-header widget-header-flat">
-                                <h5 class="widget-title bigger lighter">MANAGE PRODUCTS</h5>
+                            <div class="widget-header widget-header-flat">
+                                <h5 class="widget-title bigger lighter">List Consumers as Per Selection Criteria</h5>
                                 <div class="widget-toolbar">
-                                    <a href="<?php //echo base_url('product/add_product') ?>" class="btn btn-xs btn-warning" title="Add Product">Add <?php echo $label; ?> </a>
+                                    <a href="<?php echo base_url('consumer/list_consumer_selection_criterias') ?>" class="btn btn-xs btn-warning" title="Back to List Consumer Selection Criterias">Back to List Consumer Selection Criterias</a>
                                 </div>
                             </div>
-							-->
+							
                             <div class="widget-body">
                                 <div class="row filter-box">
                                     <form id="form-filter" action="" method="get" class="form-horizontal" >
@@ -113,7 +113,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                             <thead>
                                 <tr>
                                     <th>S No.</th>
-                                    <th class="hidden-480">Consumer Name</th>
+                                    <th class="hidden-480">Consumer Name <?php //echo get_total_consumer_loyalty_points_all(47); ?></th>
                                     <th class="hidden-480">Consumer Phone</th>
                                     <th class="hidden-480">Consumer Email</th>
                                     <th>Consumer Photo</th>
@@ -128,10 +128,10 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                         <?php
 						
 						$user_id = $this->session->userdata('admin_user_id');
-						$customer_id = $this->uri->segment(3);
+						//$customer_id = $this->uri->segment(3);
 										
                         if(count($list_all_consumers)>0){
-                           $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+                           $page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
 						
 			
                             $sno =  $page + 1;

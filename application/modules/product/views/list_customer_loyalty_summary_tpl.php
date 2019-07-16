@@ -183,26 +183,21 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                          ?>
                                 <tr id="show<?php echo $attr['id'];?>" <?php if (!empty($customer_id)) { if($attr['customer_id']!=$customer_id) {  ?> style="display:none;" <?php } } ?>>
                                 <!--<td><?php echo $sno; ?></td>-->
-                                <td><?php echo getUserFullNameById($attr['customer_id']); ?></td>
+                                <td><?php echo getUserFullNameById($attr['customer_id']);
+				
+				
+								?></td>
 								<td><?php echo total_approved_points2($attr['customer_id']);  ?> </td>  
                                 <td><?php //echo base_url(); 
-								/*
-								if(base_url()=='https://innovigents.com/') {
+								
+								if(base_url()=='http://localhost/trackingportal/') {									
+									mysql_connect("localhost", "root", "");
+								mysql_select_db("trackingportaldb");								
+								} else {								
 								mysql_connect("localhost", "tpdbuser", "india@123");
 								mysql_select_db("trackingprortaldb");
-								} else {
-								
-								mysql_connect("localhost", "root", "");
-								mysql_select_db("trackingprortaldb20a");
 								}
-								*/
-								// MySQL connect info
-								mysql_connect("localhost", "tpdbuser", "india@123");
-								mysql_select_db("trackingprortaldb");
 								
-								//mysql_connect("localhost", "root", "");
-								//mysql_select_db("trackingprortaldb20a");
-			
 								$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where customer_id = '".$attr['customer_id']."' AND transaction_lr_type = 'Loyalty'";
 
 							$results = mysql_query($some_q) or die(mysql_error());

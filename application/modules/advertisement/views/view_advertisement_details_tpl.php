@@ -92,8 +92,8 @@
 												<td><?php echo $listData['media_type']; ?></td>
 												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['ad_push_date']))); ?></td>
 												<td><?php 
-													
-								$qproduct_data 	= getquestionFeedbackDetails($listData['product_id'], $listData['consumer_id'], "product_advertisement");
+									$promotion_media_type = $listData['promotion_type'] . " " .	$listData['media_type'];				
+								$qproduct_data 	= getquestionFeedbackDetails($listData['product_id'], $listData['consumer_id'], $promotion_media_type);
 										 foreach($qproduct_data as $res){ 
 										 
 											echo "<b>[</b>" . get_question_desc_by_id($res['question_id']) . "<b>]</b>, ";

@@ -54,7 +54,7 @@ class ScannedProduct extends ApiController {
             $data['user_id'] = $user['id'];
             $data['created'] = date('Y-m-d H:i:s');
             $this->db->insert('scanned_product_logs', $data);
-            $this->response(['status'=>false,'message'=>'This product and barcode is not supported by howzzt .'],200);
+            $this->response(['status'=>false,'message'=>'This product and barcode is not supported by TRUSTAT .'],200);
         }
         if(!empty($result->product_images)){
             $result->product_images = Utils::setFileUrl($result->product_images);
@@ -108,7 +108,7 @@ class ScannedProduct extends ApiController {
 					
                     $result->message1 = 'This product is already registered, please contact your retailer/manufacturer for further details';
                 }else {
-					$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process';
+					$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to TRUSTAT member, who had initiated the registration process';
 				}
 				}else{
                     $result->message1 = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
@@ -128,7 +128,7 @@ class ScannedProduct extends ApiController {
 					
                     $result->message1 = 'This product is already registered, please contact your retailer/manufacturer for further details';
                 }else {
-					$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process';
+					$result->message1 = 'This product registration is already under process. Outcome of product registration will be notified to TRUSTAT member, who had initiated the registration process';
 				}
 				}else{
                     $result->message1 = 'Thank You for initiating Product Registration, Click Ok to scan and upload valid invoice for this product purchase and activate the warranty';
@@ -283,7 +283,7 @@ class ScannedProduct extends ApiController {
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
         
         if(empty($result)){
-            $this->response(['status'=>false,'message'=>'This product and barcode is not supported by howzzt.'],200);
+            $this->response(['status'=>false,'message'=>'This product and barcode is not supported by TRUSTAT.'],200);
         }
         //echo "<pre>";print_r($result);die;
         $bar_code_data = $result->barcode_qr_code_no;
@@ -311,7 +311,7 @@ class ScannedProduct extends ApiController {
 		if($result->stock_status!='Customer_Code'){
         if(!empty($isRegistered)){
             if($isRegistered['status'] == 0){
-                $data['message1'] = $message = 'This product registration is already under process. Outcome of product registration will be notified to howzzt member, who had initiated the registration process.';
+                $data['message1'] = $message = 'This product registration is already under process. Outcome of product registration will be notified to TRUSTAT member, who had initiated the registration process.';
             }elseif($isRegistered['status'] == 1){
                 $data['message1']  = $message = 'This product is already registered, please contact your retailer/manufacturer for further details';
             }
@@ -362,7 +362,7 @@ class ScannedProduct extends ApiController {
             if(is_null($warrenty)){
 				if($result->stock_status!='Customer_Code'){
                 $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();
-                $message = 'Thank You for Product Registration. '.$loyltyPoints->points.' loyalty points will be added to your howzzt loyalty account';
+                $message = 'Thank You for Product Registration. '.$loyltyPoints->points.' loyalty points will be added to your TRUSTAT loyalty account';
                 $transactionType = 'product-registration-without-warranty';   
 				}else{
 				// $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();

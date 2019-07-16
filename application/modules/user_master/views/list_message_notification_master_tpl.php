@@ -53,9 +53,9 @@
  								<div class="widget-box widget-color-blue">
                                                                     <div class="widget-header widget-header-flat">
                                                                     <h5 class="widget-title bigger lighter">List <?php echo $label;?></h5>
-                                                                    <!--<div class="widget-toolbar">
-                                                                        <a href="<?php echo base_url('user_master/add_user') ?>" class="btn btn-xs btn-warning" title="Add User">Add <?php echo $label; ?> </a>
-                                                                    </div>-->
+                                                                    <div class="widget-toolbar">
+                                                                     <a href="<?php echo base_url('consumer/list_faqs_master') ?>" class="btn btn-xs btn-warning" title="Manage FAQs">Manage FAQs <?php //echo $label; ?> </a>
+                                                                    </div>
                                                                 </div>
 									<div class="widget-body">
 										

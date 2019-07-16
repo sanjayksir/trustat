@@ -5842,7 +5842,7 @@ function getAllRoles(){
 }
 
 
-function getAllCities(){	
+function getConsumerCitiesofLastScan(){	
  	$res 		= '';
  	$ci 		= & get_instance();
 	//$ci->db->distinct('city');
@@ -5852,6 +5852,45 @@ function getAllCities(){
 	$ci->db->order_by("scan_id", " desc");
 		//$ci->db->where(array('status'=>'1','id!='=>'2'));
 		//$ci->db->where('status',1);
+	   //$ci->db->where(array('status'=>'1','spideyImage!='=>''));	
+	$query = $ci->db->get();  echo $ci->db->last_query(); 
+	if ($query->num_rows() > 0) {
+ 		$res = $query->result_array();
+ 	//	$res = $res[0]['categoryName'];
+	}		
+ 	return $res;
+}
+//Sanjay2
+function getConsumerData($city){	
+ 	$res 		= '';
+ 	$ci 		= & get_instance();
+	//$ci->db->distinct('city');
+	$ci->db->select('*');
+	$ci->db->from('consumers');	
+	$ci->db->group_by($city);
+	$ci->db->order_by("id", " desc");
+		//$ci->db->where(array('status'=>'1','id!='=>'2'));
+		//$ci->db->where('status',1);
+	   //$ci->db->where(array('status'=>'1','spideyImage!='=>''));	
+	$query = $ci->db->get();  echo $ci->db->last_query(); 
+	if ($query->num_rows() > 0) {
+ 		$res = $query->result_array();
+ 	//	$res = $res[0]['categoryName'];
+	}		
+ 	return $res;
+}
+
+function getConsumerSelectionCriterias($customer_id){	
+ 	$res 		= '';
+ 	$ci 		= & get_instance();
+	//$ci->db->distinct('city');
+	$ci->db->select('*');
+	$ci->db->from('consumer_selection_criteria');	
+	$ci->db->where('customer_id', $customer_id);
+	//$ci->db->group_by($city);
+	$ci->db->order_by("criteria_id", " desc");
+		//$ci->db->where(array('status'=>'1','id!='=>'2'));
+	
 	   //$ci->db->where(array('status'=>'1','spideyImage!='=>''));	
 	$query = $ci->db->get();  echo $ci->db->last_query(); 
 	if ($query->num_rows() > 0) {
@@ -5902,6 +5941,22 @@ function getRoleNameById($id){
 	return $res;
 }
 
+function getConsumerFieldName($FieldName){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('cpatm_name');
+	$ci->db->from('consumer_profile_attribute_type_master');
+	//$ci->db->where(array('status'=>'1', 'id'=>$FieldName));
+	$ci->db->where('cpatm_name_slug',$FieldName);
+ 	$query = $ci->db->get();
+	if ($query->num_rows() > 0) {
+		$res = $query->result_array();
+		$res = ucfirst($res[0]['cpatm_name']);
+ 	}
+	return $res;
+}
+
+
 function getRoleSlugById($id){
 	$res = 0;
 	$ci = & get_instance();
@@ -5912,6 +5967,39 @@ function getRoleSlugById($id){
 	if ($query->num_rows() > 0) {
 		$res = $query->result_array();
 		$res = ucfirst($res[0]['role_name_slug']);
+ 	}
+	return $res;
+}
+
+
+
+function getAttributeTypeNameBySlug($Slug){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('cpatm_name');
+	$ci->db->from('consumer_profile_attribute_type_master');
+	//$ci->db->where(array('status'=>'1', 'id'=>$Slug));
+	$ci->db->where('cpatm_name_slug',$Slug);
+ 	$query = $ci->db->get();
+	if ($query->num_rows() > 0) {
+		$res = $query->result_array();
+		$res = ucfirst($res[0]['cpatm_name']);
+ 	}
+	return $res;
+}
+
+
+function getAttributeSlugByName($Name){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('cpm_type_slug,cpm_name');
+	$ci->db->from('consumer_profile_master');
+	//$ci->db->where(array('status'=>'1', 'id'=>$Slug));
+	$ci->db->where('cpm_name',"Laptop");
+ 	$query = $ci->db->get();
+	if ($query->num_rows() > 0) {
+		$res = $query->result_array();
+		$res = ucfirst($res[0]['cpm_type_slug']);
  	}
 	return $res;
 }
@@ -6239,14 +6327,29 @@ function getParentUsers($id='',$status=''){
 	return($res);
  }
  
-  function getquestionFeedbackDetails($product_id, $user_id, $product_qr_code){
+  function getquestionFeedbackDetails($product_id, $user_id, $promotion_id, $product_qr_code){
 	$res='0';
 	$ci = & get_instance();
 	//$admin_id 				= $ci->session->userdata('admin_user_id');	
 	if(!empty($user_id)){
  		$ci->db->select('selected_answer, updated_date, question_id');
 		$ci->db->from('consumer_feedback');
-		$ci->db->where(array('product_id'=>$product_id, 'user_id'=>$user_id, 'product_qr_code'=>$product_qr_code));
+		$ci->db->where(array('product_id'=>$product_id, 'user_id'=>$user_id, 'promotion_id'=>$promotion_id, 'product_qr_code'=>$product_qr_code));
+		
+		$query= $ci->db->get();
+		$res = $query->result_array();
+	}
+	return($res);
+ }
+ 
+   function getquestionFeedbackDetailsBygetquestionID($product_id, $user_id, $promotion_id, $product_qr_code){
+	$res='0';
+	$ci = & get_instance();
+	//$admin_id 				= $ci->session->userdata('admin_user_id');	
+	if(!empty($user_id)){
+ 		$ci->db->select('selected_answer, updated_date, question_id');
+		$ci->db->from('consumer_feedback');
+		$ci->db->where(array('product_id'=>$product_id, 'user_id'=>$user_id, 'promotion_id'=>$promotion_id, 'product_qr_code'=>$product_qr_code));
 		
 		$query= $ci->db->get();
 		$res = $query->result_array();
@@ -6599,6 +6702,20 @@ function get_assigned_plant_user_list($user_id){
  	return $res_arr[0]['question'];
  }
  
+   function get_question_desc_by_id_options($question_id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($question_id)){
+			$ci->db->select('*');
+			$ci->db->from('feedback_question_bank');
+			$ci->db->where_in('question_id',explode(',',$question_id));
+			$query= $ci->db->get();//echo '***'.$ci->db->last_query();
+			//$res_arr = $query->result_array();
+ 		}
+ 	return $query;
+ }
+ 
  
   function get_locations_name_by_id($id){ 
 	$res='0';
@@ -6662,7 +6779,7 @@ function get_assigned_plant_user_list($user_id){
 	$ci = & get_instance();
 	 
  		if(!empty($id)){
-			$ci->db->select('group_concat(barcode_qr_code_no) as product_id');
+			$ci->db->select('group_concat(product_id) as product_id');
 			$ci->db->from('printed_barcode_qrcode');
 			$ci->db->where_in('barcode_qr_code_no',$id);
 			//$ci->db->or_where('barcode_qr_code_no2',$id);
@@ -7026,7 +7143,7 @@ function get_parent_user($id,$statusVal='')
 		 $res ='Live';
 		 break;
 		 case '2' :
-		 $res ='Abandoned';
+		 $res ='Closed';
 		 break;
 		 
 	}return $res;
@@ -7464,7 +7581,7 @@ function isProductCodeRegistered($bar_code_data){
 		return $query->num_rows();
 }
 
-   function NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_min_dob, $csc_consumer_max_dob){
+   function NumberOfSelectedConsumersByACustomer($customer_id, $consumer_gender, $consumer_city, $consumer_min_age, $consumer_max_age,$earned_loyalty_points_clubbed, $monthly_earnings, $job_profile, $education_qualification, $type_vehicle, $profession, $marital_status, $no_of_family_members, $loan_car, $loan_housing, $personal_loan, $credit_card_loan, $own_a_car, $house_type, $last_location, $life_insurance, $medical_insurance, $height_in_inches, $weight_in_kg, $hobbies, $sports, $entertainment, $spouse_gender, $spouse_phone, $spouse_dob, $marriage_anniversary, $spouse_work_status, $spouse_edu_qualification, $spouse_monthly_income, $spouse_loan, $spouse_personal_loan, $spouse_credit_card_loan, $spouse_own_a_car, $spouse_house_type, $spouse_height_inches, $spouse_weight_kg, $spouse_hobbies, $spouse_sports, $spouse_entertainment, $field_1, $field_2, $field_3, $field_4, $field_5, $field_6, $field_7, $field_8, $field_9, $field_10, $field_11, $field_12, $field_13, $field_14, $field_15, $field_16, $field_17, $field_18, $field_19, $field_20, $field_21, $field_22, $field_23, $field_24, $field_25, $field_26, $field_27, $field_28, $field_29, $field_30, $field_31, $field_32, $field_33, $field_34, $field_35, $field_36, $field_37, $field_38, $field_39, $field_40, $field_41, $field_42, $field_43, $field_44, $field_45, $field_46, $field_47, $field_48, $field_49, $field_50, $field_51, $field_52, $field_53, $field_54, $field_55, $field_56, $field_57, $field_58, $field_59, $field_60, $field_61, $field_62, $field_63, $field_64, $field_65, $field_66, $field_67, $field_68, $field_69, $field_70, $field_71, $field_72, $field_73, $field_74, $field_75, $field_76, $field_77, $field_78, $field_79, $field_80, $field_81, $field_82, $field_83, $field_84, $field_85, $field_86, $field_87, $field_88, $field_89, $field_90, $field_91, $field_92, $field_93, $field_94, $field_95, $field_96, $field_97, $field_98, $field_99, $field_100, $field_101, $field_102, $field_103, $field_104, $field_105, $field_106, $field_107, $field_108, $field_109, $field_110, $field_111, $field_112, $field_113, $field_114, $field_115, $field_116, $field_117, $field_118, $field_119, $field_120, $field_121, $field_122, $field_123, $field_124, $field_125, $field_126, $field_127, $field_128, $field_129, $field_130, $field_131, $field_132, $field_133, $field_134, $field_135, $field_136, $field_137, $field_138, $field_139, $field_140, $field_141, $field_142, $field_143, $field_144, $field_145, $field_146, $field_147, $field_148, $field_149, $field_150, $field_151, $field_152, $field_153, $field_154, $field_155, $field_156, $field_157, $field_158, $field_159, $field_160, $field_161, $field_162, $field_163, $field_164, $field_165, $field_166, $field_167, $field_168, $field_169, $field_170, $field_171, $field_172, $field_173, $field_174, $field_175, $field_176, $field_177, $field_178, $field_179, $field_180, $field_181, $field_182, $field_183, $field_184, $field_185, $field_186, $field_187, $field_188, $field_189, $field_190, $field_191, $field_192, $field_193, $field_194, $field_195, $field_196, $field_197, $field_198, $field_199, $field_200, $field_201){
 	   	
 	
 		$ci = & get_instance();
@@ -7474,8 +7591,289 @@ function isProductCodeRegistered($bar_code_data){
 		$ci->db->join('consumers C', 'C.id = CCL.consumer_id');
 		$array = array('CCL.customer_id' => $customer_id);
 		$ci->db->where($array);
-		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
-		$ci->db->where('C.gender', $csc_consumer_gender);
+		
+		
+		if($consumer_gender!='all') {
+		$ci->db->where('C.gender', $consumer_gender);
+			}
+			
+		if($consumer_city!='all') {
+		$ci->db->where('C.city', $consumer_city);
+			}	
+		
+		$consumer_min_dob = date('Y-m-d', strtotime('-' . $consumer_min_age . ' years'));
+		$consumer_max_dob = date('Y-m-d', strtotime('-' . $consumer_max_age . ' years'));
+		
+		if(!empty($consumer_max_age)){ 
+		$ci->db->where('C.dob >=', $consumer_max_dob);
+		//$ci->db->or_where('C.dob =', 'NULL');
+			}
+		if(!empty($consumer_min_age)){ 
+		$ci->db->where('C.dob <=', $consumer_min_dob);
+		//$ci->db->or_where('C.dob =', 'NULL');
+			}
+			
+			/*
+			$arr = explode(' ',trim($earned_loyalty_points_clubbed));
+			$ELP_from = $arr[0];
+			$ELP_to = $arr[2];			
+			if($earned_loyalty_points_clubbed!='all') { 
+			$ci->db->where('C.total_accumulated_points BETWEEN "'. $ELP_from . '" and "'. $ELP_to .'"');
+				}
+			*/
+			$arr1 = explode(' ',trim($monthly_earnings));
+			$ME_from = $arr1[0];
+			$ME_to = $arr1[2];			
+			if($monthly_earnings!='all') { $ci->db->where('C.monthly_earnings BETWEEN "'. $ME_from . '" and "'. $ME_to .'"');}
+			
+				
+						
+			if($job_profile!='all') { $ci->db->where('C.job_profile', $job_profile); }
+			if($education_qualification!='all') { $ci->db->where('C.education_qualification', $education_qualification); }
+			if($type_vehicle!='all') { $ci->db->where('C.type_vehicle', $type_vehicle); }
+			if($profession!='all') { $ci->db->where('C.profession', $profession); }
+			if($marital_status!='all') { $ci->db->where('C.marital_status', $marital_status); }
+			if($no_of_family_members!='all') { $ci->db->where('C.no_of_family_members', $no_of_family_members); }
+			if($loan_car!='all') { $ci->db->where('C.loan_car', $loan_car); }
+			if($loan_housing!='all') { $ci->db->where('C.loan_housing', $loan_housing); }
+			if($personal_loan!='all') { $ci->db->where('C.personal_loan', $personal_loan); }
+			if($credit_card_loan!='all') { $ci->db->where('C.credit_card_loan', $credit_card_loan); }
+			if($own_a_car!='all') { $ci->db->where('C.own_a_car', $own_a_car); }
+			if($house_type!='all') { $ci->db->where('C.house_type', $house_type); }
+			if($last_location!='all') { $ci->db->where('C.last_location', $last_location); }
+			if($life_insurance!='all') { $ci->db->where('C.life_insurance', $life_insurance); }
+			if($medical_insurance!='all') { $ci->db->where('C.medical_insurance', $medical_insurance); }
+			if($height_in_inches!='all') { $ci->db->where('C.height_in_inches', $height_in_inches); }
+			if($weight_in_kg!='all') { $ci->db->where('C.weight_in_kg', $weight_in_kg); }
+			if($hobbies!='all') { $ci->db->where('C.hobbies', $hobbies); }
+			if($sports!='all') { $ci->db->where('C.sports', $sports); }
+			if($entertainment!='all') { $ci->db->where('C.entertainment', $entertainment); }
+			if($spouse_gender!='all') { $ci->db->where('C.spouse_gender', $spouse_gender); }
+			if($spouse_phone!='all') { $ci->db->where('C.spouse_phone', $spouse_phone); }
+			if($spouse_dob!='all') { $ci->db->where('C.spouse_dob', $spouse_dob); }
+			if($marriage_anniversary!='all') { $ci->db->where('C.marriage_anniversary', $marriage_anniversary); }
+			if($spouse_work_status!='all') { $ci->db->where('C.spouse_work_status', $spouse_work_status); }
+			if($spouse_edu_qualification!='all') { $ci->db->where('C.spouse_edu_qualification', $spouse_edu_qualification); }
+			if($spouse_monthly_income!='all') { $ci->db->where('C.spouse_monthly_income', $spouse_monthly_income); }
+			if($spouse_loan!='all') { $ci->db->where('C.spouse_loan', $spouse_loan); }
+			if($spouse_personal_loan!='all') { $ci->db->where('C.spouse_personal_loan', $spouse_personal_loan); }
+			if($spouse_credit_card_loan!='all') { $ci->db->where('C.spouse_credit_card_loan', $spouse_credit_card_loan); }
+			if($spouse_own_a_car!='all') { $ci->db->where('C.spouse_own_a_car', $spouse_own_a_car); }
+			if($spouse_house_type!='all') { $ci->db->where('C.spouse_house_type', $spouse_house_type); }
+			if($spouse_height_inches!='all') { $ci->db->where('C.spouse_height_inches', $spouse_height_inches); }
+			if($spouse_weight_kg!='all') { $ci->db->where('C.spouse_weight_kg', $spouse_weight_kg); }
+			if($spouse_hobbies!='all') { $ci->db->where('C.spouse_hobbies', $spouse_hobbies); }
+			if($spouse_sports!='all') { $ci->db->where('C.spouse_sports', $spouse_sports); }
+			if($spouse_entertainment!='all') { $ci->db->where('C.spouse_entertainment', $spouse_entertainment); }
+			if($field_1!='all') { $ci->db->where('C.field_1', $field_1); }
+			if($field_2!='all') { $ci->db->where('C.field_2', $field_2); }
+			if($field_3!='all') { $ci->db->where('C.field_3', $field_3); }
+			if($field_4!='all') { $ci->db->where('C.field_4', $field_4); }
+			if($field_5!='all') { $ci->db->where('C.field_5', $field_5); }
+			if($field_6!='all') { $ci->db->where('C.field_6', $field_6); }
+			if($field_7!='all') { $ci->db->where('C.field_7', $field_7); }
+			if($field_8!='all') { $ci->db->where('C.field_8', $field_8); }
+			if($field_9!='all') { $ci->db->where('C.field_9', $field_9); }
+			if($field_10!='all') { $ci->db->where('C.field_10', $field_10); }
+			if($field_11!='all') { $ci->db->where('C.field_11', $field_11); }
+			if($field_12!='all') { $ci->db->where('C.field_12', $field_12); }
+			if($field_13!='all') { $ci->db->where('C.field_13', $field_13); }
+			if($field_14!='all') { $ci->db->where('C.field_14', $field_14); }
+			if($field_15!='all') { $ci->db->where('C.field_15', $field_15); }
+			if($field_16!='all') { $ci->db->where('C.field_16', $field_16); }
+			if($field_17!='all') { $ci->db->where('C.field_17', $field_17); }
+			if($field_18!='all') { $ci->db->where('C.field_18', $field_18); }
+			if($field_19!='all') { $ci->db->where('C.field_19', $field_19); }
+			if($field_20!='all') { $ci->db->where('C.field_20', $field_20); }
+			if($field_21!='all') { $ci->db->where('C.field_21', $field_21); }
+			if($field_22!='all') { $ci->db->where('C.field_22', $field_22); }
+			if($field_23!='all') { $ci->db->where('C.field_23', $field_23); }
+			if($field_24!='all') { $ci->db->where('C.field_24', $field_24); }
+			if($field_25!='all') { $ci->db->where('C.field_25', $field_25); }
+			if($field_26!='all') { $ci->db->where('C.field_26', $field_26); }
+			if($field_27!='all') { $ci->db->where('C.field_27', $field_27); }
+			if($field_28!='all') { $ci->db->where('C.field_28', $field_28); }
+			if($field_29!='all') { $ci->db->where('C.field_29', $field_29); }
+			if($field_30!='all') { $ci->db->where('C.field_30', $field_30); }
+			if($field_31!='all') { $ci->db->where('C.field_31', $field_31); }
+			if($field_32!='all') { $ci->db->where('C.field_32', $field_32); }
+			if($field_33!='all') { $ci->db->where('C.field_33', $field_33); }
+			if($field_34!='all') { $ci->db->where('C.field_34', $field_34); }
+			if($field_35!='all') { $ci->db->where('C.field_35', $field_35); }
+			if($field_36!='all') { $ci->db->where('C.field_36', $field_36); }
+			if($field_37!='all') { $ci->db->where('C.field_37', $field_37); }
+			if($field_38!='all') { $ci->db->where('C.field_38', $field_38); }
+			if($field_39!='all') { $ci->db->where('C.field_39', $field_39); }
+			if($field_40!='all') { $ci->db->where('C.field_40', $field_40); }
+			if($field_41!='all') { $ci->db->where('C.field_41', $field_41); }
+			if($field_42!='all') { $ci->db->where('C.field_42', $field_42); }
+			if($field_43!='all') { $ci->db->where('C.field_43', $field_43); }
+			if($field_44!='all') { $ci->db->where('C.field_44', $field_44); }
+			if($field_45!='all') { $ci->db->where('C.field_45', $field_45); }
+			if($field_46!='all') { $ci->db->where('C.field_46', $field_46); }
+			if($field_47!='all') { $ci->db->where('C.field_47', $field_47); }
+			if($field_48!='all') { $ci->db->where('C.field_48', $field_48); }
+			if($field_49!='all') { $ci->db->where('C.field_49', $field_49); }
+			if($field_50!='all') { $ci->db->where('C.field_50', $field_50); }
+			if($field_51!='all') { $ci->db->where('C.field_51', $field_51); }
+			if($field_52!='all') { $ci->db->where('C.field_52', $field_52); }
+			if($field_53!='all') { $ci->db->where('C.field_53', $field_53); }
+			if($field_54!='all') { $ci->db->where('C.field_54', $field_54); }
+			if($field_55!='all') { $ci->db->where('C.field_55', $field_55); }
+			if($field_56!='all') { $ci->db->where('C.field_56', $field_56); }
+			if($field_57!='all') { $ci->db->where('C.field_57', $field_57); }
+			if($field_58!='all') { $ci->db->where('C.field_58', $field_58); }
+			if($field_59!='all') { $ci->db->where('C.field_59', $field_59); }
+			if($field_60!='all') { $ci->db->where('C.field_60', $field_60); }
+			if($field_61!='all') { $ci->db->where('C.field_61', $field_61); }
+			if($field_62!='all') { $ci->db->where('C.field_62', $field_62); }
+			if($field_63!='all') { $ci->db->where('C.field_63', $field_63); }
+			if($field_64!='all') { $ci->db->where('C.field_64', $field_64); }
+			if($field_65!='all') { $ci->db->where('C.field_65', $field_65); }
+			if($field_66!='all') { $ci->db->where('C.field_66', $field_66); }
+			if($field_67!='all') { $ci->db->where('C.field_67', $field_67); }
+			if($field_68!='all') { $ci->db->where('C.field_68', $field_68); }
+			if($field_69!='all') { $ci->db->where('C.field_69', $field_69); }
+			if($field_70!='all') { $ci->db->where('C.field_70', $field_70); }
+			if($field_71!='all') { $ci->db->where('C.field_71', $field_71); }
+			if($field_72!='all') { $ci->db->where('C.field_72', $field_72); }
+			if($field_73!='all') { $ci->db->where('C.field_73', $field_73); }
+			if($field_74!='all') { $ci->db->where('C.field_74', $field_74); }
+			if($field_75!='all') { $ci->db->where('C.field_75', $field_75); }
+			if($field_76!='all') { $ci->db->where('C.field_76', $field_76); }
+			if($field_77!='all') { $ci->db->where('C.field_77', $field_77); }
+			if($field_78!='all') { $ci->db->where('C.field_78', $field_78); }
+			if($field_79!='all') { $ci->db->where('C.field_79', $field_79); }
+			if($field_80!='all') { $ci->db->where('C.field_80', $field_80); }
+			if($field_81!='all') { $ci->db->where('C.field_81', $field_81); }
+			if($field_82!='all') { $ci->db->where('C.field_82', $field_82); }
+			if($field_83!='all') { $ci->db->where('C.field_83', $field_83); }
+			if($field_84!='all') { $ci->db->where('C.field_84', $field_84); }
+			if($field_85!='all') { $ci->db->where('C.field_85', $field_85); }
+			if($field_86!='all') { $ci->db->where('C.field_86', $field_86); }
+			if($field_87!='all') { $ci->db->where('C.field_87', $field_87); }
+			if($field_88!='all') { $ci->db->where('C.field_88', $field_88); }
+			if($field_89!='all') { $ci->db->where('C.field_89', $field_89); }
+			if($field_90!='all') { $ci->db->where('C.field_90', $field_90); }
+			if($field_91!='all') { $ci->db->where('C.field_91', $field_91); }
+			if($field_92!='all') { $ci->db->where('C.field_92', $field_92); }
+			if($field_93!='all') { $ci->db->where('C.field_93', $field_93); }
+			if($field_94!='all') { $ci->db->where('C.field_94', $field_94); }
+			if($field_95!='all') { $ci->db->where('C.field_95', $field_95); }
+			if($field_96!='all') { $ci->db->where('C.field_96', $field_96); }
+			if($field_97!='all') { $ci->db->where('C.field_97', $field_97); }
+			if($field_98!='all') { $ci->db->where('C.field_98', $field_98); }
+			if($field_99!='all') { $ci->db->where('C.field_99', $field_99); }
+			if($field_100!='all') { $ci->db->where('C.field_100', $field_100); }
+			if($field_101!='all') { $ci->db->where('C.field_101', $field_101); }
+			if($field_102!='all') { $ci->db->where('C.field_102', $field_102); }
+			if($field_103!='all') { $ci->db->where('C.field_103', $field_103); }
+			if($field_104!='all') { $ci->db->where('C.field_104', $field_104); }
+			if($field_105!='all') { $ci->db->where('C.field_105', $field_105); }
+			if($field_106!='all') { $ci->db->where('C.field_106', $field_106); }
+			if($field_107!='all') { $ci->db->where('C.field_107', $field_107); }
+			if($field_108!='all') { $ci->db->where('C.field_108', $field_108); }
+			if($field_109!='all') { $ci->db->where('C.field_109', $field_109); }
+			if($field_110!='all') { $ci->db->where('C.field_110', $field_110); }
+			if($field_111!='all') { $ci->db->where('C.field_111', $field_111); }
+			if($field_112!='all') { $ci->db->where('C.field_112', $field_112); }
+			if($field_113!='all') { $ci->db->where('C.field_113', $field_113); }
+			if($field_114!='all') { $ci->db->where('C.field_114', $field_114); }
+			if($field_115!='all') { $ci->db->where('C.field_115', $field_115); }
+			if($field_116!='all') { $ci->db->where('C.field_116', $field_116); }
+			if($field_117!='all') { $ci->db->where('C.field_117', $field_117); }
+			if($field_118!='all') { $ci->db->where('C.field_118', $field_118); }
+			if($field_119!='all') { $ci->db->where('C.field_119', $field_119); }
+			if($field_120!='all') { $ci->db->where('C.field_120', $field_120); }
+			if($field_121!='all') { $ci->db->where('C.field_121', $field_121); }
+			if($field_122!='all') { $ci->db->where('C.field_122', $field_122); }
+			if($field_123!='all') { $ci->db->where('C.field_123', $field_123); }
+			if($field_124!='all') { $ci->db->where('C.field_124', $field_124); }
+			if($field_125!='all') { $ci->db->where('C.field_125', $field_125); }
+			if($field_126!='all') { $ci->db->where('C.field_126', $field_126); }
+			if($field_127!='all') { $ci->db->where('C.field_127', $field_127); }
+			if($field_128!='all') { $ci->db->where('C.field_128', $field_128); }
+			if($field_129!='all') { $ci->db->where('C.field_129', $field_129); }
+			if($field_130!='all') { $ci->db->where('C.field_130', $field_130); }
+			if($field_131!='all') { $ci->db->where('C.field_131', $field_131); }
+			if($field_132!='all') { $ci->db->where('C.field_132', $field_132); }
+			if($field_133!='all') { $ci->db->where('C.field_133', $field_133); }
+			if($field_134!='all') { $ci->db->where('C.field_134', $field_134); }
+			if($field_135!='all') { $ci->db->where('C.field_135', $field_135); }
+			if($field_136!='all') { $ci->db->where('C.field_136', $field_136); }
+			if($field_137!='all') { $ci->db->where('C.field_137', $field_137); }
+			if($field_138!='all') { $ci->db->where('C.field_138', $field_138); }
+			if($field_139!='all') { $ci->db->where('C.field_139', $field_139); }
+			if($field_140!='all') { $ci->db->where('C.field_140', $field_140); }
+			if($field_141!='all') { $ci->db->where('C.field_141', $field_141); }
+			if($field_142!='all') { $ci->db->where('C.field_142', $field_142); }
+			if($field_143!='all') { $ci->db->where('C.field_143', $field_143); }
+			if($field_144!='all') { $ci->db->where('C.field_144', $field_144); }
+			if($field_145!='all') { $ci->db->where('C.field_145', $field_145); }
+			if($field_146!='all') { $ci->db->where('C.field_146', $field_146); }
+			if($field_147!='all') { $ci->db->where('C.field_147', $field_147); }
+			if($field_148!='all') { $ci->db->where('C.field_148', $field_148); }
+			if($field_149!='all') { $ci->db->where('C.field_149', $field_149); }
+			if($field_150!='all') { $ci->db->where('C.field_150', $field_150); }
+			if($field_151!='all') { $ci->db->where('C.field_151', $field_151); }
+			if($field_152!='all') { $ci->db->where('C.field_152', $field_152); }
+			if($field_153!='all') { $ci->db->where('C.field_153', $field_153); }
+			if($field_154!='all') { $ci->db->where('C.field_154', $field_154); }
+			if($field_155!='all') { $ci->db->where('C.field_155', $field_155); }
+			if($field_156!='all') { $ci->db->where('C.field_156', $field_156); }
+			if($field_157!='all') { $ci->db->where('C.field_157', $field_157); }
+			if($field_158!='all') { $ci->db->where('C.field_158', $field_158); }
+			if($field_159!='all') { $ci->db->where('C.field_159', $field_159); }
+			if($field_160!='all') { $ci->db->where('C.field_160', $field_160); }
+			if($field_161!='all') { $ci->db->where('C.field_161', $field_161); }
+			if($field_162!='all') { $ci->db->where('C.field_162', $field_162); }
+			if($field_163!='all') { $ci->db->where('C.field_163', $field_163); }
+			if($field_164!='all') { $ci->db->where('C.field_164', $field_164); }
+			if($field_165!='all') { $ci->db->where('C.field_165', $field_165); }
+			if($field_166!='all') { $ci->db->where('C.field_166', $field_166); }
+			if($field_167!='all') { $ci->db->where('C.field_167', $field_167); }
+			if($field_168!='all') { $ci->db->where('C.field_168', $field_168); }
+			if($field_169!='all') { $ci->db->where('C.field_169', $field_169); }
+			if($field_170!='all') { $ci->db->where('C.field_170', $field_170); }
+			if($field_171!='all') { $ci->db->where('C.field_171', $field_171); }
+			if($field_172!='all') { $ci->db->where('C.field_172', $field_172); }
+			if($field_173!='all') { $ci->db->where('C.field_173', $field_173); }
+			if($field_174!='all') { $ci->db->where('C.field_174', $field_174); }
+			if($field_175!='all') { $ci->db->where('C.field_175', $field_175); }
+			if($field_176!='all') { $ci->db->where('C.field_176', $field_176); }
+			if($field_177!='all') { $ci->db->where('C.field_177', $field_177); }
+			if($field_178!='all') { $ci->db->where('C.field_178', $field_178); }
+			if($field_179!='all') { $ci->db->where('C.field_179', $field_179); }
+			if($field_180!='all') { $ci->db->where('C.field_180', $field_180); }
+			if($field_181!='all') { $ci->db->where('C.field_181', $field_181); }
+			if($field_182!='all') { $ci->db->where('C.field_182', $field_182); }
+			if($field_183!='all') { $ci->db->where('C.field_183', $field_183); }
+			if($field_184!='all') { $ci->db->where('C.field_184', $field_184); }
+			if($field_185!='all') { $ci->db->where('C.field_185', $field_185); }
+			if($field_186!='all') { $ci->db->where('C.field_186', $field_186); }
+			if($field_187!='all') { $ci->db->where('C.field_187', $field_187); }
+			if($field_188!='all') { $ci->db->where('C.field_188', $field_188); }
+			if($field_189!='all') { $ci->db->where('C.field_189', $field_189); }
+			if($field_190!='all') { $ci->db->where('C.field_190', $field_190); }
+			if($field_191!='all') { $ci->db->where('C.field_191', $field_191); }
+			if($field_192!='all') { $ci->db->where('C.field_192', $field_192); }
+			if($field_193!='all') { $ci->db->where('C.field_193', $field_193); }
+			if($field_194!='all') { $ci->db->where('C.field_194', $field_194); }
+			if($field_195!='all') { $ci->db->where('C.field_195', $field_195); }
+			if($field_196!='all') { $ci->db->where('C.field_196', $field_196); }
+			if($field_197!='all') { $ci->db->where('C.field_197', $field_197); }
+			if($field_198!='all') { $ci->db->where('C.field_198', $field_198); }
+			if($field_199!='all') { $ci->db->where('C.field_199', $field_199); }
+			if($field_200!='all') { $ci->db->where('C.field_200', $field_200); }
+			if($field_201!='all') { $ci->db->where('C.field_201', $field_201); }
+		
+		
+		
+		
+		
+		/*
+		if(($consumer_gender=='male')||($consumer_gender=='female')) {
+		$ci->db->where('C.gender', $consumer_gender);
 			}
 			
 		if(!empty($csc_consumer_city)){ 			
@@ -7486,6 +7884,7 @@ function isProductCodeRegistered($bar_code_data){
 		$ci->db->where('C.pin_code', $csc_consumer_pin);
 			}	
 			*/
+			/*
 		if(!empty($csc_consumer_min_dob)){ 			
 		$ci->db->where('C.dob <', $csc_consumer_min_dob);
 			}	
@@ -7494,7 +7893,7 @@ function isProductCodeRegistered($bar_code_data){
 		$ci->db->where('C.dob >', $csc_consumer_max_dob);
 			}
 		
-		
+		*/
 
 		//$ci->db->where("$CurrentAge BETWEEN $minvalue AND $maxvalue");
 		
@@ -7503,50 +7902,301 @@ function isProductCodeRegistered($bar_code_data){
 		return $query->num_rows();
 }
 
-   function NumberOfSelectedConsumersByACustomer2($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_min_dob, $csc_consumer_max_dob){
+ 
+	
+
+
+   function NumberOfSelectedConsumersByACustomer2($customer_id, $unique_system_selection_criteria_id){
 	   	
 	
 		$ci = & get_instance();
-		$ci->db->select('C.*');	
+		$ci->db->select('C.*');
 		$ci->db->from('consumers C');		
-		//$ci->db->from('consumer_customer_link CCL');
-		//$ci->db->join('consumer_selection_criteria CSC', 'CSC.consumer_id = CCL.consumer_id');
 		$ci->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		
+		//$ci->db->join('consumer_passbook CP', 'CP.consumer_id = C.id'); // see
+		
 		//$ci->db->join('consumers C', 'C.id = CCL.consumer_id');
 		//$array = array('CCL.customer_id' => $customer_id);
+		$query = $ci->db->query("SELECT * FROM consumer_selection_criteria WHERE unique_system_selection_criteria_id =  '$unique_system_selection_criteria_id'");
+		$row = $query->row();
+		//$row->item_id
+		
 		$ci->db->where('CCL.customer_id', $customer_id);
-		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
-		$ci->db->where('C.gender', $csc_consumer_gender);
+		
+		if($row->consumer_gender!='all') {
+		$ci->db->where('C.gender', $row->consumer_gender);
 			}
-			
-		if(!empty($csc_consumer_city)){ 			
-		$ci->db->where('C.city', $csc_consumer_city);
+		if($row->consumer_city!='all') {
+		$ci->db->where('C.city', $row->consumer_city);
 			}
-			
-			//$dobthenMin = date('Y-m-d', strtotime("-".$csc_consumer_min_dob." years"));
-			//$dobthenMax = date('Y-m-d', strtotime("-".$csc_consumer_max_dob." years"));
-		//$ci->db->where('C.dob BETWEEN "'. date('Y-m-d', strtotime($dobthenMin)). '" and "'. date('Y-m-d', strtotime($dobthenMax)).'"');	
-			
-		//if(!empty($promotion_type)){ 			
-		//$ci->db->where('CSC.promotion_type', $promotion_type);
-		//	}	
+		
+		$consumer_min_dob = date('Y-m-d', strtotime('-' . $row->consumer_min_age . ' years'));
+		$consumer_max_dob = date('Y-m-d', strtotime('-' . $row->consumer_max_age . ' years'));
+		
+		if(!empty($row->consumer_max_age)){ 
+		$ci->db->where('C.dob >=', $consumer_max_dob);
+		//$ci->db->or_where('C.dob =', 'NULL');
+			}
+		if(!empty($row->consumer_min_age)){ 
+		$ci->db->where('C.dob <=', $consumer_min_dob);
+		//$ci->db->or_where('C.dob =', 'NULL');
+			}
 			
 			/*
-		if(!empty($csc_consumer_min_dob)){
-				$dobthenMin = date('Y-m-d', strtotime("-".$csc_consumer_min_dob." years"));
-		//$ci->db->where('C.dob  >=', $dobthenMin);
-		$ci->db->where(' C.dob >= date("'.$dobthenMin.'")');
-			}	
-		
-		if(!empty($csc_consumer_max_dob)){ 	
-		$dobthenMax = date('Y-m-d', strtotime("-".$csc_consumer_max_dob." years"));		
-		//$ci->db->where('C.dob <=', $dobthenMax);
-		$ci->db->where(' C.dob >= date("'.$dobthenMax.'")');
-			}
+			$arr = explode(' ',trim($earned_loyalty_points_clubbed));
+			$ELP_from = $arr[0];
+			$ELP_to = $arr[2];			
+			if($earned_loyalty_points_clubbed!='all') { 
+			$ci->db->where('C.total_accumulated_points BETWEEN "'. $ELP_from . '" and "'. $ELP_to .'"');
+				}
 			*/
-		//$ci->db->where("$CurrentAge BETWEEN $minvalue AND $maxvalue");
+			$arr1 = explode(' ',trim($row->monthly_earnings));
+			$ME_from = $arr1[0];
+			$ME_to = $arr1[2];			
+			if($row->monthly_earnings!='all') { $ci->db->where('C.monthly_earnings BETWEEN "'. $ME_from . '" and "'. $ME_to .'"');}	
+						
+			if($row->job_profile!='all') { $ci->db->where('C.job_profile', $row->job_profile); }
+			if($row->education_qualification!='all') { $ci->db->where('C.education_qualification', $row->education_qualification); }
+			if($row->type_vehicle!='all') { $ci->db->where('C.type_vehicle', $row->type_vehicle); }
+			if($row->profession!='all') { $ci->db->where('C.profession', $row->profession); }
+			if($row->marital_status!='all') { $ci->db->where('C.marital_status', $row->marital_status); }
+			if($row->no_of_family_members!='all') { $ci->db->where('C.no_of_family_members', $row->no_of_family_members); }
+			if($row->loan_car!='all') { $ci->db->where('C.loan_car', $row->loan_car); }
+			if($row->loan_housing!='all') { $ci->db->where('C.loan_housing', $row->loan_housing); }
+			if($row->personal_loan!='all') { $ci->db->where('C.personal_loan', $row->personal_loan); }
+			if($row->credit_card_loan!='all') { $ci->db->where('C.credit_card_loan', $row->credit_card_loan); }
+			if($row->own_a_car!='all') { $ci->db->where('C.own_a_car', $row->own_a_car); }
+			if($row->house_type!='all') { $ci->db->where('C.house_type', $row->house_type); }
+			if($row->last_location!='all') { $ci->db->where('C.last_location', $row->last_location); }
+			if($row->life_insurance!='all') { $ci->db->where('C.life_insurance', $row->life_insurance); }
+			if($row->medical_insurance!='all') { $ci->db->where('C.medical_insurance', $row->medical_insurance); }
+			if($row->height_in_inches!='all') { $ci->db->where('C.height_in_inches', $row->height_in_inches); }
+			if($row->weight_in_kg!='all') { $ci->db->where('C.weight_in_kg', $row->weight_in_kg); }
+			if($row->hobbies!='all') { $ci->db->where('C.hobbies', $row->hobbies); }
+			if($row->sports!='all') { $ci->db->where('C.sports', $row->sports); }
+			if($row->entertainment!='all') { $ci->db->where('C.entertainment', $row->entertainment); }
+			if($row->spouse_gender!='all') { $ci->db->where('C.spouse_gender', $row->spouse_gender); }
+			if($row->spouse_phone!='all') { $ci->db->where('C.spouse_phone', $row->spouse_phone); }
+			if($row->spouse_dob!='all') { $ci->db->where('C.spouse_dob', $row->spouse_dob); }
+			if($row->marriage_anniversary!='all') { $ci->db->where('C.marriage_anniversary', $row->marriage_anniversary); }
+			if($row->spouse_work_status!='all') { $ci->db->where('C.spouse_work_status', $row->spouse_work_status); }
+			if($row->spouse_edu_qualification!='all') { $ci->db->where('C.spouse_edu_qualification', $row->spouse_edu_qualification); }
+			if($row->spouse_monthly_income!='all') { $ci->db->where('C.spouse_monthly_income', $row->spouse_monthly_income); }
+			if($row->spouse_loan!='all') { $ci->db->where('C.spouse_loan', $row->spouse_loan); }
+			if($row->spouse_personal_loan!='all') { $ci->db->where('C.spouse_personal_loan', $row->spouse_personal_loan); }
+			if($row->spouse_credit_card_loan!='all') { $ci->db->where('C.spouse_credit_card_loan', $row->spouse_credit_card_loan); }
+			if($row->spouse_own_a_car!='all') { $ci->db->where('C.spouse_own_a_car', $row->spouse_own_a_car); }
+			if($row->spouse_house_type!='all') { $ci->db->where('C.spouse_house_type', $row->spouse_house_type); }
+			if($row->spouse_height_inches!='all') { $ci->db->where('C.spouse_height_inches', $row->spouse_height_inches); }
+			if($row->spouse_weight_kg!='all') { $ci->db->where('C.spouse_weight_kg', $row->spouse_weight_kg); }
+			if($row->spouse_hobbies!='all') { $ci->db->where('C.spouse_hobbies', $row->spouse_hobbies); }
+			if($row->spouse_sports!='all') { $ci->db->where('C.spouse_sports', $row->spouse_sports); }
+			if($row->spouse_entertainment!='all') { $ci->db->where('C.spouse_entertainment', $row->spouse_entertainment); }
+			if($row->field_1!='all') { $ci->db->where('C.field_1', $row->field_1); }
+			if($row->field_2!='all') { $ci->db->where('C.field_2', $row->field_2); }
+			if($row->field_3!='all') { $ci->db->where('C.field_3', $row->field_3); }
+			if($row->field_4!='all') { $ci->db->where('C.field_4', $row->field_4); }
+			if($row->field_5!='all') { $ci->db->where('C.field_5', $row->field_5); }
+			if($row->field_6!='all') { $ci->db->where('C.field_6', $row->field_6); }
+			if($row->field_7!='all') { $ci->db->where('C.field_7', $row->field_7); }
+			if($row->field_8!='all') { $ci->db->where('C.field_8', $row->field_8); }
+			if($row->field_9!='all') { $ci->db->where('C.field_9', $row->field_9); }
+			if($row->field_10!='all') { $ci->db->where('C.field_10', $row->field_10); }
+			if($row->field_11!='all') { $ci->db->where('C.field_11', $row->field_11); }
+			if($row->field_12!='all') { $ci->db->where('C.field_12', $row->field_12); }
+			if($row->field_13!='all') { $ci->db->where('C.field_13', $row->field_13); }
+			if($row->field_14!='all') { $ci->db->where('C.field_14', $row->field_14); }
+			if($row->field_15!='all') { $ci->db->where('C.field_15', $row->field_15); }
+			if($row->field_16!='all') { $ci->db->where('C.field_16', $row->field_16); }
+			if($row->field_17!='all') { $ci->db->where('C.field_17', $row->field_17); }
+			if($row->field_18!='all') { $ci->db->where('C.field_18', $row->field_18); }
+			if($row->field_19!='all') { $ci->db->where('C.field_19', $row->field_19); }
+			if($row->field_20!='all') { $ci->db->where('C.field_20', $row->field_20); }
+			if($row->field_21!='all') { $ci->db->where('C.field_21', $row->field_21); }
+			if($row->field_22!='all') { $ci->db->where('C.field_22', $row->field_22); }
+			if($row->field_23!='all') { $ci->db->where('C.field_23', $row->field_23); }
+			if($row->field_24!='all') { $ci->db->where('C.field_24', $row->field_24); }
+			if($row->field_25!='all') { $ci->db->where('C.field_25', $row->field_25); }
+			if($row->field_26!='all') { $ci->db->where('C.field_26', $row->field_26); }
+			if($row->field_27!='all') { $ci->db->where('C.field_27', $row->field_27); }
+			if($row->field_28!='all') { $ci->db->where('C.field_28', $row->field_28); }
+			if($row->field_29!='all') { $ci->db->where('C.field_29', $row->field_29); }
+			if($row->field_30!='all') { $ci->db->where('C.field_30', $row->field_30); }
+			if($row->field_31!='all') { $ci->db->where('C.field_31', $row->field_31); }
+			if($row->field_32!='all') { $ci->db->where('C.field_32', $row->field_32); }
+			if($row->field_33!='all') { $ci->db->where('C.field_33', $row->field_33); }
+			if($row->field_34!='all') { $ci->db->where('C.field_34', $row->field_34); }
+			if($row->field_35!='all') { $ci->db->where('C.field_35', $row->field_35); }
+			if($row->field_36!='all') { $ci->db->where('C.field_36', $row->field_36); }
+			if($row->field_37!='all') { $ci->db->where('C.field_37', $row->field_37); }
+			if($row->field_38!='all') { $ci->db->where('C.field_38', $row->field_38); }
+			if($row->field_39!='all') { $ci->db->where('C.field_39', $row->field_39); }
+			if($row->field_40!='all') { $ci->db->where('C.field_40', $row->field_40); }
+			if($row->field_41!='all') { $ci->db->where('C.field_41', $row->field_41); }
+			if($row->field_42!='all') { $ci->db->where('C.field_42', $row->field_42); }
+			if($row->field_43!='all') { $ci->db->where('C.field_43', $row->field_43); }
+			if($row->field_44!='all') { $ci->db->where('C.field_44', $row->field_44); }
+			if($row->field_45!='all') { $ci->db->where('C.field_45', $row->field_45); }
+			if($row->field_46!='all') { $ci->db->where('C.field_46', $row->field_46); }
+			if($row->field_47!='all') { $ci->db->where('C.field_47', $row->field_47); }
+			if($row->field_48!='all') { $ci->db->where('C.field_48', $row->field_48); }
+			if($row->field_49!='all') { $ci->db->where('C.field_49', $row->field_49); }
+			if($row->field_50!='all') { $ci->db->where('C.field_50', $row->field_50); }
+			if($row->field_51!='all') { $ci->db->where('C.field_51', $row->field_51); }
+			if($row->field_52!='all') { $ci->db->where('C.field_52', $row->field_52); }
+			if($row->field_53!='all') { $ci->db->where('C.field_53', $row->field_53); }
+			if($row->field_54!='all') { $ci->db->where('C.field_54', $row->field_54); }
+			if($row->field_55!='all') { $ci->db->where('C.field_55', $row->field_55); }
+			if($row->field_56!='all') { $ci->db->where('C.field_56', $row->field_56); }
+			if($row->field_57!='all') { $ci->db->where('C.field_57', $row->field_57); }
+			if($row->field_58!='all') { $ci->db->where('C.field_58', $row->field_58); }
+			if($row->field_59!='all') { $ci->db->where('C.field_59', $row->field_59); }
+			if($row->field_60!='all') { $ci->db->where('C.field_60', $row->field_60); }
+			if($row->field_61!='all') { $ci->db->where('C.field_61', $row->field_61); }
+			if($row->field_62!='all') { $ci->db->where('C.field_62', $row->field_62); }
+			if($row->field_63!='all') { $ci->db->where('C.field_63', $row->field_63); }
+			if($row->field_64!='all') { $ci->db->where('C.field_64', $row->field_64); }
+			if($row->field_65!='all') { $ci->db->where('C.field_65', $row->field_65); }
+			if($row->field_66!='all') { $ci->db->where('C.field_66', $row->field_66); }
+			if($row->field_67!='all') { $ci->db->where('C.field_67', $row->field_67); }
+			if($row->field_68!='all') { $ci->db->where('C.field_68', $row->field_68); }
+			if($row->field_69!='all') { $ci->db->where('C.field_69', $row->field_69); }
+			if($row->field_70!='all') { $ci->db->where('C.field_70', $row->field_70); }
+			if($row->field_71!='all') { $ci->db->where('C.field_71', $row->field_71); }
+			if($row->field_72!='all') { $ci->db->where('C.field_72', $row->field_72); }
+			if($row->field_73!='all') { $ci->db->where('C.field_73', $row->field_73); }
+			if($row->field_74!='all') { $ci->db->where('C.field_74', $row->field_74); }
+			if($row->field_75!='all') { $ci->db->where('C.field_75', $row->field_75); }
+			if($row->field_76!='all') { $ci->db->where('C.field_76', $row->field_76); }
+			if($row->field_77!='all') { $ci->db->where('C.field_77', $row->field_77); }
+			if($row->field_78!='all') { $ci->db->where('C.field_78', $row->field_78); }
+			if($row->field_79!='all') { $ci->db->where('C.field_79', $row->field_79); }
+			if($row->field_80!='all') { $ci->db->where('C.field_80', $row->field_80); }
+			if($row->field_81!='all') { $ci->db->where('C.field_81', $row->field_81); }
+			if($row->field_82!='all') { $ci->db->where('C.field_82', $row->field_82); }
+			if($row->field_83!='all') { $ci->db->where('C.field_83', $row->field_83); }
+			if($row->field_84!='all') { $ci->db->where('C.field_84', $row->field_84); }
+			if($row->field_85!='all') { $ci->db->where('C.field_85', $row->field_85); }
+			if($row->field_86!='all') { $ci->db->where('C.field_86', $row->field_86); }
+			if($row->field_87!='all') { $ci->db->where('C.field_87', $row->field_87); }
+			if($row->field_88!='all') { $ci->db->where('C.field_88', $row->field_88); }
+			if($row->field_89!='all') { $ci->db->where('C.field_89', $row->field_89); }
+			if($row->field_90!='all') { $ci->db->where('C.field_90', $row->field_90); }
+			if($row->field_91!='all') { $ci->db->where('C.field_91', $row->field_91); }
+			if($row->field_92!='all') { $ci->db->where('C.field_92', $row->field_92); }
+			if($row->field_93!='all') { $ci->db->where('C.field_93', $row->field_93); }
+			if($row->field_94!='all') { $ci->db->where('C.field_94', $row->field_94); }
+			if($row->field_95!='all') { $ci->db->where('C.field_95', $row->field_95); }
+			if($row->field_96!='all') { $ci->db->where('C.field_96', $row->field_96); }
+			if($row->field_97!='all') { $ci->db->where('C.field_97', $row->field_97); }
+			if($row->field_98!='all') { $ci->db->where('C.field_98', $row->field_98); }
+			if($row->field_99!='all') { $ci->db->where('C.field_99', $row->field_99); }
+			if($row->field_100!='all') { $ci->db->where('C.field_100', $row->field_100); }
+			if($row->field_101!='all') { $ci->db->where('C.field_101', $row->field_101); }
+			if($row->field_102!='all') { $ci->db->where('C.field_102', $row->field_102); }
+			if($row->field_103!='all') { $ci->db->where('C.field_103', $row->field_103); }
+			if($row->field_104!='all') { $ci->db->where('C.field_104', $row->field_104); }
+			if($row->field_105!='all') { $ci->db->where('C.field_105', $row->field_105); }
+			if($row->field_106!='all') { $ci->db->where('C.field_106', $row->field_106); }
+			if($row->field_107!='all') { $ci->db->where('C.field_107', $row->field_107); }
+			if($row->field_108!='all') { $ci->db->where('C.field_108', $row->field_108); }
+			if($row->field_109!='all') { $ci->db->where('C.field_109', $row->field_109); }
+			if($row->field_110!='all') { $ci->db->where('C.field_110', $row->field_110); }
+			if($row->field_111!='all') { $ci->db->where('C.field_111', $row->field_111); }
+			if($row->field_112!='all') { $ci->db->where('C.field_112', $row->field_112); }
+			if($row->field_113!='all') { $ci->db->where('C.field_113', $row->field_113); }
+			if($row->field_114!='all') { $ci->db->where('C.field_114', $row->field_114); }
+			if($row->field_115!='all') { $ci->db->where('C.field_115', $row->field_115); }
+			if($row->field_116!='all') { $ci->db->where('C.field_116', $row->field_116); }
+			if($row->field_117!='all') { $ci->db->where('C.field_117', $row->field_117); }
+			if($row->field_118!='all') { $ci->db->where('C.field_118', $row->field_118); }
+			if($row->field_119!='all') { $ci->db->where('C.field_119', $row->field_119); }
+			if($row->field_120!='all') { $ci->db->where('C.field_120', $row->field_120); }
+			if($row->field_121!='all') { $ci->db->where('C.field_121', $row->field_121); }
+			if($row->field_122!='all') { $ci->db->where('C.field_122', $row->field_122); }
+			if($row->field_123!='all') { $ci->db->where('C.field_123', $row->field_123); }
+			if($row->field_124!='all') { $ci->db->where('C.field_124', $row->field_124); }
+			if($row->field_125!='all') { $ci->db->where('C.field_125', $row->field_125); }
+			if($row->field_126!='all') { $ci->db->where('C.field_126', $row->field_126); }
+			if($row->field_127!='all') { $ci->db->where('C.field_127', $row->field_127); }
+			if($row->field_128!='all') { $ci->db->where('C.field_128', $row->field_128); }
+			if($row->field_129!='all') { $ci->db->where('C.field_129', $row->field_129); }
+			if($row->field_130!='all') { $ci->db->where('C.field_130', $row->field_130); }
+			if($row->field_131!='all') { $ci->db->where('C.field_131', $row->field_131); }
+			if($row->field_132!='all') { $ci->db->where('C.field_132', $row->field_132); }
+			if($row->field_133!='all') { $ci->db->where('C.field_133', $row->field_133); }
+			if($row->field_134!='all') { $ci->db->where('C.field_134', $row->field_134); }
+			if($row->field_135!='all') { $ci->db->where('C.field_135', $row->field_135); }
+			if($row->field_136!='all') { $ci->db->where('C.field_136', $row->field_136); }
+			if($row->field_137!='all') { $ci->db->where('C.field_137', $row->field_137); }
+			if($row->field_138!='all') { $ci->db->where('C.field_138', $row->field_138); }
+			if($row->field_139!='all') { $ci->db->where('C.field_139', $row->field_139); }
+			if($row->field_140!='all') { $ci->db->where('C.field_140', $row->field_140); }
+			if($row->field_141!='all') { $ci->db->where('C.field_141', $row->field_141); }
+			if($row->field_142!='all') { $ci->db->where('C.field_142', $row->field_142); }
+			if($row->field_143!='all') { $ci->db->where('C.field_143', $row->field_143); }
+			if($row->field_144!='all') { $ci->db->where('C.field_144', $row->field_144); }
+			if($row->field_145!='all') { $ci->db->where('C.field_145', $row->field_145); }
+			if($row->field_146!='all') { $ci->db->where('C.field_146', $row->field_146); }
+			if($row->field_147!='all') { $ci->db->where('C.field_147', $row->field_147); }
+			if($row->field_148!='all') { $ci->db->where('C.field_148', $row->field_148); }
+			if($row->field_149!='all') { $ci->db->where('C.field_149', $row->field_149); }
+			if($row->field_150!='all') { $ci->db->where('C.field_150', $row->field_150); }
+			if($row->field_151!='all') { $ci->db->where('C.field_151', $row->field_151); }
+			if($row->field_152!='all') { $ci->db->where('C.field_152', $row->field_152); }
+			if($row->field_153!='all') { $ci->db->where('C.field_153', $row->field_153); }
+			if($row->field_154!='all') { $ci->db->where('C.field_154', $row->field_154); }
+			if($row->field_155!='all') { $ci->db->where('C.field_155', $row->field_155); }
+			if($row->field_156!='all') { $ci->db->where('C.field_156', $row->field_156); }
+			if($row->field_157!='all') { $ci->db->where('C.field_157', $row->field_157); }
+			if($row->field_158!='all') { $ci->db->where('C.field_158', $row->field_158); }
+			if($row->field_159!='all') { $ci->db->where('C.field_159', $row->field_159); }
+			if($row->field_160!='all') { $ci->db->where('C.field_160', $row->field_160); }
+			if($row->field_161!='all') { $ci->db->where('C.field_161', $row->field_161); }
+			if($row->field_162!='all') { $ci->db->where('C.field_162', $row->field_162); }
+			if($row->field_163!='all') { $ci->db->where('C.field_163', $row->field_163); }
+			if($row->field_164!='all') { $ci->db->where('C.field_164', $row->field_164); }
+			if($row->field_165!='all') { $ci->db->where('C.field_165', $row->field_165); }
+			if($row->field_166!='all') { $ci->db->where('C.field_166', $row->field_166); }
+			if($row->field_167!='all') { $ci->db->where('C.field_167', $row->field_167); }
+			if($row->field_168!='all') { $ci->db->where('C.field_168', $row->field_168); }
+			if($row->field_169!='all') { $ci->db->where('C.field_169', $row->field_169); }
+			if($row->field_170!='all') { $ci->db->where('C.field_170', $row->field_170); }
+			if($row->field_171!='all') { $ci->db->where('C.field_171', $row->field_171); }
+			if($row->field_172!='all') { $ci->db->where('C.field_172', $row->field_172); }
+			if($row->field_173!='all') { $ci->db->where('C.field_173', $row->field_173); }
+			if($row->field_174!='all') { $ci->db->where('C.field_174', $row->field_174); }
+			if($row->field_175!='all') { $ci->db->where('C.field_175', $row->field_175); }
+			if($row->field_176!='all') { $ci->db->where('C.field_176', $row->field_176); }
+			if($row->field_177!='all') { $ci->db->where('C.field_177', $row->field_177); }
+			if($row->field_178!='all') { $ci->db->where('C.field_178', $row->field_178); }
+			if($row->field_179!='all') { $ci->db->where('C.field_179', $row->field_179); }
+			if($row->field_180!='all') { $ci->db->where('C.field_180', $row->field_180); }
+			if($row->field_181!='all') { $ci->db->where('C.field_181', $row->field_181); }
+			if($row->field_182!='all') { $ci->db->where('C.field_182', $row->field_182); }
+			if($row->field_183!='all') { $ci->db->where('C.field_183', $row->field_183); }
+			if($row->field_184!='all') { $ci->db->where('C.field_184', $row->field_184); }
+			if($row->field_185!='all') { $ci->db->where('C.field_185', $row->field_185); }
+			if($row->field_186!='all') { $ci->db->where('C.field_186', $row->field_186); }
+			if($row->field_187!='all') { $ci->db->where('C.field_187', $row->field_187); }
+			if($row->field_188!='all') { $ci->db->where('C.field_188', $row->field_188); }
+			if($row->field_189!='all') { $ci->db->where('C.field_189', $row->field_189); }
+			if($row->field_190!='all') { $ci->db->where('C.field_190', $row->field_190); }
+			if($row->field_191!='all') { $ci->db->where('C.field_191', $row->field_191); }
+			if($row->field_192!='all') { $ci->db->where('C.field_192', $row->field_192); }
+			if($row->field_193!='all') { $ci->db->where('C.field_193', $row->field_193); }
+			if($row->field_194!='all') { $ci->db->where('C.field_194', $row->field_194); }
+			if($row->field_195!='all') { $ci->db->where('C.field_195', $row->field_195); }
+			if($row->field_196!='all') { $ci->db->where('C.field_196', $row->field_196); }
+			if($row->field_197!='all') { $ci->db->where('C.field_197', $row->field_197); }
+			if($row->field_198!='all') { $ci->db->where('C.field_198', $row->field_198); }
+			if($row->field_199!='all') { $ci->db->where('C.field_199', $row->field_199); }
+			if($row->field_200!='all') { $ci->db->where('C.field_200', $row->field_200); }
+			if($row->field_201!='all') { $ci->db->where('C.field_201', $row->field_201); }
+
 		
-		//$ci->db->where("$CurrentAge BETWEEN $minvalue AND $maxvalue");
+		
 		$query = $ci->db->get();//echo $ci->db->last_query();
 		return $query->num_rows();
 }
@@ -7562,16 +8212,18 @@ function isProductCodeRegistered($bar_code_data){
 		return $query->row();
 }
 
+
+
 //Sanjay
-   function AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob){
+   function AllSelectedConsumersByACustomer($customer_id, $consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob){
 	   
 		$ci = & get_instance();
 		$ci->db->select('C.id');	
 		$ci->db->from('consumers C');		
 		$ci->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
 		$ci->db->where('CCL.customer_id', $customer_id);
-		if(($csc_consumer_gender=='male')||($csc_consumer_gender=='female')) {
-		$ci->db->where('C.gender', $csc_consumer_gender);
+		if(($consumer_gender=='male')||($consumer_gender=='female')) {
+		$ci->db->where('C.gender', $consumer_gender);
 			}			
 		if(!empty($csc_consumer_city)){ 			
 		$ci->db->where('C.city', $csc_consumer_city);
@@ -7680,7 +8332,7 @@ function isProductCodeRegistered($bar_code_data){
  function get_all_consumer_profile_attribute_types(){	
 		$res 		= '';
 		$ci 		= & get_instance();
-		$ci->db->select('cpatm_id, cpatm_name');
+		$ci->db->select('cpatm_id, cpatm_name, cpatm_name_slug, profile_bucket');
 		$ci->db->from('consumer_profile_attribute_type_master');	
 		//$ci->db->where(array('status'=>'1','id!='=>'2'));
 		//$ci->db->where('status',1);
@@ -7692,5 +8344,36 @@ function isProductCodeRegistered($bar_code_data){
 	}		
  	return $res;
 }
+/*
+ function Check_Selection_Criteria_Exists($key){	
+		$res 		= '';
+		$ci 		= & get_instance();
+		$ci->db->select('cpatm_name_slug');
+		$ci->db->from('consumer_profile_attribute_type_master');	
+		//$ci->db->where(array('status'=>'1','id!='=>'2'));
+		$ci->db->where('cpatm_name_slug',$key);
+		//$ci->db->where(array('status'=>'1','spideyImage!='=>''));	
+	$query = $ci->db->get();  echo $ci->db->last_query(); 
+	if ($query->num_rows() > 0) {		 
+			return true;		 
+				}		
+		return false;
+	}
+*/
+
+function Check_Selection_Criteria_Exists($key)
+{		$res 		= '';
+		$ci 		= & get_instance();
+    $ci->db->where('cpm_type_slug',$key);
+    $query = $ci->db->get('consumer_profile_master');
+    if ($query->num_rows() > 0){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
+
+
 	
 ?>

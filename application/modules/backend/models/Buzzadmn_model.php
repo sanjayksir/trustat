@@ -433,8 +433,14 @@ class Buzzadmn_model extends CI_Model {
 		   "product_image_response_lps" =>  trim($data['product_image_response_lps']),
 		   "product_audio_response_lps" =>  trim($data['product_audio_response_lps']),
 		   "product_video_response_lps" =>  trim($data['product_video_response_lps']),
-		   "product_ad_response_lps" =>  trim($data['product_ad_response_lps']),
-		   "product_survey_response_lps" =>  trim($data['product_survey_response_lps']),
+		   "product_ad_video_response_lps" =>  trim($data['product_ad_video_response_lps']),		   
+		   "product_ad_audio_response_lps" =>  trim($data['product_ad_audio_response_lps']),
+		   "product_ad_pdf_response_lps" =>  trim($data['product_ad_pdf_response_lps']),
+		   "product_ad_image_response_lps" =>  trim($data['product_ad_image_response_lps']),
+		   "product_survey_video_response_lps" =>  trim($data['product_survey_video_response_lps']),
+		   "product_survey_audio_response_lps" =>  trim($data['product_survey_audio_response_lps']),
+		   "product_survey_pdf_response_lps" =>  trim($data['product_survey_pdf_response_lps']),
+		   "product_survey_image_response_lps" =>  trim($data['product_survey_image_response_lps']),
 		   "product_pdf_response_lps" =>  trim($data['product_pdf_response_lps']),
 		   "product_demo_video_response_lps" =>  trim($data['product_demo_video_response_lps']),
 		   "product_demo_audio_response_lps" =>  trim($data['product_demo_audio_response_lps']),
@@ -443,8 +449,14 @@ class Buzzadmn_model extends CI_Model {
 		   "product_audio_response_fbqq" =>  trim($data['product_audio_response_fbqq']),
 		   "product_video_response_fbqq" =>  trim($data['product_video_response_fbqq']),
 		   "product_pdf_response_fbqq" =>  trim($data['product_pdf_response_fbqq']),
-		   "product_ad_response_fbqq" =>  trim($data['product_ad_response_fbqq']),
-		   "product_survey_response_fbqq" =>  trim($data['product_survey_response_fbqq']),
+		   "product_ad_video_response_fbqq" =>  trim($data['product_ad_video_response_fbqq']),
+		   "product_ad_audio_response_fbqq" =>  trim($data['product_ad_audio_response_fbqq']),
+		   "product_ad_pdf_response_fbqq" =>  trim($data['product_ad_pdf_response_fbqq']),
+		   "product_ad_image_response_fbqq" =>  trim($data['product_ad_image_response_fbqq']),
+		   "product_survey_video_response_fbqq" =>  trim($data['product_survey_video_response_fbqq']),
+		   "product_survey_audio_response_fbqq" =>  trim($data['product_survey_audio_response_fbqq']),
+		   "product_survey_pdf_response_fbqq" =>  trim($data['product_survey_pdf_response_fbqq']),
+		   "product_survey_image_response_fbqq" =>  trim($data['product_survey_image_response_fbqq']),		  
 		   "product_demo_video_response_fbqq" =>  trim($data['product_demo_video_response_fbqq']),
 		   "product_demo_audio_response_fbqq" =>  trim($data['product_demo_audio_response_fbqq']),
 			"product_description" =>  trim($data['pickDesc']),
@@ -455,7 +467,13 @@ class Buzzadmn_model extends CI_Model {
             "product_pdf" => trim($data['attachments']),
             "product_demo_video" => trim($data['demovideo']),
 			"product_push_ad_video" => trim($data['push_advideo']),
+			"product_push_ad_audio" => trim($data['push_adaudio']),
+			"product_push_ad_pdf" => trim($data['push_adpdf']),
+			"product_push_ad_image" => trim($data['push_adimage']),			
 			"product_survey_video" => trim($data['surveyvideo']),
+			"product_survey_audio" => trim($data['surveyaudio']),
+			"product_survey_pdf" => trim($data['surveypdf']),
+			"product_survey_image" => trim($data['surveyimage']),
             "product_demo_audio" => trim($data['demoaudio']),
             "product_user_manual" => trim($data['demoattachments'])
         );
@@ -503,9 +521,39 @@ class Buzzadmn_model extends CI_Model {
                 $arr = array("product_push_ad_video" => trim($data['push_advideos']));
                 $update_array = array_merge($update_array, $arr);
             }
+			if ($data['push_adaudios'] != '') {
+                $checker = 1;
+                $arr = array("product_push_ad_audio" => trim($data['push_adaudios']));
+                $update_array = array_merge($update_array, $arr);
+            }
+			if ($data['push_adpdfs'] != '') {
+                $checker = 1;
+                $arr = array("product_push_ad_pdf" => trim($data['push_adpdfs']));
+                $update_array = array_merge($update_array, $arr);
+            }
+			if ($data['push_adimages'] != '') {
+                $checker = 1;
+                $arr = array("product_push_ad_image" => trim($data['push_adimages']));
+                $update_array = array_merge($update_array, $arr);
+            }
 			if ($data['surveyvideos'] != '') {
                 $checker = 1;
                 $arr = array("product_survey_video" => trim($data['surveyvideos']));
+                $update_array = array_merge($update_array, $arr);
+            }
+			if ($data['surveyaudios'] != '') {
+                $checker = 1;
+                $arr = array("product_survey_audio" => trim($data['surveyaudios']));
+                $update_array = array_merge($update_array, $arr);
+            }
+			if ($data['surveypdfs'] != '') {
+                $checker = 1;
+                $arr = array("product_survey_pdf" => trim($data['surveypdfs']));
+                $update_array = array_merge($update_array, $arr);
+            }
+			if ($data['surveyimages'] != '') {
+                $checker = 1;
+                $arr = array("product_survey_image" => trim($data['surveyimages']));
                 $update_array = array_merge($update_array, $arr);
             }
             if ($data['demoaudios'] != '') {

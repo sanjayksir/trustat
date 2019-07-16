@@ -224,8 +224,26 @@ class Editorial extends MX_Controller {
 			$all_product_push_ad_video_list_arr= $this->input->post('all_product_push_ad_video_list');
 			$allProductPushAdVideoList 		= $all_product_push_ad_video_list_arr[0];
 			
+			$all_product_push_ad_audio_list_arr= $this->input->post('all_product_push_ad_audio_list');
+			$allProductPushAdAudioList 		= $all_product_push_ad_audio_list_arr[0];
+			
+			$all_product_push_ad_pdf_list_arr= $this->input->post('all_product_push_ad_pdf_list');
+			$allProductPushAdPDFList 		= $all_product_push_ad_pdf_list_arr[0];
+			
+			$all_product_push_ad_image_list_arr= $this->input->post('all_product_push_ad_image_list');
+			$allProductPushAdImageList 		= $all_product_push_ad_image_list_arr[0];
+			
 			$all_product_survey_video_list_arr= $this->input->post('all_product_survey_video_list');
 			$allProductSurveyVideoList 		= $all_product_survey_video_list_arr[0];
+			
+			$all_product_survey_audio_list_arr= $this->input->post('all_product_survey_audio_list');
+			$allProductSurveyAudioList 		= $all_product_survey_audio_list_arr[0];
+			
+			$all_product_survey_pdf_list_arr= $this->input->post('all_product_survey_pdf_list');
+			$allProductSurveyPDFList 		= $all_product_survey_pdf_list_arr[0];
+			
+			$all_product_survey_image_list_arr= $this->input->post('all_product_survey_image_list');
+			$allProductSurveyImageList 		= $all_product_survey_image_list_arr[0];
 			
 			$all_product_demo_audio_list_arr= $this->input->post('all_product_demo_audio_list');
 			$allProductDemoAudioList 		= $all_product_demo_audio_list_arr[0];

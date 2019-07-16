@@ -106,8 +106,14 @@
 		
 		
 		<div class="form-group row">
-			<div class="col-sm-6">
-			 <label for="form-field-9">State</label>
+		
+			<div class="col-sm-4">
+			  <label for="form-field-8">Customer Microsite URL</label>
+             <input name="customer_microsite_url" id="customer_microsite_url" type="text" value="<?php echo $get_user_details[0]['customer_microsite_url'];?>" class="form-control" placeholder="Customer Microsite URL"  maxlength="200">
+			</div>
+			
+			<div class="col-sm-4">
+			 <label for="form-field-8">State</label>
 			 <?php $states = get_state_name(31);?>
              <select class="form-control" placeholder="Select State" id="state_name" name="state_name" onchange="get_related_city_list(this.value);">
   		  		<?php foreach($states as $val){?>
@@ -117,8 +123,8 @@
 			</div>
 			 
 			
-			<div class="col-sm-6">
-			 <label for="form-field-9">City</label>
+			<div class="col-sm-4">
+			 <label for="form-field-8">City</label>
 			  <select class="form-control" id="city_name" name="city_name">
  		  		<option value="">select City</option>       
              </select>

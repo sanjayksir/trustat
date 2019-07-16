@@ -294,22 +294,15 @@
                        	 	url: "<?php echo base_url().'consumer/';?>checkProfileAttribute",
                           	type: "post",
  							data: {  cpm_id: $( "#cpm_id" ).val() }
-
                     	 } 
-
 					  },
-
 			},
 
 		messages: {
- 
 				attribute_name: {
-
-					required: "Please Enter Consumer Profile Attribute.",
+					required: "Please Enter Consumer Profile Attribute..",
 					remote: "This Attribute already exists!"
-
 				}, 
-
 		},
 	
 		submitHandler: function(form) {

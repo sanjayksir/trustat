@@ -136,18 +136,22 @@ $route['api/consumer_loylty_deals/(:any)/(:any)'] = 'Api/Consumer/consumerLoylty
 //$route['api/consumerpassbook'] = 'Api/Consumer/ConsumerPassBook';
 
 //$route['api/redeem_loylty_points/(:any)/(:any)/(:any)'] = 'Api/Consumer/RedeemLoyltyPoints/$1/$2/$3';
-$route['api/redeem_loylty_points/(:any)/(:any)/(:any)'] = 'Api/Consumer/RedeemLoyltyPoints/$1/$2/$3';
-$route['api/faqs_otherafterlogindata'] = 'Api/Consumer/FaqsAndOtherData';
+$route['api/microsite_redeem_loylty_points/(:any)/(:any)/(:any)'] = 'Api/Consumer/MicrositeRedeemLoyltyPoints/$1/$2/$3';
+$route['api/faqs_data'] = 'Api/Consumer/FaqsAndOtherData';
 $route['api/terms_and_conditions'] = 'Api/Consumer/TermsAndConditions';
+$route['api/TRUSTAT_app_service_agreement'] = 'Api/Consumer/TRUSTATAppServiceAgreement';
 
 $route['api/consumerpassbook'] = 'Api/Consumer/ConsumerPassBook';
+$route['api/consumerpassbookdashboard'] = 'Api/Consumer/ConsumerPassBookDashboard';
 
-$route['api/consumer_profile_profile_master_data'] = 'Api/Consumer/ListConsumerProfileMasterData';
+$route['api/consumer_profile_master_data'] = 'Api/Consumer/ListConsumerProfileMasterData';
 
 $route['api/user/add_consumer_relative'] = 'Api/Consumer/addConsumerRelative';
 $route['api/user/edit_consumer_relative/(:any)'] = 'Api/Consumer/editConsumerRelative/$1';
 $route['api/user/delete_consumer_relative/(:any)'] = 'Api/Consumer/DeleteConsumerRelative/$1';
 $route['api/user/list_consumer_relatives'] = 'Api/Consumer/ListConsumerRelatives';
+
+$route['api/user/save_consumer_media_view_details'] = 'Api/Consumer/SaveConsumerMediaViewDetails';
 
 $route['api/user/add_consumer_kid'] = 'Api/Consumer/addConsumerKid';
 $route['api/user/edit_consumer_kid/(:any)'] = 'Api/Consumer/editConsumerKid/$1';

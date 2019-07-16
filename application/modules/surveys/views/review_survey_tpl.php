@@ -76,13 +76,76 @@
 								<source src="<?php echo base_url().'uploads/'.$details['product_survey_video'];?>" type="video/mp4">
 																		  
 																		  Your browser does not support the video tag.
-																		</video> &nbsp &nbsp The Consumer will get <b><?php echo $details['product_survey_response_lps']; ?></b> Loyalty Points on Product  Feedback.
+																		</video> &nbsp &nbsp The Consumer will get <b><?php echo $details['product_survey_video_response_lps']; ?></b> Loyalty Points on Product  Feedback.
 																	<?php //echo base_url().'uploads/'.$details['product_demo_video'];?>
 																	</div>
   																</div>
 															</div>
 															<?php }?>
 															<!-- /Product Survey Video -->	
+															
+															<!-- Product Survey audio -->
+															<?php if($details['product_survey_audio']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product Survey audio</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	
+										<audio width="320" height="240" controls>
+								<source src="<?php echo base_url().'uploads/'.$details['product_survey_audio'];?>" type="audio/mp4">
+																		  
+																		  Your browser does not support the audio tag.
+																		</audio> &nbsp &nbsp The Consumer will get <b><?php echo $details['product_survey_audio_response_lps']; ?></b> Loyalty Points on Product  Feedback.
+																	<?php //echo base_url().'uploads/'.$details['product_demo_audio'];?>
+																	</div>
+  																</div>
+															</div>
+															<?php }?>
+															<!-- /Product Survey audio -->
+															
+															<!-- Product Survey pdf -->
+															<?php if($details['product_survey_pdf']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product Survey pdf</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	
+										<pdf width="320" height="240" controls>
+								<source src="<?php echo base_url().'uploads/'.$details['product_survey_pdf'];?>" type="pdf/mp4">
+																		  
+																		  Your browser does not support the pdf tag.
+																		</pdf> &nbsp &nbsp The Consumer will get <b><?php echo $details['product_survey_pdf_response_lps']; ?></b> Loyalty Points on Product  Feedback.
+																	<?php //echo base_url().'uploads/'.$details['product_demo_pdf'];?>
+																	</div>
+  																</div>
+															</div>
+															<?php }?>
+															<!-- /Product Survey pdf -->
+															
+															<!-- Product Survey image -->
+															<?php if($details['product_survey_image']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product Survey image</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	
+										<image width="320" height="240" controls>
+								<source src="<?php echo base_url().'uploads/'.$details['product_survey_image'];?>" type="image/mp4">
+																		  
+																		  Your browser does not support the image tag.
+																		</image> &nbsp &nbsp The Consumer will get <b><?php echo $details['product_survey_image_response_lps']; ?></b> Loyalty Points on Product  Feedback.
+																	<?php //echo base_url().'uploads/'.$details['product_demo_image'];?>
+																	</div>
+  																</div>
+															</div>
+															<?php }?>
+															<!-- /Product Survey image -->
 														</div>
                                                         
 														 <hr />

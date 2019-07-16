@@ -186,6 +186,17 @@
 			 
 		</div>
 		 
+		<div class="form-group row">
+
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Customer Microsite URL</b></label>
+             <div class=""><?php echo $get_user_details[0]['customer_microsite_url'];?></div>
+			</div> 
+			
+			
+			 
+		</div>
 		     
 
            <hr>

@@ -63,7 +63,7 @@
 							<div class="col-xs-12">
 
 								<!-- PAGE CONTENT BEGINS -->
-
+							<!--
 								<div class="alert alert-block alert-success">
 									<button type="button" class="close" data-dismiss="alert">
 										<i class="ace-icon fa fa-times"></i>									
@@ -74,8 +74,8 @@
 									<strong class="green">
 										Dashboard
 									</strong> 
-								</div>
-								
+								</div> 
+								-->
 								<div class="row">
 								<div class="col-sm-7">
 										<div class="widget-box transparent">

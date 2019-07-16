@@ -128,7 +128,7 @@ $geocodeFromLatLong = file_get_contents('http://maps.googleapis.com/maps/api/geo
 		 <label for="form-field-8">Reason : </label>
 			 <select class="" style="float: right; width:300px;" placeholder="Query" id="vquery" name="vquery" required>
 			<option value="" selected>Please Select the verification status</option>
-			<option value="Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in “my purchase list” in Howzzt App.">The Invoice is uploaded . All particulars are correct</option> 		
+			<option value="Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in “my purchase list” in TRUSTAT App.">The Invoice is uploaded . All particulars are correct</option> 		
 			<option value="Invoice is not readable and clear. Please re-scan the product for registration and upload readable and clear invoice.">Invoice is not readable and clear</option> 
 			<option value="Description of the product registered does not match with the product(s) stated in invoice uploaded. Please re-scan the product for registration and upload the invoice with product details.">Description of the product registered does not match with the product(s) stated in invoice uploaded.</option>
 			 </select>  	

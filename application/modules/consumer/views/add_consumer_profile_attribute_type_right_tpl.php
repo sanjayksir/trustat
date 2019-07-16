@@ -24,12 +24,24 @@
         <div class="widget-main">
 		
 		<div class="form-group row">
-			
-			
+<script>
+function sync()
+{
+  var cpatm_name = document.getElementById('cpatm_name');
+  //new_text = text.replace(' ', '_');
+  var cpatm_name_slug = document.getElementById('cpatm_name_slug');
+  cpatm_name_slug.value = cpatm_name.value.split(' ').join('_').toLowerCase();
+}
+</script>
 			<div class="col-sm-4">
 			  <label for="form-field-8">Attribute Type Name</label>
-			  <input type="text" placeholder="Please Enter Attributes Type Name" name="cpatm_name" id="cpatm_name" class="form-control" required>			  
+			  <input type="text" placeholder="Please Enter Attributes Type Name" name="cpatm_name" id="cpatm_name" onkeyup="sync()" class="form-control" required>			  
 			</div>
+			<div class="col-sm-4">
+			  <label for="form-field-8">Attribute Type Slug</label>
+			  <input type="text" placeholder="Please Enter Attributes Type Name" name="cpatm_name_slug" id="cpatm_name_slug" class="form-control" readonly>			  
+			</div>
+			
 			
 			<div class="col-sm-4">
 			

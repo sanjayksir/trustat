@@ -89,31 +89,15 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 			  -->
 			  <div class="form-group row">
                                   <div class="col-sm-12">
-                                  <label for="form-field-8">Select Consumers</label><?php 
-						  // echo $csc_consumer_min_age . "<br>";
-						    //echo $csc_consumer_max_age . "<br>";
-							 //echo $csc_consumer_gender . "<br>";
-							  //echo $csc_consumer_city . "<br>";
-							  //echo $csc_consumer_pin . "<br>";
-							 function reverse_birthday( $years ){
-								return date('Y-m-d', strtotime($years . ' years ago'));
-								}
-								if($csc_consumer_min_age=='0') {
-								$csc_consumer_min_dob = '';
-									} else {
-								$csc_consumer_min_dob = reverse_birthday( $csc_consumer_min_age );
-									}
-								if($csc_consumer_max_age=='0') {
-								$csc_consumer_max_dob = '';
-									} else {
-								$csc_consumer_max_dob = reverse_birthday( $csc_consumer_max_age );
-									}
-									 ?>
+                                  <label for="form-field-8">Select Consumers</label>
                                   <select name="quantity" id="quantity" class="form-control">
-										<option value="All <?php echo NumberOfAllConsumersOfACustomer($customer_id); ?> Consumers">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>
-										<option value="Filtered <?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_min_dob, $csc_consumer_max_dob); ?> Consumers">Filtered Consumers (<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>)</option>	
-								  </select>
-								  
+									
+			<option value="<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>-All">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>
+										
+										<?php foreach(getConsumerSelectionCriterias($customer_id) as $val){ ?>
+			<option value="<?php echo NumberOfSelectedConsumersByACustomer2($customer_id, $val['unique_system_selection_criteria_id']); ?>-<?php echo $val['unique_system_selection_criteria_id']; ?>"><?php echo $val['unique_system_selection_criteria_id'];?> -> <?php  echo $val['name_of_selection_criteria'];?> -> (<?php echo NumberOfSelectedConsumersByACustomer2($customer_id, $val['unique_system_selection_criteria_id']); ?> Consumers)</option> 
+								<?php } ?>	
+										
                                   </div>
                                   </div>				 
 			  

@@ -63,6 +63,34 @@
                                                                                     </div>
                                                                                 </form>
                                                                             </div>
+																			
+			<!-- <div class="form-group row">
+			Closer Report for Ad/Survey/Messages<br /> Name of Promotion
+Promotion Category – Ad/Survey <br />
+Promotion Number – sssss<br />
+ Promotion Launch Date – ddd<br />
+Promotion Closer date – sss <br />
+Promotion report date – sss <br />
+Selection Criteria number – nnn <br />
+ Number of consumers selected –<br />
+Number of responses from consumers : 111 Download <br />
+
+			  <label for="form-field-8">Media </label> : (Video, Audio….) <br />
+			   <label for="form-field-8">Questions</label> : Basic Tea to be replaced by<br />
+			    <label for="form-field-8">Response a–– Icecream Number of consumers </label> : 
+							<label for="form-field-8">Number of consumers who have Responded a</label><br />
+							
+							<label for="form-field-8">Response b–– Icecream Number of consumers </label> : 
+							<label for="form-field-8">Number of consumers who have Responded b</label><br />
+							
+							<label for="form-field-8">Response c–– Icecream Number of consumers </label> : 
+							<label for="form-field-8">Number of consumers who have Responded c</label><br />
+							
+							<label for="form-field-8">Response d–– Icecream Number of consumers </label> : 
+							<label for="form-field-8">Number of consumers who have Responded d</label><br />
+							
+				
+		</div>	-->							
 										
  											<table id="missing_people" class="table table-striped table-bordered table-hover">
  												<thead>
@@ -94,8 +122,11 @@
 												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['survey_push_date']))); ?></td>
 												<td>
 												<?php 
-													
-								$qproduct_data 	= getquestionFeedbackDetails($listData['product_id'], $listData['consumer_id'], "product_survey");
+								$promotion_media_type = $listData['promotion_type'] . " " .	$listData['media_type'];			//echo $promotion_media_type;	
+								$qproduct_data 	= getquestionFeedbackDetails($listData['product_id'], $listData['consumer_id'], $listData['promotion_id'], $promotion_media_type);
+								
+								//getquestionFeedbackDetails($product_id, $user_id, $promotion_id, $product_qr_code)
+								
 										 foreach($qproduct_data as $res){ 
 										 
 											echo "<b>[</b>" . get_question_desc_by_id($res['question_id']) . "<b>]</b>, ";

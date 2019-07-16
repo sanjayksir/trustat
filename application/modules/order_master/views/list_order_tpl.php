@@ -335,14 +335,14 @@
 <input name="order_no" id="order_no" type="hidden" value="<?php $datecodedno; ?>">
 <div class="form-group row">
 <div class="col-sm-12">
-<label for="form-field-8">Plant Name</label>
+<label for="form-field-8">Plant Namekk</label>
 <select class="form-control" name="plant_id" id="plant_id" onchange="return get_products(this.value);">
 <option value="">-Select Plant-</option>
 <?php 
 $user_id 	= $this->session->userdata('admin_user_id');
 $plant_data = get_all_active_locations_plant($user_id);
 foreach($plant_data as $res){?>
-<option value="<?php echo $res['location_id'];?>" <?php if($this->uri->segment(3)==$res['location_id']){echo 'selected';}?>><?php echo $res['location_name'];?><?php if($user_id=='1'){ echo " - [" .getUserFullNameById($res['created_by']) . "]"; } ?>-<?php echo $res['location_id'];?></option>
+<option value="<?php echo $res['location_id'];?>" <?php if($this->uri->segment(3)==$res['location_id']){echo 'selected';}?>><?php echo $res['location_name'];?><?php if($user_id=='1'){ echo " - [" .getUserFullNameById($res['created_by']) . "]"; } ?><?php //echo $res['location_id'];?></option>
 <?php }?>
 </select>
 <br />

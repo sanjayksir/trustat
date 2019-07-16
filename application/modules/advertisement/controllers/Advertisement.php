@@ -38,11 +38,7 @@
          $this->load->view('attribute_add', $data);
      }
 	 
-	   
-
-     
  
-    
  
  	function add_Advertisement(){
 		$user_id 	= $this->session->userdata('admin_user_id');
@@ -192,7 +188,7 @@
 	public function launch_advertisement() {
         $this->checklogin();
         if (!empty($this->input->post('del_submit'))) {
-            if ($this->db->query("delete from Surveys where id='" . $this->input->post('del_submit') . "'")) {
+            if ($this->db->query("delete from advertisements where id='" . $this->input->post('del_submit') . "'")) {
                 $this->session->set_flashdata('success', 'Advertisement Deleted Successfully!');
             }
         }
@@ -213,19 +209,6 @@
         }
 		
 		$customer_id = $this->session->userdata('admin_user_id');
-		
-			$this->db->select('*');
-			$this->db->from('consumer_selection_criteria');
-			//$this->db->where('transaction_lr_type', "Loyalty");
-			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Advertisement-Video"));
-			$query=$this->db->get();
-						   
-        $params["csc_consumer_gender"] = $ConsumerSelectionCriteria=$query->row()->consumer_gender;
-		$params["csc_consumer_min_age"] = $ConsumerSelectionCriteria=$query->row()->consumer_min_age;
-		$params["csc_consumer_max_age"] = $ConsumerSelectionCriteria=$query->row()->consumer_max_age;
-		$params["csc_consumer_city"] = $ConsumerSelectionCriteria=$query->row()->consumer_city;
-		$params["csc_consumer_pin"] = $ConsumerSelectionCriteria=$query->row()->consumer_pin;
-		
 		
         $total_records = $this->Advertisement_model->total_advertisement_listing($srch_string);
         $params["orderListing"] = $this->Advertisement_model->advertisement_listing($limit_per_page, $start_index, $srch_string);
@@ -832,42 +815,35 @@ function list_assigned_Advertisements() {
 		 	}
 		 	
 	
+
+							
 	
-	function reverse_birthday( $years ){
-			return date('Y-m-d', strtotime($years . ' years ago'));
-							}
-							
-							
+	
 	function save_push_advertisement(){
 	 	$this->checklogin();		
-		$customer_id=$this->input->post('c_id');
+		$customer_id =$this->input->post('c_id');
 		$product_id	=$this->input->post('p_id');
 		$promotion_id =$this->input->post('promotion_id');
 		$promotion_title =$this->input->post('promotion_title');
 		$consumer_selection_criteria =$this->input->post('sent_to');
-		$Chk = $this->input->post('Chk');
+		$promotion_media_type =$this->input->post('promotion_media_type');
+		$Chk =$this->input->post('Chk');
+		//echo $Chk;
+		//exit;
+			echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$promotion_id,$promotion_title,$consumer_selection_criteria,$promotion_media_type,$Chk);
+						
 		
-		 echo $this->Advertisement_model->save_push_advertisement($customer_id,$product_id,$promotion_id,$promotion_title,$Chk,$consumer_selection_criteria);
-		 
-		 if($Chk==2){
+		if($Chk==2){
 		$value=2;
 		} else {
 			$value=1;
 		}
 		
-		 echo $status= $this->Advertisement_model->change_status2($promotion_id,$Chk);
+		 echo $status= $this->Advertisement_model->change_status($promotion_id,$value);
 		 
-		 /*
-		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
-				
-				foreach ($query->result() as $user)  
-				{
-		 $consumer_id = $user->consumer_id;
-		*/
+		 
 		if($consumer_selection_criteria=="All") {
-			//echo $status= $this->Advertisement_model->change_status($promotion_id,$value);
-		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
-				
+		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");				
 				foreach ($query->result() as $user)  
 				{
 		 $consumer_id = $user->consumer_id;
@@ -876,44 +852,17 @@ function list_assigned_Advertisements() {
 		$mnvtext51 = $mnv51_result->message_notification_value;
 		 $this->Advertisement_model->sendFCM("An Advertisement Posted!!..", $fb_token);
 		 	$NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "howzzt advertisement";
+			$NTFdata['title'] = "TRUSTAT advertisement";
 			$NTFdata['body'] = $mnvtext51; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
 			$NTFdata['status'] = 1; 			
 			$this->db->insert('list_notifications_table', $NTFdata);
 		 }
-			
-			
 			}else{
 		
-		$this->db->select('*');
-			$this->db->from('consumer_selection_criteria');
-			//$this->db->where('transaction_lr_type', "Loyalty");
-			$this->db->where(array('customer_id' => $customer_id, 'promotion_type' => "Advertisement-Video"));
-			$query=$this->db->get();						   
-        $csc_consumer_gender = $query->row()->consumer_gender;
-		//$csc_consumer_min_age = $query->row()->consumer_min_age;
-		//$csc_consumer_max_age = $query->row()->consumer_max_age;
-		$csc_consumer_city = $query->row()->consumer_city;
-		//$csc_consumer_pin = $query->row()->consumer_pin;
-									
-								/*
-								if($csc_consumer_min_age=='0') {
-								$csc_consumer_min_dob = '';
-									} else {
-								$csc_consumer_min_dob = $this->reverse_birthday( $csc_consumer_min_age );
-									}
-									
-								if($csc_consumer_max_age=='0') {
-								$csc_consumer_max_dob = '';
-									} else {
-								$csc_consumer_max_dob = $this->reverse_birthday( $csc_consumer_max_age );
-									}
-								*/
-		//$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
-		//$AllSelectedConsumersByACustomer = AllSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob);
 		
-				$AllSelectedConsumersByACustomer = $this->Advertisement_model->AllSelectedConsumersByACustomer2($customer_id, $csc_consumer_gender, $csc_consumer_city);
+		
+	$AllSelectedConsumersByACustomer = $this->Advertisement_model->AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_criteria);
 				
 				foreach ($AllSelectedConsumersByACustomer as $consumer_idArray)  
 				{ 
@@ -922,11 +871,11 @@ function list_assigned_Advertisements() {
 		$fb_token = getConsumerFb_TokenById($consumer_id);
 		$mnv51_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 51)->get()->row();
 		$mnvtext51 = $mnv51_result->message_notification_value;
-		 //$this->Advertisement_model->sendFCM("Here is a Advertisement for you from howzzt.", $fb_token);
+		 //$this->Advertisement_model->sendFCM("Here is a Advertisement for you from TRUSTAT.", $fb_token);
 		 $this->Advertisement_model->sendFCM($mnvtext51, $fb_token);
 		 
 			$NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "howzzt advertisement";
+			$NTFdata['title'] = "TRUSTAT advertisement";
 			$NTFdata['body'] = $mnvtext51; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
 			$NTFdata['status'] = 1; 			
@@ -938,6 +887,10 @@ function list_assigned_Advertisements() {
 		//redirect('advertisement/launch_advertisement');
 		exit;
  	}
+
+	
+	
+	
 	
 	function send_text_message(){
 	 	$this->checklogin();		
@@ -1040,7 +993,7 @@ function list_assigned_Advertisements() {
         $total_records = $this->Advertisement_model->count_advertisement_details($srch_string);
 
         $params["ScanedCodeListing"] = $this->Advertisement_model->get_advertisement_details($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('surveys/view_survey_details', $total_records,null,4);
+        $params["links"] = Utils::pagination('advertisements/view_advertisement_details', $total_records,null,4);
         
         ##--------------- pagination End ----------------##
         $data = array();
@@ -1048,6 +1001,72 @@ function list_assigned_Advertisements() {
         //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
         $this->load->view('view_advertisement_details_tpl', $params);
     }
+	
+	
+public function view_advertisement_response_by_question_answer() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Advertisement_model->count_advertisement_details_by_question_answer($srch_string);
+
+        $params["ScanedCodeListing"] = $this->Advertisement_model->get_advertisement_details_by_question_answer($limit_per_page, $start_index, $srch_string);
+		
+        $params["links"] = Utils::pagination('advertisements/view_advertisement_response_by_question_answer', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+		$promotion_id = $this->uri->segment(3);
+		
+		$this->db->select('*');
+			$this->db->from('push_promotion_master');
+			$this->db->where('promotion_id', $promotion_id);
+			//$this->db->where(array('promotion_id' => $promotion_id, 'promotion_type' => "advertisement"));
+			$query=$this->db->get(); 
+		
+		 $params["promotion_type"] = $query->row()->promotion_type;
+		 $params["promotion_media_type"] = $query->row()->promotion_media_type;
+		 $params["promotion_title"] = $query->row()->promotion_title;
+		 $params["promotion_request_id"] = $query->row()->promotion_request_id;
+		 $params["request_date_time"] = $query->row()->request_date_time;
+		 $params["request_update_datetime"] = $query->row()->request_update_datetime;
+		 $params["promotion_launch_date_time"] = $query->row()->promotion_launch_date_time;
+		 $params["promotion_closure_date_time"] = $query->row()->promotion_closure_date_time;
+		 $params["number_of_consumers"] = $query->row()->number_of_consumers;
+		 $params["unique_system_selection_criteria_id"] = $query->row()->unique_system_selection_criteria_id;
+		 
+		  $product_id = $query->row()->product_id;
+		  
+		  $this->db->select('*');
+			$this->db->from('products');
+			$this->db->where('id', $product_id);
+			//$this->db->where(array('promotion_id' => $promotion_id, 'promotion_type' => "advertisement"));
+			$query1=$this->db->get(); 
+		$params["product_push_ad_video"] = $query1->row()->product_push_ad_video;
+		$params["product_name"] = $query1->row()->product_name;
+		$params["product_push_ad_video"] = $query1->row()->product_push_ad_video;
+		$params["product_push_ad_audio"] = $query1->row()->product_push_ad_audio;
+		$params["product_push_ad_pdf"] = $query1->row()->product_push_ad_pdf;
+		$params["product_push_ad_image"] = $query1->row()->product_push_ad_image;
+		$params["Number_of_responses_from_consumers"] = $total_records;
+		
+		  
+		
+        $this->load->view('view_advertisement_response_by_question_answer_tpl', $params);
+    }
+	
 	
 	  
 	 function review_advertisement($id = '') {

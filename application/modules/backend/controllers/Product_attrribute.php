@@ -57,8 +57,26 @@ class Product_attrribute extends MX_Controller {
 			$allProductPushAdVideo_arr = $this->input->post('all_product_push_ad_video_list');
             $allProductPushAdVideoList = $allProductPushAdVideo_arr[0];
 			
+			$allProductPushAdAudio_arr = $this->input->post('all_product_push_ad_audio_list');
+            $allProductPushAdAudioList = $allProductPushAdAudio_arr[0];
+			
+			$allProductPushAdPDF_arr = $this->input->post('all_product_push_ad_pdf_list');
+            $allProductPushAdPDFList = $allProductPushAdPDF_arr[0];
+			
+			$allProductPushAdImage_arr = $this->input->post('all_product_push_ad_image_list');
+            $allProductPushAdImageList = $allProductPushAdImage_arr[0];
+			
 			$allProductSurveyVideo_arr = $this->input->post('all_product_survey_video_list');
             $allProductSurveyVideoList = $allProductSurveyVideo_arr[0];
+			
+			$allProductSurveyAudio_arr = $this->input->post('all_product_survey_audio_list');
+            $allProductSurveyAudioList = $allProductSurveyAudio_arr[0];
+			
+			$allProductSurveyPDF_arr = $this->input->post('all_product_survey_pdf_list');
+            $allProductSurveyPDFList = $allProductSurveyPDF_arr[0];
+			
+			$allProductSurveyImage_arr = $this->input->post('all_product_survey_image_list');
+            $allProductSurveyImageList = $allProductSurveyImage_arr[0];
             ## Media Files
             $data['ptimages'] = $allPTImageList;
 			$data['images'] = $allImageList;

@@ -78,10 +78,11 @@
                                                             <tr>
                                                                 <th>#</th> 
 																<th>Request No</th>
+																<th>Unique System Selection Criteria ID</th>
 																<th>Date Time</th>
                                                                 <th>Product Name</th>
 																<th>Advertisement Title</th>
-                                                                <th>Type of Advertisement</th>
+                                                                <th>Media Type</th>
                                                                 <th>Number of Consumers</th>
                                                                 <th>Status</th>
 																<th>Review Advertisement</th>
@@ -112,6 +113,7 @@
 												  <tr id="show<?php echo $listData['promotion_id']; ?>">
                                                    <td><?php  echo $sno;$sno++; ?></td>
 												    <td><?php  echo $listData['promotion_request_id']; ?></td>
+													<td><?php  echo $listData['unique_system_selection_criteria_id']; ?></td>
 												    <td><?php echo date('j M Y H:i:s D',strtotime($listData['request_date_time'])); ?></td>
 													
                                                         <td><?php echo $listData['product_name']; ?></td>
@@ -127,24 +129,24 @@
                                                          <td>
 														 
 	<?php //echo $attr['quantity']; 
-		$myvalue = $listData['number_of_consumers']; 
-		$arr = explode(' ',trim($myvalue));
-		$sent_to = $arr[0];
+		$sent_to = $listData['unique_system_selection_criteria_id']; 
+		$promotion_media_type = $listData['promotion_media_type']; 
 		//echo $sent_to;
-		//echo $listData['promotion_title'];
+		
+		//echo $listData['request_status'] . "Sanjay";
 	
-	?>
-														 <input <?php 
-	$answerQuery = $this->db->get_where('push_advertisements',"promotion_id='".$listData['promotion_id']."'");
-	if($answerQuery->num_rows() > 0){ ?>checked="checked"<?php } else {} ?> id="product_<?php echo $listData['product_id'];?>" name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $listData['user_id'];?>','<?php echo $listData['product_id'];?>','<?php echo $listData['promotion_id'];?>','<?php echo $listData['promotion_title'];?>','<?php echo $sent_to; ?>');" type="checkbox"   <?php if($listData['request_status']==2){ echo "disabled"; }   ?> >
+	?>								 
+	<input <?php 
+	//$answerQuery = $this->db->get_where('push_advertisements',"promotion_id='".$listData['promotion_id']."'");
+	if($listData['request_status'] == 1){ ?>checked="checked"<?php } else {} ?> id="product_<?php echo $listData['product_id'];?>" name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $listData['user_id'];?>','<?php echo $listData['product_id'];?>','<?php echo $listData['promotion_id'];?>','<?php echo $listData['promotion_title'];?>','<?php echo $sent_to; ?>','<?php echo $promotion_media_type; ?>');" type="checkbox" <?php if($listData['request_status']==2){ echo "disabled"; }  ?> >
 	<span class="lbl"></span> <?php echo promotion_status($listData['request_status']); ?>
 	
 	
          <?php //if($essentialAttributeArr['delivery_method']==4){?>
-               <!-- <select name="change_order_status" id="change_order_status" onchange="return change_order_status('<?php echo $listData['promotion_id'];?>',this.value,'<?php echo $print_opt;?>'); add_question_to_product('<?php echo $listData['user_id'];?>','<?php echo $listData['product_id'];?>');">
-                <option value="0" <?php if($listData['request_status']=='0'){echo 'selected';}?>>Pending</option>
-                <option value="1" <?php if($listData['request_status']=='1'){echo 'selected';}?>>Survey Pushed</option>
-                <option value="2" <?php if($listData['request_status']=='2'){echo 'selected';}?>>Request Rejected</option>
+               <!-- <select name="change_order_status" id="change_order_status" onchange="return change_order_status('<?php //echo $listData['promotion_id'];?>',this.value,'<?php //echo $print_opt;?>'); add_question_to_product('<?php //echo $listData['user_id'];?>','<?php //echo $listData['product_id'];?>');">
+                <option value="0" <?php //if($listData['request_status']=='0'){echo 'selected';}?>>Pending</option>
+                <option value="1" <?php //if($listData['request_status']=='1'){echo 'selected';}?>>Advertisement Pushed</option>
+                <option value="2" <?php //if($listData['request_status']=='2'){echo 'selected';}?>>Request Rejected</option>
                 </select> -->
         <?php //}else{
                                                                 //echo 'Hard Print';
@@ -174,18 +176,17 @@
              <div class="hidden-sm hidden-xs action-buttons">
 			  <?php if($listData['request_status']==0){ echo "Waiting to Launched"; } else {   ?>
                  <a href="<?php  echo base_url().'advertisement/view_advertisement_details/'.$listData['promotion_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>
+				 <a href="<?php  echo base_url().'advertisement/view_advertisement_response_by_question_answer/'.$listData['promotion_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View Advertisement Closure Report"><i class="fa fa-eye"></i></a>
 				<?php }   ?>
 
-                 <?php 
-				 if((order_status($listData['request_status']))=="ssPending") {
-				 echo anchor("advertisement/edit_product/" . $listData['promotion_id'], '<i class="ace-icon fa fa-pencil"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); }
-	
-
+                 <?php /*
+		if((order_status($listData['request_status']))=="Pending") {
+				 echo anchor("advertisement/edit_product/" . $listData['promotion_id'], '<i class="ace-icon fa fa-pencil"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); } 
+				 */
 				 ?>
 				 
 				 
                 <!-- <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['order_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['order_id'];?>',this.value);" />-->
-
             </div>
 
         </td>
@@ -303,7 +304,7 @@ $("#product").html(msg);
 								  <div class="form-group row">
                                   <div class="col-sm-12">
                                   <label for="form-field-8">Advertisement Subject/Title</label>
-								  <input name="promotion_title" id="promotion_title" type="text" value="", placeholder="Please enter Survey Subject/Title" class="form-control">
+								  <input name="promotion_title" id="promotion_title" type="text" value="" placeholder="Please enter Advertisement Subject/Title" class="form-control">
                                   </div>
                                   </div>
 								  
@@ -313,37 +314,26 @@ $("#product").html(msg);
                                   <label for="form-field-8">Promotion Media Type</label>
 								  <select name="promotion_media_type" id="promotion_media_type" class="form-control">
 										<option value="">- Please Select Promotion Media Type -</option>
-										<option value="Advertisement on Product Video">Advertisement on Product Video</option>	
-										<!--<option value="Advertisement on Product Audio">Advertisement on Product Audio</option>
-										<option value="Advertisement on Product PDF">Advertisement on Product PDF</option>
-										<option value="Advertisement on Product Image">Advertisement on Product Image</option>
-										<option value="Advertisement on Product Description">Advertisement on Product Description</option>-->
+										<option value="Video">Advertisement on Product Video</option>	
+										<option value="Audio">Advertisement on Product Audio</option>
+										<option value="PDF">Advertisement on Product PDF</option>
+										<option value="Image">Advertisement on Product Image</option>
+									<!--	<option value="Text">Advertisement on Product Description</option> -->
 									</select>
                                   </div>
                                   </div>
 								<?php $customer_id = $this->session->userdata('admin_user_id'); ?>
 								  <div class="form-group row">
                                   <div class="col-sm-12">
-                                  <label for="form-field-8">Select Consumers</label><?php 
-							//echo $csc_consumer_min_age . "<br>";
-							 function reverse_birthday( $years ){
-								return date('Y-m-d', strtotime($years . ' years ago'));
-								}
-								if($csc_consumer_min_age=='0') {
-								$csc_consumer_min_dob = '';
-									} else {
-								$csc_consumer_min_dob = reverse_birthday( $csc_consumer_min_age );
-									}
-								if($csc_consumer_max_age=='0') {
-								$csc_consumer_max_dob = '';
-									} else {
-								$csc_consumer_max_dob = reverse_birthday( $csc_consumer_max_age );
-									}
-									 ?>
-                                  <select name="number_of_consumers" id="number_of_consumers" class="form-control">
-										<option value="All <?php echo NumberOfAllConsumersOfACustomer($customer_id); ?> Consumers">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>
-										<option value="Filtered <?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_min_dob, $csc_consumer_max_dob); ?> Consumers">Filtered Consumers (<?php echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>)</option>	
+                                  <label for="form-field-8">Select Consumer Selection Criteria</label>
+                                  <select name="number_of_consumers_ci" id="number_of_consumers_ci" class="form-control">
+										<option value="All <?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>-All">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>
+										
+										<?php foreach(getConsumerSelectionCriterias($customer_id) as $val){ ?>
+			<option value="<?php echo NumberOfSelectedConsumersByACustomer2($customer_id, $val['unique_system_selection_criteria_id']); ?>-<?php echo $val['unique_system_selection_criteria_id']; ?>"><?php echo $val['unique_system_selection_criteria_id'];?> -> <?php  echo $val['name_of_selection_criteria'];?> -> (<?php echo NumberOfSelectedConsumersByACustomer2($customer_id, $val['unique_system_selection_criteria_id']); ?> Consumers)</option> 
+								<?php } ?>	
 								  </select>
+								  
                                   </div>
                                   </div>
 
@@ -435,8 +425,8 @@ $("#product").html(msg);
     var table;
 
 
-	function add_question_to_product(created_by, id, promotion_id, promotion_title, sent_to){
-	var r = confirm("Are Sure to process your action?");
+	function add_question_to_product(created_by, id, promotion_id, promotion_title, sent_to, promotion_media_type){
+	var r = confirm("Are you Sure to process your action?");
 	if (r == true) {
 		if ($("#product_"+id).prop('checked')==true){ 
 			var Chk =1; 
@@ -448,7 +438,7 @@ $("#product").html(msg);
 			dataType:'html',
 			type:'POST',
 			url:'<?php echo base_url().'advertisement/save_push_advertisement/';?>',
-			data:{c_id:created_by,p_id:id,promotion_id:promotion_id,promotion_title:promotion_title,sent_to:sent_to,Chk:Chk},
+			data:{c_id:created_by,p_id:id,promotion_id:promotion_id,promotion_title:promotion_title,sent_to:sent_to,promotion_media_type:promotion_media_type,Chk:Chk},
 			success:function (msg){
 			}
 		

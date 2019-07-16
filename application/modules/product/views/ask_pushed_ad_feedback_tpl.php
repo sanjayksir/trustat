@@ -74,7 +74,6 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                             <div class="col-xs-12">
 
                                 <h3 class="header smaller lighter blue">Product Name - <?php echo get_products_name_by_id($this->uri->segment(3)); ?></h3>
-
                                
  								<!--<div style="clear:both;">
 								
@@ -116,6 +115,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                          <tr>
                                              <th>S No.</th>
                                              <th class="hidden-480">Select</th>
+											 <th class="hidden-480">Media Type</th>
                                              <th class="hidden-480">Question</th>
 											 <th class="hidden-480">Option 1</th>
 											 <th class="hidden-480">Option 2</th>
@@ -142,7 +142,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                                 
                                                 <td class="center"><input <?PHP if(in_array($attr['question_id'],$x)){?>checked="checked"<?php }?> id="quest_<?php echo $attr['question_id'];?>"name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $this->uri->segment(3);?>','<?php echo $attr['question_id'];?>');" type="checkbox">
                                                 <span class="lbl"></span> </td>
-                                                
+                                                <td><?php echo $attr['question_media_type']; ?></td>
                                                 <td><?php echo $attr['question']; ?></td>
                                                 <td><?php echo $attr['answer1']; ?></td>
                                                 <td><?php echo $attr['answer2']; ?></td>

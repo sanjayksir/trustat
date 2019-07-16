@@ -24,9 +24,28 @@
 			
 			
 			<div class="col-sm-4">
-			  <label for="form-field-8">Attribute Type Name</label>
-			  <input type="text" placeholder="Please Enter Attributes Name" value="<?php echo $get_user_details[0]['cpatm_name'];?>" name="cpatm_name" id="cpatm_name" class="form-control">			  
+			  <label for="form-field-8">QUERY Type Name</label>
+			  <input type="text" placeholder="Please Enter QUERY Name" value="<?php echo $get_user_details[0]['cpatm_name'];?>" name="cpatm_name" id="cpatm_name" class="form-control">			  
 			</div>
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8">Profile Bucket</label>			 
+			<select  name="profile_bucket" id="profile_bucket" class="form-control" required>
+				<option value="<?php echo $get_user_details[0]['profile_bucket'];?>" selected><?php echo $get_user_details[0]['profile_bucket'];?></option>
+				<option value="Basic Profile">Basic Profile</option>
+				<option value="Personal Profile">Personal Profile</option>
+				<option value="Family Profile">Family Profile</option>
+				<option value="Lifestyle Profile">Lifestyle Profile</option>
+				<option value="Others">Others</option>				
+            </select>
+			
+			</div>
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8">QUERY Type Slug</label>
+			  <input type="text" placeholder="Please Enter QUERY Type Name" name="cpatm_name_slug" value="<?php echo $get_user_details[0]['cpatm_name_slug'];?>" id="cpatm_name_slug" class="form-control" readonly>			  
+			</div>
+			
 			
 			<div class="col-sm-4">
 			

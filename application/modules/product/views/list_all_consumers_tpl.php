@@ -138,7 +138,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 													<th class="hidden-480">Consumer Profession</th>
 													<th class="hidden-480">Consumer Marital Status</th>
 													<th class="fmember hidden-480">Number of Family Members</th>
-													<th class="hidden-480">Consumer Loan Car Housing</th>
+													<th class="hidden-480">Consumer Loan Car</th>
+													<th class="hidden-480">Consumer Loan Housing</th>
 													<th class="hidden-480">Consumer Personal Loan</th>
 													<th class="hidden-480">Consumer Credit Card Loan</th>
 													<th class="hidden-480">Consumer Own a Car</th>
@@ -227,7 +228,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 															<td><?php echo $attr['profession']; ?></td>
 															<td><?php echo $attr['marital_status']; ?></td>
 															<td><?php echo $attr['no_of_family_members']; ?></td>
-															<td><?php echo $attr['loan_car_housing']; ?></td>
+															<td><?php echo $attr['loan_car']; ?></td>
+															<td><?php echo $attr['loan_housing']; ?></td>
 															<td><?php echo $attr['personal_loan']; ?></td>
 															<td><?php echo $attr['credit_card_loan']; ?></td>
 															<td><?php echo $attr['own_a_car']; ?></td>

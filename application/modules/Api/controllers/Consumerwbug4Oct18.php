@@ -64,9 +64,9 @@ class Consumer extends ApiController {
                 //$data['password2'] = $checkmobileno[mobile_no];
                 //$data['token'] = $data['token'];
                 $this->signupMail($data);
-                $smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
+                $smstext = 'Welcome to TRUSTAT. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
                 Utils::sendSMS($data['mobile_no'], $smstext);
-                //$this->ConsumerModel->sendFCM("Congratulations! You registration is complete, and -- Loyalty Points have been added in your howzzt loyalty program.", $fb_tokenr);
+                //$this->ConsumerModel->sendFCM("Congratulations! You registration is complete, and -- Loyalty Points have been added in your TRUSTAT loyalty program.", $fb_tokenr);
                 Utils::response(['status' => true, 'message' => 'You are re-registered with this device.', 'data' => $data]);
                
             } else {
@@ -93,15 +93,15 @@ class Consumer extends ApiController {
             if ($this->db->insert('consumers', $data)) {
                 $userId = $this->db->insert_id();
                 $this->Productmodel->saveLoylty('user-registration', $userId, ['consumer_id' => $userId]);
-				$this->Productmodel->saveConsumerPassbookLoyaltyReg('user-registration', $userId, ['consumer_id' => $userId, 'consumer_phone' => "123456789", 'passbook_title' => "howzzt Registration", 'passbook_event' => "User Registration"], 'Loyalty');
+				$this->Productmodel->saveConsumerPassbookLoyaltyReg('user-registration', $userId, ['consumer_id' => $userId, 'consumer_phone' => "123456789", 'passbook_title' => "TRUSTAT Registration", 'passbook_event' => "User Registration"], 'Loyalty');
      
 				$loylty = $this->Productmodel->findLoylityBySlug('user-registration');
 				//$getloylty = $loylty['loyalty_points'];
                 $this->signupMail($data);
-                $smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
+                $smstext = 'Welcome to TRUSTAT. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
                 Utils::sendSMS($data['mobile_no'], $smstext);
 				$fb_token = getConsumerFb_TokenById($userId);
-               $this->ConsumerModel->sendFCM('Congratulations! Your registration is complete, and ' . $loylty['loyalty_points'] . ' Loyalty Points have been added in your howzzt loyalty program.', $fb_token);
+               $this->ConsumerModel->sendFCM('Congratulations! Your registration is complete, and ' . $loylty['loyalty_points'] . ' Loyalty Points have been added in your TRUSTAT loyalty program.', $fb_token);
                 Utils::response(['status' => true, 'message' => 'Your account has been registered.', 'data' => $data], 200);
                 
                 
@@ -221,7 +221,7 @@ class Consumer extends ApiController {
             ['field' => 'member_name', 'label' => 'Member Name', 'rules' => 'min_length[2]'],
             ['field' => 'relation', 'label' => 'Relation', 'rules' => 'min_length[2]'],
             ['field' => 'phone_number', 'label' => 'Phone Number', 'rules' => 'trim|required|integer|exact_length[10]'],
-            ['field' => 'howzzt_member', 'label' => 'howzzt member', 'rules' => 'trim|in_list[yes,no]'],
+            ['field' => 'howzzt_member', 'label' => 'TRUSTAT member', 'rules' => 'trim|in_list[yes,no]'],
         ];
         $errors = $this->ConsumerModel->validate($input, $validate);
         if (is_array($errors)) {
@@ -233,7 +233,7 @@ class Consumer extends ApiController {
         //$emailid = $this->getInput('email');
         $phone_numberr = $phone_number['phone_number'];
 
-        $isRegistered = $this->ConsumerModel->isHowzztMember($phone_numberr);
+        $isRegistered = $this->ConsumerModel->ishowzztMember($phone_numberr);
 
         if ($isRegistered == TRUE) {
 
@@ -274,7 +274,7 @@ class Consumer extends ApiController {
             ['field' => 'member_name', 'label' => 'Member Name', 'rules' => 'min_length[2]'],
             ['field' => 'relation', 'label' => 'Relation', 'rules' => 'min_length[2]'],
             ['field' => 'phone_number', 'label' => 'Phone Number', 'rules' => 'trim|required|integer|exact_length[10]'],
-            ['field' => 'howzzt_member', 'label' => 'howzzt member', 'rules' => 'trim|in_list[yes,no]'],
+            ['field' => 'howzzt_member', 'label' => 'TRUSTAT member', 'rules' => 'trim|in_list[yes,no]'],
         ];
         $errors = $this->ConsumerModel->validate($input, $validate);
         if (is_array($errors)) {
@@ -286,7 +286,7 @@ class Consumer extends ApiController {
         //$emailid = $this->getInput('email');
         $phone_numberr = $phone_number['phone_number'];
 
-        $isRegistered = $this->ConsumerModel->isHowzztMember($phone_numberr);
+        $isRegistered = $this->ConsumerModel->ishowzztMember($phone_numberr);
 
         if ($isRegistered == TRUE) {
 
@@ -433,7 +433,7 @@ class Consumer extends ApiController {
         $data->verification_code = $genRandomNo;
         $data->password = md5($genRandomNo);
 
-        $smstext = 'Welcome to howzzt. Your OTP for mobile verification is ' . $data->verification_code . ', please enter the OTP to complete the signup proccess.';
+        $smstext = 'Welcome to TRUSTAT. Your OTP for mobile verification is ' . $data->verification_code . ', please enter the OTP to complete the signup proccess.';
 
         if (Utils::sendSMS($data->mobile_no, $smstext)) {
             if ($this->db->update($this->ConsumerModel->table, $data, ['mobile_no' => $data->mobile_no])) {
@@ -706,12 +706,30 @@ class Consumer extends ApiController {
             } elseif (strstr($questionType, 'image')) {
                 $transactionType = 'product_image_response_lps';
 				 $transactionTypeName = 'Genuity Scan and Responding to Product Image';
-				  } elseif (strstr($questionType, 'ad')) {
-                $transactionType = 'product_ad_response_lps';
-				 $transactionTypeName = 'Genuity Scan and Responding to product Advertisement';
-				  } elseif (strstr($questionType, 'survey')) {
-                $transactionType = 'product_survey_response_lps';
-				 $transactionTypeName = 'Genuity Scan and Responding to product Survey';
+				  } elseif (strstr($questionType, 'ad_video')) {
+                $transactionType = 'product_ad_video_response_lps';
+				 $transactionTypeName = 'Genuity Scan and Responding to product Video Advertisement';
+				  } elseif (strstr($questionType, 'ad_audio')) {
+                $transactionType = 'product_ad_audio_response_lps';
+				 $transactionTypeName = 'Genuity Scan and Responding to product Audio Advertisement';
+				  } elseif (strstr($questionType, 'ad_pdf')) {
+                $transactionType = 'product_ad_pdf_response_lps';
+				 $transactionTypeName = 'Genuity Scan and Responding to product PDF Advertisement';
+				  } elseif (strstr($questionType, 'ad_image')) {
+                $transactionType = 'product_ad_image_response_lps';
+				 $transactionTypeName = 'Genuity Scan and Responding to product Image Advertisement';
+				  } elseif (strstr($questionType, 'survey_video')) {
+                $transactionType = 'product_survey_video_response_lps';
+				 $transactionTypeName = 'Genuity Scan and Responding to product Video Survey';
+				  } elseif (strstr($questionType, 'survey_audio')) {
+                 $transactionType = 'product_survey_audio_response_lps';
+				 $transactionTypeName = 'Genuity Scan and Responding to product Audio Survey';
+				  } elseif (strstr($questionType, 'survey_pdf')) {
+                 $transactionType = 'product_survey_pdf_response_lps';
+				 $transactionTypeName = 'Genuity Scan and Responding to product PDF Survey';
+				  } elseif (strstr($questionType, 'survey_image')) {
+                $transactionType = 'product_survey_image_response_lps';
+				 $transactionTypeName = 'Genuity Scan and Responding to product Image Survey';
 				  } elseif (strstr($questionType, 'demo_video')) {
                 $transactionType = 'product_demo_video_response_lps';
 				 $transactionTypeName = 'Viewing product video demonstration';

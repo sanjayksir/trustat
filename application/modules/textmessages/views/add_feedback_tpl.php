@@ -22,14 +22,14 @@
 				           
                    
 					<option value="Product Description Feedback" selected>Product Description Feedback</option>
-					<option value="Product Image Feedback">Product Image Feedback</option>
-					<option value="Product Video Feedback">Product Video Feedback</option>
-					<option value="Product Audio Feedback">Product Audio Feedback</option>
-					<option value="Product PDF Feedback">Product PDF Feedback</option>
-					<option value="Product Pushed Ad Feedback">Product Pushed Ad Feedback</option>
-					<option value="Product Survey Feedback">Product Survey Feedback</option>
+					<option value="Product">Product Image Feedback</option>
+					<option value="Product">Product Video Feedback</option>
+					<option value="Product">Product Audio Feedback</option>
+					<option value="Product">Product PDF Feedback</option>
+					<option value="Advertisement">Product Pushed Ad Feedback</option>
+					<option value="Survey">Product Survey Feedback</option>
 					<option value="Product Demo Video Feedback">Product Demo Video Feedback</option>
-					<option value="Product ADemonstration Feedback">Product Demo Audio Feedback</option>
+					<option value="Demonstration">Product Demo Audio Feedback</option>
                   
              </select>
 			 
