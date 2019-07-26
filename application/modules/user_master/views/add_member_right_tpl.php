@@ -94,7 +94,7 @@
 			  <label for="form-field-8">Customer Loyalty Type</label>
 			  <select  name="Customer_Loyalty_Type" id="Customer_Loyalty_Type" class="form-control" required>
 			<option value="">-Select Customer Loyalty Type-</option>
-			<option value="General">General</option>
+			<option value="TRUSTAT">TRUSTAT</option>
             <option value="Brand">Brand</option>
             </select>
 			</div>

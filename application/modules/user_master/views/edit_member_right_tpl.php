@@ -89,7 +89,7 @@
 			  <label for="form-field-8">Customer Loyalty Type</label>
 			  <select  name="Customer_Loyalty_Type" id="Customer_Loyalty_Type" class="form-control" required>
 			<option value="<?php echo $get_user_details[0]['customer_loyalty_type'];?>" selected><?php echo $get_user_details[0]['customer_loyalty_type'];?></option>
-			<option value="General">General</option>
+			<option value="TRUSTAT">TRUSTAT</option>
             <option value="Brand">Brand</option>
             </select>
 			</div>

@@ -235,7 +235,7 @@ mysqli_close($link);
 							//$character = json_decode($attr['params']);
 							//$searchdata = $character->customer_loyalty_type;
 							//echo $searchdata;
-		$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND customer_loyalty_type = 'General' AND transaction_lr_type = 'Loyalty'";
+		$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND customer_loyalty_type = 'TRUSTAT' AND transaction_lr_type = 'Loyalty'";
 								$results = mysql_query($some_q) or die(mysql_error());
 								while($row = mysql_fetch_array($results)){
 								$TE_Points = $row['points'];							
@@ -243,7 +243,7 @@ mysqli_close($link);
 								//echo $query_getShows;								
 								} ?>
 								</td>
-								<td><?php $some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."'  AND customer_loyalty_type = 'General' AND transaction_lr_type = 'Redemption'";
+								<td><?php $some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."'  AND customer_loyalty_type = 'TRUSTAT' AND transaction_lr_type = 'Redemption'";
 								$results = mysql_query($some_q) or die(mysql_error());
 								while($row = mysql_fetch_array($results)){
 								$TR_Points = $row['points'];

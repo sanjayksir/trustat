@@ -126,8 +126,10 @@
 		$code_unity_type  		= ($this->input->post('code_unity_type'))?$this->input->post('code_unity_type'):'';	
 		$registration_pack  	= ($this->input->post('registration_pack'))?$this->input->post('registration_pack'):'';	
 		$retailer_pack  		= ($this->input->post('retailer_pack'))?$this->input->post('retailer_pack'):'';	
-		$min_shipper_pack_level  		= ($this->input->post('min_shipper_pack_level'))?$this->input->post('min_shipper_pack_level'):'';	
-		$max_shipper_pack_level  		= ($this->input->post('max_shipper_pack_level'))?$this->input->post('max_shipper_pack_level'):'';			
+	$min_shipper_pack_level  		= ($this->input->post('min_shipper_pack_level'))?$this->input->post('min_shipper_pack_level'):'';	
+	$max_shipper_pack_level  		= ($this->input->post('max_shipper_pack_level'))?$this->input->post('max_shipper_pack_level'):'';
+	$number_of_scans_for_super_loyalty  		= ($this->input->post('number_of_scans_for_super_loyalty'))?$this->input->post('number_of_scans_for_super_loyalty'):'';
+	$number_of_loyalty_points_for_super_loyalty  		= ($this->input->post('number_of_loyalty_points_for_super_loyalty'))?$this->input->post('number_of_loyalty_points_for_super_loyalty'):'';		
 		## essential attributes
 		
 		$id			  = $this->input->post('id');
@@ -148,6 +150,8 @@
 					"retailer_pack"	  	  => $retailer_pack,
 					"min_shipper_pack_level"	  => $min_shipper_pack_level,
 					"max_shipper_pack_level"	  => $max_shipper_pack_level,
+					"number_of_scans_for_super_loyalty"	  => $number_of_scans_for_super_loyalty,
+					"number_of_loyalty_points_for_super_loyalty"	  => $number_of_loyalty_points_for_super_loyalty,
 					"created_by"		  => $is_parent,
 					"other_industry"	  => $Other_industry_val
  				);
@@ -192,6 +196,8 @@
 					"retailer_pack"		  => $retailer_pack,
 					"min_shipper_pack_level"	=> $min_shipper_pack_level,
 					"max_shipper_pack_level"	=> $max_shipper_pack_level,
+					"number_of_scans_for_super_loyalty"	=> $number_of_scans_for_super_loyalty,
+					"number_of_loyalty_points_for_super_loyalty"	=> $number_of_loyalty_points_for_super_loyalty,
 					"code_size"			  => $code_size,
 					"code_unity_type"	  => $code_unity_type,
 					"other_industry"	  => $Other_industry_val
@@ -1315,8 +1321,8 @@
 	public function saveConsumerPassbookLoyalty1($transactionType = null,$consumer_id = null,$params = [],$transaction_lr_type = null,$points_redeemed = null){
        
 	   
-	   $TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>"General"))->get()->row();
-		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>"General"))->get()->row();
+	   $TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>"TRUSTAT"))->get()->row();
+		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>"TRUSTAT"))->get()->row();
 		
 		$FinalTotalAccumulatedPoints = $TotalAccumulatedPoints->points;
 		$FinalTotalRedeemedPoints = $TotalRedeemedPoints->points + $points_redeemed;
@@ -1352,7 +1358,7 @@
 			'transaction_type_slug' => "loyalty_loints_ledeemed",
             'params' => json_encode($params),
             'transaction_lr_type' => $transaction_lr_type,
-			'customer_loyalty_type' => "General",
+			'customer_loyalty_type' => "TRUSTAT",
 			'total_accumulated_points' => $FinalTotalAccumulatedPoints,
 			'total_redeemed_points' => $FinalTotalRedeemedPoints,
             'current_balance' => $CurrentBalance,
@@ -1409,58 +1415,36 @@
         }
 		*/
 		
-		// Find Current transuction type
 		
-		/*
+		
+	    $customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customer_id);
 		$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 		$TRPoints = $result->$transactionType;
 		
-		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>"General"))->get()->row();
-		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>"General"))->get()->row();
+		if($customer_loyalty_type=="Brand"){
+		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
 		
-		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
-		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
+		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();		
+			} else {
+		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();
 		
-		
-		//$FinalTotalAccumulatedPoints = ($TotalAccumulatedPoints->points) + $TRPoints;
-		$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customer_id);
-		if($customer_loyalty_type=="General"){		
-		$FinalTotalAccumulatedPoints = ($TotalAccumulatedPoints->points) + $TRPoints;
-		}else{
-		$FinalTotalAccumulatedPoints = ($TotalAccumulatedPoints->points) + 0;
+		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();			
 		}
+		
+		$FinalTotalAccumulatedPoints = ($TotalAccumulatedPoints->points) + $TRPoints;
+			
 		if(($TotalRedeemedPoints->points)!='')
 		{
 			$FinalTotalRedeemedPoints = $TotalRedeemedPoints->points;
 		} else {
 			$FinalTotalRedeemedPoints =0;
 			}
-			
 		
-		$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
-		$Min_Locking_Balance = $result2->loyalty_points;
 		
-		$CurrentBalanceAfterMinBalanceLocking = $CurrentBalance - $Min_Locking_Balance;
-		$Points_Redeemed_in_Multiple_of = $result3->loyalty_points;
-				
-		$remainder = $CurrentBalanceAfterMinBalanceLocking % $Points_Redeemed_in_Multiple_of;
-		$quotient = ($CurrentBalanceAfterMinBalanceLocking - $remainder) / $Points_Redeemed_in_Multiple_of;
-
-		$Points_Redeemable = $Points_Redeemed_in_Multiple_of * $quotient;
-		$PointsShortOfRedumption =$Points_Redeemed_in_Multiple_of - $remainder;
-		*/
-		
-		$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customer_id);
-		$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
-		$TRPoints = $result->$transactionType;
-		
+		/*
 		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$userId, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
 		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$userId, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
 		
-		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
-		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
-		
-		
 		$FinalTotalAccumulatedPoints = ($TotalAccumulatedPoints->points) + $TRPoints;
 		
 		if(($TotalRedeemedPoints->points)!='')
@@ -1469,6 +1453,10 @@
 		} else {
 			$FinalTotalRedeemedPoints =0;
 			}
+		*/	
+			
+		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
+		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
 			
 		$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
 		$Min_Locking_Balance = $result2->loyalty_points;
@@ -1482,7 +1470,7 @@
 		$Points_Redeemable = $Points_Redeemed_in_Multiple_of * $quotient;
 		$PointsShortOfRedumption =$Points_Redeemed_in_Multiple_of - $remainder;
 		*/
-		if($customer_loyalty_type=="General"){
+		if($customer_loyalty_type=="TRUSTAT"){
 		$Points_Redeemable = $Points_Redeemed_in_Multiple_of * $quotient;		
 		$PointsShortOfRedumption =$Points_Redeemed_in_Multiple_of - $remainder;
 		}else{
@@ -2326,7 +2314,7 @@
 		$this->db->select('count(1) as total_rows');
 		$this->db->from('consumer_passbook');
 		$this->db->where('consumer_id', $id);
-		$this->db->where('customer_loyalty_type', "General");
+		$this->db->where('customer_loyalty_type', "TRUSTAT");
     		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -2349,7 +2337,7 @@
 		$this->db->select("*");
 		$this->db->from("consumer_passbook");		
 		$this->db->where('consumer_id', $id);
-		$this->db->where('customer_loyalty_type', "General");
+		$this->db->where('customer_loyalty_type', "TRUSTAT");
 		$this->db->order_by("transaction_date", " desc");
 		$this->db->limit($limit, $start);
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();

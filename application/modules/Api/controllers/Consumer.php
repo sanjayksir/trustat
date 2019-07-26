@@ -927,7 +927,7 @@ class Consumer extends ApiController {
 		$consumer_id = get_consumer_id_by_mobile_number($consumer_mobile);
 		
 		$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customer_id);
-		if($customer_loyalty_type=="General"){
+		if($customer_loyalty_type=="TRUSTAT"){
 		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();
 		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();
 		}else{
@@ -955,7 +955,7 @@ class Consumer extends ApiController {
 				
 		$remainder = $CurrentBalanceAfterMinBalanceLocking % $Points_Redeemed_in_Multiple_of;
 		$quotient = ($CurrentBalanceAfterMinBalanceLocking - $remainder) / $Points_Redeemed_in_Multiple_of;
-		if($customer_loyalty_type=="General"){
+		if($customer_loyalty_type=="TRUSTAT"){
 		$Points_Redeemable = $Points_Redeemed_in_Multiple_of * $quotient;		
 		$PointsShortOfRedumption =$Points_Redeemed_in_Multiple_of - $remainder;
 		}else{
@@ -1243,12 +1243,12 @@ class Consumer extends ApiController {
 		
 		 //$smstext = 'Welcome to TRUSTAT!!. Your OTP for mobile verification is ' . $data['verification_code'] . ', Please enter the OTP to complete the signup process.';
 		 
-		 $mnv1_result = $this->db->select('message_notification_value, message_notification_value_part2')->from('message_notification_master')->where('id', 1)->get()->row();
-		$message_notification_value = $mnv1_result->message_notification_value;
-		$message_notification_value_part2 = $mnv1_result->message_notification_value_part2;
+		 $mnvrOtp_result = $this->db->select('message_notification_value, message_notification_value_part2')->from('message_notification_master')->where('id', 1)->get()->row();
+		$message_notification_valuerOtp = $mnvrOtp_result->message_notification_value;
+		$message_notification_value_part2rOtp = $mnvrOtp_result->message_notification_value_part2;
 		
 		 //$smstext = 'Welcome to TRUSTAT!!. Your OTP for mobile verification is ' . $data['verification_code'] . ', Please enter the OTP to complete the signup process.';
-		  $smstext = $message_notification_value . $data['verification_code'] . $message_notification_value_part2;
+		  $smstext = $message_notification_valuerOtp . $data->verification_code . $message_notification_value_part2rOtp;
 		 
 		 
 

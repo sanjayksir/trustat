@@ -218,7 +218,7 @@
 
 		$name = initials($string);
 		$pin = mt_rand(1000, 9999);
- 		echo $res =  slugify2($name).'-'.$pin;
+ 		echo $res =  slugify2($name).$pin;
 		exit;
    }
 
@@ -1315,7 +1315,7 @@ function list_assigned_products() {
 
 	 
 	 
-		public function details_loyalty_redemption_requests() {
+  public function details_loyalty_redemption_requests() {
 		
 		$data = array();
         $id = $this->uri->segment(3);

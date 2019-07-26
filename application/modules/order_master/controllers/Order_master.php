@@ -53,9 +53,6 @@
 				$params["links"] = Utils::pagination('order_master/list_orders/' . $customer_id, $total_records, null, 4);
 			
 			}
-			
-        
-
         ##--------------- pagination End ----------------##
         $data = array();
         $user_id = $this->session->userdata('admin_user_id');
@@ -64,6 +61,93 @@
         $this->load->view('list_order_tpl', $params);
     }
 	
+	public function list_print_batches() {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		//$customer_id = $this->uri->segment(3);
+		$order_id = $this->uri->segment(3);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+       if($user_id>1){
+		//$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+       $total_records = $this->order_master_model->get_total_print_batches_list_all($srch_string);
+       $params["orderListing"] = $this->order_master_model->get_print_batches_list_all($limit_per_page, $start_index, $srch_string);
+		if($user_id>1){
+		//$params["links"] = Utils::pagination('order_master/list_print_batches', $total_records);
+		$params["links"] = Utils::pagination('order_master/list_print_batches/' . $order_id, $total_records, null, 4);
+			}else{
+		$params["links"] = Utils::pagination('order_master/list_print_batches/' . $order_id, $total_records, null, 4);
+			
+			}
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        $params['user_id'] = $user_id;
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        //$this->load->view('list_order_tpl', $params);
+		$this->load->view('list_print_batches_tpl', $params);
+    }
+	
+
+	public function list_codes_for_batch_id() {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		//$customer_id = $this->uri->segment(3);
+		$batch_id = $this->uri->segment(3);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+       if($user_id>1){
+		//$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+       //$total_records = $this->order_master_model->get_total_print_batches_list_all($srch_string);
+       //$params["orderListing"] = $this->order_master_model->get_print_batches_list_all($limit_per_page, $start_index, $srch_string);
+	   
+	   
+	   $total_records = $this->order_master_model->get_total_codes_for_batch_id_all($srch_string);
+       $params["orderListing"] = $this->order_master_model->get_codes_for_batch_id_list_all($limit_per_page, $start_index, $srch_string);
+	   
+	   
+		if($user_id>1){
+		//$params["links"] = Utils::pagination('order_master/list_codes_for_batch_id/' . $order_id, $total_records, null, 4);
+		
+		$params["links"] = Utils::pagination('order_master/list_codes_for_batch_id/' . $batch_id, $total_records, null, 4);
+			}else{
+		$params["links"] = Utils::pagination('order_master/list_codes_for_batch_id/' . $batch_id, $total_records, null, 4);
+			
+			}
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        $params['user_id'] = $user_id;
+       //$this->load->view('list_print_batches_tpl', $params);
+	   
+	   $this->load->view('list_codes_for_batch_id_tpl', $params);
+    }
 	
 	
 	     public function approve_print_orders() {
@@ -459,6 +543,7 @@
 		 
 		$userid 				= base64_decode($this->input->post('order_id')); 
 		$barcodesize 			= $this->input->post('barcodesize'); 
+		$print_batch_id 			= $this->input->post('print_batch_id'); 
  		//$userOrderData 			= view_order_data($userid);
 		//echo '<pre>';print_r($userOrderData);exit;
 		// echo '***'.$pass_id = base64_decode($this->uri->segment(3));exit;
@@ -511,8 +596,8 @@
 			$delivery_date			= date('Y-m-d',strtotime($userOrderData['delivery_date']));
 			$order_created_date     = date('Y-m-d',strtotime($userOrderData['created_date']));
 			$status					= $userOrderData['status'];
- 			$qrcode 				= $barcode_no .'-'. mt_rand(1000, 9999);
-			$qrcode2				= $barcode_no .'-'. mt_rand(1000, 9999);
+ 			$qrcode 				= $barcode_no . mt_rand(1000, 9999);
+			$qrcode2				= $barcode_no . mt_rand(1000, 9999);
 			//$qrcode2 				= $barcode_no2;			
  			
 			// set style for barcode
@@ -611,11 +696,11 @@
 					$getEssentialAttributes = getEssentialAttributes($product_id);
 					if($getEssentialAttributes['code_unity_type']=='Twin'){
 						
-					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 60, $y, $barcodesize, $barcodesize, $style, 'N');
-					$pdf->Text(62, $y+0.2, $qrcode.'-'.$i);
+					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 60, $y, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->Text(62, $y+0.2, $qrcode.$i);
 					$pdf->Text(62, $y+31, 'Scan to Check Product');
-					$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 120, $y-1.5, 80, $barcodesize, 0.4, $style, 'L');
-					//$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
+					$pdf->write1DBarcode($qrcode2.$i, 'C128B', 120, $y-1.5, 80, $barcodesize, 0.4, $style, 'L');
+					//$pdf->write1DBarcode($qrcode2.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
 					//$pdf->SetFont('','B');
 				  	$pdf->Text(121, $y+30, "^^Do Not Buy!! If already Scratched^^, Scratch to register product");
 					//$pdf->Text(150, $y+30, "Scratch to register product");
@@ -625,19 +710,20 @@
 					
 					} else {
 					$pdf->SetFont('', '1', 5);
-					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 150, $y, $barcodesize, $barcodesize, $style, 'N');
 					$pdf->SetFont('helvetica', '', 5);
-					$pdf->Text(149, $y+14, $qrcode.'-'.$i);
+					$pdf->Text(155, $y-1, $print_batch_id);
+					$pdf->Text(150, $y+13, $qrcode.$i);
 					}
 					
 					$pdf->SetXY($x,$y);
 					$pdf->Cell(287,25, '', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
 					$pdf->Ln();
-			$this->order_master_model->insert_printed_barcode_qrcode($post,$qrcode.'-'.$i,$qrcode2.'-'.$i,'Qrcode',$product_id,$active_status,$plant_id,$user_id);
+			$this->order_master_model->insert_printed_barcode_qrcode($post,$qrcode.$i,$qrcode2.$i,'Qrcode',$product_id,$active_status,$plant_id,$user_id);
 				}
-				
+				$customer_id = get_customer_id_by_product_id($product_id);
 				$this->insert_print_order_in_table($post,'Qrcode');
-				$this->insert_order_print_listing_table($post,'Qrcode');
+				$this->insert_order_print_listing_table($post,'Qrcode',$customer_id);
  			}
  			##----------------------------------------------------------------------------------##
  			// ---------------------------------------------------------
@@ -683,6 +769,7 @@
 			// print a message
 			$userid 				= base64_decode($this->input->post('order_id')); 
 			$barcodesize 			= $this->input->post('barcodesize'); 
+			$print_batch_id 			= $this->input->post('print_batch_id'); 
 			
 			
   			$userOrderData 			= view_order_data($userid);
@@ -699,8 +786,8 @@
 			$delivery_date			= date('Y-m-d',strtotime($userOrderData['delivery_date']));
 			$order_created_date     = date('Y-m-d',strtotime($userOrderData['created_date']));
 			$status					= $userOrderData['status'];
- 			$qrcode 				= $barcode_no .'-'. mt_rand(1000, 9999);
-			$qrcode2				= $barcode_no .'-'. mt_rand(1000, 9999);		
+ 			$qrcode 				= $barcode_no . mt_rand(1000, 9999);
+			$qrcode2				= $barcode_no . mt_rand(1000, 9999);		
  			
 			// set style for barcode
 			 $style = array(
@@ -810,19 +897,19 @@
 				 	$x = $pdf->GetX();
 					$y = $pdf->GetY();
 					//$style['position'] = 'R';
-					//$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 110, $y, $barcodesize, 10, $style, 'L');
-					//$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 150, $y, $barcodesize, 10, $style, 'L');
+					//$pdf->write1DBarcode($qrcode.$i, 'C128B', 110, $y, $barcodesize, 10, $style, 'L');
+					//$pdf->write1DBarcode($qrcode2.$i, 'C128B', 150, $y, $barcodesize, 10, $style, 'L');
 					
 					
 					$getEssentialAttributes = getEssentialAttributes($product_id);
 					if($getEssentialAttributes['code_unity_type']=='Twin'){
 					
 					
-					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 60, $y, $barcodesize, $barcodesize, $style, 'N');
-					$pdf->Text(62, $y+0.2, $qrcode.'-'.$i);
+					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 60, $y, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->Text(62, $y+0.2, $qrcode.$i);
 					$pdf->Text(62, $y+31, 'Scan to Check Product');
-					$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 120, $y-1.5, 80, $barcodesize, 0.4, $style, 'L');
-					//$pdf->write1DBarcode($qrcode2.'-'.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
+					$pdf->write1DBarcode($qrcode2.$i, 'C128B', 120, $y-1.5, 80, $barcodesize, 0.4, $style, 'L');
+					//$pdf->write1DBarcode($qrcode2.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
 					//$pdf->SetFont('','B');
 				  	$pdf->Text(121, $y+30, "^^Do Not Buy!! If already Scratched^^, Scratch to register product");
 					//$pdf->Text(150, $y+30, "Scratch to register product");
@@ -832,10 +919,11 @@
 					
 					
 					} else {
-					$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', 120, $y-1.5, 80, $barcodesize, 0.4, $style, 'L');
-					//$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
+						$pdf->Text(80, $y+5, $print_batch_id);
+					$pdf->write1DBarcode($qrcode.$i, 'C128B', 120, $y-1.5, 80, $barcodesize, 0.4, $style, 'L');
+					//$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
 					//$pdf->Text(110, $y, 'This is First Code');
-					//$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
+					//$pdf->write2DBarcode($qrcode2.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
 					//$pdf->Text(150, $y, 'This is Second Code');
             		//Reset X,Y so wrapping cell wraps around the barcode's cell.
            			 /* old
@@ -848,12 +936,12 @@
 					$pdf->Ln();
 					
 					// $pdf->Cell(105, 21, "", 1, 2, 'C', FALSE, '', 0, FALSE, 'C', 'B');
-		$this->order_master_model->insert_printed_barcode_qrcode($post, $qrcode.'-'.$i, $qrcode2.'-'.$i, 'barcode',$product_id,$active_status,$plant_id,$user_id);
+		$this->order_master_model->insert_printed_barcode_qrcode($post, $qrcode.$i, $qrcode2.$i, 'barcode',$product_id,$active_status,$plant_id,$user_id);
 					
  				}
-				
+				$customer_id = get_customer_id_by_product_id($product_id);
 				$this->insert_print_order_in_table($post,'barcode');
-				$this->insert_order_print_listing_table($post,'barcode');
+				$this->insert_order_print_listing_table($post,'barcode',$customer_id);
  			}
 			 // $pdf->Ln();
  			// ---------------------------------------------------------
@@ -914,7 +1002,7 @@
 				for($i=1;$i<=$this->input->post('quantity2');$i++){
 				 	
 					
-		$this->order_master_model->insert_upload_bulk_codes($post, $qrcode, $qrcode2.'-'.$i, $active_status, $plant_id, $user_id, $product2_array);
+		$this->order_master_model->insert_upload_bulk_codes($post, $qrcode, $qrcode2.$i, $active_status, $plant_id, $user_id, $product2_array);
 					
 					
 					
@@ -1101,13 +1189,13 @@
 					$y = $pdf->GetY();
 					//$style['position'] = 'R';
 					
-					//$pdf->write1DBarcode('Sanjay1234'.'-'.$i, 'C128B', 60, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
-					//$pdf->write1DBarcode('Sanjay56789'.'-'.$i, 'C128B', 140, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
+					//$pdf->write1DBarcode('Sanjay1234'.$i, 'C128B', 60, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
+					//$pdf->write1DBarcode('Sanjay56789'.$i, 'C128B', 140, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
 					
-					$pdf->write2DBarcode($qrcode.'-'.$i, 'QRCODE,L', 110, $y, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 110, $y, $barcodesize, $barcodesize, $style, 'N');
 					$pdf->SetFont('helvetica', '', 5);
 					$pdf->Text(100, $y+11, 'This is First Code');
-					//$pdf->write2DBarcode($qrcode2.'-'.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
+					//$pdf->write2DBarcode($qrcode2.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
 					//$pdf->Text(150, $y, 'This is Second Code');
 					
 					//$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,L', 20, 150, 50, 50, $style, 'N');
@@ -1121,7 +1209,7 @@
 
 // -------------------------------------------------------------------
 					
-					//$pdf->write1DBarcode($qrcode.'-'.$i, 'C128B', '', $y-8.5, 105, 20, 0.4, $style, 'M');
+					//$pdf->write1DBarcode($qrcode.$i, 'C128B', '', $y-8.5, 105, 20, 0.4, $style, 'M');
             		//Reset X,Y so wrapping cell wraps around the barcode's cell.
            			 $pdf->SetXY($x,$y);
 					 $pdf->Cell(100, 22, '', 0, 1);
@@ -1348,11 +1436,11 @@ $pdf->Output('example_050.pdf', 'I');
 	 }
 	 
 	 
-	 function insert_order_print_listing_table($post,$code_type){## code type is barcode, QR code
+	 function insert_order_print_listing_table($post,$code_type,$customer_id){## code type is barcode, QR code
 		 $order_id 				= base64_decode($post['order_id']);
 		 //$resultSet=0;
 		
-			 	$resultSet= $this->order_master_model->insert_order_print_listing($post,$code_type);	
+			 	$resultSet= $this->order_master_model->insert_order_print_listing($post,$code_type,$customer_id);	
 			 
 		// return $resultSet;
 	 }
@@ -1495,8 +1583,31 @@ $pdf->Output('example_050.pdf', 'I');
 		
 		exit;
 		
-    }	
+    }
+
+
+  public function activate_codes() {
+		
+		$data = array();
+        $print_batch_id = $this->uri->segment(3);
+		//echo $id;
+
+        $data['get_activate_codes_details'] = $this->order_master_model->details_activate_codes($print_batch_id);
+        $this->load->view('details_activate_codes_tpl', $data);
+    }
+
 	
+  public function update_activate_codes() {
+        $data					= array();
+		$data = $this->input->post();
+		$print_batch_id = $data['print_batch_id'];
+		$PackagingLevel = $data['PackagingLevel'];
+		
+		$data = $this->order_master_model->update_activate_codes($data);
+		
+		exit;
+		
+    }
 	 
    }
    

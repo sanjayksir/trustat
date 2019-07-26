@@ -232,14 +232,14 @@ return $result;
 	$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customerId);
 	$customer_loyalty_balance = $customer_purchased_points - $customer_consumed_points;	
 	/*
-	if($customer_loyalty_type=="General"){
+	if($customer_loyalty_type=="TRUSTAT"){
 				$item['GiveLoyalty'] = "Yes";
 			}else{
 			$item['GiveLoyalty'] = "No";
 			}
 		*/
 		/*
-		if($customer_loyalty_type=="General"){
+		if($customer_loyalty_type=="TRUSTAT"){
 			if(($customer_loyalty_balance-($row->product_survey_video_response_lps))< 0){
 				$item['GiveLoyalty'] = "Yes";
 			} else{

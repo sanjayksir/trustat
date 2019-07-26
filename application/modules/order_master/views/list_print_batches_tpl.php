@@ -4,7 +4,7 @@
             <script type="text/javascript">
                     try{ace.settings.loadState('main-container')}catch(e){}
             </script>
-            <?php $label = 'Order';?>
+            <?php $label = 'Print Batchs';  //echo $print_batche_id; ?>
 
             <?php $this->load->view('../includes/admin_sidebar');?>
 
@@ -43,18 +43,21 @@
                                     <div class="col-xs-12">
                                         <div class="widget-box widget-color-blue">
                                             <div class="widget-header widget-header-flat">
-                                                <h5 class="widget-title bigger lighter">List Order</h5>
+                                                <h5 class="widget-title bigger lighter">List Print Batchs</h5>
                                                 <div class="widget-toolbar">
                                                    <!--<a href="<?php echo base_url('order_master/list_orders_plant_controlllers_CC') ?>" class="btn btn-xs btn-warning" title="List Plant Controllers Orders">List Plant Controllers Orders </a>-->
 												  <?php
 													$user_id 	= $this->session->userdata('admin_user_id');
 
 												  if($user_id>1){  ?>
-                                                    <a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Make Order" data-toggle="modal" data-target="#myModal">Make Order</a>
-													<a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Upload Customer Codes" data-toggle="modal" data-target="#myUploadModal">Upload Customer Codes</a>
+                                                    
+													
 												  <?php } ?>
+													<a href="<?php echo base_url('order_master/list_orders') ?>" class="btn btn-xs btn-warning" title="List Plant Controllers Orders">Back to Order Management </a>
 													
 													<a href="<?php echo base_url('backend/dashboard') ?>" class="btn btn-xs btn-warning" title="List Plant Controllers Orders">Back to Home </a>
+
+
                                                 </div>
                                             </div>
                                             <div class="widget-body">
@@ -84,36 +87,31 @@
                                                         <thead>
                                                             <tr>
                                                                 <th>#</th> 
+																<th>Batch ID</th>
+																<th>Batch Quantity</th>
+																<th>Print Date</th>
 																<th>Order Number</th>
-																<th>Order Date</th>
-                                                                <th>Order By</th>
-                                                                <!--
-                                                                <th>Tracking Number</th>
-                                                                <th>Product SKU</th>-->
-                                                                <th>Product Name</th>
-                                                                <th>Ordered Qty</th>
-                                                                <th>Delivery Date</th>
-                                                                <th>Status</th>
-                                                                <th>Print</th>
-                                                                <th>Action</th>
+																<th>Ordered Qty</th>
+																<th>Product Name</th>
+																<th>Action</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
 
                                         <?php 
 										$user_id = $this->session->userdata('admin_user_id');
-										$customer_id = $this->uri->segment(3);
+										$order_id = $this->uri->segment(3);
                                         $i = 0; 
 
                                         if(count($orderListing)>0){
                                            // $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
 										   
 										   
-					if(($user_id==1) && ($customer_id!="")){
+					if(($user_id==1) && ($order_id!="")){
 				$page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
 			}else{
 			
-			$page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+			$page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
 			}
 			
                                             $sno =  $page + 1;
@@ -132,135 +130,30 @@
                                                 }?>
 												  <tr id="show<?php echo $listData['order_id']; ?>">
                                                    <td><?php  echo $sno;$sno++; ?></td>
+												    <td><?php  echo $listData['print_batch_id']; ?></td>
+													<td><?php echo $listData['last_printed_rows']; ?></td>
+													 <td><?php  if($listData['last_printed_date']!='0000-00-00'){echo date('j M Y H:i:s D',strtotime($listData['last_printed_date']));}else{echo '';}; ?></td>
 												    <td><?php  echo $listData['order_no']; ?></td>
-												    <td><?php  if($listData['created_date']!='0000-00-00'){echo date('j M Y H:i:s D',strtotime($listData['created_date']));}else{echo '';}; ?></td>
-													 <td><?php echo getUserFullNameById($listData['user_id']); ?></td>
-                                                   <!--<td><?php  echo $listData['order_no']; ?>
-                                                   <td><?php  echo $listData['order_tracking_number']; ?></td>
-                                                        <td><?php echo $listData['product_sku']; ?></td>-->
-                                                        <td><?php echo $listData['product_name']; ?></td>
-                                                        <td><?php echo $listData['quantity']; ?></td>
-                                                        <td><?php  if($listData['delivery_date']!='0000-00-00'){echo date('j M Y H:i:s D',strtotime($listData['delivery_date']));}else{echo '';}; ?></td>
-                                                       
-                                                        <?php if($this->session->userdata('admin_user_id')==1){
-                                                                //echo $listData['user_id'].'**'.$this->session->userdata('admin_user_id');		
+													<td><?php echo $listData['total_quantity']; ?></td>
+												     <td><?php echo $listData['product_name']; ?></td>
+                                                        
+                                                        
 
-                                                                                if($this->session->userdata('admin_user_id')!=$listData['user_id']){
-                                                                                        $print_opt = 0;
-                                                                                }else{
-                                                                                        $print_opt = 1;
-                                                                                }
-
-                                                                ?>
-
-                                                         <td>
-         <?php //if($essentialAttributeArr['delivery_method']==4){?>
-                <select name="change_order_status" id="change_order_status" onchange="return change_order_status('<?php echo $listData['order_id'];?>',this.value,'<?php echo $print_opt;?>');">
-                                                                <option value="0" <?php if($listData['order_status']=='0'){echo 'selected';}?>>Pending</option>
-                                                                <option value="1" <?php if($listData['order_status']=='1'){echo 'selected';}?>>Accepted</option>
-                                                                <option value="2" <?php if($listData['order_status']=='2'){echo 'selected';}?>>Rejected</option>
-                                                                </select>
-        <?php //}else{
-                                                                //echo 'Hard Print';
-                                                        //}?>
-                                                        </td> 
-                                                        <?php }else{?>
-                                                         <td><?php echo order_status($listData['order_status']); ?></td>
-                                                        <?php }?>
-                                                        <td>
-        <!--<a class="btn btn-primary pull-right modellink" data-toggle="modal" href="#printMyModal" id="" onclick="return print_order('<?php echo $listData['order_id'];?>');">Print</a>-->
-                                                        <?php
-                                                        $get_parent_id	= get_parent_id($user_id);
-                                                        $lable='';
-                                                        $lable1='';
-                                                        $lable2='';
-                                                        $display		= "none;";
-
-                                                        //echo '***--'.$user_id.'***--'.$listData['user_id'].'***--'.$listData['order_status'].'***--'.$essentialAttributeArr['delivery_method'];
-                                                        if($listData['order_status']==1){
-                                                         if($user_id==1 && $essentialAttributeArr['delivery_method']==1){
-                                                                $display	= "block;";
-                                                         }else if($user_id>1 && $get_parent_id==1 && $essentialAttributeArr['delivery_method']==2){
-                                                                $display	= "block;";
-                                                         }else if($user_id>1 && $get_parent_id>1 && $essentialAttributeArr['delivery_method']==3){
-                                                                $display	= "block;";
-                                                         }
-                                                        }else{
-                                                                $display	= "none;";
-                                                        }
-                                                        /*if($listData['order_status']!=1 ){
-                                                                $display	= "none;";
-                                                        }
-                                                        if($listData['order_status']==1){
-                                                                $display	= "block;";
-                                                        }*/
-
-                                                        ###---------- show print option ------------------##
-
-
-                                                        if( $essentialAttributeArr['delivery_method']==4){
-                                                                $display	= "none;";
-                                                        }
-                                                        ###---------- show print option ------------------##
-
-                                                        ##-----------------------------------##
-                                                        if($user_id==1 && $essentialAttributeArr['delivery_method']==2 ){
-                                                                $lable = 'Print By CCC Admin';
-                                                        }
-                                                        if($user_id==1 && $essentialAttributeArr['delivery_method']==3 ){
-                                                                $lable = 'Print By CCC Admin';
-                                                        }
-
-                                                        if($user_id>1 && $get_parent_id==1  && $essentialAttributeArr['delivery_method']==1){
-                                                                $lable='Print By Super Admin';
-                                                        }
-                                                        if($user_id>1 && $get_parent_id==1  && $essentialAttributeArr['delivery_method']==3){
-                                                                $lable='Print By Plant Controller';
-                                                        } 
-
-                                                        if($user_id>1 && $get_parent_id>1 && $essentialAttributeArr['delivery_method']==1){
-                                                                $lable='Print By Super Admin';
-                                                        }
-                                                        if($user_id>1 && $get_parent_id>1 && $essentialAttributeArr['delivery_method']==2){
-                                                                $lable='Print By CCC Admin';
-                                                        }
-
-                                                        if($essentialAttributeArr['delivery_method']==4){
-                                                                $lable='E-Mode Print';
-                                                        }
-                                                        ##-----------------------------------##
-
-                                                        //echo '**'.$listData['order_status'].'@@@'.$essentialAttributeArr['delivery_method'];
-                                                        ?>
-                 <span id="order_status_<?php echo $listData['order_id'];?>" style="display:<?php echo $display;?>"> 
-
-				<?php	if($user_id>1){ ?>
-                  <a class="btn btn-primary pull-right modellink" data-toggle="modal" href="#printMyModal" id="" onclick="return print_order('<?php echo $listData['order_id'];?>');"><i style="cursor:pointer" title="print Order" class="fa fa-print icon-2x"></i></a>
-				  <?php
-				  }else{
-				echo "Please Print from Approvals -> Approve & Print Orders Menu ";
-			
-			}
-			?>
-				  
-                </span>
-																
-         <?php if($display	!= "block;"){echo $lable;}?>
-
-        </td>
+                                                        
+                                                        
           <td>
              <div class="hidden-sm hidden-xs action-buttons">
-                 <a href="<?php  echo base_url().'order_master/view_order/'.$listData['order_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>
-				 
-				  <a href="<?php  echo base_url().'order_master/list_print_batches/'.$listData['order_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> Batchs</i></a>
-
-                 <?php 
-				 if((order_status($listData['order_status']))=="Pending") {
-				 echo anchor("order_master/edit_product/" . $listData['order_id'], '<i class="ace-icon fa fa-pencil"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); }
+                 <a href="<?php  echo base_url().'order_master/list_codes_for_batch_id/'.$listData['print_batch_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> View Codes</i></a>
+				 <?php  $active_batch_allow = $listData['active_batch_allow'];
+				 if($active_batch_allow==0){ ?>
+					 <a href="<?php  echo base_url().'order_master/list_codes_for_batch_id/'.$listData['print_batch_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> View Activated Codes </i></a>
+				 <?php }else { ?>
+					  <a href="<?php  echo base_url().'order_master/activate_codes/'.$listData['print_batch_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> Activate Codes</i></a>
+				 <?php
+				 }
 				 ?>
 				 
-				 
-                <!-- <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['order_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['order_id'];?>',this.value);" />-->
+
 
             </div>
 

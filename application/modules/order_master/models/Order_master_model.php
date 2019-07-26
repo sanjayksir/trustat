@@ -358,8 +358,146 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		return $resultData;
 	 }
 	 
-	//============sssss 
-	 	 function get_total_approve_print_orders_list_all($srch_string=''){
+	// End List orders Function 
+  // Start List Print Batch Function
+  	 function get_total_print_batches_list_all($srch_string=''){
+		$result_data = 0;
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		$order_id = $this->uri->segment(3);
+		
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%')");
+		}
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+				$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%') and (user_id=$user_id)");
+			}else{
+				$this->db->where(array('order_id'=>$order_id));
+			}
+	 	}
+		
+		$this->db->select('count(1) as total_rows');
+		$this->db->from('order_print_listing');
+		if($user_id>1){
+		$this->db->where('order_id', $order_id);
+			}else{
+			$this->db->where('order_id', $order_id);
+			}
+		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function get_print_batches_list_all($limit,$start,$srch_string=''){
+		$resultData = array();
+		
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		$order_id = $this->uri->segment(3);
+		/*if($user_id>1){
+			$this->db->where(array('user_id'=>$user_id));
+	 	}*/
+		
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%')");
+		}
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+				$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%') and (user_id=$user_id)");
+			}else{
+				$this->db->where(array('OPL.order_id'=>$order_id));
+			}
+	 	}
+		
+		$this->db->select('OM.product_name, OM.order_no, OPL.print_batch_id, OPL.active_batch_allow, OPL.last_printed_rows, OPL.total_quantity, OPL.code_type, OPL.last_printed_date ',false);
+		$this->db->from('order_print_listing OPL');
+		$this->db->join('order_master OM', 'OM.order_id= OPL.order_id');
+ 		$this->db->order_by('OPL.last_printed_date','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get();  //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	// End List Print Batch Function
+	
+// Start List codes for Batch id Function	
+  	 function get_total_codes_for_batch_id_all($srch_string=''){
+		$result_data = 0;
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		$batch_id = $this->uri->segment(3);
+		
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%')");
+		}
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+				$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%') and (user_id=$user_id)");
+			}else{
+				$this->db->where(array('print_batch_id'=>$batch_id));
+			}
+	 	}
+		
+		$this->db->select('count(1) as total_rows');
+		$this->db->from('printed_barcode_qrcode');
+		if($user_id>1){
+		$this->db->where('print_batch_id', $batch_id);
+			}else{
+			$this->db->where('print_batch_id', $batch_id);
+			}
+		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function get_codes_for_batch_id_list_all($limit,$start,$srch_string=''){
+		$resultData = array();
+		
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		$batch_id = $this->uri->segment(3);
+		/*if($user_id>1){
+			$this->db->where(array('user_id'=>$user_id));
+	 	}*/
+		
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%')");
+		}
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+				$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%') and (user_id=$user_id)");
+			}else{
+				$this->db->where(array('print_batch_id'=>$batch_id));
+			}
+	 	}
+		
+		$this->db->select('barcode_qr_code_no, pack_level, active_status, print_batch_id, order_id',false);
+		$this->db->from('printed_barcode_qrcode');
+		//$this->db->join('order_master OM', 'OM.batch_id= OPL.batch_id');
+ 		$this->db->order_by('id','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get();  //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	// End List codes for Batch id Function	 
+
+
+
+	 function get_total_approve_print_orders_list_all($srch_string=''){
 		$result_data = 0;
 		$user_id 	= $this->session->userdata('admin_user_id');
 		$customer_id = $this->uri->segment(3);
@@ -700,6 +838,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 	 #### -----------------Printed barcode----------------#####
 	 function insert_printed_barcode_qrcode($post, $code, $code2, $code_type,$product_id='',$active_status,$plant_id,$user_id){
 		 $order_id 				= base64_decode($post['order_id']);
+		 $print_batch_id 		= $post['print_batch_id'];
 		 $post_code 			= $code;
 		 $post_code2 			= $code2;
 		 //$rnpin2 = mt_rand(1000, 9999);
@@ -712,6 +851,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 			$date = date('m/d/Y h:i:s a', time());
 		 $insertData = array(
 				"print_id"				=> $print_id,
+				"print_batch_id"		=> $print_batch_id,
 				"order_id"				=> $order_id,
 				"barcode_qr_code_no"	=> $post_code,
 				"barcode_qr_code_no2"	=> $post_code2,
@@ -776,14 +916,18 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
  }
 	 
 	 
-	function insert_order_print_listing($post, $code_type){
+	function insert_order_print_listing($post, $code_type,$customer_id){		 
+		 //$customer_id 	= 221;
 		 $order_id 				= base64_decode($post['order_id']);
  		 $printer_current_qty 	= $post['qty'];
+		 $print_batch_id 	= $post['print_batch_id'];
 		 $print_code_type 		= $code_type;
 		 $total_quantity 		= $this->get_total_quantity_ordered($order_id) ;
 		 $insertData = array(
 				//"print_id"			=> $print_id,
 				"order_id"			=> $order_id,
+				"print_batch_id"	=> $print_batch_id,
+				"customer_id"		=> $customer_id,
 				"last_printed_rows"	=> $printer_current_qty,
 				"total_quantity"	=> $total_quantity,
 				"code_type"			=> $print_code_type
@@ -2361,5 +2505,51 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		//curl_close ( $ch );
 		return $result;
 		}
+		
+		
+function details_activate_codes($print_batch_id) {
+        $this->db->select('*');
+        $this->db->from('printed_barcode_qrcode');
+        //$this->db->join('assign_plants_to_users AS ap', 'ap.user_id = bu.user_id','LEFT');
+        $this->db->where(array('print_batch_id' => $print_batch_id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            //$res = $res[0];
+        }
+        return $res;
+    }
+	
+	
+	function update_activate_codes($data) {
+        $user_id = $this->session->userdata('admin_user_id');
+			//$id = $data['lr_id'];
+		$print_batch_id = $data['print_batch_id'];
+		$PackagingLevel = $data['PackagingLevel'];
+               // $this->db->set('profile_photo', $frmData['profile_photo']);
+                $UpdateData = array(
+                    
+					"active_status" 			=> 1,
+					"pack_level" 				=> $data['PackagingLevel'],					
+					"activation_location_id" 	=> $data['location_id'],
+					"activation_date" 			=> date("Y-m-d H:i:s")
+                );
+             
+			$whereData = array(
+                'print_batch_id' => $print_batch_id
+					);
+
+            $this->db->where('print_batch_id', $print_batch_id);
+				if($this->db->update('printed_barcode_qrcode', $UpdateData)) {// echo '===query===='.$this->db->last_query();
+					$this->db->set('active_batch_allow', 0)
+						 ->where('print_batch_id',$print_batch_id)
+						 ->update('order_print_listing');
+					$this->session->set_flashdata('success', 'Codes Activated Successfully!');
+					return true;
+	
+				}return false; 
+        
+    }	
 	 
   }

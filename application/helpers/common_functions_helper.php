@@ -6391,6 +6391,22 @@ function getParentUsers($id='',$status=''){
 	}
 	return($res);
  }
+ // Sanjay
+  function get_assigned_locations_product($product_id){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('location_id');
+	$ci->db->from('assign_locations');
+	$ci->db->where(array('product_id'=>$product_id));
+ 	$query = $ci->db->get();
+	//echo $ci->db->last_query(); 
+	if ($query->num_rows() > 0) {
+		$res = $query->result_array();
+		$res = ucfirst($res[0]['location_id']);
+ 	}
+	return $res;
+}
+
  
  function get_all_active_plants($user_id){
 	$res='0';
@@ -7355,7 +7371,7 @@ function get_user_email_name($userid){
  function printEssentialAttributes($order_id=''){
   	$ci = & get_instance();
 	$result = array();
-	$qry = $ci->db->select('O.product_id, P.code_type,P.code_unity_type,P.code_activation_type,P.delivery_method,P.code_key_type,P.code_size')
+	$qry = $ci->db->select('O.product_id, P.code_type,P.code_unity_type,P.code_activation_type,P.delivery_method,P.code_key_type,P.code_size,P.created_by')
 			 ->from('products P')
 			 ->join('order_master O','P.id=O.product_id', 'left')
 			 ->where('O.order_id',$order_id)
@@ -8375,5 +8391,41 @@ function Check_Selection_Criteria_Exists($key)
 }
 
 
+function last_printed_batch_id($customer_id)
+	{ 
+	$ci = & get_instance();   
+	$user_id 	= $ci->session->userdata('user_id');	
+	/*
+	$row = $ci->db->select("*")->limit(1)->order_by('id',"DESC")->get("order_print_listing")->where('customer_id', $user_id)->row();
+	return $row->print_batch_id; //it will provide latest or last record id.
+	*/
+	
+	$ci->db->select('*');
+    $ci->db->where('customer_id', $customer_id);
+    $ci->db->order_by('id',"DESC");
+	$ci->db->limit(1);
+    $query = $ci->db->get('order_print_listing');
+    $row = $query->row();
+	return $row->print_batch_id;
+	} 
+
+	/*
+function getCustomerIDByOrderId($OrderId){
+	$res = 0;
+	$ci = & get_instance();
+	$ci->db->select('user_name');
+	$ci->db->from('consumers');
+	$ci->db->where(array('id'=>$OrderId));
+	$query = $ci->db->get();
+
+	if ($query->num_rows() > 0) {
+	$res = $query->result_array();
+
+		$res = ucfirst($res[0]['user_name']);
+
+ 	}
+	return $res;
+}
+*/
 	
 ?>

@@ -2,7 +2,6 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-            
             <?php //echo '<pre>';print_r( $print_data);exit;?>
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 <h4 class="modal-title">Print Order</h4>
@@ -28,6 +27,20 @@
                         <option <?php if($printEssentialAttributes['code_type']=='barcode'){echo 'selected';}?> value="generate_order_barcode">Bar Code</option>
                         <option <?php if($printEssentialAttributes['code_type']=='qrcode'){echo 'selected';}?> value="generate_order">Q.R Code</option>
                     </select>
+				  </div>
+				  
+				  <div class="form-group">
+ 				  <label for="message-text">Batch ID:</label>
+				  
+				  <?php 
+				  $customer_id 	= $printEssentialAttributes['created_by'];
+				  //echo $customer_id."-";
+				  $BatchID = last_printed_batch_id($customer_id ); 
+				  //echo $BatchID."-";
+				  $BatchIDNext = $BatchID+1;
+				  
+				  ?>
+					<input type="text" name="print_batch_id" value="<?php echo $BatchIDNext;?>" class="form-control" id="print_batch_id" readonly />
 				  </div>
 				  
 				   <div class="form-group">

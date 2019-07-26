@@ -491,6 +491,24 @@ if(!empty($isOtherIndustry)){
 				 <option value="random">Random Unique</option> 
 				</select>-->
  		    </div> 
+			<div class="col-sm-4">
+				<label for="form-field-8">Number of Scans for Super Loyalty</label>
+				<select name="number_of_scans_for_super_loyalty" id="number_of_scans_for_super_loyalty" class="form-control">
+				 <option value="<?php echo $dt['number_of_scans_for_super_loyalty'];?>"> <?php echo $dt['number_of_scans_for_super_loyalty'];?> </option>
+				 <option value="5"> 5 </option>
+				 <option value="100"> 100 </option>
+				 <option value="500"> 500 </option>
+				 <option value="1000"> 1000 </option>
+				 <option value="2000"> 1000 </option>
+				 <option value="5000"> 5000 </option>
+				 <option value="10000"> 10,000 </option> 
+				</select>
+ 		    </div>
+			<div class="col-sm-4">
+				<label for="form-field-8">Number of Loyalty Points for Super Loyalty</label>
+				<input type="number" name="number_of_loyalty_points_for_super_loyalty" min="2" step="1" id="number_of_loyalty_points_for_super_loyalty" class="form-control" value="<?php echo $dt['number_of_loyalty_points_for_super_loyalty'];?>" required />
+				
+ 		    </div>
   		</div>
 		<!--------------------------------- Essential attributes ends-----------------------------------> 
          
