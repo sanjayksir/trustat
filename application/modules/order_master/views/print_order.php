@@ -44,8 +44,8 @@
 				  </div>
 				  
 				   <div class="form-group">
-					<label for="message-text">Print Size:</label>
-					<div class="form-control"><?php if( strtolower($printEssentialAttributes['code_size'])=='s'){
+					<label for="message-text">Print Size (mm):</label>
+					<div class="form-control"><?php /*if( strtolower($printEssentialAttributes['code_size'])=='s'){
 													$size = 15;
 													echo 'Small';
 													}else if(strtolower($printEssentialAttributes['code_size'])=='m'){
@@ -53,7 +53,13 @@
 													echo 'Medium';}else{
 													$size = 35;
 													echo 'Large';
-													};?></div>
+													}; */
+													
+													$sizemm = $printEssentialAttributes['code_size'];
+													echo $sizemm;
+													
+													$size = $sizemm*3.7795275591;
+													?></div>
 				  </div>
 				  <input type="hidden" name="barcodesize" value="<?php echo $size;?>" />
 				  

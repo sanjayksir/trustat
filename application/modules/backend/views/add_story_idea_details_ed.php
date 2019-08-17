@@ -65,6 +65,15 @@ $medisUrl = $this->config->item('media_location');
                                                 <input type="hidden" name="product_images" value="<?php echo $product_images; ?>" id="input-image" />
                                                 </div>
                                             </div>
+											<div class="col-sm-2">
+                                                <div class="thumbnail">
+                                                <a href="<?php echo !empty($product_code_print_bg_images)? site_url($medisUrl.'/'.$product_code_print_bg_images):"#"; ?>" id="thumb-image" data-toggle="image" class="img-thumbnail" mime-type="image">
+       <img src="<?php echo !empty($product_code_print_bg_images)? site_url($medisUrl.'/'.$product_code_print_bg_images):site_url('assets/images/upload_img.png'); ?>" alt="" title="" data-placeholder="<?php echo site_url('assets/images/upload_img.png'); ?>" />
+                                                    <span class="media-info">Product Code Print BG Image</span>
+                                                </a>
+                                                <input type="hidden" name="product_code_print_bg_images" value="<?php echo $product_code_print_bg_images; ?>" id="input-image" />
+                                                </div>
+                                            </div>
                                             <div class="col-sm-2">
                                                 <div class="thumbnail">
                                                 <a href="<?php echo !empty($product_video)? site_url($medisUrl.'/'.$product_video):"#"; ?>" id="thumb-video" data-toggle="image" class="img-thumbnail" mime-type="video">

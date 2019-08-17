@@ -52,6 +52,19 @@
 			</div>
 		</div>
 		
+		<div class="form-group row">
+			<div class="col-sm-6">
+			  <label for="form-field-8">Days for expiry from the date of Loyalty Point Credited </label>
+			<input name="days_for_expiry_of_point_credited" id="days_for_expiry_of_point_credited" type="number" value="<?php echo $get_user_details[0]['days_for_expiry_of_point_credited'];?>" class="form-control" placeholder="Please enter number of days" max="1000" min="31">
+			</div>
+			 
+			
+			<div class="col-sm-6">
+			  <label for="form-field-8">Days for Notification Before Expiry of Loyalty Point</label>
+			 <input name="days_for_notification_before_expiry_of_lps" id="days_for_notification_before_expiry_of_lps" type="number" value="<?php echo $get_user_details[0]['days_for_notification_before_expiry_of_lps'];?>" class="form-control" placeholder="Please enter number of days" max="1000" min="10">
+			</div>
+		</div>
+		
 		 <?php if($this->session->userdata('admin_user_id')==1){ ?>
 		
 		<div class="form-group row">

@@ -40,6 +40,9 @@ class Customer extends ApiController {
         if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found'],200);
         }
+		
+		$product_id = getProductIDbyProductCode($data['bar_code']);
+		
         $inventory = [
             'plant_id' => $user['plant_id'],
             'customer_id' => $user['user_id'],
@@ -49,11 +52,24 @@ class Customer extends ApiController {
         foreach(explode(',',$data['bar_code']) as $ind => $code){
             $inventory['bar_code'] = $code;
             if($this->db->insert('physical_inventory', $inventory)){
+				
+			$transactionType = "add_physical_inventory";	
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$product_name = get_products_name_by_id($product_id);
+			$transactionTypeName = "Add Physical Inventory";
+			$parent_customer_id = get_customer_id_by_product_id($product_id);
+			$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($parent_customer_id);	
+			
+	$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['add_physical_inventory_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName, 'Loyalty');
+	
+				
                 continue;
             }else{
                 $this->response(['status'=>false,'message'=>'Failed to create inventory for barcode '.$code.' .']);
             }
         }
+		
+		
         $this->response(['status'=>true,'message'=>'Inventory has been created successfully.']);
     }
     
@@ -258,6 +274,16 @@ class Customer extends ApiController {
         if(!empty($data['bar_code'])){
 			
 			$product_id = $result[0]['product_id'];
+			
+			$transactionType = "scan_for_list_following_codes";	
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$product_name = get_products_name_by_id($product_id);
+			$transactionTypeName = "Scan for List following Codes";
+			$parent_customer_id = get_customer_id_by_product_id($product_id);
+			$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($parent_customer_id);	
+			
+	$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['scan_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName, 'Loyalty');
+	
 			
 			$data['list_following_codes'] = $this->Productmodel->ListfollowingCodes($data['bar_code'], $userId, $product_id);
 			
@@ -478,8 +504,17 @@ class Customer extends ApiController {
 			
 			
 			$data['number_of_children_added'] = $this->db->where('parent_bar_code',$data['bar_code'])->from("packaging_codes_pcr")->count_all_results();
-		
-		
+			
+			
+			$transactionType = "add_shipper_box_pack_level";	
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$product_name = get_products_name_by_id($product_id);
+			$transactionTypeName = "Add Shipper Box Pack Level";
+			$parent_customer_id = get_customer_id_by_product_id($product_id);
+			$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($parent_customer_id);	
+			
+	$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['add_shipper_box_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName, 'Loyalty');
+	
             //echo $this->db->last_query();die;
             $this->response(['status'=>true,'message'=>'Level has been added to the Shipper Box.','number_of_children_added'=>$data['number_of_children_added'],'new_pack_level'=>$data['pack_level'],'data'=>$result]);
         }else{
@@ -614,6 +649,18 @@ class Customer extends ApiController {
             //echo $this->db->last_query();die;
             $this->response(['status'=>true,'message'=>'The Codes Linked with Production Batch Id.','number_of_children_added'=>$data['number_of_children_added'],'new_pack_level'=>$data['pack_level'],'data'=>$result]);
 			*/
+			
+			$transactionType = "link_codes_with_production_batch_id";	
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$product_name = get_products_name_by_id($product_id);
+			$transactionTypeName = "Link Codes with Production Batch Id";
+			$parent_customer_id = get_customer_id_by_product_id($product_id);
+			$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($parent_customer_id);	
+			
+	$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['link_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName, 'Loyalty');
+	
+	
+			
 			 $this->response(['status'=>true,'message'=>'The Codes Linked with Production Batch Id.','data'=>$result]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to add level.'],200); 
@@ -875,7 +922,7 @@ class Customer extends ApiController {
 			$transactionTypeName = "add Product Level Parent Activate";
 			$parent_customer_id = get_customer_id_by_product_id($product_id);
 				
-			//$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['activation_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName,  'Loyalty');
+			$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['activation_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName,  'Loyalty');
 			
 			
 			$data['number_of_children_added'] = $this->db->where('parent_bar_code',$data['parent_bar_code'])->from("packaging_codes_pcr")->count_all_results();
@@ -985,6 +1032,17 @@ class Customer extends ApiController {
 				$this->db->insert('inventory_on_hand',$data2);
 				
 			}
+			
+			$transactionType = "ship_out_order";	
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$product_name = get_products_name_by_id($product_id);
+			$transactionTypeName = "Ship Out Order";
+			$parent_customer_id = get_customer_id_by_product_id($product_id);
+			$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($parent_customer_id);	
+			
+	$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['delink_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName, 'Loyalty');
+	
+			
             $this->response(['status'=>true,'message'=>'Ship Out Order has been added.','stock_data'=>$data,'code_data'=>$result]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to Ship Out Order.'],200); 
@@ -1080,6 +1138,17 @@ class Customer extends ApiController {
 				$this->db->insert('inventory_on_hand',$data2);
 				
 			}
+			
+			$transactionType = "dispatch_stock_transfer_out";	
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$product_name = get_products_name_by_id($product_id);
+			$transactionTypeName = "Dispatch Stock Transfer Out";
+			$parent_customer_id = get_customer_id_by_product_id($product_id);
+			$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($parent_customer_id);	
+			
+	$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['tansfer_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName, 'Loyalty');
+	
+			
             $this->response(['status'=>true,'message'=>'Dispatch Stock Transfer-Out has been added.','stock_data'=>$data,'code_data'=>$result]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to Dispatch Stock Transfer-Out.'],200); 
@@ -1178,6 +1247,18 @@ class Customer extends ApiController {
 				$this->db->insert('inventory_on_hand',$data2);
 				
 			}
+			
+			$transactionType = "receipt_stock_transfer_in";	
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$product_name = get_products_name_by_id($product_id);
+			$transactionTypeName = "Receipt Stock Transfer In";
+			$parent_customer_id = get_customer_id_by_product_id($product_id);
+			$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($parent_customer_id);	
+			
+	$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['transfer_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName, 'Loyalty');
+	
+	
+	
             $this->response(['status'=>true,'message'=>'Receipt Stock Transfer-In has been added.','stock_data'=>$data,'code_data'=>$result]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to Dispatch Stock Transfer-In.'],200); 
@@ -1299,10 +1380,15 @@ class Customer extends ApiController {
 			$this->db->insert('list_transactions_table', $tlogdata);
 			
 			
+			$transactionType = "physical_inventory_check";	
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$product_name = get_products_name_by_id($product_id);
+			$transactionTypeName = "Physical Inventory Check";
+			$parent_customer_id = get_customer_id_by_product_id($product_id);
+			$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($parent_customer_id);	
 			
-			
-			
-		
+	$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['inventory_check_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName, 'Loyalty');
+	
             $this->response(['status'=>true,'message'=>'Physical inventory  has been added.','stock_data'=>$data,'code_data'=>$result]);
         }else{
             $this->response(['status'=>false,'message'=>'System failed to add.'],200); 
@@ -1334,7 +1420,7 @@ class Customer extends ApiController {
         }
 		$userId = $user['user_id'];
         $result = $this->Productmodel->barcodeProducts($data['bar_code'], $userId);
-		
+		$product_id = $result[0]['product_id']; 
 		//echo print_r($result); die;
 		 if(empty($result)){
             $this->response(['status'=>false,'message'=>'Record not found.'],200);
@@ -1369,7 +1455,20 @@ class Customer extends ApiController {
 			if (!$this->db->affected_rows()) {
 					$this->response(['status'=>false,'message'=>'System failed to Child De-Linked, incorrect parent.'],200); 
 				} else {
+					
+			$transactionType = "delete_product_parent_delink";	
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$product_name = get_products_name_by_id($product_id);
+			$transactionTypeName = "Delete Product Parent Delink";
+			$parent_customer_id = get_customer_id_by_product_id($product_id);
+			$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($parent_customer_id);	
+			
+	$this->Productmodel->saveCustomerLoyaltyPassbookProductScan($transactionType, ['delink_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code']], $parent_customer_id, $product_id, $userId, $transactionTypeName, 'Loyalty');
+	
+	
 					$this->response(['status'=>true,'message'=>'Child De-Linked Successfully.','data'=>$result]);
+					
+	
 				}
         }else{ $this->response(['status'=>false,'message'=>'System failed to Child De-Linked, incorrect parent.'],200); 
         }

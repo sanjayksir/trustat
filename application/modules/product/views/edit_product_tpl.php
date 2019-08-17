@@ -433,12 +433,15 @@ if(!empty($isOtherIndustry)){
  		    </div> 
             
             <div class="col-sm-4">
-				<label for="form-field-8">Size of the Code</label>
+				<label for="form-field-8">Size of the Code (mm)</label>
+				<!--
 				<select name="code_size" id="code_size" class="form-control">
 				 <option value="S"  <?php echo ($dt['code_size']=='S')?'selected':'';?>>Small</option>
 				 <option value="M"  <?php echo ($dt['code_size']=='M')?'selected':'';?>>Medium</option>
 				 <option value="L"  <?php echo ($dt['code_size']=='L')?'selected':'';?>>Large</option>
 				</select>
+				-->
+				<input type="number" name="code_size" min="3" max="600" step="0.01" value="<?php echo $dt['code_size']; ?>" id="code_size" class="form-control" />
  		    </div>
 			<div class="col-sm-4">
 				<label for="form-field-8">Code Unity Type</label>
@@ -492,23 +495,27 @@ if(!empty($isOtherIndustry)){
 				</select>-->
  		    </div> 
 			<div class="col-sm-4">
-				<label for="form-field-8">Number of Scans for Super Loyalty</label>
-				<select name="number_of_scans_for_super_loyalty" id="number_of_scans_for_super_loyalty" class="form-control">
-				 <option value="<?php echo $dt['number_of_scans_for_super_loyalty'];?>"> <?php echo $dt['number_of_scans_for_super_loyalty'];?> </option>
-				 <option value="5"> 5 </option>
-				 <option value="100"> 100 </option>
-				 <option value="500"> 500 </option>
-				 <option value="1000"> 1000 </option>
-				 <option value="2000"> 1000 </option>
-				 <option value="5000"> 5000 </option>
-				 <option value="10000"> 10,000 </option> 
-				</select>
+				<label for="form-field-8">Super Loyalty trigger every... times Scan</label>
+				<input type="number" name="number_of_scans_for_super_loyalty" min="1" step="1" id="number_of_scans_for_super_loyalty" class="form-control" value="<?php echo $dt['number_of_scans_for_super_loyalty'];?>" required />
  		    </div>
 			<div class="col-sm-4">
 				<label for="form-field-8">Number of Loyalty Points for Super Loyalty</label>
-				<input type="number" name="number_of_loyalty_points_for_super_loyalty" min="2" step="1" id="number_of_loyalty_points_for_super_loyalty" class="form-control" value="<?php echo $dt['number_of_loyalty_points_for_super_loyalty'];?>" required />
-				
+				<input type="number" name="number_of_loyalty_points_for_super_loyalty" min="0" step="1" id="number_of_loyalty_points_for_super_loyalty" class="form-control" value="<?php echo $dt['number_of_loyalty_points_for_super_loyalty'];?>" required />
  		    </div>
+  		</div>
+		<div class="form-group row"> 
+           <div class="col-sm-4">
+				<label for="form-field-8">Message print above the Code</label>
+				<input type="text" name="message_above_code" id="message_above_code" value="<?php echo $dt['message_above_code'];?>" placeholder="Please enter the message to be print above the Code" class="form-control" />
+ 		    </div> 
+			<div class="col-sm-4">
+				<label for="form-field-8">Message print below the Code</label>
+				<input type="text" name="message_below_code" id="message_below_code" value="<?php echo $dt['message_below_code'];?>" placeholder="Please enter the message to be print below the Code" class="form-control" />
+ 		    </div> 
+			<div class="col-sm-4">
+				<label for="form-field-8">Space between QR Code and Barcode(mm) </label>
+				<input type="text" name="space_between_twin_code" id="space_between_twin_code" value="<?php echo $dt['space_between_twin_code'];?>" placeholder="How much Space do you need between twin Codes(mm)" class="form-control" />
+ 		    </div> 
   		</div>
 		<!--------------------------------- Essential attributes ends-----------------------------------> 
          

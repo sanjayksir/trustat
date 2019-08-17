@@ -1906,7 +1906,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 
 	 
 	 
-	 function get_complaint_log($limit,$start,$srch_string=''){
+	 function get_complaint_log2old($limit,$start,$srch_string=''){
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
  /*
@@ -1944,7 +1944,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 	 
 	 
 	 
-	 function count_complaint_log($srch_string=''){
+	 function count_complaint_log2old($srch_string=''){
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
 		/*
@@ -2540,7 +2540,7 @@ function details_activate_codes($print_batch_id) {
                 'print_batch_id' => $print_batch_id
 					);
 
-            $this->db->where('print_batch_id', $print_batch_id);
+            $this->db->where(array('print_batch_id' => $print_batch_id, 'active_status' => 0));
 				if($this->db->update('printed_barcode_qrcode', $UpdateData)) {// echo '===query===='.$this->db->last_query();
 					$this->db->set('active_batch_allow', 0)
 						 ->where('print_batch_id',$print_batch_id)
@@ -2551,5 +2551,139 @@ function details_activate_codes($print_batch_id) {
 				}return false; 
         
     }	
+	
+	
+	
+	function get_complaint_log($limit,$start,$srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+                
+                $condition = null;
+ 
+		if(!empty($srch_string) && $user_id > 1){ 
+ 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')";
+		}
+		$total = $this->totalComplaintLog($condition);
+                if(!empty($condition)){
+                    $this->db->where($condition);
+                } 
+ 		$this->db->select(' C.*, PP.*, P.product_name, P.product_sku',false);
+		$this->db->from('consumers C');
+		$this->db->join('consumer_complaint PP', 'C.id = PP.consumer_id');
+		$this->db->join('products P', 'P.id = PP.product_id');
+		$this->db->where(array('P.created_by'=>$user_id));
+   		$this->db->order_by('PP.created_at','desc');
+                
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return [$total,$resultData];
+	 }
+	 
+	 function totalComplaintLog($condition){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+                
+                $condition = null;
+ 
+		if(!empty($srch_string) && $user_id> 1){ 
+ 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')";
+		}
+		
+                if(!empty($condition)){
+                    $this->db->where($condition);
+                } 
+                
+ 		$this->db->select(' C.*, PP.*, P.product_name, P.product_sku',false);
+		$this->db->from('consumers C');
+		$this->db->join('consumer_complaint PP', 'C.id = PP.consumer_id');
+		$this->db->join('products P', 'P.id = PP.product_id');
+		$this->db->where(array('P.created_by'=>$user_id));
+   		//$this->db->order_by('PP.created_at','desc');
+                
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return count($resultData);
+	 }
+	 
+  // Start List Printed Batch Function
+  	 function get_total_printed_batches_list_all($srch_string=''){
+		$result_data = 0;
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$Parent_id = getUserParentIDById($user_id);
+		$customer_id = $this->uri->segment(3);
+		$order_id = $this->uri->segment(3);
+		
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%')");
+		}
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+				$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%') and (user_id=$user_id)");
+			}else{
+				$this->db->where(array('customer_id'=>$user_id));
+				$this->db->or_where(array('customer_id'=>$Parent_id));
+			}
+	 	}
+		
+		$this->db->select('count(1) as total_rows');
+		$this->db->from('order_print_listing');
+		if($user_id>1){
+			$this->db->where('customer_id', $user_id);
+			$this->db->or_where('customer_id', $Parent_id);
+			}else{
+			$this->db->where('customer_id', $user_id);
+			$this->db->or_where('customer_id', $Parent_id);
+			}
+		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function get_printed_batches_list_all($limit,$start,$srch_string=''){
+		$resultData = array();
+		
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$Parent_id = getUserParentIDById($user_id);
+		$customer_id = $this->uri->segment(3);
+		$order_id = $this->uri->segment(3);
+		/*if($user_id>1){
+			$this->db->where(array('user_id'=>$user_id));
+	 	}*/
+		
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%')");
+		}
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+				$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%') and (user_id=$user_id)");
+			}else{
+				$this->db->where(array('OPL.customer_id'=>$user_id));
+				$this->db->or_where(array('OPL.customer_id'=>$Parent_id));
+			}
+	 	}
+		
+		$this->db->select('OM.product_name, OM.order_no, OPL.print_batch_id, OPL.active_batch_allow, OPL.last_printed_rows, OPL.total_quantity, OPL.code_type, OPL.last_printed_date, OPL.customer_id ',false);
+		$this->db->from('order_print_listing OPL');
+		$this->db->join('order_master OM', 'OM.order_id= OPL.order_id');
+ 		$this->db->order_by('OPL.last_printed_date','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get();  //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	// End List Printed Batch Function	 
+	 
+	 
 	 
   }

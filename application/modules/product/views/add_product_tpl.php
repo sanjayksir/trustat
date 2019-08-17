@@ -53,7 +53,7 @@
 		<div class="form-group row">
 			<div class="col-sm-4">
 			<label for="form-field-8">Brand Name</label>
-			<input name="brand_name" id="brand_name" type="text" class="form-control" >
+			<input name="brand_name" id="brand_name" type="text" placeholder="Please enter Brand Name" class="form-control" >
  			</div>
              
             
@@ -242,12 +242,12 @@
 		<div class="form-group row">
 			<div class="col-sm-4">
 			<label for="form-field-8">Product SKU Name</label>
-			<input name="product_name" id="product_name" type="text" class="form-control" >
+			<input name="product_name" id="product_name" type="text" placeholder="Please enter Product Name" class="form-control" >
  			</div>
              
             <div class="col-sm-4">
             <label for="form-field-8">Generate Product SKU</label>
-         		<input name="product_sku" id="product_sku" readonly="readonly" class="form-control" maxlength="100" type="text">
+         		<input name="product_sku" id="product_sku" readonly="readonly" placeholder="Please click the following button to Create SKU" class="form-control" type="text">
 			</div>
            <div class="col-sm-1 center"> <br>
              <input  value="Create SKU" id="GenerateSKU" class="btn btn-info" name="GenerateSKU" type="button" onclick="return genrateSku();">
@@ -314,12 +314,15 @@
  		    </div> 
             
             <div class="col-sm-4">
-				<label for="form-field-8">Size of the Code</label>
+				<label for="form-field-8">Size of the Code (mm)</label>
+				<!--
 				<select name="code_size" id="code_size" class="form-control">
 				 <option value="S">Small</option>
 				 <option value="M">Medium</option>
 				 <option value="L">Large</option>
 				</select>
+				-->
+				<input type="number" name="code_size" min="3" max="300" step="0.01" value="10" id="code_size" class="form-control" />
  		    </div>
 			
 			<div class="col-sm-4">
@@ -369,26 +372,32 @@
 				</select>-->
  		    </div> 
 			<div class="col-sm-4">
-				<label for="form-field-8">Number of Scans for Super Loyalty</label>
+				<label for="form-field-8">Super Loyalty trigger every... times Scan</label>
+				<input type="number" name="number_of_scans_for_super_loyalty" min="1" step="1" value="10" id="number_of_scans_for_super_loyalty" class="form-control" required />
 				
-				<select name="number_of_scans_for_super_loyalty" id="number_of_scans_for_super_loyalty" class="form-control">
-				 <option value="5"> 5 </option>
-				 <option value="100"> 100 </option>
-				 <option value="500"> 500 </option>
-				 <option value="1000"> 1000 </option>
-				 <option value="2000"> 1000 </option>
-				 <option value="5000"> 5000 </option>
-				 <option value="10000"> 10,000 </option> 
-				</select>
  		    </div> 
 			<div class="col-sm-4">
 				<label for="form-field-8">Number of Loyalty Points for Super Loyalty</label>
-				<input type="number" name="number_of_loyalty_points_for_super_loyalty" min="2" step="1" id="number_of_loyalty_points_for_super_loyalty" class="form-control" required />
+				<input type="number" name="number_of_loyalty_points_for_super_loyalty" min="0" step="1" value="10" id="number_of_loyalty_points_for_super_loyalty" class="form-control" required />
 				<!--
 				<select name="max_shipper_pack_level" id="max_shipper_pack_level" class="form-control">
 				 <option value="serial"> Serial Unique</option>
 				 <option value="random">Random Unique</option> 
 				</select>-->
+ 		    </div> 
+  		</div>
+		<div class="form-group row"> 
+           <div class="col-sm-4">
+				<label for="form-field-8">Message print above the Code</label>
+				<input type="text" name="message_above_code" id="message_above_code" placeholder="Please enter the message to be print above the Code" class="form-control" />
+ 		    </div> 
+			<div class="col-sm-4">
+				<label for="form-field-8">Message print below the Code</label>
+				<input type="text" name="message_below_code" id="message_below_code" placeholder="Please enter the message to be print below the Code" class="form-control" />
+ 		    </div> 
+			<div class="col-sm-4">
+				<label for="form-field-8">Space between QR Code and Barcode(mm) </label>
+				<input type="text" name="space_between_twin_code" id="space_between_twin_code" placeholder="How much Space do you need between twin Codes(mm)" class="form-control" />
  		    </div> 
   		</div>
 		<div style="color:red">Note*- You must must need to add at least 1 attribute for this product to make it working.</div> 

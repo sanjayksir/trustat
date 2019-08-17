@@ -4,7 +4,7 @@
             <script type="text/javascript">
                     try{ace.settings.loadState('main-container')}catch(e){}
             </script>
-            <?php $label = 'Print Batchs';  //echo $print_batche_id; ?>
+            <?php $label = 'Print Batches';  //echo $print_batche_id; ?>
 
             <?php $this->load->view('../includes/admin_sidebar');?>
 
@@ -43,7 +43,7 @@
                                     <div class="col-xs-12">
                                         <div class="widget-box widget-color-blue">
                                             <div class="widget-header widget-header-flat">
-                                                <h5 class="widget-title bigger lighter">List Print Batchs</h5>
+                                                <h5 class="widget-title bigger lighter">List Print Batches</h5>
                                                 <div class="widget-toolbar">
                                                    <!--<a href="<?php echo base_url('order_master/list_orders_plant_controlllers_CC') ?>" class="btn btn-xs btn-warning" title="List Plant Controllers Orders">List Plant Controllers Orders </a>-->
 												  <?php

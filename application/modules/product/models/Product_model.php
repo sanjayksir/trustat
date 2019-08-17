@@ -129,7 +129,10 @@
 	$min_shipper_pack_level  		= ($this->input->post('min_shipper_pack_level'))?$this->input->post('min_shipper_pack_level'):'';	
 	$max_shipper_pack_level  		= ($this->input->post('max_shipper_pack_level'))?$this->input->post('max_shipper_pack_level'):'';
 	$number_of_scans_for_super_loyalty  		= ($this->input->post('number_of_scans_for_super_loyalty'))?$this->input->post('number_of_scans_for_super_loyalty'):'';
-	$number_of_loyalty_points_for_super_loyalty  		= ($this->input->post('number_of_loyalty_points_for_super_loyalty'))?$this->input->post('number_of_loyalty_points_for_super_loyalty'):'';		
+	$number_of_loyalty_points_for_super_loyalty  		= ($this->input->post('number_of_loyalty_points_for_super_loyalty'))?$this->input->post('number_of_loyalty_points_for_super_loyalty'):'';	
+	$message_above_code  		= ($this->input->post('message_above_code'))?$this->input->post('message_above_code'):'';
+	$message_below_code  		= ($this->input->post('message_below_code'))?$this->input->post('message_below_code'):'';
+	$space_between_twin_code  	= ($this->input->post('space_between_twin_code'))?$this->input->post('space_between_twin_code'):'';	
 		## essential attributes
 		
 		$id			  = $this->input->post('id');
@@ -152,6 +155,9 @@
 					"max_shipper_pack_level"	  => $max_shipper_pack_level,
 					"number_of_scans_for_super_loyalty"	  => $number_of_scans_for_super_loyalty,
 					"number_of_loyalty_points_for_super_loyalty"	  => $number_of_loyalty_points_for_super_loyalty,
+					"message_above_code"	  => $message_above_code,
+					"message_below_code"	  => $message_below_code,
+					"space_between_twin_code"	  => $space_between_twin_code,
 					"created_by"		  => $is_parent,
 					"other_industry"	  => $Other_industry_val
  				);
@@ -174,6 +180,7 @@
 					"product_description" => '',
 					"product_thumb_images"	  => '',
 					"product_images"	  => '',
+					"product_code_print_bg_images"	  => '',
 					"product_video"	      => '',
 					"product_audio"		  => '',
 					"product_pdf"         => '',
@@ -198,6 +205,9 @@
 					"max_shipper_pack_level"	=> $max_shipper_pack_level,
 					"number_of_scans_for_super_loyalty"	=> $number_of_scans_for_super_loyalty,
 					"number_of_loyalty_points_for_super_loyalty"	=> $number_of_loyalty_points_for_super_loyalty,
+					"message_above_code"	=> $message_above_code,
+					"message_below_code"	=> $message_below_code,
+					"space_between_twin_code"	=> $space_between_twin_code,
 					"code_size"			  => $code_size,
 					"code_unity_type"	  => $code_unity_type,
 					"other_industry"	  => $Other_industry_val
@@ -278,6 +288,7 @@
 					"product_description" => '',
 					"product_thumb_images"	  => '',
 					"product_images"	  => '',
+					"product_code_print_bg_images"	  => '',
 					"product_video"	      => '',
 					"product_audio"		  => '',
 					"product_pdf"         => '',
@@ -1355,7 +1366,7 @@
 			'consumer_id' => $consumer_id,
             'points' => $points_redeemed,
             'transaction_type_name' => "Loyalty Rewards redemption",
-			'transaction_type_slug' => "loyalty_loints_ledeemed",
+			'transaction_type_slug' => "loyalty_loints_redeemed",
             'params' => json_encode($params),
             'transaction_lr_type' => $transaction_lr_type,
 			'customer_loyalty_type' => "TRUSTAT",
@@ -1368,6 +1379,7 @@
         ];
         
         return $this->db->insert('consumer_passbook',$input);
+		
 		
     }
 	
@@ -2504,6 +2516,11 @@ public function findLoylityBySlug($transactionType = null){
         if(empty($loylty)){
             return false;
         }
+		
+		$loyalty_points_expiry_days = loyalty_points_expiry_days(1);
+		$Current_Date = date('Y-m-d');
+		$loyalty_points_expiry_date = date('Y-m-d', strtotime($Current_Date. ' + ' . $loyalty_points_expiry_days. ' days'));
+ 		
         $date = new DateTime();
         $now = $date->format('Y-m-d H:i:s');
         $date->modify('+3    month');
@@ -2513,10 +2530,10 @@ public function findLoylityBySlug($transactionType = null){
             'points' => $loylty['loyalty_points'],
             'transaction_type' => $loylty['transaction_type'],
             'params' => json_encode($params),
-            'status' => 1,
+            'loyalty_points_status' => "Redeemed",
             'modified_at' => $now,
             'created_at' => $now,
-            'date_expire' => $date->format('Y-m-d H:i:s')
+            'loyalty_points_expiry_date' => $loyalty_points_expiry_date
         ];
         
         return $this->db->insert('loylty_points',$input);
@@ -2551,6 +2568,11 @@ public function findLoylityBySlug($transactionType = null){
 		$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 		//echo $result->$transactionType;
 		
+		$loyalty_points_expiry_days = loyalty_points_expiry_days($customer_id);
+		$Current_Date = date('Y-m-d');
+		$loyalty_points_expiry_date = date('Y-m-d', strtotime($Current_Date. ' + ' . $loyalty_points_expiry_days. ' days'));
+ 		
+		
         $date = new DateTime();
         $now = $date->format('Y-m-d H:i:s');
         $date->modify('+3    month');
@@ -2561,10 +2583,10 @@ public function findLoylityBySlug($transactionType = null){
             'transaction_type' => $transactionType,
 			'customer_loyalty_type' => $customer_loyalty_type,
             'params' => json_encode($params),
-            'status' => 1,
+            'loyalty_points_status' => "Earned",
             'modified_at' => $now,
             'created_at' => $now,
-            'date_expire' => $date->format('Y-m-d H:i:s')
+            'loyalty_points_expiry_date' => $loyalty_points_expiry_date
         ];
         
         return $this->db->insert('loylty_points',$input);
@@ -2588,6 +2610,154 @@ public function findLoylityBySlug($transactionType = null){
         }
         return $result;
     }
+	
+		function list_all_customers($limit,$start,$srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($customer_id)){ 
+			
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%') and (created_by=$customer_id)");
+			}else{
+				$this->db->where(array('created_by'=>$customer_id));
+			}
+			
+			}else{
+				if(!empty($srch_string)){ 
+ 				$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%'");
+			}else{
+				//$this->db->where(array('created_by'=>$customer_id));
+			}
+			}
+				
+		}else{
+			if(!empty($srch_string)){ 
+ 		$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%'");
+			}
+		}
+		
+		$this->db->select("*");
+		$this->db->from("backend_user");
+		if($user_id==1){
+		$this->db->where('is_parent>', 1);
+		} else {
+		
+		//$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		$this->db->where('is_parent', $user_id);
+		
+		}
+		$this->db->order_by("user_id", " desc");
+		// $this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	function total_all_customers($srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($customer_id)){ 
+			
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%') and (created_by=$customer_id)");
+			}else{
+				$this->db->where(array('created_by'=>$customer_id));
+			}
+			
+			}else{
+				if(!empty($srch_string)){ 
+ 				$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%'");
+			}else{
+				//$this->db->where(array('created_by'=>$customer_id));
+			}
+			}
+				
+		}else{
+			if(!empty($srch_string)){ 
+ 	$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%'");
+			}
+		}
+		
+		
+		
+		$this->db->select("*");
+		$this->db->from("backend_user");
+		if($user_id==1){
+		$this->db->where('is_parent>', 1);
+		} else {
+		
+		//$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		$this->db->where('is_parent', $user_id);
+		
+		}
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+	
+	
+	function count_total_list_view_blp_tracek_user_passbook($id,$srch_string='') {
+		
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%') and (customer_a_user_id=$id)");
+			}else{
+				$this->db->where(array('customer_a_user_id'=>$id));
+			}			
+		
+		$this->db->select('count(1) as total_rows');
+		$this->db->from('customer_passbook');
+		$this->db->where('customer_a_user_id', $id);		
+		$this->db->where('customer_loyalty_type', "Brand");
+		/*
+		if($user_id==1){
+		$this->db->where('parent_customer_id>', 1);
+		} else {		
+		$this->db->where('parent_customer_id', $user_id);		
+		}
+		*/
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+	
+	function list_view_blp_tracek_user_passbook($id,$limit,$start,$srch_string='') {
+		//echo $id;
+			//$this->db->where('created_by', $user_id);
+			//$id = 88;
+			//$id = $this->uri->segment(3);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%') and (customer_a_user_id=$id)");
+			}else{
+				$this->db->where(array('customer_a_user_id'=>$id));
+			}
+			
+		$this->db->select("*");
+		$this->db->from("customer_passbook");		
+		$this->db->where('customer_a_user_id', $id);
+		$this->db->where('customer_loyalty_type', "Brand");
+		/*
+		if($user_id==1){
+		$this->db->where('parent_customer_id>', 1);
+		} else {		
+		$this->db->where('parent_customer_id', $user_id);		
+		}
+			*/
+		$this->db->order_by("transaction_date", "desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
 	
 		
 }

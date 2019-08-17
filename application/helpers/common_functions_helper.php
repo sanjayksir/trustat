@@ -6934,6 +6934,20 @@ function get_products_name_by_id($id){
  }
  
  
+  function loyalty_points_expiry_days($customer_id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($customer_id)){
+			$ci->db->select('group_concat(days_for_expiry_of_point_credited) as days_for_expiry_of_point_credited');
+			$ci->db->from('backend_user');
+ 			$ci->db->where_in('user_id',$customer_id);
+			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['days_for_expiry_of_point_credited'];
+ }
+ 
  function get_products_attribute_list_by_id($id){ 
 	$res='0';
 	$ci = & get_instance();
@@ -7250,6 +7264,17 @@ function get_parent_user($id,$statusVal='')
 	return $resData;
  }
  
+   function get_product_data($ProductId){
+  	$resData = 0;
+	$ci = & get_instance();
+    $query =$ci->db->select('*')->from('products')->where(array('id'=>$ProductId))->get();
+	//echo $ci->db->last_query();
+	if ($query->num_rows() > 0) {
+		$res = $query->result_array();
+		$resData = $res[0];
+	}
+	return $resData;
+ }
  
 function get_user_email_name($userid){
 	$ci = & get_instance();

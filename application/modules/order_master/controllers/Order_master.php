@@ -544,6 +544,9 @@
 		$userid 				= base64_decode($this->input->post('order_id')); 
 		$barcodesize 			= $this->input->post('barcodesize'); 
 		$print_batch_id 			= $this->input->post('print_batch_id'); 
+		$message_above_code 			= $this->input->post('message_above_code');
+		$message_below_code 			= $this->input->post('message_below_code');
+		$space_between_twin_code 			= $this->input->post('space_between_twin_code');
  		//$userOrderData 			= view_order_data($userid);
 		//echo '<pre>';print_r($userOrderData);exit;
 		// echo '***'.$pass_id = base64_decode($this->uri->segment(3));exit;
@@ -577,7 +580,7 @@
  			// ---------------------------------------------------------
  			// NOTE: 2D barcode algorithms must be implemented on 2dbarcode.php class file.
  			// set font
-			$pdf->SetFont('', '', 7);
+			$pdf->SetFont('', '', $TextFontSize);
  			$pdf->setPrintHeader(false);
  			// add a page
 			$pdf->AddPage();
@@ -598,7 +601,16 @@
 			$status					= $userOrderData['status'];
  			$qrcode 				= $barcode_no . mt_rand(1000, 9999);
 			$qrcode2				= $barcode_no . mt_rand(1000, 9999);
-			//$qrcode2 				= $barcode_no2;			
+			//$qrcode2 				= $barcode_no2;	
+
+			$ProductData = get_product_data($product_id);
+			$message_above_code			= $ProductData['message_above_code'];
+			$message_below_code			= $ProductData['message_below_code'];
+			$space_between_twin_code			= $ProductData['space_between_twin_code'];	
+			$space_for_message_above_code			= 2;	
+			$space_for_message_below_code			= 6;
+			$space_between_code_rows = 30;
+			$TextFontSize = 7;
  			
 			// set style for barcode
 			 $style = array(
@@ -611,7 +623,7 @@
 								'module_height' => 1, // height of a single module in points
 								'text' => true,
 								'font' => 'helvetica',
-								'fontsize' => 4,
+								'fontsize' => $TextFontSize,
 								'fontweight' => 1,
 								'stretchtext' => 4
 						  ); 
@@ -635,7 +647,7 @@
 								<td width="80%" valign="top">
 									<table cellpadding="10" cellspacing="0" border="0">
 										<tr>
-											<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Bar Code No. </strong>: '.$barcode_no.'</td>
+											<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Product SKU </strong>: '.$barcode_no.'</td>
 										</tr>
 										<tr>
 											<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Order By </strong>: '.$username.'</td>
@@ -646,17 +658,17 @@
 										</tr>
 							
 							<tr>
-								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Product SKU</strong>: '.$product_sku.'</td>
+								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Print Quantity </strong>: '.$this->input->post('qty').'</td>
 							</tr>
 							 
 							<tr>
-								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Quantity</strong>: <span style="width:250px; float:right;">  '.$quantity.'</span></td>
+								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Order Quantity</strong>: <span style="width:250px; float:right;">  '.$quantity.'</span></td>
 							</tr>
 							<tr>
 								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Order Date</strong>: <span style="width:250px; float:right;">  '.$order_created_date.'</span></td>
 							</tr>
 							<tr>
-								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Delivery Date</strong>: <span style="width:250px; float:right;">  '.$delivery_date.'</span></td>
+								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Print Date</strong>: <span style="width:250px; float:right;">  '.date('m/d/Y h:i:s A', time()).'</span></td>
 							</tr>
 							
 									</table>
@@ -683,7 +695,7 @@
 						</div>
  						</body>
 						</html>';
- 			//$pdf->writeHTML($html, false); 
+ 			$pdf->writeHTML($html, false); 
 			$post = $this->input->post();
 			##----------------------------------------------------------------------------------##
 			if($this->input->post('qty')>0){
@@ -695,30 +707,45 @@
 					//$pdf->Text(20, 25, $qrcode.'-'.$i);
 					$getEssentialAttributes = getEssentialAttributes($product_id);
 					if($getEssentialAttributes['code_unity_type']=='Twin'){
-						
-					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 60, $y, $barcodesize, $barcodesize, $style, 'N');
-					$pdf->Text(62, $y+0.2, $qrcode.$i);
-					$pdf->Text(62, $y+31, 'Scan to Check Product');
-					$pdf->write1DBarcode($qrcode2.$i, 'C128B', 120, $y-1.5, 80, $barcodesize, 0.4, $style, 'L');
+						$pdf->SetFont('helvetica', '1', $TextFontSize);
+						if($message_above_code!=""){
+					$pdf->Text(18, $y, $message_above_code);
+					}
+					$pdf->Text(18, $y+5, "BatchID-".$print_batch_id);
+					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 18, $y+6, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->Text(18, $y+$barcodesize+0.5, $qrcode.$i);
+					//$pdf->Text(122, $y+35, 'Scan to Check Product');
+$pdf->write1DBarcode($qrcode2.$i, 'C128B', 18+$space_between_twin_code+$barcodesize, $y+$barcodesize/2, $barcodesize, $barcodesize/3, 0.4, $style, 'L');
+					if($message_below_code!=""){
+					$pdf->Text(18, $y+$barcodesize+8, $message_below_code);
+					}
+					//$pdf->write1DBarcode($qrcode.$i, 'C128B', 28, $y+15, $barcodesize, $barcodesize/3, 0.4, $style, 'L');
 					//$pdf->write1DBarcode($qrcode2.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
 					//$pdf->SetFont('','B');
-				  	$pdf->Text(121, $y+30, "^^Do Not Buy!! If already Scratched^^, Scratch to register product");
+				  	//$pdf->Text(22, 40+$barcodesize, "^^Do Not Buy!! If already Scratched^^, Scratch to register product");
 					//$pdf->Text(150, $y+30, "Scratch to register product");
 					
 					
 					//$pdf->Cell(287,50, 'If already Scratched ^', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
 					
 					} else {
-					$pdf->SetFont('', '1', 5);
-					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 150, $y, $barcodesize, $barcodesize, $style, 'N');
-					$pdf->SetFont('helvetica', '', 5);
-					$pdf->Text(155, $y-1, $print_batch_id);
-					$pdf->Text(150, $y+13, $qrcode.$i);
+					$pdf->SetFont('helvetica', '1', $TextFontSize);
+					if($message_above_code!=""){
+					$pdf->Text(18, $y-$space_for_message_above_code, $message_above_code);
+					}
+					$pdf->Text(18, $y+2, "BatchID-".$print_batch_id);
+					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 14, $y+5, $barcodesize, $barcodesize, $style, 'N');
+					//$pdf->SetFont('helvetica', '1', 5);					
+					$pdf->Text(18, $y+$barcodesize, $qrcode.$i);
+					if($message_below_code!=""){
+					$pdf->Text(18, $y+$barcodesize+$space_for_message_below_code+1, $message_below_code);
+					}
 					}
 					
 					$pdf->SetXY($x,$y);
-					$pdf->Cell(287,25, '', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
+					$pdf->Cell(18, $barcodesize+$space_between_code_rows, '', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
 					$pdf->Ln();
+					
 			$this->order_master_model->insert_printed_barcode_qrcode($post,$qrcode.$i,$qrcode2.$i,'Qrcode',$product_id,$active_status,$plant_id,$user_id);
 				}
 				$customer_id = get_customer_id_by_product_id($product_id);
@@ -762,7 +789,7 @@
 			
 			// set font
 			//$pdf->SetFont('helvetica', '', 13);
-			$pdf->SetFont('', '', 7);
+			//$pdf->SetFont('', '', $TextFontSize);
 			// add a page
 			$pdf->AddPage();
 			
@@ -787,11 +814,20 @@
 			$order_created_date     = date('Y-m-d',strtotime($userOrderData['created_date']));
 			$status					= $userOrderData['status'];
  			$qrcode 				= $barcode_no . mt_rand(1000, 9999);
-			$qrcode2				= $barcode_no . mt_rand(1000, 9999);		
+			$qrcode2				= $barcode_no . mt_rand(1000, 9999);	
+
+			$ProductData = get_product_data($product_id);
+			$message_above_code			= $ProductData['message_above_code'];
+			$message_below_code			= $ProductData['message_below_code'];
+			$space_between_twin_code			= $ProductData['space_between_twin_code'];	
+			$space_for_message_above_code		= 4;	
+			$space_for_message_below_code		= 6;
+			$space_between_code_rows 			= 30;	
+			$TextFontSize = 10;	
  			
 			// set style for barcode
 			 $style = array(
-								'border' => true,
+								'border' => false,
 								'vpadding' => 'auto',
 								'hpadding' => 'auto',
 								'fgcolor' => array(0,0,0), 
@@ -800,7 +836,7 @@
 								'module_height' => 1, // height of a single module in points
 								'text' => true,
 								'font' => 'helvetica',
-								'fontsize' => 8,
+								'fontsize' => $TextFontSize,
 								'stretchtext' => 4
 						  ); 
  			$html='';
@@ -820,7 +856,7 @@
 								<td width="80%" valign="top">
 									<table cellpadding="10" cellspacing="0" border="0">
 										<tr>
-											<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Bar Code No. </strong>: '.$barcode_no.'</td>
+											<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Product SKU </strong>: '.$barcode_no.'</td>
 										</tr>
 										<tr>
 											<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Order By </strong>: '.$username.'</td>
@@ -831,17 +867,17 @@
 										</tr>
 							
 							<tr>
-								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Product SKU</strong>: '.$product_sku.'</td>
+								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Print Quantity</strong>: '.$this->input->post('qty').'</td>
 							</tr>
 							 
 							<tr>
-								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Quantity</strong>: <span style="width:250px; float:right;">  '.$quantity.'</span></td>
+								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Order Quantity</strong>: <span style="width:250px; float:right;">  '.$quantity.'</span></td>
 							</tr>
 							<tr>
 								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Order Date</strong>: <span style="width:250px; float:right;">  '.$order_created_date.'</span></td>
 							</tr>
 							<tr>
-								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Delivery Date</strong>: <span style="width:250px; float:right;">  '.$delivery_date.'</span></td>
+								<td colspan="2" style="font-family: Arial, Helvetica, sans-serif;color: #000;"><strong style="width: 150px;float: left;">Print Date</strong>: <span style="width:250px; float:right;">  '.date('m/d/Y h:i:s A', time()).'</span></td>
 							</tr>
 							
 									</table>
@@ -869,8 +905,8 @@
  						</body>
 						</html>';
 			// -----------------------------------------------------------------------------
- 			/*
-			$pdf->SetFont('helvetica', '', 7);
+ 			
+			$pdf->SetFont('helvetica', '1', $TextFontSize);
 			
  			// define barcode style
 			$style = array(
@@ -883,10 +919,10 @@
 								'module_height' => 1, // height of a single module in points
 								'text' => true,
 								'font' => 'helvetica',
-								'fontsize' => 8,
+								'fontsize' => $TextFontSize,
 								'stretchtext' => 4
 						  ); 
-						  */
+						  
 			//echo '<pre>';print_r($this->input->post());exit;
 			// PRINT VARIOUS 1D BARCODES
 			$pdf->writeHTML($html, false, 0, false, 0);
@@ -919,23 +955,24 @@
 					
 					
 					} else {
-						$pdf->Text(80, $y+5, $print_batch_id);
-					$pdf->write1DBarcode($qrcode.$i, 'C128B', 120, $y-1.5, 80, $barcodesize, 0.4, $style, 'L');
-					//$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 110, $y, $barcodesize, barcodesize, $style, 'N');
-					//$pdf->Text(110, $y, 'This is First Code');
-					//$pdf->write2DBarcode($qrcode2.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
-					//$pdf->Text(150, $y, 'This is Second Code');
-            		//Reset X,Y so wrapping cell wraps around the barcode's cell.
-           			 /* old
-					 $pdf->SetXY($x,$y);
-					 $pdf->Cell(50, 42, '', 0, 1);
-					 */
+					$pdf->SetFont('helvetica', '1', $TextFontSize);	
+					if($message_above_code!=""){
+						$pdf->Text(28, $y-$space_for_message_above_code, $message_above_code);
 					}
-					 $pdf->SetXY($x,$y);
-					$pdf->Cell(287,50, '', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
+						$pdf->Text(28, $y+1, "BatchID-".$print_batch_id);
+		$pdf->write1DBarcode($qrcode.$i, 'C128B', 28, $y+5, $barcodesize, $barcodesize/3, 0.4, $style, 'L');
+					
+					if($message_below_code!=""){
+					$pdf->Text(28, $y+$barcodesize/3+$space_for_message_below_code, $message_below_code);
+					}
+					
+					}
+					$pdf->SetXY($x,$y);
+					$pdf->Cell(28,$space_between_code_rows+$barcodesize/3, '', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
 					$pdf->Ln();
 					
 					// $pdf->Cell(105, 21, "", 1, 2, 'C', FALSE, '', 0, FALSE, 'C', 'B');
+					
 		$this->order_master_model->insert_printed_barcode_qrcode($post, $qrcode.$i, $qrcode2.$i, 'barcode',$product_id,$active_status,$plant_id,$user_id);
 					
  				}
@@ -1333,15 +1370,15 @@ $style = array(
 //$pdf->Text(20, 85, 'QRCODE M');
 
 // QRCODE,Q : QR-CODE Better error correction
-$pdf->write2DBarcode('Sanjay Testing Code 1', 'QRCODE,Q', 20, 150, 50, 50, $style, 'N');
-$pdf->SetFont('helvetica', '', 4);
-$pdf->Text(20, 145, 'QRCODE Q-Sanjay');
+$pdf->write2DBarcode('Sanjay Testing Code 1', 'QRCODE,Q', 20, 110, 111, 111, $style, 'N');
+$pdf->SetFont('helvetica', '', 14);
+$pdf->Text(20, 100, 'QRCODE Q-Sanjay');
 
 // -------------------------------------------------------------------
 // DATAMATRIX (ISO/IEC 16022:2006)
 
-$pdf->write2DBarcode('Sanjay Testing Code 2', 'QRCODE,Q', 80, 150, 50, 50, $style, 'N');
-$pdf->Text(80, 145, 'DATAMATRIX-Sanjay');
+//$pdf->write2DBarcode('Sanjay Testing Code 2', 'QRCODE,Q', 80, 150, 50, 50, $style, 'N');
+//pdf->Text(80, 145, 'DATAMATRIX-Sanjay');
 
 // -------------------------------------------------------------------
 
@@ -1608,9 +1645,51 @@ $pdf->Output('example_050.pdf', 'I');
 		exit;
 		
     }
-	 
+
+
+	public function list_printed_batches() {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		//$customer_id = $this->uri->segment(3);
+		$order_id = $this->uri->segment(3);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+       if($user_id>1){
+		//$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+       $total_records = $this->order_master_model->get_total_printed_batches_list_all($srch_string);
+       $params["orderListing"] = $this->order_master_model->get_printed_batches_list_all($limit_per_page, $start_index, $srch_string);
+		if($user_id>1){
+		//$params["links"] = Utils::pagination('order_master/list_print_batches', $total_records);
+		$params["links"] = Utils::pagination('order_master/list_printed_batches/' . $order_id, $total_records, null, 4);
+			}else{
+		$params["links"] = Utils::pagination('order_master/list_printed_batches/' . $order_id, $total_records, null, 4);
+			
+			}
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        $params['user_id'] = $user_id;
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        //$this->load->view('list_order_tpl', $params);
+		$this->load->view('list_printed_batches_tpl', $params);
+    }	
+
+
+
+	
    }
-   
-   
    ?>
 

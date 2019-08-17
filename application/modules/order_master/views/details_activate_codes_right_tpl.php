@@ -31,7 +31,7 @@
 			<select class="form-control" placeholder="Select Packaging Level" id="PackagingLevel" name="PackagingLevel" >
 			<option value="0" selected> 0 </option>
 			<option value="1"> 1 </option> 
-			<!--<option value="2"> 2 </option>
+			<option value="2"> 2 </option>
 			<option value="3"> 3 </option>
 			<option value="4"> 4 </option>
 			<option value="5"> 5 </option>
@@ -50,7 +50,7 @@
 			<option value="18"> 18 </option>
 			<option value="19"> 19 </option>
 			<option value="20"> 20 </option>
-			<option value="21"> 21 </option>-->
+			<option value="21"> 21 </option>
 			 </select>  
 			</div>
 			<div class="col-sm-6">

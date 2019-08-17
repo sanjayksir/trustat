@@ -27,9 +27,6 @@ class Consumer extends ApiController {
             Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
         }
 		
-			
-			
-			
         // if number already exists 
         $checkmobileno = $this->getInput('mobile_no');
         $checkmobileno2 = $checkmobileno['mobile_no'];
@@ -980,17 +977,165 @@ class Consumer extends ApiController {
         //$data['ip'] = $this->input->ip_address();
 
         if ($this->db->insert('consumer_passbook', $data)) {
-            $this->signupMail($data);
+            //$this->signupMail($data);
            // $smstext = 'You have added ' . $mobile_no . ' as ' . $data['relation'] . ' relation with you.';
             //Utils::sendSMS($data['phone_number'], $smstext);
             //$userId = $user['id'];
             //$this->Productmodel->saveLoylty('user-registration', $userId, ['user_id' => $userId]);
-            Utils::response(['status' => true, 'message' => 'Points Reddemed.', 'data' => $data], 200);
+			
+			// Update Reddemed Status of the Loyalty Points
+		
+	//$oldest_loyalty_points = $this->db->get_where('loylty_points', array('user_id' => $consumer_id, 'customer_id' => $customer_id, 'customer_loyalty_type' => "Brand"))->limit(1)->row()->points;
+	for($i=0; $i<1000; $i++){
+	$this->db->select('id,points,redeemed_points');
+    $this->db->where(array('user_id' => $consumer_id, 'customer_id' => $customer_id, 'customer_loyalty_type' => "Brand", 'loyalty_points_status != ' => "Redeemed"));
+	$this->db->order_by('id', 'ASC');
+    $this->db->limit(1);
+    $query = $this->db->get('loylty_points');
+    $row = $query->row();
+	
+	$oldest_loyalty_points = $row->points;
+	$oldest_loyalty_points_id = $row->id;
+	$redeemed_partial_points = $row->redeemed_points;
+	
+	$balancepoints =  $oldest_loyalty_points - ($points_redeemed+$redeemed_partial_points);	
+	
+	if($balancepoints > 0)
+		{
+			$updateData = array(
+			   'loyalty_points_status'=>"RedeemedPartial",
+			   'redeemed_points'=>$points_redeemed+$redeemed_partial_points,
+			   'modified_at'=>date("Y-m-d H:i:s")
+			);
+			$this->db->where('id', $oldest_loyalty_points_id);
+			$this->db->update('loylty_points', $updateData); 
+			 break;
+			}else{
+				if(($points_redeemed+$redeemed_partial_points) > $oldest_loyalty_points)
+				{
+				$updateData = array(
+				   'loyalty_points_status'=>"Redeemed",
+				   'redeemed_points'=>$oldest_loyalty_points-$redeemed_partial_points,
+				   'modified_at'=>date("Y-m-d H:i:s")
+				);
+				$this->db->where('id', $oldest_loyalty_points_id);
+				$this->db->update('loylty_points', $updateData); 
+			}else{
+				$updateData = array(
+				   'loyalty_points_status'=>"Redeemed",
+				   'redeemed_points'=>$points_redeemed+$redeemed_partial_points,
+				   'modified_at'=>date("Y-m-d H:i:s")
+				);
+				$this->db->where('id', $oldest_loyalty_points_id);
+				$this->db->update('loylty_points', $updateData); 
+			}
+			}
+			}
+			
+            Utils::response(['status' => true, 'message' => 'Points Reddemed.', 'oldest_loyalty_points' => $oldest_loyalty_points . "-" . $oldest_loyalty_points_id, 'data' => $data], 200);
         } else {
             Utils::response(['status' => false, 'message' => 'Redemption failed.'], 200);
         }
     }
 
+
+ // Expire Consumer Loylty Points
+	
+	public function ExpireConsumerLoyaltyPoints() {
+		
+		
+	$this->db->select('id,user_id,customer_id,points,redeemed_points,loyalty_points_status,loyalty_points_expiry_date');
+    $this->db->where(array('loyalty_points_status != ' => "Redeemed", 'loyalty_points_status' => "Earned", 'loyalty_points_expiry_date' => date("Y-m-d")));
+	$this->db->order_by('id', 'ASC');
+    $query = $this->db->get('loylty_points');
+    $rows = $query->result_array();
+	
+	//$oldest_loyalty_points = $rows->points;
+	//$oldest_loyalty_points_id = $rows->id;
+	//$redeemed_partial_points = $rows->redeemed_points;
+	
+	foreach($rows as $row){
+	$Expiring_loyalty_points = $row['points'];
+	$Expiring_loyalty_points_id = $row['id'];
+	$consumer_id = $row['user_id'];
+	$customer_id = $row['customer_id'];
+	//$loyalty_points = $row['points'];
+	//$loyalty_points = $row['points'];
+	//$loyalty_points = $row['points'];
+	//$loyalty_points = $row['points'];
+	//echo "<pre>"; print_r($customer_id);  die;
+	
+		$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customer_id);
+		if($customer_loyalty_type=="TRUSTAT"){
+		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();
+		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();
+		}else{
+		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		}
+		
+		
+		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
+		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
+		
+		$FinalTotalAccumulatedPoints = $TotalAccumulatedPoints->points;
+		
+		if(($TotalRedeemedPoints->points)!='')
+		{
+			$FinalTotalRedeemedPoints = ($TotalRedeemedPoints->points) + $points_redeemed;
+		} else {
+			$FinalTotalRedeemedPoints =0 + $points_redeemed;
+			}
+			
+		$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
+		$Min_Locking_Balance = $result2->loyalty_points;
+		
+		$CurrentBalanceAfterMinBalanceLocking = $CurrentBalance - $Min_Locking_Balance;
+		$Points_Redeemed_in_Multiple_of = $result3->loyalty_points;
+				
+		$remainder = $CurrentBalanceAfterMinBalanceLocking % $Points_Redeemed_in_Multiple_of;
+		$quotient = ($CurrentBalanceAfterMinBalanceLocking - $remainder) / $Points_Redeemed_in_Multiple_of;
+		if($customer_loyalty_type=="TRUSTAT"){
+		$Points_Redeemable = $Points_Redeemed_in_Multiple_of * $quotient;		
+		$PointsShortOfRedumption =$Points_Redeemed_in_Multiple_of - $remainder;
+		}else{
+		$Points_Redeemable = $CurrentBalance;		
+		$PointsShortOfRedumption = 0;	
+		}
+		    
+		$data['customer_id'] = $customer_id;
+		$data['consumer_id'] = $consumer_id;
+		$data['points'] = $Expiring_loyalty_points;
+        $data['transaction_type_name'] = "Loyalty Points Expired";
+		$data['transaction_type_slug'] = "loyalty_points_expired";
+		$data['params'] = "Loyalty Points Expired";
+		$data['transaction_lr_type'] = "Expiry";
+		$data['customer_loyalty_type'] = get_customer_loyalty_type_by_customer_id($customer_id);
+		$data['total_accumulated_points'] = $FinalTotalAccumulatedPoints;
+		$data['total_redeemed_points'] = $FinalTotalRedeemedPoints;
+		$data['current_balance'] = $CurrentBalance;
+		$data['points_redeemable'] = $Points_Redeemable;
+		$data['points_short_of_redumption'] = $PointsShortOfRedumption;
+		$data['transaction_date'] = date("Y-m-d H:i:s");
+        //$data['ip'] = $this->input->ip_address();
+		
+
+        if ($this->db->insert('consumer_passbook', $data)) {
+			
+			$updateData = array(
+				   'loyalty_points_status'=>"Expired",
+				  // 'redeemed_points'=>$points_redeemed+$redeemed_partial_points,
+				   'modified_at'=>date("Y-m-d H:i:s")
+				);
+				$this->db->where('id', $Expiring_loyalty_points_id);
+				$this->db->update('loylty_points', $updateData);
+            Utils::response(['status' => true, 'message' => 'Points Expired.', 'data' => $data], 200);
+        } else {
+            Utils::response(['status' => false, 'message' => ''], 200);
+        }
+		
+		} // foreach end 
+    }
 	
 	    // add Consumer Kid Details function 
     public function addConsumerKid() {

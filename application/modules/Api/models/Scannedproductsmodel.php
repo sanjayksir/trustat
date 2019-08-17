@@ -123,6 +123,13 @@ class ScannedproductsModel extends CI_Model {
             }else{
                 $item['product_images'] = '';
             }
+			
+			if(!empty($row->product_code_print_bg_images)){
+                $item['product_code_print_bg_images'] = Utils::setFileUrl($row->product_code_print_bg_images);
+            }else{
+                $item['product_code_print_bg_images'] = '';
+            }
+			
             if(!empty($row->product_push_ad_video)){
                 $item['product_push_ad_video'] = Utils::setFileUrl($row->product_push_ad_video);
             }else{
@@ -263,6 +270,12 @@ return $result;
             }else{
                 $item['product_images'] = '';
             }
+			if(!empty($row->product_code_print_bg_images)){
+                $item['product_code_print_bg_images'] = Utils::setFileUrl($row->product_code_print_bg_images);
+            }else{
+                $item['product_code_print_bg_images'] = '';
+            }
+			
             if(!empty($row->product_survey_video)){
                 $item['product_survey_video'] = Utils::setFileUrl($row->product_survey_video);
             }else{
@@ -704,6 +717,11 @@ return $result;
             }else{
                 $item['product_images'] = '';
             }
+			if(!empty($row->product_code_print_bg_images)){
+                $item['product_code_print_bg_images'] = Utils::setFileUrl($row->product_code_print_bg_images);
+            }else{
+                $item['product_code_print_bg_images'] = '';
+            }
             if(!empty($row->product_video)){
                 $item['product_video'] = Utils::setFileUrl($row->product_video);
             }else{
@@ -799,6 +817,12 @@ return $result;
             }else{
                 $item['product_images'] = '';
             }
+			if(!empty($row->product_code_print_bg_images)){
+                $item['product_code_print_bg_images'] = Utils::setFileUrl($row->product_code_print_bg_images);
+            }else{
+                $item['product_code_print_bg_images'] = '';
+            }
+			
             if(!empty($row->product_video)){
                 $item['product_video'] = Utils::setFileUrl($row->product_video);
             }else{

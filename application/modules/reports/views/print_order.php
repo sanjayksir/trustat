@@ -24,7 +24,7 @@
 				  
 				   <div class="form-group">
 					<label for="message-text">Print Size:</label>
-					<div class="form-control"><?php if( strtolower($printEssentialAttributes['code_size'])=='s'){
+					<div class="form-control"><?php /* if( strtolower($printEssentialAttributes['code_size'])=='s'){
 													$size = 30;
 													echo 'Small';
 													}else if(strtolower($printEssentialAttributes['code_size'])=='m'){
@@ -32,9 +32,18 @@
 													echo 'Medium';}else{
 													$size = 50;
 													echo 'Large';
-													};?></div>
+													}; */
+													
+													$sizemm = $printEssentialAttributes['code_size'];
+													echo $sizemm;
+													
+													$size = $sizemm;
+													?></div>
 				  </div>
 				  <input type="hidden" name="barcodesize" value="<?php echo $size;?>" />
+				  <input type="hidden" name="message_above_code" value="<?php echo $printEssentialAttributes['message_above_code'];?>" />
+				  <input type="hidden" name="message_below_code" value="<?php echo $printEssentialAttributes['message_below_code'];?>" />
+				  <input type="hidden" name="space_between_twin_code" value="<?php echo $printEssentialAttributes['space_between_twin_code'];?>" />
 				  
 				  <div class="form-group">
 					<label for="message-text">Print Quantity:</label>

@@ -137,6 +137,9 @@ $route['api/consumer_loylty_deals/(:any)/(:any)'] = 'Api/Consumer/consumerLoylty
 
 //$route['api/redeem_loylty_points/(:any)/(:any)/(:any)'] = 'Api/Consumer/RedeemLoyltyPoints/$1/$2/$3';
 $route['api/microsite_redeem_loylty_points/(:any)/(:any)/(:any)'] = 'Api/Consumer/MicrositeRedeemLoyltyPoints/$1/$2/$3';
+
+$route['api/expire_consumer_loyalty_points'] = 'Api/Consumer/ExpireConsumerLoyaltyPoints/';
+
 $route['api/faqs_data'] = 'Api/Consumer/FaqsAndOtherData';
 $route['api/terms_and_conditions'] = 'Api/Consumer/TermsAndConditions';
 $route['api/TRUSTAT_app_service_agreement'] = 'Api/Consumer/TRUSTATAppServiceAgreement';

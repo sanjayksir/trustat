@@ -218,6 +218,27 @@
 															<br /><br />
 															<?php }?>
 															<br />
+															<?php if($details['product_code_print_bg_images']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product Code BG Image</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	<?php $arrImg = explode(',',$details['product_code_print_bg_images']);
+ 																	if(count($arrImg)>0){
+																		foreach($arrImg as $recs){	
+																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
+																	?>
+																		<img style="border:1px solid grey;"  src="<?php echo base_url().'/uploads/'.$recs;?>" width="100px" height="100px;" />
+																		  <?php }
+																			}
+																		}?>
+																	</div>
+  																</div>
+															</div>
+															<br /><br />
+															<?php }?>
 															<!-- Product Video -->
 									<?php if($details['product_video']!=''){?>
 										<div class="row">
@@ -536,7 +557,7 @@ Your browser does not support audio in video tag.
 										   </label><br />
 					<label><strong>Delivery Method : </strong> <?php echo product_delivery_method($details['delivery_method']);?></label><br />
 					<label><strong>Code Key Type : </strong><?php echo $details['code_key_type'];?></label><br />
-					<label><strong>Code Size : </strong><?php echo getProductSize($details['code_size']);?></label>
+					<label><strong>Code Size : </strong><?php //echo getProductSize($details['code_size']);?><?php echo $details['code_size'];?> mm</label>
 					
 				<br /><br /><br /><br />
             

@@ -254,7 +254,7 @@
 				data: dataSend,
   				success: function (msg) {
 					setTimeout(function() {
- 						  window.location.href="<?php echo base_url().'order_master/list_orders';?>";
+ 						  window.location.href="<?php echo base_url().'order_master/list_printed_batches';?>";
 					  }, 2000); 
 				}
 			});

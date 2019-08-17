@@ -44,6 +44,8 @@ class ScannedProduct extends ApiController {
         $bar_code_data = $data['bar_code'];
 		$product_id = $result->id;
 		$consumerId = $user['id'];
+		
+		
 		// function to get product registration status
         $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);   
 	
@@ -92,6 +94,9 @@ class ScannedProduct extends ApiController {
 		
         if(!empty($result->product_images)){
             $result->product_images = Utils::setFileUrl($result->product_images);
+        }
+		if(!empty($result->product_code_print_bg_images)){
+            $result->product_code_print_bg_images = Utils::setFileUrl($result->product_code_print_bg_images);
         }
         if(!empty($result->product_video)){
             $result->product_video = Utils::setFileUrl($result->product_video);
@@ -168,6 +173,94 @@ class ScannedProduct extends ApiController {
 			//$this->db->insert('consumer_customer_link', $data);
 			
 			
+			// Super Loyalty start		
+			// Insert number if Scans 
+		$resultC = $this->db->select('number_of_scans')->from('consumers')->where('id', $consumerId)->get()->row();
+		$number_of_scansBD = $resultC->number_of_scans;
+		$number_of_scansAD = $number_of_scansBD + 1;
+		$updateData = array(
+					   'number_of_scans' => $number_of_scansAD
+						);
+					$this->db->update('consumers', $updateData, array('id' => $consumerId));
+					
+		$resultP = $this->db->select('*')->from('products')->where('id', $product_id)->get()->row();
+		$number_of_scans_for_super_loyalty = $resultP->number_of_scans_for_super_loyalty;
+		$number_of_loyalty_points_for_super_loyalty = $resultP->number_of_loyalty_points_for_super_loyalty;	
+		$number_of_scans_for_productBD = $resultP->number_of_scans_for_product;
+		
+		$number_of_scans_for_productAD = $number_of_scans_for_productBD + 1;
+		$updateDataP = array(
+					   'number_of_scans_for_product' => $number_of_scans_for_productAD
+						);
+					$this->db->update('products', $updateDataP, array('id' => $product_id));
+		
+	$remainder = $number_of_scans_for_productAD%$number_of_scans_for_super_loyalty;
+		if(($remainder == 0)&&($number_of_loyalty_points_for_super_loyalty!=0)) {
+		
+		//$Product_id = getProductIDbyProductCode($data['bar_code']);
+			$customerId = get_customer_id_by_product_id($product_id);
+			
+				$purchased_points = total_approved_points2($customerId);
+				$consumed_points = get_total_consumed_points($customerId);
+				$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customerId);
+				$product_name = get_products_name_by_id($product_id);
+				$consumer_name = getConsumerNameById($consumerId);	
+				$product_brand_name = get_products_brand_name_by_id($product_id);
+				$customer_id = get_customer_id_by_product_id($product_id);
+				
+				$customer_name = getUserFullNameById($customerId);		
+				$product_name = get_products_name_by_id($product_id);
+				$consumer_name = getConsumerNameById($consumerId);
+		
+				
+				$LPconsumed_points = $consumed_points+$number_of_loyalty_points_for_super_loyalty;
+				//echo "<pre>";print_r($LPconsumed_points); die;
+				
+				
+				if($purchased_points > ($consumed_points+$number_of_loyalty_points_for_super_loyalty)){
+                $message = 'Thank You for Product Registration. '. $number_of_loyalty_points_for_super_loyalty .' loyalty points will be added to your TRUSTAT loyalty account';
+				//echo "<pre>Jyada";print_r($LPconsumed_points); die;
+				}else{
+					$message = 'Thank You for Scan!';
+					//echo "<pre>kam";print_r($LPconsumed_points); die;
+					}
+				
+			   // $transactionType = 'product-registration-without-warranty'; 
+				$transactionType = "Super Loyalty";
+				$mnv52_result = $this->db->select('message_notification_value,message_notification_value_part2')->from('message_notification_master')->where('id', 52)->get()->row();
+				$mnvtext52 = $mnv52_result->message_notification_value;
+				$mnvtext52_p2 = $mnv52_result->message_notification_value_part2;
+			    $transactionTypeName = $mnvtext52 . $number_of_scans_for_productAD . $mnvtext52_p2;
+			   
+				//$userId = $user['id'];	
+				
+				
+				
+				if($purchased_points > ($consumed_points+$number_of_loyalty_points_for_super_loyalty)){
+	$this->Productmodel->saveSuperLoylty($transactionType, $consumerId, $product_id, ['verification_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumerId, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code'],'customer_loyalty_type' => $customer_loyalty_type], $customer_id, $customer_loyalty_type, $number_of_loyalty_points_for_super_loyalty);
+				
+				
+				
+				$this->Productmodel->saveConsumerPassbookSuperLoyalty($transactionType, ['verification_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code'],'customer_loyalty_type' => $customer_loyalty_type], $customer_id, $product_id, $consumerId, $transactionTypeName,  'Loyalty', $customer_loyalty_type, $number_of_loyalty_points_for_super_loyalty);
+				}
+				
+				$fb_token = getConsumerFb_TokenById($consumerId);
+              // $this->ConsumerModel->sendFCM('Thank you for Product Registration, Please check the details in "my purchase list" in TRUSTAT App.', $fb_token);
+			    $this->ConsumerModel->sendFCM("Super Loyalty", $fb_token);
+				$NTFdata['consumer_id'] = $consumerId; 
+				$NTFdata['title'] = "TRUSTAT notification";
+				$NTFdata['body'] = "Super Loyalty"; 
+				$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+				$NTFdata['status'] = 1; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);	
+
+		}
+			
+		// Super Loyalty end	
+		
+			
+			
 			if($result->barcode_qr_code_no == $data['bar_code']) {
             if( $result->pack_level == 0 ){
                 if( $isRegistered ){
@@ -224,6 +317,9 @@ class ScannedProduct extends ApiController {
 		$mnvtext31 = $mnv31_result->message_notification_value;
 			//$this->response(['status'=>true,'message'=>'Thanks for scanning the product.','data'=>$result]);
 			$this->response(['status'=>true,'message'=>$mnvtext31,'data'=>$result]);
+			
+			
+			
         }else{
 		$mnv32_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 32)->get()->row();
 		$mnvtext32 = $mnv32_result->message_notification_value;	
@@ -433,7 +529,7 @@ class ScannedProduct extends ApiController {
 				$data['message1'] = $message = $mnvtext35;
             }elseif($isRegistered['status'] == 1){
                 //$data['message1']  = $message = 'This product is already registered, please contact your retailer/manufacturer for further details.';
-				$data['message1']  = $message = $mnvtext35;
+				$data['message1']  = $message = $mnvtext36;
             }
             $this->response(['status'=>true,'message'=>$message,'data'=>$data]);
         }

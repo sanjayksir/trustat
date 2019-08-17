@@ -252,7 +252,7 @@
              <div class="hidden-sm hidden-xs action-buttons">
                  <a href="<?php  echo base_url().'order_master/view_order/'.$listData['order_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>
 				 
-				  <a href="<?php  echo base_url().'order_master/list_print_batches/'.$listData['order_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> Batchs</i></a>
+				  <a href="<?php  echo base_url().'order_master/list_print_batches/'.$listData['order_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> Batches</i></a>
 
                  <?php 
 				 if((order_status($listData['order_status']))=="Pending") {

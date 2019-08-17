@@ -587,7 +587,7 @@
      }
 	
 ## For complaint reports
-    public function list_complaint_log() {
+    public function list_complaint_logOld2() {
         ##--------------- pagination start ----------------##
         // init params
         $params = array();
@@ -702,6 +702,31 @@
      }	 
 	 
 	
+	public function list_complaint_log() {
+ 		##--------------- pagination start ----------------##
+		 // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if(empty($srch_string)){
+            $srch_string ='';
+        }
+        list($total_records,$params["ScanedCodeListing"]) =$this->order_master_model->get_complaint_log($limit_per_page, $start_index,$srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_complaint_log', $total_records,null,4);
+		
+		
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');		
+	
+        $this->load->view('list_complaint_log_tpl', $params);
+     }
 	
 	
 	

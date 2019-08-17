@@ -194,7 +194,27 @@
 															</div>
 															<?php }?>
 															<br />
-															
+															<?php if($details['product_code_print_bg_images']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product Code Print BG Images</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	<?php $arrImg = explode(',',$get_detail['product_code_print_bg_images']);
+ 																	if(count($arrImg)>0){
+																		foreach($arrImg as $recs){	
+																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
+																	?>
+																		<img style="border:1px solid grey;"  src="<?php echo base_url().'/uploads/'.$recs;?>" width="100px" height="100px;" />
+																		  <?php }
+																			}
+																		}?>
+																	</div>
+  																</div>
+															</div>
+															<?php }?>
+															<br />
 															<?php if($get_detail['product_video']!=''){?>
 															<div class="row">
 																<div class="col-xs-12"> 
@@ -308,7 +328,7 @@ Your browser does not support audio in video tag.
                                                                 </div>
                                                                 
                                                                 <div class="col-sm-4"><label for="form-field-8"><strong>Code Size:-</strong></label> 
-                                                                	<div class="form-control"><?php echo getProductSize($get_detail['code_size']);?></div>
+                                                                	<div class="form-control"><?php //echo getProductSize($get_detail['code_size']);?><?php echo $get_detail['code_size'];?> mm</div>
                                                                 </div>
                                                                   
                                                          </div>

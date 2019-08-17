@@ -48,6 +48,8 @@
 			$UpdateData = array(
 			    "f_name"=>$frmData['f_name'],
 			    "l_name"=>$frmData['l_name'],
+				"days_for_expiry_of_point_credited"=>$frmData['days_for_expiry_of_point_credited'],
+				"days_for_notification_before_expiry_of_lps"=>$frmData['days_for_notification_before_expiry_of_lps'],
 				"mobile_no"=>$frmData['user_mobile'],
 				"email_id"=>$frmData['user_email'],
                 "usergroup_id "=>$frmData['user_group'],
@@ -84,7 +86,9 @@
 				"status "=>'1',
 				"is_admin "=>'1',
 				"f_name"=>$frmData['f_name'],
-			    "l_name"=>$frmData['l_name']
+			    "l_name"=>$frmData['l_name'],
+				"days_for_expiry_of_point_credited"=>$frmData['days_for_expiry_of_point_credited'],
+			    "days_for_notification_before_expiry_of_lps"=>$frmData['days_for_notification_before_expiry_of_lps']
 			
 			);//echo '<pre>';print_r($insertData);exit;
 			if($this->db->insert("backend_user", $insertData)){

@@ -1272,6 +1272,43 @@ function list_assigned_products() {
 		 
 		 $this->Product_model->sendFBLRNotification($vquery, $fb_token);
 		 
+	// update redeemed loyalty 	 
+	for($i=0; $i<1000; $i++){
+	$this->db->select('id,points,redeemed_points');
+    $this->db->where(array('user_id' => $consumer_id, 'customer_loyalty_type' => "TRUSTAT", 'loyalty_points_status != ' => "Redeemed"));
+	$this->db->order_by('id', 'ASC');
+    $this->db->limit(1);
+    $query = $this->db->get('loylty_points');
+    $row = $query->row();
+	
+	$oldest_loyalty_points = $row->points;
+	$oldest_loyalty_points_id = $row->id;
+	$redeemed_partial_points = $row->redeemed_points;
+	
+	$balancepoints =  $oldest_loyalty_points - ($points_redeemed+$redeemed_partial_points);	
+	
+	if($balancepoints > 0)	{
+			$updateData = array(
+			   'loyalty_points_status'=>"RedeemedPartial",
+			   'redeemed_points'=>$points_redeemed+$redeemed_partial_points,
+			   'modified_at'=>date("Y-m-d H:i:s")
+			);
+			$this->db->where('id', $oldest_loyalty_points_id);
+			$this->db->update('loylty_points', $updateData); 
+			 break;
+			}else{
+				$updateData = array(
+				   'loyalty_points_status'=>"Redeemed",
+				   'redeemed_points'=>$oldest_loyalty_points,
+				   'modified_at'=>date("Y-m-d H:i:s")
+				);
+				$this->db->where('id', $oldest_loyalty_points_id);
+				$this->db->update('loylty_points', $updateData); 				
+			}
+			
+			}
+		 // end update redeemed loyalty 
+		 
 			$NTFdata['consumer_id'] = $consumer_id; 
 			$NTFdata['title'] = "TRUSTAT loyalty verification";
 			$NTFdata['body'] = $vquery; 
@@ -1389,6 +1426,34 @@ function list_assigned_products() {
         $params["links"] = Utils::pagination('product/list_view_consumer_passbook/' . $id, $total_records);
 		//echo "test";
         $this->load->view('list_view_consumer_passbook_tpl', $params);
+    }
+	
+	
+		public function list_view_blp_tracek_user_passbook() {
+        $this->checklogin();
+       $id = $this->uri->segment(3);
+	
+		//echo $id;
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->count_total_list_view_blp_tracek_user_passbook($id,$srch_string);
+        $params["list_view_consumer_passbook"] = $this->Product_model->list_view_blp_tracek_user_passbook($id, $limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('product/list_view_consumer_passbook/' . $id, $total_records);
+		//echo "test";
+        $this->load->view('list_view_tracek_user_passbook_tpl', $params);
     }
 	
 	public function list_customerwise_consumer_loyalty_details() {
@@ -1707,6 +1772,52 @@ function list_assigned_products() {
 
         echo $isExists;
         exit;
+    }
+	
+	
+		public function list_tracek_users_loyalty_summary() {
+        $this->checklogin();
+        
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_all_customers($srch_string);
+        $params["list_all_consumers"] = $this->Product_model->list_all_customers($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('product/list_tracek_users_loyalty_summary', $total_records);
+		$params["total_records"] =  $total_records;
+		
+			$this->db->select_sum('points');
+			$this->db->from('customer_passbook');
+			$this->db->where('transaction_lr_type', "Loyalty");
+			//$this->db->where(array('transaction_lr_type' => "Loyalty", 'transaction_lr_type' => "Loyalty"));
+			$query=$this->db->get();
+			$Total_Earned_Points=$query->row()->points;		
+		    $params["Total_Earned_Points"] = $Total_Earned_Points; 
+		
+		    $this->db->select_sum('points');
+			$this->db->from('customer_passbook');
+			$this->db->where('transaction_lr_type', "Redemption");
+			$query=$this->db->get();
+			$Total_Points_Redeemed=$query->row()->points;	
+			$params["Total_Points_Redeemed"] = $Total_Points_Redeemed;
+			
+			$result = $this->db->select('loyalty_points')->from('loylties')->where('transaction_type_slug', 'minimum_locking_balance')->limit(1)->get()->row();
+			$minimum_locking_balance = $result->loyalty_points;
+			$params["minimum_locking_balance"] = $minimum_locking_balance;
+		
+        $this->load->view('list_tracek_users_loyalty_summary_tpl', $params);
     }
 	
 	
