@@ -52,6 +52,35 @@
       <div class="form-control"><?php echo $get_user_details[0]['l_name'];?></div>
     </div>
   </div>
+   <div class="form-group row">
+    <div class="col-sm-4">
+      <label for="form-field-8">Customer Microsite URL</label>
+      <div class="form-control"><?php echo $get_user_details[0]['customer_microsite_url'];?></div>
+    </div>
+    <div class="col-sm-4">
+      <label for="form-field-8">State</label>
+      <div class="form-control"><?php $states = get_state_name(31);?>
+   		  		<?php foreach($states as $val){
+					if($val['state_id']==$get_user_details[0]['state']){?>
+					<div class=""><?php  echo $val['state_name'];?></div>
+				<?php }}?></div>
+    </div>
+	<div class="col-sm-4">
+      <label for="form-field-8">City</label>
+      <div class="form-control"><?php  echo $get_user_details[0]['city_name'];?></div>
+    </div>
+  </div>
+    <div class="form-group row">
+    
+    <div class="col-sm-6">
+      <label for="form-field-8">Days for expiry from the date of Loyalty Point Credited </label>
+      <div class="form-control"><?php echo $get_user_details[0]['days_for_expiry_of_point_credited'];?></div>
+    </div>
+	 <div class="col-sm-6">
+      <label for="form-field-8">Days for Notification Before Expiry of Loyalty Point</label>
+      <div class="form-control"><?php echo $get_user_details[0]['days_for_notification_before_expiry_of_lps'];?></div>
+    </div>
+  </div>
  <?php if($this->session->userdata('admin_user_id')==1){ ?>
   
   <div class="form-group row">

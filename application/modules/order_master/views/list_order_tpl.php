@@ -251,8 +251,12 @@
           <td>
              <div class="hidden-sm hidden-xs action-buttons">
                  <a href="<?php  echo base_url().'order_master/view_order/'.$listData['order_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>
-				 
+				 <?php  $batch_status = get_products_batch_status_by_id($listData['product_id']);
+						if($batch_status=="Yes")
+						{
+				 ?>				 
 				  <a href="<?php  echo base_url().'order_master/list_print_batches/'.$listData['order_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> Batches</i></a>
+						<?php  } ?>
 
                  <?php 
 				 if((order_status($listData['order_status']))=="Pending") {
@@ -336,7 +340,7 @@
 <input name="order_no" id="order_no" type="hidden" value="<?php $datecodedno; ?>">
 <div class="form-group row">
 <div class="col-sm-12">
-<label for="form-field-8">Plant Namekk</label>
+<label for="form-field-8">Plant Name</label>
 <select class="form-control" name="plant_id" id="plant_id" onchange="return get_products(this.value);">
 <option value="">-Select Plant-</option>
 <?php 

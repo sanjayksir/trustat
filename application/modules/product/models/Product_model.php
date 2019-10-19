@@ -133,6 +133,16 @@
 	$message_above_code  		= ($this->input->post('message_above_code'))?$this->input->post('message_above_code'):'';
 	$message_below_code  		= ($this->input->post('message_below_code'))?$this->input->post('message_below_code'):'';
 	$space_between_twin_code  	= ($this->input->post('space_between_twin_code'))?$this->input->post('space_between_twin_code'):'';	
+	$space_for_message_above_code  	= ($this->input->post('space_for_message_above_code'))?$this->input->post('space_for_message_above_code'):'';
+	$space_for_message_below_code  	= ($this->input->post('space_for_message_below_code'))?$this->input->post('space_for_message_below_code'):'';
+	$space_between_code_rows  	= ($this->input->post('space_between_code_rows'))?$this->input->post('space_between_code_rows'):'';
+	$TextFontSize  	= ($this->input->post('TextFontSize'))?$this->input->post('TextFontSize'):'';
+	$print_codes_in_batches  	= ($this->input->post('print_codes_in_batches'))?$this->input->post('print_codes_in_batches'):'';
+	$height_of_the_bar_code  	= ($this->input->post('height_of_the_bar_code'))?$this->input->post('height_of_the_bar_code'):'';
+	$message_above_secondry_code  	= ($this->input->post('message_above_secondry_code'))?$this->input->post('message_above_secondry_code'):'';
+	$message_below_secondry_code  	= ($this->input->post('message_below_secondry_code'))?$this->input->post('message_below_secondry_code'):'';
+	$space_for_message_above_secondry_code  	= ($this->input->post('space_for_message_above_secondry_code'))?$this->input->post('space_for_message_above_secondry_code'):'';
+	$space_for_message_below_secondry_code  	= ($this->input->post('space_for_message_below_secondry_code'))?$this->input->post('space_for_message_below_secondry_code'):'';
 		## essential attributes
 		
 		$id			  = $this->input->post('id');
@@ -158,6 +168,16 @@
 					"message_above_code"	  => $message_above_code,
 					"message_below_code"	  => $message_below_code,
 					"space_between_twin_code"	  => $space_between_twin_code,
+					"space_for_message_above_code"	  => $space_for_message_above_code,
+					"space_for_message_below_code"	  => $space_for_message_below_code,
+					"space_between_code_rows"	  => $space_between_code_rows,
+					"TextFontSize"	  => $TextFontSize,
+					"print_codes_in_batches"	  => $print_codes_in_batches,
+					"height_of_the_bar_code"	  => $height_of_the_bar_code,
+					"message_above_secondry_code"	  => $message_above_secondry_code,
+					"message_below_secondry_code"	  => $message_below_secondry_code,
+					"space_for_message_above_secondry_code"	  => $space_for_message_above_secondry_code,
+					"space_for_message_below_secondry_code"	  => $space_for_message_below_secondry_code,
 					"created_by"		  => $is_parent,
 					"other_industry"	  => $Other_industry_val
  				);
@@ -205,11 +225,21 @@
 					"max_shipper_pack_level"	=> $max_shipper_pack_level,
 					"number_of_scans_for_super_loyalty"	=> $number_of_scans_for_super_loyalty,
 					"number_of_loyalty_points_for_super_loyalty"	=> $number_of_loyalty_points_for_super_loyalty,
+					"TextFontSize"	  => $TextFontSize,
+					"height_of_the_bar_code"	  => $height_of_the_bar_code,
+					"space_for_message_above_code"	  => $space_for_message_above_code,
+					"space_for_message_below_code"	  => $space_for_message_below_code,
+					"space_between_code_rows"	  => $space_between_code_rows,
+					"message_above_secondry_code"	  => $message_above_secondry_code,
+					"message_below_secondry_code"	  => $message_below_secondry_code,
+					"space_for_message_above_secondry_code"	  => $space_for_message_above_secondry_code,
+					"space_for_message_below_secondry_code"	  => $space_for_message_below_secondry_code,
 					"message_above_code"	=> $message_above_code,
 					"message_below_code"	=> $message_below_code,
 					"space_between_twin_code"	=> $space_between_twin_code,
 					"code_size"			  => $code_size,
 					"code_unity_type"	  => $code_unity_type,
+					"print_codes_in_batches"	  => $print_codes_in_batches,
 					"other_industry"	  => $Other_industry_val
 					
 				); //echo '<pre>';print_r($insertData);exit;
@@ -1270,7 +1300,7 @@
 		$fields = json_encode ( $fields );
 		
 		$headers = array (
-		        'Authorization: key=' . "AAAA446l5pE:APA91bE3nQ0T5E9fOH-y4w_dkOLU1e9lV7Wn0OmVLaKNnE8tXcZ0eC3buduhCwHL1ICaJ882IHfLy-akAe7Nih7M1RewkO9IzAR-ELdPgmORtb7KjriRrQspVHkIb9GRZPOjXuqfPInlOAly5-65sEEUbGlcoujMgw", 'Content-Type: application/json'
+		        'Authorization: key=' . "AAAA4LpXTK8:APA91bHs48XoX1_-4CdsBVyAAVceqQFavfo6Hz3K1U5Phmz2OgYsX7Pr_bNuE8x_PGJBcWs08WHx0JTGh-6goN7ozfl3yB8z9bYe_2ayk0Nmlp9uYOknIKDwq9czlj10rRGQ1bDZ9Nlp", 'Content-Type: application/json'
 		);
 		
 		$ch = curl_init ();
@@ -1298,7 +1328,7 @@
 		$fields = json_encode ( $fields );
 		
 		$headers = array (
-		        'Authorization: key=' . "AAAA446l5pE:APA91bE3nQ0T5E9fOH-y4w_dkOLU1e9lV7Wn0OmVLaKNnE8tXcZ0eC3buduhCwHL1ICaJ882IHfLy-akAe7Nih7M1RewkO9IzAR-ELdPgmORtb7KjriRrQspVHkIb9GRZPOjXuqfPInlOAly5-65sEEUbGlcoujMgw", 'Content-Type: application/json'
+		        'Authorization: key=' . "AAAA4LpXTK8:APA91bHs48XoX1_-4CdsBVyAAVceqQFavfo6Hz3K1U5Phmz2OgYsX7Pr_bNuE8x_PGJBcWs08WHx0JTGh-6goN7ozfl3yB8z9bYe_2ayk0Nmlp9uYOknIKDwq9czlj10rRGQ1bDZ9Nlp", 'Content-Type: application/json'
 		);
 		
 		$ch = curl_init ();
@@ -1330,15 +1360,26 @@
 			
 			
 	public function saveConsumerPassbookLoyalty1($transactionType = null,$consumer_id = null,$params = [],$transaction_lr_type = null,$points_redeemed = null){
-       
-	   
+       //sanjay
+	   //$customer_id = $this->session->userdata('admin_user_id');
 	   $TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>"TRUSTAT"))->get()->row();
-		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>"TRUSTAT"))->get()->row();
+		
+	   $TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>"TRUSTAT"))->get()->row();
+		
+		$TotalExpiredPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>"TRUSTAT"))->get()->row();	
 		
 		$FinalTotalAccumulatedPoints = $TotalAccumulatedPoints->points;
 		$FinalTotalRedeemedPoints = $TotalRedeemedPoints->points + $points_redeemed;
 		
-		$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
+		if(($TotalExpiredPoints->points)!='')
+		{
+			$FinalTotalExpiredPoints = $TotalExpiredPoints->points;
+		} else {
+			$FinalTotalExpiredPoints =0;
+			}	
+			
+		$CurrentBalance = $FinalTotalAccumulatedPoints - ($FinalTotalRedeemedPoints + $FinalTotalExpiredPoints);
+		//$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
 		
 		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
 		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
@@ -1356,8 +1397,10 @@
 		$Points_Redeemable = $Points_Redeemed_in_Multiple_of * $quotient;
 		$PointsShortOfRedumption =$Points_Redeemed_in_Multiple_of-$remainder;
         
-		
-		
+		$loyalty_points_expiry_days = loyalty_points_expiry_days($customer_id);
+		$Current_Date = date('Y-m-d');
+		$loyalty_points_expiry_date = date('Y-m-d', strtotime($Current_Date. ' + ' . $loyalty_points_expiry_days. ' days'));
+		$FinalTotalRedeemedExpiredPoints = $FinalTotalRedeemedPoints + $FinalTotalExpiredPoints;
 		$date = new DateTime();
         $now = $date->format('Y-m-d H:i:s');
        // $date->modify('+3    month');
@@ -1371,11 +1414,12 @@
             'transaction_lr_type' => $transaction_lr_type,
 			'customer_loyalty_type' => "TRUSTAT",
 			'total_accumulated_points' => $FinalTotalAccumulatedPoints,
-			'total_redeemed_points' => $FinalTotalRedeemedPoints,
+			'total_redeemed_points' => $FinalTotalRedeemedExpiredPoints,
             'current_balance' => $CurrentBalance,
 			'points_redeemable' => $Points_Redeemable,
 			'points_short_of_redumption' => $PointsShortOfRedumption,
-            'transaction_date' => $now
+            'transaction_date' => $now,
+            'loyalty_points_expiry_date' => $loyalty_points_expiry_date
         ];
         
         return $this->db->insert('consumer_passbook',$input);
@@ -1436,11 +1480,15 @@
 		if($customer_loyalty_type=="Brand"){
 		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
 		
-		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();		
+		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+
+		$TotalExpiredPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
 			} else {
-		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();
+		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
 		
-		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();			
+		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+
+		$TotalExpiredPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
 		}
 		
 		$FinalTotalAccumulatedPoints = ($TotalAccumulatedPoints->points) + $TRPoints;
@@ -1469,8 +1517,17 @@
 			
 		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
 		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
+		
+		if(($TotalExpiredPoints->points)!='')
+		{
+			$FinalTotalExpiredPoints = $TotalExpiredPoints->points;
+		} else {
+			$FinalTotalExpiredPoints =0;
+			}	
 			
-		$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
+		$CurrentBalance = $FinalTotalAccumulatedPoints - ($FinalTotalRedeemedPoints + $FinalTotalExpiredPoints);
+			
+		//$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
 		$Min_Locking_Balance = $result2->loyalty_points;
 		
 		$CurrentBalanceAfterMinBalanceLocking = $CurrentBalance - $Min_Locking_Balance;
@@ -1490,7 +1547,11 @@
 		$PointsShortOfRedumption = 0;	
 		}
 		
-		//testing
+				
+		$loyalty_points_expiry_days = loyalty_points_expiry_days($customer_id);
+		$Current_Date = date('Y-m-d');
+		$loyalty_points_expiry_date = date('Y-m-d', strtotime($Current_Date. ' + ' . $loyalty_points_expiry_days. ' days'));
+		$FinalTotalRedeemedExpiredPoints = $FinalTotalRedeemedPoints + $FinalTotalExpiredPoints;
 		$date = new DateTime();
         $now = $date->format('Y-m-d H:i:s');
        // $date->modify('+3    month');
@@ -1505,11 +1566,12 @@
             'transaction_lr_type' => $transaction_lr_type,
 			'customer_loyalty_type' => get_customer_loyalty_type_by_customer_id($customer_id),
 			'total_accumulated_points' => $FinalTotalAccumulatedPoints,
-			'total_redeemed_points' => $FinalTotalRedeemedPoints,
+			'total_redeemed_points' => $FinalTotalRedeemedExpiredPoints,
             'current_balance' => $CurrentBalance,
 			'points_redeemable' => $Points_Redeemable,
 			'points_short_of_redumption' => $PointsShortOfRedumption,
-            'transaction_date' => $now
+            'transaction_date' => $now,
+            'loyalty_points_expiry_date' => $loyalty_points_expiry_date
         ];
         
         return $this->db->insert('consumer_passbook',$input);
@@ -2285,7 +2347,7 @@
 		$this->db->from("consumer_passbook");	
 		$this->db->distinct();	
 		$this->db->group_by('customer_id');
-		//$this->db->where('consumer_id', $id);
+		//$this->db->where('customer_id != ', 1);
 		$this->db->order_by("transaction_date", " desc");
 		$this->db->limit($limit, $start);
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
@@ -2356,12 +2418,12 @@
 		return $resultDt ;
     }
 	
-
+// Sanjay 
 	function count_total_list_view_blp_consumer_passbook($id,$srch_string='') {
 		
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%') and (consumer_id=$id)");
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%' OR customer_id LIKE '%$srch_string%') and (consumer_id=$id)");
 			}else{
 				//$this->db->where(array('consumer_id'=>$id));
 			}			
@@ -2384,7 +2446,7 @@
 			//$id = 88;
 			//$id = $this->uri->segment(3);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%') and (consumer_id=$id)");
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%' OR customer_id LIKE '%$srch_string%') and (consumer_id=$id)");
 			}else{
 				$this->db->where(array('consumer_id'=>$id));
 			}
@@ -2393,6 +2455,28 @@
 		$this->db->from("consumer_passbook");		
 		$this->db->where('consumer_id', $id);
 		$this->db->where('customer_loyalty_type', "Brand");
+		$this->db->order_by("transaction_date", "desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+		function list_view_blp_consumer_passbook_cust_dist($id,$limit,$start,$srch_string='') {
+		//echo $id;
+			//$this->db->where('created_by', $user_id);
+			//$id = 88;
+			//$id = $this->uri->segment(3);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%' OR customer_id LIKE '%$srch_string%') and (consumer_id=$id)");
+			}else{
+				$this->db->where(array('consumer_id'=>$id));
+			}
+			
+		$this->db->select("*");
+		$this->db->from("consumer_passbook");		
+		$this->db->where('consumer_id', $id);
+		$this->db->where('customer_loyalty_type', "Brand");
+		$this->db->group_by('consumer_id');
 		$this->db->order_by("transaction_date", "desc");
 		$this->db->limit($limit, $start);
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
@@ -2415,10 +2499,10 @@
 		$this->db->from("consumer_passbook");	
 		if($user_id==1){
 			//$this->db->where('customer_id', $user_id);
-			$this->db->where(array('customer_id'=>$id, 'transaction_lr_type'=>"Loyalty"));
+			$this->db->where(array('customer_id'=>$id));
 		}
 		//$this->db->where('customer_id', $id);
-		$this->db->where(array('customer_id'=>$id, 'transaction_lr_type'=>"Loyalty"));
+		$this->db->where(array('customer_id'=>$id));
 		$this->db->order_by("id", " desc");
 		$this->db->limit($limit, $start);
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
@@ -2437,7 +2521,54 @@
 		$this->db->select('count(1) as total_rows');
 		$this->db->from('consumer_passbook');
 		//$this->db->where('customer_id', $id);
-		$this->db->where(array('customer_id'=>$id, 'transaction_lr_type'=>"Loyalty"));
+		$this->db->where(array('customer_id'=>$id));
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+	
+	
+	function list_customerwise_consumer_loyalty_redemption($id,$limit,$start,$srch_string='') {
+		//echo $id;
+			//$this->db->where('created_by', $user_id);
+			//$id = 88;
+			//$id = $this->uri->segment(3);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%') and (customer_id=$id)");
+			}else{
+				$this->db->where(array('customer_id'=>$id));
+			}
+			
+		$this->db->select("*");
+		$this->db->from("consumer_passbook");	
+		if($user_id==1){
+			//$this->db->where('customer_id', $user_id);
+			$this->db->where(array('customer_id'=>$id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>"Brand"));
+		}
+		//$this->db->where('customer_id', $id);
+		$this->db->where(array('customer_id'=>$id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>"Brand"));
+		$this->db->order_by("id", " desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	function count_total_list_customerwise_consumer_loyalty_redemption($id,$srch_string='') {
+		
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%') and (customer_id=$id)");
+			}else{
+				$this->db->where(array('customer_id'=>$id));
+			}			
+		
+		$this->db->select('count(1) as total_rows');
+		$this->db->from('consumer_passbook');
+		//$this->db->where('customer_id', $id);
+		$this->db->where(array('customer_id'=>$id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>"Brand"));
     		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -2758,7 +2889,33 @@ public function findLoylityBySlug($transactionType = null){
 		return $resultDt ;
     }
 	
-	
+public function sendFCM($mess,$id) {
+		$url = 'https://fcm.googleapis.com/fcm/send';
+		
+		$fields = array (
+		        'to' => $id,
+		         
+		         'notification' => array('title' => 'Loyalty Approved', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+				  'data' => array('title' => 'Loyalty Approved', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
+		       
+		);
+		$fields = json_encode ( $fields );
+		
+		$headers = array (
+		        'Authorization: key=' . "AAAA4LpXTK8:APA91bHs48XoX1_-4CdsBVyAAVceqQFavfo6Hz3K1U5Phmz2OgYsX7Pr_bNuE8x_PGJBcWs08WHx0JTGh-6goN7ozfl3yB8z9bYe_2ayk0Nmlp9uYOknIKDwq9czlj10rRGQ1bDZ9Nlp", 'Content-Type: application/json'
+		);
+		
+		$ch = curl_init ();
+		curl_setopt ( $ch, CURLOPT_URL, $url );
+		curl_setopt ( $ch, CURLOPT_POST, true );
+		curl_setopt ( $ch, CURLOPT_HTTPHEADER, $headers );
+		curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, true );
+		curl_setopt ( $ch, CURLOPT_POSTFIELDS, $fields );
+		
+		$result = curl_exec ( $ch );
+		//curl_close ( $ch );
+		return $result;
+		}	
 		
 }
 

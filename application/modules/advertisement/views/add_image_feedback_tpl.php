@@ -94,7 +94,7 @@
 
           <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
 
-            <input class="btn btn-info" type="submit" name="submit" value="Save Question" id="save" onClick="this.disabled=true; this.value='Saving…';" />
+            <input class="btn btn-info" type="submit" name="submit" value="Save Question" id="save" onClick="this.disabled; this.value='Saving…';" />
           </div>
 
         </div>

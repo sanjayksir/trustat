@@ -73,7 +73,7 @@
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <div class="input-group">
-                                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Order Number or Product Name">
+                                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Name">
                                                                 <span class="input-group-btn">
                                                                     <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                     <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -90,9 +90,10 @@
 																<th>Batch ID</th>
 																<th>Batch Quantity</th>
 																<th>Print Date</th>
-																<th>Order Number</th>
-																<th>Ordered Qty</th>
+																<!--
+																<th>Ordered Qty</th>-->
 																<th>Product Name</th>
+																<th>Code Unity Type</th>
 																<th>Action</th>
                                                             </tr>
                                                         </thead>
@@ -133,10 +134,10 @@
 												    <td><?php  echo $listData['print_batch_id']; ?></td>
 													<td><?php echo $listData['last_printed_rows']; ?></td>
 													 <td><?php  if($listData['last_printed_date']!='0000-00-00'){echo date('j M Y H:i:s D',strtotime($listData['last_printed_date']));}else{echo '';}; ?></td>
-												    <td><?php  echo $listData['order_no']; ?></td>
-													<td><?php echo $listData['total_quantity']; ?></td>
+												   <!-- <td><?php  echo $listData['order_no']; ?></td>
+													<td><?php echo $listData['total_quantity']; ?></td>-->
 												     <td><?php echo $listData['product_name']; ?></td>
-                                                        
+                                                      <td><?php echo $listData['print_code_unity_type']; ?></td>
                                                         
 
                                                         
@@ -144,11 +145,24 @@
           <td>
              <div class="hidden-sm hidden-xs action-buttons">
                  <a href="<?php  echo base_url().'order_master/list_codes_for_batch_id/'.$listData['print_batch_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> View Codes</i></a>
+				 <?php  $batch_status = get_products_batch_status_by_id($listData['product_id']);
+						if($batch_status=="Yes")
+						{
+						?>	
 				 <?php  $active_batch_allow = $listData['active_batch_allow'];
 				 if($active_batch_allow==0){ ?>
-					 <a href="<?php  echo base_url().'order_master/list_codes_for_batch_id/'.$listData['print_batch_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> View Activated Codes </i></a>
-				 <?php }else { ?>
+				  Codes Activated
+					<!-- <a href="<?php  echo base_url().'order_master/list_codes_for_batch_id/'.$listData['print_batch_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> View Activated Codes </i></a>-->
+				 <?php }else { if($listData['print_code_unity_type']=="Twin") { ?>
+				 
+						<a href="<?php  echo base_url().'order_master/activate_twin_codes/'.$listData['print_batch_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> Activate Twin Codes</i></a>
+						
+							<?php  }else { ?>
 					  <a href="<?php  echo base_url().'order_master/activate_codes/'.$listData['print_batch_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> Activate Codes</i></a>
+					  
+					  
+					  
+				 <?php  } } ?>
 				 <?php
 				 }
 				 ?>
@@ -229,7 +243,7 @@
 <input name="order_no" id="order_no" type="hidden" value="<?php $datecodedno; ?>">
 <div class="form-group row">
 <div class="col-sm-12">
-<label for="form-field-8">Plant Namekk</label>
+<label for="form-field-8">Plant Name</label>
 <select class="form-control" name="plant_id" id="plant_id" onchange="return get_products(this.value);">
 <option value="">-Select Plant-</option>
 <?php 

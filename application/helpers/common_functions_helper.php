@@ -6855,6 +6855,23 @@ function get_products_name_by_id($id){
  	return $res_arr[0]['name'];
  }
  
+ function get_products_batch_status_by_id($id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($id)){
+			$id2 = checkProductsId_having_other_industry($id);
+			$ids = explode(',',$id);
+			$get_ids = array_diff($ids, $id2);
+			$ci->db->select('group_concat(print_codes_in_batches) as print_codes_in_batches');
+			$ci->db->from('products');
+ 			$ci->db->where_in('id',$get_ids);
+			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['print_codes_in_batches'];
+ }
+ 
  function get_industry_name_by_id($id){ 
 	$res='0';
 	$ci = & get_instance();
@@ -6919,6 +6936,34 @@ function get_products_name_by_id($id){
  	return $res_arr[0]['created_by'];
  }
  
+   function get_customer_id_by_promotion_id($promotion_id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($promotion_id)){
+			$ci->db->select('group_concat(user_id) as user_id');
+			$ci->db->from('push_promotion_master');
+ 			$ci->db->where_in('promotion_id',$promotion_id);
+			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['user_id'];
+ }
+ 
+   function get_product_id_by_promotion_id($promotion_id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($promotion_id)){
+			$ci->db->select('group_concat(product_id) as product_id');
+			$ci->db->from('push_promotion_master');
+ 			$ci->db->where_in('promotion_id',$promotion_id);
+			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['product_id'];
+ }
+ 
    function get_customer_loyalty_type_by_customer_id($id){ 
 	$res='0';
 	$ci = & get_instance();
@@ -6946,6 +6991,20 @@ function get_products_name_by_id($id){
 			$res_arr = $query->result_array();
  		}
  	return $res_arr[0]['days_for_expiry_of_point_credited'];
+ }
+ 
+   function days_for_notification_before_expiry($customer_id){ 
+	$res='0';
+	$ci = & get_instance();
+	 
+ 		if(!empty($customer_id)){
+			$ci->db->select('group_concat(days_for_notification_before_expiry_of_lps) as days_for_notification_before_expiry_of_lps');
+			$ci->db->from('backend_user');
+ 			$ci->db->where_in('user_id',$customer_id);
+			$query= $ci->db->get(); //echo '***'.$ci->db->last_query();
+			$res_arr = $query->result_array();
+ 		}
+ 	return $res_arr[0]['days_for_notification_before_expiry_of_lps'];
  }
  
  function get_products_attribute_list_by_id($id){ 

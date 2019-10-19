@@ -159,9 +159,10 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                             <thead>
                                 <tr>
 														<!--<th>S No.</th>-->
-													   <th>Customer Namecc<?php echo $list_all_consumers->customer_id; ?></th>
+													   <th>Customer Name<?php echo $list_all_consumers->customer_id; ?></th>
 													   <th>Total Purchased Points</th>
-														<th>Points awarded to Consumers</th>
+														<th>Total Points awarded</th>
+														<th>Brand Points Redeemed</th>
 														<th>Closing Balance</th>
                                                        <th>Loyalty Details</th>
 
@@ -187,9 +188,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 				
 				
 								?></td>
-								<td><?php echo total_approved_points2($attr['customer_id']);  ?> </td>  
-                                <td><?php //echo base_url(); 
-								
+								<td><?php echo total_approved_points2($attr['customer_id']);  ?> </td>  								
+                                <td><?php //echo base_url(); 								
 								if(base_url()=='http://localhost/trackingportal/') {									
 									mysql_connect("localhost", "root", "");
 								mysql_select_db("trackingportaldb");								
@@ -205,17 +205,35 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 							while($row = mysql_fetch_array($results)){
 							$TE_Points = $row['points'];
 							
-							echo $TE_Points;
-							
+							echo $TE_Points;							
 							}
-
-
 								?></td>
-                           
+                           <td><?php //echo base_url(); 								
+								if(base_url()=='http://localhost/trackingportal/') {									
+									mysql_connect("localhost", "root", "");
+								mysql_select_db("trackingportaldb");								
+								} else {								
+								mysql_connect("localhost", "tpdbuser", "india@123");
+								mysql_select_db("trackingprortaldb");
+								}
+								
+								$some_q2 = "SELECT SUM(points) AS `points` FROM consumer_passbook where customer_id = '".$attr['customer_id']."' AND transaction_lr_type = 'Redemption' AND customer_loyalty_type = 'Brand'";
+
+							$results2 = mysql_query($some_q2) or die(mysql_error());
+
+							while($row2 = mysql_fetch_array($results2)){
+							$TE_Points2 = $row2['points'];
+							
+							echo $TE_Points2;							
+							}
+								?></td>
                                                
-                                                 <td><?php echo total_approved_points2($attr['customer_id']) - $TE_Points; ?> </td> 
+                                                 <td><?php echo total_approved_points2($attr['customer_id']) - $TE_Points + $TE_Points2; ?> </td> 
 													<td><?php echo anchor("product/list_customerwise_consumer_loyalty_details/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Loyalty Details</i>', array('class' => 'btn btn-xs btn-info','title'=>' Loyalty Details')); ?>  
-													<?php echo anchor("textmessages/list_approved_purchases_by_customer/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Customer Purchase</i>', array('class' => 'btn btn-xs btn-info','title'=>'Customer Purchase')); ?>
+													<?php echo anchor("textmessages/list_approved_purchases_by_customer/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Purchases</i>', array('class' => 'btn btn-xs btn-info','title'=>'Customer Purchase')); ?>
+													
+													<?php //echo anchor("product/list_customerwise_consumer_loyalty_redemption_details/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> B. Redemption</i>', array('class' => 'btn btn-xs btn-info','title'=>'Brand Redemption')); ?>
+													
 													<?php //echo anchor("product/list_view_consumer_feedback_details/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> Feedback Report data</i>', array('class' => 'btn btn-xs btn-info','title'=>' Feedback Report data')); ?>
 													<br />
 												

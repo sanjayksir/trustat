@@ -132,6 +132,9 @@ $route['api/list-responses-on-complaint/(:any)'] = 'Api/Consumer/ListResponsesOn
 $route['api/list-consumer-notifications'] = 'Api/Consumer/ListConsumerNotifications';
 
 $route['api/consumer_loylty_deals/(:any)/(:any)'] = 'Api/Consumer/consumerLoyltyDeals/$1/$2';
+
+$route['api/user/consumer_profile_fields_available_update'] = 'Api/Consumer/ConsumerProfileFieldsAvailableUpdate'; 
+$route['api/user/consumer_profile_fields_require_update'] = 'Api/Consumer/ConsumerProfileFieldsRequireUpdate'; 
 //$route['api/list-responses-on-complaint/(:any)'] = 'Api/Consumer/ListResponsesOnComplaint/$1';
 //$route['api/consumerpassbook'] = 'Api/Consumer/ConsumerPassBook';
 
@@ -139,6 +142,7 @@ $route['api/consumer_loylty_deals/(:any)/(:any)'] = 'Api/Consumer/consumerLoylty
 $route['api/microsite_redeem_loylty_points/(:any)/(:any)/(:any)'] = 'Api/Consumer/MicrositeRedeemLoyltyPoints/$1/$2/$3';
 
 $route['api/expire_consumer_loyalty_points'] = 'Api/Consumer/ExpireConsumerLoyaltyPoints/';
+$route['api/pre_loyalty_points_expiry_notifications'] = 'Api/Consumer/PreLoyaltyPointsExpiryNotifications/';
 
 $route['api/faqs_data'] = 'Api/Consumer/FaqsAndOtherData';
 $route['api/terms_and_conditions'] = 'Api/Consumer/TermsAndConditions';
@@ -164,6 +168,8 @@ $route['api/user/list_consumer_kids'] = 'Api/Consumer/ListConsumerKids';
 $route['api/products-advertisements'] = 'Api/ScannedProduct/productsAdvertisements';
 $route['api/products-surveys'] = 'Api/ScannedProduct/productsSurveys';
 
+$route['api/advertisement_read_status_update'] = 'Api/ScannedProduct/AdvertisementReadStatusUpdate';
+$route['api/survey_read_status_update'] = 'Api/ScannedProduct/SurveyReadStatusUpdate';
 
 $route['api/scan-product'] = 'Api/ScannedProduct/productScanning';
 $route['api/delete-scaned-product'] = 'Api/ScannedProduct/DeleteScanedProduct';
@@ -295,7 +301,7 @@ $route['reports/list_feedback_on_product'] = 'order_master/barcode/list_feedback
 $route['reports/list_warranty_claims'] = 'order_master/barcode/list_warranty_claims';
 
 $route['surveys/view_survey_details/(:any)'] = 'surveys/view_survey_details/$1';
-$route['surveys/view_advertisement_details/(:any)'] = 'surveys/view_advertisement_details/$1';
+$route['advertisements/view_advertisement_details/(:any)'] = 'advertisements/view_advertisement_details/$1';
 
 
 $route['reports/ship_out_order_report_list'] = 'order_master/barcode/ship_out_order_report_list';

@@ -117,8 +117,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th class="hidden-480">Product Industry</th>
                                     <!-- <th>Created By</th>-->
                                     <th>Creation Date</th>
-                                    <th>Edit/DeleteProduct </th>
-                                    <th>Product Review (View/Edit/Add)</th>
+                                    <th>Edit/Delete Product </th>
+                                    <th>View</th>
                                     <th>Feedback Questions (View/Edit/Add)</th>
                                 </tr>
                             </thead>
@@ -171,6 +171,10 @@ $this->load->view('../includes/admin_top_navigation'); ?>
  																&nbsp;<i class="ace-icon fa fa-plus-square bigger-120"></i>
  															</a>
 															 &nbsp;
+															 <a title="add media" href="<?php echo base_url();?>backend/product_attrribute/att_detail/<?php echo $attr['id'];?>" class="btn btn-xs btn-info">
+ 																<i class="ace-icon fa fa-camera-retro"></i>
+ 															</a>
+															&nbsp;
 															<a href="<?php echo base_url();?>product/manage_packaging/<?php echo $attr['id'];?>" title="Manage Packaging"  class="btn btn-xs btn-info">
  																<i class="fa fa-sort-numeric-asc bigger-120"></i>
  															</a>
@@ -185,9 +189,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
  													</td> 
                                                     <td> 
  														<div class="hidden-sm hidden-xs btn-group">
-   															<a title="add media" href="<?php echo base_url();?>backend/product_attrribute/att_detail/<?php echo $attr['id'];?>" class="btn btn-xs btn-info">
- 																<i class="ace-icon fa fa-camera-retro"></i>
- 															</a>&nbsp;&nbsp; <a title="View" href="<?php echo base_url();?>backend/product_attrribute/view/<?php echo $attr['id'];?>" class="btn btn-xs btn-info">
+   															&nbsp;&nbsp; <a title="View" href="<?php echo base_url();?>backend/product_attrribute/view/<?php echo $attr['id'];?>" class="btn btn-xs btn-info">
  																<i class="fa fa-eye" aria-hidden="true"></i>
 
  															</a>
@@ -195,7 +197,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
   													</td>
                                                     <td> 
  														<div class="hidden-sm hidden-xs btn-group">
-   															<a title="Product Description Feedback" href="<?php echo base_url();?>product/ask_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa 	fa-barcode" aria-hidden="true"></i></a> 
+														<!--
+   															<a title="Product Description Feedback" href="<?php //echo base_url();?>product/ask_feedback/<?php //echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa 	fa-barcode" aria-hidden="true"></i></a> -->
 															<a title="Product Image Feedback" href="<?php echo base_url();?>product/ask_image_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa 	fa-file-image-o" aria-hidden="true"></i></a>
 															<a title="Product Video Feedback" href="<?php echo base_url();?>product/ask_video_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-video-camera" aria-hidden="true"></i> </a>
 															<a title="Product Audio Feedback" href="<?php echo base_url();?>product/ask_audio_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-bullhorn" aria-hidden="true"></i> </a>&nbsp;

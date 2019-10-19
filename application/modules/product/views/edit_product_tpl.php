@@ -392,14 +392,14 @@ if(!empty($isOtherIndustry)){
          <!--------------------------------- Essential attributes-----------------------------------> 
 		  <div class="form-group row">
           <div class="col-sm-4">
-				<label for="form-field-8">Code type in printing</label>
+				<label for="form-field-8">Barcode Type – Line Barcode or QR</label>
 				<select name="code_type" id="code_type" class="form-control">
 				 <option value="barcode" <?php echo ($dt['code_type']=='barcode')?'selected':'';?>>Barcode</option>
 				 <option value="qrcode"  <?php echo ($dt['code_type']=='qrcode')?'selected':'';?>>Qrcode</option>
 				</select>
   			</div>
 			<div class="col-sm-4">
-				<label for="form-field-8">Code Activation Type</label>
+				<label for="form-field-8">Code Activation Type – Pre or Post</label>
 				<?php //echo $dt['code_activation_type'];
 				$one='1';
 				$zero='0';
@@ -414,7 +414,7 @@ if(!empty($isOtherIndustry)){
 				</select>
  		    </div>
             <div class="col-sm-4">
-				<label for="form-field-8">Methods of Delivery</label>
+				<label for="form-field-8"> Method of Delivery – Printing by Super Admin or CCC</label>
 				<select name="delivery_method" id="delivery_method" class="form-control">
 				 <option value="1"  <?php echo ($dt['delivery_method']=='1')?'selected':'';?>>Physical Printing by Super Admin</option>
 				 <option value="2"  <?php echo ($dt['delivery_method']=='2')?'selected':'';?>>Physical Printing by CCC Admin</option>
@@ -425,64 +425,64 @@ if(!empty($isOtherIndustry)){
           </div>   
           <div class="form-group row"> 
            <div class="col-sm-4">
-				<label for="form-field-8">Code Key Type</label>
+				<label for="form-field-8">Code Key Type – Serial or Random</label>
 				<select name="code_key_type" id="code_key_type" class="form-control">
 				 <option value="serial"  <?php echo ($dt['code_key_type']=='serial')?'selected':'';?>> Serial Unique</option>
 				 <option value="random"  <?php echo ($dt['code_key_type']=='random')?'selected':'';?>>Random Unique</option> 
 				</select>
  		    </div> 
-            
             <div class="col-sm-4">
-				<label for="form-field-8">Size of the Code (mm)</label>
-				<!--
-				<select name="code_size" id="code_size" class="form-control">
-				 <option value="S"  <?php echo ($dt['code_size']=='S')?'selected':'';?>>Small</option>
-				 <option value="M"  <?php echo ($dt['code_size']=='M')?'selected':'';?>>Medium</option>
-				 <option value="L"  <?php echo ($dt['code_size']=='L')?'selected':'';?>>Large</option>
-				</select>
-				-->
-				<input type="number" name="code_size" min="3" max="600" step="0.01" value="<?php echo $dt['code_size']; ?>" id="code_size" class="form-control" />
- 		    </div>
-			<div class="col-sm-4">
-				<label for="form-field-8">Code Unity Type</label>
+				<label for="form-field-8">Code Unity Type – Single or Twin</label>
 				<select name="code_unity_type" id="code_unity_type" class="form-control">
 				 <option value="Single"  <?php echo ($dt['code_unity_type']=='Single')?'selected':'';?>>Single</option>
 				 <option value="Twin"  <?php echo ($dt['code_unity_type']=='Twin')?'selected':'';?>>Twin</option>
 				</select>
  		    </div>
-			
+			<div class="col-sm-4">
+				<label for="form-field-8">Print codes in Batches?</label>
+			<select name="print_codes_in_batches" id="print_codes_in_batches" class="form-control">
+				<option value="Yes"  <?php echo ($dt['print_codes_in_batches']=='Yes')?'selected':'';?>>Yes</option>
+				<option value="No"  <?php echo ($dt['print_codes_in_batches']=='No')?'selected':'';?>>No</option>
+			</select>
+ 		    </div>			
   		</div> 
 		<div class="form-group row"> 
            <div class="col-sm-4">
 				<label for="form-field-8">Registration Pack</label>
-				<select name="registration_pack" id="registration_pack" class="form-control">
-				
+				<select name="registration_pack" id="registration_pack" class="form-control">				
 				<option value="Yes"  <?php echo ($dt['registration_pack']=='Yes')?'selected':'';?>>Yes</option>
-				<option value="No"  <?php echo ($dt['registration_pack']=='No')?'selected':'';?>>No</option>
-				 
+				<option value="No"  <?php echo ($dt['registration_pack']=='No')?'selected':'';?>>No</option>				 
 				</select>
- 		    </div> 
-            
+ 		    </div>             
             <div class="col-sm-4">
 				<label for="form-field-8">Retailer Pack</label>
 				<select name="retailer_pack" id="retailer_pack" class="form-control">
-				 <option value="Yes"  <?php echo ($dt['retailer_pack']=='Yes')?'selected':'';?>>Yes</option>
+				<option value="Yes"  <?php echo ($dt['retailer_pack']=='Yes')?'selected':'';?>>Yes</option>
 				<option value="No"  <?php echo ($dt['retailer_pack']=='No')?'selected':'';?>>No</option>
 				</select>
- 		    </div>
-			
+ 		    </div>			
 			<div class="col-sm-4">
 				<label for="form-field-8">Min Shipper Pack Level </label>
 				<input type="number" name="min_shipper_pack_level" min="2" step="1" id="min_shipper_pack_level" class="form-control" value="<?php echo $dt['min_shipper_pack_level'];?>" />
-				
-				<!--
-				<select name="min_shipper_pack_level" id="min_shipper_pack_level" class="form-control">
-				 <option value="Single">Single</option>
-				 <option value="Twin">Twin</option>
-				 -->
 				</select>
  		    </div>
   		</div>
+		<div class="form-group row"> 
+           <div class="col-sm-4">
+				<label for="form-field-8">Text Font Size</label>
+				<input type="number" name="TextFontSize" id="TextFontSize"  min="4" step=".01" max="50" value="<?php echo $dt['TextFontSize'];?>" placeholder="in mm" class="form-control" />
+ 		    </div> 
+			
+			<div class="col-sm-4">
+				<label for="form-field-8">Height of the barcode(mm)</label>
+			<input type="number" name="height_of_the_bar_code" id="height_of_the_bar_code"  min="1" step=".01" max="50" value="<?php echo $dt['height_of_the_bar_code'];?>" placeholder="in mm" class="form-control" />
+ 		    </div>
+			<div class="col-sm-4">
+				<label for="form-field-8">Size of the Code (mm)</label>				
+				<input type="number" name="code_size" min="3" max="600" step="0.01" value="<?php echo $dt['code_size']; ?>" id="code_size" class="form-control" />
+ 		    </div>
+  		</div>
+		
 		<div class="form-group row"> 
            <div class="col-sm-4">
 				<label for="form-field-8">Max Shipper Pack Level </label>
@@ -503,20 +503,59 @@ if(!empty($isOtherIndustry)){
 				<input type="number" name="number_of_loyalty_points_for_super_loyalty" min="0" step="1" id="number_of_loyalty_points_for_super_loyalty" class="form-control" value="<?php echo $dt['number_of_loyalty_points_for_super_loyalty'];?>" required />
  		    </div>
   		</div>
-		<div class="form-group row"> 
-           <div class="col-sm-4">
+		
+		<div class="form-group row">            
+			<div class="col-sm-4">
+				<label for="form-field-8">Space between QR Code and Barcode(mm) </label>
+				<input type="number" name="space_between_twin_code" id="space_between_twin_code" min="1" step=".01" max="50"  value="<?php echo $dt['space_between_twin_code'];?>" placeholder="How much Space do you need between twin Codes(mm)" class="form-control" />
+ 		    </div> 
+			<div class="col-sm-4">
+				<label for="form-field-8">Space for Message above the Code(mm)</label>
+				<input type="number" name="space_for_message_above_code" id="space_for_message_above_code"  min="1" step=".01" max="50" value="<?php echo $dt['space_for_message_above_code'];?>" placeholder="in mm" class="form-control" />
+ 		    </div> 
+			<div class="col-sm-4">
 				<label for="form-field-8">Message print above the Code</label>
 				<input type="text" name="message_above_code" id="message_above_code" value="<?php echo $dt['message_above_code'];?>" placeholder="Please enter the message to be print above the Code" class="form-control" />
+ 		  </div>
+  		</div>
+		<div class="form-group row">            
+			
+			<div class="col-sm-4">
+				<label for="form-field-8">Space for Message below the Code(mm)</label>
+				<input type="number" name="space_for_message_below_code" id="space_for_message_below_code"  min="1" step=".01" max="50" value="<?php echo $dt['space_for_message_below_code'];?>" placeholder="in mm" class="form-control" />
  		    </div> 
 			<div class="col-sm-4">
 				<label for="form-field-8">Message print below the Code</label>
 				<input type="text" name="message_below_code" id="message_below_code" value="<?php echo $dt['message_below_code'];?>" placeholder="Please enter the message to be print below the Code" class="form-control" />
+ 		    </div>
+			 <div class="col-sm-4">
+				<label for="form-field-8">Space between Code Rows(mm)</label>
+	<input type="number" name="space_between_code_rows" id="space_between_code_rows"  min="1" step=".01" max="50" value="<?php echo $dt['space_between_code_rows'];?>" placeholder="in mm" class="form-control" />
+ 		    </div>
+  		</div>
+		
+		<div class="form-group row"> 
+           <div class="col-sm-4">
+				<label for="form-field-8">Message above Secondary Code of twin</label>
+				<input type="text" name="message_above_secondry_code" id="message_above_secondry_code" value="<?php echo $dt['message_above_secondry_code'];?>" placeholder="Please enter the Message above Secondary Code of twin" class="form-control" />
  		    </div> 
 			<div class="col-sm-4">
-				<label for="form-field-8">Space between QR Code and Barcode(mm) </label>
-				<input type="text" name="space_between_twin_code" id="space_between_twin_code" value="<?php echo $dt['space_between_twin_code'];?>" placeholder="How much Space do you need between twin Codes(mm)" class="form-control" />
- 		    </div> 
+				<label for="form-field-8">Message Below Secondary Code of twin</label>
+			<input type="text" name="message_below_secondry_code" id="message_below_secondry_code" value="<?php echo $dt['message_below_secondry_code'];?>" placeholder="Please enter the Message above Secondary Code of twin" class="form-control" />
+ 		    </div>
+			<div class="col-sm-4">
+				<label for="form-field-8">Space for Message above Secondary Code of twin(mm)</label>
+			<input type="number" name="space_for_message_above_secondry_code" id="space_for_message_above_secondry_code"  min="1" step=".01" max="50" value="<?php echo $dt['space_for_message_above_secondry_code'];?>" placeholder="in mm" class="form-control" />
+ 		    </div>
   		</div>
+		
+		<div class="form-group row">            
+			<div class="col-sm-4">
+				<label for="form-field-8">Space for Message Below Secondary  Code of twin(mm)</label>
+			<input type="number" name="space_for_message_below_secondry_code" id="space_for_message_below_secondry_code"  min="-10" step=".01" max="50" value="<?php echo $dt['space_for_message_below_secondry_code'];?>" placeholder="in mm" class="form-control" />
+ 		    </div>
+  		</div>
+		
 		<!--------------------------------- Essential attributes ends-----------------------------------> 
          
          <hr>

@@ -209,7 +209,7 @@
 <input name="order_no" id="order_no" type="hidden" value="<?php $datecodedno; ?>">
 <div class="form-group row">
 <div class="col-sm-12">
-<label for="form-field-8">Plant Namekk</label>
+<label for="form-field-8">Plant Name</label>
 <select class="form-control" name="plant_id" id="plant_id" onchange="return get_products(this.value);">
 <option value="">-Select Plant-</option>
 <?php 

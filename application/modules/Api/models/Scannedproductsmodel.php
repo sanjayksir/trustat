@@ -91,12 +91,14 @@ class ScannedproductsModel extends CI_Model {
         $items = [];
         foreach($query as $row){
             $item = [
+				'push_ad_id' => $row->id,
                 'product_id' => $row->product_id,
 				'promotion_id' => $row->promotion_id,
 				'product_name' => $row->product_name,
 				'promotion_type' => $row->promotion_type,
 				'media_type' => $row->media_type,
 				'push_date' => $row->ad_push_date,
+				'media_play_date' => $row->media_play_date,
 				'promotion_title' => $row->promotion_title,
 				'brand_name' => $row->brand_name,
 				'product_ad_video_response_fbqq' => $row->product_ad_video_response_fbqq,
@@ -109,10 +111,11 @@ class ScannedproductsModel extends CI_Model {
            
 		  // $consumerId = $row->id;
 		   $product_id = $row->product_id;
-			$item['isPushedAdVideoFeedbackGiven'] = $this->isLoyaltyForProductPushedAdVideoFeedbackQuesGiven($consumer_id, $product_id);
-			$item['isPushedAdAudioFeedbackGiven'] = $this->isLoyaltyForProductPushedAdAudioFeedbackQuesGiven($consumer_id, $product_id);
-			$item['isPushedAdPDFFeedbackGiven'] = $this->isLoyaltyForProductPushedAdPDFFeedbackQuesGiven($consumer_id, $product_id);
-			$item['isPushedAdImageFeedbackGiven'] = $this->isLoyaltyForProductPushedAdImageFeedbackQuesGiven($consumer_id, $product_id);
+		   $promotion_id = $row->promotion_id;
+			$item['isPushedAdVideoFeedbackGiven'] = $this->isLoyaltyForProductPushedAdVideoFeedbackQuesGiven($consumer_id, $product_id, $promotion_id);
+			$item['isPushedAdAudioFeedbackGiven'] = $this->isLoyaltyForProductPushedAdAudioFeedbackQuesGiven($consumer_id, $product_id, $promotion_id);
+			$item['isPushedAdPDFFeedbackGiven'] = $this->isLoyaltyForProductPushedAdPDFFeedbackQuesGiven($consumer_id, $product_id, $promotion_id);
+			$item['isPushedAdImageFeedbackGiven'] = $this->isLoyaltyForProductPushedAdImageFeedbackQuesGiven($consumer_id, $product_id, $promotion_id);
             if(!empty($row->product_thumb_images)){
                 $item['product_thumb_images'] = Utils::setFileUrl($row->product_thumb_images);
             }else{
@@ -171,7 +174,7 @@ $fields = array (
 $fields = json_encode ( $fields );
 
 $headers = array (
-        'Authorization: key=' . "AAAA446l5pE:APA91bE3nQ0T5E9fOH-y4w_dkOLU1e9lV7Wn0OmVLaKNnE8tXcZ0eC3buduhCwHL1ICaJ882IHfLy-akAe7Nih7M1RewkO9IzAR-ELdPgmORtb7KjriRrQspVHkIb9GRZPOjXuqfPInlOAly5-65sEEUbGlcoujMgw",
+        'Authorization: key=' . "AAAA4LpXTK8:APA91bHs48XoX1_-4CdsBVyAAVceqQFavfo6Hz3K1U5Phmz2OgYsX7Pr_bNuE8x_PGJBcWs08WHx0JTGh-6goN7ozfl3yB8z9bYe_2ayk0Nmlp9uYOknIKDwq9czlj10rRGQ1bDZ9Nlp",
         'Content-Type: application/json'
 );
 
@@ -215,12 +218,14 @@ return $result;
         $items = [];
         foreach($query as $row){
             $item = [
+				'push_survey_id' => $row->id,
                 'product_id' => $row->product_id,
 				'promotion_id' => $row->promotion_id,
 				'product_name' => $row->product_name,
 				'promotion_type' => $row->promotion_type,
 				'media_type' => $row->media_type,
 				'push_date' => $row->survey_push_date,
+				'media_play_date' => $row->media_play_date,
 				'promotion_title' => $row->promotion_title,
 				'brand_name' => $row->brand_name,
 				'product_survey_video_response_fbqq' => $row->product_survey_video_response_fbqq,
@@ -233,6 +238,7 @@ return $result;
 			
 	//$consumerId = 29;
 	$product_id = $row->product_id;
+	$promotion_id = $row->promotion_id;
 	$customerId = get_customer_id_by_product_id($product_id);
 	$customer_purchased_points = total_approved_points2($customerId);
 	$customer_consumed_points = get_total_consumed_points($customerId);
@@ -255,7 +261,7 @@ return $result;
 			$item['GiveLoyalty'] = "No";
 		}
 		*/
-	$item['isGiven'] = $this->isLoyaltyForProductSurveyVideoFeedbackQuesGiven($consumer_id, $product_id);
+	$item['isGiven'] = $this->isLoyaltyForProductSurveyVideoFeedbackQuesGiven($consumer_id, $product_id, $promotion_id);
 			
 			$item['cid'] = $consumer_id;
 		
@@ -317,7 +323,7 @@ $fields = array (
 $fields = json_encode ( $fields );
 
 $headers = array (
-        'Authorization: key=' . "AAAA446l5pE:APA91bE3nQ0T5E9fOH-y4w_dkOLU1e9lV7Wn0OmVLaKNnE8tXcZ0eC3buduhCwHL1ICaJ882IHfLy-akAe7Nih7M1RewkO9IzAR-ELdPgmORtb7KjriRrQspVHkIb9GRZPOjXuqfPInlOAly5-65sEEUbGlcoujMgw",
+        'Authorization: key=' . "AAAA4LpXTK8:APA91bHs48XoX1_-4CdsBVyAAVceqQFavfo6Hz3K1U5Phmz2OgYsX7Pr_bNuE8x_PGJBcWs08WHx0JTGh-6goN7ozfl3yB8z9bYe_2ayk0Nmlp9uYOknIKDwq9czlj10rRGQ1bDZ9Nlp",
         'Content-Type: application/json'
 );
 
@@ -440,12 +446,12 @@ return $result;
 	
 	// checking if the Loyalty given to the user on on Advertisement Video Product Pushed Ad Feedback type questions on code 
     Public function isLoyaltyForProductPushedAdVideoFeedbackQuesGiven($consumer_id, $product_id, $promotion_id) {
-        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumer_id."' AND transaction_type='product_ad_video_response_lps' AND transaction_type='".$promotion_id."'");
+        $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumer_id."' AND promotion_id='".$promotion_id."'");
         if($answerQuery->num_rows() > 0){
             $dataItems = $answerQuery->result();
             foreach($dataItems as $row){
                 $paramsValue = json_decode($row->params,true);                
-                if(($paramsValue['product_id'] == $product_id)){
+                if(($paramsValue['promotion_id'] == $promotion_id)){
                     $row->params = $paramsValue;
                     if($paramsValue != ''){
 						//return $row;
@@ -517,12 +523,12 @@ return $result;
 	// checking if the Loyalty given to the user on on Product Video Survey Feedback type questions on code 
     Public function isLoyaltyForProductSurveyVideoFeedbackQuesGiven($consumerId, $product_id, $promotion_id) {
        // $answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_survey_video_response_lps'");
-		$answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND transaction_type='product_survey_video_response_lps' AND transaction_type='".$promotion_id."'");
+		$answerQuery = $this->db->get_where('loylty_points',"user_id='".$consumerId."' AND promotion_id='".$promotion_id."'");
         if($answerQuery->num_rows() > 0){
             $dataItems = $answerQuery->result();
             foreach($dataItems as $row){
                 $paramsValue = json_decode($row->params,true);                
-                if(($paramsValue['product_id'] == $product_id)){
+                if(($paramsValue['promotion_id'] == $promotion_id)){
                     $row->params = $paramsValue;
 					if($paramsValue != ''){
 						//return $row;

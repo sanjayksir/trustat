@@ -58,7 +58,7 @@
 													$sizemm = $printEssentialAttributes['code_size'];
 													echo $sizemm;
 													
-													$size = $sizemm*3.7795275591;
+													$size = $sizemm;
 													?></div>
 				  </div>
 				  <input type="hidden" name="barcodesize" value="<?php echo $size;?>" />

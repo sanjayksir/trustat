@@ -50,6 +50,7 @@
 			    "l_name"=>$frmData['l_name'],
 				"days_for_expiry_of_point_credited"=>$frmData['days_for_expiry_of_point_credited'],
 				"days_for_notification_before_expiry_of_lps"=>$frmData['days_for_notification_before_expiry_of_lps'],
+				"customer_microsite_url"=>$frmData['customer_microsite_url'],
 				"mobile_no"=>$frmData['user_mobile'],
 				"email_id"=>$frmData['user_email'],
                 "usergroup_id "=>$frmData['user_group'],
@@ -87,6 +88,7 @@
 				"is_admin "=>'1',
 				"f_name"=>$frmData['f_name'],
 			    "l_name"=>$frmData['l_name'],
+				"customer_microsite_url"=>$frmData['customer_microsite_url'],
 				"days_for_expiry_of_point_credited"=>$frmData['days_for_expiry_of_point_credited'],
 			    "days_for_notification_before_expiry_of_lps"=>$frmData['days_for_notification_before_expiry_of_lps']
 			

@@ -280,14 +280,14 @@
 		<!--------------------------------- Essential attributes-----------------------------------> 
 		  <div class="form-group row">
           <div class="col-sm-4">
-				<label for="form-field-8">Code type in printing</label>
+				<label for="form-field-8">Barcode Type – Line Barcode or QR</label>
 				<select name="code_type" id="code_type" class="form-control">
 				 <option value="barcode">Barcode</option>
 				 <option value="qrcode">Qrcode</option>
 				</select>
   			</div>
 			<div class="col-sm-4">
-				<label for="form-field-8">Code Activation Type</label>
+				<label for="form-field-8">Code Activation Type – Pre or Post</label>
 				<select name="code_activation_type" id="code_activation_type" class="form-control">
 					<!--<option value="1">Pre-Activated</option>	-->
 					<option value="0">Post-Activated</option>	
@@ -295,7 +295,7 @@
 				</select>
  		    </div>
             <div class="col-sm-4">
-				<label for="form-field-8">Methods of Delivery</label>
+				<label for="form-field-8"> Method of Delivery – Printing by Super Admin or CCC</label>
 				<select name="delivery_method" id="delivery_method" class="form-control">
 				 <option value="1">Physical Printing by Super Admin</option>
 				 <option value="2">Physical Printing by CCC Admin</option>
@@ -306,33 +306,31 @@
           </div>   
           <div class="form-group row"> 
            <div class="col-sm-4">
-				<label for="form-field-8">Code Key Type</label>
+				<label for="form-field-8">Code Key Type – Serial or Random</label>
 				<select name="code_key_type" id="code_key_type" class="form-control">
 				 <option value="serial"> Serial Unique</option>
 				 <option value="random">Random Unique</option> 
 				</select>
  		    </div> 
-            
             <div class="col-sm-4">
-				<label for="form-field-8">Size of the Code (mm)</label>
-				<!--
-				<select name="code_size" id="code_size" class="form-control">
-				 <option value="S">Small</option>
-				 <option value="M">Medium</option>
-				 <option value="L">Large</option>
-				</select>
-				-->
-				<input type="number" name="code_size" min="3" max="300" step="0.01" value="10" id="code_size" class="form-control" />
- 		    </div>
-			
-			<div class="col-sm-4">
-				<label for="form-field-8">Code Unity Type</label>
+				<label for="form-field-8">Code Unity Type – Single or Twin</label>
 				<select name="code_unity_type" id="code_unity_type" class="form-control">
 				 <option value="Single">Single</option>
 				 <option value="Twin">Twin</option>
 				</select>
  		    </div>
+			
+			<div class="col-sm-4">
+				<label for="form-field-8">Print codes in Batches?</label>
+			<select name="print_codes_in_batches" id="print_codes_in_batches" class="form-control">
+				<option value="Yes">Yes</option>
+				<option value="No">No</option>
+			</select>
+ 		    </div>
+			 
   		</div> 
+		
+		
 		<div class="form-group row"> 
            <div class="col-sm-4">
 				<label for="form-field-8">Registration Pack</label>
@@ -378,28 +376,79 @@
  		    </div> 
 			<div class="col-sm-4">
 				<label for="form-field-8">Number of Loyalty Points for Super Loyalty</label>
-				<input type="number" name="number_of_loyalty_points_for_super_loyalty" min="0" step="1" value="10" id="number_of_loyalty_points_for_super_loyalty" class="form-control" required />
-				<!--
-				<select name="max_shipper_pack_level" id="max_shipper_pack_level" class="form-control">
-				 <option value="serial"> Serial Unique</option>
-				 <option value="random">Random Unique</option> 
-				</select>-->
+				<input type="number" name="number_of_loyalty_points_for_super_loyalty" min="0" step="1" value="50" id="number_of_loyalty_points_for_super_loyalty" class="form-control" required />
+				
  		    </div> 
   		</div>
 		<div class="form-group row"> 
            <div class="col-sm-4">
+				<label for="form-field-8">Text Font Size</label>
+				<input type="number" name="TextFontSize" id="TextFontSize"  min="3" step=".01" max="50" value="7" placeholder="in mm" class="form-control" />
+ 		    </div> 
+			 
+			<div class="col-sm-4">
+				<label for="form-field-8">Height of Barcode(mm) </label>
+				<input type="text" name="height_of_the_bar_code" id="height_of_the_bar_code" value="10" placeholder="How much Space do you need between twin Codes(mm)" class="form-control" />
+ 		    </div> 
+			<div class="col-sm-4">
+				<label for="form-field-8">Size of the Code (mm)</label>				
+				<input type="number" name="code_size" min="3" max="300" step="0.01" value="15" id="code_size" class="form-control" />
+ 		    </div>
+  		</div>
+		<div class="form-group row"> 
+		<div class="col-sm-4">
+				<label for="form-field-8">Space between QR Code and Barcode(mm) </label>
+				<input type="text" name="space_between_twin_code" id="space_between_twin_code" placeholder="How much Space do you need between twin Codes(mm)" value="50" class="form-control" />
+ 		    </div>
+			
+			<div class="col-sm-4">
+				<label for="form-field-8">Space for Message above the Code(mm)</label>
+				<input type="number" name="space_for_message_above_code" id="space_for_message_above_code"  min="1" step=".01" max="50" value="2" placeholder="in mm" class="form-control" />
+ 		    </div>
+			
+           <div class="col-sm-4">
 				<label for="form-field-8">Message print above the Code</label>
 				<input type="text" name="message_above_code" id="message_above_code" placeholder="Please enter the message to be print above the Code" class="form-control" />
+ 		    </div> 
+  		</div>
+		<div class="form-group row">            
+			 
+			<div class="col-sm-4">
+				<label for="form-field-8">Space for Message below the Code(mm)</label>
+				<input type="number" name="space_for_message_below_code" id="space_for_message_below_code"  min="1" step=".01" max="50" value="6" placeholder="in mm" class="form-control" />
  		    </div> 
 			<div class="col-sm-4">
 				<label for="form-field-8">Message print below the Code</label>
 				<input type="text" name="message_below_code" id="message_below_code" placeholder="Please enter the message to be print below the Code" class="form-control" />
+ 		    </div>
+			 <div class="col-sm-4">
+				<label for="form-field-8">Space between Code Rows</label>
+	<input type="number" name="space_between_code_rows" id="space_between_code_rows"  min="1" step=".01" max="50" value="20" placeholder="in mm" class="form-control" />
+ 		    </div>
+  		</div>
+		
+		<div class="form-group row"> 
+           <div class="col-sm-4">
+				<label for="form-field-8">Message above Secondary Code of twin</label>
+				<input type="text" name="message_above_secondry_code" id="message_above_secondry_code" value="" placeholder="Please enter the Message above Secondary Code of twin" class="form-control" />
  		    </div> 
 			<div class="col-sm-4">
-				<label for="form-field-8">Space between QR Code and Barcode(mm) </label>
-				<input type="text" name="space_between_twin_code" id="space_between_twin_code" placeholder="How much Space do you need between twin Codes(mm)" class="form-control" />
- 		    </div> 
+				<label for="form-field-8">Message Below Secondary Code of twin</label>
+			<input type="text" name="message_below_secondry_code" id="message_below_secondry_code" value="" placeholder="Please enter the Message above Secondary Code of twin" class="form-control" />
+ 		    </div>
+			<div class="col-sm-4">
+				<label for="form-field-8">Space for Message above Secondary Code of twin(mm)</label>
+			<input type="number" name="space_for_message_above_secondry_code" id="space_for_message_above_secondry_code"  min="-10" step=".01" max="50" value="1" placeholder="in mm" class="form-control" />
+ 		    </div>
   		</div>
+		
+		<div class="form-group row">            
+			<div class="col-sm-4">
+				<label for="form-field-8">Space for Message Below Secondary  Code of twin(mm)</label>
+			<input type="number" name="space_for_message_below_secondry_code" id="space_for_message_below_secondry_code"  min="1" step=".01" max="50" value="35" placeholder="in mm" class="form-control" />
+ 		    </div>
+  		</div>
+		
 		<div style="color:red">Note*- You must must need to add at least 1 attribute for this product to make it working.</div> 
 		<!--------------------------------- Essential attributes-----------------------------------> 
 		 <hr>

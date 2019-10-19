@@ -157,7 +157,21 @@
 		
 		<?php }?>
 		 
-		
+		<div class="form-group row">
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Customer Microsite URL</b></label>
+			 <div class=""><?php echo $get_user_details[0]['customer_microsite_url'];?></div>
+			</div>
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Days for expiry from the date of Loyalty Point Credited</b></label>
+			 <div class=""><?php echo $get_user_details[0]['days_for_expiry_of_point_credited']; ?></div>
+			</div>
+			<div class="col-sm-4"><?php //print_r($show_city_name);?>
+			 <label for="form-field-9"><b>Days for Notification Before Expiry of Loyalty Point</b></label>
+              <div class=""><?php  echo $get_user_details[0]['days_for_notification_before_expiry_of_lps'];?></div>
+ 			</div>
+		</div>
 		<div class="form-group row">
 			<div class="col-sm-4">
 			<?php if(empty($get_user_details[0]['profile_photo']) || !file_exists('./uploads/rwaprofilesettings/thumb/thumb_'.$get_user_details[0]['profile_photo'])){?>
@@ -188,12 +202,12 @@
 		 
 		<div class="form-group row">
 
-			
+			<!--
 			<div class="col-sm-4">
 			  <label for="form-field-8"><b>Customer Microsite URL</b></label>
-             <div class=""><?php echo $get_user_details[0]['customer_microsite_url'];?></div>
+             <div class=""><?php //echo $get_user_details[0]['customer_microsite_url'];?></div>
 			</div> 
-			
+			-->
 			
 			 
 		</div>

@@ -237,10 +237,8 @@ class ScannedProduct extends ApiController {
 				
 				
 				if($purchased_points > ($consumed_points+$number_of_loyalty_points_for_super_loyalty)){
-	$this->Productmodel->saveSuperLoylty($transactionType, $consumerId, $product_id, ['verification_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumerId, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code'],'customer_loyalty_type' => $customer_loyalty_type], $customer_id, $customer_loyalty_type, $number_of_loyalty_points_for_super_loyalty);
-				
-				
-				
+				$this->Productmodel->saveSuperLoylty($transactionType, $consumerId, $product_id, ['verification_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumerId, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code'],'customer_loyalty_type' => $customer_loyalty_type], $customer_id, $customer_loyalty_type, $number_of_loyalty_points_for_super_loyalty);
+			
 				$this->Productmodel->saveConsumerPassbookSuperLoyalty($transactionType, ['verification_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => $data['bar_code'],'customer_loyalty_type' => $customer_loyalty_type], $customer_id, $product_id, $consumerId, $transactionTypeName,  'Loyalty', $customer_loyalty_type, $number_of_loyalty_points_for_super_loyalty);
 				}
 				
@@ -259,7 +257,6 @@ class ScannedProduct extends ApiController {
 			
 		// Super Loyalty end	
 		
-			
 			
 			if($result->barcode_qr_code_no == $data['bar_code']) {
             if( $result->pack_level == 0 ){
@@ -317,8 +314,6 @@ class ScannedProduct extends ApiController {
 		$mnvtext31 = $mnv31_result->message_notification_value;
 			//$this->response(['status'=>true,'message'=>'Thanks for scanning the product.','data'=>$result]);
 			$this->response(['status'=>true,'message'=>$mnvtext31,'data'=>$result]);
-			
-			
 			
         }else{
 		$mnv32_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 32)->get()->row();
@@ -848,7 +843,7 @@ class ScannedProduct extends ApiController {
 	
 	
 	
-	    public function DeleteScanedProduct() {
+	  public function DeleteScanedProduct() {
         $user = $this->auth();
         if(empty($this->auth())){
             Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
@@ -880,6 +875,66 @@ class ScannedProduct extends ApiController {
 		$mnv49_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 49)->get()->row();
 		$mnvtext49 = $mnv49_result->message_notification_value;	
             Utils::response(['status' => false, 'message' => $mnvtext49], 200);
+        }
+    }
+	
+	
+	// Advertisement Read Status Update function
+    public function AdvertisementReadStatusUpdate() {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        $input = $this->getInput();
+        if (($this->input->method() != 'post') || empty($input)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $validate = [
+            ['field' => 'push_ad_id', 'label' => 'Pushed Advertisement ID', 'rules' => 'required'],
+        ];
+        $errors = $this->ConsumerModel->validate($input, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }	
+		$push_ad_id = $this->getInput('push_ad_id');
+		$push_ad_idi = $push_ad_id['push_ad_id'];
+		
+        $this->db->set('media_play_date', date("Y-m-d H:i:s"));        
+        $this->db->where('id', $push_ad_idi);
+        if ($this->db->update('push_advertisements')) {
+            Utils::response(['status' => true, 'message' => 'Record updated.', 'data' => $input]);
+        } else {
+            Utils::response(['status' => false, 'message' => 'System failed to update.'], 200);
+        }
+    }
+	
+	
+	// Survey Read Status Update function
+    public function SurveyReadStatusUpdate() {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        $input = $this->getInput();
+        if (($this->input->method() != 'post') || empty($input)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $validate = [
+            ['field' => 'push_survey_id', 'label' => 'Pushed Survey ID', 'rules' => 'required'],
+        ];
+        $errors = $this->ConsumerModel->validate($input, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }	
+		$push_survey_id = $this->getInput('push_survey_id');
+		$push_survey_idi = $push_survey_id['push_survey_id'];
+		
+        $this->db->set('media_play_date', date("Y-m-d H:i:s"));        
+        $this->db->where('id', $push_survey_idi);
+        if ($this->db->update('push_surveys')) {
+            Utils::response(['status' => true, 'message' => 'Record updated.', 'data' => $input]);
+        } else {
+            Utils::response(['status' => false, 'message' => 'System failed to update.'], 200);
         }
     }
 	

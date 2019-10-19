@@ -125,6 +125,7 @@ class Consumer extends ApiController {
 
 			$registrationAddressN = $this->getInput('registration_address');
 			$data['registration_address'] = $registrationAddressN['registration_address'];			
+			$data['date_of_registration'] = date("Y-m-d");
 			
             $data['verification_code'] = Utils::randomNumber(5);
             $data['password'] = md5($data['verification_code']);
@@ -922,14 +923,21 @@ class Consumer extends ApiController {
 		
 		//echo "<pre>";print_r(get_consumer_id_by_mobile_number($consumer_mobile)); die;
 		$consumer_id = get_consumer_id_by_mobile_number($consumer_mobile);
+		$fb_token = getConsumerFb_TokenById($consumer_id);		
 		
 		$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customer_id);
 		if($customer_loyalty_type=="TRUSTAT"){
-		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();
-		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();
+		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		
+		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		
+		$TotalExpiredPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
 		}else{
 		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		
 		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		
+		$TotalExpiredPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
 		}
 		
 		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
@@ -944,7 +952,16 @@ class Consumer extends ApiController {
 			$FinalTotalRedeemedPoints =0 + $points_redeemed;
 			}
 			
-		$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
+		if(($TotalExpiredPoints->points)!='')
+		{
+			$FinalTotalExpiredPoints = $TotalExpiredPoints->points;
+		} else {
+			$FinalTotalExpiredPoints =0;
+			}	
+			
+		$CurrentBalance = $FinalTotalAccumulatedPoints - ($FinalTotalRedeemedPoints + $FinalTotalExpiredPoints);	
+			
+		//$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
 		$Min_Locking_Balance = $result2->loyalty_points;
 		
 		$CurrentBalanceAfterMinBalanceLocking = $CurrentBalance - $Min_Locking_Balance;
@@ -959,17 +976,19 @@ class Consumer extends ApiController {
 		$Points_Redeemable = $CurrentBalance;		
 		$PointsShortOfRedumption = 0;	
 		}
-		       
+		    
+		$FinalTotalRedeemedExpiredPoints = $FinalTotalRedeemedPoints + $FinalTotalExpiredPoints;		
+				
 		$data['customer_id'] = $customer_id;
 		$data['consumer_id'] = $consumer_id;
 		$data['points'] = $points_redeemed;
         $data['transaction_type_name'] = "Loylty Redemption";
 		$data['transaction_type_slug'] = "loylty_redemption";
-		$data['params'] = $this->input->ip_address();
+		$data['params'] = '{"transaction_name":"Loyalty Points redeemed"}';
 		$data['transaction_lr_type'] = "Redemption";
 		$data['customer_loyalty_type'] = get_customer_loyalty_type_by_customer_id($customer_id);
 		$data['total_accumulated_points'] = $FinalTotalAccumulatedPoints;
-		$data['total_redeemed_points'] = $FinalTotalRedeemedPoints;
+		$data['total_redeemed_points'] = $FinalTotalRedeemedExpiredPoints;
 		$data['current_balance'] = $CurrentBalance;
 		$data['points_redeemable'] = $Points_Redeemable;
 		$data['points_short_of_redumption'] = $PointsShortOfRedumption;
@@ -986,21 +1005,23 @@ class Consumer extends ApiController {
 			// Update Reddemed Status of the Loyalty Points
 		
 	//$oldest_loyalty_points = $this->db->get_where('loylty_points', array('user_id' => $consumer_id, 'customer_id' => $customer_id, 'customer_loyalty_type' => "Brand"))->limit(1)->row()->points;
+	
+
+	
 	for($i=0; $i<1000; $i++){
+		
+			
 	$this->db->select('id,points,redeemed_points');
     $this->db->where(array('user_id' => $consumer_id, 'customer_id' => $customer_id, 'customer_loyalty_type' => "Brand", 'loyalty_points_status != ' => "Redeemed"));
 	$this->db->order_by('id', 'ASC');
     $this->db->limit(1);
     $query = $this->db->get('loylty_points');
-    $row = $query->row();
-	
+    $row = $query->row();	
 	$oldest_loyalty_points = $row->points;
 	$oldest_loyalty_points_id = $row->id;
 	$redeemed_partial_points = $row->redeemed_points;
 	
-	$balancepoints =  $oldest_loyalty_points - ($points_redeemed+$redeemed_partial_points);	
-	
-	if($balancepoints > 0)
+	if($oldest_loyalty_points > ($points_redeemed+$redeemed_partial_points))
 		{
 			$updateData = array(
 			   'loyalty_points_status'=>"RedeemedPartial",
@@ -1009,18 +1030,9 @@ class Consumer extends ApiController {
 			);
 			$this->db->where('id', $oldest_loyalty_points_id);
 			$this->db->update('loylty_points', $updateData); 
+			$this->Productmodel->sendFCM($points_redeemed . " Loyalty Points Reddemed", $fb_token);
 			 break;
-			}else{
-				if(($points_redeemed+$redeemed_partial_points) > $oldest_loyalty_points)
-				{
-				$updateData = array(
-				   'loyalty_points_status'=>"Redeemed",
-				   'redeemed_points'=>$oldest_loyalty_points-$redeemed_partial_points,
-				   'modified_at'=>date("Y-m-d H:i:s")
-				);
-				$this->db->where('id', $oldest_loyalty_points_id);
-				$this->db->update('loylty_points', $updateData); 
-			}else{
+			}elseif($oldest_loyalty_points == ($points_redeemed+$redeemed_partial_points)){
 				$updateData = array(
 				   'loyalty_points_status'=>"Redeemed",
 				   'redeemed_points'=>$points_redeemed+$redeemed_partial_points,
@@ -1028,11 +1040,24 @@ class Consumer extends ApiController {
 				);
 				$this->db->where('id', $oldest_loyalty_points_id);
 				$this->db->update('loylty_points', $updateData); 
+				$this->Productmodel->sendFCM($points_redeemed . " Loyalty Points Reddemed", $fb_token);
+				break;				
+			} elseif($oldest_loyalty_points < ($points_redeemed+$redeemed_partial_points)) {
+				$updateData = array(
+				   'loyalty_points_status'=>"Redeemed",
+				   'redeemed_points'=>$oldest_loyalty_points,
+				   'modified_at'=>date("Y-m-d H:i:s")
+				);
+				$this->db->where('id', $oldest_loyalty_points_id);
+				$this->db->update('loylty_points', $updateData); 
+				
+				$points_redeemed = $points_redeemed -($oldest_loyalty_points-$redeemed_partial_points);	
+				$this->Productmodel->sendFCM($points_redeemed . " Loyalty Points Reddemed", $fb_token);
+			}						
 			}
-			}
-			}
+            Utils::response(['status' => true, 'message' => 'Points Reddemed.', 'oldest_loyalty_points' => $oldest_loyalty_points, 'data' => $data], 200);
 			
-            Utils::response(['status' => true, 'message' => 'Points Reddemed.', 'oldest_loyalty_points' => $oldest_loyalty_points . "-" . $oldest_loyalty_points_id, 'data' => $data], 200);
+		
         } else {
             Utils::response(['status' => false, 'message' => 'Redemption failed.'], 200);
         }
@@ -1069,9 +1094,11 @@ class Consumer extends ApiController {
 		if($customer_loyalty_type=="TRUSTAT"){
 		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();
 		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();
+		$TotalExpiredPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
 		}else{
 		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
 		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalExpiredPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();		
 		}
 		
 		
@@ -1087,7 +1114,14 @@ class Consumer extends ApiController {
 			$FinalTotalRedeemedPoints =0 + $points_redeemed;
 			}
 			
-		$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
+		if(($TotalExpiredPoints->points)!='')
+		{
+			$FinalTotalExpiredPoints = ($TotalExpiredPoints->points) + $Expiring_loyalty_points;
+		} else {
+			$FinalTotalExpiredPoints =0 + $Expiring_loyalty_points;
+			}	
+			
+		$CurrentBalance = $FinalTotalAccumulatedPoints - ($FinalTotalRedeemedPoints + $FinalTotalExpiredPoints);
 		$Min_Locking_Balance = $result2->loyalty_points;
 		
 		$CurrentBalanceAfterMinBalanceLocking = $CurrentBalance - $Min_Locking_Balance;
@@ -1102,17 +1136,17 @@ class Consumer extends ApiController {
 		$Points_Redeemable = $CurrentBalance;		
 		$PointsShortOfRedumption = 0;	
 		}
-		    
+		    $FinalTotalRedeemedExpiredPoints = $FinalTotalRedeemedPoints + $FinalTotalExpiredPoints;
 		$data['customer_id'] = $customer_id;
 		$data['consumer_id'] = $consumer_id;
 		$data['points'] = $Expiring_loyalty_points;
         $data['transaction_type_name'] = "Loyalty Points Expired";
 		$data['transaction_type_slug'] = "loyalty_points_expired";
-		$data['params'] = "Loyalty Points Expired";
+		$data['params'] = '{"transaction_name":"Loyalty Points Expired"}';
 		$data['transaction_lr_type'] = "Expiry";
 		$data['customer_loyalty_type'] = get_customer_loyalty_type_by_customer_id($customer_id);
 		$data['total_accumulated_points'] = $FinalTotalAccumulatedPoints;
-		$data['total_redeemed_points'] = $FinalTotalRedeemedPoints;
+		$data['total_redeemed_points'] = $FinalTotalRedeemedExpiredPoints;
 		$data['current_balance'] = $CurrentBalance;
 		$data['points_redeemable'] = $Points_Redeemable;
 		$data['points_short_of_redumption'] = $PointsShortOfRedumption;
@@ -1129,10 +1163,52 @@ class Consumer extends ApiController {
 				);
 				$this->db->where('id', $Expiring_loyalty_points_id);
 				$this->db->update('loylty_points', $updateData);
+				
+		$fb_token = getConsumerFb_TokenById($consumer_id);
+		$mnv53_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 53)->get()->row();
+		$mnvtext53 = $mnv53_result->message_notification_value;
+				
+                $this->ConsumerModel->sendFCM($mnvtext53, $fb_token);
+				
+				
             Utils::response(['status' => true, 'message' => 'Points Expired.', 'data' => $data], 200);
         } else {
             Utils::response(['status' => false, 'message' => ''], 200);
         }
+		
+		} // foreach end 
+    }
+	
+	
+	public function PreLoyaltyPointsExpiryNotifications() {
+		
+	$this->db->select('id,user_id,customer_id,points,redeemed_points,loyalty_points_status,loyalty_points_expiry_date');
+    $this->db->where(array('loyalty_points_status != ' => "Redeemed"));
+	$this->db->order_by('id', 'ASC');
+    $query = $this->db->get('loylty_points');
+    $rows = $query->result_array();
+		
+	foreach($rows as $row){ // foreach start
+	$Expiring_loyalty_points = $row['points'];
+	$Expiring_loyalty_points_id = $row['id'];
+	$consumer_id = $row['user_id'];
+	$customer_id = $row['customer_id'];
+	$loyalty_points_expiry_date = $row['loyalty_points_expiry_date'];
+	
+		 $days_for_notification_before_expiry = days_for_notification_before_expiry($customer_id);
+			 
+			$Current_Date = date('Y-m-d');
+			$loyalty_points_expiry_notification_date = date('Y-m-d', strtotime($loyalty_points_expiry_date. ' - ' . $days_for_notification_before_expiry. ' days'));
+
+				if($loyalty_points_expiry_notification_date==$Current_Date){
+				$fb_token = getConsumerFb_TokenById($consumer_id);
+				
+				$mnv54_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 54)->get()->row();
+		$mnvtext54 = $mnv54_result->message_notification_value;
+		
+                $this->ConsumerModel->sendFCM($mnvtext54, $fb_token);
+				}
+			
 		
 		} // foreach end 
     }
@@ -1668,7 +1744,7 @@ class Consumer extends ApiController {
         if ($this->db->insert('consumer_feedback', $data)) {
 			
 				
-		if($data['promotion_id']!=0){	
+		if($promotion_id!=0){	
 				$arr1 = explode(' ',trim($data['product_qr_code']));
 				$Part11 = $arr1[0];
 				$Part22 = $arr1[1];		
@@ -1859,7 +1935,7 @@ class Consumer extends ApiController {
     }
 
 	
-	    public function SaveConsumerMediaViewDetails() {
+	 public function SaveConsumerMediaViewDetails() {
         $user = $this->auth();
         if (empty($user)) {
             Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
@@ -1871,9 +1947,11 @@ class Consumer extends ApiController {
 
         $validate = [
             ['field' => 'product_qr_code', 'label' => 'Product QR Code', 'rules' => 'trim|required'],
+			['field' => 'promotion_id', 'label' => 'Promotion id', 'rules' => 'trim|required'],
             ['field' => 'media_type', 'label' => 'Media Type', 'rules' => 'trim|required'],
-            ['field' => 'total_media_duration_sec', 'label' => 'Total Media Duration in Seconds', 'rules' => 'trim|required|integer'],
-			['field' => 'media_play_duration_sec', 'label' => 'Media Play Duration in Seconds', 'rules' => 'trim|required|integer'],
+            ['field' => 'total_media_duration_sec', 'label' => 'Total Media Duration in Seconds', 'rules' => 'trim|required'],
+			['field' => 'media_play_duration_sec', 'label' => 'Media Play Duration in Seconds', 'rules' => 'trim|required'],
+			['field' => 'watched_complete', 'label' => 'Watched Complete-Yes or No', 'rules' => 'trim|required'],
 			['field' => 'latitude', 'label' => 'User latitude', 'rules' => 'trim|required'],
 			['field' => 'longitude', 'label' => 'User longitude', 'rules' => 'trim|required'],
 			['field' => 'current_city', 'label' => 'Registration Address', 'rules' => 'trim|required'],
@@ -1891,12 +1969,16 @@ class Consumer extends ApiController {
         
 
         //Utils::debug();
-        $data['consumer_id'] = $user['id'];
-		$data['product_id'] = $ProductID;
-		$data['customer_id'] = $customer_id;
-        $data['view_date_time'] =  date('Y-m-d H:i:s');
-		
-		
+		if($product_qr_code=="null"){
+		$data['product_id'] = get_product_id_by_promotion_id($data['promotion_id']);	
+		$data['customer_id'] = get_customer_id_by_promotion_id($data['promotion_id']);	
+		}else{
+        $data['product_id'] = $ProductID;
+		$data['customer_id'] = $customer_id;       
+		}
+		$data['consumer_id'] = $user['id'];
+		$data['view_date_time'] =  date('Y-m-d H:i:s');
+		 
         if ($this->db->insert('consumer_media_view_details', $data)) {
            
             Utils::response(['status' => true, 'message' => 'Consumer media view details saved successfully.', 'data' => $data]);
@@ -2130,7 +2212,7 @@ class Consumer extends ApiController {
     }
 	
 	
-	    public function FaqsAndOtherData() {
+	 public function FaqsAndOtherData() {
         //Utils::debug();
         $user = $this->auth();
         if (empty($this->auth())) {
@@ -2158,6 +2240,37 @@ class Consumer extends ApiController {
        
     }
 	
+	
+	public function ConsumerProfileFieldsAvailableUpdate() {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $data = $this->Productmodel->getConsumerProfileFieldsAvailableUpdate($user['id']);
+		
+        Utils::response(['status'=>true,'message'=>'List of Consumer Profile Fields Available to Update', 'data'=>$data]);
+       
+    }
+	
+	public function ConsumerProfileFieldsRequireUpdate() {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+		$consumer_id = $user['id'];
+        $data = $this->Productmodel->getConsumerProfileFieldsRequireUpdate($consumer_id);
+		
+        Utils::response(['status'=>true,'message'=>'List of Consumer Profile Fields Require to Update', 'data'=>$data]);
+       
+    }
 	
 	public function TRUSTATAppServiceAgreement() {
         //Utils::debug();

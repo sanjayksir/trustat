@@ -97,7 +97,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="input-group">
-                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Event Name, Transaction Type">
+                                                <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="showDescription" style="width:369px !important;" placeholder="Event Name, Transaction Type">
                                                 <span class="input-group-btn">
                                                     <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                     <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -116,7 +116,25 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th class="hidden-480">Event Name</th>
                                     <th class="hidden-480">Event Detail</th>
                                     <th>Points </th>
-									<th>Loyalty Source</th>
+									<th>Loyalty Source - Brand
+								<select name="v" class="Product">
+								<?php foreach ($list_view_consumer_passbook_cust_dist as $attr12){                        
+                                // echo $attr1['customer_id'];  ?>
+						<option value=""> - Please Select -  </option>
+						<option value="<?php echo $attr12['customer_id']; ?>"> <?php echo getUserFullNameById($attr12['customer_id']); ?></option>
+									<?php }  ?>
+						</select>
+						<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+						<script>
+							$(function(){
+								  $('.Product').change(function(){
+										 var Product = $('.Product').val();
+										 $(".showDescription").val(Product);
+								  });
+							});
+						</script>
+
+										</th>
                                     <th>Transaction Type (Earned/Redeemed) </th>
 									<td>Total accumulated points</td>
 								   <td>Total redeemed points</td>

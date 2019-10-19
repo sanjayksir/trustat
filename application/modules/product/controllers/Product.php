@@ -217,7 +217,7 @@
 		//echo initials($string);
 
 		$name = initials($string);
-		$pin = mt_rand(1000, 9999);
+		$pin = mt_rand(100, 999);
  		echo $res =  slugify2($name).$pin;
 		exit;
    }
@@ -1285,8 +1285,38 @@ function list_assigned_products() {
 	$oldest_loyalty_points_id = $row->id;
 	$redeemed_partial_points = $row->redeemed_points;
 	
-	$balancepoints =  $oldest_loyalty_points - ($points_redeemed+$redeemed_partial_points);	
-	
+	if($oldest_loyalty_points > ($points_redeemed+$redeemed_partial_points))
+		{
+			$updateData = array(
+			   'loyalty_points_status'=>"RedeemedPartial",
+			   'redeemed_points'=>$points_redeemed+$redeemed_partial_points,
+			   'modified_at'=>date("Y-m-d H:i:s")
+			);
+			$this->db->where('id', $oldest_loyalty_points_id);
+			$this->db->update('loylty_points', $updateData); 
+			 break;
+			}elseif($oldest_loyalty_points == ($points_redeemed+$redeemed_partial_points)){
+				$updateData = array(
+				   'loyalty_points_status'=>"Redeemed",
+				   'redeemed_points'=>$points_redeemed+$redeemed_partial_points,
+				   'modified_at'=>date("Y-m-d H:i:s")
+				);
+				$this->db->where('id', $oldest_loyalty_points_id);
+				$this->db->update('loylty_points', $updateData); 
+				break;				
+			} elseif($oldest_loyalty_points < ($points_redeemed+$redeemed_partial_points)) {
+				$updateData = array(
+				   'loyalty_points_status'=>"Redeemed",
+				   'redeemed_points'=>$oldest_loyalty_points,
+				   'modified_at'=>date("Y-m-d H:i:s")
+				);
+				$this->db->where('id', $oldest_loyalty_points_id);
+				$this->db->update('loylty_points', $updateData); 
+				
+				$points_redeemed = $points_redeemed -($oldest_loyalty_points-$redeemed_partial_points);	
+			}
+	/*
+	$balancepoints =  $oldest_loyalty_points - ($points_redeemed+$redeemed_partial_points);		
 	if($balancepoints > 0)	{
 			$updateData = array(
 			   'loyalty_points_status'=>"RedeemedPartial",
@@ -1305,7 +1335,7 @@ function list_assigned_products() {
 				$this->db->where('id', $oldest_loyalty_points_id);
 				$this->db->update('loylty_points', $updateData); 				
 			}
-			
+			*/
 			}
 		 // end update redeemed loyalty 
 		 
@@ -1316,6 +1346,8 @@ function list_assigned_products() {
 			$NTFdata['status'] = 1; 
 			
 			$this->db->insert('list_notifications_table', $NTFdata);
+			
+			
 		
 		exit;
 		
@@ -1423,6 +1455,7 @@ function list_assigned_products() {
         }
         $total_records = $this->Product_model->count_total_list_view_blp_consumer_passbook($id,$srch_string);
         $params["list_view_consumer_passbook"] = $this->Product_model->list_view_blp_consumer_passbook($id, $limit_per_page, $start_index, $srch_string);
+		$params["list_view_consumer_passbook_cust_dist"] = $this->Product_model->list_view_blp_consumer_passbook_cust_dist($id, $limit_per_page, $start_index, $srch_string);
         $params["links"] = Utils::pagination('product/list_view_consumer_passbook/' . $id, $total_records);
 		//echo "test";
         $this->load->view('list_view_consumer_passbook_tpl', $params);
@@ -1483,6 +1516,36 @@ function list_assigned_products() {
         $params["links"] = Utils::pagination('product/list_customerwise_consumer_loyalty_details/' . $id, $total_records, null, 4);
 		//echo $user_id;
         $this->load->view('list_view_customerwise_consumer_loyalty_tpl', $params);
+    }
+	
+	
+		public function list_customerwise_consumer_loyalty_redemption_details() {
+        $this->checklogin();
+		$user_id 	= $this->session->userdata('admin_user_id');
+		//if($user_id==1){ $id = 1; }
+		
+       $id = $this->uri->segment(3);
+		//echo $id;
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->count_total_list_customerwise_consumer_loyalty_redemption($id,$srch_string);
+        $params["list_view_consumer_passbook"] = $this->Product_model->list_customerwise_consumer_loyalty_redemption($id, $limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('product/list_customerwise_consumer_loyalty_redemption_details/' . $id, $total_records, null, 4);
+		//echo $user_id;
+        $this->load->view('list_view_customerwise_consumer_loyalty_redemption_tpl', $params);
     }
 	
 	
@@ -1720,6 +1783,31 @@ function list_assigned_products() {
 			
 		
         $this->load->view('list_customer_loyalty_summary_tpl', $params);
+    }
+	
+	public function consumer_brand_loyalty_dashboard() {
+        $this->checklogin();
+        
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->count_total_list_loyalty_customers($srch_string);
+        $params["list_all_consumers"] = $this->Product_model->list_all_loyalty_customers($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('product/consumer_brand_loyalty_dashboard', $total_records);
+		
+        $this->load->view('consumer_brand_loyalty_dashboard_tpl', $params);
     }
 	
 	public function view_customer_loyalties() {

@@ -40,28 +40,44 @@
 			</div>
 		</div>
 		<div class="form-group row">
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			  <label for="form-field-8">First Name</label>
 			<input name="f_name" id="f_name" type="text" value="<?php echo $get_user_details[0]['f_name'];?>" class="form-control" placeholder="First Name"  maxlength="30">
 			</div>
 			 
 			
-			<div class="col-sm-6">
+			<div class="col-sm-4">
 			  <label for="form-field-8">Last Name</label>
 			 <input name="l_name" id="l_name" type="text" value="<?php echo $get_user_details[0]['l_name'];?>" class="form-control" placeholder="Last Name"  maxlength="30">
 			</div>
+			
+			
+			
 		</div>
 		
 		<div class="form-group row">
-			<div class="col-sm-6">
-			  <label for="form-field-8">Days for expiry from the date of Loyalty Point Credited </label>
-			<input name="days_for_expiry_of_point_credited" id="days_for_expiry_of_point_credited" type="number" value="<?php echo $get_user_details[0]['days_for_expiry_of_point_credited'];?>" class="form-control" placeholder="Please enter number of days" max="1000" min="31">
+		
+			<div class="col-sm-4">
+			  <label for="form-field-8">Customer Microsite URL</label>
+             <input name="customer_microsite_url" id="customer_microsite_url" type="text" value="<?php echo $get_user_details[0]['customer_microsite_url'];?>" class="form-control" placeholder="Customer Microsite URL"  maxlength="200">
+			</div>
+			
+			<div class="col-sm-4">
+			 <label for="form-field-8">State</label>
+			 <?php $states = get_state_name(31);?>
+             <select class="form-control" placeholder="Select State" id="state_name" name="state_name" onchange="get_related_city_list(this.value);">
+  		  		<?php foreach($states as $val){?>
+				<option value="<?php echo $val['state_id'];?>" <?php if($val['state_id']==$get_user_details[0]['state']){echo 'selected';}?>><?php  echo $val['state_name'];?></option> 
+			 	<?php }?>
+			 </select>  
 			</div>
 			 
 			
-			<div class="col-sm-6">
-			  <label for="form-field-8">Days for Notification Before Expiry of Loyalty Point</label>
-			 <input name="days_for_notification_before_expiry_of_lps" id="days_for_notification_before_expiry_of_lps" type="number" value="<?php echo $get_user_details[0]['days_for_notification_before_expiry_of_lps'];?>" class="form-control" placeholder="Please enter number of days" max="1000" min="10">
+			<div class="col-sm-4">
+			 <label for="form-field-8">City</label>
+			  <select class="form-control" id="city_name" name="city_name">
+ 		  		<option value="">select City</option>       
+             </select>
 			</div>
 		</div>
 		
@@ -98,6 +114,16 @@
 			</div>
 		</div>
 		<?php }?>
+		<div class="form-group row">
+			<div class="col-sm-6">
+			  <label for="form-field-8">Days for expiry from the date of Loyalty Point Credited </label>
+			<input name="days_for_expiry_of_point_credited" id="days_for_expiry_of_point_credited" type="number" value="<?php echo $get_user_details[0]['days_for_expiry_of_point_credited'];?>" class="form-control" placeholder="Please enter number of days" max="10000" min="1">
+			</div>
+			<div class="col-sm-6">
+			  <label for="form-field-8">Days for Notification Before Expiry of Loyalty Point</label>
+			 <input name="days_for_notification_before_expiry_of_lps" id="days_for_notification_before_expiry_of_lps" type="number" value="<?php echo $get_user_details[0]['days_for_notification_before_expiry_of_lps'];?>" class="form-control" placeholder="Please enter number of days" max="10000" min="1">
+			</div>	
+		</div>
 		
 		<div class="form-group row">
 			<div class="col-sm-6">

@@ -121,7 +121,7 @@
 		
           <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
 
-           <input class="btn btn-info" type="submit" name="submit" value="Send" id="savemenu"  onClick="this.disabled=true; this.value='Saving…';" /> 
+           <input class="btn btn-info" type="submit" name="submit" value="Send" id="savemenu"  onClick="this.disabled; this.value='Saving…';" /> 
 		   
 		   <a href="<?php echo base_url('reports/list_complaint_log') ?>" class="btn btn-info" title="Back to List Location Types">Back to List Complaints <?php echo $label; ?> </a>
 		   

@@ -544,9 +544,9 @@
 		$userid 				= base64_decode($this->input->post('order_id')); 
 		$barcodesize 			= $this->input->post('barcodesize'); 
 		$print_batch_id 			= $this->input->post('print_batch_id'); 
-		$message_above_code 			= $this->input->post('message_above_code');
-		$message_below_code 			= $this->input->post('message_below_code');
-		$space_between_twin_code 			= $this->input->post('space_between_twin_code');
+		//$message_above_code 			= $this->input->post('message_above_code');
+		//$message_below_code 			= $this->input->post('message_below_code');
+		//$space_between_twin_code 			= $this->input->post('space_between_twin_code');
  		//$userOrderData 			= view_order_data($userid);
 		//echo '<pre>';print_r($userOrderData);exit;
 		// echo '***'.$pass_id = base64_decode($this->uri->segment(3));exit;
@@ -599,19 +599,27 @@
 			$delivery_date			= date('Y-m-d',strtotime($userOrderData['delivery_date']));
 			$order_created_date     = date('Y-m-d',strtotime($userOrderData['created_date']));
 			$status					= $userOrderData['status'];
- 			$qrcode 				= $barcode_no . mt_rand(1000, 9999);
-			$qrcode2				= $barcode_no . mt_rand(1000, 9999);
+ 			$qrcode 				= $barcode_no . mt_rand(100, 999);
+			$qrcode2				= $barcode_no . mt_rand(100, 999);
 			//$qrcode2 				= $barcode_no2;	
 
 			$ProductData = get_product_data($product_id);
 			$message_above_code			= $ProductData['message_above_code'];
 			$message_below_code			= $ProductData['message_below_code'];
 			$space_between_twin_code			= $ProductData['space_between_twin_code'];	
-			$space_for_message_above_code			= 2;	
-			$space_for_message_below_code			= 6;
-			$space_between_code_rows = 30;
-			$TextFontSize = 7;
- 			
+			$space_for_message_above_code			= $ProductData['space_for_message_above_code'];
+			$space_for_message_below_code			= $ProductData['space_for_message_below_code'];
+			$space_between_code_rows = $ProductData['space_between_code_rows'];
+			$print_codes_in_batches = $ProductData['print_codes_in_batches'];
+			$TextFontSize = $ProductData['TextFontSize'];
+			$height_of_the_bar_code = $ProductData['height_of_the_bar_code'];
+			
+			$height_of_the_bar_code = $ProductData['height_of_the_bar_code'];
+			$message_above_secondry_code 			= $ProductData['message_above_secondry_code'];
+			$message_below_secondry_code 			= $ProductData['message_below_secondry_code'];
+			$space_for_message_above_secondry_code 			= $ProductData['space_for_message_above_secondry_code'];
+			$space_for_message_below_secondry_code 			= $ProductData['space_for_message_below_secondry_code'];
+ 			$print_code_unity_type 			= $ProductData['code_unity_type'];
 			// set style for barcode
 			 $style = array(
 								'border' => false,
@@ -709,34 +717,37 @@
 					if($getEssentialAttributes['code_unity_type']=='Twin'){
 						$pdf->SetFont('helvetica', '1', $TextFontSize);
 						if($message_above_code!=""){
-					$pdf->Text(18, $y, $message_above_code);
+					$pdf->Text(18, $y-$space_for_message_above_code, $message_above_code);
 					}
-					$pdf->Text(18, $y+5, "BatchID-".$print_batch_id);
-					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 18, $y+6, $barcodesize, $barcodesize, $style, 'N');
-					$pdf->Text(18, $y+$barcodesize+0.5, $qrcode.$i);
+					if($print_codes_in_batches=="Yes"){
+					$pdf->Text(18, $y+2, "BatchID-".$print_batch_id);
+					}
+					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 12, $y+5, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->Text(18, $y+2+$barcodesize, $qrcode.$i);
 					//$pdf->Text(122, $y+35, 'Scan to Check Product');
-$pdf->write1DBarcode($qrcode2.$i, 'C128B', 18+$space_between_twin_code+$barcodesize, $y+$barcodesize/2, $barcodesize, $barcodesize/3, 0.4, $style, 'L');
+					if($message_above_secondry_code!=""){
+					$pdf->Text(18+$space_between_twin_code+$barcodesize, $y+$space_for_message_above_secondry_code, $message_above_secondry_code);
+					  }
+$pdf->write1DBarcode($qrcode2.$i, 'C128B', 18+$space_between_twin_code+$barcodesize, $y+9, $barcodesize, $height_of_the_bar_code, 0.4, $style, 'L');
+
+if($message_below_secondry_code!=""){
+					$pdf->Text(18+$space_between_twin_code+$barcodesize, $y+$space_for_message_below_secondry_code, $message_below_secondry_code);
+					  }
+					  
 					if($message_below_code!=""){
-					$pdf->Text(18, $y+$barcodesize+8, $message_below_code);
-					}
-					//$pdf->write1DBarcode($qrcode.$i, 'C128B', 28, $y+15, $barcodesize, $barcodesize/3, 0.4, $style, 'L');
-					//$pdf->write1DBarcode($qrcode2.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
-					//$pdf->SetFont('','B');
-				  	//$pdf->Text(22, 40+$barcodesize, "^^Do Not Buy!! If already Scratched^^, Scratch to register product");
-					//$pdf->Text(150, $y+30, "Scratch to register product");
-					
-					
-					//$pdf->Cell(287,50, 'If already Scratched ^', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
-					
+					$pdf->Text(18, $y+$barcodesize+$space_for_message_below_code+1, $message_below_code);
+					}										
 					} else {
 					$pdf->SetFont('helvetica', '1', $TextFontSize);
 					if($message_above_code!=""){
 					$pdf->Text(18, $y-$space_for_message_above_code, $message_above_code);
 					}
+					if($print_codes_in_batches=="Yes"){
 					$pdf->Text(18, $y+2, "BatchID-".$print_batch_id);
-					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 14, $y+5, $barcodesize, $barcodesize, $style, 'N');
+					}
+					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 12, $y+5, $barcodesize, $barcodesize, $style, 'N');
 					//$pdf->SetFont('helvetica', '1', 5);					
-					$pdf->Text(18, $y+$barcodesize, $qrcode.$i);
+					$pdf->Text(18, $y+2+$barcodesize, $qrcode.$i);
 					if($message_below_code!=""){
 					$pdf->Text(18, $y+$barcodesize+$space_for_message_below_code+1, $message_below_code);
 					}
@@ -750,7 +761,7 @@ $pdf->write1DBarcode($qrcode2.$i, 'C128B', 18+$space_between_twin_code+$barcodes
 				}
 				$customer_id = get_customer_id_by_product_id($product_id);
 				$this->insert_print_order_in_table($post,'Qrcode');
-				$this->insert_order_print_listing_table($post,'Qrcode',$customer_id);
+				$this->insert_order_print_listing_table($post,'Qrcode',$customer_id,$print_codes_in_batches,$print_code_unity_type);
  			}
  			##----------------------------------------------------------------------------------##
  			// ---------------------------------------------------------
@@ -813,17 +824,33 @@ $pdf->write1DBarcode($qrcode2.$i, 'C128B', 18+$space_between_twin_code+$barcodes
 			$delivery_date			= date('Y-m-d',strtotime($userOrderData['delivery_date']));
 			$order_created_date     = date('Y-m-d',strtotime($userOrderData['created_date']));
 			$status					= $userOrderData['status'];
- 			$qrcode 				= $barcode_no . mt_rand(1000, 9999);
-			$qrcode2				= $barcode_no . mt_rand(1000, 9999);	
+ 			$qrcode 				= $barcode_no . mt_rand(100, 999);
+			$qrcode2				= $barcode_no . mt_rand(100, 999);	
 
 			$ProductData = get_product_data($product_id);
 			$message_above_code			= $ProductData['message_above_code'];
 			$message_below_code			= $ProductData['message_below_code'];
 			$space_between_twin_code			= $ProductData['space_between_twin_code'];	
-			$space_for_message_above_code		= 4;	
-			$space_for_message_below_code		= 6;
+			/*
+			$space_for_message_above_code		= 14;	
+			$space_for_message_below_code		= 16;
 			$space_between_code_rows 			= 30;	
 			$TextFontSize = 10;	
+			*/
+			
+			$space_for_message_above_code			= $ProductData['space_for_message_above_code'];
+			$space_for_message_below_code			= $ProductData['space_for_message_below_code'];
+			$space_between_code_rows = $ProductData['space_between_code_rows'];
+			$print_codes_in_batches = $ProductData['print_codes_in_batches'];
+			$TextFontSize = $ProductData['TextFontSize'];
+			
+			$height_of_the_bar_code = $ProductData['height_of_the_bar_code'];
+			$message_above_secondry_code 			= $ProductData['message_above_secondry_code'];
+			$message_below_secondry_code 			= $ProductData['message_below_secondry_code'];
+			$space_for_message_above_secondry_code 			= $ProductData['space_for_message_above_secondry_code'];
+			$space_for_message_below_secondry_code 			= $ProductData['space_for_message_below_secondry_code'];
+			$print_code_unity_type 			= $ProductData['code_unity_type'];
+			
  			
 			// set style for barcode
 			 $style = array(
@@ -910,7 +937,7 @@ $pdf->write1DBarcode($qrcode2.$i, 'C128B', 18+$space_between_twin_code+$barcodes
 			
  			// define barcode style
 			$style = array(
-								'border' => true,
+								'border' => false,
 								'vpadding' => 'auto',
 								'hpadding' => 'auto',
 								'fgcolor' => array(0,0,0), 
@@ -941,34 +968,46 @@ $pdf->write1DBarcode($qrcode2.$i, 'C128B', 18+$space_between_twin_code+$barcodes
 					if($getEssentialAttributes['code_unity_type']=='Twin'){
 					
 					
-					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 60, $y, $barcodesize, $barcodesize, $style, 'N');
-					$pdf->Text(62, $y+0.2, $qrcode.$i);
-					$pdf->Text(62, $y+31, 'Scan to Check Product');
-					$pdf->write1DBarcode($qrcode2.$i, 'C128B', 120, $y-1.5, 80, $barcodesize, 0.4, $style, 'L');
-					//$pdf->write1DBarcode($qrcode2.$i, 'C128B', 140, $y, 50, 15, 0.3, $style, 'N');
-					//$pdf->SetFont('','B');
-				  	$pdf->Text(121, $y+30, "^^Do Not Buy!! If already Scratched^^, Scratch to register product");
-					//$pdf->Text(150, $y+30, "Scratch to register product");
+						$pdf->SetFont('helvetica', '1', $TextFontSize);
+						if($message_above_code!=""){
+					$pdf->Text(18, $y-$space_for_message_above_code, $message_above_code);
+					  }
+					if($print_codes_in_batches=="Yes"){
+					$pdf->Text(18, $y+2, "BatchID-".$print_batch_id);
+					}
+					$pdf->write1DBarcode($qrcode2.$i, 'C128B', 18, $y+6, $barcodesize, $height_of_the_bar_code, 0.4, $style, 'L');
 					
-					
-					//$pdf->Cell(287,50, 'If already Scratched ^', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
-					
+					$pdf->Text(22+$space_between_twin_code+$barcodesize, $y+$barcodesize+1, $qrcode.$i);
+					//$pdf->Text(122, $y+35, 'Scan to Check Product');
+					if($message_above_secondry_code!=""){
+					$pdf->Text(18+$space_between_twin_code+$barcodesize, $y+$space_for_message_above_secondry_code, $message_above_secondry_code);
+					  }
+					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 18+$space_between_twin_code+$barcodesize, $y+5, $barcodesize, $barcodesize, $style, 'N');
+					if($message_below_secondry_code!=""){
+					$pdf->Text(18+$space_between_twin_code+$barcodesize, $y+$space_for_message_below_secondry_code, $message_below_secondry_code);
+					  }
+
+					if($message_below_code!=""){
+					$pdf->Text(18, $y+$height_of_the_bar_code+$space_for_message_below_code+2, $message_below_code);
+					}
 					
 					} else {
 					$pdf->SetFont('helvetica', '1', $TextFontSize);	
 					if($message_above_code!=""){
 						$pdf->Text(28, $y-$space_for_message_above_code, $message_above_code);
 					}
-						$pdf->Text(28, $y+1, "BatchID-".$print_batch_id);
-		$pdf->write1DBarcode($qrcode.$i, 'C128B', 28, $y+5, $barcodesize, $barcodesize/3, 0.4, $style, 'L');
+					if($print_codes_in_batches=="Yes"){
+					$pdf->Text(28, $y+1, "BatchID-".$print_batch_id);
+					}
+		$pdf->write1DBarcode($qrcode.$i, 'C128B', 28, $y+5, $barcodesize, $height_of_the_bar_code, 0.4, $style, 'L');
 					
 					if($message_below_code!=""){
-					$pdf->Text(28, $y+$barcodesize/3+$space_for_message_below_code, $message_below_code);
+					$pdf->Text(28, $y+$height_of_the_bar_code+$space_for_message_below_code, $message_below_code);
 					}
 					
 					}
 					$pdf->SetXY($x,$y);
-					$pdf->Cell(28,$space_between_code_rows+$barcodesize/3, '', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
+					$pdf->Cell(28,$space_between_code_rows+$height_of_the_bar_code, '', 0, 0, 'C', FALSE, '', 0, FALSE, 'C', 'B');
 					$pdf->Ln();
 					
 					// $pdf->Cell(105, 21, "", 1, 2, 'C', FALSE, '', 0, FALSE, 'C', 'B');
@@ -978,7 +1017,7 @@ $pdf->write1DBarcode($qrcode2.$i, 'C128B', 18+$space_between_twin_code+$barcodes
  				}
 				$customer_id = get_customer_id_by_product_id($product_id);
 				$this->insert_print_order_in_table($post,'barcode');
-				$this->insert_order_print_listing_table($post,'barcode',$customer_id);
+				$this->insert_order_print_listing_table($post,'barcode',$customer_id,$print_codes_in_batches,$print_code_unity_type);
  			}
 			 // $pdf->Ln();
  			// ---------------------------------------------------------
@@ -1029,7 +1068,7 @@ $pdf->write1DBarcode($qrcode2.$i, 'C128B', 18+$space_between_twin_code+$barcodes
 			//$order_created_date     = date('Y-m-d',strtotime($userOrderData['created_date']));
 			//$status					= $userOrderData['status'];
  			$qrcode 				= $this->input->post('upload_code');	
-			$qrcode2				= mt_rand(1000, 9999);		
+			$qrcode2				= mt_rand(100, 999);		
  			
 			
 			//echo '<pre>';print_r($this->input->post());exit;
@@ -1473,11 +1512,11 @@ $pdf->Output('example_050.pdf', 'I');
 	 }
 	 
 	 
-	 function insert_order_print_listing_table($post,$code_type,$customer_id){## code type is barcode, QR code
+	 function insert_order_print_listing_table($post,$code_type,$customer_id,$print_codes_in_batches,$print_code_unity_type){## code type is barcode, QR code
 		 $order_id 				= base64_decode($post['order_id']);
 		 //$resultSet=0;
 		
-			 	$resultSet= $this->order_master_model->insert_order_print_listing($post,$code_type,$customer_id);	
+			 	$resultSet= $this->order_master_model->insert_order_print_listing($post,$code_type,$customer_id,$print_codes_in_batches,$print_code_unity_type);	
 			 
 		// return $resultSet;
 	 }
@@ -1632,6 +1671,16 @@ $pdf->Output('example_050.pdf', 'I');
         $data['get_activate_codes_details'] = $this->order_master_model->details_activate_codes($print_batch_id);
         $this->load->view('details_activate_codes_tpl', $data);
     }
+	
+	  public function activate_twin_codes() {
+		
+		$data = array();
+        $print_batch_id = $this->uri->segment(3);
+		//echo $id;
+
+        $data['get_activate_codes_details'] = $this->order_master_model->details_activate_codes($print_batch_id);
+        $this->load->view('details_activate_twin_codes_tpl', $data);
+    }
 
 	
   public function update_activate_codes() {
@@ -1646,6 +1695,17 @@ $pdf->Output('example_050.pdf', 'I');
 		
     }
 
+	  public function update_activate_twin_codes() {
+        $data					= array();
+		$data = $this->input->post();
+		$print_batch_id = $data['print_batch_id'];
+		$PackagingLevel = $data['PackagingLevel'];
+		
+		$data = $this->order_master_model->update_activate_twin_codes($data);
+		
+		exit;
+		
+    }
 
 	public function list_printed_batches() {
 		$user_id 	= $this->session->userdata('admin_user_id');

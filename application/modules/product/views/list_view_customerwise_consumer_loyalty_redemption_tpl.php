@@ -115,7 +115,6 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th class="hidden-480">Transuction Date</th>
                                     <th class="hidden-480">Event Name</th>
                                     <th class="hidden-480">Event Detail</th>
-									<th>Transaction</th>
                                     <th>Points</th>
 									<th>Consumer Name</th>
 									<th>Consumer Phone</th>
@@ -145,31 +144,32 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                 <td><?php echo $sno; ?></td>
                                 <td><?php echo $attr['transaction_date']; ?></td>
                                 <td><?php echo $attr['transaction_type_name']; ?></td>
-                                <td><?php //echo $attr['params'];
+                                <td>Redeemed Through Microsite<?php //echo $attr['params'];
 						//echo json_decode($attr['params']);
-							$character = json_decode($attr['params']);	 					
-							//if($character->transaction_date!=''){echo $character->transaction_date . ".";}
-						if($character->transaction_name!=''){echo  $character->transaction_name . " ";}							
+							$character = json_decode($attr['params']);	
+ 					
+							//if($character->transaction_date!=''){echo $character->transaction_date . ".";}	
 							if($character->passbook_title!=''){echo  $character->passbook_title . ", ";}	
 							if($character->consumer_phone!=''){echo  $character->consumer_phone;}
-	if(getConsumerNameById($character->consumer_id)!='') {echo ", " . getConsumerNameById($character->consumer_id);}	
+	if(getConsumerNameById($character->consumer_id)!='') {echo ", " . getConsumerNameById($character->consumer_id);}
+	
 							//if($character->brand_name!=''){echo  $character->brand_name;}
 							//if($character->product_name!=''){echo ", " . $character->product_name;}
+							
 							if($character->product_id!=''){echo  get_products_brand_name_by_id($character->product_id);}
 							if($character->product_id!=''){echo ", " . get_products_name_by_id($character->product_id);}
+							
 							if($character->points_redeemed!=''){echo $character->points_redeemed;}
 							if($character->coupon_number!=''){echo ", " . $character->coupon_number;}
-								?></td>
-								<td><?php if($attr['transaction_lr_type']=="Loyalty"){
-									echo "Credited";
-								}else{ echo "Debited"; }
+							
+							
 								?></td>
                                  <td><?php echo $attr['points']; ?></td>
 								 <td><?php echo getConsumerNameById($attr['consumer_id']); ?></td>
 								 <td><?php echo getConsumerMobileNumberById($attr['consumer_id']); ?></td>
-							<td><?php echo $character->registration_address;	?>
+								 <td><?php echo $character->registration_address;	?>
 								 <!--<a href="https://www.mapdevelopers.com/geocode_tool.php?lat=<?php echo $character->latitude; ?>&lng=<?php echo $character->longitude; ?>" target="_blank"><?php echo $character->latitude; echo ", ";	echo $character->longitude;	?></a>-->
-							</td> 
+								 </td>
                                    <!--<td><?php echo $attr['transaction_lr_type']; ?></td>
 								   <td><?php echo $attr['total_accumulated_points']; ?></td>
 								   <td><?php echo $attr['total_redeemed_points']; ?></td>

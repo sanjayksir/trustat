@@ -412,10 +412,11 @@ class Myspidey_user_master_model extends CI_Model {
                 // $this->db->set('profile_photo', $frmData['profile_photo']);
                 $UpdateData = array(
                     "mobile_no" => $frmData['user_mobile'],
-                    "industry" => $frmData['industry'],
-                    "pan " => $frmData['pan'],
+                    //"industry" => $frmData['industry'],
+                    //"pan " => $frmData['pan'],
                     "f_name" => $frmData['f_name'],
                     "l_name" => $frmData['l_name'],
+					"customer_microsite_url"=>$frmData['customer_microsite_url'],
 					"days_for_expiry_of_point_credited" => $frmData['days_for_expiry_of_point_credited'],
                     "days_for_notification_before_expiry_of_lps" => $frmData['days_for_notification_before_expiry_of_lps'],
                     "user_name" => $frmData['user_name'],
@@ -430,10 +431,11 @@ class Myspidey_user_master_model extends CI_Model {
             } else {
                 $UpdateData = array(
                     "mobile_no" => $frmData['user_mobile'],
-                    "industry" => $frmData['industry'],
-                    "pan " => $frmData['pan'],
+                    //"industry" => $frmData['industry'],
+                    //"pan " => $frmData['pan'],
                     "f_name" => $frmData['f_name'],
                     "l_name" => $frmData['l_name'], 
+					"customer_microsite_url"=>$frmData['customer_microsite_url'],
 					"days_for_expiry_of_point_credited" => $frmData['days_for_expiry_of_point_credited'],
                     "days_for_notification_before_expiry_of_lps" => $frmData['days_for_notification_before_expiry_of_lps'],
                     "user_name" => $frmData['user_name'],

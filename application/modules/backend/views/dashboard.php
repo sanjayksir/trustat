@@ -76,755 +76,250 @@
 									</strong> 
 								</div> 
 								-->
-								<div class="row">
-								<div class="col-sm-7">
-										<div class="widget-box transparent">
-											<div class="widget-header widget-header-flat">
+								 <?php if($this->session->userdata('admin_user_id')==1) { ?>
+								
+											
+								<div class="col-xs-12">
+								<div class="widget-header widget-header-flat">
 												<h4 class="widget-title lighter">
 													<i class="ace-icon fa fa-signal"></i>
-													Barcodes Status
+													Pending Approvals
 												</h4>
-
-												<div class="widget-toolbar">
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												</div>
 											</div>
-
-											<div class="widget-body">
-												<div class="widget-main padding-4">
-												<table class="table table-bordered table-striped" style="display: block; height: 300px; overflow-y: auto">
-														<thead class="thin-border-bottom">
-															<tr>
-																<th>
-																	<i class="ace-icon fa fa-caret-right blue"></i>Barcode																</th>
-
-																<th>
-																	<i class="ace-icon fa fa-caret-right blue"></i>Product Name</th>
-
-																
-															    <th class="hidden-480"><i class="ace-icon fa fa-caret-right blue"></i>Status</th>
-															    
-																<th class="hidden-480"><i class="ace-icon fa fa-caret-right blue"></i>Purhased</th>
-															</tr>
-														</thead>
-						
-										<tbody>
-
-    <?php $i = 0;  //  echo '***<pre>';print_r($orderListing); 
-                                            if(count($PrintedCodeListing)>0){
-                                                    $i=0;
-                                                    $page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
-                                                    $sno =  $page + 1;
-    foreach ($PrintedCodeListing as $key=>$listData){
-                                                    $i++;
-                                                    ?>
-           <tr id="show<?php echo $key; ?>">
-															<td class="hidden-480"><?php echo $listData['barcode_qr_code_no']; ?></td>
-                                                            <td class="hidden-480"><?php echo $listData['product_name']; ?></td>
-                                                            <td>
-
-                                                            <?php 												
-
-                                                             $activeinactive = $listData['active_status'];
-                                                             if ($activeinactive == 1)
-                                                                     { echo "Active";
-                                                                     } else { 
-                                                                     echo "Inactive";
-                                                                     }
-
-                                                              ?>
-                                                            </td>
-                                                             <td><?php //echo isProductCodeRegistered($listData['barcode_qr_code_no']); ?>
-															 <?php 												
-
-                                                             $isProductCodeRegistered = isProductCodeRegistered($listData['barcode_qr_code_no']);
-                                                             if ($isProductCodeRegistered == true)
-                                                                     { echo "Yes";
-                                                                     } else { 
-                                                                     echo "No";
-                                                                     }
-
-                                                              ?>
-															 </td>
-															  
-															 
-          </tr>
-     <?php 
-     $sno++;
-     }
-                                            }else{ ?>
-                                            <tr><td align="center" colspan="9" class="color error">No Records Founds</td></tr>
-                                            <?php }?>
-                                        </tbody>
-													</table>
-													<div id="sales-charts"></div>
-												</div><!-- /.widget-main -->
-											</div><!-- /.widget-body -->
-										</div><!-- /.widget-box -->
-									</div>
+										<table id="simple-table" class="table  table-bordered table-hover">
+											<thead>
+												<tr>
+													
+													<th>Issuing QR codes</th>
+													<th>Advertisements</th>
+													<th>Survey</th>
+													<th>Messages</th>
+													<th> Loyalty Redemptions</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr>
+													<td><a href="#"><?php echo $NumberofPendingCodePrintOrders;?></a></td>
+													<td><a href="#"><?php echo $NumberofPendingAdvertisementOrders;?></a></td>
+													<td><a href="#"><?php echo $NumberofPendingSurveyOrders;?></a></td>
+													<td><a href="#"><?php echo $NumberofPendingMessagesOrders;?></a></td>
+													<td><a href="#"><?php echo $NumberofPendingLoyaltyRedemptionsRequests;?></a></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>	
+								<br />
 								
-								
-								
-								
-								<div class="col-sm-5">
-										<div class="widget-box transparent">
-											<div class="widget-header widget-header-flat">
+								<div class="col-xs-12">
+								<div class="widget-header widget-header-flat">
 												<h4 class="widget-title lighter">
-													<i class="ace-icon fa fa-star orange"></i>
-													Order Status
+													<i class="ace-icon fa fa-signal"></i>
+													Consumer Dashboard
 												</h4>
-
-												<div class="widget-toolbar">
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												</div>
 											</div>
-
-											<div class="widget-body">
-												<div class="widget-main no-padding">
-													<table class="table table-bordered table-striped" style="display: block; height: 300px; overflow-y: auto">
-														<thead class="thin-border-bottom">
-															<tr>
-																<th><i class="ace-icon fa fa-caret-right blue"></i>Order Number</th>
-																<th><i class="ace-icon fa fa-caret-right blue"></i>Product Name </th>
-																<th><i class="ace-icon fa fa-caret-right blue"></i>Order Status</th>
-															</tr>
-														</thead>
-														<tbody>
-
-                                        <?php 
-                                        $i = 0; 
-
-                                        if(count($orderListing)>0){
-                                            $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
-                                            $sno =  $page + 1;
-                                            foreach ($orderListing as $listData){
-                                                $essentialAttributeArr = array();
-                                                $essentialAttributeArr = getEssentialAttributes($listData['product_id']);
-                                                // echo '***<pre>';print_r($essentialAttributeArr);
-                                                $i++;
-                                                $status = $listData['status'];
-    if($status ==1){
-                                                $status ='Active';
-                                                        $colorStyle="style='color:white;border-radius:10px;background-color:green;border:none;'";
-                                                }else{
-                                                $status ='Inactive';
-                                                        $colorStyle="style='color:black;border-radius:10px;background-color:red;border:none;'";
-                                                }?>
-												  <tr id="show<?php echo $listData['order_id']; ?>">
-                                                   <td><?php  echo $listData['order_no']; ?></td>
-												   <td><?php echo $listData['product_name']; ?></td>
-          
-                                                        <?php if($this->session->userdata('admin_user_id')==1){
-                                                                //echo $listData['user_id'].'**'.$this->session->userdata('admin_user_id');		
-
-                                                                                if($this->session->userdata('admin_user_id')!=$listData['user_id']){
-                                                                                        $print_opt = 0;
-                                                                                }else{
-                                                                                        $print_opt = 1;
-                                                                                }
-
-                                                                ?>
-
-                                                         <td>
-         <?php //if($essentialAttributeArr['delivery_method']==4){?>
-                <select name="change_order_status" id="change_order_status" onchange="return change_order_status('<?php echo $listData['order_id'];?>',this.value,'<?php echo $print_opt;?>');">
-                                                                <option value="0" <?php if($listData['order_status']=='0'){echo 'selected';}?>>Pending</option>
-                                                                <option value="1" <?php if($listData['order_status']=='1'){echo 'selected';}?>>Accepted</option>
-                                                                <option value="2" <?php if($listData['order_status']=='2'){echo 'selected';}?>>Rejected</option>
-                                                                </select>
-        <?php //}else{
-                                                                //echo 'Hard Print';
-                                                        //}?>
-                                                        </td> 
-                                                        <?php }else{?>
-                                                         <td><?php echo order_status($listData['order_status']); ?></td>
-                                                        <?php }?>
-                                                        
-         
-     </tr>
-    <?php 
-    }
- }else{
-    ?>
-    <tr><td align="center" colspan="8" class="color error">No Records Founds</td></tr>
-<?php         
- }
- ?>
-
-                </tbody>
-														
-														<!--
-														<tbody>
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-														</tbody>
-														-->
-													</table>
-												</div><!-- /.widget-main -->
-											</div><!-- /.widget-body -->
-										</div><!-- /.widget-box -->
+										<table class="table table-bordered table-striped" style="display: block; height: 450px; overflow-y: auto">
+											<thead>
+												<tr>
+													<th>S. No.</th> 
+													<th>Consumer Dashboard</th>
+													<th>Number of Registered Consumers</th>
+													<th>No. of times scanned products for level 0</th>
+													<th>No. of times scanned products for level 1</th>
+													<th>Watched pushed Advertisement</th>
+													<th>Feedback Given pushed Advertisement</th>
+													<th>Watched pushed Surveys</th>
+													<th>Feedback Given pushed Surveys</th>
+												</tr>
+											</thead>
+											<tbody>
+								<tr>
+									<td><a href="#">1</a></td>
+									<td><a href="#">Consumers</a></td>
+									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel0;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel1;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertisment;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveys;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveys;?></a></td>
+								</tr>
+								<tr>
+									<td><a href="#">2</a></td>
+									<td><a href="#">Regsitered Consumers who scanned today for all Brands</a></td>
+									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumersToday;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel0Today;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel1Today;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertismentToday;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertismentToday;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveysToday;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveysToday;?></a></td>
+								</tr>
+												<tr>
+													<td><a href="#">3</a></td>
+													<td><a href="#">Regsitered Consumers who scanned in last 7 days for all Brands</a></td>
+									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers7Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers7Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel17Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertisment7Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment7Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveys7Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveys7Days;?></a></td>
+												</tr>
+												<tr>
+													<td><a href="#">4</a></td>
+													<td><a href="#">Regsitered Consumers who scanned in last 30 days for all Brands</a></td>
+									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers30Days; ?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers30Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel130Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertisment30Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment30Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveys30Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveys30Days;?></a></td>
+												</tr>
+												<tr>
+													<td><a href="#">5</a></td>
+													<td><a href="#">Brandwise and TRUSTAT tolal loyalty points with Consumers</a></td>
+													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?></a></td>
+													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0;?></a></td>
+													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1;?></a></td>
+													<td><a href="#"><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?>NA</a></td>
+													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></a></td>
+													<td><a href="#"><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</a></td>
+											<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></a></td>
+												</tr>
+												<tr>
+													<td><a href="#">6</a></td>
+													<td><a href="#">TRUSTAT</a></td>
+													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?></a></td>
+													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0;?></a></td>
+													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1;?></a></td>
+													<td><a href="#"><?php //echo $TRUSTATTotalEarnedLoyaltyPointsWatchedPushedAdvertisment;?>NA</a></td>
+													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></a></td>
+													<td><a href="#"><?php //echo $TRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</a></td>
+											<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></a></td>
+												</tr>
+												<tr>
+													<td><a href="#">7</a></td>
+													<td><a href="<?php echo base_url('product/consumer_brand_loyalty_dashboard') ?>">Brand <font color="red"> Click here for Details</font></a></td>
+													<td><a href="#"><?php //echo $BrandTotalEarnedLoyaltyPointsConsumerRegistration;?>0</a></td>
+													<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsScannedCodesLevel0;?></a></td>
+													<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsScannedCodesLevel1;?></a></td>
+													<td><a href="#"><?php //echo $BrandTotalEarnedLoyaltyPointsWatchedPushedAdvertisment;?>NA</a></td>
+													<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></a></td>
+													<td><a href="#"><?php //echo $BrandTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</a></td>
+											<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></a></td>
+												</tr>
+											</tbody>
+										</table>
 									</div>
-									
-									
-									
-									</div>
+								 <?php }else{ ?>
 								
+								<div class="col-xs-12">
+								<div class="widget-header widget-header-flat">
+												<h4 class="widget-title lighter">
+													<i class="ace-icon fa fa-signal"></i>
+													Consumer Dashboard
+												</h4>
+											</div>
+										<table class="table table-bordered table-striped" style="display: block; height: 520px; overflow-y: auto">
+											<thead>
+												<tr>
+													<th>S. No.</th> 
+													<th>Consumer Dashboard</th>
+													<th>Number of Registered Consumers</th>
+													<th>No. of times scanned products for level 0</th>
+													<th>No. of times scanned products for level 1</th>
+													<th>Watched pushed Advertisement</th>
+													<th>Feedback Given pushed Advertisement</th>
+													<th>Watched pushed Surveys</th>
+													<th>Feedback Given pushed Surveys</th>
+												</tr>
+											</thead>
+											<tbody>
+								<tr>
+									<td><a href="#">1</a></td>
+									<td><a href="#">Consumers</a></td>
+									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel0;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel1;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertisment;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveys;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveys;?></a></td>
+								</tr>
+								<tr>
+									<td><a href="#">2</a></td>
+									<td><a href="#">Regsitered Consumers who scanned today</a></td>
+									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumersToday;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel0Today;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel1Today;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertismentToday;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertismentToday;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveysToday;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveysToday;?></a></td>
+								</tr>
+												<tr>
+													<td><a href="#">3</a></td>
+													<td><a href="#">Regsitered Consumers who scanned in last 7 days</a></td>
+									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers7Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel07Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel17Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertisment7Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment7Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveys7Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveys7Days;?></a></td>
+												</tr>
+												<tr>
+													<td><a href="#">4</a></td>
+													<td><a href="#">Regsitered Consumers who scanned in last 30 days</a></td>
+									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers30Days; ?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel030Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel130Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertisment30Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment30Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveys30Days;?></a></td>
+									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveys30Days;?></a></td>
+												</tr>
+												<tr>
+													<td><a href="#">5</a></td>
+													<td><a href="#">Brand + TRUSTAT tolal loyalty points with Consumers</a></td>
+													<td><a href="#"><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>0</a></td>
+													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0;?></a></td>
+													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1;?></a></td>
+													<td><a href="#"><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?>NA</a></td>
+													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></a></td>
+													<td><a href="#"><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</a></td>
+											<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></a></td>
+												</tr>
+												<tr>
+													<td><a href="#">6</a></td>
+													<td><a href="#">TRUSTAT</a></td>
+													<td><a href="#"><?php //echo $TRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>0</a></td>
+													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0;?></a></td>
+													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1;?></a></td>
+													<td><a href="#"><?php //echo $TRUSTATTotalEarnedLoyaltyPointsWatchedPushedAdvertisment;?>NA</a></td>
+													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></a></td>
+													<td><a href="#"><?php //echo $TRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</a></td>
+											<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></a></td>
+												</tr>
+												<tr>
+													<td><a href="#">7</a></td>
+													<td><a href="#">Brand</a></td>
+													<td><a href="#"><?php //echo $BrandTotalEarnedLoyaltyPointsConsumerRegistration;?>0</a></td>
+													<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsScannedCodesLevel0;?></a></td>
+													<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsScannedCodesLevel1;?></a></td>
+													<td><a href="#"><?php //echo $BrandTotalEarnedLoyaltyPointsWatchedPushedAdvertisment;?>NA</a></td>
+													<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></a></td>
+													<td><a href="#"><?php //echo $BrandTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</a></td>
+											<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></a></td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+								<?php } ?>
 					<!--================================		-->	
 								
-								
-						<div class="row">
-						
-						<div class="col-sm-7">
-										<div class="widget-box transparent">
-											<div class="widget-header widget-header-flat">
-												<h4 class="widget-title lighter">
-													<i class="ace-icon fa fa-signal"></i>
-													Report 1
-												</h4>
-
-												<div class="widget-toolbar">
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												</div>
-											</div>
-
-											<div class="widget-body">
-												<div class="widget-main padding-4">
-												<table class="table table-bordered table-striped">
-														<thead class="thin-border-bottom">
-															<tr>
-																<th>
-																	<i class="ace-icon fa fa-caret-right blue"></i>Field 1 </th>
-
-																<th>
-																	<i class="ace-icon fa fa-caret-right blue"></i>Field 2 </th>
-
-																<th class="hidden-480">
-																	<i class="ace-icon fa fa-caret-right blue"></i>Field 3 </th>
-															    <th class="hidden-480">Field 4 </th>
-															    <th class="hidden-480">Field 5 </th>
-															    <th class="hidden-480">Field 6 </th>
-															</tr>
-														</thead>
-
-														<tbody>
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-														</tbody>
-													</table>
-													<div id="sales-charts"></div>
-												</div><!-- /.widget-main -->
-											</div><!-- /.widget-body -->
-										</div><!-- /.widget-box -->
-									</div>
 									
-									
-								<div class="col-sm-5">
-										<div class="widget-box transparent">
-											<div class="widget-header widget-header-flat">
-												<h4 class="widget-title lighter">
-													<i class="ace-icon fa fa-star orange"></i>
-													Report 2
-												</h4>
-
-												<div class="widget-toolbar">
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												</div>
-											</div>
-
-											<div class="widget-body">
-												<div class="widget-main no-padding">
-													<table class="table table-bordered table-striped">
-														<thead class="thin-border-bottom">
-															<tr>
-																<th>
-																		<i class="ace-icon fa fa-caret-right blue"></i>Field 1  																</th>
-
-																<th><i class="ace-icon fa fa-caret-right blue"></i>Field 2 </th>
-																<th><i class="ace-icon fa fa-caret-right blue"></i>Field 3 </th>
-															</tr>
-														</thead>
-
-														<tbody>
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-														</tbody>
-													</table>
-												</div><!-- /.widget-main -->
-											</div><!-- /.widget-body -->
-										</div><!-- /.widget-box -->
-									</div>
-									
-									<div class="col-sm-7">
-										<div class="widget-box transparent">
-											<div class="widget-header widget-header-flat">
-												<h4 class="widget-title lighter">
-													<i class="ace-icon fa fa-signal"></i>
-													Report 3
-												</h4>
-
-												<div class="widget-toolbar">
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												</div>
-											</div>
-
-											<div class="widget-body">
-												<div class="widget-main padding-4">
-												<table class="table table-bordered table-striped">
-														<thead class="thin-border-bottom">
-															<tr>
-																<th>
-																	<i class="ace-icon fa fa-caret-right blue"></i>Field 1  </th>
-
-																<th>
-																	<i class="ace-icon fa fa-caret-right blue"></i>Field 2  </th>
-
-																<th class="hidden-480">
-																	<i class="ace-icon fa fa-caret-right blue"></i>Field 3  </th>
-															    <th class="hidden-480">Field 4 </th>
-															    <th class="hidden-480">Field 5 </th>
-															    <th class="hidden-480">Field 6 </th>
-															</tr>
-														</thead>
-
-														<tbody>
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-														</tbody>
-													</table>
-													<div id="sales-charts"></div>
-												</div><!-- /.widget-main -->
-											</div><!-- /.widget-body -->
-										</div><!-- /.widget-box -->
-									</div>
-									
-									
-									<div class="col-sm-5">
-										<div class="widget-box transparent">
-											<div class="widget-header widget-header-flat">
-												<h4 class="widget-title lighter">
-													<i class="ace-icon fa fa-star orange"></i>
-													Report 4
-												</h4>
-
-												<div class="widget-toolbar">
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												</div>
-											</div>
-
-											<div class="widget-body">
-												<div class="widget-main no-padding">
-													<table class="table table-bordered table-striped">
-														<thead class="thin-border-bottom">
-															<tr>
-																<th>
-																	<i class="ace-icon fa fa-caret-right blue"></i>Field 1  </th>
-
-																<th><i class="ace-icon fa fa-caret-right blue"></i>Field 2 </th>
-																<th><i class="ace-icon fa fa-caret-right blue"></i>Field 3 </th>
-															</tr>
-														</thead>
-
-														<tbody>
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-														</tbody>
-													</table>
-												</div><!-- /.widget-main -->
-											</div><!-- /.widget-body -->
-										</div><!-- /.widget-box -->
-									</div>
-									
-									
-									</div>
-									<!--================================		-->	
-									<div class="row">
-									
-									
-									
-								
-									
-									<div class="col-sm-7">
-										<div class="widget-box transparent">
-											<div class="widget-header widget-header-flat">
-												<h4 class="widget-title lighter">
-													<i class="ace-icon fa fa-signal"></i>
-													Report 5
-												</h4>
-
-												<div class="widget-toolbar">
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												</div>
-											</div>
-
-											<div class="widget-body">
-												<div class="widget-main padding-4">
-												<table class="table table-bordered table-striped">
-														<thead class="thin-border-bottom">
-															<tr>
-																<th>
-																	<i class="ace-icon fa fa-caret-right blue"></i>Field 1  </th>
-
-																<th>
-																	<i class="ace-icon fa fa-caret-right blue"></i>Field 2  </th>
-
-																<th class="hidden-480">
-																	<i class="ace-icon fa fa-caret-right blue"></i>Field 3  </th>
-															    <th class="hidden-480">Field 4 </th>
-															    <th class="hidden-480">Field 5 </th>
-															    <th class="hidden-480">Field 6 </th>
-															</tr>
-														</thead>
-
-														<tbody>
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-
-																<td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															    <td class="hidden-480">&nbsp;</td>
-															</tr>
-														</tbody>
-													</table>
-													<div id="sales-charts"></div>
-												</div><!-- /.widget-main -->
-											</div><!-- /.widget-body -->
-										</div><!-- /.widget-box -->
-									</div>
-									
-									<div class="col-sm-5">
-										<div class="widget-box transparent">
-											<div class="widget-header widget-header-flat">
-												<h4 class="widget-title lighter">
-													<i class="ace-icon fa fa-star orange"></i>
-													Report 6
-												</h4>
-
-												<div class="widget-toolbar">
-													<a href="#" data-action="collapse">
-														<i class="ace-icon fa fa-chevron-up"></i>
-													</a>
-												</div>
-											</div>
-
-											<div class="widget-body">
-												<div class="widget-main no-padding">
-													<table class="table table-bordered table-striped">
-														<thead class="thin-border-bottom">
-															<tr>
-																<th>
-																	<i class="ace-icon fa fa-caret-right blue"></i>Field 1  </th>
-
-																<th><i class="ace-icon fa fa-caret-right blue"></i>Field 2 </th>
-																<th><i class="ace-icon fa fa-caret-right blue"></i>Field 3 </th>
-															</tr>
-														</thead>
-
-														<tbody>
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-
-															<tr>
-																<td>&nbsp;</td>
-
-																<td>&nbsp;</td>
-																<td>&nbsp;</td>
-															</tr>
-														</tbody>
-													</table>
-												</div><!-- /.widget-main -->
-											</div><!-- /.widget-body -->
-										</div><!-- /.widget-box -->
-									</div>
-									
-									</div>
-
-
 								
 						</div>
 		
