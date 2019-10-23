@@ -115,6 +115,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                     <th class="hidden-480">Transuction Date</th>
                                     <th class="hidden-480">Event Name</th>
                                     <th class="hidden-480">Event Detail</th>
+									<th>Customer Loyalty Type</th>
 									<th>Transaction</th>
                                     <th>Points</th>
 									<th>Consumer Name</th>
@@ -160,11 +161,13 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 							if($character->points_redeemed!=''){echo $character->points_redeemed;}
 							if($character->coupon_number!=''){echo ", " . $character->coupon_number;}
 								?></td>
+								<td><?php echo $attr['customer_loyalty_type']; ?></td>
+								<td><?php echo $attr['points'];	?></td>
 								<td><?php if($attr['transaction_lr_type']=="Loyalty"){
 									echo "Credited";
 								}else{ echo "Debited"; }
 								?></td>
-                                 <td><?php echo $attr['points']; ?></td>
+                                 
 								 <td><?php echo getConsumerNameById($attr['consumer_id']); ?></td>
 								 <td><?php echo getConsumerMobileNumberById($attr['consumer_id']); ?></td>
 							<td><?php echo $character->registration_address;	?>

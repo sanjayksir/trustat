@@ -299,6 +299,9 @@ $route['reports/list_purchased_products'] = 'order_master/barcode/list_purchased
 $route['reports/list_complaint_log'] = 'order_master/barcode/list_complaint_log';
 $route['reports/list_feedback_on_product'] = 'order_master/barcode/list_feedback_on_product';
 $route['reports/list_warranty_claims'] = 'order_master/barcode/list_warranty_claims';
+$route['reports/basic_customer_report_level0'] = 'order_master/barcode/BasicCustomerReportLevel0';
+$route['reports/basic_customer_report_level1'] = 'order_master/barcode/BasicCustomerReportLevel1';
+
 
 $route['surveys/view_survey_details/(:any)'] = 'surveys/view_survey_details/$1';
 $route['advertisements/view_advertisement_details/(:any)'] = 'advertisements/view_advertisement_details/$1';

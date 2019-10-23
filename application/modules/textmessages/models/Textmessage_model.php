@@ -1109,7 +1109,13 @@ function AllSelectedConsumersByACustomer1($customer_id, $consumer_selection_crit
 		return $query->row()->purchasing_points;
     }
 	
-	
+	function consumed_loyalty_points($user_id) {
+				$this->db->select_sum('points');
+				$this->db->from('loylty_points');
+				$this->db->where(array('customer_id'=> $user_id, 'customer_loyalty_type'=> "TRUSTAT"));
+				$query=$this->db->get();		
+		return $query->row()->points;
+    }
 
 	
 			

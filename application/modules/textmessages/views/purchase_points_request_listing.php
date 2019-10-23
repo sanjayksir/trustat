@@ -80,11 +80,11 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                         <div class="widget-box widget-color-blue">
                             <div class="widget-header widget-header-flat">
-                                <h5 class="widget-title bigger lighter">Approve Purchased Points Requests
+                                <h5 class="widget-title bigger lighter">Loyalty Points
 								 <?php
 									$user_id 	= $this->session->userdata('admin_user_id');
 
-									 if($user_id>1) {  ?> : Total Approved(<?php echo $total_approved_points; ?>), Waiting Approval(<?php echo $waiting_approval_points; ?>) Points<?php }  ?>
+									 if($user_id>1) {  ?> : Total Approved (<?php echo $total_approved_points; ?>), Waiting Approval (<?php echo $waiting_approval_points; ?>), Consumed (<?php echo $consumed_loyalty_points; ?>), Remaining (<?php echo $total_approved_points-$consumed_loyalty_points; ?>) <?php }  ?>
 								
 								
 								</h5>

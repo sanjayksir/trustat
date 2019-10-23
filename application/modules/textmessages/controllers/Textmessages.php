@@ -1427,7 +1427,7 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
         $params["links"] = Utils::pagination('textmessages/approve_purchase_points_requests', $total_records);
 		$params["total_approved_points"] = $this->Textmessage_model->total_approved_points($user_id);
 		$params["waiting_approval_points"] = $this->Textmessage_model->waiting_approval_points($user_id);
-		
+		$params["consumed_loyalty_points"] = $this->Textmessage_model->consumed_loyalty_points($user_id);
         $this->load->view('purchase_points_request_listing', $params);
     }
 	

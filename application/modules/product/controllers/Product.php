@@ -1780,8 +1780,6 @@ function list_assigned_products() {
 			$minimum_locking_balance = $result->loyalty_points;
 			$params["minimum_locking_balance"] = $minimum_locking_balance;
 			
-			
-		
         $this->load->view('list_customer_loyalty_summary_tpl', $params);
     }
 	

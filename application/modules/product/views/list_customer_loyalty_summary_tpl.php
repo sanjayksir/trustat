@@ -158,12 +158,12 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                         <table id="dynamic-table" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-														<!--<th>S No.</th>-->
+														<th>S No.</th>
 													   <th>Customer Name<?php echo $list_all_consumers->customer_id; ?></th>
-													   <th>Total Purchased Points</th>
-														<th>Total Points awarded</th>
+													   <th>Total Purchased TRUSTAT Points</th>
+														<th>Total TRUSTAT Points awarded</th>
 														<th>Brand Points Redeemed</th>
-														<th>Closing Balance</th>
+														<th>TRUSTAT Closing Balance</th>
                                                        <th>Loyalty Details</th>
 
                                 </tr>
@@ -183,7 +183,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 							
                          ?>
                                 <tr id="show<?php echo $attr['id'];?>" <?php if (!empty($customer_id)) { if($attr['customer_id']!=$customer_id) {  ?> style="display:none;" <?php } } ?>>
-                                <!--<td><?php echo $sno; ?></td>-->
+                                <td><?php echo $sno; ?></td>
                                 <td><?php echo getUserFullNameById($attr['customer_id']);
 				
 				
@@ -198,7 +198,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 								mysql_select_db("trackingprortaldb");
 								}
 								
-								$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where customer_id = '".$attr['customer_id']."' AND transaction_lr_type = 'Loyalty'";
+								$some_q = "SELECT SUM(points) AS `points` FROM loylty_points where customer_id = '".$attr['customer_id']."' AND customer_loyalty_type = 'TRUSTAT'";
 
 							$results = mysql_query($some_q) or die(mysql_error());
 
@@ -217,7 +217,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 								mysql_select_db("trackingprortaldb");
 								}
 								
-								$some_q2 = "SELECT SUM(points) AS `points` FROM consumer_passbook where customer_id = '".$attr['customer_id']."' AND transaction_lr_type = 'Redemption' AND customer_loyalty_type = 'Brand'";
+								$some_q2 = "SELECT SUM(points) AS `points` FROM loylty_points where customer_id = '".$attr['customer_id']."' AND customer_loyalty_type = 'Brand'";
 
 							$results2 = mysql_query($some_q2) or die(mysql_error());
 
@@ -228,7 +228,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 							}
 								?></td>
                                                
-                                                 <td><?php echo total_approved_points2($attr['customer_id']) - $TE_Points + $TE_Points2; ?> </td> 
+                                                 <td><?php echo total_approved_points2($attr['customer_id']) - $TE_Points; ?> </td> 
 													<td><?php echo anchor("product/list_customerwise_consumer_loyalty_details/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Loyalty Details</i>', array('class' => 'btn btn-xs btn-info','title'=>' Loyalty Details')); ?>  
 													<?php echo anchor("textmessages/list_approved_purchases_by_customer/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Purchases</i>', array('class' => 'btn btn-xs btn-info','title'=>'Customer Purchase')); ?>
 													
