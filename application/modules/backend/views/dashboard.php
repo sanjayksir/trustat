@@ -1,4 +1,6 @@
-<?php $this->load->view('../includes/admin_header');?>
+<?php 
+//log_message('debug',print_r($array_or_object_you_want_to_print,TRUE));
+$this->load->view('../includes/admin_header');?>
 
 <?php $this->load->view('../includes/admin_top_navigation');?>
 
@@ -95,15 +97,17 @@
 													<th>Survey</th>
 													<th>Messages</th>
 													<th> Loyalty Redemptions</th>
+													<th>Purchase Loyalty</th>
 												</tr>
 											</thead>
 											<tbody>
 												<tr>
-													<td><a href="#"><?php echo $NumberofPendingCodePrintOrders;?></a></td>
-													<td><a href="#"><?php echo $NumberofPendingAdvertisementOrders;?></a></td>
-													<td><a href="#"><?php echo $NumberofPendingSurveyOrders;?></a></td>
-													<td><a href="#"><?php echo $NumberofPendingMessagesOrders;?></a></td>
-													<td><a href="#"><?php echo $NumberofPendingLoyaltyRedemptionsRequests;?></a></td>
+													<td><?php echo $NumberofPendingCodePrintOrders;?></td>
+													<td><?php echo $NumberofPendingAdvertisementOrders;?></td>
+													<td><?php echo $NumberofPendingSurveyOrders;?></td>
+													<td><?php echo $NumberofPendingMessagesOrders;?></td>
+													<td><?php echo $NumberofPendingLoyaltyRedemptionsRequests;?></td>
+													<td><?php echo $NumberofPendingPurchaseLoyaltyRequests;?></td>
 												</tr>
 											</tbody>
 										</table>
@@ -123,8 +127,8 @@
 													<th>S. No.</th> 
 													<th>Consumer Dashboard</th>
 													<th>Number of Registered Consumers</th>
-													<th>No. of times scanned products for level 0</th>
-													<th>No. of times scanned products for level 1</th>
+													<th>No. of times Post Purchase Scan Report</th>
+													<th>No. of times Pre Purchase Scan Report</th>
 													<th>Watched pushed Advertisement</th>
 													<th>Feedback Given pushed Advertisement</th>
 													<th>Watched pushed Surveys</th>
@@ -133,81 +137,81 @@
 											</thead>
 											<tbody>
 								<tr>
-									<td><a href="#">1</a></td>
-									<td><a href="#">Consumers</a></td>
-									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel0;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel1;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertisment;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveys;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveys;?></a></td>
+									<td>1</td>
+									<td>Consumers</td>
+									<td><?php echo $TotalNumberofRegisteredConsumers;?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel0;?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel1;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedAdvertisment;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedSurveys;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedSurveys;?></td>
 								</tr>
 								<tr>
-									<td><a href="#">2</a></td>
-									<td><a href="#">Regsitered Consumers who scanned today for all Brands</a></td>
-									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumersToday;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel0Today;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel1Today;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertismentToday;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertismentToday;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveysToday;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveysToday;?></a></td>
+									<td>2</td>
+									<td>Regsitered Consumers who scanned today for all Brands</td>
+									<td><?php echo $TotalNumberofRegisteredConsumersToday;?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel0Today;?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel1Today;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedAdvertismentToday;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedAdvertismentToday;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedSurveysToday;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedSurveysToday;?></td>
 								</tr>
 												<tr>
-													<td><a href="#">3</a></td>
-													<td><a href="#">Regsitered Consumers who scanned in last 7 days for all Brands</a></td>
-									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers7Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers7Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel17Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertisment7Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment7Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveys7Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveys7Days;?></a></td>
+													<td>3</td>
+													<td>Regsitered Consumers who scanned in last 7 days for all Brands</td>
+									<td><?php echo $TotalNumberofRegisteredConsumers7Days;?></td>
+									<td><?php echo $TotalNumberofRegisteredConsumers7Days;?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel17Days;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedAdvertisment7Days;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment7Days;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedSurveys7Days;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedSurveys7Days;?></td>
 												</tr>
 												<tr>
-													<td><a href="#">4</a></td>
-													<td><a href="#">Regsitered Consumers who scanned in last 30 days for all Brands</a></td>
-									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers30Days; ?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers30Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel130Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertisment30Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment30Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveys30Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveys30Days;?></a></td>
+													<td>4</td>
+													<td>Regsitered Consumers who scanned in last 30 days for all Brands</td>
+									<td><?php echo $TotalNumberofRegisteredConsumers30Days; ?></td>
+									<td><?php echo $TotalNumberofRegisteredConsumers30Days;?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel130Days;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedAdvertisment30Days;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment30Days;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedSurveys30Days;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedSurveys30Days;?></td>
 												</tr>
 												<tr>
-													<td><a href="#">5</a></td>
-													<td><a href="#">Brandwise and TRUSTAT tolal loyalty points with Consumers</a></td>
-													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?></a></td>
-													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0;?></a></td>
-													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1;?></a></td>
-													<td><a href="#"><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?>NA</a></td>
-													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></a></td>
-													<td><a href="#"><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</a></td>
-											<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></a></td>
+													<td>5</td>
+													<td>Brandwise and TRUSTAT tolal loyalty points with Consumers</td>
+													<td><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?></td>
+													<td><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0;?></td>
+													<td><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1;?></td>
+													<td><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?>NA</td>
+													<td><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></td>
+													<td><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</td>
+											<td><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></td>
 												</tr>
 												<tr>
-													<td><a href="#">6</a></td>
-													<td><a href="#">TRUSTAT</a></td>
-													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?></a></td>
-													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0;?></a></td>
-													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1;?></a></td>
-													<td><a href="#"><?php //echo $TRUSTATTotalEarnedLoyaltyPointsWatchedPushedAdvertisment;?>NA</a></td>
-													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></a></td>
-													<td><a href="#"><?php //echo $TRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</a></td>
-											<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></a></td>
+													<td>6</td>
+													<td>TRUSTAT</td>
+													<td><?php echo $TRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?></td>
+													<td><?php echo $TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0;?></td>
+													<td><?php echo $TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1;?></td>
+													<td><?php //echo $TRUSTATTotalEarnedLoyaltyPointsWatchedPushedAdvertisment;?>NA</td>
+													<td><?php echo $TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></td>
+													<td><?php //echo $TRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</td>
+											<td><?php echo $TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></td>
 												</tr>
 												<tr>
-													<td><a href="#">7</a></td>
-													<td><a href="<?php echo base_url('product/consumer_brand_loyalty_dashboard') ?>">Brand <font color="red"> Click here for Details</font></a></td>
-													<td><a href="#"><?php //echo $BrandTotalEarnedLoyaltyPointsConsumerRegistration;?>0</a></td>
-													<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsScannedCodesLevel0;?></a></td>
-													<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsScannedCodesLevel1;?></a></td>
-													<td><a href="#"><?php //echo $BrandTotalEarnedLoyaltyPointsWatchedPushedAdvertisment;?>NA</a></td>
-													<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></a></td>
-													<td><a href="#"><?php //echo $BrandTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</a></td>
-											<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></a></td>
+													<td>7</td>
+													<td><a href="<?php echo base_url('product/consumer_brand_loyalty_dashboard') ?>">Brand <font color="red"> Click here for Details</font></td>
+													<td><?php //echo $BrandTotalEarnedLoyaltyPointsConsumerRegistration;?>0</td>
+													<td><?php echo $BrandTotalEarnedLoyaltyPointsScannedCodesLevel0;?></td>
+													<td><?php echo $BrandTotalEarnedLoyaltyPointsScannedCodesLevel1;?></td>
+													<td><?php //echo $BrandTotalEarnedLoyaltyPointsWatchedPushedAdvertisment;?>NA</td>
+													<td><?php echo $BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></td>
+													<td><?php //echo $BrandTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</td>
+											<td><?php echo $BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></td>
 												</tr>
 											</tbody>
 										</table>
@@ -227,8 +231,8 @@
 													<th>S. No.</th> 
 													<th>Consumer Dashboard</th>
 													<th>Number of Registered Consumers</th>
-													<th>No. of times scanned products for level 0</th>
-													<th>No. of times scanned products for level 1</th>
+													<th>No. of times Post Purchase Scan Report</th>
+													<th>No. of times Pre Purchase Scan Report</th>
 													<th>Watched pushed Advertisement</th>
 													<th>Feedback Given pushed Advertisement</th>
 													<th>Watched pushed Surveys</th>
@@ -237,81 +241,82 @@
 											</thead>
 											<tbody>
 								<tr>
-									<td><a href="#">1</a></td>
-									<td><a href="#">Consumers</a></td>
-									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel0;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel1;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertisment;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveys;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveys;?></a></td>
+									<td>1</td>
+									<!--<td><a href="<?php  echo base_url().'product/list_all_consumers';?>">Consumers</a></td>  -->
+									<td>Consumers</td>
+									<td><?php echo $TotalNumberofRegisteredConsumers;?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel0;?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel1;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedAdvertisment;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedSurveys;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedSurveys;?></td>
 								</tr>
 								<tr>
-									<td><a href="#">2</a></td>
-									<td><a href="#">Regsitered Consumers who scanned today</a></td>
-									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumersToday;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel0Today;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel1Today;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertismentToday;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertismentToday;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveysToday;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveysToday;?></a></td>
+									<td>2</td>
+									<td>Regsitered Consumers who scanned today</td>
+									<td><?php echo $TotalNumberofRegisteredConsumersToday;?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel0Today;?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel1Today;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedAdvertismentToday;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedAdvertismentToday;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedSurveysToday;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedSurveysToday;?></td>
 								</tr>
 												<tr>
-													<td><a href="#">3</a></td>
-													<td><a href="#">Regsitered Consumers who scanned in last 7 days</a></td>
-									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers7Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel07Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel17Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertisment7Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment7Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveys7Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveys7Days;?></a></td>
+													<td>3</td>
+													<td>Regsitered Consumers who scanned in last 7 days</td>
+									<td><?php echo $TotalNumberofRegisteredConsumers7Days;?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel07Days;?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel17Days;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedAdvertisment7Days;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment7Days;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedSurveys7Days;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedSurveys7Days;?></td>
 												</tr>
 												<tr>
-													<td><a href="#">4</a></td>
-													<td><a href="#">Regsitered Consumers who scanned in last 30 days</a></td>
-									<td><a href="#"><?php echo $TotalNumberofRegisteredConsumers30Days; ?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel030Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofScannedCodesLevel130Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedAdvertisment30Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment30Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofWatchedPushedSurveys30Days;?></a></td>
-									<td><a href="#"><?php echo $TotalNumberofFeedbackGivenPushedSurveys30Days;?></a></td>
+													<td>4</td>
+													<td>Regsitered Consumers who scanned in last 30 days</td>
+									<td><?php echo $TotalNumberofRegisteredConsumers30Days; ?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel030Days;?></td>
+									<td><?php echo $TotalNumberofScannedCodesLevel130Days;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedAdvertisment30Days;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedAdvertisment30Days;?></td>
+									<td><?php echo $TotalNumberofWatchedPushedSurveys30Days;?></td>
+									<td><?php echo $TotalNumberofFeedbackGivenPushedSurveys30Days;?></td>
+												</tr>
+												<!--<tr>
+													<td>5</td>
+													<td>Brand + TRUSTAT tolal loyalty points with Consumers</td>
+													<td><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>0</td>
+													<td><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0;?></td>
+													<td><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1;?></td>
+													<td><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?>NA</td>
+													<td><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></td>
+													<td><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</td>
+											<td><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></td>
 												</tr>
 												<tr>
-													<td><a href="#">5</a></td>
-													<td><a href="#">Brand + TRUSTAT tolal loyalty points with Consumers</a></td>
-													<td><a href="#"><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>0</a></td>
-													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0;?></a></td>
-													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1;?></a></td>
-													<td><a href="#"><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?>NA</a></td>
-													<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></a></td>
-													<td><a href="#"><?php //echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</a></td>
-											<td><a href="#"><?php echo $BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></a></td>
-												</tr>
+													<td>6</td>
+													<td>TRUSTAT</td>
+													<td><?php //echo $TRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>0</td>
+													<td><?php echo $TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0;?></td>
+													<td><?php echo $TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1;?></td>
+													<td><?php //echo $TRUSTATTotalEarnedLoyaltyPointsWatchedPushedAdvertisment;?>NA</td>
+													<td><?php echo $TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></td>
+													<td><?php //echo $TRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</td>
+											<td><?php echo $TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></td>
+												</tr>-->
 												<tr>
-													<td><a href="#">6</a></td>
-													<td><a href="#">TRUSTAT</a></td>
-													<td><a href="#"><?php //echo $TRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>0</a></td>
-													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0;?></a></td>
-													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1;?></a></td>
-													<td><a href="#"><?php //echo $TRUSTATTotalEarnedLoyaltyPointsWatchedPushedAdvertisment;?>NA</a></td>
-													<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></a></td>
-													<td><a href="#"><?php //echo $TRUSTATTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</a></td>
-											<td><a href="#"><?php echo $TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></a></td>
-												</tr>
-												<tr>
-													<td><a href="#">7</a></td>
-													<td><a href="#">Brand</a></td>
-													<td><a href="#"><?php //echo $BrandTotalEarnedLoyaltyPointsConsumerRegistration;?>0</a></td>
-													<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsScannedCodesLevel0;?></a></td>
-													<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsScannedCodesLevel1;?></a></td>
-													<td><a href="#"><?php //echo $BrandTotalEarnedLoyaltyPointsWatchedPushedAdvertisment;?>NA</a></td>
-													<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment;?></a></td>
-													<td><a href="#"><?php //echo $BrandTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</a></td>
-											<td><a href="#"><?php echo $BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys;?></a></td>
+													<td>5</td>
+													<td>Brand Loyalty</td>
+													<td><?php //echo $BrandTotalEarnedLoyaltyPointsConsumerRegistration;?>0</td>
+													<td><?php if($BrandTotalEarnedLoyaltyPointsScannedCodesLevel0==""){ echo "0";}else{ echo $BrandTotalEarnedLoyaltyPointsScannedCodesLevel0;} ?></td>
+													<td><?php if($BrandTotalEarnedLoyaltyPointsScannedCodesLevel1==""){ echo "0";}else{ echo $BrandTotalEarnedLoyaltyPointsScannedCodesLevel1;}?></td>
+													<td><?php //echo $BrandTotalEarnedLoyaltyPointsWatchedPushedAdvertisment;?>NA</td>
+													<td><?php if($BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment==""){ echo "0";}else{ echo $BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment; } ?></td>
+													<td><?php //echo $BrandTotalEarnedLoyaltyPointsConsumerRegistration;?>NA</td>
+											<td><?php if($BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys==""){ echo "0";}else{ echo $BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys; }?></td>
 												</tr>
 											</tbody>
 										</table>

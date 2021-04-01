@@ -3,7 +3,7 @@
 <div class="col-xs-12">
 		<div class="widget-box">
 				<div class="widget-header">
-						<h4 class="widget-title">Edit Customer Code</h4>
+						<h4 class="widget-title">Edit Customer Code</h4> <?php //echo get_customer_id_by_product_id(getProductIDbyProductCodeID($this->uri->segment(3))); ?> <?php echo get_products_name_by_id(getProductIDbyProductCodeID($this->uri->segment(3))); ?>
 						<div class="widget-toolbar"> <a href="#" data-action="collapse"> <i class="ace-icon fa fa-chevron-up"></i> </a> <a href="#" data-action="close"> <i class="ace-icon fa fa-times"></i> </a> <a href="#" class="show_loader" data-action="reload" style="display:none;"><i class="ace-icon fa fa-refresh"></i></a> </div>
 				</div>
 				<div class="widget-body">

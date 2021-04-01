@@ -879,7 +879,7 @@ class TCPDF {
 	 * @protected
 	 * @since 3.0.000 (2008-03-27)
 	 */
-	protected $dpi = 72;
+	protected $dpi = 96;
 
 	/**
 	 * Array of page numbers were a new page group was started (the page numbers are the keys of the array).

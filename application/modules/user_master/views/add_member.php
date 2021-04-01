@@ -418,7 +418,11 @@ get_related_city_list('<?php echo $get_user_details[0]['state'];?>')
  						$('#ajax_msg').text("User Added Successfully!").css("color","green").show();
  						$('#blah').attr('src', '').hide();
  						$('#user_frm')[0].reset(); 
+						<?php if($this->uri->segment(3)==""){?>
 						window.location.href="<?php echo base_url(); ?>user_master/list_user/";
+						<?php }else{ ?>
+						window.location.href="<?php echo base_url(); ?>user_master/list_tracek_users/<?php echo $this->uri->segment(3); ?>";
+						<?php } ?>
  					}
  					else if(parseInt(msg)==2){
  						$('#ajax_msg').text("User Aalready Exists!").css("color","red").show();
@@ -428,11 +432,23 @@ get_related_city_list('<?php echo $get_user_details[0]['state'];?>')
  						$('#blah').attr('src', '').hide();
  						$('#user_frm')[0].reset(); 
   					}
-					window.location.href="<?php echo base_url(); ?>user_master/list_user/";		
+					<?php if($this->uri->segment(3)==""){?>
+						window.location.href="<?php echo base_url(); ?>user_master/list_user/";
+						<?php }else{ ?>
+						window.location.href="<?php echo base_url(); ?>user_master/list_tracek_users/<?php echo $this->uri->segment(3); ?>";
+						<?php } ?>
  				},
  				complete: function(){
  					$(".show_loader").hide();
-					window.location.href="<?php echo base_url(); ?>user_master/list_user/";	
+					<?php if($this->uri->segment(3)==""){?>
+						window.location.href="<?php echo base_url(); ?>user_master/list_user/";
+						<?php }else{ ?>
+						<?php if($this->uri->segment(2)=="edit_plant_controller"){?>
+						window.location.href="<?php echo base_url(); ?>user_master/list_tracek_users/<?php echo getUserParentIDById($this->uri->segment(3)); ?>";
+						<?php }else{ ?>
+						window.location.href="<?php echo base_url(); ?>user_master/list_tracek_users/<?php echo $this->uri->segment(3); ?>";
+						<?php } ?>
+						<?php } ?>
  				}
  			});
  			 return false;

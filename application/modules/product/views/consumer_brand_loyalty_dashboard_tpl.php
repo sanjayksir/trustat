@@ -106,8 +106,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                 <tr>
 														<th>S No.</th>
 													   <th>Brand Name<?php echo $list_all_consumers->customer_id; ?></th>
-													   <th>No. of times scanned products for level 0</th>
-														<th>No. of times scanned products for level 1</th>
+													   <th>No. of times Post Purchase Scan Report</th>
+														<th>No. of times Pre Purchase Scan Report</th>
 														<th>Feedback Given pushed Advertisement</th>
 														<th>Feedback Given pushed Surveys</th>
                                                        
@@ -132,13 +132,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                 <td><?php echo $sno; ?></td>
                                 <td><?php echo getUserFullNameById($attr['customer_id']); ?></td>
 								<td><?php //echo base_url(); 								
-								if(base_url()=='http://localhost/trackingportal/') {									
-									mysql_connect("localhost", "root", "");
-								mysql_select_db("trackingportaldb");								
-								} else {								
-								mysql_connect("localhost", "tpdbuser", "india@123");
-								mysql_select_db("trackingprortaldb");
-								}
+								include('url_base_con_db2.php');
 								
 					$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where customer_id = '".$attr['customer_id']."' AND transaction_type_slug = 'product_registration_lps'";
 
@@ -215,12 +209,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="footer-content">
 
                         <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

@@ -76,7 +76,7 @@
 
                     <!--left end---->
 
-                    <div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/list_assigned_locations_user" class="btn btn-primary pull-right" title="List Assign Locations to Location Controller Users">List Assign Locations to Location Controller Users</a></div>
+                    <div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/list_assigned_locations_user<?php echo $this->uri->segment(3); ?>" class="btn btn-primary pull-right" title="List Assign Locations to Location Controller Users">List Assign Locations to Location Controller Users</a></div>
 
                     <div class="col-xs-12">
 

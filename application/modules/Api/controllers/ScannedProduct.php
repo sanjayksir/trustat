@@ -16,6 +16,7 @@ class ScannedProduct extends ApiController {
         $this->load->model('ScannedproductsModel');
         $this->load->model('Productmodel');
         $this->load->model('ConsumerModel');
+		$this->load->library(array('Dmailer', 'form_validation', 'email'));
     }
     /**
      * productScanning scan the product with the help of bar code and keep the recrod.
@@ -32,22 +33,24 @@ class ScannedProduct extends ApiController {
         $validate = [
             ['field' =>'bar_code','label'=>'Barcode','rules' => 'required' ],
 			['field' =>'scan_city','label'=>'Scan City','rules' => 'trim' ],
+			['field' =>'pin_code','label'=>'Scan PIN Code','rules' => 'trim' ],
             ['field' =>'latitude','label'=>'Latitude','rules' => 'trim'],
             ['field' =>'longitude','label'=>'Longitude','rules' => 'trim' ],
 			//['field' =>'registration_address','label'=>'Registration Address','rules' => 'trim|required' ],
         ];
         $errors = $this->ScannedproductsModel->validate($data,$validate);
         if(is_array($errors)){
-            Utils::response(['status'=>false,'message'=>'Validation errors.','errors'=>$errors]);
+            Utils::response(['status'=>false,'message'=>'Validation errorss.','errors'=>$errors]);
         }
         $result = $this->ScannedproductsModel->findProduct($data['bar_code']);
         $bar_code_data = $data['bar_code'];
+		$bar_code2_data = $data['bar_code'];
 		$product_id = $result->id;
 		$consumerId = $user['id'];
-		
+		$data['ps_ip_address'] = $this->input->ip_address();
 		
 		// function to get product registration status
-        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data);   
+        $isRegistered = $this->ScannedproductsModel->isProductRegistered($bar_code_data, $bar_code2_data);   
 	
         $isLoyaltyForVideoFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForVideoFBQuesGiven($consumerId,$product_id);
         $isLoyaltyForAudioFBQuesGiven = $this->ScannedproductsModel->isLoyaltyForAudioFBQuesGiven($consumerId,$product_id);
@@ -92,8 +95,8 @@ class ScannedProduct extends ApiController {
             $result->product_thumb_images = Utils::setFileUrl($result->product_thumb_images);
         }
 		
-        if(!empty($result->product_images)){
-            $result->product_images = Utils::setFileUrl($result->product_images);
+        if(!empty($result->product_image)){
+            $result->product_image = Utils::setFileUrl($result->product_image);
         }
 		if(!empty($result->product_code_print_bg_images)){
             $result->product_code_print_bg_images = Utils::setFileUrl($result->product_code_print_bg_images);
@@ -138,43 +141,87 @@ class ScannedProduct extends ApiController {
 		
 
 		$result->scanned_code = $data['bar_code']; 
-		if($data['bar_code'] == $result->barcode_qr_code_no) {
+		if($data['bar_code'] == ($result->barcode_qr_code_no)) {
 			
 		$result->activation_level = $result->pack_level; 
+		
+		$activation_packaging_level = $result->pack_level; 
 		
 		
 		} else {
 			
 		$result->activation_level = $result->pack_level2; 
+		$activation_packaging_level = $result->pack_level2;
 			
 		}                 
         $data['consumer_id'] = $user['id'];
+		
         $data['product_id'] = $result->id;
 		$data['customer_id'] = $result->created_by;
-        $data['created_at'] = date("Y-m-d H:i:s");
+        $data['code_scan_date'] = date("Y-m-d H:i:s");
 		$data['del_by_cs'] = 0;
-        //$result->pack_level = $result->pack_level;
+        //$result->pack_level = $result->pack_level; registration_status
 		
 		$consumer_id = $data['consumer_id'];
 		$customer_id = $data['customer_id'];
 		$product_id = $data['product_id'];
 		
+		$isConsAlreadyLinkedtoCust = $this->ScannedproductsModel->isConsAlreadyLinkedtoCust($consumer_id, $customer_id);		
 		
+		$mnv1_result62 = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 62)->get()->row();
+		$message_notification_value62 = $mnv1_result62->message_notification_value;
 		
-		$isConsAlreadyLinkedtoCust = $this->ScannedproductsModel->isConsAlreadyLinkedtoCust($consumer_id, $customer_id);
+        if($this->db->insert($this->ScannedproductsModel->table, $data)){	
 		
 		if($isConsAlreadyLinkedtoCust==false){
+		$data['registration_status'] = "Registered";
 		$this->db->insert('consumer_customer_link', $data);
 		}
 		
-        if($this->db->insert($this->ScannedproductsModel->table, $data)){
+			if($activation_packaging_level==1){
+			// Consumer Activity Log Data insert start
+			$CALdata['date_time'] = date('Y-m-d H:i:s'); 
+			$CALdata['consumer_name'] = get_consumer_name_by_consumer_id($consumerId);
+			$CALdata['consumer_id'] = $consumerId; 
+			$CALdata['consumer_mobile'] = getConsumerMobileNumberById($consumerId); 
+			$CALdata['customer_name'] = getUserNameById($customer_id); 
+			$CALdata['customer_id'] = $customer_id; 
+			$CALdata['unique_customer_code'] = getCustomerCodeById($customer_id); 
+			$CALdata['product_name'] = get_products_name_by_id($product_id); 
+			$CALdata['product_id'] = $product_id; 
+			$CALdata['product_sku'] = get_product_sku_by_id($product_id); 
+			$CALdata['product_code'] = $data['bar_code']; 
+			$CALdata['gloc_latitude'] = $data['latitude'];
+			$CALdata['gloc_longitude'] = $data['longitude'];
+			$CALdata['gloc_city'] = $data['scan_city'];
+			$CALdata['gloc_pin_code'] = $data['pin_code'];
+			$CALdata['consumer_activity_type'] = $message_notification_value62;
+			$CALdata['loyalty_rewards_points'] = 0;
+			$CALdata['loyalty_rewards_type'] = getCustomerLoyaltyTypeById($customer_id);
 			
-			
+			$this->db->insert('consumer_activity_log_table', $CALdata);
+			// Consumer Log Data insert end
+			}
+			$updateDataCityScan = array(
+					   'city_last_scan' => $data['scan_city']
+						);
+					$this->db->update('consumers', $updateDataCityScan, array('id' => $consumerId));
+					
 			//$this->db->insert('consumer_customer_link', $data);
 			
 			
 			// Super Loyalty start		
 			// Insert number if Scans 
+			//check if the product code is already registerd
+			if($activation_packaging_level==1){
+		$ifSuperLoyaltyAlreadyGivenConsumerProduct = $this->ScannedproductsModel->ifSuperLoyaltyAlreadyGivenConsumerProduct($product_id, $consumerId); 
+			}else{
+		$ifSuperLoyaltyAlreadyGivenConsumerProduct = "NotGiven";
+			}
+		$isSuperLoyaltyYes	= SuperLoyaltyStatusonProductByProductID($product_id);
+		if($isSuperLoyaltyYes=="Yes"){
+			if($isRegistered==false){
+				if($ifSuperLoyaltyAlreadyGivenConsumerProduct=="NotGiven"){
 		$resultC = $this->db->select('number_of_scans')->from('consumers')->where('id', $consumerId)->get()->row();
 		$number_of_scansBD = $resultC->number_of_scans;
 		$number_of_scansAD = $number_of_scansBD + 1;
@@ -184,6 +231,7 @@ class ScannedProduct extends ApiController {
 					$this->db->update('consumers', $updateData, array('id' => $consumerId));
 					
 		$resultP = $this->db->select('*')->from('products')->where('id', $product_id)->get()->row();
+		$include_the_product_in_super_loyalty = $resultP->include_the_product_in_super_loyalty;
 		$number_of_scans_for_super_loyalty = $resultP->number_of_scans_for_super_loyalty;
 		$number_of_loyalty_points_for_super_loyalty = $resultP->number_of_loyalty_points_for_super_loyalty;	
 		$number_of_scans_for_productBD = $resultP->number_of_scans_for_product;
@@ -195,11 +243,9 @@ class ScannedProduct extends ApiController {
 					$this->db->update('products', $updateDataP, array('id' => $product_id));
 		
 	$remainder = $number_of_scans_for_productAD%$number_of_scans_for_super_loyalty;
-		if(($remainder == 0)&&($number_of_loyalty_points_for_super_loyalty!=0)) {
-		
+		if(($remainder ==0)&&($number_of_loyalty_points_for_super_loyalty!=0)) {		
 		//$Product_id = getProductIDbyProductCode($data['bar_code']);
-			$customerId = get_customer_id_by_product_id($product_id);
-			
+			$customerId = get_customer_id_by_product_id($product_id);			
 				$purchased_points = total_approved_points2($customerId);
 				$consumed_points = get_total_consumed_points($customerId);
 				$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customerId);
@@ -227,11 +273,12 @@ class ScannedProduct extends ApiController {
 				
 			   // $transactionType = 'product-registration-without-warranty'; 
 				$transactionType = "Super Loyalty";
-				$mnv52_result = $this->db->select('message_notification_value,message_notification_value_part2')->from('message_notification_master')->where('id', 52)->get()->row();
-				$mnvtext52 = $mnv52_result->message_notification_value;
-				$mnvtext52_p2 = $mnv52_result->message_notification_value_part2;
-			    $transactionTypeName = $mnvtext52 . $number_of_scans_for_productAD . $mnvtext52_p2;
-			   
+				//$mnv61_result = $this->db->select('message_notification_value,message_notification_value_part2')->from('message_notification_master')->where('id', 61)->get()->row();
+				//$mnvtext61 = $mnv61_result->message_notification_value;
+				$mnvtext61 = getAPPPassbookOnScreenDisplayMessageSLByProductId($product_id);
+				//$mnvtext61_p2 = $mnv61_result->message_notification_value_part2;
+			    //$transactionTypeName = $mnvtext61 . $number_of_scans_for_productAD . $mnvtext52_p2;
+			   $transactionTypeName = $mnvtext61;
 				//$userId = $user['id'];	
 				
 				
@@ -244,17 +291,37 @@ class ScannedProduct extends ApiController {
 				
 				$fb_token = getConsumerFb_TokenById($consumerId);
               // $this->ConsumerModel->sendFCM('Thank you for Product Registration, Please check the details in "my purchase list" in TRUSTAT App.', $fb_token);
-			    $this->ConsumerModel->sendFCM("Super Loyalty", $fb_token);
+			  //$mnv52_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 52)->get()->row();
+			  //$mnvtext52 = $mnv52_result->message_notification_value;
+			  $mnvtext52 = getAPPNotificationMessageforSuperLoyaltyByProductId($product_id);
+			    $this->ConsumerModel->sendFCM($mnvtext52, $fb_token);
 				$NTFdata['consumer_id'] = $consumerId; 
-				$NTFdata['title'] = "TRUSTAT notification";
-				$NTFdata['body'] = "Super Loyalty"; 
+				$NTFdata['title'] = "TRUSTAT Super Loyalty";
+				$NTFdata['body'] = $mnvtext52; 
 				$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
-				$NTFdata['status'] = 1; 
+				$NTFdata['status'] = 0; 
 			
-			$this->db->insert('list_notifications_table', $NTFdata);	
-
+			$this->db->insert('list_notifications_table', $NTFdata);
+			
+			$TRNNC_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 10)->get()->row();
+			$TRNNC_billin_particular_name = $TRNNC_result->billin_particular_name;
+			$TRNNC_billin_particular_slug = $TRNNC_result->billin_particular_slug;
+			
+			$TRNNCData['customer_id'] = $customer_id;
+			$TRNNCData['consumer_id'] = $consumerId;
+			$TRNNCData['billing_particular_name'] = $TRNNC_billin_particular_name.' TRUSTAT Super Loyalty';		
+			$TRNNCData['billing_particular_slug'] = $TRNNC_billin_particular_slug.'_TRUSTAT_Super_Loyalty';
+			$TRNNCData['trans_quantity'] = 1; 
+			$TRNNCData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$TRNNCData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $TRNNCData);
+			
+			
+			
+			}
+			}
+			}
 		}
-			
 		// Super Loyalty end	
 		
 			
@@ -443,10 +510,13 @@ class ScannedProduct extends ApiController {
             ['field' =>'expiry_date','label'=>'Expiry date','rules' => ['',['date',[$this->ScannedproductsModel,'validDate']]]],
 			['field' =>'latitude','label'=>'Latitude','rules' => 'required'],
 			['field' =>'longitude','label'=>'Longitude','rules' => 'required'],
+			['field' =>'scan_city','label'=>'Scan City','rules' => 'required'],
+			['field' =>'pin_code','label'=>'Scan PIN Code','rules' => 'required'],
 			['field' =>'registration_address','label'=>'Registration Address','rules' => 'trim|required' ],
         ];
         
         $errors = $this->ScannedproductsModel->validate($data,$validate);
+		
         /*
         if(is_array($errors) || empty($data['invoice_image'])){
             if($errors){
@@ -477,6 +547,7 @@ class ScannedProduct extends ApiController {
 				$purchased_points = total_approved_points2($customerId);
 				$consumed_points = get_total_consumed_points($customerId);
 				$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customerId);
+				$transaction_lr_type = "Loyalty";
 				//$data['customer_loyalty_type'] = $customer_loyalty_type;
 				//$closing_balance = $purchased_points - $consumed_points;
 			//echo "<pre>";print_r($customer_loyalty_type); die;
@@ -555,18 +626,20 @@ class ScannedProduct extends ApiController {
         $data['purchase_date'] = $data['purchase_date'];
         //$data['warranty_start_date'] = '0000-00-00';
         //$data['warranty_end_date'] = '0000-00-00';
+		$ProductID = $result->id;
         $data['consumer_id'] = $user['id'];
+		$data['customer_id'] = get_customer_id_by_product_id($ProductID);;
         $data['product_id'] = $result->id;
         $data['modified'] = date('Y-m-d H:i:s');
 		$data['create_date'] = date('Y-m-d H:i:s');
-		$consumer_id = $user['id'];
-		$ProductID = $result->id;
+		$data['ps_ip_address'] = $this->input->ip_address();
+		$consumer_id = $user['id'];		
 		$product_brand_name = get_products_brand_name_by_id($ProductID);
 		$customer_name = getUserFullNameById($customerId);
 		$customer_id = get_customer_id_by_product_id($ProductID);
 		$product_name = get_products_name_by_id($ProductID);
 		$consumer_name = getConsumerNameById($consumer_id);		
-		
+		$product_bar_code = $data['bar_code'];
 		$transactionType = 'product_registration_lps';
 		$transactionTypeName = 'Product Registration';
 				
@@ -587,9 +660,37 @@ class ScannedProduct extends ApiController {
 			
         }
         
+		$mnv1_result63 = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 63)->get()->row();
+		$message_notification_value63 = $mnv1_result63->message_notification_value;
+		
         unset($data['purchase_date']);
         //echo "<pre>";print_r($data);die;        
         if($this->db->insert('purchased_product', $data)){
+			
+			// Consumer Log Data insert start
+				$CALdata['date_time'] = date('Y-m-d H:i:s'); 
+				$CALdata['consumer_name'] = $consumer_name;
+				$CALdata['consumer_id'] = $user['id']; 
+				$CALdata['consumer_mobile'] = getConsumerMobileNumberById($user['id']); 
+				$CALdata['customer_name'] = $customer_name; 
+				$CALdata['customer_id'] = $customer_id; 
+				$CALdata['unique_customer_code'] = getCustomerCodeById($customer_id); 
+				$CALdata['product_name'] = $product_name; 
+				$CALdata['product_id'] = $ProductID; 
+				$CALdata['product_sku'] = get_product_sku_by_id($ProductID); 
+				$CALdata['product_code'] = $data['bar_code']; 
+				$CALdata['gloc_latitude'] = $data['latitude'];
+				$CALdata['gloc_longitude'] = $data['longitude'];
+				$CALdata['gloc_city'] = $data['scan_city'];
+				$CALdata['gloc_pin_code'] = $data['pin_code'];
+				$CALdata['consumer_activity_type'] = $message_notification_value63;
+				$CALdata['loyalty_rewards_points'] = $TRPoints;
+				$CALdata['loyalty_rewards_type'] = getCustomerLoyaltyTypeById($customer_id);
+			
+			$this->db->insert('consumer_activity_log_table', $CALdata);
+			// Consumer Log Data insert end
+			
+			
             $data['invoice_image'] = site_url($data['invoice_image']);
             $data['pack_level'] = $result->pack_level;
             $data['id'] = $this->db->insert_id();
@@ -598,10 +699,12 @@ class ScannedProduct extends ApiController {
                 //$loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();
 				$LPconsumed_points = $consumed_points+$TRPoints;
 				//echo "<pre>";print_r($LPconsumed_points); die;
-				
+		$mnv1_result64 = $this->db->select('message_notification_value, message_notification_value_part2')->from('message_notification_master')->where('id', 64)->get()->row();
+		$message_notification_value64 = $mnv1_result64->message_notification_value;
+		$message_notification_value_part2_64 = $mnv1_result64->message_notification_value_part2;	
 				
 				if($purchased_points > ($consumed_points+$TRPoints)){
-                $message = 'Thank You for Product Registration. '. $TRPoints .' loyalty points will be added to your TRUSTAT loyalty account';
+                $message = $message_notification_value64.' '. $TRPoints .' '.$message_notification_value_part2_64;
 				//echo "<pre>Jyada";print_r($LPconsumed_points); die;
 				}else{
 					$message = 'Thank You for Product Registration!';
@@ -610,35 +713,49 @@ class ScannedProduct extends ApiController {
 				
 			   // $transactionType = 'product-registration-without-warranty'; 
 				$transactionType = "product_registration_lps";
-			    $transactionTypeName = "Scan for product registration";
+			    $transactionTypeName = "Scan for product registration";// Put in CMS
 			   
 				$userId = $user['id'];	
 				
 				
 				
 				if($purchased_points > ($consumed_points+$TRPoints)){
-	$this->Productmodel->saveLoyltyProductReg($transactionType, $userId, $ProductID, ['verification_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code'],'customer_loyalty_type' => $customer_loyalty_type], $customer_id, $customer_loyalty_type);
+	$this->Productmodel->saveLoyltyProductReg($transactionType, $userId, $ProductID, ['verification_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code'],'customer_loyalty_type' => $customer_loyalty_type], $customer_id, $customer_loyalty_type, $product_bar_code);
 				//$this->Productmodel->saveConsumerPassbookLoyalty($transactionType, $userId, ['user_id' => $userId, 'brand_name' => $result->brand_name, 'product_name' => $result->product_name, 'product_code' => $data['bar_code'], 'user_id' => $userId], 'Loyalty');
 				
 				
-				$this->Productmodel->saveConsumerPassbookLoyaltyProductReg($transactionType, ['verification_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code'],'customer_loyalty_type' => $customer_loyalty_type], $customer_id, $ProductID, $userId, $transactionTypeName,  'Loyalty', $customer_loyalty_type);
+	$this->Productmodel->saveConsumerPassbookLoyaltyProductReg($transactionType, ['verification_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $data['bar_code'],'customer_loyalty_type' => $customer_loyalty_type], $customer_id, $ProductID, $userId, $transactionTypeName, $transaction_lr_type, $product_bar_code);
 				}
 				
 				$fb_token = getConsumerFb_TokenById($userId);
               // $this->ConsumerModel->sendFCM('Thank you for Product Registration, Please check the details in "my purchase list" in TRUSTAT App.', $fb_token);
 			    $this->ConsumerModel->sendFCM($mnvtext37, $fb_token);
 				$NTFdata['consumer_id'] = $userId; 
-				$NTFdata['title'] = "TRUSTAT notification";
+				$NTFdata['title'] = "Product Registration";
 				$NTFdata['body'] = $mnvtext37; 
 				$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
-				$NTFdata['status'] = 1; 
+				$NTFdata['status'] = 0; 
 			
-			$this->db->insert('list_notifications_table', $NTFdata);
-			   
-				
+			$this->db->insert('list_notifications_table', $NTFdata);	
+
+			$TRNNC_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 10)->get()->row();
+			$TRNNC_billin_particular_name = $TRNNC_result->billin_particular_name;
+			$TRNNC_billin_particular_slug = $TRNNC_result->billin_particular_slug;
+			
+			$TRNNCData['customer_id'] = $customer_id;
+			$TRNNCData['consumer_id'] = $userId;
+			$TRNNCData['billing_particular_name'] = $TRNNC_billin_particular_name.' Product Registration';		
+			$TRNNCData['billing_particular_slug'] = $TRNNC_billin_particular_slug.'_Product_Registration';
+			$TRNNCData['trans_quantity'] = 1; 
+			$TRNNCData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$TRNNCData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $TRNNCData);			
+			
 				}else{
 				// $loyltyPoints = $this->db->get_where('loylties', ['transaction_type_slug' => 'product-registration-without-warranty'])->row();
-                $message = 'Thank You for Product Registration.';
+			$mnv1_result65 = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 65)->get()->row();
+			$message = $mnv1_result65->message_notification_value;
+			  //$message = 'Thank You for Product Registration.';
                 $transactionType = 'product-registration-without-warranty';  	
 					
 				}
@@ -730,8 +847,13 @@ class ScannedProduct extends ApiController {
         }
         $validate = [
             ['field' =>'bar_code','label'=>'Bar code','rules' => 'trim|required'],
-            ['field' =>'type','label'=>'Latitude','rules' => 'required'],
-            ['field' =>'description','label'=>'Longitude','rules' => 'trim|required' ],
+            ['field' =>'type','label'=>'Complaint Type','rules' => 'required'],
+            ['field' =>'description','label'=>'Complaint Description','rules' => 'trim|required' ],			
+            ['field' =>'complaint_reg_latitude','label'=>'Complaint Registration Latitude','rules' => 'required'],
+			['field' =>'complaint_reg_longitude','label'=>'Complaint Registration Latitude','rules' => 'required'],
+			['field' =>'complaint_reg_city','label'=>'Complaint Registration City','rules' => 'required'],
+			['field' =>'complaint_reg_pin_code','label'=>'Complaint Registration Area PIN Code','rules' => 'required'],
+            ['field' =>'complaint_reg_address','label'=>'Complaint Registration Address','rules' => 'trim|required' ],
         ];
         $errors = $this->ScannedproductsModel->validate($data,$validate);
         if(is_array($errors)){
@@ -746,9 +868,71 @@ class ScannedProduct extends ApiController {
         $data['consumer_id'] = $user['id'];
         $data['complain_code']= Utils::randomNumber(5);
         $data['status']= 'pending';
+		$customer_id = get_customer_id_by_product_id($data['product_id']);
+		//$product_brand_name = get_products_brand_name_by_id($ProductID);
+		$consumer_id = $user['id'];
+		$customer_name = getUserFullNameById($customer_id);
+		$product_name = get_products_name_by_id($data['product_id']);
+		$consumer_name = getConsumerNameById($consumer_id);	
+		$customer_comp_email = getCustomerCEmailById($customer_id);
+		$consumer_complaint_no = $data['complain_code'];
+		$bar_code = $data['bar_code'];
+		$consumer_complaint_type = $data['type'];
+		$consumer_complaint_description = $data['description'];
+		$consumer_mobile = getConsumerMobileNumberById($consumer_id);
+		$consumer_email = getConsumerEmailIDById($consumer_id);
+		$complaint_datetime  = date("Y-m-d H:i:s");
+			
         if($this->db->insert('consumer_complaint', $data)){
-            Utils::sendSMS($user['mobile_no'], 'Your complaint code is '.$data['complain_code'].'. The compliant has been transfered to the respective brand owner for quick redressal.');
-            //Utils::sendSMS($this->config->item('adminMobile'), 'A consumer has looged a complain with compoain code '.$data['complain_code'].' with following description '.$data['description']);
+				// Consumer Log Data insert start
+			$CALdata['date_time'] = date('Y-m-d H:i:s'); 
+			$CALdata['consumer_name'] = getConsumerNameById($data['consumer_id']);
+			$CALdata['consumer_id'] = $data['consumer_id']; 
+			$CALdata['consumer_mobile'] = getConsumerMobileNumberById($data['consumer_id']); 
+			$CALdata['customer_name'] = getUserFullNameById($customer_id); 
+			$CALdata['customer_id'] = $customer_id; 
+			$CALdata['unique_customer_code'] = getCustomerCodeById($customer_id); 
+			$CALdata['product_name'] = get_products_name_by_id($data['product_id']); 
+			$CALdata['product_id'] = $data['product_id']; 
+			$CALdata['product_sku'] = get_product_sku_by_id($data['product_id']); 
+			$CALdata['product_code'] = $data['bar_code']; 
+			$CALdata['gloc_latitude'] = $data['complaint_reg_latitude'];
+			$CALdata['gloc_longitude'] = $data['complaint_reg_longitude'];
+			$CALdata['gloc_city'] = $data['complaint_reg_city'];
+			$CALdata['gloc_pin_code'] = $data['complaint_reg_pin_code'];
+			$CALdata['consumer_activity_type'] = "Consumer Complaint on the product.";
+			$CALdata['loyalty_rewards_points'] = 0;
+			$CALdata['loyalty_rewards_type'] = getCustomerLoyaltyTypeById($customer_id);
+			
+			$this->db->insert('consumer_activity_log_table', $CALdata);
+				// Consumer Log Data insert end
+			
+            //Utils::sendSMS($user['mobile_no'], 'Your complaint code is '.$data['complain_code'].'. The compliant has been transfered to the respective brand owner for quick redressal.' . " zLJoGnJzfXg");
+			
+			$consumer_complaint_nofification = 'Your complaint code is '.$data['complain_code'].'. The compliant has been transfered to the respective brand owner for quick redressal.';
+			$fb_token = getConsumerFb_TokenById($consumer_id);
+			$this->ConsumerModel->sendFCM($consumer_complaint_nofification, $fb_token);
+			
+			$this->ComplaintEmailtoCustomer($product_name, $bar_code, $customer_name, $consumer_name, $customer_comp_email, $consumer_complaint_no, $consumer_complaint_type, $consumer_complaint_description, $consumer_mobile, $consumer_email, $complaint_datetime);
+			
+			$CCD_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 13)->get()->row();
+			$CCD_billin_particular_name = $CCD_result->billin_particular_name;
+			$CCD_billin_particular_slug = $CCD_result->billin_particular_slug;
+		
+			$CCData['customer_id'] = $customer_id;
+			$CCData['billing_particular_name'] = $CCD_billin_particular_name;		
+			$CCData['billing_particular_slug'] = $CCD_billin_particular_slug;
+			$CCData['trans_quantity'] = 1; 
+			$CCData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$CCData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $CCData);
+/*
+if($this->Productmodel->ComplaintEmailtoCustomer($product_name, $bar_code, $customer_name, $consumer_name, $customer_comp_email, $consumer_complaint_no, $consumer_complaint_type, $consumer_complaint_description)){
+	    $data['email_sent'] = 'Yes';
+			}else{
+        $data['email_sent'] = 'No';
+			} */
+		    //Utils::sendSMS($this->config->item('adminMobile'), 'A consumer has looged a complain with compoain code '.$data['complain_code'].' with following description '.$data['description']);
 	   $mnv43_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 43)->get()->row();
 		$mnvtext43 = $mnv43_result->message_notification_value;
             //$this->response(['status'=>true,'message'=>'Your complaint has been logged successfully.','data'=>$data]);
@@ -757,6 +941,42 @@ class ScannedProduct extends ApiController {
             $this->response(['status'=>false,'message'=>'System failed to log the complaint.'],200); 
         }
     }
+	
+	    public function ComplaintEmailtoCustomer($product_name, $bar_code, $customer_name, $consumer_name, $customer_comp_email, $consumer_complaint_no, $consumer_complaint_type, $consumer_complaint_description, $consumer_mobile, $consumer_email, $complaint_datetime) 
+		{//echo '***'.$email;exit;
+       
+        $subject = 'ISPL : Complaint -> ' . $product_name;
+        $body = "Hello <b>" . $customer_name . "</b>,
+								 <br><br>
+								 The following consumer complaint has been received. The detail of complaint as received is as under:
+								 <br>
+								<br>Consumer Name : <b> " . $consumer_name . "</b>.
+ 								<br>Consumer Mobile Number : <b> " . $consumer_mobile . "</b>.
+ 								<br>Consumer Email address : <b> " . $consumer_email . "</b>.
+ 								<br>Consumer Complaint Number :<b> " . $consumer_complaint_no . "</b>.
+ 								<br>Date & Time of Complaint: : <b> " . $complaint_datetime . "</b>.
+ 								<br>Product Name : <b> " . $product_name . "</b>. 								
+								<br>Product Code : <b>" . $bar_code . "</b>.
+ 								<br>Consumer Complaint Type: <b>" . $consumer_complaint_type . "</b>.
+								<br>Consumer Complaint Description : <b>" . $consumer_complaint_description . "</b>.
+								<br><br>
+								Please address to the same and update the status to your consumer.
+ 								<br><br><b>ISPL Team</b>";
+        $mail_conf = array(
+            'subject' => $subject,
+            'to_email' => $customer_comp_email,
+            'cc' => 'sanjay@innovigent.in',
+            'from_email' => 'admin@'.$_SERVER['SERVER_NAME'],
+            'from_name' => 'ISPL',
+            'body_part' => $body
+        );
+        if ($this->dmailer->mail_notify($mail_conf)) {
+            return true;
+        } return false; //echo redirect('accounts/create');
+    }
+	
+	
+	
 	
 	public function FeedbackOnProduct(){
         $user = $this->auth();
@@ -772,8 +992,9 @@ class ScannedProduct extends ApiController {
             ['field' =>'rating','label'=>'Product Rating','rules' => 'required'],
 			['field' => 'latitude', 'label' => 'User latitude', 'rules' => 'trim|required'],
 			['field' => 'longitude', 'label' => 'User longitude', 'rules' => 'trim|required'],
+			['field' => 'feedback_loc_city', 'label' => 'Feedback Location City', 'rules' => 'trim|required'],
+			['field' => 'feedback_loc_pin_code', 'label' => 'Feedback Location Pin Code', 'rules' => 'trim|required'],
 			['field' =>'registration_address','label'=>'Registration Address','rules' => 'trim|required' ],
-			//['field' =>'type','label'=>'Latitude','rules' => 'required'],
             ['field' =>'description','label'=>'Product Description','rules' => 'trim|required' ],
         ];
         $errors = $this->ScannedproductsModel->validate($data,$validate);
@@ -794,9 +1015,25 @@ class ScannedProduct extends ApiController {
 		$data['ip_address'] =  $this->input->ip_address();
         //$data['complain_code']= Utils::randomNumber(5);
         //$data['status']= 'pending';
+		
+		$consumer_id = $user['id'];
+		$customer_id = get_customer_id_by_product_id($ProductID);
+		$customer_name = getUserFullNameById($customer_id);
+		$product_name = get_products_name_by_id($ProductID);
+		$consumer_name = getConsumerNameById($consumer_id);	
+		$customer_feedback_email = getCustomerFeedbackEmailById($customer_id);
+		//$consumer_complaint_no = $data['complain_code'];
+		$bar_code = $data['bar_code'];
+		//$consumer_complaint_type = $data['type'];
+		$consumer_feedback_description = $data['description'];
+		$consumer_feedback_rating = $data['rating'];
+		$consumer_mobile = getConsumerMobileNumberById($consumer_id);
+		$consumer_email = getConsumerEmailIDById($consumer_id);
+		$feedback_datetime  = date("Y-m-d H:i:s");
+		
 		$transactionType = "feedback_on_product_lps";
 		$transactionTypeName = "Product Feedback";
-		$customer_id = get_customer_id_by_product_id($ProductID);
+		
 		$result3 = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 		$TRPoints = $result3->$transactionType;
 			$purchased_points = total_approved_points2($customer_id);
@@ -824,6 +1061,55 @@ class ScannedProduct extends ApiController {
 		
 			$data['customer_loyalty_type'] = get_customer_loyalty_type_by_customer_id($customer_id);
 			$customer_loyalty_type = $data['customer_loyalty_type'];
+			
+			// Consumer Log Data insert start
+			$CALdata['date_time'] = date('Y-m-d H:i:s'); 
+			$CALdata['consumer_name'] = getConsumerNameById($data['consumer_id']);
+			$CALdata['consumer_id'] = $data['consumer_id']; 
+			$CALdata['consumer_mobile'] = getConsumerMobileNumberById($data['consumer_id']); 
+			$CALdata['customer_name'] = getUserFullNameById($customer_id); 
+			$CALdata['customer_id'] = $customer_id; 
+			$CALdata['unique_customer_code'] = getCustomerCodeById($customer_id); 
+			$CALdata['product_name'] = get_products_name_by_id($data['product_id']); 
+			$CALdata['product_id'] = $data['product_id']; 
+			$CALdata['product_sku'] = get_product_sku_by_id($data['product_id']); 
+			$CALdata['product_code'] = $data['bar_code']; 
+			$CALdata['gloc_latitude'] = $data['latitude'];
+			$CALdata['gloc_longitude'] = $data['longitude'];
+			$CALdata['gloc_city'] = $data['feedback_loc_city'];
+			$CALdata['gloc_pin_code'] = $data['feedback_loc_pin_code'];
+			$CALdata['consumer_activity_type'] = "Consumer Feedback on the product.";
+			$CALdata['loyalty_rewards_points'] = 0;
+			$CALdata['loyalty_rewards_type'] = getCustomerLoyaltyTypeById($customer_id);
+			
+			$this->db->insert('consumer_activity_log_table', $CALdata);
+				// Consumer Log Data insert end
+				
+				// Consumer Notification insert start
+			$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "Consumer feedback";
+			$NTFdata['body'] = "Feedback on ".$product_name." posted successfully!"; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s"); 
+			$NTFdata['status'] = 0; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);
+				// Consumer Notification insert end
+				
+			$TRNNC_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 10)->get()->row();
+			$TRNNC_billin_particular_name = $TRNNC_result->billin_particular_name;
+			$TRNNC_billin_particular_slug = $TRNNC_result->billin_particular_slug;
+			
+			$TRNNCData['customer_id'] = $customer_id;
+			$TRNNCData['consumer_id'] = $consumer_id;
+			$TRNNCData['billing_particular_name'] = $TRNNC_billin_particular_name.' Consumer feedback';		
+			$TRNNCData['billing_particular_slug'] = $TRNNC_billin_particular_slug.'_Consumer_feedback';
+			$TRNNCData['trans_quantity'] = 1; 
+			$TRNNCData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$TRNNCData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $TRNNCData);	
+				
+			$this->ConsumerFeedbackEmailtoCustomer($product_name, $bar_code, $customer_name, $consumer_name, $customer_feedback_email, $consumer_feedback_rating, $consumer_feedback_description, $consumer_mobile, $consumer_email, $feedback_datetime);	
+				
 			if($purchased_points > ($consumed_points+$TRPoints)){
 			$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $customer_loyalty_type);
 			}
@@ -831,6 +1117,9 @@ class ScannedProduct extends ApiController {
 		$mnvtext46 = $mnv46_result->message_notification_value;
            //$this->response(['status'=>true,'message'=>'Your feedback submitted successfully.','data'=>$data]);
 			$this->response(['status'=>true,'message'=>$mnvtext46,'data'=>$data]);
+			
+	
+			
         }else{
 		$mnv47_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 47)->get()->row();
 		$mnvtext47 = $mnv47_result->message_notification_value;
@@ -839,7 +1128,40 @@ class ScannedProduct extends ApiController {
         }
     }
 	
-	// Scanned product deleted by the consumer from scanned product list 
+	// Scanned product deleted by the consumer from scanned product list
+	
+	public function ConsumerFeedbackEmailtoCustomer($product_name, $bar_code, $customer_name, $consumer_name, $customer_feedback_email, $consumer_feedback_rating, $consumer_feedback_description, $consumer_mobile, $consumer_email, $feedback_datetime) 
+		{//echo '***'.$email;exit;
+       
+        $subject = 'ISPL : Product Feedback -> ' . $product_name;
+        $body = "Hello <b>" . $customer_name . "</b>,
+								 <br><br>
+								 The following consumer feedback has been received. The detail of feedback as received is as under:
+								 <br>
+								<br>Consumer Name : <b> " . $consumer_name . "</b>.
+ 								<br>Consumer Mobile Number : <b> " . $consumer_mobile . "</b>.
+ 								<br>Consumer Email address : <b> " . $consumer_email . "</b>.
+ 								<br>Date & Time of Feedback: : <b> " . $feedback_datetime . "</b>.
+ 								<br>Product Name : <b> " . $product_name . "</b>. 								
+								<br>Product Code : <b>" . $bar_code . "</b>.
+ 								<br>Consumer Feedback Type: <b>" . $consumer_feedback_rating . "</b>.
+								<br>Consumer Feedback Description : <b>" . $consumer_feedback_description . "</b>.
+								<br><br>
+								Please address to the same and update the status to your consumer.
+ 								<br><br><b>ISPL Team</b>";
+        $mail_conf = array(
+            'subject' => $subject,
+            'to_email' => $customer_feedback_email,
+            'cc' => 'sanjay@innovigent.in',
+            'from_email' => 'admin@'.$_SERVER['SERVER_NAME'],
+            'from_name' => 'ISPL',
+            'body_part' => $body
+        );
+        if ($this->dmailer->mail_notify($mail_conf)) {
+            return true;
+        } return false; //echo redirect('accounts/create');
+    }
+
 	
 	
 	
@@ -938,4 +1260,6 @@ class ScannedProduct extends ApiController {
         }
     }
 	
+	
 }
+

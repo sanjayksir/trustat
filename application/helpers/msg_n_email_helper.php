@@ -57,7 +57,7 @@
 	
   	function sendemail($firstname,$to,$password,$rwaname,$sub,$getOTP)
  	{
- 		$from = "no-reply@innovigents.com";
+ 		$from = "no-reply@".$_SERVER['SERVER_NAME'];
 		$reply =  $_SESSION['email'];
 		$fromname = $_SESSION['rwaname'];
 		//$to = $emails; //Recipients list (semicolon separated)
@@ -81,11 +81,11 @@
 				  </table></td>
 				<td><table cellpadding="0" cellspacing="0"  align="right" style="margin:10px;">
 					<tr>
-					  <td><a href="#" target="_blank"><img src="http://innovigents.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://'.$_SERVER['SERVER_NAME'].'/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
 					  <td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.'.$_SERVER['SERVER_NAME'].'/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
 						<td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.'.$_SERVER['SERVER_NAME'].'/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
 					</tr>
 				  </table></td>
 			  </tr>';
@@ -128,7 +128,7 @@
   
   function emailMessage($firstname,$to,$sub,$name,$email,$phone,$message)
  	{
- 		$from = "no-reply@innovigents.com";
+ 		$from = "no-reply@'.$_SERVER['SERVER_NAME'].'";
 		$reply =  $to;
 		$fromname = "Spidey Buzz";
 		//$to = $emails; //Recipients list (semicolon separated)
@@ -152,11 +152,11 @@
 				  </table></td>
 				<td><table cellpadding="0" cellspacing="0"  align="right" style="margin:10px;">
 					<tr>
-					  <td><a href="#" target="_blank"><img src="http://innovigents.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://'.$_SERVER['SERVER_NAME'].'/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
 					  <td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.'.$_SERVER['SERVER_NAME'].'/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
 						<td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.'.$_SERVER['SERVER_NAME'].'/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
 					</tr>
 				  </table></td>
 			  </tr>';
@@ -193,7 +193,7 @@
   
   function emailCareer($to,$sub,$name,$age,$message,$attachment)
  	{
- 		$from = "no-reply@innovigents.com";
+ 		$from = "no-reply@'.$_SERVER['SERVER_NAME'].'";
 		$reply =  $to;
 		$fromname = "Spidey Buzz";
 		//$to = $emails; //Recipients list (semicolon separated)
@@ -217,11 +217,11 @@
 				  </table></td>
 				<td><table cellpadding="0" cellspacing="0"  align="right" style="margin:10px;">
 					<tr>
-					  <td><a href="#" target="_blank"><img src="http://innovigents.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://'.$_SERVER['SERVER_NAME'].'/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
 					  <td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.'.$_SERVER['SERVER_NAME'].'/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
 						<td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.'.$_SERVER['SERVER_NAME'].'/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
 					</tr>
 				  </table></td>
 			  </tr>';

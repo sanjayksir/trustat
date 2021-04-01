@@ -806,7 +806,7 @@ function list_assigned_Advertisements() {
 			$value=1;
 		}
 		 echo $status= $this->Textmessage_model->change_status($product_id,$value);exit;
-		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$cid."';");
+		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."' AND registration_status='Registered';");
 				
 				foreach ($query->result() as $user)  
 				{
@@ -819,7 +819,7 @@ function list_assigned_Advertisements() {
 			$NTFdata['title'] = "TRUSTAT text message";
 			$NTFdata['body'] = "A Text Message Posted!!.."; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
-			$NTFdata['status'] = 1; 
+			$NTFdata['status'] = 0; 
 			
 			$this->db->insert('list_notifications_table', $NTFdata);
 			
@@ -858,9 +858,8 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		$this->db->select('C.id');	
 		$this->db->from('consumers C');		
 		$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
-		$this->db->where('CCL.customer_id', $customer_id);
-		
-		
+		//$this->db->where('CCL.customer_id', $customer_id);
+		$this->db->where(array('CCL.customer_id' => $customer_id, 'CCL.registration_status' => "Registered"));		
 		
 		$query = $this->db->query("SELECT * FROM consumer_selection_criteria WHERE unique_system_selection_criteria_id =  '$consumer_selection_criteria'");
 		$row = $query->row();
@@ -874,7 +873,7 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		if($row->consumer_city!='all') {
 		$this->db->where('C.city', $row->consumer_city);
 			}
-		
+		if($row->consumer_age_option=='SpecifyAge') {
 		$consumer_min_dob = date('Y-m-d', strtotime('-' . $row->consumer_min_age . ' years'));
 		$consumer_max_dob = date('Y-m-d', strtotime('-' . $row->consumer_max_age . ' years'));
 		
@@ -886,7 +885,7 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		$this->db->where('C.dob <=', $consumer_min_dob);
 		//$this->db->or_where('C.dob =', 'NULL');
 			}
-			
+		}
 			/*
 			$arr = explode(' ',trim($earned_loyalty_points_clubbed));
 			$ELP_from = $arr[0];
@@ -1150,64 +1149,46 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 	 	$this->checklogin();		
 		$customer_id = $this->input->post('c_id');
 		$message_id	= $this->input->post('m_id');
-		$Chk = $this->input->post('Chk');
+		$send_status = $this->input->post('Chk');
 		$text_message	= $this->input->post('text_message');
 		$consumer_selection_criteria = $this->input->post('unique_system_selection_criteria_id');
 		$this->load->view('text_messages_listing');
-			if($Chk==1){
-			$send_status=1;
-		}else{
-			
-			$send_status=0;
-		}
-		if($consumer_selection_criteria=="All") {		
 		
-		$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status,$consumer_selection_criteria);
-		$this->Textmessage_model->update_push_text_message_request($message_id,$send_status);
+		
+		$this->Textmessage_model->update_push_text_message_request($message_id, $send_status);
 
-		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+		if($send_status==1) {
+		if($consumer_selection_criteria=="All") {
+			
+$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status,$consumer_selection_criteria,$message_id);
 		
-				
+		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."' AND registration_status='Registered';");
 				foreach ($query->result() as $user)  
-				{
-		 $consumer_id = $user->consumer_id;
-		 $fb_token = getConsumerFb_TokenById($consumer_id);
+				{  
+			$consumer_id = $user->consumer_id;
+			$fb_token = getConsumerFb_TokenById($consumer_id);
 		 
-		 $this->Textmessage_model->sendFCM($text_message, $fb_token);	
+		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
 		 
+			//$NTFdata['pp_id'] = $message_id;
+			//$NTFdata['pp_type'] = "Push_Text_Message";
 		 	$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['customer_id'] = $customer_id;
+			//$NTFdata['product_id'] = 0;			
 			$NTFdata['title'] = "TRUSTAT text message";
 			$NTFdata['body'] = $text_message; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
-			$NTFdata['status'] = 1; 
+			$NTFdata['status'] = 0; 
+			//$NTFdata['notifications_view_dt'] = "0000-00-00 00:00:00";  
 			
 			$this->db->insert('list_notifications_table', $NTFdata);
-		 }	
-			
-		
+				 }
+				 
 		exit;
 		
 		}else{
-		$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status,$consumer_selection_criteria);
-	
-		$this->Textmessage_model->update_push_text_message_request($message_id, $send_status);
-		
-		/*
-		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
-				
-				foreach ($query->result() as $user)  
-				{
-				$consumer_id = $user->consumer_id;
-		 
-		 */
-			
-
-		
-									
-								
+$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status,$consumer_selection_criteria,$message_id);
 		$AllSelectedConsumersByACustomer = $this->AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_criteria);
-		
-				
 				foreach ($AllSelectedConsumersByACustomer as $consumer_idArray) 
 				{
 					$consumer_id = $consumer_idArray->id;
@@ -1216,33 +1197,22 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		 
 		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
 		 
-			$NTFdata['consumer_id'] = $consumer_id; 
+			//$NTFdata['pp_id'] = $message_id;
+			//$NTFdata['pp_type'] = "Push_Text_Message";
+		 	$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['customer_id'] = $customer_id;
+			//$NTFdata['product_id'] = 0;			
 			$NTFdata['title'] = "TRUSTAT text message";
 			$NTFdata['body'] = $text_message; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
-			$NTFdata['status'] = 1; 
+			$NTFdata['status'] = 0; 
+			//$NTFdata['notifications_view_dt'] = "0000-00-00 00:00:00";  
 			
 			$this->db->insert('list_notifications_table', $NTFdata);
 		 
 		 }
-		//echo  $this->Advertisement_model->sendFCM("Advertisement pushed!",$fb_token);
 		exit;
-		
-		/*
-		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
-				
-				foreach ($query->result() as $user)  
-				{
-		 $consumer_id = $user->consumer_id;
-		  $fb_token = getConsumerFb_TokenById(17);
-		 $this->Textmessage_model->sendFCM($consumer_id, $fb_token);
-		
-		redirect(base_url().'textmessages/approve_text_messages');	exit;
-		
-		
-		}
-		*/	
-			
+		}	
 		}
 		
  	}
@@ -1261,7 +1231,7 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		} else {
 		//echo $this->Textmessage_model->save_push_advertisement($customer_id,$product_id,$Chk);
 		 
-		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+		 $query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."' AND registration_status='Registered';");
 				
 				foreach ($query->result() as $user)  
 				{
@@ -1269,11 +1239,13 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		 $fb_token = getConsumerFb_TokenById($consumer_id);
 		 
 		 $this->Textmessage_model->sendFCM($text_message, $fb_token);
-		 $NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['customer_id'] = $customer_id; 
+			//$NTFdata['product_id'] = $product_id; 
 			$NTFdata['title'] = "TRUSTAT text message";
 			$NTFdata['body'] = $text_message; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
-			$NTFdata['status'] = 1; 
+			$NTFdata['status'] = 0; 
 			
 			$this->db->insert('list_notifications_table', $NTFdata);
 		 
@@ -1429,6 +1401,8 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		$params["waiting_approval_points"] = $this->Textmessage_model->waiting_approval_points($user_id);
 		$params["consumed_loyalty_points"] = $this->Textmessage_model->consumed_loyalty_points($user_id);
         $this->load->view('purchase_points_request_listing', $params);
+		
+			
     }
 	
 
@@ -1482,8 +1456,24 @@ function save_approve_purchase_points_requests(){
 		//$this->Textmessage_model->save_push_sent_text_message($customer_id,$text_message,$send_status);
 	
 		$this->Textmessage_model->update_purchased_purchased_loyalty_points($message_id,$send_status);
+			
+			$NPLPW_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 12)->get()->row();
+			$NPLPW_billin_particular_name = $NPLPW_result->billin_particular_name;
+			$NPLPW_billin_particular_slug = $NPLPW_result->billin_particular_slug;
+			
+			$Number_Purchased_Points = getNumberofPurchsedPointsByRequestID($message_id);
+		
+			$NPLPWData['customer_id'] = $customer_id;
+			$NPLPWData['billing_particular_name'] = $NPLPW_billin_particular_name;		
+			$NPLPWData['billing_particular_slug'] = $NPLPW_billin_particular_slug;
+			$NPLPWData['trans_quantity'] = $Number_Purchased_Points; 
+			$NPLPWData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$NPLPWData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $NPLPWData);
+			
+			
 		/*
-		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."' AND registration_status='Registered';");
 				
 				foreach ($query->result() as $user)  
 				{
@@ -1495,7 +1485,7 @@ function save_approve_purchase_points_requests(){
 			$NTFdata['title'] = "TRUSTAT text message";
 			$NTFdata['body'] = $text_message; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
-			$NTFdata['status'] = 1; 
+			$NTFdata['status'] = 0; 
 			
 			$this->db->insert('list_notifications_table', $NTFdata);
 		 
@@ -1504,7 +1494,7 @@ function save_approve_purchase_points_requests(){
 		//exit;
 		
 		
-		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+		$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."' AND registration_status='Registered';");
 				
 				foreach ($query->result() as $user)  
 				{

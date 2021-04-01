@@ -57,46 +57,39 @@
         <div class="widget-main">
 		<div class="form-group row">
 			<div class="col-sm-6">
-			<label for="form-field-8">Tracking Number</label>
-			<div class="form-control"><?php echo $getData['order_tracking_number'];?></div>
+			<label for="form-field-8"><b>Tracking Number</b></label>  : <?php echo $getData['order_tracking_number'];?>
 			 
 			</div>
 			
 			<div class="col-sm-6">
-			  <label for="form-field-8">Product Code</label>
-             <div class="form-control"><?php echo $getData['product_sku'];?></div>
+			  <label for="form-field-8"><b>Product Code</b></label> : <?php echo $getData['product_sku'];?>
 			</div>
 		</div>
 		
 		<div class="form-group row">
 			<div class="col-sm-6">
-			<label for="form-field-8">Product Name</label>
-			<div class="form-control"><?php echo $getData['product_name'];?></div>
+			<label for="form-field-8"><b>Product Name</b></label> : <?php echo $getData['product_name'];?>
 			</div>
 			
 			<div class="col-sm-6">
-			  <label for="form-field-8">Quantity</label>
-             <div class="form-control"><?php echo $getData['quantity'];?></div>
+			  <label for="form-field-8"><b>Quantity</b></label> : <?php echo $getData['quantity'];?>
 			</div>
 		</div>
 		
 		<div class="form-group row">
 			<div class="col-sm-6">
-			  <label for="form-field-8">Delivery Date</label>
-			<div class="form-control"><?php  if($getData['delivery_date']!='0000-00-00'){echo date('d/M/Y',strtotime($getData['delivery_date']));}else{echo '';}; ?></div>
+			  <label for="form-field-8"><b>Delivery Date</b></label> : <?php  if($getData['delivery_date']!='0000-00-00'){echo date('d/M/Y',strtotime($getData['delivery_date']));}else{echo '';}; ?>
 			</div>
 			 
 			
 			<div class="col-sm-6">
-			  <label for="form-field-8">Order Date</label>
-			 <div class="form-control"><?php  if($getData['created_date']!='0000-00-00'){echo date('d/M/Y',strtotime($getData['created_date']));}else{echo '';}; ?> </div>
+			  <label for="form-field-8"><b>Order Date</b></label> : <?php  if($getData['created_date']!='0000-00-00'){echo date('d/M/Y',strtotime($getData['created_date']));}else{echo '';}; ?> 
 			</div>
 		</div>
 		
 		<div class="form-group row">
 			<div class="col-sm-6">
-			  <label for="form-field-8">Status</label>
-             <div class="form-control"><?php echo order_status($getData['order_status']);?></div>
+			  <label for="form-field-8"><b>Status</b></label> : <?php echo order_status($getData['order_status']);?>
 			</div>
  		</div>
 		

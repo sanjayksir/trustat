@@ -414,6 +414,26 @@
 	   public function change_order_status() {
  		 $id = $this->input->post('id');
 		 $status = $this->input->post('value');
+		 
+		 $OrderData = view_order_data($id);
+		 $number_of_consumers = $OrderData['quantity'];
+		 $customer_id = $OrderData['user_id'];
+		 
+		 if($status==1){			
+			$cbb1_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 5)->get()->row();
+			$billin_particular_name = $cbb1_result->billin_particular_name;
+			$billin_particular_slug = $cbb1_result->billin_particular_slug;
+		
+			$CBBdata['customer_id'] = $customer_id;
+			//$CBBdata['consumer_id'] = $consumer_id;
+			$CBBdata['billing_particular_name'] = $billin_particular_name;		
+			$CBBdata['billing_particular_slug'] = $billin_particular_slug;
+			$CBBdata['trans_quantity'] = $number_of_consumers; 
+			$CBBdata['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$CBBdata['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $CBBdata);
+		} 
+		
  		 echo $status= $this->order_master_model->change_order_status($id,$status);exit;
       }
 	 
@@ -611,6 +631,7 @@
 			$space_for_message_below_code			= $ProductData['space_for_message_below_code'];
 			$space_between_code_rows = $ProductData['space_between_code_rows'];
 			$print_codes_in_batches = $ProductData['print_codes_in_batches'];
+			$space_for_code_below_batchid_mm = $ProductData['space_for_code_below_batchid']*0.2645833333333;
 			$TextFontSize = $ProductData['TextFontSize'];
 			$height_of_the_bar_code = $ProductData['height_of_the_bar_code'];
 			
@@ -620,7 +641,13 @@
 			$space_for_message_above_secondry_code 			= $ProductData['space_for_message_above_secondry_code'];
 			$space_for_message_below_secondry_code 			= $ProductData['space_for_message_below_secondry_code'];
  			$print_code_unity_type 			= $ProductData['code_unity_type'];
+			$show_code_below_printed_bar_qr_code 			= $ProductData['show_code_below_printed_bar_qr_code'];
 			// set style for barcode
+			if($show_code_below_printed_bar_qr_code=="Yes"){
+									$valuseoftext = true;
+								}else{
+								$valuseoftext = false;
+								}
 			 $style = array(
 								'border' => false,
 								'vpadding' => 'auto',
@@ -629,7 +656,7 @@
 								'bgcolor' => false, //array(255,255,255)
 								'module_width' => 1, // width of a single module in points
 								'module_height' => 1, // height of a single module in points
-								'text' => true,
+								'text' => $valuseoftext,
 								'font' => 'helvetica',
 								'fontsize' => $TextFontSize,
 								'fontweight' => 1,
@@ -720,15 +747,17 @@
 					$pdf->Text(18, $y-$space_for_message_above_code, $message_above_code);
 					}
 					if($print_codes_in_batches=="Yes"){
-					$pdf->Text(18, $y+2, "BatchID-".$print_batch_id);
+					$pdf->Text(18, $y+$space_for_code_below_batchid_mm, "BatchID-".$print_batch_id);
 					}
-					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 12, $y+5, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->write2DBarcode("et1.in?c=".$qrcode.$i, 'QRCODE,L', 12, $y+5, $barcodesize, $barcodesize, $style, 'N');
+					if($show_code_below_printed_bar_qr_code=="Yes"){
 					$pdf->Text(18, $y+2+$barcodesize, $qrcode.$i);
+					}
 					//$pdf->Text(122, $y+35, 'Scan to Check Product');
 					if($message_above_secondry_code!=""){
 					$pdf->Text(18+$space_between_twin_code+$barcodesize, $y+$space_for_message_above_secondry_code, $message_above_secondry_code);
 					  }
-$pdf->write1DBarcode($qrcode2.$i, 'C128B', 18+$space_between_twin_code+$barcodesize, $y+9, $barcodesize, $height_of_the_bar_code, 0.4, $style, 'L');
+$pdf->write1DBarcode("et1.in?c=".$qrcode2.$i, 'C128B', 18+$space_between_twin_code+$barcodesize, $y+9, $barcodesize, $height_of_the_bar_code, 0.4, $style, 'L');
 
 if($message_below_secondry_code!=""){
 					$pdf->Text(18+$space_between_twin_code+$barcodesize, $y+$space_for_message_below_secondry_code, $message_below_secondry_code);
@@ -743,11 +772,13 @@ if($message_below_secondry_code!=""){
 					$pdf->Text(18, $y-$space_for_message_above_code, $message_above_code);
 					}
 					if($print_codes_in_batches=="Yes"){
-					$pdf->Text(18, $y+2, "BatchID-".$print_batch_id);
+					$pdf->Text(18, $y-$space_for_code_below_batchid_mm, $print_batch_id);
 					}
-					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 12, $y+5, $barcodesize, $barcodesize, $style, 'N');
-					//$pdf->SetFont('helvetica', '1', 5);					
-					$pdf->Text(18, $y+2+$barcodesize, $qrcode.$i);
+					$pdf->write2DBarcode("et1.in?c=".$qrcode.$i, 'QRCODE,L', 17, $y+2, $barcodesize, $barcodesize, $style, 'N');
+					//$pdf->SetFont('helvetica', '1', 5);
+						if($show_code_below_printed_bar_qr_code=="Yes"){
+					$pdf->Text(18, $y+1+$barcodesize, $qrcode.$i);
+						}
 					if($message_below_code!=""){
 					$pdf->Text(18, $y+$barcodesize+$space_for_message_below_code+1, $message_below_code);
 					}
@@ -842,6 +873,7 @@ if($message_below_secondry_code!=""){
 			$space_for_message_below_code			= $ProductData['space_for_message_below_code'];
 			$space_between_code_rows = $ProductData['space_between_code_rows'];
 			$print_codes_in_batches = $ProductData['print_codes_in_batches'];
+			$space_for_code_below_batchid_mm = $ProductData['space_for_code_below_batchid']*0.2645833333333;
 			$TextFontSize = $ProductData['TextFontSize'];
 			
 			$height_of_the_bar_code = $ProductData['height_of_the_bar_code'];
@@ -850,9 +882,13 @@ if($message_below_secondry_code!=""){
 			$space_for_message_above_secondry_code 			= $ProductData['space_for_message_above_secondry_code'];
 			$space_for_message_below_secondry_code 			= $ProductData['space_for_message_below_secondry_code'];
 			$print_code_unity_type 			= $ProductData['code_unity_type'];
-			
- 			
+			$show_code_below_printed_bar_qr_code 			= $ProductData['show_code_below_printed_bar_qr_code'];
 			// set style for barcode
+			if($show_code_below_printed_bar_qr_code=="Yes"){
+									$valuseoftext = true;
+								}else{
+								$valuseoftext = false;
+								}
 			 $style = array(
 								'border' => false,
 								'vpadding' => 'auto',
@@ -861,7 +897,7 @@ if($message_below_secondry_code!=""){
 								'bgcolor' => false, //array(255,255,255)
 								'module_width' => 1, // width of a single module in points
 								'module_height' => 1, // height of a single module in points
-								'text' => true,
+								'text' => $valuseoftext,
 								'font' => 'helvetica',
 								'fontsize' => $TextFontSize,
 								'stretchtext' => 4
@@ -934,7 +970,11 @@ if($message_below_secondry_code!=""){
 			// -----------------------------------------------------------------------------
  			
 			$pdf->SetFont('helvetica', '1', $TextFontSize);
-			
+			if($show_code_below_printed_bar_qr_code=="Yes"){
+									$valuseoftext = true;
+								}else{
+								$valuseoftext = false;
+								}
  			// define barcode style
 			$style = array(
 								'border' => false,
@@ -944,7 +984,7 @@ if($message_below_secondry_code!=""){
 								'bgcolor' => false, //array(255,255,255)
 								'module_width' => 1, // width of a single module in points
 								'module_height' => 1, // height of a single module in points
-								'text' => true,
+								'text' => $valuseoftext,
 								'font' => 'helvetica',
 								'fontsize' => $TextFontSize,
 								'stretchtext' => 4
@@ -973,16 +1013,17 @@ if($message_below_secondry_code!=""){
 					$pdf->Text(18, $y-$space_for_message_above_code, $message_above_code);
 					  }
 					if($print_codes_in_batches=="Yes"){
-					$pdf->Text(18, $y+2, "BatchID-".$print_batch_id);
+					$pdf->Text(18, $y-$space_for_code_below_batchid_mm, "BatchID-".$print_batch_id);
 					}
-					$pdf->write1DBarcode($qrcode2.$i, 'C128B', 18, $y+6, $barcodesize, $height_of_the_bar_code, 0.4, $style, 'L');
-					
+					$pdf->write1DBarcode("et1.in?c=".$qrcode2.$i, 'C128B', 18, $y+6, $barcodesize, $height_of_the_bar_code, 0.4, $style, 'L');
+					if($show_code_below_printed_bar_qr_code=="Yes"){
 					$pdf->Text(22+$space_between_twin_code+$barcodesize, $y+$barcodesize+1, $qrcode.$i);
+					}
 					//$pdf->Text(122, $y+35, 'Scan to Check Product');
 					if($message_above_secondry_code!=""){
 					$pdf->Text(18+$space_between_twin_code+$barcodesize, $y+$space_for_message_above_secondry_code, $message_above_secondry_code);
 					  }
-					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 18+$space_between_twin_code+$barcodesize, $y+5, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->write2DBarcode("et1.in?c=".$qrcode.$i, 'QRCODE,L', 18+$space_between_twin_code+$barcodesize, $y+5, $barcodesize, $barcodesize, $style, 'N');
 					if($message_below_secondry_code!=""){
 					$pdf->Text(18+$space_between_twin_code+$barcodesize, $y+$space_for_message_below_secondry_code, $message_below_secondry_code);
 					  }
@@ -997,9 +1038,9 @@ if($message_below_secondry_code!=""){
 						$pdf->Text(28, $y-$space_for_message_above_code, $message_above_code);
 					}
 					if($print_codes_in_batches=="Yes"){
-					$pdf->Text(28, $y+1, "BatchID-".$print_batch_id);
+					$pdf->Text(28, $y-$space_for_code_below_batchid_mm, "BatchID-".$print_batch_id);
 					}
-		$pdf->write1DBarcode($qrcode.$i, 'C128B', 28, $y+5, $barcodesize, $height_of_the_bar_code, 0.4, $style, 'L');
+		$pdf->write1DBarcode("et1.in?c=".$qrcode.$i, 'C128B', 28, $y+5, $barcodesize, $height_of_the_bar_code, 0.4, $style, 'L');
 					
 					if($message_below_code!=""){
 					$pdf->Text(28, $y+$height_of_the_bar_code+$space_for_message_below_code, $message_below_code);
@@ -1079,10 +1120,6 @@ if($message_below_secondry_code!=""){
 				 	
 					
 		$this->order_master_model->insert_upload_bulk_codes($post, $qrcode, $qrcode2.$i, $active_status, $plant_id, $user_id, $product2_array);
-					
-					
-					
-					
  				}
 				
 				
@@ -1095,6 +1132,21 @@ if($message_below_secondry_code!=""){
 			//Close and output PDF document
 			//ob_end_clean();
 			//============================================================+
+ 	 } 
+	 
+	 
+	 	function save_tracek_report_customer(){ 
+			$user_id 	= $this->session->userdata('admin_user_id');
+			$trm_id 					= $this->input->post('trm_id');
+			$tracek_report_slug 		= getTracekReportMasterDataByID('tracek_report_slug', $trm_id);
+			$report_name 				= getTracekReportMasterDataByID('report_name', $trm_id);			
+			$report_site_url 			= strtolower('reports/'.getTracekReportMasterDataByID('report_site_url', $trm_id));
+			$customer_id 				= $this->input->post('customer_id');
+			$report_view_status 		= $this->input->post('report_view_status');
+			$report_auto_email_status 	= $this->input->post('report_auto_email_status');
+					
+		$this->order_master_model->insert_save_tracek_report_customer($user_id,$tracek_report_slug, $trm_id, $report_name, $report_site_url, $customer_id, $report_view_status, $report_auto_email_status);
+ 				
  	 } 
 	 
 	 
@@ -1268,7 +1320,7 @@ if($message_below_secondry_code!=""){
 					//$pdf->write1DBarcode('Sanjay1234'.$i, 'C128B', 60, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
 					//$pdf->write1DBarcode('Sanjay56789'.$i, 'C128B', 140, $y-1.5, 60, $barcodesize, 0.4, $style, 'L');
 					
-					$pdf->write2DBarcode($qrcode.$i, 'QRCODE,L', 110, $y, $barcodesize, $barcodesize, $style, 'N');
+					$pdf->write2DBarcode("et1.in?c=".$qrcode.$i, 'QRCODE,L', 110, $y, $barcodesize, $barcodesize, $style, 'N');
 					$pdf->SetFont('helvetica', '', 5);
 					$pdf->Text(100, $y+11, 'This is First Code');
 					//$pdf->write2DBarcode($qrcode2.$i, 'QRCODE,L', 150, $y, $barcodesize, barcodesize, $style, 'N');
@@ -1282,7 +1334,7 @@ if($message_below_secondry_code!=""){
 
 					//$pdf->write2DBarcode('www.tcpdf.org', 'QRCODE,L', 80, 150, 50, 50, $style, 'N');
 					//$pdf->Text(80, 145, 'DATAMATRIX-Sanjay (ISO/IEC 16022:2006)');
-
+					
 // -------------------------------------------------------------------
 					
 					//$pdf->write1DBarcode($qrcode.$i, 'C128B', '', $y-8.5, 105, 20, 0.4, $style, 'M');
@@ -1532,6 +1584,10 @@ $pdf->Output('example_050.pdf', 'I');
 	 
 	 
 	 public function list_customer_codes() {
+		 
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		
         $params = array();
         if(!empty($this->input->get('page_limit'))){
             $limit_per_page = $this->input->get('page_limit');
@@ -1539,7 +1595,13 @@ $pdf->Output('example_050.pdf', 'I');
             $limit_per_page = $this->config->item('pageLimit');
         }
         $this->config->set_item('pageLimit', $limit_per_page);
-        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        //$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+			
         $srch_string = $this->input->get('search');
         
         if (empty($srch_string)) {
@@ -1548,7 +1610,14 @@ $pdf->Output('example_050.pdf', 'I');
         $total_records = $this->order_master_model->get_total_customer_codes_all($srch_string);
 
         $params["orderListing"] = $this->order_master_model->get_customer_codes_list_all($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('order_master/list_customer_codes', $total_records);
+		
+		if($user_id>1){
+		$params["links"] = Utils::pagination('order_master/list_customer_codes', $total_records);
+			}else{
+			$params["links"] = Utils::pagination('order_master/list_customer_codes/' . $customer_id, $total_records, null, 4);
+			}
+			
+        //$params["links"] = Utils::pagination('order_master/list_customer_codes', $total_records);
 
         ##--------------- pagination End ----------------##
         $data = array();
@@ -1629,7 +1698,8 @@ $pdf->Output('example_050.pdf', 'I');
         $data					= array();
 		$data = $this->input->post();
 		$consumer_id = $data['consumer_id'];
-		echo "Sanjay";
+		$customer_id = $this->session->userdata('admin_user_id');
+		//echo "Sanjay";
 			
 			//$transactionType = "successful-verification-of-invoice-uploaded-for-product-registration";
 			$transactionType = "product_registration_lps";
@@ -1649,13 +1719,27 @@ $pdf->Output('example_050.pdf', 'I');
 		 
 		 $this->order_master_model->sendFVPNotification($vquery, $fb_token);
 		 
-		 $NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "TRUSTAT product verifiction";
+			$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "TRUSTAT product Verification";
 			$NTFdata['body'] = $vquery; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
-			$NTFdata['status'] = 1; 
+			$NTFdata['status'] = 0; 
 			
 			$this->db->insert('list_notifications_table', $NTFdata);
+			
+			$TRNNC_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 10)->get()->row();
+			$TRNNC_billin_particular_name = $TRNNC_result->billin_particular_name;
+			$TRNNC_billin_particular_slug = $TRNNC_result->billin_particular_slug;
+			
+			$TRNNCData['customer_id'] = $customer_id;
+			$TRNNCData['consumer_id'] = $consumer_id;
+			$TRNNCData['billing_particular_name'] = $TRNNC_billin_particular_name.' TRUSTAT product Verification';		
+			$TRNNCData['billing_particular_slug'] = $TRNNC_billin_particular_slug.'_TRUSTAT_product_verifiction';
+			$TRNNCData['trans_quantity'] = 1; 
+			$TRNNCData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$TRNNCData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $TRNNCData);		
+			
 		
 		exit;
 		
@@ -1745,9 +1829,69 @@ $pdf->Output('example_050.pdf', 'I');
         //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
         //$this->load->view('list_order_tpl', $params);
 		$this->load->view('list_printed_batches_tpl', $params);
+    }
+
+	 public function list_tracek_reports() {
+		 
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        //$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+			
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->get_total_customer_tracek_reports_all($srch_string);
+
+        $params["orderListing"] = $this->order_master_model->get_customer_tracek_reports_list_all($limit_per_page, $start_index, $srch_string);
+		
+		if($user_id>1){
+		$params["links"] = Utils::pagination('order_master/list_customer_codes', $total_records);
+			}else{
+			$params["links"] = Utils::pagination('order_master/list_customer_codes/' . $customer_id, $total_records, null, 4);
+			}
+			
+        //$params["links"] = Utils::pagination('order_master/list_customer_codes', $total_records);
+
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        $params['user_id'] = $user_id;
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_tracek_reports_tpl', $params);
     }	
 
 
+	   public function change_report_view_status() {
+ 		 $id = $this->input->post('id');
+		 $value = $this->input->post('value');
+		 
+		
+ 		 echo $status= $this->order_master_model->change_report_view_status($id,$value);exit;
+      }
+	  
+	  
+	 public function change_report_auto_email_status() {
+ 		 $id = $this->input->post('id');
+		 $value = $this->input->post('value');
+		 
+		
+ 		 echo $status= $this->order_master_model->change_report_auto_email_status($id,$value);exit;
+      }
 
 	
    }

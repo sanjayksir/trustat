@@ -255,7 +255,7 @@
 				data: dataSend,
   				success: function (msg) {
 					setTimeout(function() {
- 						  window.location.href="<?php echo base_url().'order_master/list_customer_codes';?>";
+ 						  window.location.href="<?php echo base_url().'order_master/list_customer_codes';?>/<?php echo get_customer_id_by_product_id(getProductIDbyProductCodeID($this->uri->segment(3))); ?>";
 					  }, 2000); 
 				}
 			});

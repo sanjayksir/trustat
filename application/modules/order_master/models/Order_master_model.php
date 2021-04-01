@@ -86,7 +86,7 @@
 						##------------ check exists entries--------------##
 						$check_exists_entry 	= $this->check_product_order( $user_id,$product_id,$frmData['order_id']);
 						##------------ check exists entries--------------##
-						if(!empty($check_exists_entry)){ 
+						//if(!empty($check_exists_entry)){ 
 							if(!empty($frmData['deliverydate'])){
 								$date = date('Y-m-d',strtotime($frmData['deliverydate']));
 							}else{
@@ -108,10 +108,10 @@
 								$this->session->set_flashdata('success', 'Order Not Updated!');
 								$result = 0;
 							}
-						 }else{
+						/* }else{
  							$this->save_order_add(json_encode($frmData));
 							$result = 1;
-						}
+						} */
 					} 
 				}else{
 						$this->save_order_add(json_encode($frmData));
@@ -193,7 +193,7 @@
 		$subject    =  'ISPL Admin:: Welcome to Tracking Portal';
 		$body			=	"<b>Hello <b>".$user_name."</b>,
 								</b><br><br><r>
-								 A Order has been Placed.
+								 A Order has been Placed for Codes.
 								<br>Product Code is :".$product_code."<br />
 								<br>Product Name is :".$product_name."<br />
 								<br>Tracking Order No is :".$tracking_no."<br />
@@ -202,7 +202,7 @@
 		$mail_conf =  array(
 		'subject'=>$subject,
 		'to_email'=>$email,
-		'from_email'=>'admin@innovigents.com',
+		'from_email'=>'admin@'.$_SERVER['SERVER_NAME'],
 		'from_name'=> 'ISPL Admin',
 		'body_part'=>$body
 		);
@@ -211,6 +211,7 @@
 		} return false;//echo redirect('accounts/create');
 	 }
 
+	 
 	 
 
 	 function checkDuplicateUser($username){
@@ -443,16 +444,18 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 			if(!empty($srch_string)){ 
 				$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%') and (user_id=$user_id)");
 			}else{
-				$this->db->where(array('print_batch_id'=>$batch_id));
+				$this->db->where(array('print_batch_id'=>$batch_id, 'print_user_id'=>$user_id));
 			}
 	 	}
 		
 		$this->db->select('count(1) as total_rows');
 		$this->db->from('printed_barcode_qrcode');
 		if($user_id>1){
-		$this->db->where('print_batch_id', $batch_id);
+		//$this->db->where('print_batch_id', $batch_id);
+		$this->db->where(array('print_batch_id'=>$batch_id, 'print_user_id'=>$user_id));
 			}else{
-			$this->db->where('print_batch_id', $batch_id);
+			//$this->db->where('print_batch_id', $batch_id);
+			$this->db->where(array('print_batch_id'=>$batch_id, 'print_user_id'=>$customer_id));
 			}
 		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
@@ -480,13 +483,20 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 			if(!empty($srch_string)){ 
 				$this->db->where("(product_name LIKE '%$srch_string%' OR order_tracking_number LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR order_no LIKE '%$srch_string%') and (user_id=$user_id)");
 			}else{
-				$this->db->where(array('print_batch_id'=>$batch_id));
+				$this->db->where(array('print_batch_id'=>$batch_id, 'print_user_id'=>$user_id));
 			}
 	 	}
 		
 		$this->db->select('barcode_qr_code_no, pack_level, active_status, print_batch_id, order_id',false);
 		$this->db->from('printed_barcode_qrcode');
 		//$this->db->join('order_master OM', 'OM.batch_id= OPL.batch_id');
+		if($user_id>1){
+		//$this->db->where('print_batch_id', $batch_id);
+		$this->db->where(array('print_batch_id'=>$batch_id, 'print_user_id'=>$user_id));
+			}else{
+			//$this->db->where('print_batch_id', $batch_id);
+			$this->db->where(array('print_batch_id'=>$batch_id, 'print_user_id'=>$customer_id));
+			}
  		$this->db->order_by('id','desc');
 		$this->db->limit($limit, $start);
    		$query = $this->db->get();  //echo '***'.$this->db->last_query();
@@ -888,27 +898,30 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 			//$print_idb1 = $this->last_record();
 	//$row = $this->db->select("*")->limit(1)->order_by('id',"DESC")->get("order_print_listing")->row();
 			//$print_id =  $row->id + 1;
-			$date = date('m/d/Y h:i:s a', time());
+			//$date = date('m/d/Y h:i:s a', time());
 			foreach ($product2_arr as $product2s) {
 		 $insertData = array(
 				"print_id"				=> 1,
+				"print_batch_id"		=> 1,
 				"order_id"				=> 1,
-				"barcode_qr_code_no"	=> $post_code,
-				"barcode_qr_code_no2"	=> get_product_sku_by_id($product2s) . '-' . $post_code2,
-				"pack_level"			=> 0,
-				"pack_level2"			=> 0,
 				"product_id"			=> $product2s,
-				"plant_id"				=> $plant_id,
-				"print_user_id"			=> $user_id,
-				"active_status"			=> 1,
+				"plant_id"				=> 1,
+				"print_user_id"			=> $user_id,		
+				"active_status"			=> 1,				
+				"pack_level"			=> 1,		
+				"barcode_qr_code_no"	=> $post_code,
+				"barcode_qr_code_no2"	=> $post_code,
+				"pack_level2"			=> 0,
+				"activation_location_id"			=> 1,				
 				"customer_id"			=> 0,
 				"stock_status"			=> 'Customer_Code',
+				"batch_id"				=> 1,
 				"modified_at"			=> date('Y-m-d H:i:s'),
 				"receive_date"			=> date('Y-m-d H:i:s')
 			 ); 
 		 
 		if($this->db->insert("printed_barcode_qrcode", $insertData)){
-			$this->session->set_flashdata('success', 'Order Updated!');
+			$this->session->set_flashdata('success', 'Order Updated Successfully!');
  			return true;
 		}else{
 			$this->session->set_flashdata('success', 'Error!');
@@ -957,7 +970,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		if($user_id>1){
 			
 			if(!empty($srch_string)){ 
- 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.location_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
 				$this->db->where_in(array('P.created_by'=>$user_id));
 				
 			}else{
@@ -965,7 +978,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 			}			
 		}else{
 			if(!empty($srch_string)){ 
- 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.location_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
 			}
 		}
 		
@@ -996,12 +1009,10 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
  			$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
 		}
 		*/
-		
-		
 		if($user_id>1){
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%'");
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.location_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%'");
 			}else{
 				$this->db->where(array('P.created_by'=>$user_id));
 			}			
@@ -1011,12 +1022,12 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 			}
 		}
 		
- 		$this->db->select('PP.*, P.product_name, P.product_sku, P.created_by, B.user_name, Ppp.location_name, Ppp.address, PP.plant_id',false);
+ 		$this->db->select('PP.*, P.product_name, P.product_sku, P.created_by, B.user_name, Ppp.location_name, Ppp.street_address, PP.plant_id',false);
 		$this->db->from('printed_barcode_qrcode PP');
 		$this->db->join('backend_user B', 'B.user_id = PP.print_user_id');
 		$this->db->join('products P', 'P.id = PP.product_id');
 		$this->db->join('location_master Ppp', 'Ppp.location_id = PP.plant_id');
-		//$this->db->where(array('P.created_by' => $user_id));
+		$this->db->where(array('P.created_by' => $user_id)); 
    		$this->db->order_by('id','desc');
 		
 		/*
@@ -1062,8 +1073,8 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->from('printed_barcode_qrcode PP');
 		$this->db->join('backend_user B', 'B.user_id = PP.print_user_id');
 		$this->db->join('products P', 'P.id = PP.product_id');
-		$this->db->join('plant_master Ppp', 'Ppp.plant_id = PP.plant_id');
- 		$this->db->where(array('P.created_by' => $user_id));
+		$this->db->join('location_master Ppp', 'Ppp.location_id = PP.plant_id');
+		$this->db->where(array('P.created_by' => $user_id)); 
    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -1141,7 +1152,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		if($user_id>1){
 		$this->db->where(array('P.created_by'=>$user_id));
 		}
-   		$this->db->order_by('S.created_at','desc');
+   		$this->db->order_by('S.code_scan_date','desc');
 		$this->db->limit($limit, $start);
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
@@ -1150,9 +1161,245 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		return $resultData;
 	 }
 	 
+	//  ## Consumer Activity Log
+
+	 function count_consumer_activity_log_list_records($srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+		/*
+		if(!empty($srch_string) && $user_id==1){ 
+                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");                    
+		}
+		*/
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%') AND P.created_by LIKE '%$user_id%'"); 
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')"); 
+			}
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('consumer_activity_log_table');
+		//$this->db->join('scanned_products S', 'C.id = S.consumer_id');
+		//$this->db->join('products P', 'P.id = S.product_id');
+		if($user_id>1){
+		//$this->db->where(array('P.created_by'=>$user_id));
+		}
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
 	 
 	 
+	 function get_consumer_activity_log_list($limit,$start,$srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ /*
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");              
+		}
+		*/
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')  AND P.created_by LIKE '%$user_id%'"); 
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')"); 
+			}
+		}
+		
+		 
+ 		$this->db->select('*',false);
+		$this->db->from('consumer_activity_log_table');
+		//$this->db->join('scanned_products S', 'C.id = S.consumer_id');
+		//$this->db->join('products P', 'P.id = S.product_id');
+		if($user_id>1){
+		//$this->db->where(array('P.created_by'=>$user_id));
+		}
+   		$this->db->order_by('cal_id','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+
+   //  ## Consumer Activity Log end
 	 
+	 
+	//  ## Consumer Product Referral Report Start
+
+	 function count_consumer_product_referral_report_records($srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+		/*
+		if(!empty($srch_string) && $user_id==1){ 
+                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");                    
+		}
+		*/
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(referral_reference_id LIKE '%$srch_string%' OR referrer_consumer_id LIKE '%$srch_string%' OR referred_consumer_id LIKE '%$srch_string%' OR product_id LIKE '%$srch_string%' OR media_type LIKE '%$srch_string%' OR product_code_or_promotion_id LIKE '%$srch_string%' OR rs_referred_consumer_TRUSTAT LIKE '%$srch_string%' OR rs_referred_consumer_customer LIKE '%$srch_string%' OR referred_consumer_id LIKE '%$srch_string%' AND referred_mobile_no LIKE '%$srch_string%')"); 
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(referral_reference_id LIKE '%$srch_string%' OR referrer_consumer_id LIKE '%$srch_string%' OR referred_consumer_id LIKE '%$srch_string%' OR product_id LIKE '%$srch_string%' OR media_type LIKE '%$srch_string%' OR product_code_or_promotion_id LIKE '%$srch_string%' OR rs_referred_consumer_TRUSTAT LIKE '%$srch_string%' OR rs_referred_consumer_customer LIKE '%$srch_string%' OR referred_consumer_id LIKE '%$srch_string%' AND referred_mobile_no LIKE '%$srch_string%')"); 
+			}
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('consumer_referral_table');
+		//$this->db->join('scanned_products S', 'C.id = S.consumer_id');
+		//$this->db->join('products P', 'P.id = S.product_id');
+		if($user_id>1){
+		//$this->db->where(array('P.created_by'=>$user_id));
+		}
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function get_consumer_product_referral_report_list_records($limit,$start,$srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ /*
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%')");              
+		}
+		*/
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(referral_reference_id LIKE '%$srch_string%' OR referrer_consumer_id LIKE '%$srch_string%' OR referred_consumer_id LIKE '%$srch_string%' OR product_id LIKE '%$srch_string%' OR media_type LIKE '%$srch_string%' OR product_code_or_promotion_id LIKE '%$srch_string%' OR rs_referred_consumer_TRUSTAT LIKE '%$srch_string%' OR rs_referred_consumer_customer LIKE '%$srch_string%' OR referred_consumer_id LIKE '%$srch_string%' AND referred_mobile_no LIKE '%$srch_string%')"); 
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(referral_reference_id LIKE '%$srch_string%' OR referrer_consumer_id LIKE '%$srch_string%' OR referred_consumer_id LIKE '%$srch_string%' OR product_id LIKE '%$srch_string%' OR media_type LIKE '%$srch_string%' OR product_code_or_promotion_id LIKE '%$srch_string%' OR rs_referred_consumer_TRUSTAT LIKE '%$srch_string%' OR rs_referred_consumer_customer LIKE '%$srch_string%' OR referred_consumer_id LIKE '%$srch_string%' AND referred_mobile_no LIKE '%$srch_string%')"); 
+			}
+		}
+		
+		 
+ 		$this->db->select('*',false);
+		$this->db->from('consumer_referral_table');
+		//$this->db->join('scanned_products S', 'C.id = S.consumer_id');
+		//$this->db->join('products P', 'P.id = S.product_id');
+		if($user_id>1){
+		//$this->db->where(array('P.created_by'=>$user_id));
+		}
+   		$this->db->order_by('referral_id','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+
+   //  ## Consumer Product Referral Report end	 
+	
+	//  ## Tracek User Activity Log
+
+	 function count_tracek_user_activity_log_list_records($srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+		
+		if(!empty($srch_string) && $user_id==1){ 
+                    $this->db->where("(BU.l_name LIKE '%$srch_string%' OR LTT.parent_customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR LTT.bar_code LIKE '%$srch_string%')");                    
+		}
+		
+		if($user_id>1){
+			$this->db->where('LTT.parent_customer_id', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(BU.l_name LIKE '%$srch_string%' OR LTT.parent_customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR LTT.bar_code LIKE '%$srch_string%' parent_customer_id LIKE '%$user_id%'"); 
+			}else{
+				$this->db->where(array('parent_customer_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(BU.l_name LIKE '%$srch_string%' OR LTT.parent_customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR LTT.bar_code LIKE '%$srch_string%')"); 
+			}
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('list_transactions_table LTT');
+		$this->db->join('backend_user BU', 'BU.user_id = LTT.parent_customer_id');
+		$this->db->join('products P', 'P.id = LTT.product_id');
+		if($user_id>1){
+		$this->db->where(array('parent_customer_id'=>$user_id));
+		}
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function get_tracek_user_activity_log_list($limit,$start,$srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(BU.l_name LIKE '%$srch_string%' OR LTT.parent_customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR LTT.bar_code LIKE '%$srch_string%')");              
+		}
+		
+		if($user_id>1){
+			$this->db->where('parent_customer_id', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(BU.l_name LIKE '%$srch_string%' OR LTT.parent_customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR LTT.bar_code LIKE '%$srch_string%')  AND P.parent_customer_id LIKE '%$user_id%'"); 
+			}else{
+				$this->db->where(array('parent_customer_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(BU.l_name LIKE '%$srch_string%' OR LTT.parent_customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR LTT.bar_code LIKE '%$srch_string%')"); 
+			}
+		}
+		
+		 
+ 		$this->db->select('LTT.*, BU.*, P.*',false);
+		$this->db->from('list_transactions_table LTT');
+		$this->db->join('backend_user BU', 'BU.user_id = LTT.parent_customer_id');
+		//$this->db->join('role_master BU', 'BU.id = LTT.agent_customer_id');
+		$this->db->join('products P', 'P.id = LTT.product_id');
+		if($user_id>1){
+		$this->db->where(array('parent_customer_id'=>$user_id));
+		}
+   		$this->db->order_by('LTT.id','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+
+   //  ## Tracek User Activity Log end
+   
 	  function count_physical_packaging_barqrcodelist($srch_string=''){
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
@@ -1993,7 +2240,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
                 $condition = null;
  
 		if(!empty($srch_string) && $user_id > 1){ 
- 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR PP.rating LIKE '%$srch_string%' OR PP.description LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')";
+ 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR PP.rating LIKE '%$srch_string%' OR PP.rating LIKE '%$srch_string%' OR PP.description LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')";
 		}
 		$total = $this->totalFeedbacksOnProducts($condition);
                 if(!empty($condition)){
@@ -2270,8 +2517,9 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$resultData = array();
 		
 		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
 		/*if($user_id>1){
-			$this->db->where(array('user_id'=>$user_id));
+			$this->db->where(array('user_id'=>$customer_id));
 	 	}*/
 		if(!empty($srch_string) && $user_id==1){ 
  			$this->db->where("(PP.barcode_qr_code_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%')");
@@ -2289,8 +2537,14 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->from('printed_barcode_qrcode PP');
 		$this->db->join('products P', 'P.id= PP.product_id');
 		//$this->db->where(array('user_id'=>$user_id 'stock_status'=>"Customer_Code"));
-		$this->db->where(array('PP.stock_status'=>"Customer_Code", 'P.created_by'=>$user_id));
- 		$this->db->order_by('modified_at','desc');
+		//$user_id 	= $this->session->userdata('admin_user_id');
+				 if($user_id==1){			 			
+						$this->db->where(array('PP.stock_status'=>"Customer_Code", 'P.created_by'=>$customer_id));
+			 			 }else{
+			 			$this->db->where(array('PP.stock_status'=>"Customer_Code", 'P.created_by'=>$user_id));
+						 }
+		//$this->db->where(array('PP.stock_status'=>"Customer_Code", 'P.created_by'=>$user_id));
+ 		$this->db->order_by('PP.modified_at','desc');
 		$this->db->limit($limit, $start);
    		$query = $this->db->get();  //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
@@ -2302,7 +2556,7 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 	 function get_total_customer_codes_all($srch_string=''){
 		$result_data = 0;
 		$user_id 	= $this->session->userdata('admin_user_id');
-		
+		$customer_id = $this->uri->segment(3);
 		if(!empty($srch_string) && $user_id==1){ 
  			$this->db->where("(PP.barcode_qr_code_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%')");
 		}
@@ -2318,8 +2572,13 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$this->db->from('printed_barcode_qrcode PP');
 		$this->db->join('products P', 'P.id= PP.product_id');
 		//$this->db->where(array('user_id'=>$user_id 'stock_status'=>"Customer_Code"));
-		$this->db->where(array('PP.stock_status'=>"Customer_Code", 'P.created_by'=>$user_id));
-		//$this->db->join('print_orders_history P', 'O.order_id= P.order_id');
+		//$this->db->where(array('PP.stock_status'=>"Customer_Code", 'P.created_by'=>$user_id));
+		//$this->db->join('print_orders_history P', 'O.order_id= P.order_id');		
+			if($user_id==1){			 			
+						$this->db->where(array('PP.stock_status'=>"Customer_Code", 'P.created_by'=>$customer_id));
+			 			 }else{
+			 			$this->db->where(array('PP.stock_status'=>"Customer_Code", 'P.created_by'=>$user_id));
+						 }						 
 		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -2489,8 +2748,8 @@ LEFT JOIN print_orders_history P ON O.order_id = P.order_id";
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'TRUSTAT product verifiction', 'body' =>  $mess , 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
-				  'data' => array('title' => 'TRUSTAT product verifiction', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
+		         'notification' => array('title' => 'TRUSTAT product Verification', 'body' =>  $mess , 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+				  'data' => array('title' => 'TRUSTAT product Verification', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
 		       
 		);
 		$fields = json_encode ( $fields );
@@ -2594,7 +2853,7 @@ function details_activate_codes($print_batch_id) {
                 $condition = null;
  
 		if(!empty($srch_string) && $user_id > 1){ 
- 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')";
+ 			$condition= "(C.user_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR PP.complain_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')";
 		}
 		$total = $this->totalComplaintLog($condition);
                 if(!empty($condition)){
@@ -2718,6 +2977,1228 @@ function details_activate_codes($print_batch_id) {
 		return $resultData;
 	 }
 	// End List Printed Batch Function	 
+	 
+	 
+	function get_basic_customer_report_level0_list($limit,$start,$srch_string='', $from_date_data='', $to_date_data=''){
+		$resultData = 0;
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+		
+		$srch_string = trim($srch_string);
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                $this->db->where("(PP.customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR PP.create_date LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR PP.scan_city LIKE '%$srch_string%' OR PP.pin_code LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%' OR PP.consumer_id LIKE '%$srch_string%') and (P.created_by=$user_id)");
+	//$this->db->where('PP.create_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+            $this->db->where('DATE(PP.create_date) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->where('DATE(PP.create_date) <=', date('Y-m-d',strtotime($to_date_data)));
+			} else {
+                $this->db->where(array('P.created_by' => $user_id));
+            }
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(PP.customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR PP.create_date LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR PP.scan_city LIKE '%$srch_string%' OR PP.pin_code LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%' OR PP.consumer_id LIKE '%$srch_string%')");
+	$this->db->where('PP.create_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+			$this->db->where('DATE(PP.create_date) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->where('DATE(PP.create_date) <=', date('Y-m-d',strtotime($to_date_data)));
+		}
+			}
+		
+		//$from_date_data='2019-05-25';
+		//$to_date_data='2020-06-28';
+		
+ 		$this->db->select('PP.*, PBQ.*, C.*, P.*, P.product_name, PP.pin_code as pr_pin_code, PP.latitude as latitude, PP.longitude as longitude, P.product_sku, P.created_by, PP.status',false);
+		$this->db->from('purchased_product PP');
+		$this->db->join('consumers C', 'C.id = PP.consumer_id');
+		$this->db->join('products P', 'P.id = PP.product_id');
+		$this->db->join('printed_barcode_qrcode PBQ', 'PBQ.barcode_qr_code_no = PP.bar_code');
+		//$this->db->join('scanned_products SP', 'SP.bar_code = PP.bar_code');
+		if($user_id > 1){ 
+			$this->db->where(array('P.created_by' => $user_id));			
+		}
+		if (!empty($from_date_data)) {
+		//$this->db->where('PP.create_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(PP.create_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(PP.create_date) <=', date('Y-m-d',strtotime($to_date_data)));
+		}
+		//$this->db->where('PP.create_date BETWEEN "$from_date_data" AND "$to_date_data"');
+		$this->db->where(array('PP.status' =>1));
+   		$this->db->order_by('PP.create_date','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get();  //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+		
+	function count_basic_customer_report_level0_list($srch_string='', $from_date_data='', $to_date_data=''){
+		$result_data = 0;
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$srch_string = trim($srch_string);
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                 $this->db->where("(PP.customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR PP.create_date LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR PP.scan_city LIKE '%$srch_string%' OR PP.pin_code LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%' OR PP.consumer_id LIKE '%$srch_string%') and (P.created_by=$user_id)");
+		//$this->db->where('PP.create_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+        $this->db->where('DATE(PP.create_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(PP.create_date) <=', date('Y-m-d',strtotime($to_date_data)));
+			} else {
+                $this->db->where(array('P.created_by' => $user_id));
+            }
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(PP.customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR PP.create_date LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR PP.scan_city LIKE '%$srch_string%' OR PP.pin_code LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%' OR PP.consumer_id LIKE '%$srch_string%')");
+		//$this->db->where('PP.create_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+			$this->db->where('DATE(PP.create_date) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->where('DATE(PP.create_date) <=', date('Y-m-d',strtotime($to_date_data)));
+		}
+        }
+		
+		//$from_date_data='2019-06-25';
+		//$to_date_data='2020-06-26';
+		
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('purchased_product PP');
+		$this->db->join('consumers C', 'C.id = PP.consumer_id');
+		$this->db->join('products P', 'P.id = PP.product_id');
+		$this->db->join('printed_barcode_qrcode PBQ', 'PBQ.barcode_qr_code_no = PP.bar_code');
+		if($user_id > 1){ 
+			$this->db->where(array('P.created_by' => $user_id));
+		}
+		if (!empty($from_date_data)) {
+		//$this->db->where('PP.create_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(PP.create_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(PP.create_date) <=', date('Y-m-d',strtotime($to_date_data)));
+		}
+		$this->db->where(array('PP.status' =>1));
+   		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 	function get_basic_customer_report_level1_list($limit,$start,$srch_string='', $from_date_data='', $to_date_data=''){
+		$resultData = 0;
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+		
+		$srch_string = trim($srch_string);
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                $this->db->where("(SP.customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR SP.code_scan_date LIKE '%$srch_string%' OR SP.bar_code LIKE '%$srch_string%' OR SP.scan_city LIKE '%$srch_string%' OR SP.pin_code LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%' OR SP.consumer_id LIKE '%$srch_string%') and (P.created_by=$user_id)");
+//$this->db->where('SP.code_scan_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+	$this->db->where('DATE(SP.code_scan_date) >=', date('Y-m-d',strtotime($from_date_data)));
+	$this->db->where('DATE(SP.code_scan_date) <=', date('Y-m-d',strtotime($to_date_data)));
+            } else {
+                $this->db->where(array('P.created_by' => $user_id));
+            }
+		
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(SP.customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR SP.code_scan_date LIKE '%$srch_string%' OR SP.bar_code LIKE '%$srch_string%' OR SP.scan_city LIKE '%$srch_string%' OR SP.pin_code LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%' OR SP.consumer_id LIKE '%$srch_string%')");
+//$this->db->where('SP.code_scan_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+ 	$this->db->where('DATE(SP.code_scan_date) >=', date('Y-m-d',strtotime($from_date_data)));
+	$this->db->where('DATE(SP.code_scan_date) <=', date('Y-m-d',strtotime($to_date_data)));
+           }
+        }
+		
+ 		$this->db->select('SP.*, PBQ.*, BU.*, P.*, C.*, P.product_name, SP.pin_code as pr_pin_code, SP.latitude as latitude, SP.longitude as longitude, P.product_sku, P.created_by',false);
+		$this->db->from('scanned_products SP');
+		$this->db->join('backend_user BU', 'BU.user_id = SP.customer_id');
+		$this->db->join('products P', 'P.id = SP.product_id');
+		$this->db->join('printed_barcode_qrcode PBQ', 'PBQ.barcode_qr_code_no = SP.bar_code');
+		$this->db->join('consumers C', 'C.id = SP.consumer_id');
+		//$this->db->join('scanned_products SP', 'SP.bar_code = SP.bar_code');
+		if($user_id > 1){ 
+			$this->db->where(array('P.created_by' => $user_id));
+		}
+		if (!empty($from_date_data)) {
+//		$this->db->where('SP.code_scan_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(SP.code_scan_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(SP.code_scan_date) <=', date('Y-m-d',strtotime($to_date_data)));
+		}
+		$this->db->where(array('PBQ.pack_level'=>1));
+   		$this->db->order_by('SP.scan_id','DESC');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get();  //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+		
+	function count_basic_customer_report_level1_list($srch_string='', $from_date_data='', $to_date_data=''){
+		$result_data = 0;
+		$user_id 	= $this->session->userdata('admin_user_id');
+		
+		$srch_string = trim($srch_string);
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                $this->db->where("(SP.customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR SP.code_scan_date LIKE '%$srch_string%' OR SP.bar_code LIKE '%$srch_string%' OR SP.scan_city LIKE '%$srch_string%' OR SP.pin_code LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%' OR SP.consumer_id LIKE '%$srch_string%') and (P.created_by=$user_id)");
+//	$this->db->where('SP.code_scan_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+  	$this->db->where('DATE(SP.code_scan_date) >=', date('Y-m-d',strtotime($from_date_data)));
+	$this->db->where('DATE(SP.code_scan_date) <=', date('Y-m-d',strtotime($to_date_data)));
+          } else {
+                $this->db->where(array('P.created_by' => $user_id));
+            }
+	  
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(SP.customer_id LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR SP.code_scan_date LIKE '%$srch_string%' OR SP.bar_code LIKE '%$srch_string%' OR SP.scan_city LIKE '%$srch_string%' OR SP.pin_code LIKE '%$srch_string%' OR C.user_name LIKE '%$srch_string%' OR SP.consumer_id LIKE '%$srch_string%')");
+//$this->db->where('SP.code_scan_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+  	$this->db->where('DATE(SP.code_scan_date) >=', date('Y-m-d',strtotime($from_date_data)));
+	$this->db->where('DATE(SP.code_scan_date) <=', date('Y-m-d',strtotime($to_date_data)));
+          }
+        }
+		
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('scanned_products SP');
+		$this->db->join('backend_user BU', 'BU.user_id = SP.customer_id');
+		$this->db->join('products P', 'P.id = SP.product_id');
+		$this->db->join('printed_barcode_qrcode PBQ', 'PBQ.barcode_qr_code_no = SP.bar_code');
+		$this->db->join('consumers C', 'C.id = SP.consumer_id');
+		if($user_id > 1){ 
+			$this->db->where(array('P.created_by' => $user_id));
+		}
+		if (!empty($from_date_data)) {
+//		$this->db->where('SP.code_scan_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(SP.code_scan_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(SP.code_scan_date) <=', date('Y-m-d',strtotime($to_date_data)));
+			}
+		$this->db->where(array('PBQ.pack_level'=>1));
+   		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 // Basic Customer Report Product Wise Start
+	 
+	function get_basic_customer_report_level0_list_product($limit,$start,$srch_string=''){
+		$resultData = 0;
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+		$product_id 	= $this->uri->segment(4);
+		
+		$srch_string = trim($srch_string);
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                $this->db->where("(P.product_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR PP.consumer_id LIKE '%$srch_string%' OR PP.purchase_date LIKE '%$srch_string% OR PP.seller_name LIKE '%$srch_string%') and (P.created_by=$user_id)");
+                $this->db->where("(P.product_name LIKE '%$srch_string%' OR PP.bar_code LIKE '%$srch_string%' OR PP.consumer_id LIKE '%$srch_string%' OR PP.purchase_date LIKE '%$srch_string% OR PP.seller_name LIKE '%$srch_string%') and (P.created_by=$user_id)");
+            } else {
+                $this->db->where(array('P.created_by' => $user_id,'P.id' => $product_id));
+            }
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%'  OR C.user_name LIKE '%$srch_string%' OR PP.purchase_date LIKE '%$srch_string%')");
+            }
+        }
+		
+ 		$this->db->select('PP.*, PBQ.*, C.*, P.product_name, PP.pin_code as pr_pin_code, PP.latitude as latitude, PP.longitude as longitude, P.product_sku, P.created_by, PP.status',false);
+		$this->db->from('purchased_product PP');
+		$this->db->join('consumers C', 'C.id = PP.consumer_id');
+		$this->db->join('products P', 'P.id = PP.product_id');
+		$this->db->join('printed_barcode_qrcode PBQ', 'PBQ.barcode_qr_code_no = PP.bar_code');
+		//$this->db->join('scanned_products SP', 'SP.bar_code = PP.bar_code');
+		if($user_id > 1){ 
+			$this->db->where(array('PP.status' =>1,'P.created_by' => $user_id,'P.id' => $product_id));
+			//$this->db->where(array('P.id' => $product_id));
+		}
+		$this->db->where(array('PP.status' =>1,'P.id' => $product_id));
+   		$this->db->order_by('PP.create_date','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get();  //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+		
+	function count_basic_customer_report_level0_list_product($srch_string=''){
+		$result_data = 0;
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$product_id 	= $this->uri->segment(4);
+		
+		$srch_string = trim($srch_string);
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                $this->db->where("(PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%'  OR C.user_name LIKE '%$srch_string%' OR PP.purchase_date LIKE '%$srch_string%') and (P.created_by=$user_id)");
+            } else {
+                $this->db->where(array('P.created_by' => $user_id,'P.id' => $product_id));
+            }
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%'  OR C.user_name LIKE '%$srch_string%' OR PP.purchase_date LIKE '%$srch_string%')");
+            }
+        }
+		
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('purchased_product PP');
+		$this->db->join('consumers C', 'C.id = PP.consumer_id');
+		$this->db->join('products P', 'P.id = PP.product_id');
+		if($user_id > 1){ 
+			$this->db->where(array('PP.status' =>1,'P.created_by' => $user_id,'P.id' => $product_id));
+			//$this->db->where(array('P.id' => $product_id));
+		}
+		$this->db->where(array('PP.status' =>1,'P.id' => $product_id));
+   		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function get_basic_customer_report_level1_list_product($limit,$start,$srch_string=''){
+		$resultData = 0;
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+		$product_id 	= $this->uri->segment(4);
+		
+		$srch_string = trim($srch_string);
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                $this->db->where("(BU.user_name LIKE '%$srch_string%' OR SP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR SP.consumer_id LIKE '%$srch_string%') and (P.created_by=$user_id)");
+            } else {
+                $this->db->where(array('P.created_by' => $user_id,'P.id' => $product_id));
+            }
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(BU.user_name LIKE '%$srch_string%' OR SP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR SP.consumer_id LIKE '%$srch_string%')");
+            }
+        }
+		
+		
+ 		$this->db->select('SP.*, PBQ.*, BU.*, P.*',false);
+		$this->db->from('scanned_products SP');
+		$this->db->join('backend_user BU', 'BU.user_id = SP.customer_id');
+		$this->db->join('products P', 'P.id = SP.product_id');
+		$this->db->join('printed_barcode_qrcode PBQ', 'PBQ.barcode_qr_code_no = SP.bar_code');
+		//$this->db->join('scanned_products SP', 'SP.bar_code = SP.bar_code');
+		if($user_id > 1){ 
+			$this->db->where(array('PBQ.pack_level' =>1,'P.created_by' => $user_id,'P.id' => $product_id));
+		}
+		$this->db->where(array('PBQ.pack_level' =>1,'P.id' => $product_id));
+   		$this->db->order_by('SP.scan_id','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get();  //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+		
+	function count_basic_customer_report_level1_list_product($srch_string=''){
+		$result_data = 0;
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$product_id 	= $this->uri->segment(4);
+		
+		$srch_string = trim($srch_string);
+        if ($user_id > 1) {
+            //$this->db->where('created_by', $user_id);
+            if (!empty($srch_string)) {
+                $this->db->where("(BU.user_name LIKE '%$srch_string%' OR SP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR SP.consumer_id LIKE '%$srch_string%') and (P.created_by=$user_id)");
+            } else {
+                $this->db->where(array('P.created_by' => $user_id,'P.id' => $product_id));
+            }
+        } else {
+            if (!empty($srch_string)) {
+                $this->db->where("(BU.user_name LIKE '%$srch_string%' OR SP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR SP.consumer_id LIKE '%$srch_string%')");
+            }
+        }
+		
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('scanned_products SP');
+		$this->db->join('backend_user BU', 'BU.user_id = SP.customer_id');
+		$this->db->join('products P', 'P.id = SP.product_id');
+		$this->db->join('printed_barcode_qrcode PBQ', 'PBQ.barcode_qr_code_no = SP.bar_code');
+		if($user_id > 1){ 
+			$this->db->where(array('PBQ.pack_level' =>1,'P.created_by' => $user_id,'P.id' => $product_id));
+		}
+		$this->db->where(array('PBQ.pack_level' =>1,'P.id' => $product_id));
+   		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 // Basic Customer Report Product Wise end
+	 
+	function get_customer_tracek_reports_list_all($limit,$start,$srch_string=''){
+		$resultData = array();
+		
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		/*if($user_id>1){
+			$this->db->where(array('user_id'=>$customer_id));
+	 	}*/
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(report_name LIKE '%$srch_string%')");
+		}
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+				$this->db->where("(report_name LIKE '%$srch_string%') and (customer_id=$customer_id)");
+			}else{
+				$this->db->where(array('customer_id'=>$user_id));
+			}
+	 	}
+		
+		
+		$this->db->select('*');
+		$this->db->from('list_tracek_report_customer');
+		//$this->db->join('products P', 'P.id= PP.product_id');
+		//$this->db->where(array('user_id'=>$user_id 'stock_status'=>"Customer_Code"));
+		//$user_id 	= $this->session->userdata('admin_user_id');
+				  if($user_id==1){			 			
+						$this->db->where(array('customer_id'=>$customer_id));
+			 			 }else{
+			 			$this->db->where(array('customer_id'=>$user_id));
+						 }
+		//$this->db->where(array('PP.stock_status'=>"Customer_Code", 'P.created_by'=>$user_id));
+ 		$this->db->order_by('ltrc_id','ASC');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get();  //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 function get_total_customer_tracek_reports_all($srch_string=''){
+		$result_data = 0;
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(report_name LIKE '%$srch_string%')");
+		}
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+				$this->db->where("(report_name LIKE '%$srch_string%') and (customer_id=$user_id)");
+			}else{
+				$this->db->where(array('customer_id'=>$user_id));
+			}
+	 	}
+		
+		$this->db->select('count(1) as total_rows');
+		$this->db->from('list_tracek_report_customer');
+		//$this->db->join('products P', 'P.id= PP.product_id');
+		//$this->db->where(array('user_id'=>$user_id 'stock_status'=>"Customer_Code"));
+		//$this->db->where(array('PP.stock_status'=>"Customer_Code", 'customer_id'=>$user_id));
+		//$this->db->join('print_orders_history P', 'O.order_id= P.order_id');		
+			 if($user_id==1){			 			
+						$this->db->where(array('customer_id'=>$customer_id));
+			 			 }else{
+			 			$this->db->where(array('customer_id'=>$user_id));
+						 }						 
+		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	function insert_save_tracek_report_customer($user_id,$tracek_report_slug, $trm_id, $report_name, $report_site_url, $customer_id, $report_view_status, $report_auto_email_status){
+		
+		 $insertData = array(
+				"created_by_id"				=> $user_id,
+				"tracek_report_slug"		=> $tracek_report_slug,
+				"trm_id"					=> $trm_id,
+				"report_name"				=> $report_name,
+				"report_site_url"			=> $report_site_url,
+				"customer_id"				=> $customer_id,
+				"report_view_status"		=> $report_view_status,
+				"report_auto_email_status"	=> $report_auto_email_status,
+				"tr_create_date"			=> date('Y-m-d H:i:s')
+			 ); 
+		 
+		if($this->db->insert("list_tracek_report_customer", $insertData)){
+			$this->session->set_flashdata('success', 'Customer Tracek Report created Successfully!');
+ 			return true;
+		}else{
+			$this->session->set_flashdata('Failed', 'Error!');
+ 			return false;
+		}
+	
+ }
+ 
+ 
+ 	 function  change_report_view_status($id,$value){
+		$this->db->set(array('report_view_status'=>$value));
+		$this->db->where(array('ltrc_id'=>$id));
+ 		if($this->db->update('list_tracek_report_customer')){//echo '***'.$this->db->last_query();exit;
+			return $value;
+		}else{
+			return '';
+		}
+	 }
+	 
+	 
+	 function  change_report_auto_email_status($id,$value){
+		$this->db->set(array('report_auto_email_status'=>$value));
+		$this->db->where(array('ltrc_id'=>$id));
+ 		if($this->db->update('list_tracek_report_customer')){//echo '***'.$this->db->last_query();exit;
+			return $value;
+		}else{
+			return '';
+		}
+	 }
+	 
+	 
+	function count_overall_global_inventory_in_hand_barqrcodelist($srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");                    
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('overall_global_inventory_in_hand C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		if($this->uri->segment(2)=='overall_global_inventory_in_hand'){ 
+		$this->db->where(array('P.created_by' => $user_id, 'C.inventory_date' => date('Y-m-d')));
+		}else{ $this->db->where(array('P.created_by' => $user_id)); }
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 function get_overall_global_inventory_in_hand_barqrcodelist($limit,$start,$srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		}
+		 
+ 		$this->db->select(' C.*, P.product_name, P.product_sku, P.product_description, P.created_by',false);
+		$this->db->from('overall_global_inventory_in_hand C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		if($this->uri->segment(2)=='overall_global_inventory_in_hand'){ 
+		$this->db->where(array('P.created_by' => $user_id, 'C.inventory_date' => date('Y-m-d')));
+		}else{ $this->db->where(array('P.created_by' => $user_id)); }
+   		$this->db->order_by('C.update_date','desc');
+		$this->db->order_by('C.location_id','desc');
+		$this->db->order_by('C.product_id','desc');
+		$this->db->order_by('C.created_by_id','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 
+	 
+	function count_overall_global_inventory_stock_transfer_out_invoice_details($srch_string=''){
+		$invoice_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('dispatch_stock_transfer_out C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+   		 $this->db->where(array('C.tr_ref_id' => $invoice_number, 'P.created_by' => $user_id));
+		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 function get_overall_global_inventory_stock_transfer_out_invoice_details($limit,$start,$srch_string=''){
+		 $invoice_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+	/*
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		} */
+		
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
+		}
+		
+		
+		$this->db->select('C.*, P.created_by, P.product_name, P.product_sku, P.product_description',false);
+		$this->db->from('dispatch_stock_transfer_out C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		 $this->db->where(array('C.tr_ref_id' => $invoice_number, 'P.created_by' => $user_id));
+		//$this->db->group_by('C.invoice_number');
+   		$this->db->order_by('C.dispatch_id','desc');
+		
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+
+	 
+	function count_overall_global_inventory_stock_transfer_in_invoice_details($srch_string=''){
+		$invoice_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('receipt_stock_transfer_in C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+   		 $this->db->where(array('C.tr_ref_id' => $invoice_number, 'P.created_by' => $user_id));
+		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function get_overall_global_inventory_stock_transfer_in_invoice_details($limit,$start,$srch_string=''){
+		 $invoice_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+	/*
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		} */
+		
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
+		}
+		
+		
+		$this->db->select(' C.*, P.product_name,  P.created_by, P.product_sku, P.product_description',false);
+		$this->db->from('receipt_stock_transfer_in C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		 $this->db->where(array('C.tr_ref_id' => $invoice_number, 'P.created_by' => $user_id));
+		//$this->db->group_by('C.invoice_number');
+   		$this->db->order_by('C.receipt_id','desc');
+		
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 
+	 
+	function count_overall_global_inventory_product_sale_details($srch_string=''){
+		$invoice_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('scan_code_as_sold_out_direct_customer_sale C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+   		 $this->db->where(array('C.tr_ref_id' => $invoice_number, 'P.created_by' => $user_id));
+		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function get_overall_global_inventory_product_sale_details($limit,$start,$srch_string=''){
+		 $invoice_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+	/*
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		} */
+		
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
+		}
+		
+		
+		$this->db->select(' C.*, P.created_by, P.product_name, P.product_sku, P.product_description',false);
+		$this->db->from('scan_code_as_sold_out_direct_customer_sale C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		 $this->db->where(array('C.tr_ref_id' => $invoice_number, 'P.created_by' => $user_id));
+		//$this->db->group_by('C.invoice_number');
+   		$this->db->order_by('C.scasodcs_id','desc');		
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 
+	 	function count_overall_global_inventory_product_returned_details($srch_string=''){
+		$invoice_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('product_returned_from_customer C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+   		 $this->db->where(array('C.tr_ref_id' => $invoice_number, 'P.created_by' => $user_id));
+		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function get_overall_global_inventory_product_returned_details($limit,$start,$srch_string=''){
+		 $invoice_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+	/*
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		} */
+		
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
+		}
+		
+		
+		$this->db->select('C.*, P.created_by, P.product_name, P.product_sku, P.product_description',false);
+		$this->db->from('product_returned_from_customer C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		 $this->db->where(array('C.tr_ref_id' => $invoice_number, 'P.created_by' => $user_id));
+		//$this->db->group_by('C.invoice_number');
+   		$this->db->order_by('C.prfc_id','desc');		
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 	function count_overall_global_inventory_closing_details($srch_string=''){
+		$invoice_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('overall_global_inventory_closing C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+   		 $this->db->where(array('C.tr_ref_id' => $invoice_number, 'C.stock_status !=' => 0, 'P.created_by' => $user_id));
+		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function get_overall_global_inventory_closing_details($limit,$start,$srch_string=''){
+		 $invoice_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+	/*
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		} */
+		
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
+		}
+		
+		
+		$this->db->select('C.*, P.product_name,  P.created_by, P.product_sku, P.product_description',false);
+		$this->db->from('overall_global_inventory_closing C');
+		//$this->db->join('product_returned_from_customer PRFC', 'PRFC.id = C.product_id');
+		//$this->db->join('dispatch_stock_transfer_out DSTOUT', 'C.receipt_id = DSTOUT.dispatch_id', 'outer');
+		$this->db->join('products P', 'P.id = C.product_id');
+		// $this->db->where('C.tr_ref_id = PRFC.tr_ref_id');
+		 $this->db->where(array('C.tr_ref_id' => $invoice_number, 'C.stock_status !=' => 0, 'P.created_by' => $user_id));
+		//$this->db->group_by('C.invoice_number');
+   		$this->db->order_by('C.ogic_id','desc');
+		
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 
+	 	 	function count_overall_global_inventory_opening_details($srch_string=''){
+		$invoice_number = $this->uri->segment(3);
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('overall_global_inventory_closing C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+   		 $this->db->where(array('C.tr_ref_id' => $invoice_number, 'C.stock_status !=' => 0, 'P.created_by' => $user_id));
+		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function get_overall_global_inventory_opening_details($limit,$start,$srch_string=''){
+		 $invoice_number = $this->uri->segment(3);
+		 
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+	/*
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		} */
+		
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");  
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR C.bar_code LIKE '%$srch_string%' OR C.location_type LIKE '%$srch_string%' OR C.location_name LIKE '%$srch_string%')"); 
+			}
+		}
+		
+		
+		$this->db->select('C.*, P.product_name,  P.created_by, P.product_sku, P.product_description',false);
+		$this->db->from('overall_global_inventory_closing C');
+		$this->db->join('products P', 'P.id = C.product_id');
+		$this->db->where(array('C.tr_ref_id' => $invoice_number, 'C.stock_status !=' => 0, 'P.created_by' => $user_id));
+		$this->db->order_by('C.ogic_id','desc');
+		
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 
+	 function get_product_code_history_list($limit,$start,$srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		/*
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
+		}
+		*/
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR LTT.trax_name LIKE '%$srch_string%') OR LTT.product_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%'");
+			}else{
+				$this->db->where(array('P.created_by'=>1));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR LTT.trax_name LIKE '%$srch_string%') OR LTT.product_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%'");
+			}
+		}
+		
+ 		$this->db->select('LTT.*, P.product_name, P.product_sku, P.created_by',false);
+		$this->db->from('list_transactions_table LTT');
+		//$this->db->join('backend_user B', 'B.user_id = PP.print_user_id');
+		$this->db->join('products P', 'P.id = LTT.product_id');
+		//$this->db->join('location_master Ppp', 'Ppp.location_id = PP.plant_id');
+		$this->db->where(array('P.created_by' => $user_id)); 
+   		$this->db->order_by('id','desc');
+		
+		/*
+		$this->db->select(' D.*, S.*, P.product_name, P.product_sku',false);
+		$this->db->from('backend_user D');
+		$this->db->join('printed_barcode_qrcode S', 'D.user_id = S.customer_id');
+		$this->db->join('products P', 'P.id = S.product_id');
+   		$this->db->order_by('S.modified_at','desc');
+		*/
+		
+		
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 
+	  function get_total_product_code_history_all($srch_string=''){
+		$result_data = 0;
+		$user_id 	= $this->session->userdata('admin_user_id');
+		/*
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR Ppp.plant_name LIKE '%$srch_string%' OR B.user_name LIKE '%$srch_string%') OR PP.barcode_qr_code_no LIKE '%$srch_string%'");
+		}
+		*/
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR LTT.trax_name LIKE '%$srch_string%') OR LTT.product_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%'");
+			}else{
+				$this->db->where(array('P.created_by'=>1));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(P.product_name LIKE '%$srch_string%' OR P.product_sku LIKE '%$srch_string%' OR LTT.trax_name LIKE '%$srch_string%') OR LTT.product_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%'");
+			}
+		}
+		
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('list_transactions_table LTT');
+		$this->db->join('products P', 'P.id = LTT.product_id');
+ 		$this->db->where(array('P.created_by' => $user_id));
+   		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+
+
+	 // unpacked inventory 
+	 
+	 	function count_unpacked_inventory_in_hand_barqrcodes($srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+                    $this->db->where("(PBQ.user_name LIKE '%$srch_string%' OR PBQ.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");                    
+		}
+		 
+ 		$this->db->select('count(PBQ.pack_level) as total_rows');
+		$this->db->from('printed_barcode_qrcode PBQ');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = PBQ.product_id');
+		$this->db->where(array('P.created_by' => $user_id, 'PBQ.packaging_status !=' => "Packed"));	
+		$this->db->order_by('PBQ.pack_level', 'ASC');
+		$this->db->group_by('PBQ.pack_level');
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+	 
+	 
+	 function get_unpacked_inventory_in_hand_barqrcodelist($limit,$start,$srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(PBQ.user_name LIKE '%$srch_string%' OR PBQ.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		}
+		 
+ 		$this->db->select('PBQ.*, P.product_name, P.product_sku, P.product_description, P.created_by',false);
+		$this->db->from('printed_barcode_qrcode PBQ');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = PBQ.product_id');
+		$this->db->where(array('P.created_by' => $user_id, 'PBQ.packaging_status !=' => "Packed"));		
+		$this->db->order_by('PBQ.pack_level', 'ASC');
+		$this->db->group_by('PBQ.pack_level');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 
+	 function count_unpacked_inventory_in_hand_list_codes($srch_string=''){
+				$resultData = array();
+				$user_id 	= $this->session->userdata('admin_user_id');
+				$product_id 	= $this->uri->segment(4);
+				$code_pack_level 	= $this->uri->segment(5);
+		 
+				if(!empty($srch_string) && $user_id==1){ 
+							$this->db->where("(PBQ.user_name LIKE '%$srch_string%' OR PBQ.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");                    
+				}
+				 
+				$this->db->select('count(PBQ.pack_level) as total_rows');
+				$this->db->from('printed_barcode_qrcode PBQ');
+				//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+				$this->db->join('products P', 'P.id = PBQ.product_id');
+				$this->db->where(array('P.created_by' => $user_id, 'PBQ.product_id' => $product_id, 'PBQ.pack_level' => $code_pack_level, 'PBQ.packaging_status !=' => "Packed"));	
+				//$this->db->order_by('PBQ.pack_level', 'ASC');
+				//$this->db->group_by('PBQ.pack_level');
+				$query = $this->db->get(); // echo '***'.$this->db->last_query();
+				if ($query->num_rows() > 0) {
+					$result = $query->result_array();
+					$result_data = $result[0]['total_rows'];
+				}
+				return $result_data;
+			 }
+	 
+	 
+	 function get_unpacked_inventory_in_hand_list_codes($limit,$start,$srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+		$product_id 	= $this->uri->segment(4);
+		$code_pack_level 	= $this->uri->segment(5);
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(PBQ.user_name LIKE '%$srch_string%' OR PBQ.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		}
+		 
+ 		$this->db->select('PBQ.*, P.product_name, P.product_sku, P.product_description, P.created_by',false);
+		$this->db->from('printed_barcode_qrcode PBQ');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = PBQ.product_id');
+		$this->db->where(array('P.created_by' => $user_id, 'PBQ.product_id' => $product_id, 'PBQ.pack_level' => $code_pack_level, 'PBQ.packaging_status !=' => "Packed"));		
+		//$this->db->order_by('PBQ.pack_level', 'ASC');
+		//$this->db->group_by('PBQ.pack_level');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
+	 
+	 	function count_overall_global_inventory_in_hand_tr_records_barqrcodelist($srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+                    $this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");                    
+		}
+		 
+ 		$this->db->select('count(1) as total_rows');
+		$this->db->from('overall_global_inventory_in_hand C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		//$this->db->where(array('P.created_by' => $user_id));
+		if($this->uri->segment(2)=='overall_global_inventory_in_hand_tr_records'){ 
+		$wherecond = "( ( ( C.stock_transfer_in_qty !='0' OR C.stock_transfer_out_qty !='0' OR C.direct_customer_sale_qty !='0' OR C.product_returned_from_customer_qty !='0') AND (P.created_by='" . $user_id . "') AND (C.inventory_date='" . date('Y-m-d') . "')) )";
+		$this->db->where($wherecond);
+		}else{ 
+		$this->db->where(array('P.created_by' => $user_id)); 
+		$this->db->where('C.stock_transfer_in_qty !=', 0);
+		$this->db->or_where('C.stock_transfer_out_qty !=', 0);
+		$this->db->or_where('C.direct_customer_sale_qty !=', 0);
+		$this->db->or_where('C.product_returned_from_customer_qty !=', 0);
+		}
+		//$this->db->where('C.stock_transfer_in_qty !=', 0);
+		//$this->db->or_where('C.stock_transfer_out_qty !=', 0);
+		//$this->db->or_where('C.direct_customer_sale_qty !=', 0);
+		//$this->db->or_where('C.product_returned_from_customer_qty !=', 0);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+	 }
+
+	 function get_overall_global_inventory_in_hand_tr_records_barqrcodelist($limit,$start,$srch_string=''){
+		$resultData = array();
+ 		$user_id 	= $this->session->userdata('admin_user_id');
+ 
+		if(!empty($srch_string) && $user_id==1){ 
+ 			$this->db->where("(C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR S.bar_code LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		}
+		 
+ 		$this->db->select(' C.*, P.product_name, P.product_sku, P.product_description, P.created_by',false);
+		$this->db->from('overall_global_inventory_in_hand C');
+		//$this->db->join('packaging_codes_pcr S', 'C.id = S.consumer_id');
+		$this->db->join('products P', 'P.id = C.product_id');
+		//$this->db->where(array('P.created_by' => $user_id));
+		if($this->uri->segment(2)=='overall_global_inventory_in_hand_tr_records'){ 
+		
+		$wherecond = "( ( ( C.stock_transfer_in_qty !='0' OR C.stock_transfer_out_qty !='0' OR C.direct_customer_sale_qty !='0' OR C.product_returned_from_customer_qty !='0') AND (P.created_by='" . $user_id . "') AND (C.inventory_date='" . date('Y-m-d') . "')) )";
+		$this->db->where($wherecond);
+		//$this->db->where(array('P.created_by' => $user_id, 'C.inventory_date' => date('Y-m-d')));
+		//$this->db->or_where('C.stock_transfer_in_qty !=', 0);
+		//$this->db->or_where('C.stock_transfer_out_qty !=', 0);
+		//$this->db->or_where('C.direct_customer_sale_qty !=', 0);
+		//$this->db->or_where('C.product_returned_from_customer_qty !=', 0);
+		}else{ 
+		$this->db->where(array('P.created_by' => $user_id)); 
+		$this->db->where('C.stock_transfer_in_qty !=', 0);
+		$this->db->or_where('C.stock_transfer_out_qty !=', 0);
+		$this->db->or_where('C.direct_customer_sale_qty !=', 0);
+		$this->db->or_where('C.product_returned_from_customer_qty !=', 0);
+		}
+		
+   		$this->db->order_by('C.update_date','desc');
+		$this->db->order_by('C.location_id','desc');
+		$this->db->order_by('C.product_id','desc');
+		$this->db->order_by('C.created_by_id','desc');
+		$this->db->limit($limit, $start);
+   		$query = $this->db->get(); // echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$resultData = $query->result_array();
+ 		}
+		return $resultData;
+	 }
 	 
 	 
 	 

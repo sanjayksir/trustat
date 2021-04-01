@@ -462,7 +462,7 @@ class Buzzadmn_model extends CI_Model {
 			"product_description" =>  trim($data['pickDesc']),
             "product_thumb_images" => trim($data['ptimages']),
 			"product_code_print_bg_images" => trim($data['pcpbgimages']),
-			"product_images" => trim($data['images']),
+			"product_image" => trim($data['images']),
             "product_video" => trim($data['videos']),
             "product_audio" => trim($data['audios']),
             "product_pdf" => trim($data['attachments']),
@@ -494,7 +494,7 @@ class Buzzadmn_model extends CI_Model {
             }
 			if ($data['images'] != '') {
                 $checker = 1;
-                $arr = array("product_images" => trim($data['images']));
+                $arr = array("product_image" => trim($data['images']));
                 $update_array = array_merge($update_array, $arr);
             }
 			if ($data['pcpbgimages'] != '') {
@@ -594,7 +594,7 @@ class Buzzadmn_model extends CI_Model {
 			"product_sku" => 0,
 			"product_description" =>  trim($data['pickDesc']),
             "product_thumb_images" => trim($data['ptimages']),
-			"product_images" => trim($data['images']),
+			"product_image" => trim($data['images']),
 			"product_code_print_bg_images" => trim($data['pcpbgimages']),
             "product_video" => trim($data['videos']),
             "product_audio" => trim($data['audios']),

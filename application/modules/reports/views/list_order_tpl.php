@@ -191,7 +191,7 @@
                                                  <?php if($essentialAttributeArr['delivery_method']==4){?>
                                                  	<select name="change_order_status" id="change_order_status" onchange="return change_order_status('<?php echo $listData['order_id'];?>',this.value);">
  													<option value="0" <?php if($listData['order_status']==0){echo 'selected';}?>>Pending</option>
-													<option value="1" <?php if($listData['order_status']==1){echo 'selected';}?>>Accepted</option>
+													<option value="4" <?php if($listData['order_status']==4){echo 'selected';}?>>Accepted</option>
 													<option value="2" <?php if($listData['order_status']==2){echo 'selected';}?>>Rejected</option>
 													</select>
                                                 <?php }else{

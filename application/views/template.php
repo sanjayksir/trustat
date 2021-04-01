@@ -67,7 +67,7 @@
                 </button>
 
                 <div class="navbar-header pull-left">
-                    <a href="<?php echo base_url()?>backend/dashboard" title="howzzt"><img src="<?php echo base_url()?>/assets/images/finallogow.png" height="70"></a>
+                    <a href="<?php echo base_url()?>backend/dashboard" title="TRUSTAT"><img src="<?php echo base_url()?>/assets/images/finallogow.png" height="70"></a>
                 </div>
 
                 <div class="navbar-buttons navbar-header pull-right" role="navigation">

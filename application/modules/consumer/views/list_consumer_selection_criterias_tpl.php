@@ -100,6 +100,7 @@
                                     <tr>
                                             <th>#</th>
                                             <th>Unique System Selection Criteria ID</th>
+											<th>Update Status</th>
 											<th>Last Modified</th>
                                             <th>Name of Selection Criteria</th>
                                             <th>Selected Consumers</th>
@@ -125,6 +126,7 @@
 										<tr id="show<?php echo $listData['criteria_id']; ?>">
                                            <td><?php echo $sno;$sno++; ?></td>
                                            <td><?php echo $listData['unique_system_selection_criteria_id']; ?></td>
+										   <td><?php if($listData['uptodate_date']==date('Y-m-d')){echo "Updated";}else{echo "Edit & Update Now";} ?></td>
 										   <td><?php echo $listData['update_date']; ?></td>
                                            <td><?php echo $listData['name_of_selection_criteria']; ?></td>
                                            <td><?php //echo NumberOfSelectedConsumersByACustomer($customer_id, $csc_consumer_gender, $csc_consumer_city, $csc_consumer_pin, $csc_consumer_min_dob, $csc_consumer_max_dob); ?>

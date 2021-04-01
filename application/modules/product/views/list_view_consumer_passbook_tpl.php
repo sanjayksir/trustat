@@ -2,7 +2,11 @@
 
 <?php //echo '<pre>';print_r($product_list);exit;
 $this->load->view('../includes/admin_top_navigation'); ?>
-
+<!-- Export to Excel -->
+<script src="<?php echo base_url(); ?>assets/export_to_excel/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/export_to_excel/tableExport.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/export_to_excel/jquery.base64.js"></script>
+<!-- /Export to Excel -->
 <div class="main-container ace-save-state" id="main-container">
 
     <script type="text/javascript">
@@ -38,7 +42,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                     </li>
 
-                    <li class="active">List View Consumer Passbook </li>
+                    <li class="active">List View Consumer Passbook <?php if(($this->uri->segment(2))=='list_view_blp_consumer_passbook'){
+					echo "Brand";}else {echo "TRUSTAT"; }?></li>
 
                 </ul><!-- /.breadcrumb -->
 
@@ -93,7 +98,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                                 <?php echo Utils::selectOptions('pagelimit',['options'=>$this->config->item('pageOption'),'value'=>$this->config->item('pageLimit')]) ?>
                                                 </select>
                                             Records
-                                            </label>
+                                            </label><label><a href="#" onclick="$('#List_Consumer_Passbook').tableExport({type:'excel',escape:'false'});"> <img src="<?php echo base_url();?>assets/images/excel_xls.png" width="24px" style="margin-left:100px"> Export to Excel</a></label>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="input-group">
@@ -108,23 +113,24 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                 </div>
 
                       <!--------------- Search Tab start----------------->
-                        <table id="dynamic-table" class="table table-striped table-bordered table-hover">
+					  <div style="overflow-x:auto;">
+                        <table id="List_Consumer_Passbook" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
                                     <th>S No.</th>
-                                    <th class="hidden-480">Transuction Date</th>
+                                    <th class="hidden-480">Transaction Date</th>
                                     <th class="hidden-480">Event Name</th>
                                     <th class="hidden-480">Event Detail</th>
                                     <th>Points </th>
 									<th>Loyalty Source - Brand
 								<select name="v" class="Product">
+								<option value=""> - Please Select -  </option>						
 								<?php foreach ($list_view_consumer_passbook_cust_dist as $attr12){                        
                                 // echo $attr1['customer_id'];  ?>
-						<option value=""> - Please Select -  </option>
 						<option value="<?php echo $attr12['customer_id']; ?>"> <?php echo getUserFullNameById($attr12['customer_id']); ?></option>
 									<?php }  ?>
 						</select>
-						<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+						<!--<script src="http://innovigents.com/assets/export_to_excel/jquery.min21.js"></script>-->
 						<script>
 							$(function(){
 								  $('.Product').change(function(){
@@ -179,7 +185,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 							
 							
 								?></td>
-                                 <td><?php echo $attr['points']; ?></td>
+                                 <td><?php if($attr['transaction_lr_type']=="Loyalty"){ echo "+"; }else{ echo "-"; } ?><?php echo $attr['points']; ?></td>
 								 <td><?php echo getUserFullNameById($attr['customer_id']); ?></td>
                                    <td><?php echo $attr['transaction_lr_type']; ?>-<?php echo $attr['customer_loyalty_type']; ?></td>
 								   <td><?php echo $attr['total_accumulated_points']; ?></td>
@@ -202,6 +208,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                                     </tbody>
                                 </table>
+								</div> 
 								<?php   echo anchor("product/list_consumers_loyalty_summary/", '<i class="ace-icon fa fa-list bigger-130"> Back to List</i>', array('class' => 'btn btn-xs btn-info','title'=>'Back'));  ?>
                             <div class="row paging-box">
                             <?php echo $links ?>
@@ -220,12 +227,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="footer-content">
 
                         <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

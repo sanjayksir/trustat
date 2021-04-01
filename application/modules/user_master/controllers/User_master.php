@@ -438,6 +438,45 @@ class User_master extends MX_Controller {
         echo $this->myspidey_user_master_model->save_user($searcharray);
         exit;
     }
+	
+	     public function add_location() {
+ 		 $data					= array();
+   		 $this->load->view('add_location', $data); 
+      }
+ 
+ 
+	 public function edit_location() {
+ 		 $data					= array();
+		 $location_id 					= $this->uri->segment(3);//$this->session->userdata('admin_user_id');
+ 		 $data['get_user_details'] 	= $this->myspidey_user_master_model->get_location_details($location_id);
+    	 $this->load->view('add_location', $data); 
+      }
+	  
+		public function save_location11() {
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+        if (empty($user_id) || empty($user_name)) {
+
+            redirect('login');
+            exit;
+        }
+        parse_str($_POST['newdata'], $searcharray);
+        
+        ## helper used for image upload
+
+        $res = upload_image_n_thumb($_FILES['file'], 'uploads/location_images', 'thumb');
+
+        $searcharray['location_image'] = '';
+
+        $result = json_decode($res);
+
+        if (!empty($result[0]->success)) {
+            $searcharray['location_image'] = $result[0]->success;
+        }
+        echo $this->myspidey_user_master_model->save_location11($searcharray);
+        exit;
+    }  
+	
 
     public function update_profile() {
         $user_id = $this->session->userdata('admin_user_id');
@@ -618,6 +657,31 @@ class User_master extends MX_Controller {
         $this->load->view('verification_tpl', $data);
     }
 
+	    ### delete user
+
+    function send_otp_delete_customer() {
+        $customer_id = $this->uri->segment(3);
+        if (!empty($customer_id)) {
+            $customer_id = base64_decode($customer_id);
+            //$result = $this->myspidey_user_master_model->delete_user($id);
+            //$childIds = getAllChildFromParentUser($id);
+            //print_r($childIds);exit;
+            //if ($childIds != '') {
+				
+				$otp_code = Utils::randomNumber(5);
+				//$otp_code = 11456;
+                $result = $this->myspidey_user_master_model->send_email_with_otp_delete_customer($customer_id, $otp_code);
+           // }
+            if($result==true) {				
+				$this->myspidey_user_master_model->update_otp_delete_customer($customer_id, $otp_code);				
+                $this->session->set_flashdata('success', 'OTP sent successfully! Please check your Email and complete the process to delete the user.');
+            } else {				
+                $this->session->set_flashdata('success', 'OTP not sent! Please try after some time.');
+            }
+            redirect(base_url() . 'user_master/list_user/');
+        }
+    }
+	
     ### delete user
 
     function del() {
@@ -632,6 +696,33 @@ class User_master extends MX_Controller {
             }
             if ($result == 1) {
                 $this->session->set_flashdata('success', 'User deleted successfully!.');
+            } else {
+                $this->session->set_flashdata('success', 'User not deleted!');
+            }
+            redirect(base_url() . 'user_master/list_user/');
+        }
+    }
+	
+	//sss8888
+	    function del_confirm_otp() {
+        $id = $this->uri->segment(3);
+		//$otp = $this->input->post('otp');
+		 $confirm_otp = $this->input->post('confirm_otp');
+		 
+        if (!empty($id)) {
+            //$id = base64_decode($id);
+			//parse_str($_POST['newdata'], $searcharray);
+            $result = $this->myspidey_user_master_model->delete_user_confirm_otp($id, $confirm_otp);
+            $childIds = getAllChildFromParentUser($id);
+            //print_r($childIds);exit;
+            
+            if ($result == 1) {
+                $this->session->set_flashdata('success', 'User deleted successfully!.');
+				
+				if ($childIds != '') {
+                $result = $this->myspidey_user_master_model->delete_child_users($childIds);
+            }
+			
             } else {
                 $this->session->set_flashdata('success', 'User not deleted!');
             }
@@ -768,6 +859,22 @@ class User_master extends MX_Controller {
     }
 	
 	
+	public function update_common_point_master_otp() {
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+        if (empty($user_id) || empty($user_name)) {
+
+            redirect('login');
+            exit;
+        }
+        parse_str($_POST['newdata'], $searcharray);
+       
+		//$id = $this->uri->segment(3);
+
+        echo $this->myspidey_user_master_model->update_common_point_master_data_otp($searcharray);
+        exit;
+    }
+	
 	public function list_message_notification_master() {
         $user_id = $this->session->userdata('admin_user_id');
         $user_name = $this->session->userdata('user_name');
@@ -851,7 +958,17 @@ class User_master extends MX_Controller {
 
         echo $this->myspidey_user_master_model->update_message_notification_details_data($searcharray);
         exit;
-    }	
+    }
+
+	function delete_user_accept_otp(){
+		 $id = $this->uri->segment(3);
+		 if($id!=''){
+ 			 $data['customer_id']=$id;
+			$this->load->view('delete_user_accept_otp_master_tpl',$data);
+		 }
+		// $this->load->view('delete_accept_otp');
+	 }
+	 
 
 }
 ?>

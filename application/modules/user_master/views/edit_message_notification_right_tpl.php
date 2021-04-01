@@ -25,18 +25,22 @@
 			<textarea  class="form-control" name="message_notification_value" placeholder="Write your message..."  maxlength="500"><?php echo $get_user_details[0]['message_notification_value'];?></textarea>
 			
 			<?php 
-			  if(($get_user_details[0]['id']==1)||($get_user_details[0]['id']==5))
+			  if(($get_user_details[0]['id']==1)||($get_user_details[0]['id']==5)||($get_user_details[0]['id']==53)||($get_user_details[0]['id']==54))
 			  {
 				  //echo $user_registration_points;
 			  ?>
-			  [....]
-			<textarea  class="form-control" name="message_notification_value_part2" placeholder="Write your message..."  maxlength="500"><?php echo $get_user_details[0]['message_notification_value_part2'];?></textarea>
+			  [##]
+			<textarea  class="form-control" name="message_notification_value_part2" placeholder="Write your message part 3..."  maxlength="500"><?php echo $get_user_details[0]['message_notification_value_part2'];?></textarea>
+			[##]
+			<textarea  class="form-control" name="message_notification_value_part3" placeholder="Write your message part 3..."  maxlength="500"><?php echo $get_user_details[0]['message_notification_value_part3'];?></textarea>
+			[##]
+			<textarea  class="form-control" name="message_notification_value_part4" placeholder="Write your message part 4..."  maxlength="500"><?php echo $get_user_details[0]['message_notification_value_part4'];?></textarea>
 			  <?php 
 			  }
 			  ?>
 			  
 			  <?php 
-			  if($get_user_details[0]['id']==6)
+			  if($get_user_details[0]['id']==2)
 			  {
 				  echo $user_registration_points;
 			  ?>
@@ -47,7 +51,7 @@
 			  ?>
 			  
 			  <?php 
-			  if(($get_user_details[0]['id']==38)||($get_user_details[0]['id']==44))
+			  if(($get_user_details[0]['id']==38)||($get_user_details[0]['id']==44)||($get_user_details[0]['id']==64))
 			  {
 				  echo "X";
 			  ?>

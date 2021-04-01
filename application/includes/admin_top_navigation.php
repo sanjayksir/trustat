@@ -63,7 +63,7 @@
             
 
 				<div class="navbar-header pull-left">
-			<a href="<?php echo base_url()?>backend/dashboard" title="howzzt"><img src="<?php echo base_url()?>/assets/images/finallogow.png" height="70"></a>
+			<a href="<?php echo base_url()?>backend/dashboard" title="TRUSTAT"><img src="<?php echo base_url()?>/assets/images/finallogow.png" height="70" style="margin-left:20px"></a>
 					<!--<a href="<?php echo base_url()?>backend/dashboard" class="navbar-brand" title="Admin">-->
 
 						<!--<img src="<?php echo base_url()?>/assets/images/logo.png" height="">
@@ -109,7 +109,7 @@
 
 									<!--<small>Welcome,</small>-->
 
-									<?php   $user_name = getUserFullNameById($this->session->userdata('admin_user_id'));
+									<?php   $user_name = getOrganizationNameById($this->session->userdata('admin_user_id'));
 									
 										if(empty($user_name)){
 											$user_name_arr =  get_rwa_username($this->session->userdata('admin_user_id'));

@@ -76,7 +76,7 @@
 
                     <!--left end---->
 
-                    <div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/list_assigned_plants_user" class="btn btn-primary pull-right" title="List Assign Plant to Plant Controllers">List Assign Plant to Plant Controllers</a></div>
+                    <div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/list_assigned_plants_user/<?php echo $this->uri->segment(3); ?>" class="btn btn-primary pull-right" title="List Assign Plant to Plant Controllers">List Assign Plant to Plant Controllers</a></div>
 
                     <div class="col-xs-12">
 
@@ -384,7 +384,7 @@ $.ajax({
 				$('#ajax_msg').text("Plant Assigned Successfully!").css("color","green").show();
 				$('#blah').attr('src', '').hide();
 				$('#user_frm')[0].reset(); 
-				  window.location.href="<?php echo base_url(); ?>plant_master//list_assigned_plants_user";						
+				  window.location.href="<?php echo base_url(); ?>plant_master/list_assigned_plants_user/<?php echo $this->uri->segment(3); ?>";						
 			}
 			 
 		},

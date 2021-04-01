@@ -107,8 +107,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                    	
                                  </table></form>
 								  <?php $product_id = basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)); ?>
-                                 </div> <div class="col-sm-2 pull-right"><?php echo anchor('product/add_image_feedback/'.$product_id.'/', 'Add New Question',array('class' => 'btn btn-primary pull-right')); ?></div>
-                                
+                                 </div><div class="col-sm-2 pull-right"><?php echo anchor('product/add_image_feedback/'.$product_id.'/', 'Add New Question',array('class' => 'btn btn-primary pull-right')); ?></div>								
                             </div> 
                       <!--------------- Search Tab start----------------->
                                   <table id="dynamic-table" class="table table-striped table-bordered table-hover">  
@@ -188,12 +187,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="footer-content">
 
                         <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

@@ -64,7 +64,7 @@
                               <div class="col-xs-12">
                                 <div class="widget-box">
                                   <div class="widget-header">
-                                    <h4 class="widget-title">Edit Order</h4>
+                                    <h4 class="widget-title">Edit Order </h4>
                                     <div class="widget-toolbar"> <a href="#" data-action="collapse"> <i class="ace-icon fa fa-chevron-up"></i> </a> <a href="#" data-action="close"> <i class="ace-icon fa fa-times"></i> </a> <a href="#" class="show_loader"  data-action="reload" style="display:none;"><i class="ace-icon fa fa-refresh"></i></a> </div>
                                   </div>
                                   <div class="widget-body">
@@ -79,7 +79,7 @@
                                              <input name="order_id" id="order_id" type="hidden" value="<?php echo $product_data['order_id'];?>">
                                             <div class="form-group row">
                                               <div class="col-sm-12">
-                                                <label for="form-field-8">Product Name/SKU</label>
+                                                <label for="form-field-8">Product Name/SKU <font color="orange"> - The product Name/SKU cannot be changed.</font><?php //echo $product_data['order_id'];?></label>
                                                 <?php 
 															$user_id 		= $this->session->userdata('admin_user_id');
 															$parentId 		= getParentIdFromUserId();
@@ -109,7 +109,20 @@
                                             <div class="form-group row">
                                               <div class="col-sm-12">
                                                 <label for="form-field-8">Quantity</label>
-                                                <input name="quantity" id="quantity" type="text" value="<?php echo $product_data['quantity'];?>" class="form-control" placeholder="Quantity" >
+												<select name="quantity" id="quantity" class="form-control">
+												<option value="<?php echo $product_data['quantity'];?>"><?php echo $product_data['quantity'];?></option>
+													<option value="10">10</option>	
+													<option value="20">20</option>
+													<option value="50">50</option>
+													<option value="100">100</option>
+													<option value="1000">1,000</option>
+													<option value="10000">10,000</option>
+													<option value="100000">1,00,000</option>
+													<option value="1000000">10,00,000</option>
+												</select>
+												
+												
+                                                <!--<input name="quantity" id="quantity" type="text" value="<?php echo $product_data['quantity'];?>" class="form-control" placeholder="Quantity" >-->
                                               </div>
                                             </div>
                                             <div class="form-group row">

@@ -21,12 +21,15 @@
 		
 		<div class="form-group row">
 		
-			<div class="col-sm-12">
+			<div class="col-sm-8">
 			<label for="form-field-8"><b>Name of Selection Criteria</b></label> : 
 			<?php echo $get_user_details[0]['name_of_selection_criteria'];?>		 		
 			</div>
 			
-			
+			<div class="col-sm-4">
+			<label for="form-field-8"><b>Selected Consumers</b></label> : 
+			<?php echo $get_user_details[0]['number_of_consumers_selected'];?>		 		
+			</div>
 
 		</div>
 		
@@ -34,10 +37,9 @@
 		<div class="form-group row">
 			<div class="col-sm-4">
 			<label for="form-field-8"><b>Unique Sys S Criteria ID</b></label> : 
-			<?php echo $get_user_details[0]['unique_system_selection_criteria_id'];?>
-		 		
+			<?php echo $get_user_details[0]['unique_system_selection_criteria_id'];?>		 		
 			</div>
-			
+			<?php if($get_user_details[0]['consumer_age_option']=="SpecifyAge"){ ?>
 			<div class="col-sm-4">
 			  <label for="form-field-8"><b>Minimum Age of the consumer in Years</b></label> :
              <?php echo $get_user_details[0]['consumer_min_age'];?>
@@ -47,6 +49,12 @@
 			  <label for="form-field-8"><b>Maximum Age of the consumer in Years</b></label> :
              <?php echo $get_user_details[0]['consumer_max_age'];?>
 			</div>
+			<?php }else{ ?>			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Age</b></label> :
+			  Age filter is not applied. 
+			</div>
+			<?php } ?>
 
 		</div>
 		

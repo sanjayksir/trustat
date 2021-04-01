@@ -4,7 +4,7 @@
             <script type="text/javascript">
                     try{ace.settings.loadState('main-container')}catch(e){}
             </script>
-            <?php $label = 'Order';?>
+            <?php $label = 'Customer Codes';?>
 
             <?php $this->load->view('../includes/admin_sidebar');?>
 
@@ -43,11 +43,15 @@
                                     <div class="col-xs-12">
                                         <div class="widget-box widget-color-blue">
                                             <div class="widget-header widget-header-flat">
-                                                <h5 class="widget-title bigger lighter">List Order</h5>
+                                                <h5 class="widget-title bigger lighter">List Customer Codes</h5>
                                                 <div class="widget-toolbar">
-                                                   <a href="<?php echo base_url('order_master/list_orders_plant_controlllers_CC') ?>" class="btn btn-xs btn-warning" title="List Plant Controllers Orders">List Plant Controllers Orders </a>
-                                                    <a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Make Order" data-toggle="modal" data-target="#myModal">Make Order</a>
-													<a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Upload Customer Codes" data-toggle="modal" data-target="#myUploadModal">Upload Customer Codes</a>
+                                                   <!--<a href="<?php echo base_url('order_master/list_orders_plant_controlllers_CC') ?>" class="btn btn-xs btn-warning" title="List Plant Controllers Orders">List Plant Controllers Orders </a>-->
+												<?php   $user_id 	= $this->session->userdata('admin_user_id');
+
+												  if($user_id==1){  ?>
+                                                   <!-- <a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Make Order" data-toggle="modal" data-target="#myModal">Make Order</a>-->
+													<a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Upload Customer Codes" data-toggle="modal" data-target="#myUploadModal">Upload a Customer Code</a>
+												  <?php   }  ?>
                                                 </div>
                                             </div>
                                             <div class="widget-body">
@@ -76,9 +80,14 @@
                                                 <table id="missing_people" class="table table-striped table-bordered table-hover">
                                                         <thead>
                                                             <tr>
-                                                                <th>#</th>
+                                                                <th>#<?php //echo $this->uri->segment(3); ?></th>
                                                                 <th>Customer Code</th>			
-																<th>Product Name</th>										<th>Action/Status</th>
+																<th>Product Name</th>										
+																<th><?php if($this->session->userdata('admin_user_id')==1){
+												echo "Action on ";
+											}else{
+												echo "View ";
+											} ?>Status</th>
                                                             </tr>
                                                         </thead>
                                                         <tbody>
@@ -87,7 +96,11 @@
                                         $i = 0; 
 
                                         if(count($orderListing)>0){
-                                            $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+											if($this->session->userdata('admin_user_id')==1){
+												$page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
+											}else{
+												$page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+											}
                                             $sno =  $page + 1;
                                             foreach ($orderListing as $listData){
                                                 $essentialAttributeArr = array();
@@ -111,12 +124,16 @@
  															</a></td>
 														<td><div class="hidden-sm hidden-xs action-buttons">
 
-												   
-                                                      <?php echo anchor("order_master/edit_customer_code/" . $listData['id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>
-														 
-               <a title="Delete Code" href="javascript:void(0);" onclick="return confirmDelete('<?php echo base64_encode($listData['id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
-													   <?php //echo $listData['id'];?>
-													   <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['id'];?>" value="<?php echo $status ;?>" onclick="return change_customer_code_status('<?php echo $listData['id'];?>',this.value);" />
+										<?php		   if($this->session->userdata('admin_user_id')==1){ ?>
+					<?php echo anchor("order_master/edit_customer_code/" . $listData['id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>														 
+               <!--<a title="Delete Code" href="javascript:void(0);" onclick="return confirmDelete('<?php echo base64_encode($listData['id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>-->
+					<?php //echo $listData['id'];?>
+				<input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['id'];?>" value="<?php echo $status ;?>" onclick="return change_customer_code_status('<?php echo $listData['id'];?>',this.value);" />					
+			 			
+			 			<?php  }else{ ?>
+			 				<input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['id'];?>" value="<?php echo $status ;?>" />	
+						<?php  } ?>
+                                                      
 													   
 
                                                     </div>
@@ -222,7 +239,7 @@ if(id!=''){
 $.ajax({
 type:'POST',
 url:'<?php echo base_url().'plant_master/getAssignedProductList'?>',
-data:{id:id},
+data:{id:id, customer_id:<?php echo $this->uri->segment(3); ?>},
 success:function(msg){
 $("#product").html(msg);
 }
@@ -288,7 +305,7 @@ $("#product").html(msg);
           <div class="modal-content">
             <div class="modal-header">
                   <button type="button" class="close" data-dismiss="modal">&times;</button>
-                  <h4 class="modal-title">Upload Customer Codes</h4>
+                  <h4 class="modal-title">Upload a Customer Code</h4>
             </div>
             <div class="modal-body">
 <?php 
@@ -306,10 +323,10 @@ $("#product").html(msg);
 <select class="form-control" name="plant_id2" id="plant_id2" onchange="return get_products2(this.value);">
 <option value="">-Select Plant-</option>
 <?php 
-$user_id 	= $this->session->userdata('admin_user_id');
-$plant_data = get_all_active_plants($user_id);
+$user_id 	= $this->uri->segment(3);
+$plant_data = get_all_active_locations_plant($user_id);
 foreach($plant_data as $res){?>
-<option value="<?php echo $res['plant_id'];?>" <?php if($this->uri->segment(3)==$res['plant_id']){echo 'selected';}?>><?php echo $res['plant_name'];?></option>
+<option value="<?php echo $res['location_id'];?>" <?php if($this->uri->segment(3)==$res['location_id']){echo 'selected';}?>><?php echo $res['location_name'];?></option>
 <?php }?>
 </select>
 <br />
@@ -327,8 +344,8 @@ function get_products2(id){
 if(id!=''){
 $.ajax({
 type:'POST',
-url:'<?php echo base_url().'plant_master/getAssignedProductList'?>',
-data:{id:id},
+url:'<?php echo base_url().'plant_master/getAssignedProductListForCustomer'?>',
+data:{id:id, customer_id:<?php echo $this->uri->segment(3); ?>},
 success:function(msg2){
 $("#product2").html(msg2);
 }
@@ -448,64 +465,6 @@ $("#product2").html(msg2);
 
     </script>
 
-    <script>$(function () {
-    var nowDate = new Date();
-    var today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate(), 0, 0, 0, 0);
-    //initializing datepicker
-    $('.datepicker').datepicker({format:'yyyy-mm-dd', startDate: today,minDate: new Date()  });
-    });
-
-
-
-    $("form#frm").validate({
-    rules: {
-			plant_id: {required: true},
-            "product[]":{required: true},
-        quantity: {required: true, number: true}
-            } ,
-
-    messages: {
-			plant_id: {	required: "Please Select a Plant"} ,
-            "product[]": {required: "Please Select Product Name/SKU Code" } , 
-            quantity: {	required: "Please enter quantity"} 
-    },
-    submitHandler: function(form) {
-            var dataSend;
-            var dataSend 	= $("#frm").serialize();
-            $.ajax({
-                    type: "POST",
-                    dataType:"json",
-                    beforeSend: function(){
-                    $('.alert-success').hide();
-                                    //$(".show_loader").show();
-                                    //$(".show_loader").click();
-                    },
-                    url: "<?php echo base_url(); ?>order_master/save_order/",
-                    data: dataSend,
-                    success: function (msg) {
-
-                            if(parseInt(msg)==1){
-                            $('#myModal').modal('hide');
-                                    //$('#ajax_msg').text("User Added Successfully!").css("color","green").show();
-                                    $('.alert-success').show();
-                                    $('#frm')[0].reset(); 
-                                    window.location="<?php echo base_url(); ?>order_master/list_orders/";
-
-                            }
-                    }
-
-            });
-
-             return false;
-
-    }
-
-    });
-
-
-
-
-    </script>
     <?php if($this->uri->segment(3)=='open'){?>
     <script type="text/javascript">
     $(window).on('load',function(){
@@ -528,15 +487,16 @@ $("#product2").html(msg2);
 			plant_id2: {required: true},
             "product2[]":{required: true},
 			upload_code: {required: true},
-			quantity2: {required: true, number: true}
-            } ,
+			quantity2: {required: true}
+            },
 
     messages: {
-			plant_id2: {	required: "Please Select a Plant"} ,
-           "product2[]": {required: "Please Select Product Name/SKU Code" } , 
-			upload_code: {	required: "Please provide the upload code"} ,
+			plant_id2: {	required: "Please Select a Plant"},
+           "product2[]": {required: "Please Select Product Name/SKU Code"}, 
+			upload_code: {	required: "Please provide the upload code"},
             quantity2: {	required: "Please enter quantity"} 
     },
+	
     submitHandler: function(form) {
             var dataSend;
             var dataSend 	= $("#frmup").serialize();
@@ -545,28 +505,24 @@ $("#product2").html(msg2);
                     dataType:"json",
                     beforeSend: function(){
                     $('.alert-success').hide();
-                                    //$(".show_loader").show();
-                                    //$(".show_loader").click();
+                                    $(".show_loader").show();
+                                    $(".show_loader").click();
                     },
          url: "<?php echo base_url(); ?>order_master/save_upload_bulk_codes/",
          data: dataSend,
-         success: function (msg) {
-			
-			if(parseInt(msg)==1){
+         success: function (msg) {			
+			if(parseInt(msg)==true){
                     $('#myUploadModal').modal('hide');
-                  //$('#ajax_msg').text("Codes Upoaded Successfully!").css("color","green").show();
+                  $('#ajax_msg').text("Codes Upoaded Successfully!").css("color","green").show();
                     $('.alert-success').show();
                     $('#frmup')[0].reset(); 
-                    window.location="<?php echo base_url(); ?>order_master/list_customer_codes/";
-					
-                            }
+                    window.location="<?php echo base_url(); ?>order_master/list_customer_codes/<?php echo $this->uri->segment(3); ?>";        }
                     }
-
             });
 			
-				alert("Codes Upoaded!");
-				window.location.href = "<?php echo base_url(); ?>order_master/list_customer_codes/";
-             return false; 
+				alert("Codes Upoaded!!.");
+				window.location.href = "<?php echo base_url(); ?>order_master/list_customer_codes/<?php echo $this->uri->segment(3); ?>";
+            // return false; 
     }
     });
 

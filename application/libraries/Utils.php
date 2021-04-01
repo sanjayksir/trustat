@@ -119,6 +119,7 @@ class Utils {
             return false;
         }
     }
+	/*
     public static function sendSMS($mobile, $message) {
         $gateway = self::$ci->config->item('sms');        
         $query = [
@@ -132,8 +133,60 @@ class Utils {
         $httpResponse = file_get_contents($url);
         return $httpResponse;
     }
+*/
+    public static function sendSMS($Phno, $Msg) {
+		//$Phno='9319800106';
+        //$Msg="Sending Text message from New Server-Sanjay Testing2";
+        $Password='ispl@6664';
+        $SenderID='TRUSTT';
+        $UserID='innovigent';        
+            $ch='';
+            $url='https://nimbusit.biz/api/SmsApi/SendSingleApi?UserID='.$UserID.'&Password='.$Password.'&SenderID='.$SenderID.'&Phno='.$Phno.'&Msg='.urlencode($Msg);
+            $ch = curl_init($url);
+            curl_setopt($ch,CURLOPT_URL,$url);
+            curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+            $output=curl_exec($ch);
+            curl_close($ch);
+            return $output;       
+    }	
 
     public static function selectOptions($name=null,$attributes) {
+        $optionVal = '';
+        if (!empty($attributes['empty'])) {
+            if (is_string($attributes['empty'])) {
+                $optionVal .= '<option value="">' . $attributes['empty'] . '</option>';
+            } else {
+                $optionVal .= '<option value="">Select One</option>';
+}
+        }
+        $values = [];
+        if(!empty($attributes['value'])){
+            if(!is_array($attributes['value'])){
+                $values[] = $attributes['value'];
+            }else{
+                $values = $attributes['value'];            
+            }
+        }
+        if (!empty($attributes['options'])) {
+            foreach ($attributes['options'] as $key => $text) {
+                $selected = null;
+                if (!empty($attributes['indextext'])) {
+                    if(in_array($text, $values)){
+                        $selected = 'selected="selected"';
+                    }
+                    $optionVal .= '<option value="' . $text . '" '.$selected.'>' . $text . '</option>';
+                } else {
+                    if(in_array($key, $values)){
+                        $selected = 'selected="selected"';
+                    }
+                    $optionVal .= '<option value="' . $key . '" '.$selected.'>' . $text . '</option>';
+                }
+            }
+        }
+        return $optionVal;
+    }
+	
+	    public static function selectOptions2($name=null,$attributes) {
         $optionVal = '';
         if (!empty($attributes['empty'])) {
             if (is_string($attributes['empty'])) {
@@ -272,6 +325,57 @@ class Utils {
             $endPage = $totalRecords;
         }
         return '<div class="col-sm-4"><span class="counter">Showing '.$startPage.' to '.$endPage.' of '.$totalRecords.' entries</span></div><div class="col-sm-8">'.$pagelink.'</div>';
+    }
+
+
+    public static function pagination2($url=null,$totalRecords,$limit = null,$segment=3){
+        self::$ci->load->library("pagination");
+        if(is_null($limit)){
+            $limit = self::$ci->config->item('pageLimit2');
+        }
+        if(empty($url)){
+            $url = self::$ci->uri->uri_string();
+        }
+        $config['base_url'] = site_url($url) ;
+        $config['total_rows'] = $totalRecords;
+        $config['per_page'] = $limit;
+        $config["uri_segment"] = $segment;             
+        $config["full_tag_open"] = '<ul class="pagination">';
+        $config["full_tag_close"] = '</ul>';	
+        $config["first_link"] = "&laquo;";
+        $config["first_tag_open"] = "<li>";
+        $config["first_tag_close"] = "</li>";
+        $config["last_link"] = "&raquo;";
+        $config["last_tag_open"] = "<li>";
+        $config["last_tag_close"] = "</li>";
+        $config['next_link'] = '&gt;';
+        $config['next_tag_open'] = '<li>';
+        $config['next_tag_close'] = '<li>';
+        $config['prev_link'] = '&lt;';
+        $config['prev_tag_open'] = '<li>';
+        $config['prev_tag_close'] = '<li>';
+        $config['cur_tag_open'] = '<li class="active"><a href="#">';
+        $config['cur_tag_close'] = '</a></li>';
+        $config['num_tag_open'] = '<li>';
+        $config['num_tag_close'] = '</li>';
+        $config['reuse_query_string'] = TRUE;
+        self::$ci->pagination->initialize($config);
+        $pagelink = self::$ci->pagination->create_links();
+        if(empty($pagelink)){
+            return '';
+        }
+        $curpage = self::$ci->pagination->cur_page;
+        $startPage = ($curpage - 1) * $limit + 1;
+        if ($startPage == 0){
+            $startPage= 1;
+        }
+        $endPage = $startPage+$limit-1;
+        if ($endPage < $limit){
+            $endPage = $limit;
+        }elseif($endPage > $totalRecords){
+            $endPage = $totalRecords;
+        }
+        return '<div class="col-sm-4"><span class="counter">From '.$startPage.' to '.$endPage.', '.$limit.' records, out of '.$totalRecords.' </span></div><div class="col-sm-8">'.$pagelink.'</div>';
     }
     
     public static function countAll($table,$conditions = null) {

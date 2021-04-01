@@ -40,12 +40,14 @@
  								<div class="row">
 									<div class="col-xs-12">
 										<h3 class="header smaller lighter blue">List <?php echo $label;?></h3>
- 										<div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/add_location" class="btn btn-primary pull-right" title="Add New Location">Add New Location</a>
-										<a href="<?php echo base_url()?>plant_master/list_assigned_locations_user" class="btn btn-primary pull-right" title="Add New Location">Assign Location</a>
-										
-										
+										<?php if($this->session->userdata('admin_user_id')==1){?>
+ 	<div style="clear:both;height:40px;"><a href="<?php echo base_url()?>user_master/add_location/<?php echo $this->uri->segment(3); ?>" class="btn btn-primary pull-right" title="Add New Location">Add New Location</a>
+		<a href="<?php echo base_url()?>plant_master/list_assigned_locations_user/<?php echo $this->uri->segment(3); ?>" class="btn btn-primary pull-right" title="List Assigned Locations to User">List Assigned Locations to User</a>
 										</div>
-										
+										<?php }else{ ?>
+										<a href="<?php echo base_url()?>plant_master/list_assigned_locations_user" class="btn btn-primary pull-right" title="List Assigned Locations to User">List Assigned Locations to User</a>
+										<?php } ?>
+										</div>
 										<!--------------- Search Tab start----------------->
                             <div class="row"><form id="form-filter" action="" method="post" class="form-horizontal" onsubmit="return validateSrch();">
                                 <table id="search" class="table table-hover display">
@@ -55,7 +57,7 @@
                                             	<td><input name="search" value="<?php if(!empty($this->input->post('search'))){echo $this->input->post('search');}?>" id="searchStr" placeholder="Search Records" class="form-control" type="text"></td>
                                             	<td>
                                                 	<input type="submit" id="btn-filter" value="Search" name="Search" class="btn btn-primary btn-search">&nbsp;
-                                                	<button type="button" id="btn-reset" class="btn btn-default btn-search">Reset</button>
+                                                	<a href="<?php echo base_url(); ?>plant_master/list_locations/<?php echo $this->uri->segment(3); ?>"><button type="button" id="btn-reset" class="btn btn-default btn-search">Reset</button></a>
                                             	</td>
                                          	</tr>
                                  		 </tbody>
@@ -85,7 +87,12 @@
 														<th>Assigned Product</th>
 														<?php }?>
 														<th>Created on</th>
- 														<th>Action</th>
+ 														<th><?php if($this->session->userdata('admin_user_id')==1){?>
+														<div style="width:140px">View and Action  </div>
+														<?php }else{?>
+														<div style="width:100px"> Details & Status</div>
+														<?php }?>
+														</th>
  													</tr>
 												</thead>
 												<tbody>
@@ -132,11 +139,18 @@
 												<td><?php echo date('j M Y H:i:s D',strtotime($listData['created_date'])); ?></td>
                                                  <td>
                                                      <div class="hidden-sm hidden-xs action-buttons">
+													 
+													 <?php if($this->session->userdata('admin_user_id')==1){?>
+												
                                                          <a href="<?php  echo base_url().'plant_master/view_location/'.$listData['location_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>
-                                                         <?php echo anchor("plant_master/edit_location/" . $listData['location_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>
+                                                         <?php echo anchor("user_master/edit_location/" . $listData['location_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>
                                                          <!--<a title="Delete Plant" href="javascript:void(0);" onclick="return confirmDelete('<?php //echo base64_encode($listData['plant_id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>-->
                                                          
                                                          <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['location_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['location_id'];?>',this.value);" />
+													 <?php }else{ ?>
+												<a href="<?php  echo base_url().'plant_master/view_location/'.$listData['location_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>
+												<input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['location_id'];?>" value="<?php echo $status ;?>" />		 
+														 <?php } ?>
 
                                                     </div>
 

@@ -1,7 +1,13 @@
 <?php $this->load->view('../includes/admin_header'); ?>
 
+<!-- Export to Excel -->
+<script src="<?php echo base_url(); ?>assets/export_to_excel/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/export_to_excel/tableExport.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/export_to_excel/jquery.base64.js"></script>
+<!-- /Export to Excel -->
+
 <?php //echo '<pre>';print_r($product_list);exit;
-$this->load->view('../includes/admin_top_navigation'); ?>
+$this->load->view('../includes/admin_top_navigation'); ?> 
 
 <div class="main-container ace-save-state" id="main-container">
 
@@ -37,7 +43,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
 					</li>
 
-					<li class="active">All Consumers - [Export all consumers to excel (<a href="<?php echo base_url(''); ?>exportallconsumerstoexcel.php">Click Here</a>)]</li>
+					<!--<li class="active">All Consumers - [Export all consumers to excel (<a href="<?php echo base_url(''); ?>exportallconsumerstoexcel.php">Click Here</a>)]</li>-->
+					
+					<label><a href="#" onclick="$('#dynamic-table').tableExport({type:'excel',escape:'false'});"> <img src="<?php echo base_url();?>assets/images/excel_xls.png" width="24px" style="margin-left:100px"> Export to Excel</a></label>
 
 				</ul><!-- /.breadcrumb -->
 
@@ -70,20 +78,19 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 				<?php } ?>
 
 
-
+			
 				<div class="row">
 
 					<div class="col-xs-12">
 
 						<div class="widget-box widget-color-blue">
-							<!--<div class="widget-header widget-header-flat">
-                                <h5 class="widget-title bigger lighter">MANAGE PRODUCTS</h5>
+							<div class="widget-header widget-header-flat">
+                                <h5 class="widget-title bigger lighter">List all Consumers</h5>
                                 <div class="widget-toolbar">
-                                    <a href="<?php 
-												?>" class="btn btn-xs btn-warning" title="Add Product">Add <?php echo $label; ?> </a>
+                                   <!-- <a href="" class="btn btn-xs btn-warning" title="Add Product">Add <?php echo $label; ?></a>-->
                                 </div>
                             </div>
-							-->
+							
 							<div class="widget-body">
 								<!-- <div class="row filter-box">
 									<form id="form-filter" action="" method="get" class="form-horizontal">
@@ -113,22 +120,22 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 											<tr>
 												<th class="skip-col">S No.</th>
 												<th class="hidden-480">Consumer Name</th>
+												<th class="con-gender-c hidden-480">Consumer Gender</th>
 												<th class="hidden-480">Consumer Phone</th>
 												<th class="hidden-480">Consumer Email</th>
 												<th>Consumer Photo</th>
 												<th>Date of Registration</th>
 												<th class="loyalty-points-c">Earned Loyalty Points</th>
-												<th>Consumer Aadhaar Number </th>
+												<th>City Of Last Scan</th>
+												<th class="hidden-480">Consumer Registration City</th>
 												<?php
 												$user_id = $this->session->userdata('admin_user_id');
 												if ($user_id == 1) {
 													?>
-													<th class="con-gender-c hidden-480">Consumer Gender</th>
-													<th class="hidden-480">Consumer dob</th>
+													<th class="consumer-dob hidden-480">Consumer dob</th>
 													<th class="hidden-480">Consumer Registration Address</th>
 													<th class="hidden-480">Consumer Alternate Mobile Number</th>
-													<th class="hidden-480">Consumer Street Address</th>
-													<th class="hidden-480">Consumer City</th>
+													<th class="hidden-480">Consumer Street Address</th>													
 													<th class="hidden-480">Consumer State</th>
 													<th class="hidden-480">Consumer Pin Code</th>
 													<th class="monthly-earnings-c hidden-480">Consumer Monthly Earnings</th>
@@ -199,6 +206,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 													<tr id="show<?php echo $attr['id']; ?>">
 														<td><?php echo $sno; ?></td>
 														<td><?php echo $attr['user_name']; ?></td>
+														<td><?php echo $attr['gender']; ?></td>
 														<td><?php echo $attr['mobile_no']; ?></td>
 														<td><?php echo $attr['email']; ?></td>
 														<td><img src="<?php echo base_url(); ?><?php echo $attr['avatar_url']; ?>" alt="Consumer Photo Not found" height="42" width="42"></td>
@@ -206,19 +214,19 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 														<td><?php if ($user_id == 1) {
 																echo get_total_consumer_loyalty_points_all($attr['id']);
 															} else {
-																echo get_total_consumer_loyalty_points_customerwise($attr['id'], $user_id);
+																echo get_total_consumer_loyalty_points_customerwise($attr['id'], $user_id). ' : '. anchor("product/view_consumer_passbook_at_customer/" . $attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> Passbook</i>', array('class' => 'btn btn-xs btn-info','title'=>'Passbook'));
 															}
 															?>
 														</td>
-														<td><?php echo $attr['aadhaar_number']; ?></td>
+														<td><?php echo $attr['city_last_scan']; ?></td>
+														<td><?php echo $attr['registration_city']; ?></td>
 														<?php if ($user_id == 1) {
 															?>
-															<td><?php echo $attr['gender']; ?></td>
 															<td><?php echo $attr['dob']; ?></td>
 															<td><?php echo $attr['registration_address']; ?></td>
 															<td><?php echo $attr['alternate_mobile_no']; ?></td>
 															<td><?php echo $attr['street_address']; ?></td>
-															<td><?php echo $attr['city']; ?></td>
+															
 															<td><?php echo $attr['state']; ?></td>
 															<td><?php echo $attr['pin_code']; ?></td>
 															<td><?php echo $attr['monthly_earnings']; ?></td>
@@ -294,12 +302,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 						<div class="footer-content">
 
 							<span class="bigger-120">
-
-								<span class="blue bolder">Tracking Portal</span>
-
-								<?= date('Y'); ?>
-
-							</span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
 							&nbsp; &nbsp;
 

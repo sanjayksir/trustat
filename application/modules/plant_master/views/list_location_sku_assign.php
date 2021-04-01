@@ -40,7 +40,10 @@
  								<div class="row">
 									<div class="col-xs-12">
 										<h3 class="header smaller lighter blue">List <?php echo $label;?></h3>
- 										<div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/assign_locations" class="btn btn-primary pull-right" title="Add Location">Assign Products</a></div>
+									<?php	 $user_id = $this->session->userdata('admin_user_id');
+												if($user_id ==1){ ?>
+ 										<div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/assign_locations/<?php echo $this->uri->segment(3); ?>" class="btn btn-primary pull-right" title="Add Location">Assign Products to Plant</a></div>
+												<?php } ?>
 										<!-- div.table-responsive -->
  										<!-- div.dataTables_borderWrap -->
  											<table id="missing_people" class="table table-striped table-bordered table-hover">
@@ -53,7 +56,7 @@
 														<th>Phone</th>
                                                         <th>Products</th>
   														<th>Created on</th>
- 														<th>Action</th>
+ 														<th>Status</th>
  													</tr>
 												</thead>
 												<tbody>
@@ -86,11 +89,17 @@
 												<td><?php echo date('j M Y H:i:s D',strtotime($listData['created_date'])); ?></td>
                                                  <td>
                                                      <div class="hidden-sm hidden-xs action-buttons">
-                                                         <a href="<?php  echo base_url().'plant_master/view_location/'.$listData['location_id'];?>" class="blue" target="_blank" title="View"><i class="fa fa-eye"></i></a>
-                                                         <?php echo anchor("plant_master/assign_locations/" . $listData['location_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green','title'=>'Edit')); ?>
-                                                         <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['location_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['location_id'];?>',this.value);" />
-
+													 <div style="width:90px">
+                                                         <!--<a href="<?php  echo base_url().'plant_master/view_location/'.$listData['location_id'];?>" class="blue" target="_blank" title="View"><i class="fa fa-eye"></i></a>-->
+														  <?php if($this->session->userdata('admin_user_id')==1){ ?>
+                                                         <?php //echo anchor("plant_master/assign_locations/" . $listData['location_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green','title'=>'Edit')); ?>
+                                                        <!-- <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['location_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['location_id'];?>',this.value);" />-->
+														
+														 <?php	 }//else{ ?>
+													<input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['location_id'];?>" value="<?php echo $status ;?>" />
+														 <?php //} ?>
                                                     </div>
+													</div>
 
                                                 </td>
                                              </tr>

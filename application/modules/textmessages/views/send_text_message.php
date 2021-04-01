@@ -92,7 +92,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                   <label for="form-field-8">Select Consumers</label>
                                   <select name="quantity" id="quantity" class="form-control">
 									
-			<option value="<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>-All">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>
+			<!--<option value="<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>-All">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>-->
 										
 										<?php foreach(getConsumerSelectionCriterias($customer_id) as $val){ ?>
 			<option value="<?php echo NumberOfSelectedConsumersByACustomer2($customer_id, $val['unique_system_selection_criteria_id']); ?>-<?php echo $val['unique_system_selection_criteria_id']; ?>"><?php echo $val['unique_system_selection_criteria_id'];?> -> <?php  echo $val['name_of_selection_criteria'];?> -> (<?php echo NumberOfSelectedConsumersByACustomer2($customer_id, $val['unique_system_selection_criteria_id']); ?> Consumers)</option> 
@@ -102,7 +102,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                   </div>				 
 			  
 			  <textarea  class="form-control" name="text_message" placeholder="Write your text message..." maxlength="500" required ></textarea>
-			<br /><input class="btn btn-info" type="submit" name="submit" value="Send" id="savemenu" />
+			<br /><input class="btn btn-info" type="submit" name="submit" value="Send" id="savemenu" /> 
+			<?php echo anchor("textmessages/approve_text_messages/", '<i class="btn btn-xs btn-info">List Sent Messages</i>', array('class' => 'btn btn-xs btn-info','title'=>'List Sent Messages'));
+													?>
 			</div>
 		
 		     <div style="height:210px">    
@@ -119,12 +121,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="footer-content">
 
                         <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

@@ -82,8 +82,8 @@
 			 <select  name="city_registration" id="city_registration" class="form-control" multiple="multiple" size="4"  required>
            <option value="">-Consumer City of Registration-</option>	
 			<option value="all" selected>All Cities</option>			   
-            <?php foreach(getConsumerData('city') as $val){?>
-				<option value="<?php echo $val['city'];?>"><?php  echo $val['city'];?></option> 
+            <?php foreach(getConsumerData('registration_city') as $val){?>
+				<option value="<?php echo $val['registration_city'];?>"><?php  echo $val['registration_city'];?></option> 
 			<?php } ?>				
             </select>				
 			</div>			

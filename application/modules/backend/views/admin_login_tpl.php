@@ -114,8 +114,11 @@
  								<div id="login-box" class="login-box visible widget-box no-border">
  									<div class="widget-body">
  										<div class="widget-main">
+										<h2 class="header blue lighter bigger center" style="color:#4a4a4a !important; font-weight:bold;">
+ 												Innovigent Solutions Private Limited
+ 											</h2>
  											<h4 class="header blue lighter bigger center" style="color:#4a4a4a !important; font-weight:bold;">
- 												Super Admin Login
+ 												Administration Portal
  											</h4>
  											<span class="space-6" id="eror_msg" style="display:none;"></span>
 											<span class="space-6" >
@@ -162,14 +165,14 @@
  													</label>
   													<div class="space"></div>
   													<div class="clearfix">
-  														<input type="submit" class="width-35 pull-right btn btn-sm btn-primary" name="submit" id="submitbtn" value="submit">
+  														<input type="submit" class="width-35 pull-right btn btn-sm btn-primary" name="submit" id="submitbtn" value="Submit">
                                                            <div id="displayAfter" style="display:none;" class="pull-right"><div class="btn btn-sm btn-primary" name="submit" id="submitbtn" value="submit" type="submit">Submit</div><span class="btn btn-sm btn-primary" style="margin-left:-10px"> <i class="fa fa-spinner fa-spin"></i></span>
   													</div>
   													<div class="space-4"></div>
  												</fieldset>
  											</form>
  										</div><!-- /.widget-main -->
- 										<!--
+ 										
 										<div class="toolbar clearfix">
  											<div>
  												<a href="#" data-target="#forgot-box" class="forgot-password-link">
@@ -177,14 +180,15 @@
  													I forgot my password
  												</a>
  											</div>
+											<!--
 											<div>
  												<a href="#" data-target="#signup-box" class="user-signup-link">
  													Click here to register
  													<i class="ace-icon fa fa-arrow-right"></i>
  												</a>
- 											</div>
+ 											</div>-->
  										</div>
-										-->
+										
  									</div><!-- /.widget-body -->
  								</div><!-- /.login-box -->
  								<div id="forgot-box" class="forgot-box widget-box no-border">
@@ -207,7 +211,7 @@
 
 											<p>
 
-												Enter your email and to receive instructions
+											Password Change Instructions sent to xxxxa@ixxxxxxxxx.in
 
 											</p>
 
@@ -239,9 +243,9 @@
 
 														<span class="block input-icon input-icon-right">
 
-															<input type="text" id="email" name="email" class="form-control" placeholder="Email" />
+															<input type="hidden" id="email" name="email" class="form-control" value="sikka@innovigent.in" placeholder="Email" readonly />
 
-															<i class="ace-icon fa fa-envelope"></i>
+															<!--<i class="ace-icon fa fa-envelope"></i>-->
 
 														</span>
 
@@ -253,7 +257,7 @@
 
                                                     
 
-                                                    <input type="submit" class="width-35 pull-right btn btn-sm btn-primary" name="submit" id="submitbtnForgot" value="Send Me">
+                                                    <input type="submit" class="width-35 pull-right btn btn-sm btn-primary" name="submit" id="submitbtnForgot" value="Next">
 
                                                           <div id="displayAfterForgot" style="display:none;" class="pull-right"><div class="btn btn-sm btn-primary" name="submit" id="submitbtn" value="submit" type="submit">Submit</div><span class="btn btn-sm btn-primary" style="margin-left:-10px"> <i class="fa fa-spinner fa-spin"></i></span>
 
@@ -698,7 +702,7 @@
 						else if($.trim(msg)=='status'){
  							$('#eror_msg').html('Your registration is waiting for admin approval!').css('color', 'red').show().delay(5000).fadeOut('slow');
  						}else if($.trim(msg)=='wrong-pass'){
- 							$('#eror_msg').html('User Not Exists!').css('color', 'red').show().delay(5000).fadeOut('slow');;
+ 							$('#eror_msg').html('User Name and password does not match!!').css('color', 'red').show().delay(5000).fadeOut('slow');;
  							$("#displayAfter").hide();
  							$("#submitbtn").show();
  						}else{					

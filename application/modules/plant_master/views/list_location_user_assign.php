@@ -7,7 +7,7 @@
         } catch (e) {
         }
     </script>
-    <?php $label = '/ Assign Location to Location Controller Users'; ?>
+    <?php $label = 'List Assigned Locations to Users'; ?>
 
     <?php $this->load->view('../includes/admin_sidebar'); ?>
 
@@ -42,13 +42,16 @@
                     <div class="col-xs-12">
                         <div class="widget-box widget-color-blue">
                             <div class="widget-header widget-header-flat">
-                                <h5 class="widget-title bigger lighter">List / Assign Location to Location Controller Users</h5>
+                                <h5 class="widget-title bigger lighter"> <?php echo $label; ?></h5>
                                 <div class="widget-toolbar">
-                                    <a href="<?php echo base_url('plant_master/assign_location_to_users') ?>" class="btn btn-xs btn-warning" title="Assign Location to Location Controller">Assign Location to Location Controller Users</a>
+							<?php	$user_id 	= $this->session->userdata('admin_user_id');
+									if($user_id==1){ ?>
+                                    <a href="<?php echo base_url('plant_master/assign_location_to_users/').'/'.$this->uri->segment(3); ?>" class="btn btn-xs btn-warning" title="Assign Location to Location Controller">Assign Location to Location Controller Users</a>
+									<?php } ?>
                                 </div>
                             </div>
                             <div class="widget-body">
-                               <div class="row filter-box">
+                              <!-- <div class="row filter-box">
                                     <form id="form-filter" action="" method="get" class="form-horizontal" >
                                         <div class="col-sm-6">
                                             <label>Display
@@ -68,7 +71,7 @@
                                             </div>
                                         </div>
                                     </form>
-                                </div>
+                                </div>-->
                                 <table id="missing_people" class="table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
@@ -77,8 +80,12 @@
                                             <th>Email ID</th>
                                             <th>Phone</th>
                                             <th>Location Name</th>
-                                            <th>Created on</th>
-                                            <th>Action</th>
+                                            <th>Assigned/Updated on</th>
+									<?php	$user_id 	= $this->session->userdata('admin_user_id');
+									if($user_id==1){	?>
+                                            <!--<th>Action</th>-->
+										<?php } ?>
+											 
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -105,21 +112,21 @@
                                                     <td><?php echo $listData['email_id']; ?></td>
                                                     <td><?php echo $listData['mobile_no']; ?></td>
                                                     <td><?php $plants = get_assigned_location_user_list($listData['user_id']);
+													
 
-
-                                                echo get_locations_name_by_id($plants);
+														echo get_locations_name_by_id($plants);
                                                 ?></td>
 
                                                     <td><?php echo date('j M Y H:i:s D', strtotime($listData['created_on'])); ?></td>
-                                                    <td>
+                                                  <!--  <td>
+												<?php	if($user_id==1){ ?>
                                                         <div class="hidden-sm hidden-xs action-buttons">
-                                                            <!--<a href="<?php echo base_url() . 'plant_master/view_location/' . $listData['user_id']; ?>" class="blue" target="_blank" title="View"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>-->
+                                                            <a href="<?php echo base_url() . 'plant_master/view_location/' . $listData['user_id']; ?>" class="blue" target="_blank" title="View"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>
         <?php echo anchor("plant_master/assign_location_to_users/" . $listData['user_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green', 'title' => 'Edit')); ?>
-                                                           <!-- <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['user_id']; ?>" value="<?php echo $status; ?>" onclick="return change_status('<?php echo $listData['user_id']; ?>', this.value, '<?php echo $plants; ?>');" />-->
-
+                                                            <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['user_id']; ?>" value="<?php echo $status; ?>" onclick="return change_status('<?php echo $listData['user_id']; ?>', this.value, '<?php echo $plants; ?>');" />
                                                         </div>
-
-                                                    </td>
+												<?php } ?>
+                                                    </td>-->
                                                 </tr>
                                             <?php $sno++; 
                                                 }

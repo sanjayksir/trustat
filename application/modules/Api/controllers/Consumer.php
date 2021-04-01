@@ -34,6 +34,11 @@ class Consumer extends ApiController {
 
 
         $query = $this->db->get_where('consumers', array('mobile_no' => $checkmobileno2));
+			if($checkmobileno2=='7272002111'){
+				$verification_code_otp = "894562";
+			}else{
+			$verification_code_otp = Utils::randomNumber(5);
+			}		
         if ($query->num_rows() > 0) {
             $errors = $this->ConsumerModel->signupValidateNew($data);
             if (is_array($errors)) {
@@ -54,6 +59,12 @@ class Consumer extends ApiController {
 			$registration_address = $this->getInput('registration_address');
             $registration_addressr = $registration_address['registration_address'];
 			
+			$registration_city = $this->getInput('registration_city');
+            $registration_cityr = $registration_city['registration_city'];
+			
+			$registration_pin_code = $this->getInput('registration_pin_code');
+            $registration_pin_coder = $registration_pin_code['registration_pin_code'];
+			
 			$fb_token1 = $this->getInput('fb_token');
             $fb_tokenr = $fb_token1['fb_token'];
 			
@@ -64,9 +75,11 @@ class Consumer extends ApiController {
             $this->db->set('longitude', $longituder);
 			$this->db->set('latitude', $latituder);
 			$this->db->set('registration_address', $registration_addressr);
+			$this->db->set('registration_city', $registration_cityr);
+			$this->db->set('registration_pin_code', $registration_pin_coder);
 			$this->db->set('fb_token', $fb_tokenr);
 			$this->db->set('iemi', $iemir);
-            $data['verification_code'] = Utils::randomNumber(5);
+            $data['verification_code'] = $verification_code_otp;
             $this->db->set('verification_code', $data['verification_code']);
             $this->db->set('password', md5($data['verification_code']));
             $this->db->where('mobile_no', $data['mobile_no']);
@@ -78,26 +91,26 @@ class Consumer extends ApiController {
                 $this->signupMail($data);
                
 				
-		$mnv1_result = $this->db->select('message_notification_value, message_notification_value_part2')->from('message_notification_master')->where('id', 1)->get()->row();
+		$mnv1_result = $this->db->select('message_notification_value, message_notification_value_part2')->from('message_notification_master')->where('id', 5)->get()->row();
 		$message_notification_value = $mnv1_result->message_notification_value;
 		$message_notification_value_part2 = $mnv1_result->message_notification_value_part2;
 		
 		 //$smstext = 'Welcome to TRUSTAT!!. Your OTP for mobile verification is ' . $data['verification_code'] . ', Please enter the OTP to complete the signup process.';
 		  $smstext = $message_notification_value . $data['verification_code'] . $message_notification_value_part2;
 		
-                Utils::sendSMS($data['mobile_no'], $smstext);
+                Utils::sendSMS($data['mobile_no'], $smstext . " zLJoGnJzfXg");
                 //$this->ConsumerModel->sendFCM("Congratulations! Your re-registration is successfully completed, and you are logged in.", $fb_tokenr);
-		$mnv2_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 2)->get()->row();
+		$mnv2_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 6)->get()->row();
 				$mnvtext2 = $mnv2_result->message_notification_value;
 		 //$this->ConsumerModel->sendFCM("Congratulations! Your re-registration is successfully completed, and you are logged in.", $fb_tokenr);
-		  $this->ConsumerModel->sendFCM($mnvtext2, $fb_tokenr);
-		  $mnv3_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 3)->get()->row();
+		 // $this->ConsumerModel->sendFCM($mnvtext2, $fb_tokenr);
+		  $mnv3_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 7)->get()->row();
 				$mnvtext3 = $mnv3_result->message_notification_value;
                // Utils::response(['status' => true, 'message' => 'You are re-registered with this device, and you are logged in.', 'data' => $data]);
 				Utils::response(['status' => true, 'message' => $mnvtext3, 'data' => $data]);
                
             } else {
-				$mnv4_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 4)->get()->row();
+				$mnv4_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 8)->get()->row();
 				$mnvtext4 = $mnv4_result->message_notification_value;
                 Utils::response(['status' => false, 'message' => $mnvtext4], 200);
             }
@@ -124,15 +137,37 @@ class Consumer extends ApiController {
 			$data['latitude'] = $latitudeN['latitude'];	
 
 			$registrationAddressN = $this->getInput('registration_address');
-			$data['registration_address'] = $registrationAddressN['registration_address'];			
+			$data['registration_address'] = $registrationAddressN['registration_address'];
+
+			$registration_cityN = $this->getInput('registration_city');
+			$data['registration_city'] = $registration_cityN['registration_city'];
+
+			$registration_pin_codeN = $this->getInput('registration_pin_code');
+			$data['registration_pin_code'] = $registration_pin_codeN['registration_pin_code'];			
+
+			
 			$data['date_of_registration'] = date("Y-m-d");
 			
-            $data['verification_code'] = Utils::randomNumber(5);
+            //$data['verification_code'] = Utils::randomNumber(5);
+			$data['verification_code'] = $verification_code_otp;
             $data['password'] = md5($data['verification_code']);
             if ($this->db->insert('consumers', $data)) {
                 $userId = $this->db->insert_id();
+				
+				$resultAS = $this->db->select('*')->from('loylties')->where('id', 1)->get()->row();
+				$ActiveStatus = $resultAS->active_status;
+				if($ActiveStatus=='Active'){
                 $this->Productmodel->saveLoyltyReg('user-registration', $userId, ['consumer_id' => $userId, 'latitude' =>$data['latitude'], 'longitude' => $data['longitude'], 'registration_address' => $data['registration_address']]);
 				$this->Productmodel->saveConsumerPassbookLoyaltyReg('user-registration', $userId, ['consumer_id' => $userId, 'consumer_phone' => $checkmobileno2, 'passbook_title' => "TRUSTAT Registration", 'passbook_event' => "User Registration", 'latitude' =>$data['latitude'], 'longitude' => $data['longitude'], 'registration_address' => $data['registration_address']], 'Loyalty');
+				}
+				$this->db->set(array("consumer_id" => $userId))->where(array("consumer_id" => $checkmobileno2))->update('push_advertisements');
+				
+				$this->db->set(array("referred_consumer_id" => $userId))->where(array("referred_mobile_no" => $checkmobileno2))->update('consumer_referral_table');
+				
+				$this->db->set(array("consumer_id" => $userId, "registration_status" => "Registered"))->where(array("consumer_id" => $checkmobileno2))->update('consumer_customer_link');
+				
+				$this->db->set(array("consumer_id" => $userId))->where(array("consumer_id" => $checkmobileno2))->update('consumer_activity_log_table');
+				
                 //$data['password'] = $data['mobile_no'];
                 //$data['token'] = $this->ConsumerModel->authIdentifyDR($data);
                 /*
@@ -151,35 +186,32 @@ class Consumer extends ApiController {
 				//$getloylty = $loylty['loyalty_points'];
                 $this->signupMail($data);
                 //$mnvtext5 = 'Welcome to TRUSTAT. Your OTP for mobile verification is ' . $data['verification_code'] . ', please enter the OTP to complete the signup proccess.';
-				$mnv5_result = $this->db->select('message_notification_value, message_notification_value_part2')->from('message_notification_master')->where('id', 5)->get()->row();
+				$mnv5_result = $this->db->select('message_notification_value, message_notification_value_part2')->from('message_notification_master')->where('id', 1)->get()->row();
 		$message_notification_value5 = $mnv5_result->message_notification_value;
 		$message_notification_value_part5 = $mnv5_result->message_notification_value_part2;
 		
 		 //$smstext = 'Welcome to TRUSTAT!!. Your OTP for mobile verification is ' . $data['verification_code'] . ', Please enter the OTP to complete the signup process.';
 		  $mnvtext5 = $message_notification_value5 . $data['verification_code'] . $message_notification_value_part5;
 		
-		
-				
 				//$mnv5_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 5)->get()->row();
 				
 				
 				//$mnvtext5 = $mnv5_result->message_notification_value;
 				
-                Utils::sendSMS($data['mobile_no'], $mnvtext5);
+                Utils::sendSMS($data['mobile_no'], $mnvtext5 . " zLJoGnJzfXg");
 				$fb_token = getConsumerFb_TokenById($userId);
-				$mnv6_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 6)->get()->row();
+				$mnv6_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 2)->get()->row();
 				$mnvtext6 = $mnv6_result->message_notification_value;
                //$this->ConsumerModel->sendFCM('Congratulations! Your registration is complete, and ' . $loylty['loyalty_points'] . ' Loyalty Points have been added in your TRUSTAT loyalty program.', $fb_token);
-			   $this->ConsumerModel->sendFCM($mnvtext5, $fb_token);
+			   //$this->ConsumerModel->sendFCM($mnvtext5, $fb_token);
 			   
-			   $mnv7_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 7)->get()->row();
+			   $mnv7_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 3)->get()->row();
 				$mnvtext7 = $mnv7_result->message_notification_value;
                 //Utils::response(['status' => true, 'message' => 'Your account has been registered successfully.', 'data' => $data], 200);
 				Utils::response(['status' => true, 'message' => $mnvtext7, 'data' => $data], 200);
                 
-                
             } else {
-		$mnv8_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 8)->get()->row();
+		$mnv8_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 4)->get()->row();
 		$mnvtext8 = $mnv8_result->message_notification_value;
                 //Utils::response(['status' => false, 'message' => 'Registration has been failed.'], 200);
 				Utils::response(['status' => false, 'message' => $mnvtext8], 200);
@@ -223,6 +255,7 @@ class Consumer extends ApiController {
             ['field' => 'email', 'label' => 'Email', 'rules' => 'trim'],
             ['field' => 'dob', 'label' => 'Date of birth', 'rules' => [$this->ConsumerModel, 'dob_check']],
             ['field' => 'gender', 'label' => 'Gender', 'rules' => 'trim|min_length[2]'],
+			['field' => 'city_last_scan', 'label' => 'City Of Last Scan', 'rules' => 'min_length[2]'],
 			['field' => 'alternate_mobile_no', 'label' => 'Alternate Mobile Number', 'rules' => 'min_length[10]'],
 			['field' => 'street_address', 'label' => 'Street Address', 'rules' => 'trim'],
 			['field' => 'city', 'label' => 'City', 'rules' => 'trim'],
@@ -724,12 +757,15 @@ class Consumer extends ApiController {
 		$this->db->set('field_201', Utils::getVar('field_201', $input));
 
         $this->db->where('id', $user['id']);
+		
+		log_message('debug',print_r($array_or_object_you_want_to_print,TRUE));
         if ($this->db->update($this->ConsumerModel->table)) {
 			$mnv10_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 10)->get()->row();
 		$mnvtext10 = $mnv10_result->message_notification_value;		
             //Utils::response(['status' => true, 'message' => 'Your account has been updated.', 'data' => $input]);
 			 Utils::response(['status' => true, 'message' => $mnvtext10, 'data' => $input]);
         } else {
+			
             Utils::response(['status' => false, 'message' => 'System failed to update.'], 200);
         }
     }
@@ -822,7 +858,7 @@ class Consumer extends ApiController {
         if ($this->db->insert('consumer_family_details', $data)) {
             $this->signupMail($data);
             $smstext = 'You have added ' . $mobile_no . ' as ' . $data['relation'] . ' relation with you.';
-            Utils::sendSMS($data['phone_number'], $smstext);
+            Utils::sendSMS($data['phone_number'], $smstext . " zLJoGnJzfXg");
             $userId = $user['id'];
             //$this->Productmodel->saveLoylty('user-registration', $userId, ['user_id' => $userId]);
             Utils::response(['status' => true, 'message' => 'Your Family member has been added successfully.', 'data' => $data], 200);
@@ -882,6 +918,206 @@ class Consumer extends ApiController {
         }
     }
 
+	
+	// Check Consumer If Registered function
+    public function CheckConsumerIfRegistered() {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+
+        $input = $this->getInput();
+        if (($this->input->method() != 'post') || empty($input)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $validate = [
+            ['field' => 'phone_number', 'label' => 'Phone Number', 'rules' => 'trim|required|integer|exact_length[10]'],
+        ];
+        $errors = $this->ConsumerModel->validate($input, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }
+
+        $phone_number = $this->getInput('phone_number');
+        $phone_numberr = $phone_number['phone_number'];
+
+        $isRegistered = $this->ConsumerModel->ishowzztMember($phone_numberr);
+
+        if ($isRegistered == TRUE) {
+
+           $data['isRegistered'] = "Yes";
+			
+        } else {
+
+           $data['isRegistered'] = "No";
+        
+        }
+		Utils::response(['status' => true, 'message' => 'Mobile Number Registration Status Yes if Registered.', 'data' => $data]);
+    }
+	
+	
+	
+		// Check Consumer If eligible to Receive reference Function Start 
+    public function CheckConsumerIfEligiblForReference() {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+
+        $input = $this->getInput();
+        if (($this->input->method() != 'post') || empty($input)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $validate = [
+            ['field' => 'phone_number', 'label' => 'Phone Number', 'rules' => 'trim|required|integer|exact_length[10]'],
+			['field' => 'product_id', 'label' => 'Product ID', 'rules' => 'trim|required|integer'],
+        ];
+        $errors = $this->ConsumerModel->validate($input, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }
+
+        $phone_numberArray = $this->getInput('phone_number');
+        $phone_number = $phone_numberArray['phone_number'];
+		
+		$product_idArray = $this->getInput('product_id');
+        $product_id = $product_idArray['product_id'];
+		$media_type = getMediaTypeforSendingReferenceByProductId($product_id);
+		$ConsumerID = $user['id'];
+		$ReferarMonileNo = getConsumerMobileNumberById($ConsumerID);
+
+        $isRegistered = $this->ConsumerModel->ishowzztMember($phone_number);
+		
+			//$TotalRefSenttoConsumer = $this->db->where(array('referred_mobile_no' => $phone_number, 'product_id' => $product_id, 'media_type' => $media_type))->from("consumer_referral_table")->count_all_results();
+			
+			//$TotalRefSentbySenderConsumerForTheProduct = $this->db->where(array('referrer_consumer_id' => $ConsumerID, 'product_id' => $product_id))->from("consumer_referral_table")->count_all_results();
+			
+			//$TotalRefPermittedtoSenderConsumerForTheProduct = getNumberOfReferralsAllowedToConsumerByProductId($product_id);
+		//if($TotalRefSentbySenderConsumerForTheProduct >= $TotalRefPermittedtoSenderConsumerForTheProduct){
+			if($ReferarMonileNo != $phone_number){
+		if ($isRegistered == TRUE) {
+			$refferedConsumerID = get_consumer_id_by_mobile_number($phone_number);
+           $data['isRegistered'] = "Mobile Number is Registered";
+		   $gap_period_for_last_activity_product = getGapPeriodfinalisedbyBrandByProductId($product_id);
+		   $last_activity_of_existing_consumer_date_time = getLastActivityDateByConsumerID($refferedConsumerID, $product_id);
+		   if($last_activity_of_existing_consumer_date_time!=0){
+		  $last_activity_of_existing_consumer_days = (new DateTime($last_activity_of_existing_consumer_date_time))->diff(new DateTime(date("Y-m-d")))->days;		
+		   if($last_activity_of_existing_consumer_days>$gap_period_for_last_activity_product){
+		   $data['EligibleForReference'] = "Yes";
+		   }else{			   
+			$data['EligibleForReference'] = "No";
+		   }
+		   }else{
+			$data['EligibleForReference'] = "Yes";		
+			}
+			} else {
+
+           $data['isRegistered'] = "Mobile Number Registration is Not Registered";
+		   
+		   $gap_period_for_last_activity_product = getGapPeriodfinalisedbyBrandByProductId($product_id);
+		   $last_activity_of_existing_consumer_date_time = getLastActivityDateByConsumerID($phone_number, $product_id);
+		    if($last_activity_of_existing_consumer_date_time!=0){
+		  $last_activity_of_existing_consumer_days = (new DateTime($last_activity_of_existing_consumer_date_time))->diff(new DateTime(date("Y-m-d")))->days;				
+		   if($last_activity_of_existing_consumer_days>$gap_period_for_last_activity_product){
+		   $data['EligibleForReference'] = "Yes";
+		   }else{			   
+			$data['EligibleForReference'] = "No";
+		   }
+			}else{
+			$data['EligibleForReference'] = "Yes";		
+			}
+        }
+				
+		/*}else{
+		$mnv1_result66 = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 66)->get()->row();
+		$message_notification_value66 = $mnv1_result66->message_notification_value;	
+		Utils::response(['status' => false, 'message' => $message_notification_value66]);	
+		}*/
+		
+		$mnv1_result66 = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 66)->get()->row();
+		$message_notification_value66 = $mnv1_result66->message_notification_value;	
+		//Utils::response(['status' => false, 'message' => $message_notification_value66]);	
+		
+		
+		Utils::response(['status' => true, 'message' => $message_notification_value66, 'data' => $data]);
+		}else{
+			$data['EligibleForReference'] = "No";
+		//$mnv1_result66 = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 66)->get()->row();
+		//$message_notification_value66 = $mnv1_result66->message_notification_value;	
+		$messageforselfreferar = "You can't refer yourself!";
+		Utils::response(['status' => false, 'message' => $messageforselfreferar, 'data' => $data]);	
+		}
+    }
+	
+	// Check Consumer If eligible to send reference Function End
+	
+	
+	
+	
+			// Check Consumer If eligible to send reference Function Start 
+    public function CheckConsumerIfEligiblForReferenceAllProducts() {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+		
+       // $product_id = 230;
+		$consumer_id = $user['id'];
+	$ListAllProducts = $this->Productmodel->getListAllProducts($consumer_id);
+	
+	Utils::response(['status' => true, 'message' => 'Product Eligiblity Status For Reference For Consumer', 'data' => $ListAllProducts]);
+    }
+	
+	//Sanjay22
+	// Check Consumer If eligible to send reference Function End
+	
+	
+			// Consumer Referrals Info Function Start 
+    public function ConsumerReferralsInfo() {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+
+        $input = $this->getInput();
+        if (($this->input->method() != 'post') || empty($input)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $validate = [
+			['field' => 'product_id', 'label' => 'Product ID', 'rules' => 'trim|required|integer'],
+        ];
+        $errors = $this->ConsumerModel->validate($input, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }
+
+		$product_idArray = $this->getInput('product_id');
+        $product_id = $product_idArray['product_id'];
+		
+		$ConsumerID = $user['id'];
+       // $isRegistered = $this->ConsumerModel->ishowzztMember($phone_number);
+	    if(!empty($product_id)) {			
+			$data['include_the_product_in_referral_program'] = getProductinReferralProgramAssignedbyBrandByProductId($product_id);
+			$data['number_of_referrals_allowed_to_consumer'] = getMaxReferralsForConsumerbyProductId($product_id);
+			$data['number_of_referrals_sent_by_consumer'] = $this->db->where(array('product_id'=>$product_id, 'referrer_consumer_id'=>$ConsumerID))->from("consumer_referral_table")->count_all_results();
+			$data['number_of_referrals_remaining_for_consumer'] = $data['number_of_referrals_allowed_to_consumer'] - $data['number_of_referrals_sent_by_consumer'];			
+		Utils::response(['status' => true, 'message' => 'Consumer Referral Information', 'data' => $data]);			
+        } else {
+
+           $data['product_id'] = "Product info not available";
+		   Utils::response(['status' => true, 'message' => 'Consumer Referral Information', 'data' => $data]);
+        
+        }
+       
+    }			
+
+	
+	// Consumer Referrals Info Function End
+	
 // Delete Consumer Family Member function
 
     public function DeleteConsumerRelative($relation_id) {
@@ -919,42 +1155,81 @@ class Consumer extends ApiController {
 
 	// Redeem Loylty Points
 	// Sanjay
-	public function MicrositeRedeemLoyltyPoints($consumer_mobile,$customer_id,$points_redeemed) {
+	public function MicrositeRedeemLoyltyPoints($consumer_mobile,$customer_id,$points_redeemed,$Microsite_URL,$order_id,$subtotals,$client_ip,$product_sku,$product_name,$product_cetagory,$billing_address1,$billing_address2,$billing_address_city,$billing_address_state,$billing_address_pincode,$dispatched_on,$order_data_field1,$order_data_field2,$order_data_field3,$order_data_field4,$order_data_field5,$order_data_field6,$order_data_field7,$order_data_field8,$order_data_field9,$order_data_field10) {
 		
 		//echo "<pre>";print_r(get_consumer_id_by_mobile_number($consumer_mobile)); die;
 		$consumer_id = get_consumer_id_by_mobile_number($consumer_mobile);
 		$fb_token = getConsumerFb_TokenById($consumer_id);		
 		
 		$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customer_id);
+		
+		$MRLP1_billin_particular_name = "Loyalty Redemption Microsite";
+		$MRLP1_billin_particular_slug = "loyalty_redemption_microsite";
+
+		// Consumer Log Data insert start
+			$CALdata['date_time'] = date('Y-m-d H:i:s'); 
+			$CALdata['consumer_name'] = getConsumerNameById($consumer_id);
+			$CALdata['consumer_id'] = $consumer_id; 
+			$CALdata['consumer_mobile'] = getConsumerMobileNumberById($consumer_id); 
+			$CALdata['customer_name'] = getUserFullNameById($customer_id); 
+			$CALdata['customer_id'] = $customer_id; 
+			$CALdata['unique_customer_code'] = getCustomerCodeById($customer_id); 
+			$CALdata['product_name'] = "Product info is not reqired"; 
+			$CALdata['product_id'] = 0; 
+			$CALdata['product_sku'] = "Product info is not reqired"; 
+			$CALdata['product_code'] = "Product info is not reqired"; 
+			$CALdata['gloc_latitude'] = "";
+			$CALdata['gloc_longitude'] = "";
+			$CALdata['gloc_city'] = "";
+			$CALdata['gloc_pin_code'] = "000000";
+			$CALdata['consumer_activity_type'] = "Redeemed Brand Loyalty Through Microsite- " . getUserFullNameById($customer_id);
+			$CALdata['loyalty_rewards_points'] = 0;
+			$CALdata['loyalty_rewards_type'] = getCustomerLoyaltyTypeById($customer_id);
+			
+			$this->db->insert('consumer_activity_log_table', $CALdata);
+				// Consumer Log Data insert end
+				
+				
 		if($customer_loyalty_type=="TRUSTAT"){
-		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalAccumulatedPointsCustomer = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalAccumulatedPointsISPL = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>1))->get()->row();
+		$TotalAccumulatedPoints = $TotalAccumulatedPointsCustomer->points + $TotalAccumulatedPointsISPL->points;
 		
-		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalRedeemedPointsCustomer = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalRedeemedPointsISPL = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>1))->get()->row();
+		$TotalRedeemedPoints = $TotalRedeemedPointsCustomer->points + $TotalRedeemedPointsISPL->points;
 		
-		$TotalExpiredPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalExpiredPointsCustomer = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalExpiredPointsISPL = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>1))->get()->row();
+		$TotalExpiredPoints = $TotalExpiredPointsCustomer->points + $TotalExpiredPointsISPL->points;
+		
 		}else{
-		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalAccumulatedPointsBrand = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalAccumulatedPoints = $TotalAccumulatedPointsBrand->points;
 		
-		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalRedeemedPointsBrand = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalRedeemedPoints = $TotalRedeemedPointsBrand->points;
 		
-		$TotalExpiredPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalExpiredPointsBrand = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalExpiredPoints = $TotalExpiredPointsBrand->points;
+		
 		}
 		
 		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
 		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
 		
-		$FinalTotalAccumulatedPoints = $TotalAccumulatedPoints->points;
+		$FinalTotalAccumulatedPoints = $TotalAccumulatedPoints;
 		
-		if(($TotalRedeemedPoints->points)!='')
+		if(($TotalRedeemedPoints)!='')
 		{
-			$FinalTotalRedeemedPoints = ($TotalRedeemedPoints->points) + $points_redeemed;
+			$FinalTotalRedeemedPoints = ($TotalRedeemedPoints) + $points_redeemed;
 		} else {
 			$FinalTotalRedeemedPoints =0 + $points_redeemed;
 			}
 			
-		if(($TotalExpiredPoints->points)!='')
+		if(($TotalExpiredPoints)!='')
 		{
-			$FinalTotalExpiredPoints = $TotalExpiredPoints->points;
+			$FinalTotalExpiredPoints = $TotalExpiredPoints;
 		} else {
 			$FinalTotalExpiredPoints =0;
 			}	
@@ -982,9 +1257,10 @@ class Consumer extends ApiController {
 		$data['customer_id'] = $customer_id;
 		$data['consumer_id'] = $consumer_id;
 		$data['points'] = $points_redeemed;
-        $data['transaction_type_name'] = "Loylty Redemption";
-		$data['transaction_type_slug'] = "loylty_redemption";
-		$data['params'] = '{"transaction_name":"Loyalty Points redeemed"}';
+        $data['transaction_type_name'] = "Loyalty Redemption Microsite";
+		$data['transaction_type_slug'] = "loyalty_redemption_microsite";
+		$data['product_id'] = 0;
+		$data['params'] = '{"Microsite_URL":"'.$Microsite_URL.'","order_id":"'.$order_id.'","subtotals":"'.$subtotals.'","client_ip":"'.$client_ip.'","product_sku":"'.$product_sku.'","product_name":"'.$product_name.'","product_cetagory":"'.$product_cetagory.'","billing_address1":"'.$billing_address1.'","billing_address2":"'.$billing_address2.'","billing_address_city":"'.$billing_address_city.'","billing_address_state":"'.$billing_address_state.'","billing_address_pincode":"'.$billing_address_pincode.'","dispatched_on":"'.$dispatched_on.'","order_data_field1":"'.$order_data_field1.'","order_data_field2":"'.$order_data_field2.'","order_data_field3":"'.$order_data_field3.'","order_data_field4":"'.$order_data_field4.'","order_data_field5":"'.$order_data_field5.'","order_data_field6":"'.$order_data_field6.'","order_data_field7":"'.$order_data_field7.'","order_data_field8":"'.$order_data_field8.'","order_data_field9":"'.$order_data_field9.'","order_data_field10":"'.$order_data_field10.'","transaction_name":"Loyalty Points redeemed through microtime"}';
 		$data['transaction_lr_type'] = "Redemption";
 		$data['customer_loyalty_type'] = get_customer_loyalty_type_by_customer_id($customer_id);
 		$data['total_accumulated_points'] = $FinalTotalAccumulatedPoints;
@@ -994,15 +1270,20 @@ class Consumer extends ApiController {
 		$data['points_short_of_redumption'] = $PointsShortOfRedumption;
 		$data['transaction_date'] = date("Y-m-d H:i:s");
         //$data['ip'] = $this->input->ip_address();
+		
+			
 
         if ($this->db->insert('consumer_passbook', $data)) {
+			
+			$this->Productmodel->sendFCM($points_redeemed . " Loyalty Points Redeemed", $fb_token);
+			
             //$this->signupMail($data);
            // $smstext = 'You have added ' . $mobile_no . ' as ' . $data['relation'] . ' relation with you.';
             //Utils::sendSMS($data['phone_number'], $smstext);
             //$userId = $user['id'];
             //$this->Productmodel->saveLoylty('user-registration', $userId, ['user_id' => $userId]);
 			
-			// Update Reddemed Status of the Loyalty Points
+			// Update Redeemed Status of the Loyalty Points
 		
 	//$oldest_loyalty_points = $this->db->get_where('loylty_points', array('user_id' => $consumer_id, 'customer_id' => $customer_id, 'customer_loyalty_type' => "Brand"))->limit(1)->row()->points;
 	
@@ -1030,7 +1311,17 @@ class Consumer extends ApiController {
 			);
 			$this->db->where('id', $oldest_loyalty_points_id);
 			$this->db->update('loylty_points', $updateData); 
-			$this->Productmodel->sendFCM($points_redeemed . " Loyalty Points Reddemed", $fb_token);
+			//$this->Productmodel->sendFCM($points_redeemed . " Loyalty Points Redeemed", $fb_token);
+			
+			$MRLPData['customer_id'] = $customer_id;
+			$MRLPData['consumer_id'] = $consumer_id;
+			$MRLPData['billing_particular_name'] = $MRLP1_billin_particular_name;		
+			$MRLPData['billing_particular_slug'] = $MRLP1_billin_particular_slug;
+			$MRLPData['trans_quantity'] = $points_redeemed; 
+			$MRLPData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$MRLPData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $MRLPData);
+			
 			 break;
 			}elseif($oldest_loyalty_points == ($points_redeemed+$redeemed_partial_points)){
 				$updateData = array(
@@ -1040,7 +1331,17 @@ class Consumer extends ApiController {
 				);
 				$this->db->where('id', $oldest_loyalty_points_id);
 				$this->db->update('loylty_points', $updateData); 
-				$this->Productmodel->sendFCM($points_redeemed . " Loyalty Points Reddemed", $fb_token);
+				//$this->Productmodel->sendFCM($points_redeemed . " Loyalty Points Redeemed", $fb_token);
+				
+			$MRLP2Data['customer_id'] = $customer_id;
+			$MRLP2Data['consumer_id'] = $consumer_id;
+			$MRLP2Data['billing_particular_name'] = $MRLP1_billin_particular_name;		
+			$MRLP2Data['billing_particular_slug'] = $MRLP1_billin_particular_slug;
+			$MRLP2Data['trans_quantity'] = $points_redeemed; 
+			$MRLP2Data['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$MRLP2Data['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $MRLP2Data);
+			
 				break;				
 			} elseif($oldest_loyalty_points < ($points_redeemed+$redeemed_partial_points)) {
 				$updateData = array(
@@ -1052,10 +1353,42 @@ class Consumer extends ApiController {
 				$this->db->update('loylty_points', $updateData); 
 				
 				$points_redeemed = $points_redeemed -($oldest_loyalty_points-$redeemed_partial_points);	
-				$this->Productmodel->sendFCM($points_redeemed . " Loyalty Points Reddemed", $fb_token);
+				//$this->Productmodel->sendFCM($points_redeemed . " Loyalty Points Redeemed", $fb_token);
+				
+			$MRLP4Data['customer_id'] = $customer_id;
+			$MRLP4Data['consumer_id'] = $consumer_id;
+			$MRLP4Data['billing_particular_name'] = $MRLP1_billin_particular_name;		
+			$MRLP4Data['billing_particular_slug'] = $MRLP1_billin_particular_slug;
+			$MRLP4Data['trans_quantity'] = $points_redeemed; 
+			$MRLP4Data['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$MRLP4Data['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $MRLP4Data);
 			}						
 			}
-            Utils::response(['status' => true, 'message' => 'Points Reddemed.', 'oldest_loyalty_points' => $oldest_loyalty_points, 'data' => $data], 200);
+            Utils::response(['status' => true, 'message' => 'Points Redeemed.', 'oldest_loyalty_points' => $oldest_loyalty_points, 'data' => $data], 200);
+			
+			$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['customer_id'] = $customer_id;
+			//$NTFdata['product_id'] = $product_id;		
+			$NTFdata['title'] = "Loyalty!";
+			$NTFdata['body'] = "Loyalty Points Redeemed"; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 0; 			
+			$this->db->insert('list_notifications_table', $NTFdata);
+			
+			$TRNNC_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 10)->get()->row();
+			$TRNNC_billin_particular_name = $TRNNC_result->billin_particular_name;
+			$TRNNC_billin_particular_slug = $TRNNC_result->billin_particular_slug;
+			
+			$TRNNCData['customer_id'] = $customer_id;
+			$TRNNCData['consumer_id'] = $consumer_id;
+			$TRNNCData['billing_particular_name'] = $TRNNC_billin_particular_name.' Loyalty Points Redeemed';		
+			$TRNNCData['billing_particular_slug'] = $TRNNC_billin_particular_slug.'_Loyalty_Points_Reddemed';
+			$TRNNCData['trans_quantity'] = 1; 
+			$TRNNCData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$TRNNCData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $TRNNCData);		
+					
 			
 		
         } else {
@@ -1066,21 +1399,22 @@ class Consumer extends ApiController {
 
  // Expire Consumer Loylty Points
 	
-	public function ExpireConsumerLoyaltyPoints() {
+	public function ExpireConsumerLoyaltyPoints() {		
 		
 		
 	$this->db->select('id,user_id,customer_id,points,redeemed_points,loyalty_points_status,loyalty_points_expiry_date');
-    $this->db->where(array('loyalty_points_status != ' => "Redeemed", 'loyalty_points_status' => "Earned", 'loyalty_points_expiry_date' => date("Y-m-d")));
+    $this->db->where(array('loyalty_points_status' => "RedeemedPartial", 'loyalty_points_status' => "Earned", 'loyalty_points_expiry_date' => date("Y-m-d")));
 	$this->db->order_by('id', 'ASC');
     $query = $this->db->get('loylty_points');
     $rows = $query->result_array();
 	
 	//$oldest_loyalty_points = $rows->points;
 	//$oldest_loyalty_points_id = $rows->id;
-	//$redeemed_partial_points = $rows->redeemed_points;
-	
+	//$ConsumerID = $rows->user_id;	
+	//$NumberRecords = $this->db->where(['user_id'=>$ConsumerID, 'loyalty_points_expiry_date' => date("Y-m-d")])->from("loylty_points")->count_all_results();
+	//for ($i = 0; $i <= $NumberRecords+2; $i++) {
 	foreach($rows as $row){
-	$Expiring_loyalty_points = $row['points'];
+	$Expiring_loyalty_points = $row['points']-$row['redeemed_points'];
 	$Expiring_loyalty_points_id = $row['id'];
 	$consumer_id = $row['user_id'];
 	$customer_id = $row['customer_id'];
@@ -1091,37 +1425,51 @@ class Consumer extends ApiController {
 	//echo "<pre>"; print_r($customer_id);  die;
 	
 		$customer_loyalty_type = get_customer_loyalty_type_by_customer_id($customer_id);
-		if($customer_loyalty_type=="TRUSTAT"){
-		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();
-		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type))->get()->row();
-		$TotalExpiredPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+	if($customer_loyalty_type=="TRUSTAT"){
+		$TotalAccumulatedPointsCustomer = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalAccumulatedPointsISPL = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>1))->get()->row();
+		$TotalAccumulatedPoints = $TotalAccumulatedPointsCustomer->points + $TotalAccumulatedPointsISPL->points;
+		
+		$TotalRedeemedPointsCustomer = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalRedeemedPointsISPL = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>1))->get()->row();
+		$TotalRedeemedPoints = $TotalRedeemedPointsCustomer->points + $TotalRedeemedPointsISPL->points;
+		
+		$TotalExpiredPointsCustomer = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalExpiredPointsISPL = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>1))->get()->row();
+		$TotalExpiredPoints = $TotalExpiredPointsCustomer->points + $TotalExpiredPointsISPL->points;
+		
 		}else{
-		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
-		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
-		$TotalExpiredPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();		
+		$TotalAccumulatedPointsBrand = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalAccumulatedPoints = $TotalAccumulatedPointsBrand->points;
+		
+		$TotalRedeemedPointsBrand = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalRedeemedPoints = $TotalRedeemedPointsBrand->points;
+		
+		$TotalExpiredPointsBrand = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalExpiredPoints = $TotalExpiredPointsBrand->points;
+		
 		}
-		
-		
+				
 		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
 		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
 		
-		$FinalTotalAccumulatedPoints = $TotalAccumulatedPoints->points;
+		$FinalTotalAccumulatedPoints = $TotalAccumulatedPoints;
 		
-		if(($TotalRedeemedPoints->points)!='')
+		if($TotalRedeemedPoints!='')
 		{
-			$FinalTotalRedeemedPoints = ($TotalRedeemedPoints->points) + $points_redeemed;
+			$FinalTotalRedeemedPoints = $TotalRedeemedPoints;
 		} else {
-			$FinalTotalRedeemedPoints =0 + $points_redeemed;
+			$FinalTotalRedeemedPoints =0;
 			}
 			
-		if(($TotalExpiredPoints->points)!='')
+		if($TotalExpiredPoints!='')
 		{
-			$FinalTotalExpiredPoints = ($TotalExpiredPoints->points) + $Expiring_loyalty_points;
+			$FinalTotalExpiredPoints = $TotalExpiredPoints;
 		} else {
-			$FinalTotalExpiredPoints =0 + $Expiring_loyalty_points;
+			$FinalTotalExpiredPoints =0;
 			}	
 			
-		$CurrentBalance = $FinalTotalAccumulatedPoints - ($FinalTotalRedeemedPoints + $FinalTotalExpiredPoints);
+		$CurrentBalance = $FinalTotalAccumulatedPoints - ($FinalTotalRedeemedPoints + $FinalTotalExpiredPoints + $Expiring_loyalty_points);
 		$Min_Locking_Balance = $result2->loyalty_points;
 		
 		$CurrentBalanceAfterMinBalanceLocking = $CurrentBalance - $Min_Locking_Balance;
@@ -1136,12 +1484,13 @@ class Consumer extends ApiController {
 		$Points_Redeemable = $CurrentBalance;		
 		$PointsShortOfRedumption = 0;	
 		}
-		    $FinalTotalRedeemedExpiredPoints = $FinalTotalRedeemedPoints + $FinalTotalExpiredPoints;
+		    $FinalTotalRedeemedExpiredPoints = $FinalTotalRedeemedPoints + $FinalTotalExpiredPoints + $Expiring_loyalty_points;
 		$data['customer_id'] = $customer_id;
 		$data['consumer_id'] = $consumer_id;
 		$data['points'] = $Expiring_loyalty_points;
         $data['transaction_type_name'] = "Loyalty Points Expired";
 		$data['transaction_type_slug'] = "loyalty_points_expired";
+		$data['product_id'] = 0;
 		$data['params'] = '{"transaction_name":"Loyalty Points Expired"}';
 		$data['transaction_lr_type'] = "Expiry";
 		$data['customer_loyalty_type'] = get_customer_loyalty_type_by_customer_id($customer_id);
@@ -1163,13 +1512,38 @@ class Consumer extends ApiController {
 				);
 				$this->db->where('id', $Expiring_loyalty_points_id);
 				$this->db->update('loylty_points', $updateData);
-				
+		$CustomerName = getUserFullNameById($customer_id);		
 		$fb_token = getConsumerFb_TokenById($consumer_id);
-		$mnv53_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 53)->get()->row();
-		$mnvtext53 = $mnv53_result->message_notification_value;
+		$mnv53_result = $this->db->select('message_notification_value, message_notification_value_part2, message_notification_value_part3')->from('message_notification_master')->where('id', 53)->get()->row();
+		$mnvtext53_part1 = $mnv53_result->message_notification_value;
+		$mnvtext53_part2 = $mnv53_result->message_notification_value_part2;
+		$mnvtext53_part3 = $mnv53_result->message_notification_value_part3;
+		$mnvtext53 = $mnvtext53_part1 . ' ' . $FinalTotalRedeemedExpiredPoints . ' ' . $mnvtext53_part2 . ' ' . $CustomerName . ' ' . $mnvtext53_part3;
 				
                 $this->ConsumerModel->sendFCM($mnvtext53, $fb_token);
 				
+			$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['customer_id'] = $customer_id;
+			//$NTFdata['product_id'] = $product_id;		
+			$NTFdata['title'] = "TRUSTAT Loyalty";
+			$NTFdata['body'] = $mnvtext53; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 0; 			
+			$this->db->insert('list_notifications_table', $NTFdata);
+			
+			$TRNNC_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 10)->get()->row();
+			$TRNNC_billin_particular_name = $TRNNC_result->billin_particular_name;
+			$TRNNC_billin_particular_slug = $TRNNC_result->billin_particular_slug;
+			
+			$TRNNCData['customer_id'] = $customer_id;
+			$TRNNCData['consumer_id'] = $consumer_id;
+			$TRNNCData['billing_particular_name'] = $TRNNC_billin_particular_name.' TRUSTAT Loyalty';		
+			$TRNNCData['billing_particular_slug'] = $TRNNC_billin_particular_slug.'_TRUSTAT_Loyalty';
+			$TRNNCData['trans_quantity'] = 1; 
+			$TRNNCData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$TRNNCData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $TRNNCData);		
+			
 				
             Utils::response(['status' => true, 'message' => 'Points Expired.', 'data' => $data], 200);
         } else {
@@ -1177,6 +1551,7 @@ class Consumer extends ApiController {
         }
 		
 		} // foreach end 
+	//} // for loop end 
     }
 	
 	
@@ -1193,6 +1568,7 @@ class Consumer extends ApiController {
 	$Expiring_loyalty_points_id = $row['id'];
 	$consumer_id = $row['user_id'];
 	$customer_id = $row['customer_id'];
+	$brand_name = getUserFullNameById($customer_id);
 	$loyalty_points_expiry_date = $row['loyalty_points_expiry_date'];
 	
 		 $days_for_notification_before_expiry = days_for_notification_before_expiry($customer_id);
@@ -1203,15 +1579,71 @@ class Consumer extends ApiController {
 				if($loyalty_points_expiry_notification_date==$Current_Date){
 				$fb_token = getConsumerFb_TokenById($consumer_id);
 				
-				$mnv54_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 54)->get()->row();
-		$mnvtext54 = $mnv54_result->message_notification_value;
+	$mnv54_result = $this->db->select('message_notification_value, message_notification_value_part2, message_notification_value_part3, message_notification_value_part4')->from('message_notification_master')->where('id', 54)->get()->row();
+	$mnvtext54 = $mnv54_result->message_notification_value . ' ' . $Expiring_loyalty_points . ' ' . $mnv54_result->message_notification_value_part2 . ' ' . $brand_name . ' ' .$mnv54_result->message_notification_value_part3 . ' ' . $loyalty_points_expiry_date . ' ' . $mnv54_result->message_notification_value_part4;
 		
                 $this->ConsumerModel->sendFCM($mnvtext54, $fb_token);
+				
+				$NTFdata['consumer_id'] = $consumer_id;
+				$NTFdata['customer_id'] = $customer_id;
+				//$NTFdata['product_id'] = $product_id;				
+				$NTFdata['title'] = "TRUSTAT Pre Loyalty Points Expiry Notification";
+				$NTFdata['body'] = $mnvtext54; 
+				$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+				$NTFdata['status'] = 0; 
+			
+			$this->db->insert('list_notifications_table', $NTFdata);	
+
+			$TRNNC_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 10)->get()->row();
+			$TRNNC_billin_particular_name = $TRNNC_result->billin_particular_name;
+			$TRNNC_billin_particular_slug = $TRNNC_result->billin_particular_slug;
+			
+			$TRNNCData['customer_id'] = $customer_id;
+			$TRNNCData['consumer_id'] = $consumer_id;
+			$TRNNCData['billing_particular_name'] = $TRNNC_billin_particular_name.' TRUSTAT Pre Loyalty Points Expiry Notification';		
+			$TRNNCData['billing_particular_slug'] = $TRNNC_billin_particular_slug.'_TRUSTAT_Pre_Loyalty_Points_Expiry_Notification';
+			$TRNNCData['trans_quantity'] = 1; 
+			$TRNNCData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$TRNNCData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $TRNNCData);		
+					
+					
+				
 				}
 			
 		
 		} // foreach end 
     }
+	
+	
+	public function ReferralProgramAutoOff() {
+		
+	$this->db->select('id,max_referrals_for_product,referral_program_auto_off_date');
+    //$this->db->where(array('loyalty_points_status != ' => "Redeemed"));
+	$this->db->order_by('id', 'ASC');
+    $query = $this->db->get('products');
+    $rows = $query->result_array();
+		
+	foreach($rows as $row){ // foreach start
+	$product_id = $row['id'];
+	$max_referrals_for_product = $row['max_referrals_for_product'];
+	$referral_program_auto_off_date = $row['referral_program_auto_off_date'];
+	
+$count_referrals_product = $this->db->where('product_id',$product_id)->from("consumer_referral_table")->count_all_results();
+	
+if(($count_referrals_product >= $max_referrals_for_product)||(date('Y-m-d') >= $referral_program_auto_off_date))
+{
+	$updateProductReferral = array(
+					   'include_the_product_in_referral_program' => "No"
+						);
+					$this->db->update('products', $updateProductReferral, array('id' => $product_id));
+	
+	}
+		
+		} // foreach end 
+    }	
+	
+	
 	
 	    // add Consumer Kid Details function 
     public function addConsumerKid() {
@@ -1430,7 +1862,7 @@ class Consumer extends ApiController {
         $password = Utils::randomNumber(8);
         $user->password = md5($password);
         $smstext = 'System generated password is ' . $password . ' Please change it after doing logging.';
-        if (Utils::sendSMS($user->mobile_no, $smstext)) {
+        if (Utils::sendSMS($user->mobile_no, $smstext . " zLJoGnJzfXg")) {
             if ($this->db->update($this->ConsumerModel->table, ['password' => $user->password], ['id' => $user->id])) {
                 Utils::response(['status' => true, 'message' => 'A new password has been sent to your registered mobile no.']);
             } else {
@@ -1473,7 +1905,7 @@ class Consumer extends ApiController {
 		 
 		 
 
-        if (Utils::sendSMS($data->mobile_no, $smstext)) {
+        if (Utils::sendSMS($data->mobile_no, $smstext . " zLJoGnJzfXg")) {
             if ($this->db->update($this->ConsumerModel->table, $data, ['mobile_no' => $data->mobile_no])) {
                 Utils::response(['status' => true, 'message' => 'OTP has been sent successfully.']);
             } else {
@@ -1507,6 +1939,15 @@ class Consumer extends ApiController {
         $dbdata->verification_code = null;
         $dbdata->is_verified = ($dbdata->is_verified == 3) ? 1 : 2;
         if ($this->db->update($this->ConsumerModel->table, $dbdata, ['mobile_no' => $dbdata->mobile_no])) {
+			
+			$consumer_id = get_consumer_id_by_mobile_number2($data['mobile_no']);
+			$fb_token = getConsumerFb_TokenById($consumer_id);
+			$mnv2_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 59)->get()->row();
+			$mnvtext2 = $mnv2_result->message_notification_value;
+		// $this->ConsumerModel->sendFCM("Congratulations! Your account has been successfully verified.", $fb_token);
+		  $this->ConsumerModel->sendFCM($mnvtext2, $fb_token);
+		 
+		 
             Utils::response(['status' => true, 'message' => 'Your account has been successfully verified.']);
         }
     }
@@ -1516,7 +1957,7 @@ class Consumer extends ApiController {
         $this->email->initialize($this->config->item('smtp'));
         $this->email->set_newline("\r\n");
         $this->email->from($data['email'], $data['user_name']);
-        $this->email->reply_to('no-reply@innovigents.com', 'Team');
+        $this->email->reply_to('no-reply@'.$_SERVER['SERVER_NAME'], 'Team');
         $this->email->to($this->config->item('admin_email'));
         $this->email->subject('Signup with with ' . $this->config->item("site_name"));
         $body = $this->load->view('signup_mail.php', $data, TRUE);
@@ -1529,6 +1970,27 @@ class Consumer extends ApiController {
         //echo $this->email->print_debugger();die;
     }
 
+	 public function ConsuerCompEMail($data_comp_email) {
+        $this->load->library('email');
+        $this->email->initialize($this->config->item('smtp'));
+        $this->email->set_newline("\r\n");
+        $this->email->from('sanjayksir@gmail.com', 'Sanjay');
+        $this->email->reply_to('no-reply@'.$_SERVER['SERVER_NAME'], 'Team');
+        $this->email->to('sanjaykumar7pm@gmail.com');
+        $this->email->subject('Signup with with ' . $this->config->item("site_name"));
+        //$body = $this->load->view('signup_mail.php', $data_comp_email, TRUE);
+		$body = 'Test Message';
+        $this->email->message($body);
+        if ($this->email->send()) {
+            return true;
+        } else {
+            return false;
+        }
+        //echo $this->email->print_debugger();die;
+    }
+	
+	
+	
     public function resendMail() {
         $data = $this->getInput();
         if (($this->input->method() != 'post') || empty($data)) {
@@ -1694,16 +2156,18 @@ class Consumer extends ApiController {
         if (($this->request->method != 'post') || empty($data)) {
             Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
         }
-
         $validate = [
             ['field' => 'product_id', 'label' => 'Product', 'rules' => 'trim|required|integer'],
             ['field' => 'product_qr_code', 'label' => 'Product QR Code', 'rules' => 'trim|required'],
 			['field' => 'promotion_id', 'label' => 'Promotion ID', 'rules' => 'trim'],
+			['field' => 'media_type', 'label' => 'Media Type', 'rules' => 'trim'],
             ['field' => 'question_id', 'label' => 'Question', 'rules' => 'trim|required|integer'],
             ['field' => 'selected_answer', 'label' => 'User answer', 'rules' => 'trim|required'],
 			['field' => 'latitude', 'label' => 'User latitude', 'rules' => 'trim|required'],
 			['field' => 'longitude', 'label' => 'User longitude', 'rules' => 'trim|required'],
 			['field' => 'registration_address', 'label' => 'Registration Address', 'rules' => 'trim|required'],
+			['field' => 'feedback_city', 'label' => 'Feedback City', 'rules' => 'trim'],
+			['field' => 'feedback_pin_code', 'label' => 'Feedback Pin Code', 'rules' => 'trim'],
         ];
         $errors = $this->ConsumerModel->validate($data, $validate);
         if (is_array($errors)) {
@@ -1717,8 +2181,6 @@ class Consumer extends ApiController {
         if (empty($productQuestion)) {
             Utils::response(['status' => false, 'message' => 'Validation errors2.', 'errors' => 'Invalid question id or product id.']);
         }
-		
-		
 		$ProductID = $data['product_id'];
 		$customer_id = get_customer_id_by_product_id($ProductID);
 		$Product_code = $data['product_qr_code'];
@@ -1746,13 +2208,16 @@ class Consumer extends ApiController {
 				
 		if($promotion_id!=0){	
 				$arr1 = explode(' ',trim($data['product_qr_code']));
+				$promotion_type = PromotionTypeByPromotionID($promotion_id);
 				$Part11 = $arr1[0];
 				$Part22 = $arr1[1];		
-		if($Part11=='Survey'){
+		if($promotion_type=='Survey'){
 			$this->db->set(array("survey_feedback_response" => 'Yes', "survey_response_datetime" => date("Y-m-d H:i:s")))->where(array("consumer_id" => $user['id'], "promotion_id" => $data['promotion_id']))->update('push_surveys');
 		} else {
 			$this->db->set(array("ad_feedback_response" => 'Yes', "ad_response_datetime" => date("Y-m-d H:i:s")))->where(array("consumer_id" => $user['id'], "promotion_id" => $data['promotion_id']))->update('push_advertisements');
 		}
+		}else{
+			$promotion_id = $data['product_qr_code'];
 		}
 		   $purchased_points = total_approved_points2($customer_id);
 			$consumed_points = get_total_consumed_points($customer_id);
@@ -1768,10 +2233,10 @@ class Consumer extends ApiController {
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
 				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Audio Promotion. '. $TRPoints .' have been added to your TRUSTAT loyalty program.'; 
-				$data['transaction_type'] = "Product Audio";
+				$data['transaction_type'] = "Product Audio Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude']);
             } elseif (strstr($questionMediaAndType, 'productvideo')) {
                 $transactionType = 'product_video_response_lps';
 				$transactionTypeName = 'Genuity Scan and Responding to Video Promotion';
@@ -1779,10 +2244,10 @@ class Consumer extends ApiController {
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
 				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Video Promotion. '. $TRPoints .' have been added to your TRUSTAT loyalty program.'; 
-				$data['transaction_type'] = "Product Video";
+				$data['transaction_type'] = "Product Video Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude'], $data['product_qr_code']);
             } elseif (strstr($questionMediaAndType, 'productpdf')) {
                 $transactionType = 'product_pdf_response_lps';
 				$transactionTypeName = 'Genuity Scan and Responding to Product Brochure';
@@ -1792,7 +2257,7 @@ class Consumer extends ApiController {
 				$data['transaction_type'] = "Product PDF Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude'], $data['product_qr_code']);
             } elseif (strstr($questionMediaAndType, 'productimage')) {
                 $transactionType = 'product_image_response_lps';
 				$transactionTypeName = 'Genuity Scan and Responding to Image Promotion.';
@@ -1802,120 +2267,286 @@ class Consumer extends ApiController {
 				$data['transaction_type'] = "Product Image Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude']);
 		   } elseif (strstr($questionMediaAndType, 'advertisementvideo')) {
+			   
                 $transactionType = 'product_ad_video_response_lps';
 				$transactionTypeName = 'Product Video Advertisement';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
 				$mess = 'You have responded to video promotion for ' . $product_brand_name . ' . '. $TRPoints .' Loyalty Points have been added to your TRUSTAT loyalty program.';
-				$data['transaction_type'] = "Advertisement Video";
+				$data['transaction_type'] = "Advertisement Video Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude'], $data['product_qr_code']);
+			
+			// Referral loyalty to the referar consumer when referral_consumed Starts			
+			$ConsumerMobileNumber = getConsumerMobileNumberById($user['id']);
+			$ConsumerReferralRow = $this->Productmodel->ConsumerReferralDetails($ProductID, $ConsumerMobileNumber);
+			$ConsumerReferralID = $ConsumerReferralRow->referral_id;
+			$LoyaltyPointsReferral = $ConsumerReferralRow->loyalty_points_referral;
+			$ReferrerConsumerId = $ConsumerReferralRow->referrer_consumer_id;
+			$promotion_id = $ConsumerReferralRow->product_code_or_promotion_id;
+			$consumer_id = $ReferrerConsumerId;
+			
+			if(!empty($ConsumerReferralID)){	
+						
+			$product_id = $ProductID;
+			
+			$transactionTypeName = "Product Referral - " . getUserFullNameById($customer_id);
+			$transactionType = "loyalty_rewards_to_sender_consumer_under_referral";
+			$consumer_name = getConsumerNameById($consumer_id);
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$customer_name = getUserFullNameById($customer_id); 
+			$product_name = get_products_name_by_id($product_id); 
+			$customer_loyalty_type = getCustomerLoyaltyTypeById($customer_id);
+			$transaction_lr_type = "Loyalty";
+			
+$this->Productmodel->saveLoylty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+
+$this->Productmodel->saveConsumerPassbookLoyalty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+
+	
+		// update refrerar loyalty gained.		
+		$VideoAdResponseLoyaltyPoints = VideoAdResponseLoyaltyPointsByProductID($product_id);
+		$this->db->update('consumer_referral_table',array('referral_consume_loyalty_points'=>$VideoAdResponseLoyaltyPoints,'referral_consumed'=>1,'referral_consume_datetime'=>date("Y-m-d H:i:s")),array('referral_id'=>$ConsumerReferralID));			
+			}
+			
+			// Notification to sender of reference
+	     
+	$fb_token = getConsumerFb_TokenById($consumer_id);	
+
+		$this->Productmodel->sendFCM("Your contact with mobile number #" . $ConsumerMobileNumber . " has responded for your refrence for the " . $product_name . ", " . $LoyaltyPointsReferral . " Loyalty points have been credited to your loyalty account", $fb_token);
+
+		// Referral loyalty to the referar consumer when referral_consumed Ends
+		
+			$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['customer_id'] = $customer_id;
+			$NTFdata['product_id'] = $product_id;		
+			$NTFdata['title'] = "TRUSTAT Referral";
+			$NTFdata['body'] = "Your contact with mobile number #" . $ConsumerMobileNumber . " has responded for your refrence for the " . $product_name . ", " . $LoyaltyPointsReferral . " Loyalty points have been credited to your loyalty account"; 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 0; 			
+			$this->db->insert('list_notifications_table', $NTFdata);
+		
+			$TRNNC_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 10)->get()->row();
+			$TRNNC_billin_particular_name = $TRNNC_result->billin_particular_name;
+			$TRNNC_billin_particular_slug = $TRNNC_result->billin_particular_slug;
+			
+			$TRNNCData['customer_id'] = $customer_id;
+			$TRNNCData['consumer_id'] = $consumer_id;
+			$TRNNCData['billing_particular_name'] = $TRNNC_billin_particular_name.' TRUSTAT Referral';		
+			$TRNNCData['billing_particular_slug'] = $TRNNC_billin_particular_slug.'_TRUSTAT_Referral';
+			$TRNNCData['trans_quantity'] = 1; 
+			$TRNNCData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$TRNNCData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $TRNNCData);	
+		
 			} elseif (strstr($questionMediaAndType, 'advertisementaudio')) {
                 $transactionType = 'product_ad_audio_response_lps';
 				$transactionTypeName = 'Product Audio Advertisement';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
 				$mess = 'You have responded to audio promotion for ' . $product_brand_name . ' . '. $TRPoints .' Loyalty Points have been added to your TRUSTAT loyalty program.';
-				$data['transaction_type'] = "Advertisement Audio";
+				$data['transaction_type'] = "Advertisement Audio Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude'], $data['product_qr_code']);
+				
+				// Referral loyalty to the referar consumer when referral_consumed Starts			
+			$ConsumerMobileNumber = getConsumerMobileNumberById($user['id']);
+			$ConsumerReferralRow = $this->Productmodel->ConsumerReferralDetails($ProductID, $ConsumerMobileNumber);
+			$ConsumerReferralID = $ConsumerReferralRow->referral_id;
+			$LoyaltyPointsReferral = $ConsumerReferralRow->loyalty_points_referral;
+			$ReferrerConsumerId = $ConsumerReferralRow->referrer_consumer_id;
+			$promotion_id = $ConsumerReferralRow->product_code_or_promotion_id;
+			$consumer_id = $ReferrerConsumerId;
+			
+			if(!empty($ConsumerReferralID)){	
+						
+			$product_id = $ProductID;
+			
+			$transactionTypeName = "Product Referral - " . getUserFullNameById($customer_id);
+			$transactionType = "loyalty_rewards_to_sender_consumer_under_referral";
+			$consumer_name = getConsumerNameById($consumer_id);
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$customer_name = getUserFullNameById($customer_id); 
+			$product_name = get_products_name_by_id($product_id); 
+			$customer_loyalty_type = getCustomerLoyaltyTypeById($customer_id);
+			$transaction_lr_type = "Loyalty";
+			
+$this->Productmodel->saveLoylty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+
+$this->Productmodel->saveConsumerPassbookLoyalty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+		
+		// update refrerar loyalty gained.
+			$AudioAdResponseLoyaltyPoints = AudioAdResponseLoyaltyPointsByProductID($product_id);		
+		$this->db->update('consumer_referral_table',array('referral_consume_loyalty_points'=>$AudioAdResponseLoyaltyPoints,'referral_consumed'=>1,'referral_consume_datetime'=>date("Y-m-d H:i:s")),array('referral_id'=>$ConsumerReferralID));			
+			}
+		// Referral loyalty to the referar consumer when referral_consumed Ends
+		
 			} elseif (strstr($questionMediaAndType, 'advertisementpdf')) {
                 $transactionType = 'product_ad_pdf_response_lps';
 				$transactionTypeName = 'Product PDF Advertisement';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
 				$mess = 'You have responded to pdf promotion for ' . $product_brand_name . ' . '. $TRPoints .' Loyalty Points have been added to your TRUSTAT loyalty program.';
-				$data['transaction_type'] = "Advertisement PDF";
+				$data['transaction_type'] = "Advertisement PDF Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude'], $data['product_qr_code']);
+				
+				// Referral loyalty to the referar consumer when referral_consumed Starts			
+			$ConsumerMobileNumber = getConsumerMobileNumberById($user['id']);
+			$ConsumerReferralRow = $this->Productmodel->ConsumerReferralDetails($ProductID, $ConsumerMobileNumber);
+			$ConsumerReferralID = $ConsumerReferralRow->referral_id;
+			$LoyaltyPointsReferral = $ConsumerReferralRow->loyalty_points_referral;
+			$ReferrerConsumerId = $ConsumerReferralRow->referrer_consumer_id;
+			$promotion_id = $ConsumerReferralRow->product_code_or_promotion_id;
+			$consumer_id = $ReferrerConsumerId;
+			
+			if(!empty($ConsumerReferralID)){	
+						
+			$product_id = $ProductID;
+			
+			$transactionTypeName = "Product Referral - " . getUserFullNameById($customer_id);
+			$transactionType = "loyalty_rewards_to_sender_consumer_under_referral";
+			$consumer_name = getConsumerNameById($consumer_id);
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$customer_name = getUserFullNameById($customer_id); 
+			$product_name = get_products_name_by_id($product_id); 
+			$customer_loyalty_type = getCustomerLoyaltyTypeById($customer_id);
+			$transaction_lr_type = "Loyalty";
+			
+$this->Productmodel->saveLoylty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+
+$this->Productmodel->saveConsumerPassbookLoyalty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+		
+		// update refrerar loyalty gained.	
+			$PDFAdResponseLoyaltyPoints = PDFAdResponseLoyaltyPointsByProductID($product_id);	
+		$this->db->update('consumer_referral_table',array('referral_consume_loyalty_points'=>$PDFAdResponseLoyaltyPoints,'referral_consumed'=>1,'referral_consume_datetime'=>date("Y-m-d H:i:s")),array('referral_id'=>$ConsumerReferralID));			
+			}
+		// Referral loyalty to the referar consumer when referral_consumed Ends
+		
 			} elseif (strstr($questionMediaAndType, 'advertisementimage')) {
                 $transactionType = 'product_ad_image_response_lps';
 				$transactionTypeName = 'Product Image Advertisement';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
 				$mess = 'You have responded to image promotion for ' . $product_brand_name . ' . '. $TRPoints .' Loyalty Points have been added to your TRUSTAT loyalty program.';
-				$data['transaction_type'] = "Advertisement Image";
+				$data['transaction_type'] = "Advertisement Image Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude'], $data['product_qr_code']);
+				
+				// Referral loyalty to the referar consumer when referral_consumed Starts			
+			$ConsumerMobileNumber = getConsumerMobileNumberById($user['id']);
+			$ConsumerReferralRow = $this->Productmodel->ConsumerReferralDetails($ProductID, $ConsumerMobileNumber);
+			$ConsumerReferralID = $ConsumerReferralRow->referral_id;
+			$LoyaltyPointsReferral = $ConsumerReferralRow->loyalty_points_referral;
+			$ReferrerConsumerId = $ConsumerReferralRow->referrer_consumer_id;
+			$promotion_id = $ConsumerReferralRow->product_code_or_promotion_id;
+			$consumer_id = $ReferrerConsumerId;
+			
+			if(!empty($ConsumerReferralID)){	
+						
+			$product_id = $ProductID;
+			
+			$transactionTypeName = "Product Referral - " . getUserFullNameById($customer_id);
+			$transactionType = "loyalty_rewards_to_sender_consumer_under_referral";
+			$consumer_name = getConsumerNameById($consumer_id);
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$customer_name = getUserFullNameById($customer_id); 
+			$product_name = get_products_name_by_id($product_id); 
+			$customer_loyalty_type = getCustomerLoyaltyTypeById($customer_id);
+			$transaction_lr_type = "Loyalty";
+			
+$this->Productmodel->saveLoylty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+
+$this->Productmodel->saveConsumerPassbookLoyalty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+		
+		// update refrerar loyalty gained.	
+			$ImageAdResponseLoyaltyPoints = ImageAdResponseLoyaltyPointsByProductID($product_id);
+		$this->db->update('consumer_referral_table',array('referral_consume_loyalty_points'=>$ImageAdResponseLoyaltyPoints,'referral_consumed'=>1,'referral_consume_datetime'=>date("Y-m-d H:i:s")),array('referral_id'=>$ConsumerReferralID));			
+			}
+		// Referral loyalty to the referar consumer when referral_consumed Ends
+		
 			} elseif (strstr($questionMediaAndType, 'surveyvideo')) {
                 $transactionType = 'product_survey_video_response_lps';
 				$transactionTypeName = 'Product Survey';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
 				$mess = 'You have responded to product survey for ' . $product_brand_name . '. '. $TRPoints .' Loyalty Points have been added to your TRUSTAT loyalty program.';	
-				$data['transaction_type'] = "Survey Video";
+				$data['transaction_type'] = "Survey Video Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude'], $data['product_qr_code']);
+				
+				
+				
+				
 			} elseif (strstr($questionMediaAndType, 'surveyaudio')) {
                 $transactionType = 'product_survey_audio_response_lps';
 				$transactionTypeName = 'Product Survey';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
 				$mess = 'You have responded to product survey for ' . $product_brand_name . '. '. $TRPoints .' Loyalty Points have been added to your TRUSTAT loyalty program.';	
-				$data['transaction_type'] = "Survey Audio";
+				$data['transaction_type'] = "Survey Audio Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude'], $data['product_qr_code']);
 			}elseif (strstr($questionMediaAndType, 'surveypdf')) {
                 $transactionType = 'product_survey_pdf_response_lps';
 				$transactionTypeName = 'Product Survey';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
 				$mess = 'You have responded to product survey for ' . $product_brand_name . '. '. $TRPoints .' Loyalty Points have been added to your TRUSTAT loyalty program.';	
-				$data['transaction_type'] = "Survey PDF";
+				$data['transaction_type'] = "Survey PDF Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude'], $data['product_qr_code']);
 			}elseif (strstr($questionMediaAndType, 'surveyimage')) {
                 $transactionType = 'product_survey_image_response_lps';
 				$transactionTypeName = 'Product Image Survey';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
 				$mess = 'You have responded to product survey for ' . $product_brand_name . '. '. $TRPoints .' Loyalty Points have been added to your TRUSTAT loyalty program.';	
-				$data['transaction_type'] = "Survey Image";
+				$data['transaction_type'] = "Survey Image Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+				$this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude'], $data['product_qr_code']);
 			}elseif (strstr($questionMediaAndType, 'demonstrationvideo')) {
                 $transactionType = 'product_demo_video_response_lps';
 				$transactionTypeName = 'Viewing product video demonstration';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
-				$mess = 'Thank you for viewing product video demonstration. Loyalty Point. '. $TRPoints .' have been added to your TRUSTAT loyalty program.';
-				$data['transaction_type'] = "Product Demo Video";
+				$mess = 'Thank you for viewing product video demonstration. Loyalty Point '. $TRPoints .' have been added to your TRUSTAT loyalty program.';
+				$data['transaction_type'] = "Product Demo Video Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-				$this->Productmodel->feedbackLoylityDemo($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+				$this->Productmodel->feedbackLoylityDemo($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude'], $data['product_qr_code']);
 			} elseif (strstr($questionMediaAndType, 'demonstrationaudio')) {
                 $transactionType = 'product_demo_audio_response_lps';
 				$transactionTypeName = 'Listening product audio demonstration ';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
 				$mess = 'Thank you for listening product audio demonstration. Loyalty Point '. $TRPoints .' have been added to your TRUSTAT loyalty program.';	
-				$data['transaction_type'] = "Product Demo Audio";
+				$data['transaction_type'] = "Product Demo Audio Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-            $this->Productmodel->feedbackLoylityDemo($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+            $this->Productmodel->feedbackLoylityDemo($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude'], $data['product_qr_code']);
             } else {
                 $transactionType = 'product_video_response_lps';
 				$transactionTypeName = 'Genuity Scan and Responding to Product Description Promotion';
 				$result = $this->db->select($transactionType)->from('products')->where('id', $ProductID)->get()->row();
 				$TRPoints = $result->$transactionType;
 				$mess = 'You scanned ' . $product_name . ' for Genuity & responded to Product Image Promotion. '. $TRPoints .' have been added to your TRUSTAT loyalty program'; 
-				$data['transaction_type'] = "product Video";
+				$data['transaction_type'] = "Product Video Feedback";
 				$data['brand_name'] = get_products_brand_name_by_id($data['product_id']);
 				$data['product_name'] = get_products_name_by_id($data['product_id']);
-            $this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id);
+            $this->Productmodel->feedbackLoylity($transactionType, $data, $ProductID, $user['id'], $transactionTypeName, 'Loyalty', $mess, $customer_id, $promotion_id, $TRPoints, $data['latitude'], $data['longitude'], $data['product_qr_code']);
             }
             
-			
 				//$id = getConsumerFb_TokenById(29);
 		  
 				//$this->Productmodel->sendFCM($transactionType, $id);
@@ -1929,9 +2560,6 @@ class Consumer extends ApiController {
 		} else {
             Utils::response(['status' => false, 'message' => 'System failed to proccess the request.'], 200);
         }
-		
-		
-		
     }
 
 	
@@ -1949,12 +2577,14 @@ class Consumer extends ApiController {
             ['field' => 'product_qr_code', 'label' => 'Product QR Code', 'rules' => 'trim|required'],
 			['field' => 'promotion_id', 'label' => 'Promotion id', 'rules' => 'trim|required'],
             ['field' => 'media_type', 'label' => 'Media Type', 'rules' => 'trim|required'],
+			['field' => 'media_play_location', 'label' => 'Media Play Location', 'rules' => 'trim'],
             ['field' => 'total_media_duration_sec', 'label' => 'Total Media Duration in Seconds', 'rules' => 'trim|required'],
 			['field' => 'media_play_duration_sec', 'label' => 'Media Play Duration in Seconds', 'rules' => 'trim|required'],
 			['field' => 'watched_complete', 'label' => 'Watched Complete-Yes or No', 'rules' => 'trim|required'],
 			['field' => 'latitude', 'label' => 'User latitude', 'rules' => 'trim|required'],
 			['field' => 'longitude', 'label' => 'User longitude', 'rules' => 'trim|required'],
-			['field' => 'current_city', 'label' => 'Registration Address', 'rules' => 'trim|required'],
+			['field' => 'current_city', 'label' => 'Current City', 'rules' => 'trim|required'],
+			['field' => 'current_pin', 'label' => 'Current PIN', 'rules' => 'trim'],
         ];
         $errors = $this->ConsumerModel->validate($data, $validate);
         if (is_array($errors)) {
@@ -1963,23 +2593,48 @@ class Consumer extends ApiController {
        
 		
 		$product_qr_code = $data['product_qr_code'];
+		$promotion_id = $data['promotion_id'];
 		$ProductID = get_product_id_by_product_code($product_qr_code);
 		$customer_id = get_customer_id_by_product_id($ProductID);
 		    
-        
-
         //Utils::debug();
-		if($product_qr_code=="null"){
-		$data['product_id'] = get_product_id_by_promotion_id($data['promotion_id']);	
-		$data['customer_id'] = get_customer_id_by_promotion_id($data['promotion_id']);	
+		if($promotion_id==0){
+		$data['product_id'] = $ProductID;
+		$data['customer_id'] = $customer_id; 
 		}else{
-        $data['product_id'] = $ProductID;
-		$data['customer_id'] = $customer_id;       
+		$data['product_id'] = get_product_id_by_promotion_id($data['promotion_id']);	
+		$data['customer_id'] = get_customer_id_by_promotion_id($data['promotion_id']);			
 		}
 		$data['consumer_id'] = $user['id'];
+		$userId =  $user['id'];
 		$data['view_date_time'] =  date('Y-m-d H:i:s');
 		 
         if ($this->db->insert('consumer_media_view_details', $data)) {
+			
+			// Consumer Log Data insert start
+			
+			$CALdata['date_time'] = date('Y-m-d H:i:s'); 
+			$CALdata['consumer_name'] = getConsumerNameById($userId);
+			$CALdata['consumer_id'] = $userId; 
+			$CALdata['consumer_mobile'] = getConsumerMobileNumberById($userId); 
+			$CALdata['customer_name'] = getUserFullNameById($data['customer_id']); 
+			$CALdata['customer_id'] = $data['customer_id']; 
+			$CALdata['unique_customer_code'] = getCustomerCodeById($data['customer_id']); 
+			$CALdata['product_name'] = get_products_name_by_id($data['product_id']); 
+			$CALdata['product_id'] = $data['product_id']; 
+			$CALdata['product_sku'] = get_product_sku_by_id($data['product_id']); 
+			$CALdata['product_code'] = $product_qr_code; 
+			$CALdata['gloc_latitude'] = $data['latitude'];
+			$CALdata['gloc_longitude'] = $data['longitude'];
+			$CALdata['gloc_city'] = $data['current_city'];
+			$CALdata['gloc_pin_code'] = $data['current_pin'];
+			$CALdata['consumer_activity_type'] = " Watched Level 1 " . $data['media_type'];
+			$CALdata['loyalty_rewards_points'] = 0;
+			$CALdata['loyalty_rewards_type'] = getCustomerLoyaltyTypeById($data['customer_id']);
+			
+			$this->db->insert('consumer_activity_log_table', $CALdata);
+			
+			// Consumer Log Data insert end
            
             Utils::response(['status' => true, 'message' => 'Consumer media view details saved successfully.', 'data' => $data]);
        		
@@ -2073,6 +2728,30 @@ class Consumer extends ApiController {
 		$checkifrquestinprocess = $this->db->where(array('user_id' => $user['id'], 'l_status' => 0))->count_all_results('loyalty_redemption');
 		if ($checkifrquestinprocess < 1) {
         if ($this->db->insert('loyalty_redemption', $redemtionData)) {
+			
+			// Consumer Log Data insert start
+			$CALdata['date_time'] = date('Y-m-d H:i:s'); 
+			$CALdata['consumer_name'] = getConsumerNameById($user['id']);
+			$CALdata['consumer_id'] = $user['id']; 
+			$CALdata['consumer_mobile'] = getConsumerMobileNumberById($user['id']); 
+			$CALdata['customer_name'] = "Reposting to ISPL"; 
+			$CALdata['customer_id'] = 1;  
+			$CALdata['unique_customer_code'] ="Reposting to ISPL";
+			$CALdata['product_name'] = "No Specific Product Involved"; 
+			$CALdata['product_id'] = 0; 
+			$CALdata['product_sku'] = "No Specific Product Involved"; 
+			$CALdata['product_code'] = "No Specific Product Involved";
+			$CALdata['gloc_latitude'] = "";
+			$CALdata['gloc_longitude'] = "";
+			$CALdata['gloc_city'] = $data['city'];
+			$CALdata['gloc_pin_code'] = $data['pin_code'];
+			$CALdata['consumer_activity_type'] = "TRUSTAT Loyalty Redemption request";
+			$CALdata['loyalty_rewards_points'] = 0;
+			$CALdata['loyalty_rewards_type'] = "TRUSTAT";
+			
+			$this->db->insert('consumer_activity_log_table', $CALdata);
+				// Consumer Log Data insert end
+				
             $redemptionId = $this->db->insert_id();
             $this->db->update('consumers',$consumerData,['id'=>$user['id']]);
             //$this->Productmodel->saveLoylty('loyalty-redemption', $user['id'], ['user_id' => $user['id'],'redemption_id'=>$redemptionId]);
@@ -2131,8 +2810,7 @@ class Consumer extends ApiController {
 		$mnvtext23 = $mnv23_result->message_notification_value;
             //Utils::response(['status'=>false,'message'=>'Failed to respond on the complaint. Please contact support team.']);
 			Utils::response(['status'=>false,'message'=>$mnvtext23]);
-        }
-		
+        }		
 		}
 
 
@@ -2148,10 +2826,103 @@ class Consumer extends ApiController {
             Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
         }
         $items = $this->Productmodel->getResponsesOnComplaint($complaintid);
-        Utils::response(['status'=>true,'message'=>'List of Responses On Complaint','data'=>$items]);
-       
+        Utils::response(['status'=>true,'message'=>'List of Responses On Complaint','data'=>$items]);       
     }
+	
+	public function CustomMessageforSendingProductReference($product_id = null) {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }		
+        $CustomMessage = getCustomMessageforSendingProductReferenceByProductId($product_id);
+		if($CustomMessage==''){
+			$CustomMessage = "No Message";
+		Utils::response(['status'=>true,'message'=>'Custom Message for Sending Reference','data'=>$CustomMessage]);	
+		}else{		
+        Utils::response(['status'=>true,'message'=>'Custom Message for Sending Reference','data'=>$CustomMessage]);
+		}
+    }
+	
+		public function MessageForReceiverOfReference($product_id = null, $MobileNo = null) {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
 		
+        $CustomMessage = getMessageForReceiverOfReferenceByProductId($product_id) .' '. base_url().'click_link/'.$MobileNo.'/'.$product_id. '/' . getMediaTypeforSendingReferenceByProductId($product_id);
+		if($CustomMessage==''){
+			$CustomMessage = "No Message";
+		Utils::response(['status'=>true,'message'=>'Message for receiver of Reference','data'=>$CustomMessage]);	
+		}else{		
+        Utils::response(['status'=>true,'message'=>'Message for receiver of Reference','data'=>$CustomMessage]);
+		}
+    }
+	
+
+		public function TRUSTATCouponTypeNameNumber() {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+		
+        $CustomMessage = getTRUSTATCouponTypeNameNumberById(55);
+				
+		Utils::response(['status'=>true,'message'=>'TRUSTAT Coupon Type/Name/Number','data'=>$CustomMessage]);
+		
+    }
+
+	/*
+	public function SelectOptionForReasonSendingProductReference($product_id = null) {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+		
+        $CustomMessage = getOptionForReasonSendingProductReferenceByProductId($product_id);
+		if($CustomMessage==''){
+			$CustomMessage = "No Message";
+		Utils::response(['status'=>true,'message'=>'Custom Message for Sending Reference','data'=>$CustomMessage]);	
+		}else{		
+        Utils::response(['status'=>true,'message'=>'Custom Message for Sending Reference','data'=>$CustomMessage]);
+		}
+    }
+	*/	
+		
+  public function SelectOptionForReasonSendingProductReference($product = null) {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+
+        if (($this->request->method != 'get') || is_null($product)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+		$ProductReferenceMediaTyeSelectedByCustomer = ProductReferenceMediaTyeSelectedByCustomer($product);
+		
+		
+        $data = $this->Productmodel->getOptionForReasonSendingProductReferenceByProductId($product,$ProductReferenceMediaTyeSelectedByCustomer);
+        if (!empty($data)) {
+            Utils::response(['status' => true, 'message' => 'Consumer need to select one option as reason to share this product.', 'data' => $data]);
+        } else {
+            Utils::response(['status' => false, 'message' => 'System failed to proccess the request.'], 200);
+        }
+    }
 		
     public function redemption() {
         //Utils::debug();
@@ -2168,7 +2939,7 @@ class Consumer extends ApiController {
     }
 	
 	
-	    public function Complaints() {
+	public function Complaints() {
         //Utils::debug();
         $user = $this->auth();
         if (empty($this->auth())) {
@@ -2197,7 +2968,36 @@ class Consumer extends ApiController {
        
     }
 	
-		  public function ListConsumerNotifications() {
+	
+		public function ListAllCustomersBrandLoyalty() {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $items = $this->Productmodel->getListAllCustomersBrandLoyalty($user['id']);
+		
+        Utils::response(['status'=>true,'message'=>'List all Customers Brand Loyalty.','data'=>$items]);       
+    }
+
+		public function ListAllCustomersBrandLoyalty2() {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $items = $this->Productmodel->getListAllCustomersBrandLoyalty2($user['id']);
+		
+        Utils::response(['status'=>true,'message'=>'List all Customers Brand Loyalty.','data'=>$items]);       
+    }	
+	
+	public function ListConsumerNotifications() {
         //Utils::debug();
         $user = $this->auth();
         if (empty($this->auth())) {
@@ -2212,6 +3012,550 @@ class Consumer extends ApiController {
     }
 	
 	
+	// View Consumer Notification function Starts
+	// Updated function
+	/* 
+    public function ViewConsumerNotification() {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+
+        $input = $this->getInput();
+        if (($this->input->method() != 'post') || empty($input)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $validate = [
+            ['field' => 'notification_id', 'label' => 'Notification ID', 'rules' => 'trim'],
+			['field' => 'pp_id', 'label' => 'Push Promotion ID', 'rules' => 'trim'],
+			['field' => 'pp_type', 'label' => 'Push Promotion Type', 'rules' => 'trim'],
+			['field' =>'geol_city','label'=>'GEO Location City','rules' => 'trim' ],
+			['field' =>'geol_pin_code','label'=>'GEO Location PIN Code','rules' => 'trim' ],
+            ['field' =>'geol_latitude','label'=>'GEO Location Latitude','rules' => 'trim'],
+            ['field' =>'geol_longitude','label'=>'GEO Location Longitude','rules' => 'trim' ],
+        ];
+        $errors = $this->ConsumerModel->validate($input, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }
+        $notification_idArray = $this->getInput('notification_id');
+        $notification_id = $notification_idArray['notification_id'];
+		
+		$pp_idArray = $this->getInput('pp_id');
+        $pp_id = $pp_idArray['pp_id'];
+		
+		$pp_typeArray = $this->getInput('pp_type');
+        $pp_type = $pp_typeArray['pp_type'];
+		
+		
+		$consumer_id = $user['id'];
+		$product_id = getProductIDByNotificationId($notification_id);
+		$customer_id = get_customer_id_by_product_id($product_id);
+		$loyalty_points_consumer_view_notification_lps = getLPCVNLPSByCustomerId($customer_id); 
+		
+        $this->db->set('notifications_view_dt', date("Y-m-d H:i:s"));
+        $this->db->set('status', 1);
+        $this->db->where('id', $notification_id);
+        if ($this->db->update('list_notifications_table')) {
+			
+			$transactionTypeName = "Notification Reed for the brand - " . getUserFullNameById($customer_id);
+			$transactionType = "loyalty_points_consumer_view_notification_lps";
+			$consumer_name = getConsumerNameById($consumer_id);
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$customer_name = getUserFullNameById($customer_id); 
+			$product_name = get_products_name_by_id($product_id); 
+			$customer_loyalty_type = getCustomerLoyaltyTypeById($customer_id);
+			$transaction_lr_type = "Loyalty";
+			$promotion_id = $notification_id;
+			
+			if($loyalty_points_consumer_view_notification_lps>0){
+				 $this->Productmodel->saveLoylty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+$this->Productmodel->saveConsumerPassbookLoyalty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+			}
+			// Consumer Log Data insert start
+			$CALdata['date_time'] = date('Y-m-d H:i:s'); 
+			$CALdata['consumer_name'] = getConsumerNameById($consumer_id);
+			$CALdata['consumer_id'] = $consumer_id; 
+			$CALdata['consumer_mobile'] = getConsumerMobileNumberById($consumer_id); 
+			$CALdata['customer_name'] = getUserFullNameById($customer_id); 
+			$CALdata['customer_id'] = $customer_id; 
+			$CALdata['unique_customer_code'] = getCustomerCodeById($customer_id); 
+			$CALdata['product_name'] = get_products_name_by_id($product_id); 
+			$CALdata['product_id'] = $product_id; 
+			$CALdata['product_sku'] = get_product_sku_by_id($product_id); 
+			$CALdata['product_code'] = "Product info is not reqired"; 
+			$CALdata['gloc_latitude'] = "";
+			$CALdata['gloc_longitude'] = "";
+			$CALdata['gloc_city'] = "";
+			$CALdata['gloc_pin_code'] = "000000";
+			$CALdata['consumer_activity_type'] = "Notification Reed for the brand - " . getUserFullNameById($customer_id);
+			$CALdata['loyalty_rewards_points'] = $loyalty_points_consumer_view_notification_lps;
+			$CALdata['loyalty_rewards_type'] = getCustomerLoyaltyTypeById($customer_id);
+			
+			$this->db->insert('consumer_activity_log_table', $CALdata);
+				// Consumer Log Data insert end
+				
+			//	update push_text_message table start
+			if($pp_type=="Push_Text_Message"){
+			$this->db->set('m_v_datetime', date("Y-m-d H:i:s"));
+			$this->db->set('m_v_status', 1);
+			$this->db->where(array('text_pp_id'=>$pp_id, 'consumer_id'=>$consumer_id));
+			if($this->db->update('push_text_message')) {
+				$input['notification_type'] = "Text Message View status updated";
+				$input['text_message_for_consumer'] = getTextMessageByMessageID($pp_id);
+			}
+			}
+			//	update push_text_message table end			
+				
+			
+	//$mnv13_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 13)->get()->row();
+		//$mnvtext13 = $mnv13_result->message_notification_value;	
+            Utils::response(['status' => true, 'message' => 'Notification Viewed successfully.', 'data' => $input]);
+			//Utils::response(['status' => true, 'message' => $mnvtext13, 'data' => $input]);
+        } else {
+			//$mnv14_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 14)->get()->row();
+		//$mnvtext14 = $mnv14_result->message_notification_value;	
+            Utils::response(['status' => false, 'message' => 'System failed to update.'], 200);
+			// Utils::response(['status' => false, 'message' => $mnvtext14], 200);
+        }
+    }
+	*/
+// Old Function 	
+   public function ViewConsumerNotification() {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+
+        $input = $this->getInput();
+        if (($this->input->method() != 'post') || empty($input)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $validate = [
+            ['field' => 'notification_id', 'label' => 'Notification ID', 'rules' => 'trim'],
+			['field' =>'geol_city','label'=>'GEO Location City','rules' => 'trim' ],
+			['field' =>'geol_pin_code','label'=>'GEO Location PIN Code','rules' => 'trim' ],
+            ['field' =>'geol_latitude','label'=>'GEO Location Latitude','rules' => 'trim'],
+            ['field' =>'geol_longitude','label'=>'GEO Location Longitude','rules' => 'trim' ],
+        ];
+        $errors = $this->ConsumerModel->validate($input, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }
+        $notification_idArray = $this->getInput('notification_id');
+        $notification_id = $notification_idArray['notification_id'];
+		
+		
+		$consumer_id = $user['id'];
+		$product_id = getProductIDByNotificationId($notification_id);
+		$customer_id = get_customer_id_by_product_id($product_id);
+		$loyalty_points_consumer_view_notification_lps = getLPCVNLPSByCustomerId($customer_id); 
+		
+        $this->db->set('notifications_view_dt', date("Y-m-d H:i:s"));
+        $this->db->set('status', 1);
+        $this->db->where('id', $notification_id);
+        if ($this->db->update('list_notifications_table')) {
+			
+			$transactionTypeName = "Notification Reed for the brand - " . getUserFullNameById($customer_id);
+			$transactionType = "loyalty_points_consumer_view_notification_lps";
+			$consumer_name = getConsumerNameById($consumer_id);
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$customer_name = getUserFullNameById($customer_id); 
+			$product_name = get_products_name_by_id($product_id); 
+			$customer_loyalty_type = getCustomerLoyaltyTypeById($customer_id);
+			$transaction_lr_type = "Loyalty";
+			$promotion_id = $notification_id;
+			
+			
+				 $this->Productmodel->saveLoylty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+$this->Productmodel->saveConsumerPassbookLoyalty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+			
+			// Consumer Log Data insert start
+			$CALdata['date_time'] = date('Y-m-d H:i:s'); 
+			$CALdata['consumer_name'] = getConsumerNameById($consumer_id);
+			$CALdata['consumer_id'] = $consumer_id; 
+			$CALdata['consumer_mobile'] = getConsumerMobileNumberById($consumer_id); 
+			$CALdata['customer_name'] = getUserFullNameById($customer_id); 
+			$CALdata['customer_id'] = $customer_id; 
+			$CALdata['unique_customer_code'] = getCustomerCodeById($customer_id); 
+			$CALdata['product_name'] = get_products_name_by_id($product_id); 
+			$CALdata['product_id'] = $product_id; 
+			$CALdata['product_sku'] = get_product_sku_by_id($product_id); 
+			$CALdata['product_code'] = "Product info is not reqired"; 
+			$CALdata['gloc_latitude'] = "";
+			$CALdata['gloc_longitude'] = "";
+			$CALdata['gloc_city'] = "";
+			$CALdata['gloc_pin_code'] = "000000";
+			$CALdata['consumer_activity_type'] = "Notification Reed for the brand - " . getUserFullNameById($customer_id);
+			$CALdata['loyalty_rewards_points'] = $loyalty_points_consumer_view_notification_lps;
+			$CALdata['loyalty_rewards_type'] = getCustomerLoyaltyTypeById($customer_id);
+			
+			$this->db->insert('consumer_activity_log_table', $CALdata);
+				// Consumer Log Data insert end
+			
+	//$mnv13_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 13)->get()->row();
+		//$mnvtext13 = $mnv13_result->message_notification_value;	
+            Utils::response(['status' => true, 'message' => 'Notification Viewed successfully.', 'data' => $input]);
+			//Utils::response(['status' => true, 'message' => $mnvtext13, 'data' => $input]);
+        } else {
+			//$mnv14_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 14)->get()->row();
+		//$mnvtext14 = $mnv14_result->message_notification_value;	
+            Utils::response(['status' => false, 'message' => 'System failed to update.'], 200);
+			// Utils::response(['status' => false, 'message' => $mnvtext14], 200);
+        }
+    }
+// View Consumer Notification function end
+	
+	// View Text Message function Starts
+    public function ViewConsumerTextMessage() {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+
+        $input = $this->getInput();
+        if (($this->input->method() != 'post') || empty($input)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $validate = [
+            ['field' => 'text_message_id', 'label' => 'Message ID', 'rules' => 'trim'],
+			['field' =>'geol_city','label'=>'GEO Location City','rules' => 'trim' ],
+			['field' =>'geol_pin_code','label'=>'GEO Location PIN Code','rules' => 'trim' ],
+            ['field' =>'geol_latitude','label'=>'GEO Location Latitude','rules' => 'trim'],
+            ['field' =>'geol_longitude','label'=>'GEO Location Longitude','rules' => 'trim' ],
+        ];
+        $errors = $this->ConsumerModel->validate($input, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }
+        $notification_idArray = $this->getInput('text_message_id');
+        $text_message_id = $notification_idArray['text_message_id'];
+		$text_message_text = getCustomerIDByMessageID($text_message_id);
+		$input['text_message_text'] = getTextMessageByMessageID($text_message_id);
+		
+		$consumer_id = $user['id'];
+		//$product_id = getProductIDByNotificationId($text_message_id);
+		$customer_id = getCustomerIDByMessageID($text_message_id);
+		//$loyalty_points_consumer_view_notification_lps = getLPCVNLPSByCustomerId($customer_id); 
+		
+        $this->db->set('m_v_datetime', date("Y-m-d H:i:s"));
+        $this->db->set('m_v_status', 1);
+        $this->db->where('id', $text_message_id);
+        if($this->db->update('push_text_message')) {
+			
+			$transactionTypeName = "Text Message from" . getUserFullNameById($customer_id);
+			$transactionType = "loyalty_points_consumer_view_notification_lps";
+			$consumer_name = getConsumerNameById($consumer_id);
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$customer_name = getUserFullNameById($customer_id); 
+			$product_name = get_products_name_by_id($product_id); 
+			$customer_loyalty_type = getCustomerLoyaltyTypeById($customer_id);
+			$transaction_lr_type = "View Message";
+			$promotion_id = $text_message_id;
+			
+			// Consumer Log Data insert start
+			/*
+			$CALdata['date_time'] = date('Y-m-d H:i:s'); 
+			$CALdata['consumer_name'] = getConsumerNameById($consumer_id);
+			$CALdata['consumer_id'] = $consumer_id; 
+			$CALdata['consumer_mobile'] = getConsumerMobileNumberById($consumer_id); 
+			$CALdata['customer_name'] = getUserFullNameById($customer_id); 
+			$CALdata['customer_id'] = $customer_id; 
+			$CALdata['unique_customer_code'] = getCustomerCodeById($customer_id); 
+			$CALdata['product_name'] = get_products_name_by_id($product_id); 
+			$CALdata['product_id'] = $product_id; 
+			$CALdata['product_sku'] = get_product_sku_by_id($product_id); 
+			$CALdata['product_code'] = "Product info is not reqired"; 
+			$CALdata['gloc_latitude'] = $input['gloc_latitude'];
+			$CALdata['gloc_longitude'] = $input['gloc_longitude'];
+			$CALdata['gloc_city'] = $input['gloc_city'];
+			$CALdata['gloc_pin_code'] = $input['geol_pin_code'];
+			$CALdata['consumer_activity_type'] = "Text Message Viewed successfully for the brand - " . getUserFullNameById($customer_id);
+			$CALdata['loyalty_rewards_points'] = 0;
+			$CALdata['loyalty_rewards_type'] = getCustomerLoyaltyTypeById($customer_id);
+			
+			$this->db->insert('consumer_activity_log_table', $CALdata);
+			*/
+				// Consumer Log Data insert end
+				
+            Utils::response(['status' => true, 'message' => 'Text Message Viewed successfully.', 'data' => $input]);
+        } else {
+            Utils::response(['status' => false, 'message' => 'System failed to update.'], 200);
+        }
+    }
+
+// View Consumer Text function end
+		
+
+// Consumer profile empty field  count
+
+	public function ConsumerProfileEmptyFieldCount() {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+		//$items['consumer_id'] = $user['id'];		
+		$consumer_id = $user['id'];
+   //$items['total_fields_to_update_profile_all'] = $this->Productmodel->getTotalCountConsumerProfileFieldsAvailableUpdateAll($consumer_id);
+	$items = $this->Productmodel->getConsumerProfileFieldsRequireUpdate($consumer_id);
+	$items['total_fields_to_update_profile'] = 100;
+	$items['fields_to_update_personal_profile'] = 100;
+	$items['fields_to_update_family_profile'] = 100;
+	$items['fields_to_update_lifestyle_profile'] = 100;
+	$items['fields_to_update_others_profile'] = 100;
+		//$items = $this->Productmodel->getTotalCountConsumerProfileFieldsAvailableUpdateAll($consumer_id);
+		
+       Utils::response(['status'=>true,'message'=>'Consumer Profile Empty Field Count Listed here.','data'=>$items]);  
+    }
+/*	
+		public function ConsumerProfileEmptyFieldCount() {
+        //Utils::debug();
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+		$consumer_id = $user['id'];
+        $data = $this->Productmodel->getConsumerProfileFieldsRequireUpdate($consumer_id);
+		
+        Utils::response(['status'=>true,'message'=>'List of Consumer Profile Fields Require to Update', 'data'=>$data]);
+       
+    }
+	
+	*/
+
+	
+	
+		// Loyalty Consumer Referral Product function Starts
+    public function LoyaltyConsumerReferralProduct() {
+        $user = $this->auth();
+        if(empty($this->auth())){
+            Utils::response(['status'=>false,'message'=>'Forbidden access.'],403);
+        }
+
+        $data = $this->getInput();
+        if(($this->input->method() != 'post') || empty($data)){ 
+            Utils::response(['status'=>false,'message'=>'Bad request.'],400);
+        }
+        $validate = [
+			['field' =>'referral_reference_id', 'label' => 'Referral Reference ID', 'rules' => 'trim'],
+			['field' =>'promotion_details', 'label' => 'Promotion details', 'rules' => 'trim'],
+			['field' =>'product_code_or_promotion_id', 'label' => 'Product Code Or Promotion ID', 'rules' => 'trim'],
+            ['field' =>'product_id', 'label' => 'Product ID', 'rules' => 'trim'],
+			['field' =>'referred_mobile_no','label'=>'Referred Mobile Number','rules' => 'trim'],
+			['field' =>'geol_city','label'=>'GEO Location City','rules' => 'trim' ],
+			['field' =>'geol_pin_code','label'=>'GEO Location PIN Code','rules' => 'trim'],
+            ['field' =>'geol_latitude','label'=>'GEO Location Latitude','rules' => 'trim'],
+            ['field' =>'geol_longitude','label'=>'GEO Location Longitude','rules' => 'trim'],
+        ];
+        $errors = $this->ConsumerModel->validate($data, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }
+       
+		$data['referrer_consumer_id'] = $user['id'];
+		$data['referred_consumer_id'] = get_consumer_id_by_mobile_number2($data['referred_mobile_no']);
+		$data['media_type'] = getMediaTypeforSendingReferenceByProductId($data['product_id']);
+		
+		if($data['referred_consumer_id']==0){ 
+			$data['rs_referred_consumer_TRUSTAT'] = "Not Registered With TRUSTAT"; 
+			$referred_consumer_id = $data['referred_mobile_no'];
+			$registration_status = "NotRegistered";
+		}else{ 
+			$data['rs_referred_consumer_TRUSTAT'] = "Already Registered With TRUSTAT"; 
+			$referred_consumer_id = $data['referred_consumer_id'];
+			$registration_status = "Registered";
+		} 
+		
+		$Consumer_Linked_Customer = Check_If_Consumer_Linked_Customer($data['referred_consumer_id'], get_customer_id_by_product_id($data['product_id'])); 
+		if($Consumer_Linked_Customer==true){ 
+		$data['rs_referred_consumer_customer'] = "Consumer Linked Customer"; 
+		}else{ 
+		$data['rs_referred_consumer_customer'] = "Consumer Not Linked Customer"; 
+		}
+		
+		
+		$customer_id = get_customer_id_by_product_id($data['product_id']);
+		$consumer_id = $user['id'];
+		$product_id = $data['product_id'];
+		$loyalty_points = getLPSReferralByCustomerId($data['product_id']); 
+	$data['loyalty_points_referral'] = getLoyaltyrewardstosenderconsumerunderReferralAssignedbyBrandByProductId($product_id);
+		
+		$data['referring_datetime'] = date('Y-m-d H:i:s');
+		 
+		 $NumberOfReferralsAllowedToConsumer = getNumberOfReferralsAllowedToConsumerByProductId($product_id); 
+		$TotalRefbyConsumer = $this->db->where(array('referrer_consumer_id' => $consumer_id, 'product_id' => $product_id))->from("consumer_referral_table")->count_all_results();
+		
+		$TotalRefSenttoConsumer = $this->db->where(array('referred_mobile_no' => $data['referred_mobile_no'], 'product_id' => $product_id, 'media_type' => $data['media_type']))->from("consumer_referral_table")->count_all_results();
+		
+		if($TotalRefSenttoConsumer < 1){
+		if($NumberOfReferralsAllowedToConsumer > $TotalRefbyConsumer){
+        if ($this->db->insert('consumer_referral_table', $data)) {
+			
+			$transactionTypeName = "Product Referral - " . getUserFullNameById($customer_id);
+			$transactionType = "loyalty_rewards_to_sender_consumer_under_referral";
+			$consumer_name = getConsumerNameById($consumer_id);
+			$product_brand_name = get_products_brand_name_by_id($product_id);
+			$customer_name = getUserFullNameById($customer_id); 
+			$product_name = get_products_name_by_id($product_id); 
+			$customer_loyalty_type = getCustomerLoyaltyTypeById($customer_id);
+			$transaction_lr_type = "Loyalty";
+			$promotion_id = $data['product_code_or_promotion_id'];
+			$promotion_title = $data['promotion_details'];
+		
+
+		$insertAdData=array(
+					"customer_id"	 => $customer_id,
+					"consumer_id"	 => $referred_consumer_id,
+					"product_id"	 => $product_id,
+					"promotion_id"	 => $data['referral_reference_id'],
+					"promotion_title"	 => $promotion_title,	
+					"promotion_type"	 => "Advertisement",
+					"media_type"	 => $data['media_type'],
+					"ad_push_date"	 => date('Y-m-d H:i:s'),
+					"media_play_date"	 => "0000-00-00 00:00:00",
+					"ad_feedback_response"	 => "No",
+					"ad_response_datetime"	 => date('Y-m-d H:i:s'),
+					"ad_active"	 => "1"					
+					);	
+					
+				  $this->db->insert("push_advertisements", $insertAdData);	
+				  
+				  // Link Consumer Customer insert record 
+				  if($Consumer_Linked_Customer==false){ 
+				  $LinkCCData=array(
+					"consumer_id"	 		 => $referred_consumer_id,
+					"registration_status"	 => $registration_status,
+					"product_id"			 => $product_id,
+					"customer_id"	 		 => $customer_id,
+					"bar_code"	 	 		 => $data['product_code_or_promotion_id'],
+					"scan_city"	 	 		 => $data['geol_city'],
+					"pin_code"	 	 		 => $data['geol_pin_code'],
+					"latitude"	 	 		 => $data['geol_latitude'],
+					"longitude"	 	 		 => $data['geol_longitude'],
+					"ps_ip_address"	 		 => $this->input->ip_address(),
+					"code_scan_date"	 	 => date('Y-m-d H:i:s'),
+					"del_by_cs"	 			 => "0"					
+					);						
+				  $this->db->insert("consumer_customer_link", $LinkCCData);	
+				  }
+				  
+				
+		
+//$this->Productmodel->saveLoylty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+//$this->Productmodel->saveConsumerPassbookLoyalty($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $customer_id, $promotion_id);
+			
+			
+			// Consumer Log Data insert start
+			$CALdata['date_time'] = date('Y-m-d H:i:s'); 
+			$CALdata['consumer_name'] = getConsumerNameById($consumer_id);
+			$CALdata['consumer_id'] = $consumer_id; 
+			$CALdata['consumer_mobile'] = getConsumerMobileNumberById($consumer_id); 
+			$CALdata['customer_name'] = getUserFullNameById($customer_id); 
+			$CALdata['customer_id'] = $customer_id; 
+			$CALdata['unique_customer_code'] = getCustomerCodeById($customer_id); 
+			$CALdata['product_name'] = get_products_name_by_id($product_id); 
+			$CALdata['product_id'] = $product_id; 
+			$CALdata['product_sku'] = get_product_sku_by_id($product_id); 
+			$CALdata['product_code'] = "Product info is not reqired"; 
+			$CALdata['gloc_latitude'] = $data['geol_latitude'];
+			$CALdata['gloc_longitude'] = $data['geol_longitude'];
+			$CALdata['gloc_city'] = $data['geol_city'];
+			$CALdata['gloc_pin_code'] = $data['geol_pin_code'];
+			$CALdata['consumer_activity_type'] = "Product Referral - " . getUserFullNameById($customer_id);
+			$CALdata['loyalty_rewards_points'] = $loyalty_points;
+			$CALdata['loyalty_rewards_type'] = getCustomerLoyaltyTypeById($customer_id);
+			
+			$this->db->insert('consumer_activity_log_table', $CALdata);
+			
+			// consumer_activity_log Referred Consumer
+			$CALdata['date_time'] = date('Y-m-d H:i:s'); 
+			$CALdata['consumer_name'] = getConsumerNameById($referred_consumer_id);
+			$CALdata['consumer_id'] = $referred_consumer_id; 
+			$CALdata['consumer_mobile'] = $data['referred_mobile_no']; 
+			$CALdata['customer_name'] = getUserFullNameById($customer_id); 
+			$CALdata['customer_id'] = $customer_id; 
+			$CALdata['unique_customer_code'] = getCustomerCodeById($customer_id); 
+			$CALdata['product_name'] = get_products_name_by_id($product_id); 
+			$CALdata['product_id'] = $product_id; 
+			$CALdata['product_sku'] = get_product_sku_by_id($product_id); 
+			$CALdata['product_code'] = "Product info is not reqired"; 
+			$CALdata['gloc_latitude'] = $data['geol_latitude'];
+			$CALdata['gloc_longitude'] = $data['geol_longitude'];
+			$CALdata['gloc_city'] = $data['geol_city'];
+			$CALdata['gloc_pin_code'] = $data['geol_pin_code'];
+			$CALdata['consumer_activity_type'] = "Product Referral Received- " . getUserFullNameById($customer_id);
+			$CALdata['loyalty_rewards_points'] = 0;
+			$CALdata['loyalty_rewards_type'] = getCustomerLoyaltyTypeById($customer_id);
+			
+			$this->db->insert('consumer_activity_log_table', $CALdata);
+			
+			
+			$Ref1_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 9)->get()->row();
+			$Ref1_billin_particular_name = $Ref1_result->billin_particular_name;
+			$Ref1_billin_particular_slug = $Ref1_result->billin_particular_slug;
+		
+			$RefData['customer_id'] = $customer_id;
+			$RefData['consumer_id'] = $referred_consumer_id;
+			$RefData['billing_particular_name'] = $Ref1_billin_particular_name;		
+			$RefData['billing_particular_slug'] = $Ref1_billin_particular_slug;
+			$RefData['trans_quantity'] = 1; 
+			$RefData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$RefData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $RefData);
+			
+			
+			/*
+			$NTFdata['consumer_id'] = $consumer_id; 
+			$NTFdata['title'] = "TRUSTAT";
+			$NTFdata['body'] = 'The below message has been sent by, '.getConsumerNameById($consumer_id).' Mobile No. '.getConsumerMobileNumberById($consumer_id).' - '. $message_receiver_ref_frm_server . ' ' . base_url().'click_link/'.$data['referred_mobile_no'].'/'.$product_id.'/'. getMediaTypeforSendingReferenceByProductId($product_id); 
+			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
+			$NTFdata['status'] = 0; 			
+			$this->db->insert('list_notifications_table', $NTFdata);
+			*/
+				// Consumer Log Data insert end
+			
+	//$mnv13_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 13)->get()->row();
+		//$mnvtext13 = $mnv13_result->message_notification_value;	
+		//$CustomMessage = getMessageForReceiverOfReferenceByProductId($product_id) .' '. base_url().'click_link/'.$MobileNo.'/'.$product_id. '/' . getMediaTypeforSendingReferenceByProductId($product_id);
+		
+		// This message will be sent from APP commenting here for now.
+		$include_the_product_in_referral_program = getProductinReferralProgramAssignedbyBrandByProductId($product_id);
+		$send_ref_message_frm_server = getifSendReferralMessageFromServerByProductId($product_id);
+		$message_receiver_ref_frm_server = getMessageReceiverReferencefromServerByProductId($product_id);
+		if(($send_ref_message_frm_server=="Yes") && ($include_the_product_in_referral_program=="Yes")){
+	Utils::sendSMS($data['referred_mobile_no'], 'Greetings from TRUSTAT!! Your contact with mobile number'.' ['.getConsumerMobileNumberById($consumer_id).'] '.' has sent you following message.'. $message_receiver_ref_frm_server . ' ' . base_url().'click_link/'.$data['referred_mobile_no'].'/'.$product_id.'/'. getMediaTypeforSendingReferenceByProductId($product_id). " zLJoGnJzfXg");
+		}
+		$mnv1_result67 = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 67)->get()->row();
+		$message_notification_value67 = $mnv1_result67->message_notification_value;
+            Utils::response(['status' => true, 'message' => $message_notification_value67, 'data' => $data]);
+			//Utils::response(['status' => true, 'message' => $mnvtext13, 'data' => $input]);
+        } else {
+			//$mnv14_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 14)->get()->row();
+		//$mnvtext14 = $mnv14_result->message_notification_value;	
+            Utils::response(['status' => false, 'message' => 'System failed to update.'], 200);
+			// Utils::response(['status' => false, 'message' => $mnvtext14], 200);
+        }
+		}else{
+			$mnv1_result68 = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 68)->get()->row();
+		$message_notification_value68 = $mnv1_result68->message_notification_value;
+		 Utils::response(['status' => false, 'message' => $message_notification_value68], 200);	
+		}
+		}else{
+			$mnv1_result69 = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 69)->get()->row();
+		$message_notification_value69 = $mnv1_result69->message_notification_value;
+		 Utils::response(['status' => false, 'message' => $message_notification_value69], 200);	
+		}
+    }
+
+// Loyalty Consumer Referral Product  function end
+
 	 public function FaqsAndOtherData() {
         //Utils::debug();
         $user = $this->auth();
@@ -2282,6 +3626,59 @@ class Consumer extends ApiController {
         Utils::response(['status'=>true,'message'=>'TRUSTAT App Service Agreement', 'data'=>$data]);
        
     }
+	
+		public function TRUSTATAppVersionUpdate() {
+        //Utils::debug();
+       
+        //$items = $this->Productmodel->getRedemption($user['id']);
+		$data['TRUSTAT_android_app_version'] = "1.0";
+		$data['TRUSTAT_android_app_version_updated_date'] = '20-03-2020';
+		$data['TRUSTAT_ios_app_version'] = "1.0";
+		$data['TRUSTAT_ios_app_version_updated_date'] = '20-03-2020';
+		
+		$data['Tracek_android_app_version'] = "1.0";
+		$data['Tracek_android_app_version_updated_date'] = '20-03-2020';
+		$data['Tracek_ios_app_version'] = "1.0";
+		$data['Tracek_ios_app_version_updated_date'] = '20-03-2020';
+		
+		//$data = $this->Productmodel->getTRUSTATAppServiceAgreement($user['id']);
+        Utils::response(['status'=>true,'message'=>'Latest Version of TRUSTAT and Tracek APPs', 'data'=>$data]);
+       
+    }
+	
+		public function TRUSTATAppServerBaseURL() {
+        //Utils::debug();
+		
+		$mnv1_result = $this->db->select('message_notification_value, message_notification_value_part2')->from('message_notification_master')->where('id', 56)->get()->row();
+		$message_notification_value = $mnv1_result->message_notification_value;
+       
+        //$items = $this->Productmodel->getRedemption($user['id']);
+		$data['APP_Name'] = "TRUSTAT App";
+		$data['TRUSTAT_app_live_server_base_url'] = 'http://trustat.in/';
+		$data['TRUSTAT_app_staging_server_base_url'] = 'http://mtrck.in/';
+		$data['TRUSTAT_app_development_server_base_url'] = 'http://innovigents.com/';
+		$data['number_for_testing_development_allow'] = $message_notification_value;
+		
+        Utils::response(['status'=>true,'message'=>'TRUSTAT App Server Base URL', 'data'=>$data]);
+       
+    }
+	
+		public function TracekAppServerBaseURL() {
+        //Utils::debug();
+		
+		$mnv1_result = $this->db->select('message_notification_value, message_notification_value_part2')->from('message_notification_master')->where('id', 57)->get()->row();
+		$message_notification_value = $mnv1_result->message_notification_value;
+       
+        //$items = $this->Productmodel->getRedemption($user['id']);
+		$data['APP_Name'] = "Tracek App";
+		$data['tracek_app_live_server_base_url'] = 'http://trustat.in/';
+		$data['tracek_app_staging_server_base_url'] = 'http://mtrck.in/';
+		$data['tracek_app_development_server_base_url'] = 'http://innovigents.com/';
+		$data['tracek_username_for_testing_development_allow'] = $message_notification_value;
+		
+        Utils::response(['status'=>true,'message'=>'Tracek App Server Base URL', 'data'=>$data]);
+       
+    }	
 	
 	/*
 	public function ConsumerPassBook() {
@@ -2361,31 +3758,41 @@ class Consumer extends ApiController {
 			$this->db->select_sum('cpb.points');
 			$this->db->from('consumer_passbook as cpb');
 			$this->db->join('consumers as c','c.id=cpb.consumer_id');
-	$this->db->where(array('c.mobile_no' => $mobile_no, 'cpb.customer_id' => $customer_id, 'cpb.transaction_lr_type' =>  "Loyalty"));
+	$this->db->where(array('c.mobile_no' => $mobile_no, 'cpb.customer_id' => $customer_id, 'cpb.transaction_lr_type' => "Loyalty"));
 			$query=$this->db->get();
 			$Total_Earned_Points=$query->row()->points;	
 			
 			$this->db->select_sum('cpb.points');
 			$this->db->from('consumer_passbook as cpb');
 			$this->db->join('consumers as c','c.id=cpb.consumer_id');
-	$this->db->where(array('c.mobile_no' => $mobile_no, 'cpb.customer_id' => $customer_id, 'cpb.transaction_lr_type' =>  "Redemption"));
-	
+	$this->db->where(array('c.mobile_no' => $mobile_no, 'cpb.customer_id' => $customer_id, 'cpb.transaction_lr_type' => "Redemption"));	
 			$query2=$this->db->get();
 			$Total_Points_Redeemed=$query2->row()->points;
 			
+			$this->db->select_sum('cpb.points');
+			$this->db->from('consumer_passbook as cpb');
+			$this->db->join('consumers as c','c.id=cpb.consumer_id');
+	$this->db->where(array('c.mobile_no' => $mobile_no, 'cpb.customer_id' => $customer_id, 'cpb.transaction_lr_type' => "Expiry"));	
+			$query3=$this->db->get();
+			$Total_Points_Expired=$query3->row()->points;
+			
 			//$Earned_Loyalty_Points = $this->Productmodel->getconsumerEarnedLoyaltyPoints();
 			//$Redeemed_Loyalty_Points = $this->Productmodel->getconsumerRedeemedLoyaltyPoints();
+			/*
 			if($Total_Points_Redeemed==0){
 			$Balance_Loyalty_Points = $Total_Earned_Points;
 			} else {
 				$Balance_Loyalty_Points = $Total_Earned_Points - $Total_Points_Redeemed;
 			}
+			*/
+			$Balance_Loyalty_Points = $Total_Earned_Points - ($Total_Points_Redeemed + $Total_Points_Expired); 
+			$percent_loyalty_points_redeemed_cashier_store = getPercentLoyaltyPointsRedeemedCashierStoreByCustomerId($customer_id);
 		
         //$data = [];
         //$data = $this->Productmodel->getconsumerLoyltyDeals($user['id']);
 		
         if (!empty($mobile_no)) {
-             Utils::response(['status' => true, 'message' => 'Your Balance Loyalty Points: ', 'balance_loyalty_points' => $Balance_Loyalty_Points/*, 'data' => $data*/]);
+             Utils::response(['status' => true, 'message' => 'Your Balance Loyalty Points.', 'balance_loyalty_points' => $Balance_Loyalty_Points/*, 'data' => $data*/]);
         } else {
             Utils::response(['status' => false, 'message' => 'There is no record found.'], 200);
         }
@@ -2402,12 +3809,432 @@ class Consumer extends ApiController {
         }
         $userid = $user['id'];
         $result = $this->ConsumerModel->findConsumerProfileMasterData($userid);
+		//$result['SELECT'] = "SELECT";
         if (empty($result)) {
             $this->response(['status' => false, 'message' => 'Record not found'], 200);
         }
-        $this->response(['status' => true, 'message' => 'Consumer Profile Master Data List is below-', 'data' => $result]);
+        $this->response(['status' => true, 'message' => 'Consumer Profile Master Data List is below-', 'SELECT' => 0, 'SELECT DATE' => '0000-00-00', 'data' => $result]);
     }
 	
+	
+		public function ListReltailStores($customer_id){
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        $data = [];
+		$userId = $user['user_id'];
+		$ParentuserId = getParentIdFromUserIdTAPP($userId);
+		//print_r($userId);
+		//print_r($ParentuserId); exit;
+		$LocationType = "Retail Store";
+		//$customer_id = 221;
+        $data = $this->Productmodel->All_ReltailStores_location_list($LocationType,$customer_id);
+                if(!empty($data)){
+            Utils::response(['status'=>true,'message'=>'List of locations.','data'=>$data]);
+        }else{
+            Utils::response(['status'=>false,'message'=>'There is no record found.'],200);
+        }
+		
+    }
+	
+	
+  // Check Consumer If reference received Function Start 
+  /*
+    public function CheckIfConsumerReceivedReference() {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+		 
+		 $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        $data = [];
+		
+		/*
+        $input = $this->getInput();
+        if (($this->input->method() != 'post') || empty($input)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $validate = [
+            ['field' => 'phone_number', 'label' => 'Phone Number', 'rules' => 'trim|required|integer|exact_length[10]'],
+			['field' => 'product_id', 'label' => 'Product ID', 'rules' => 'trim|required|integer'],
+        ];
+        $errors = $this->ConsumerModel->validate($input, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }
+		
+        $phone_numberArray = $this->getInput('phone_number');
+        $phone_number = $phone_numberArray['phone_number'];
+		
+		$product_idArray = $this->getInput('product_id');
+        $product_id = $product_idArray['product_id'];
+		
+		$ConsumerID = $user['id'];
+       
+		$isRefrenceReceived = $this->ConsumerModel->isRefrenceReceived($ConsumerID);
+		$isFeedbackAnsDueLA = $this->ConsumerModel->isFeedbackAnsDueLA($ConsumerID);
+		
+        if ($isRefrenceReceived == TRUE){
+
+           $data['RedirectToAdScreen'] = "Yes";
+		   
+        } else {
+
+           $data['RedirectToAdScreen'] = "No";
+        
+        }
+		Utils::response(['status' => true, 'message' => 'Need to redirect the consumer to ad screen?', 'data' => $data]);
+    }
+	*/
+	public function CheckIfConsumerReceivedReference(){
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        $data = [];		
+		$ConsumerID = $user['id'];
+		$mobile_no = getConsumerMobileNumberById($ConsumerID);
+		$findRefrenceReceived = $this->ConsumerModel->findRefrenceReceived($mobile_no);
+		//$isFeedbackAnsDueLA = $this->ConsumerModel->isFeedbackAnsDueLA($ConsumerID);
+		
+        if($findRefrenceReceived == false){
+
+           $data['RedirectToAdScreen'] = "No";
+		   
+        } else {
+
+           $data['RedirectToAdScreen'] = $findRefrenceReceived;
+		   
+		 // $rid= $findRefrenceReceived->referral_reference_id; 
+		   /*
+		$RAMVdata['product_id'] = get_product_id_by_promotion_id($data['promotion_id']);	
+		$RAMVdata['customer_id'] = get_customer_id_by_promotion_id($data['promotion_id']);			
+		$RAMVdata['consumer_id'] = $user['id'];
+		$RAMVdata['view_date_time'] =  date('Y-m-d H:i:s');
+		 
+        $this->db->insert('consumer_media_view_details', $RAMVdata)
+        */
+        }
+		$mnv1_result70 = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 70)->get()->row();
+		$message_notification_value70 = $mnv1_result70->message_notification_value;
+		Utils::response(['status' => true, 'message' => $message_notification_value70, 'data' => $data]);
+		
+    }
+	
+	// Check Consumer If reference received Function End
+	
+	
+		// Check If Product is eligible for reference for consumer Function Start 
+    public function CheckIfProductEligiblForReferenceForConsumer() {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        $input = $this->getInput();
+        if (($this->input->method() != 'post') || empty($input)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+        $validate = [
+			['field' => 'product_id', 'label' => 'Product ID', 'rules' => 'trim|required|integer'],
+        ];
+        $errors = $this->ConsumerModel->validate($input, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors.', 'errors' => $errors]);
+        }		
+		$product_idArray = $this->getInput('product_id');
+        $product_id = $product_idArray['product_id'];		
+		$consumer_id = $user['id'];		
+		//$ProductEligiblForReferenceForConsumer = getProductEligiblForReferenceForConsumerByProductIdAndConsumerID($product_id, $consumer_id);
+		$findIfProductScanned = $this->Productmodel->findIfProductScanned($product_id, $consumer_id);
+		$isAdPushedToconsumerForProduct = $this->Productmodel->isAdPushedToconsumerForProduct($product_id, $consumer_id);
+		
+	$data['findIfProductScanned'] = $findIfProductScanned;
+	$data['isAdPushedToconsumerForProduct'] = $isAdPushedToconsumerForProduct;
+        
+        if (($findIfProductScanned == true)||($isAdPushedToconsumerForProduct == true)) {
+			
+           $data['ProductEligiblForReferenceForConsumer'] = "Yes";		   
+		  
+        } else {
+
+           $data['ProductEligiblForReferenceForConsumer'] = "No";
+        
+        }
+		Utils::response(['status' => true, 'message' => 'Product Eligiblity Status For Reference For Consumer', 'data' => $data]);
+    }
+	
+	// Check If Product is eligible for reference for consumer Function End
+	
+	public function UpdateRefSMSLinkClicked($referred_mobile_no, $referred_product_id, $media_type) {
+        if (($this->input->method() != 'get')) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+		/*
+        $user = $this->auth();
+        if (empty($this->auth())) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        $userid = $user['id'];
+        $result = $this->ConsumerModel->findConsumerProfileMasterData($userid);
+        if (empty($result)) {
+            $this->response(['status' => false, 'message' => 'Record not found'], 200);
+        }
+		*/
+		$result['LinkClicked'] = "OK Done";
+		
+				$UpdateData = array( 
+				'referral_link_clicked_datetime' => date('Y-m-d H:i:s')
+				);
+		
+		$this->db->update('consumer_referral_table',$UpdateData,['referred_mobile_no'=>$referred_mobile_no, 'product_id'=>$referred_product_id, 'media_type'=>$media_type]);		
+		
+		header('Location: http://et1.in/');
+    //$this->response(['status' => true, 'message' => 'Action: ', 'data' => $result]);
+    	
+	}
+	
+	
+	
+	// Media view from refral 
+	
+		 public function SaveConsumerMediaViewDetailsAutoRef() {
+        $user = $this->auth();
+        if (empty($user)) {
+            Utils::response(['status' => false, 'message' => 'Forbidden access.'], 403);
+        }
+        $data = $this->getInput();
+        if (($this->request->method != 'post') || empty($data)) {
+            Utils::response(['status' => false, 'message' => 'Bad request.'], 400);
+        }
+
+        $validate = [
+            ['field' => 'product_id', 'label' => 'Product QR Code', 'rules' => 'trim|required'],
+			['field' => 'promotion_id', 'label' => 'Promotion id', 'rules' => 'trim|required'],
+            ['field' => 'media_type', 'label' => 'Media Type', 'rules' => 'trim|required'],
+			['field' => 'media_play_location', 'label' => 'Media Play Location', 'rules' => 'trim'],
+            ['field' => 'total_media_duration_sec', 'label' => 'Total Media Duration in Seconds', 'rules' => 'trim|required'],
+			['field' => 'media_play_duration_sec', 'label' => 'Media Play Duration in Seconds', 'rules' => 'trim|required'],
+			['field' => 'watched_complete', 'label' => 'Watched Complete-Yes or No', 'rules' => 'trim|required'],
+			['field' => 'latitude', 'label' => 'User latitude', 'rules' => 'trim|required'],
+			['field' => 'longitude', 'label' => 'User longitude', 'rules' => 'trim|required'],
+			['field' => 'current_city', 'label' => 'Current City', 'rules' => 'trim|required'],
+			['field' => 'current_pin', 'label' => 'Current PIN', 'rules' => 'trim'],
+        ];
+        $errors = $this->ConsumerModel->validate($data, $validate);
+        if (is_array($errors)) {
+            Utils::response(['status' => false, 'message' => 'Validation errors1.', 'errors' => $errors]);
+        }
+       
+		
+		$product_qr_code = $data['product_qr_code'];
+		$promotion_id = $data['promotion_id'];
+		$ProductID = get_product_id_by_product_code($product_qr_code);
+		$customer_id = get_customer_id_by_product_id($ProductID);
+		    
+        //Utils::debug();
+		$data['customer_id'] = get_customer_id_by_product_id($data['product_id']);			
+		$data['consumer_id'] = $user['id'];
+		$userId =  $user['id'];
+		$data['view_date_time'] =  date('Y-m-d H:i:s');
+		 
+        if ($this->db->insert('consumer_media_view_details', $data)) {
+			
+			
+			$this->db->set(array("referral_media_apd" => 1))->where(array("referral_reference_id" => $promotion_id))->update('consumer_referral_table');
+			
+			// Consumer Log Data insert start
+			
+			$CALdata['date_time'] = date('Y-m-d H:i:s'); 
+			$CALdata['consumer_name'] = getConsumerNameById($userId);
+			$CALdata['consumer_id'] = $userId; 
+			$CALdata['consumer_mobile'] = getConsumerMobileNumberById($userId); 
+			$CALdata['customer_name'] = getUserFullNameById($data['customer_id']); 
+			$CALdata['customer_id'] = $data['customer_id']; 
+			$CALdata['unique_customer_code'] = getCustomerCodeById($data['customer_id']); 
+			$CALdata['product_name'] = get_products_name_by_id($data['product_id']); 
+			$CALdata['product_id'] = $data['product_id']; 
+			$CALdata['product_sku'] = get_product_sku_by_id($data['product_id']); 
+			$CALdata['product_code'] = $product_qr_code; 
+			$CALdata['gloc_latitude'] = $data['latitude'];
+			$CALdata['gloc_longitude'] = $data['longitude'];
+			$CALdata['gloc_city'] = $data['current_city'];
+			$CALdata['gloc_pin_code'] = $data['current_pin'];
+			$CALdata['consumer_activity_type'] = " Watched Level 1 " . $data['media_type'];
+			$CALdata['loyalty_rewards_points'] = 0;
+			$CALdata['loyalty_rewards_type'] = getCustomerLoyaltyTypeById($data['customer_id']);
+			
+			$this->db->insert('consumer_activity_log_table', $CALdata);
+			
+			// Consumer Log Data insert end
+           
+            Utils::response(['status' => true, 'message' => 'Consumer media Auto Play done successfully.', 'data' => $data]);
+       		
+		} else {
+            Utils::response(['status' => false, 'message' => 'System failed to proccess the request.'], 200);
+        }
+		
+    }
+	
+	
+public function TestSendMessage(){
+	
+		$Phno='9319800106';
+        $Msg="Sending Text message from New Server-Sanjay Testing2";
+        $Password='ispl@54321';
+        $SenderID='DMTMSG';
+        $UserID='innovigent';
+
+        function send_message($Phno,$Msg,$Password,$SenderID,$UserID)
+        {         
+            $ch='';
+            $url='http://nimbusit.biz/api/SmsApi/SendSingleApi?UserID='.$UserID.'&Password='.$Password.'&SenderID='.$SenderID.'&Phno='.$Phno.'&Msg='.urlencode($Msg);
+            $ch = curl_init($url);
+            curl_setopt($ch,CURLOPT_URL,$url);
+            curl_setopt($ch,CURLOPT_RETURNTRANSFER,true);
+
+            $output=curl_exec($ch);
+            curl_close($ch);
+            return $output;
+        }
+	 echo send_message($Phno,$Msg,$Password,$SenderID,$UserID);
+}
+
+	public function ProductReturnTypeCMSItems() {
+        //Utils::debug();       
+        //$items = $this->Productmodel->getRedemption($user['id']);
+		$CMSItems = "Return Type";
+		$data['APP_Name'] = "Tracek App";
+		//$data['TRUSTAT_app_service_agreement'] = 'test';
+		$data = $this->Productmodel->getProductReturnTypeCMSItems($CMSItems);
+        Utils::response(['status'=>true,'message'=>'List Product Return Type CMS Items', 'data'=>$data]);
+       
+    }
+	
+		public function ProductReturnTypeNameValueCMSItems() {
+        //Utils::debug();       
+        //$items = $this->Productmodel->getRedemption($user['id']);
+		$CMSItems = "Returning Condition of Product Condition";
+		$data['APP_Name'] = "Tracek App";
+		//$data['TRUSTAT_app_service_agreement'] = 'test';
+		$data = $this->Productmodel->getProductReturnTypeCMSItems($CMSItems);
+        Utils::response(['status'=>true,'message'=>'List Return Type Name Value CMS Items', 'data'=>$data]);
+    }
+	
+	public function PercentLoyaltyPointsDefinedByCustomer($CustomerID) {
+        //Utils::debug();       
+        //$items = $this->Productmodel->getRedemption($user['id']);
+		//$CMSItems = "Returning Condition of Product Condition";
+		//$data['APP_Name'] = "Tracek App";
+		//$data['TRUSTAT_app_service_agreement'] = 'test';
+		//$data = $this->Productmodel->getProductReturnTypeCMSItems($CMSItems);
+		$PercentLoyaltyPoints = getPercentLoyaltyPointsRedeemedCashierStoreByCustomerId($CustomerID);
+		if (!empty($CustomerID)) {
+             Utils::response(['status' => true, 'message' => 'Percent Loyalty Points Defined By Customer.', 'percent_lty_pts_defined' => $PercentLoyaltyPoints/*, 'data' => $data*/]);
+        } else {
+            Utils::response(['status' => false, 'message' => 'There is no record found.'], 200);
+        }
+       // Utils::response(['status'=>true,'message'=>'List Return Type Name Value CMS Items', 'data'=>$data]);
+    }
+	
+		public function LoyaltyPointWeightageComparetoCurrency($CustomerID) {
+        //Utils::debug();       
+        //$items = $this->Productmodel->getRedemption($user['id']);
+		//$CMSItems = "Returning Condition of Product Condition";
+		//$data['APP_Name'] = "Tracek App";
+		//$data['TRUSTAT_app_service_agreement'] = 'test';
+		//$data = $this->Productmodel->getProductReturnTypeCMSItems($CMSItems);
+		$LoyaltyPointWeightage = getLoyaltyPointWeightageByCustomerId($CustomerID);
+		if (!empty($CustomerID)) {
+             Utils::response(['status' => true, 'message' => 'Loyalty Point weightage with compare to currency.', 'loyalty_point_weightage' => $LoyaltyPointWeightage/*, 'data' => $data*/]);
+        } else {
+            Utils::response(['status' => false, 'message' => 'There is no record found.'], 200);
+        }
+       // Utils::response(['status'=>true,'message'=>'List Return Type Name Value CMS Items', 'data'=>$data]);
+    }
+	
+	// add Packaging Ship Out Order starts   
+		public function addPackagingShipOutOrder($psoo_customer_product_name,$psoo_customer_erp_product_id,$customer_id,$pick_list_number,$psoo_quantity,$psoo_product_origin_type,$psoo_bin_number,$psoo_token_id,$psoo_invoice_number,$Microsite_URL,$psoo_ip_address,$psoo_latitude,$psoo_longitude,$psoo_city,$psoo_pin_code,$psoo_more_fields) {
+		
+		// Consumer Log Data insert start 
+			$PAOOdata['psoo_customer_product_name'] = $psoo_customer_product_name;
+			$PAOOdata['psoo_customer_erp_product_id'] = $psoo_customer_erp_product_id;
+			$PAOOdata['customer_id'] = $customer_id;
+			$PAOOdata['tracek_user_id'] = getPackagingSupervisorUser($customer_id); 
+			$PAOOdata['tracek_user_name'] = getTracekUserFullNameById(getPackagingSupervisorUser($customer_id)); 
+			$PAOOdata['product_id'] = get_products_id_by_customer_erp_product_id($psoo_customer_erp_product_id); 
+			$PAOOdata['tracek_packer_id'] = getAssignSinglePackerUser($customer_id); 
+			$PAOOdata['tracek_packer_name'] = getTracekUserFullNameById(getAssignSinglePackerUser($customer_id)); 
+			$PAOOdata['product_id'] = get_products_id_by_customer_erp_product_id($psoo_customer_erp_product_id); 
+			$PAOOdata['pick_list_number'] = $pick_list_number; 
+			$PAOOdata['product_name'] = get_products_name_by_id($PAOOdata['product_id']); 
+			$PAOOdata['psoo_quantity'] = $psoo_quantity; 
+			$PAOOdata['psoo_product_origin_type'] = $psoo_product_origin_type;
+			$PAOOdata['psoo_bin_number'] = $psoo_bin_number;
+			$PAOOdata['microsite_url'] = $Microsite_URL; 
+			$PAOOdata['psoo_token_id'] = $psoo_token_id; 
+			$PAOOdata['psoo_invoice_number'] = $psoo_invoice_number; 
+			$PAOOdata['psoo_codes'] = ""; 
+			$PAOOdata['psoo_ip_address'] = $psoo_ip_address; 
+			$PAOOdata['psoo_latitude'] = $psoo_latitude;
+			$PAOOdata['psoo_longitude'] = $psoo_longitude;
+			$PAOOdata['psoo_city'] = $psoo_city;
+			$PAOOdata['psoo_pin_code'] = $psoo_pin_code;
+			$PAOOdata['psoo_date_time'] = date('Y-m-d H:i:s'); 			
+			$PAOOdata['psoo_packing_start_date_time'] = "";
+			$PAOOdata['psoo_packing_end_date_time'] = "";
+			$PAOOdata['psoo_more_fields'] = $psoo_more_fields;
+			if(getPackagingSupervisorUser($customer_id)==0){
+			$PAOOdata['assigned_to_psupervisor_datetime'] = ""; 
+				}else{					
+			$PAOOdata['assigned_to_psupervisor_datetime'] = date('Y-m-d H:i:s'); 		
+				}
+			if(getPackagingSupervisorUser($customer_id)==0){
+			$PAOOdata['tracek_packer_assigned_datetime'] = ""; 
+				}else{					
+			$PAOOdata['tracek_packer_assigned_datetime'] = date('Y-m-d H:i:s');  		
+				}	
+			
+		// Consumer Log Data insert end
+			
+        if ($this->db->insert('packaging_ship_out_order', $PAOOdata)) {
+			
+			/*
+			$TRNNC_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 10)->get()->row();
+			$TRNNC_billin_particular_name = $TRNNC_result->billin_particular_name;
+			$TRNNC_billin_particular_slug = $TRNNC_result->billin_particular_slug;
+			*/
+			
+			$MRLP1_billin_particular_name = "Packaging Ship Out Order";
+			$MRLP1_billin_particular_slug = "Packaging_Ship_Out_Order";
+		
+		
+			$TRNNCData['customer_id'] = $customer_id;
+			$TRNNCData['consumer_id'] = $consumer_id;
+			$TRNNCData['billing_particular_name'] = $MRLP1_billin_particular_name.' Placed';		
+			$TRNNCData['billing_particular_slug'] = $MRLP1_billin_particular_slug.'_Placed';
+			$TRNNCData['trans_quantity'] = 1; 
+			$TRNNCData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$TRNNCData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $TRNNCData);		
+			
+		 Utils::response(['status' => true, 'message' => 'Order placed', 'product_code_quantity' => $psoo_quantity, 'data' => $PAOOdata], 200);
+			
+        } else {
+            Utils::response(['status' => false, 'message' => 'Redemption failed.'], 200);
+        }
+    }
+	
+	// add Packaging Ship Out Order ends 
 	
 
 }

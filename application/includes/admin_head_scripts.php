@@ -4,7 +4,7 @@
 
 		<meta charset="utf-8" />
 
-		<title>howzzt - <?php echo getSeoTitle();?></title>
+		<title>TRUSTAT - <?php echo getSeoTitle();?></title>
 
 
 

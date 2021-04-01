@@ -696,7 +696,7 @@
 						else if($.trim(msg)=='status'){
  							$('#eror_msg').html('Your registration is waiting for admin approval!').css('color', 'red').show().delay(5000).fadeOut('slow');
  						}else if($.trim(msg)=='wrong-pass'){
- 							$('#eror_msg').html('User Not Exists!').css('color', 'red').show().delay(5000).fadeOut('slow');;
+ 							$('#eror_msg').html('User Name and password does not match!!').css('color', 'red').show().delay(5000).fadeOut('slow');;
  							$("#displayAfter").hide();
  							$("#submitbtn").show();
  						}else{					

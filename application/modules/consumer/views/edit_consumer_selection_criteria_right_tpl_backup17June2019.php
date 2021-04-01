@@ -97,8 +97,8 @@
            <option value="">-Consumer City of Registration-</option>	
 			<option value="<?php echo $get_user_details[0]['city_registration'];?>" selected><?php echo $get_user_details[0]['city_registration'];?></option>	
 				<option value="all">All</option>
-            <?php foreach(getConsumerData('city') as $val){?>
-				<option value="<?php echo $val['city'];?>"><?php  echo $val['city'];?></option> 
+            <?php foreach(getConsumerData('registration_city') as $val){?>
+				<option value="<?php echo $val['registration_city'];?>"><?php  echo $val['registration_city'];?></option> 
 			<?php } ?>				
             </select>				
 			</div>			

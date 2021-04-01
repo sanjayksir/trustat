@@ -101,5 +101,14 @@ class CustomerModel extends CI_Model {
         //echo $this->db->last_query();die;
         return $users;
     }
+	
+	
+	 public function findByLoyaltyRedemption($conditions=[]){
+        $query = $this->db->get_where('loyalty_redemption_customer_cashier',$conditions)->row();
+        if(empty($query )){
+            return false;
+        }
+        return $query;
+    }
 
 }

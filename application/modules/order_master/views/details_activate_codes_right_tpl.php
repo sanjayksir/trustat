@@ -63,7 +63,7 @@
 
           <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
 
-            <input class="btn btn-info" type="submit" name="submit" value="Activate" id="savemenu" />
+            <input class="btn btn-info" type="submit" name="submit" value="Activate Codes at Selected Packaging Level" id="savemenu" onclick="this.style.display='none'" />
 			<a href="<?php echo base_url('order_master/list_orders') ?>" class="btn btn-info" title="Back to List Loyalty Matrix">Back to Order Management <?php //echo $label; ?> </a>
           </div>
 

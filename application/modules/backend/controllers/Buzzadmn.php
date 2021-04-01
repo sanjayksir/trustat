@@ -489,7 +489,7 @@ class Buzzadmn extends MX_Controller
     function preview($spidey_pic_id) {
 		$this->checklogin();
         $spidey_title = $this->Buzzadmn_model->getSpideyTitle($spidey_pic_id);
-        redirect('http://www.innovigents.com/spideypick_detail.php?id=' . $spidey_pic_id . '&sef=' . $spidey_title[0]['spidyName']);
+        redirect('http://www.'.$_SERVER['SERVER_NAME'].'backend/dashboard');
     }
 	
 	 private function _flashAndRedirect($successful, $successmsg, $failmsg) {

@@ -209,7 +209,66 @@ return $result;
                 }          
     }
 	
+	/*
+	public function isRefrenceReceived($mobile_no) {
+		
+		 $query = $this->db->get_where('consumer_referral_table', array('referred_mobile_no' => $mobile_no,'referral_consumed' => 0)); 
+
+                if ($query->num_rows() == 0 )
+                {
+                     return FALSE;
+                }
+                else
+                {
+                      return TRUE;
+                }          
+    }
+	*/
+	public function findRefrenceReceived($mobile_no){
+        if($mobile_no == null){
+            return false;
+        }
+        
+   $query = $this->db->select('referral_reference_id,media_type,product_id,referred_mobile_no,referral_consumed,referral_link_clicked_datetime,referral_media_apd')
+                ->from('consumer_referral_table')               
+                ->where(array('referred_mobile_no' => $mobile_no,'referral_consumed' => 0,'referral_media_apd' => 0))
+				->limit(1)
+				->order_by('referral_link_clicked_datetime', 'DESC')				
+                ->get()
+                ->result();
+        if(empty($query)){
+            return false;
+        }
+        //echo "<pre>";print_r($query);die;
+        $items = [];
+        foreach($query as $row){
+            $item = [
+				'referral_reference_id' => $row->referral_reference_id,
+				'media_type' => $row->media_type,
+				'product_id' => $row->product_id,	
+				//'referral_link_clicked_datetime' => $row->referral_link_clicked_datetime,
+        'media_url' => "http://".$_SERVER['SERVER_NAME']."/uploads/" . getMediaURLByProductIdAndMediaType($row->product_id, 'product_push_ad_video'),
+				//'referral_consumed' => $row->referral_consumed,
+            ];
+                       
+            $items[] = $item;
+        }
+        return $items;
+    }	
 	
+		public function isFeedbackAnsDueLA($ConsumerID) {
+		
+		 $query = $this->db->get_where('push_advertisements', array('consumer_id' => $ConsumerID,'ad_feedback_response' => "No",'ad_active' => 1)); 
+
+                if ($query->num_rows() == 0 )
+                {
+                     return FALSE;
+                }
+                else
+                {
+                      return TRUE;
+                }          
+    }
 	
 	public function findConsumerRelatives($userid){
         if($userid == null){

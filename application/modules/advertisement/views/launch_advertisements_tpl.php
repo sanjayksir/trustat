@@ -37,7 +37,7 @@
                                                     <button type="button" class="close" data-dismiss="alert">
                                                             <i class="ace-icon fa fa-times"></i>
                                                     </button>
-                                                    <i class="ace-icon fa fa-check green"></i>Codes Upoaded Successfully!2
+                                                    <i class="ace-icon fa fa-check green"></i>Codes Upoaded Successfully!
                              </div>
                             <div class="row">
                                     <div class="col-xs-12">
@@ -84,6 +84,7 @@
 																<th>Advertisement Title</th>
                                                                 <th>Media Type</th>
                                                                 <th>Number of Consumers</th>
+																<th>Notification Message for Advertisement</th>
                                                                 <th>Status</th>
 																<th>Review Advertisement</th>
 																<th>Consumer Data</th>
@@ -120,26 +121,34 @@
 														<td><?php echo $listData['promotion_title']; ?></td>
                                                         <td><?php echo $listData['promotion_media_type']; ?></td>
 														<td><?php echo $listData['number_of_consumers']; ?></td>
-                                                       
-                                                        <?php if($this->session->userdata('admin_user_id')==1){
-                                                               
-
-                                                                ?>
+                                                       <td><?php echo $listData['promotion_notification_message']; ?></td>
+                                                        <?php if($this->session->userdata('admin_user_id')==1){ ?>
 
                                                          <td>
 														 
 	<?php //echo $attr['quantity']; 
 		$sent_to = $listData['unique_system_selection_criteria_id']; 
 		$promotion_media_type = $listData['promotion_media_type']; 
+		if($sent_to=='All'){
+			$fullstr = $listData['number_of_consumers'];
+			$number_of_consumers = substr($fullstr, 3);
+		}else{
+			$number_of_consumers = $listData['number_of_consumers']; 	
+		}
 		//echo $sent_to;
 		
 		//echo $listData['request_status'] . "Sanjay";
-	
+	$product_media =  "product_" . strtolower($listData['promotion_media_type']);
+														 //echo $pmtype;
+				$media = getPromotionMediaByProductId($listData['product_id'], $product_media);
+				if($media==""){
+							echo "Please ask the Customer to Upload Product ".$listData['promotion_media_type'];
+									}else{
 	?>								 
 	<input <?php 
 	//$answerQuery = $this->db->get_where('push_advertisements',"promotion_id='".$listData['promotion_id']."'");
-	if($listData['request_status'] == 1){ ?>checked="checked"<?php } else {} ?> id="product_<?php echo $listData['product_id'];?>" name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $listData['user_id'];?>','<?php echo $listData['product_id'];?>','<?php echo $listData['promotion_id'];?>','<?php echo $listData['promotion_title'];?>','<?php echo $sent_to; ?>','<?php echo $promotion_media_type; ?>');" type="checkbox" <?php if($listData['request_status']==2){ echo "disabled"; }  ?> >
-	<span class="lbl"></span> <?php echo promotion_status($listData['request_status']); ?>
+	if($listData['request_status'] == 1){ ?>checked="checked"<?php } else {} ?> id="product_<?php echo $listData['product_id'];?>" name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $listData['user_id'];?>','<?php echo $listData['product_id'];?>','<?php echo $listData['promotion_id'];?>','<?php echo $listData['promotion_title'];?>','<?php echo $listData['promotion_notification_message'];?>','<?php echo $sent_to; ?>','<?php echo $promotion_media_type; ?>','<?php echo $number_of_consumers; ?>');" type="checkbox" <?php if($listData['request_status']==2){ echo "disabled"; }  ?> >
+									<span class="lbl"></span> <?php echo promotion_status($listData['request_status']); }?>
 	
 	
          <?php //if($essentialAttributeArr['delivery_method']==4){?>
@@ -153,7 +162,14 @@
                                                         //}?>
                                                         </td> 
                                                         <?php }else{?>
-                                                         <td><?php echo promotion_status($listData['request_status']); ?></td>
+                                                        <td><?php 
+											$product_media =  "product_" . strtolower($listData['promotion_media_type']);
+														 //echo $pmtype;
+												$media = getPromotionMediaByProductId($listData['product_id'], $product_media);
+														 if($media==""){
+															echo "Please Upload Product ".$listData['promotion_media_type'];
+														 }else{
+														 echo promotion_status($listData['request_status']); } ?></td>
                                                         <?php }?>
 														
 														
@@ -186,7 +202,7 @@
 				 ?>
 				 
 				 
-                <!-- <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['order_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['order_id'];?>',this.value);" />-->
+                <!-- <input <?php //echo $colorStyle; ?>type="button" name="status" id="status_<?php //echo $listData['order_id'];?>" value="<?php //echo $status ;?>" onclick="return change_status('<?php //echo $listData['order_id'];?>',this.value);" />-->
             </div>
 
         </td>
@@ -311,12 +327,12 @@ $("#product").html(msg);
 
                                   <div class="form-group row">
                                   <div class="col-sm-12">
-                                  <label for="form-field-8">Promotion Media Type</label>
+                                  <label for="form-field-8">Advertisement Media Type</label>
 								  <select name="promotion_media_type" id="promotion_media_type" class="form-control">
 										<option value="">- Please Select Promotion Media Type -</option>
 										<option value="Video">Advertisement on Product Video</option>	
 										<option value="Audio">Advertisement on Product Audio</option>
-										<option value="PDF">Advertisement on Product PDF</option>
+									<!--	<option value="PDF">Advertisement on Product PDF</option> -->
 										<option value="Image">Advertisement on Product Image</option>
 									<!--	<option value="Text">Advertisement on Product Description</option> -->
 									</select>
@@ -327,13 +343,18 @@ $("#product").html(msg);
                                   <div class="col-sm-12">
                                   <label for="form-field-8">Select Consumer Selection Criteria</label>
                                   <select name="number_of_consumers_ci" id="number_of_consumers_ci" class="form-control">
-										<option value="All <?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>-All">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>
-										
+										<option value="All <?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>-All">All Consumers (<?php echo NumberOfAllConsumersOfACustomer($customer_id); ?>)</option>										
 										<?php foreach(getConsumerSelectionCriterias($customer_id) as $val){ ?>
 			<option value="<?php echo NumberOfSelectedConsumersByACustomer2($customer_id, $val['unique_system_selection_criteria_id']); ?>-<?php echo $val['unique_system_selection_criteria_id']; ?>"><?php echo $val['unique_system_selection_criteria_id'];?> -> <?php  echo $val['name_of_selection_criteria'];?> -> (<?php echo NumberOfSelectedConsumersByACustomer2($customer_id, $val['unique_system_selection_criteria_id']); ?> Consumers)</option> 
 								<?php } ?>	
-								  </select>
+								  </select>								  
+                                  </div>
+                                  </div>
 								  
+								  <div class="form-group row">
+                                  <div class="col-sm-12">
+                                  <label for="form-field-8">Notification Message for Advertisement</label>
+								  <input name="promotion_notification_message" id="promotion_notification_message" type="text" value="" placeholder="Please enter Notification Message for Advertisement" class="form-control">
                                   </div>
                                   </div>
 
@@ -425,7 +446,7 @@ $("#product").html(msg);
     var table;
 
 
-	function add_question_to_product(created_by, id, promotion_id, promotion_title, sent_to, promotion_media_type){
+	function add_question_to_product(created_by, id, promotion_id, promotion_title, promotion_notification_message, sent_to, promotion_media_type, number_of_consumers){
 	var r = confirm("Are you Sure to process your action?");
 	if (r == true) {
 		if ($("#product_"+id).prop('checked')==true){ 
@@ -438,7 +459,7 @@ $("#product").html(msg);
 			dataType:'html',
 			type:'POST',
 			url:'<?php echo base_url().'advertisement/save_push_advertisement/';?>',
-			data:{c_id:created_by,p_id:id,promotion_id:promotion_id,promotion_title:promotion_title,sent_to:sent_to,promotion_media_type:promotion_media_type,Chk:Chk},
+			data:{c_id:created_by,p_id:id,promotion_id:promotion_id,promotion_title:promotion_title,promotion_notification_message:promotion_notification_message,sent_to:sent_to,promotion_media_type:promotion_media_type,number_of_consumers:number_of_consumers,Chk:Chk},
 			success:function (msg){
 			}
 		
@@ -466,6 +487,7 @@ $("#product").html(msg);
 			plant_id: {required: true},
             "product[]":{required: true},
 			promotion_title: {required: true},
+			promotion_notification_message: {required: true},
         promotion_media_type: {required: true}
             } ,
 
@@ -473,6 +495,7 @@ $("#product").html(msg);
 			plant_id: {	required: "Please Select a Plant"} ,
             "product[]": {required: "Please Select Product" } , 
 			promotion_title: {	required: "Please Enter Promotion Title"} ,
+			promotion_notification_message: {	required: "Please Enter Promotion Notification Message for the Advertisement"} ,
             promotion_media_type: {	required: "Please Select Media Type"} 
     },
     submitHandler: function(form) {

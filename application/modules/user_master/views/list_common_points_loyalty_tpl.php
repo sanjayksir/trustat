@@ -96,7 +96,8 @@
                                             <th>#</th>
                                             <th>Loyalty Type  Name</th>
                                             <th>Points</th>
-                                            
+											<th>Expiry Days</th>
+											<th>Active Status</th>
                                             <th>Action</th>
                                     </tr>
                             </thead>
@@ -120,6 +121,8 @@ if($status ==1){
                                            <td><?php echo $sno;$sno++; ?></td>
                                                 <td><?php echo $listData['transaction_type']; ?></td>
                                                 <td><?php echo $listData['loyalty_points']; ?></td>
+												<td><?php echo $listData['expiry_days']; ?></td>
+												<td><?php echo $listData['active_status']; ?></td>
                                                  <td>
 												 <div class="hidden-sm hidden-xs action-buttons">
 												 

@@ -76,7 +76,7 @@
 
                     <!--left end---->
 
-                    <div style="clear:both;height:40px;"><a href="<?php echo base_url()?>role_master/list_assigned_functionalities_to_role" class="btn btn-primary pull-right" title="List Assigned Functionalities to Role">List Assigned Functionalities to Role</a></div>
+                    <div style="clear:both;height:40px;"><a href="<?php echo base_url()?>role_master/list_assigned_functionalities_to_role/<?php echo $this->uri->segment(3); ?>" class="btn btn-primary pull-right" title="List Assigned Functionalities to Role">List Assigned Functionalities to Role</a></div>
 
                     <div class="col-xs-12">
 
@@ -96,7 +96,7 @@
 
     <div class="widget-header">
 
-      <h4 class="widget-title">Assign Functionalities to Role</h4>
+      <h4 class="widget-title">KKAssign Functionalities to Role <?php //echo $this->uri->segment(3); ?></h4>
 
       <div class="widget-toolbar"> <a href="#" data-action="collapse"> <i class="ace-icon fa fa-chevron-up"></i> </a> <a href="#" data-action="close"> <i class="ace-icon fa fa-times"></i> </a> <a href="#" class="show_loader"  data-action="reload" style="display:none;"><i class="ace-icon fa fa-refresh"></i></a> </div>
 
@@ -111,8 +111,8 @@
 
 $user_id 	= $this->session->userdata('admin_user_id');//echo '<pre>';print_r($this->session->userdata('admin_user_id'));
 
-if( $this->uri->segment(3)!=''){
-	$user_id=	$this->uri->segment(3);
+if( $this->uri->segment(4)!=''){
+	$user_id=	$this->uri->segment(4);
 	$UserData = get_parent_user($user_id,'1'); 
 	$SelectDD='';
 }else{
@@ -123,7 +123,8 @@ if( $this->uri->segment(3)!=''){
 $ActiveRoles = get_active_roles($user_id,'1');
 //echo '<pre>';print_r($UserData);?>
       <form name="user_frm" id="user_frm" action="#" method="POST" onsubmit="return saved_assigned_data();">
-<input type="hidden" name="is_edit" value="<?php echo ($this->uri->segment(3))?1:0;?>" />
+<input type="hidden" name="is_edit" value="<?php echo ($this->uri->segment(4))?1:0;?>" />
+<input type="hidden" name="customer_idF" value="<?php echo $this->uri->segment(3); ?>" />
         <div class="widget-main">
 		 
 		<div class="form-group row">
@@ -134,14 +135,15 @@ $ActiveRoles = get_active_roles($user_id,'1');
             <?php }
  			//$plant_data = get_all_plants($user_id);
  			foreach($ActiveRoles as $res){?>
-            <option value="<?php echo $res['id'];?>" <?php if($this->uri->segment(3)==$res['id']){echo 'selected';}?>><?php echo ucfirst($res['role_name_value']);?></option>
+            <option value="<?php echo $res['id'];?>" <?php if($this->uri->segment(4)==$res['id']){echo 'selected';}?>><?php echo ucfirst($res['role_name_value']);?></option>
  			<?php }?>
             </select>
+			<!--
 			<br /><br />
 			<label for="form-field-8">How many users you need of this Role?</label><br />
 			
 			<div id="role_quantity"></div>
-			
+			-->
 			</div>
 			
 			<div class="col-sm-6">
@@ -158,7 +160,7 @@ $ActiveRoles = get_active_roles($user_id,'1');
 				$.ajax({
 				type:'POST',
 				url:'<?php echo base_url().'role_master/getActiveFunctionalitiestList'?>',
-				data:{id:id},
+				data:{id:id, customer_id:<?php echo $this->uri->segment(3); ?>},
 				success:function(msg){
 					$("#functionalities").html(msg);
 				}
@@ -180,9 +182,9 @@ $ActiveRoles = get_active_roles($user_id,'1');
 		 }
 		 
 		 </script>
-		 <?php if(!empty($this->uri->segment(3))){?>
-		 <script>get_functionalities(<?php echo $this->uri->segment(3);?>);</script>
-		  <script>created_users_for_the_role(<?php echo $this->uri->segment(3);?>);</script>
+		 <?php if(!empty($this->uri->segment(4))){?>
+		 <script>get_functionalities(<?php echo $this->uri->segment(4);?>);</script>
+		  <script>created_users_for_the_role(<?php echo $this->uri->segment(4);?>);</script>
 		 <?php }?>
  		 
             <hr>
@@ -374,7 +376,7 @@ $.ajax({
 				$('#ajax_msg').text("Functionalities Assigned Successfully!").css("color","green").show();
 				$('#blah').attr('src', '').hide();
 				$('#user_frm')[0].reset(); 
-				 window.location.href="<?php echo base_url(); ?>role_master/list_assigned_functionalities_to_role";						
+				 window.location.href="<?php echo base_url(); ?>role_master/list_assigned_functionalities_to_role/<?php echo $this->uri->segment(3); ?>";						
 			}
 			 
 		},

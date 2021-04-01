@@ -160,6 +160,40 @@
 
  	  echo $this->Product_model->IsExistsProduct($name,$id='');exit;
   }
+  
+    function checkCustomerERPProductID($id=''){
+  $user_id 	= $this->session->userdata('admin_user_id');
+		if(empty($user_id)){
+ 			redirect(base_url().'login');	exit;
+ 		}
+	   $name = $this->input->post('customer_erp_product_id');
+
+
+ 	  echo $this->Product_model->IsCustomerERPProductID($name,$id='');exit;
+  }
+  
+  
+  function checkDateMoreThanToday(){
+  $user_id 	= $this->session->userdata('admin_user_id');
+		if(empty($user_id)){
+ 			redirect(base_url().'login');	exit;
+ 		}
+		
+	   $referral_program_auto_off_date = $this->input->post('referral_program_auto_off_date');
+
+ 	 echo $this->Product_model->isDateMoreThanToday($referral_program_auto_off_date);exit; 
+  }
+  
+    function checkDateMoreThanTodayEdit(){
+  $user_id 	= $this->session->userdata('admin_user_id');
+		if(empty($user_id)){
+ 			redirect(base_url().'login');	exit;
+ 		}
+		
+	   $referral_program_auto_off_date = $this->input->post('referral_program_auto_off_date');
+
+ 	 echo $this->Product_model->isDateMoreThanTodayEdit($referral_program_auto_off_date);exit; 
+  }
 
   function save_product($id='') {
   $user_id 	= $this->session->userdata('admin_user_id');
@@ -261,11 +295,444 @@
 			$params["links"] = Utils::pagination('product/list_product/' . $customer_id, $total_records, null, 4);
 			}
 		
-        
+        $ConsumerReferralDetails = $this->Product_model->ConsumerReferralDetails2("230", "9971411559");
+			$params["ConsumerReferralID"] = $ConsumerReferralDetails->referral_id;
+			$params["loyalty_points_referral"] = $ConsumerReferralDetails->loyalty_points_referral;
+			
         $this->load->view('product_list', $params);
     }
+	
+	
+   public function list_all_products() {
+        $this->checklogin();
+        if (!empty($this->input->post('del_submit'))) {
+            if ($this->db->query("delete from products where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Product Deleted Successfully!');
+            }
+        }
+        ##--------------- pagination start ----------------##
+        // init params
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+		
+		if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+		
+		 
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+		
+		/*
+		$params["TotalNumberofScannedCodesLevel0"] = $this->db->where('pack_level', 0)
+		->from("scanned_products")
+		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
+		->count_all_results();  
+		$params["TotalNumberofScannedCodesLevel1"] = $this->db->where('pack_level', 1)
+		->from("scanned_products")
+		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
+		->count_all_results(); 
+		*/
+		
+        $total_records = $this->Product_model->total_product_listing_all($srch_string);
+        $params["product_list"] = $this->Product_model->product_listing_all($limit_per_page, $start_index, $srch_string);
+		$params["list_all_customers_products"] = $this->Product_model->list_all_customers_products();
+		if($user_id>1){
+		$params["links"] = Utils::pagination('product/list_all_products', $total_records);
+			}else{
+			$params["links"] = Utils::pagination('product/list_all_products/' . $customer_id, $total_records, null, 4);
+			}
+		/*
+        $ConsumerReferralDetails = $this->Product_model->ConsumerReferralDetails2("230", "9971411559");
+			$params["ConsumerReferralID"] = $ConsumerReferralDetails->referral_id;
+			$params["loyalty_points_referral"] = $ConsumerReferralDetails->loyalty_points_referral;
+			*/
+        $this->load->view('list_all_products_tpl', $params);
+    }	
 // list assigned products to Plant controller
 
+   public function referral_mis() {
+        $this->checklogin();
+        if (!empty($this->input->post('del_submit'))) {
+            if ($this->db->query("delete from products where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Product Deleted Successfully!');
+            }
+        }
+        ##--------------- pagination start ----------------##
+        // init params
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+		
+		$from_date_data = $this->input->get('from_date_data');
+		$to_date_data = $this->input->get('to_date_data');
+		
+		if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+		
+		 
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_referral_mis_listing($srch_string, $from_date_data, $to_date_data);
+        $params["product_list"] = $this->Product_model->referral_mis_listing($limit_per_page, $start_index, $srch_string, $from_date_data, $to_date_data);
+		if($user_id>1){
+		$params["links"] = Utils::pagination('product/referral_mis', $total_records);
+			}else{
+			$params["links"] = Utils::pagination('product/referral_mis/' . $customer_id, $total_records, null, 4);
+			}
+		
+		/*
+        $ConsumerReferralDetails = $this->Product_model->ConsumerReferralDetails2("230", "9971411559");
+			$params["ConsumerReferralID"] = $ConsumerReferralDetails->referral_id;
+			$params["loyalty_points_referral"] = $ConsumerReferralDetails->loyalty_points_referral;
+			*/
+        $this->load->view('referral_mis_tpl', $params);
+    }
+	
+	   public function referral_mis_download() {
+        $this->checklogin();
+        if (!empty($this->input->post('del_submit'))) {
+            if ($this->db->query("delete from products where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Product Deleted Successfully!');
+            }
+        }
+		
+		$mnv58_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 58)->get()->row();
+		$mnvtext58 = $mnv58_result->message_notification_value;
+		
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $mnvtext58;
+        }else{
+            $limit_per_page = $mnvtext58;
+        }
+		
+        ##--------------- pagination start ----------------##
+        // init params
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $mnvtext58;
+        }else{
+            $limit_per_page = $mnvtext58;
+        }
+        $this->config->set_item('pageLimit2', $limit_per_page);
+		
+		$from_date_data = $this->input->get('from_date_data');
+		$to_date_data = $this->input->get('to_date_data');
+		
+		if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+        $srch_string = $this->input->get('search');
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_referral_mis_listing($srch_string, $from_date_data, $to_date_data);
+        $params["product_list"] = $this->Product_model->referral_mis_listing($limit_per_page, $start_index, $srch_string, $from_date_data, $to_date_data);
+		if($user_id>1){
+		$params["links"] = Utils::pagination('product/referral_mis', $total_records);
+		$params["links2"] = Utils::pagination2('product/referral_mis', $total_records);
+			}else{
+			$params["links"] = Utils::pagination('product/referral_mis/' . $customer_id, $total_records, null, 4);
+			$params["links2"] = Utils::pagination2('product/referral_mis/' . $customer_id, $total_records, null, 4);
+			}
+		$params["total_records2"] = $total_records; 
+		/*
+        $ConsumerReferralDetails = $this->Product_model->ConsumerReferralDetails2("230", "9971411559");
+			$params["ConsumerReferralID"] = $ConsumerReferralDetails->referral_id;
+			$params["loyalty_points_referral"] = $ConsumerReferralDetails->loyalty_points_referral;
+			*/
+        $this->load->view('referral_mis_download_tpl', $params);
+    }
+	
+	// In-Store Redemption MIS Report
+	
+	
+	   public function tracek_loyalty_redemption() {
+        $this->checklogin();
+        if (!empty($this->input->post('del_submit'))) {
+            if ($this->db->query("delete from products where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Product Deleted Successfully!');
+            }
+        }
+        ##--------------- pagination start ----------------##
+        // init params
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+		
+		if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+		
+		 
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_tracek_loyalty_redemption_count($srch_string);
+        $params["product_list"] = $this->Product_model->tracek_loyalty_redemption_listing($limit_per_page, $start_index, $srch_string);
+		if($user_id>1){
+		$params["links"] = Utils::pagination('product/tracek_loyalty_redemption', $total_records);
+			}else{
+			$params["links"] = Utils::pagination('product/tracek_loyalty_redemption/' . $customer_id, $total_records, null, 4);
+			}
+		
+		/*
+        $ConsumerReferralDetails = $this->Product_model->ConsumerReferralDetails2("230", "9971411559");
+			$params["ConsumerReferralID"] = $ConsumerReferralDetails->referral_id;
+			$params["loyalty_points_referral"] = $ConsumerReferralDetails->loyalty_points_referral;
+			*/
+        $this->load->view('tracek_loyalty_redemption_tpl', $params);
+    }
+	
+	// 
+	
+   public function in_store_redemption_mis() {
+        $this->checklogin();
+        if (!empty($this->input->post('del_submit'))) {
+            if ($this->db->query("delete from products where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Product Deleted Successfully!');
+            }
+        }
+        ##--------------- pagination start ----------------##
+        // init params
+		
+		$from_date_data = $this->input->get('from_date_data');
+		$to_date_data = $this->input->get('to_date_data');
+
+		
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+		
+		if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+		
+		 
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_in_store_redemption_mis_listing($srch_string, $from_date_data, $to_date_data);
+        $params["product_list"] = $this->Product_model->in_store_redemption_mis_listing($limit_per_page, $start_index, $srch_string, $from_date_data, $to_date_data);
+		if($user_id>1){
+		$params["links"] = Utils::pagination('product/in_store_redemption_mis', $total_records);
+			}else{
+			$params["links"] = Utils::pagination('product/in_store_redemption_mis/' . $customer_id, $total_records, null, 4);
+			}
+		/*
+        $ConsumerReferralDetails = $this->Product_model->ConsumerReferralDetails2("230", "9971411559");
+			$params["ConsumerReferralID"] = $ConsumerReferralDetails->referral_id;
+			$params["loyalty_points_referral"] = $ConsumerReferralDetails->loyalty_points_referral;
+			*/
+        $this->load->view('in_store_redemption_mis_tpl', $params);
+    }
+	
+	
+	   public function in_store_redemption_mis_download() {
+        $this->checklogin();
+        if (!empty($this->input->post('del_submit'))) {
+            if ($this->db->query("delete from products where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Product Deleted Successfully!');
+            }
+        }
+        ##--------------- pagination start ----------------##
+        // init params
+		
+		$mnv58_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 58)->get()->row();
+		$mnvtext58 = $mnv58_result->message_notification_value;
+		
+		$from_date_data = $this->input->get('from_date_data');
+		$to_date_data = $this->input->get('to_date_data');
+
+		
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $mnvtext58;
+        }else{
+            $limit_per_page = $mnvtext58;
+        }
+        $this->config->set_item('pageLimit2', $limit_per_page);
+		
+		if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+		
+		 
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_in_store_redemption_mis_listing($srch_string, $from_date_data, $to_date_data);
+        $params["product_list"] = $this->Product_model->in_store_redemption_mis_listing($limit_per_page, $start_index, $srch_string, $from_date_data, $to_date_data);
+		if($user_id>1){
+		$params["links"] = Utils::pagination('product/in_store_redemption_mis', $total_records);
+		$params["links2"] = Utils::pagination2('product/in_store_redemption_mis', $total_records);
+			}else{
+			$params["links"] = Utils::pagination('product/in_store_redemption_mis/' . $customer_id, $total_records, null, 4);
+			$params["links2"] = Utils::pagination2('product/in_store_redemption_mis/' . $customer_id, $total_records, null, 4);
+			}
+		/*
+        $ConsumerReferralDetails = $this->Product_model->ConsumerReferralDetails2("230", "9971411559");
+			$params["ConsumerReferralID"] = $ConsumerReferralDetails->referral_id;
+			$params["loyalty_points_referral"] = $ConsumerReferralDetails->loyalty_points_referral;
+			*/
+		$params["total_records2"] = $total_records;	
+        $this->load->view('in_store_redemption_mis_download_tpl', $params);
+    }
+	
+	   public function mis_redemption_microsite() {
+        $this->checklogin();
+       
+        ##--------------- pagination start ----------------##
+        // init params
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+		
+		$from_date_data = $this->input->get('from_date_data');
+		$to_date_data = $this->input->get('to_date_data');
+
+		
+		if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}		
+		 
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_mis_redemption_microsite_listing($srch_string, $from_date_data, $to_date_data);
+        $params["product_list"] = $this->Product_model->list_mis_redemption_microsite_listing($limit_per_page, $start_index, $srch_string, $from_date_data, $to_date_data);
+		if($user_id>1){
+		$params["links"] = Utils::pagination('product/mis_redemption_microsite', $total_records);
+			}else{
+			$params["links"] = Utils::pagination('product/mis_redemption_microsite/' . $customer_id, $total_records, null, 4);
+			}
+		/*
+        $ConsumerReferralDetails = $this->Product_model->ConsumerReferralDetails2("230", "9971411559");
+			$params["ConsumerReferralID"] = $ConsumerReferralDetails->referral_id;
+			$params["loyalty_points_referral"] = $ConsumerReferralDetails->loyalty_points_referral;
+			*/
+        $this->load->view('mis_redemption_microsite_tpl', $params);
+    }
+
+	   public function mis_redemption_microsite_download() {
+        $this->checklogin();
+       
+        ##--------------- pagination start ----------------##
+        // init params
+		
+		$mnv58_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 58)->get()->row();
+		$mnvtext58 = $mnv58_result->message_notification_value;
+		
+		
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $mnvtext58;
+        }else{
+            $limit_per_page = $mnvtext58;
+        }
+        $this->config->set_item('pageLimit2', $limit_per_page);
+		
+		$from_date_data = $this->input->get('from_date_data');
+		$to_date_data = $this->input->get('to_date_data');
+
+		
+		if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}		
+		 
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_mis_redemption_microsite_listing($srch_string, $from_date_data, $to_date_data);
+        $params["product_list"] = $this->Product_model->list_mis_redemption_microsite_listing($limit_per_page, $start_index, $srch_string, $from_date_data, $to_date_data);
+		if($user_id>1){
+			$params["links"] = Utils::pagination('product/mis_redemption_microsite_download', $total_records);
+		$params["links2"] = Utils::pagination2('product/mis_redemption_microsite_download', $total_records);
+			}else{
+				$params["links"] = Utils::pagination('product/mis_redemption_microsite_download/' . $customer_id, $total_records, null, 4);
+			$params["links2"] = Utils::pagination2('product/mis_redemption_microsite_download/' . $customer_id, $total_records, null, 4);
+			}
+		$params["total_records2"] = $total_records;	
+		/*
+        $ConsumerReferralDetails = $this->Product_model->ConsumerReferralDetails2("230", "9971411559");
+			$params["ConsumerReferralID"] = $ConsumerReferralDetails->referral_id;
+			$params["loyalty_points_referral"] = $ConsumerReferralDetails->loyalty_points_referral;
+			*/
+        $this->load->view('mis_redemption_microsite_download_tpl', $params);
+    }
+	
+	
 function list_assigned_products() {
 		 $this->checklogin();
 		 if(!empty($this->input->post('del_submit'))){
@@ -566,6 +1033,13 @@ function list_assigned_products() {
 		 $data['edit_demo_video_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(4));
    		 $this->load->view('demo_video_feedback', $data);
 	}
+	
+	function edit_product_referral_response_message_options(){
+		 $data					= array();
+		 $data['edit_demo_audio_feedback_data'] = $this->Product_model->fetch_feedback_question_detail($this->uri->segment(4));
+   		 $this->load->view('referral_response_message_options', $data);
+	}
+	
    /*
 	function delete_attribute($id){//echo '**'.$id;exit;
 	 	$data = $this->Product_model->delete_attr($id);
@@ -1083,6 +1557,74 @@ function list_assigned_products() {
 
 	}
 	
+	
+		// List Product Referral Title message Options 
+	function ask_product_referral_response_message_options($id=''){
+		if(empty($id)){
+			redirect('product/list_product');
+		}
+ 		 $this->checklogin();
+ 		 ##--------------- pagination start ----------------##
+		 // init params
+        $params = array();
+        $limit_per_page = 20;
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		$srch_string =  $this->input->post('search');
+		if(empty($srch_string)){
+			$srch_string ='';
+		}
+        $total_records = $this->Product_model->total_product_referral_response_message_options_listing($srch_string, $id);
+
+		if ($total_records > 0)
+        {
+            // get current page records
+            $params["product_list"] = $this->Product_model->product_referral_response_message_options_listing($limit_per_page, $start_index,$srch_string, $id);
+
+            $config['base_url'] = base_url() . 'product/manage_referral_response_message_options';
+            $config['total_rows'] = $total_records;
+            $config['per_page'] = $limit_per_page;
+            $config["uri_segment"] = 3;
+
+ 			$config["full_tag_open"] = '<ul class="pagination">';
+			$config["full_tag_close"] = '</ul>';
+			$config["first_link"] = "&laquo;";
+			$config["first_tag_open"] = "<li>";
+			$config["first_tag_close"] = "</li>";
+			$config["last_link"] = "&raquo;";
+			$config["last_tag_open"] = "<li>";
+			$config["last_tag_close"] = "</li>";
+			$config['next_link'] = '&gt;';
+			$config['next_tag_open'] = '<li>';
+			$config['next_tag_close'] = '<li>';
+			$config['prev_link'] = '&lt;';
+			$config['prev_tag_open'] = '<li>';
+			$config['prev_tag_close'] = '<li>';
+			$config['cur_tag_open'] = '<li class="active"><a href="#">';
+			$config['cur_tag_close'] = '</a></li>';
+			$config['num_tag_open'] = '<li>';
+			$config['num_tag_close'] = '</li>';
+
+			## paging style configuration End
+            $this->pagination->initialize($config);
+             // build paging links
+            $params["links"] = $this->pagination->create_links();
+        }
+		##--------------- pagination End ----------------##
+
+       //  $data['product_list'] = $this->Product_model->product_listing();
+ 		$this->load->view('ask_manage_referral_response_message_options_tpl', $params);
+
+	}
+	// List Product Referral Title message Options end
+	
+	// Add Product Referral Title message Options start
+		function add_referral_response_message_options(){
+		 $data					= array();
+   		 $this->load->view('referral_response_message_options', $data);
+	}
+	
+	// Add Product Referral Title message Options end
+	
 	// Product Demo Video Feedback Questions
 	function ask_demo_video_feedback($id=''){
 		if(empty($id)){
@@ -1189,6 +1731,16 @@ function list_assigned_products() {
         $data['get_registered_products_by_consumers_details'] = $this->Product_model->get_registered_products_by_consumers_details($id);
         $this->load->view('verity_registered_products_by_consumers_tpl', $data);
     }
+	
+	public function verity_registered_products_by_consumers_view() {
+		
+		$data = array();
+        $id = $this->uri->segment(3);
+		
+
+        $data['get_registered_products_by_consumers_details'] = $this->Product_model->get_registered_products_by_consumers_details($id);
+        $this->load->view('verity_registered_products_by_consumers_tpl', $data);
+    }
 	 
 	 public function update_registered_products_by_consumers() {
         $data					= array();
@@ -1205,13 +1757,16 @@ function list_assigned_products() {
 			
 			//$transactionType = "successful-verification-of-invoice-uploaded-for-product-registration";
 			$transactionType = "product_registration_lps";
-			$transactionTypeName = "Successful verification of invoice uploaded for product registration ";
+			$transactionTypeName = "Successful verification of invoice uploaded for product registration";
 				$this->Product_model->saveProductLoylty($transactionType, $ProductID, $consumer_id, ['transaction_date' => date("Y-m-d H:i:s"),'consumer_id' => $consumer_id,'product_id' => $ProductID], $customer_id);
 				$this->Product_model->saveConsumerPassbookLoyalty($transactionType, $transactionTypeName, $ProductID, $consumer_id, ['verification_date' => date("Y-m-d H:i:s"), 'brand_name' => $product_brand_name, 'product_name' => $product_name, 'product_id' => $ProductID, 'product_code' => $bar_code], $customer_id, 'Loyalty');
 				
 			//$vquery = "Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in 'my purchase list' in TRUSTAT App.";	
+			$mnv60_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 60)->get()->row();
+			$mnvtext60 = $mnv60_result->message_notification_value;
 			
-			$vquery = "Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in 'my purchase list' in TRUSTAT App";
+			//$vquery = "Congratulations! Your invoice validation is successful. Warranty, if applicable shall be now effective. Please check the details in 'my purchase list' in TRUSTAT App";
+			$vquery = $mnvtext60;
 		
 		
 		} else{
@@ -1228,12 +1783,28 @@ function list_assigned_products() {
 		 $this->Product_model->sendFVPNotification($vquery, $fb_token);
 		 
 			$NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "TRUSTAT product verifiction";
+			$NTFdata['title'] = "TRUSTAT product Verification";
 			$NTFdata['body'] = $vquery; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
-			$NTFdata['status'] = 1; 
+			$NTFdata['status'] = 0; 
 			
 			$this->db->insert('list_notifications_table', $NTFdata);
+			
+			
+			$TRNNC_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 10)->get()->row();
+			$TRNNC_billin_particular_name = $TRNNC_result->billin_particular_name;
+			$TRNNC_billin_particular_slug = $TRNNC_result->billin_particular_slug;
+			
+			$TRNNCData['customer_id'] = $customer_id;
+			$TRNNCData['consumer_id'] = $consumer_id;
+			$TRNNCData['billing_particular_name'] = $TRNNC_billin_particular_name.' Uplate product Verification';		
+			$TRNNCData['billing_particular_slug'] = $TRNNC_billin_particular_slug.'_update_product_verifiction';
+			$TRNNCData['trans_quantity'] = 1; 
+			$TRNNCData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$TRNNCData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $TRNNCData);		
+			
+			
 		
 		exit;
 		
@@ -1246,7 +1817,7 @@ function list_assigned_products() {
 		$points_redeemed = $data['points_redeemed'];
 		$coupon_vendor = $data['coupon_vendor'];
 		$coupon_number = $data['coupon_number'];
-		$points_redeemed = $data['points_redeemed'];
+		//$points_redeemed = $data['points_redeemed'];
 		$consumer_address = $data['consumer_address'];
 		$courier_number = $data['courier_details'];
 		
@@ -1340,13 +1911,25 @@ function list_assigned_products() {
 		 // end update redeemed loyalty 
 		 
 			$NTFdata['consumer_id'] = $consumer_id; 
-			$NTFdata['title'] = "TRUSTAT loyalty verification";
+			$NTFdata['title'] = "Uplate Loyalty Redemption Request";
 			$NTFdata['body'] = $vquery; 
 			$NTFdata['timestamp'] = date("Y-m-d H:i:s",time()); 
-			$NTFdata['status'] = 1; 
+			$NTFdata['status'] = 0; 
 			
 			$this->db->insert('list_notifications_table', $NTFdata);
 			
+			$TRNNC_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 10)->get()->row();
+			$TRNNC_billin_particular_name = $TRNNC_result->billin_particular_name;
+			$TRNNC_billin_particular_slug = $TRNNC_result->billin_particular_slug;
+			
+			$TRNNCData['customer_id'] = $customer_id;
+			$TRNNCData['consumer_id'] = 1;
+			$TRNNCData['billing_particular_name'] = $TRNNC_billin_particular_name.' Uplate Loyalty Redemption Request';		
+			$TRNNCData['billing_particular_slug'] = $TRNNC_billin_particular_slug.'_update_loyalty_redemption_request';
+			$TRNNCData['trans_quantity'] = 1; 
+			$TRNNCData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$TRNNCData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $TRNNCData);		
 			
 		
 		exit;
@@ -1393,6 +1976,203 @@ function list_assigned_products() {
         $data['get_loyalty_redemption_requests_details'] = $this->Product_model->details_loyalty_redemption_requests($id);
         $this->load->view('details_loyalty_redemption_requests_tpl', $data);
     }
+	
+	
+	 public function loyalty_redemption_request_tracek_user() {
+		
+		$data = array();
+        $id = $this->uri->segment(3);
+		//echo $id;
+
+        $data['get_loyalty_redemption_requests_details'] = $this->Product_model->details_loyalty_redemption_request_tracek_user($id);
+        $this->load->view('loyalty_redemption_request_tracek_user_tpl', $data);
+    }
+	
+	
+		 public function view_loyalty_redemption_request_tracek_user() {
+		
+		$data = array();
+        $id = $this->uri->segment(3);
+		//echo $id;
+
+        $data['get_loyalty_redemption_requests_details'] = $this->Product_model->details_loyalty_redemption_request_tracek_user($id);
+        $this->load->view('view_loyalty_redemption_request_tracek_user_tpl', $data);
+    }
+	
+	public function update_loyalty_redemption_tracek_user_request() {
+        $data					= array();
+		$data = $this->input->post();
+		$tr_user_id = $data['tr_user_id'];
+		$points_redeemed = $data['points_redeemed'];
+		$coupon_type = $data['coupon_type'];
+		$coupon_number = $data['coupon_number'];
+		//$points_redeemed = $data['points_redeemed'];
+		//$consumer_address = $data['consumer_address'];
+		//$courier_number = $data['courier_details'];
+		$tracek_user_parent_id = getUserParentIDById($tr_user_id);
+		$l_status = $data['l_status'];
+		if($l_status==1) {			
+		//$this->Product_model->saveLoylty($transactionType, $userId, ['user_id' => $userId]);
+		$transactionType = "Redemption";
+		// this message for app$vquery = "Congratulations! Your Loyalty Points redumption request is processed successfully, we will update you for further information.";	
+		
+		//$vquery = $coupon_type . " voucher for Rs." . $points_redeemed . " has been sent to your address " .$coupon_number. " vide courier number ";  
+		
+		
+		//print_r($data);exit;
+		echo $data = $this->Product_model->update_loyalty_redemption_tracek_user_request($data);
+		
+	$this->db->select('id, points, redeemed_points, loyalty_points_status');
+    $this->db->where(array('tracek_user_id' => $tr_user_id, 'customer_id' => $tracek_user_parent_id, 'modified_at' => "0000-00-00 00:00:00"));
+	$this->db->order_by('id', 'ASC');
+    $this->db->limit(1);
+    $query = $this->db->get('tracek_loylty_points');
+    $row = $query->row();	
+	$oldest_loyalty_points = $row->points;
+	$oldest_loyalty_points_id = $row->id;
+	$redeemed_partial_points = $row->redeemed_points;	
+	
+	$loyalty_points_status = $row->loyalty_points_status;
+	
+	//$c_redeeming = $redeeming_points;
+	if($oldest_loyalty_points !=""){
+		//if(($redeemed_partial_points=="Earned")||($redeemed_partial_points=="RedeemedPartial")){
+	if($oldest_loyalty_points > ($points_redeemed+$redeemed_partial_points))
+		{				
+			$updateData = array(
+			   'loyalty_points_status'=>"RedeemedPartial",
+			   'redeemed_points'=>$points_redeemed+$redeemed_partial_points,
+			   'modified_at'=>"0000-00-00 00:00:00"
+			);
+			$this->db->where('id', $oldest_loyalty_points_id);
+			$this->db->update('tracek_loylty_points', $updateData); 
+			
+			//$this->Productmodel->saveConsumerPassbookLoyaltyCashier($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' =>0,'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $parent_customer_id, $promotion_id, $redeeming_points, $CashierId);
+			
+			$this->Product_model->saveTracekUserPassbookLoyalty1($transactionType, $tr_user_id, ['transaction_date' => date("Y-m-d H:i:s"),'points_redeemed' => $points_redeemed,'coupon_number' => $coupon_number], 'Redemption', $points_redeemed);
+			
+		//	$this->db->where('lrcc_id', $transaction_id);
+		//	$this->db->update('loyalty_redemption_customer_cashier', array('closing_loyalty_balance' => $c_redeeming));
+			// break;
+			}elseif($oldest_loyalty_points == ($points_redeemed+$redeemed_partial_points)){
+				$updateData = array(
+				   'loyalty_points_status'=>"Redeemed",
+				   'redeemed_points'=>$points_redeemed+$redeemed_partial_points,
+				   'modified_at'=>date("Y-m-d H:i:s")
+				);
+				$this->db->where('id', $oldest_loyalty_points_id);
+				$this->db->update('tracek_loylty_points', $updateData); 
+				
+			//$this->db->where('lrcc_id', $transaction_id);
+			//$this->db->update('loyalty_redemption_customer_cashier', array('closing_loyalty_balance' => $c_redeeming));			
+			
+			//$this->Productmodel->saveConsumerPassbookLoyaltyCashier($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => "",'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $parent_customer_id, $promotion_id, $redeeming_points, $CashierId);			
+			//break;		
+
+				$this->Product_model->saveTracekUserPassbookLoyalty1($transactionType, $tr_user_id, ['transaction_date' => date("Y-m-d H:i:s"),'points_redeemed' => $points_redeemed,'coupon_number' => $coupon_number], 'Redemption', $points_redeemed);
+				
+			}else{ //if($oldest_loyalty_points < ($redeeming_points+$redeemed_partial_points))
+			
+			//$this->Productmodel->saveConsumerPassbookLoyaltyCashier($transactionType, ['activity_date' => date("Y-m-d H:i:s"), 'consumer_id' =>$consumer_id, 'consumer_name' => $consumer_name, 'brand_name' => $product_brand_name, 'customer_name' => $customer_name, 'product_name' => $product_name, 'product_id' => $product_id, 'product_code' => 0,'customer_loyalty_type' => $customer_loyalty_type], $product_id, $consumer_id, $transactionTypeName, $transaction_lr_type, $parent_customer_id, $promotion_id, $redeeming_points, $CashierId);	
+		
+		$this->Product_model->saveTracekUserPassbookLoyalty1($transactionType, $tr_user_id, ['transaction_date' => date("Y-m-d H:i:s"),'points_redeemed' => $points_redeemed,'coupon_number' => $coupon_number], 'Redemption', $points_redeemed);
+		
+			$updateData = array(
+				   'loyalty_points_status'=>"Redeemed",
+				   'redeemed_points'=>$oldest_loyalty_points,
+				   'modified_at'=>date("Y-m-d H:i:s")
+				);
+				$this->db->where('id', $oldest_loyalty_points_id);
+				//$this->db->where(array('customer_id'=>$parent_customer_id, 'user_id'=>$consumer_id));
+				$this->db->update('tracek_loylty_points', $updateData); 	
+				
+				$redeeming_points2 = $points_redeemed - ($oldest_loyalty_points-$redeemed_partial_points);
+				while($redeeming_points2 > 0){	
+					
+	$this->db->select('id, points, redeemed_points, loyalty_points_status, loyalty_points_status');
+    $this->db->where(array('tracek_user_id' => $tr_user_id, 'customer_id' => $tracek_user_parent_id, 'modified_at' => "0000-00-00 00:00:00"));
+	$this->db->order_by('id', 'ASC');
+    $this->db->limit(1);
+    $query = $this->db->get('tracek_loylty_points');
+    $row = $query->row();	
+	$oldest_loyalty_points2 = $row->points;
+	$oldest_loyalty_points_id2 = $row->id;
+	$redeemed_partial_points2 = $row->redeemed_points;	
+	$loyalty_points_status = $row->loyalty_points_status;
+	if($oldest_loyalty_points2 !=""){
+		if($oldest_loyalty_points2 > ($redeeming_points2+$redeemed_partial_points2))
+			{				
+			$updateData2 = array(
+			   'loyalty_points_status'=>"RedeemedPartial",
+			   'redeemed_points'=>$redeeming_points2+$redeemed_partial_points2,
+			   'modified_at'=>"0000-00-00 00:00:00"
+			);
+			$this->db->where('id', $oldest_loyalty_points_id2);
+			$this->db->update('tracek_loylty_points', $updateData2); 
+			//break;
+			}elseif($oldest_loyalty_points2 == ($redeeming_points2+$redeemed_partial_points2)){
+				$updateData2 = array(
+				   'loyalty_points_status'=>"Redeemed",
+				   'redeemed_points'=>$redeeming_points2+$redeemed_partial_points2,
+				   'modified_at'=>date("Y-m-d H:i:s")
+				);
+				$this->db->where('id', $oldest_loyalty_points_id2);
+				$this->db->update('tracek_loylty_points', $updateData2); 							
+			//break;				
+			}else{ //if($oldest_loyalty_points < ($redeeming_points+$redeemed_partial_points))
+			$updateData2 = array(
+				   'loyalty_points_status'=>"Redeemed",
+				   'redeemed_points'=>$oldest_loyalty_points2,
+				   'modified_at'=>date("Y-m-d H:i:s")
+				);
+				$this->db->where('id', $oldest_loyalty_points_id2);
+				//$this->db->where(array('customer_id'=>$parent_customer_id, 'user_id'=>$consumer_id));
+				$this->db->update('tracek_loylty_points', $updateData2);			
+			//continue;
+			}			
+				}
+				$redeeming_points2 = $redeeming_points2 - ($oldest_loyalty_points2-$redeemed_partial_points2);
+				}
+			}
+			//}		
+			}
+			}else{
+			exit;
+			//$vquery = "Your Loyalty Points redumption request is still pending...";	
+		}
+	
+		 // end update redeemed loyalty 
+			/*
+			$NTFdata['date_time'] = date("Y-m-d H:i:s",time());			
+			$NTFdata['tracek_user_name'] = getTracekUserFullNameById($tr_user_id); 
+			$NTFdata['tracek_user_id'] = $tr_user_id;
+			$NTFdata['tracek_user_mobile'] = get_customer_mobile_no_id($tr_user_id); 			
+			$NTFdata['customer_name'] = getUserFullNameById(getUserParentIDById($tr_user_id)); 
+			$NTFdata['customer_id'] = getUserParentIDById($tr_user_id); 
+			$NTFdata['unique_customer_code'] = getUserParentIDById($tr_user_id); 
+			$NTFdata['product_name'] = 0; 
+			$NTFdata['product_id'] = 0; 
+			$NTFdata['product_sku'] = 0; 
+			$NTFdata['product_code'] = 0; 
+			$NTFdata['gloc_latitude'] = 0; 
+			$NTFdata['gloc_longitude'] = 0; 
+			$NTFdata['gloc_city'] = 0; 
+			$NTFdata['gloc_pin_code'] = 0; 
+			$NTFdata['tracek_user_activity_type'] = 0; 
+			$NTFdata['loyalty_rewards_points'] = 0; 
+			$NTFdata['customer_loyalty_type'] = 0; 
+			
+			
+			$this->db->insert('tracek_user_activity_log_table', $NTFdata);
+			*/
+			
+		
+		exit;
+		
+    }
+	
+	
+	
 	 
 	 public function details_view_loyalty_redemption_request() {
 		
@@ -1428,7 +2208,8 @@ function list_assigned_products() {
         }
         $total_records = $this->Product_model->count_total_list_view_consumer_passbook($id,$srch_string);
         $params["list_view_consumer_passbook"] = $this->Product_model->list_view_consumer_passbook($id, $limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('product/list_view_consumer_passbook/' . $id, $total_records);
+      $params["list_view_consumer_passbook_cust_dist"] = $this->Product_model->list_view_blp_consumer_passbook_cust_dist($id, $limit_per_page, $start_index, $srch_string); 
+	   $params["links"] = Utils::pagination('product/list_view_consumer_passbook/' . $id, $total_records);
 		//echo "test";
         $this->load->view('list_view_consumer_passbook_tpl', $params);
     }
@@ -1456,7 +2237,7 @@ function list_assigned_products() {
         $total_records = $this->Product_model->count_total_list_view_blp_consumer_passbook($id,$srch_string);
         $params["list_view_consumer_passbook"] = $this->Product_model->list_view_blp_consumer_passbook($id, $limit_per_page, $start_index, $srch_string);
 		$params["list_view_consumer_passbook_cust_dist"] = $this->Product_model->list_view_blp_consumer_passbook_cust_dist($id, $limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('product/list_view_consumer_passbook/' . $id, $total_records);
+        $params["links"] = Utils::pagination('product/list_view_blp_consumer_passbook/' . $id, $total_records);
 		//echo "test";
         $this->load->view('list_view_consumer_passbook_tpl', $params);
     }
@@ -1484,7 +2265,7 @@ function list_assigned_products() {
         }
         $total_records = $this->Product_model->count_total_list_view_blp_tracek_user_passbook($id,$srch_string);
         $params["list_view_consumer_passbook"] = $this->Product_model->list_view_blp_tracek_user_passbook($id, $limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('product/list_view_consumer_passbook/' . $id, $total_records);
+        $params["links"] = Utils::pagination('product/list_view_blp_tracek_user_passbook/' . $id, $total_records);
 		//echo "test";
         $this->load->view('list_view_tracek_user_passbook_tpl', $params);
     }
@@ -1724,6 +2505,7 @@ function list_assigned_products() {
 			$Total_Points_Redeemed=$query->row()->points;	
 			$params["Total_Points_Redeemed"] = $Total_Points_Redeemed;
 			
+			
 			$result = $this->db->select('loyalty_points')->from('loylties')->where('transaction_type_slug', 'minimum_locking_balance')->limit(1)->get()->row();
 			$minimum_locking_balance = $result->loyalty_points;
 			$params["minimum_locking_balance"] = $minimum_locking_balance;
@@ -1838,6 +2620,14 @@ function list_assigned_products() {
 			$query=$this->db->get();
 			$Total_Earned_Points=$query->row()->points;		
 		    $params["Total_Earned_Points"] = $Total_Earned_Points; 
+			
+			$this->db->select_sum('points');
+			$this->db->from('consumer_passbook');
+			//$this->db->where('transaction_lr_type', "Loyalty");
+			$this->db->where(array('customer_id' => $user_id, 'transaction_type_slug' => "loyalty_redemption_microsite"));
+			$query_ms=$this->db->get();
+			$Total_Points_Redeemed_ms=$query_ms->row()->points;		
+		    $params["Total_Points_Redeemed_ms"] = $Total_Points_Redeemed_ms; 
 		
 		    
         $this->load->view('view_customer_loyalties_tpl', $params);
@@ -1907,6 +2697,313 @@ function list_assigned_products() {
     }
 	
 	
+ public function ispl_billing_list_items() {
+        $this->checklogin();
+        if (!empty($this->input->post('del_submit'))) {
+            if ($this->db->query("delete from products where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Product Deleted Successfully!');
+            }
+        }
+        ##--------------- pagination start ----------------##
+        // init params
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+		
+		$from_date_data = $this->input->get('from_date_data');
+		$to_date_data = $this->input->get('to_date_data');
+		
+		if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+		
+		 
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_ispl_billing_list_items_listing($srch_string, $from_date_data, $to_date_data);
+        $params["product_list"] = $this->Product_model->ispl_billing_list_items_listing($limit_per_page, $start_index, $srch_string, $from_date_data, $to_date_data);
+		if($user_id>1){
+		$params["links"] = Utils::pagination('product/ispl_billing_list_items', $total_records);
+			}else{
+			$params["links"] = Utils::pagination('product/ispl_billing_list_items/' . $customer_id, $total_records, null, 4);
+			}		
+		/*
+        $ConsumerReferralDetails = $this->Product_model->ConsumerReferralDetails2("230", "9971411559");
+			$params["ConsumerReferralID"] = $ConsumerReferralDetails->referral_id;
+			$params["loyalty_points_referral"] = $ConsumerReferralDetails->loyalty_points_referral;
+			*/
+        $this->load->view('ispl_billing_list_items_tpl', $params);
+    }
+	
+	   public function ispl_billing_list_items_download() {
+        $this->checklogin();
+        if (!empty($this->input->post('del_submit'))) {
+            if ($this->db->query("delete from products where id='" . $this->input->post('del_submit') . "'")) {
+                $this->session->set_flashdata('success', 'Product Deleted Successfully!');
+            }
+        }
+		
+		$mnv58_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 58)->get()->row();
+		$mnvtext58 = $mnv58_result->message_notification_value;
+		
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $mnvtext58;
+        }else{
+            $limit_per_page = $mnvtext58;
+        }
+		
+        ##--------------- pagination start ----------------##
+        // init params
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $mnvtext58;
+        }else{
+            $limit_per_page = $mnvtext58;
+        }
+        $this->config->set_item('pageLimit2', $limit_per_page);
+		
+		$from_date_data = $this->input->get('from_date_data');
+		$to_date_data = $this->input->get('to_date_data');
+		
+		if($user_id>1){
+		$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+			}else{
+			$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+			}
+		
+		 
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_ispl_billing_list_items_listing($srch_string, $from_date_data, $to_date_data);
+        $params["product_list"] = $this->Product_model->ispl_billing_list_items_listing($limit_per_page, $start_index, $srch_string, $from_date_data, $to_date_data);
+		if($user_id>1){
+		$params["links"] = Utils::pagination('product/ispl_billing_list_items', $total_records);
+		$params["links2"] = Utils::pagination2('product/ispl_billing_list_items', $total_records);
+			}else{
+			$params["links"] = Utils::pagination('product/ispl_billing_list_items/' . $customer_id, $total_records, null, 4);
+			$params["links2"] = Utils::pagination2('product/ispl_billing_list_items/' . $customer_id, $total_records, null, 4);
+			}
+		$params["total_records2"] = $total_records; 
+		/*
+        $ConsumerReferralDetails = $this->Product_model->ConsumerReferralDetails2("230", "9971411559");
+			$params["ConsumerReferralID"] = $ConsumerReferralDetails->referral_id;
+			$params["loyalty_points_referral"] = $ConsumerReferralDetails->loyalty_points_referral;
+			*/
+        $this->load->view('ispl_billing_list_items_download_tpl', $params);
+    }
+	
+	
+	
+	public function view_consumer_passbook_at_customer() {
+        $this->checklogin();
+       $id = $this->uri->segment(3);
+	
+		//echo $id;
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->count_total_list_view_consumer_passbook_at_customer($id,$srch_string);
+        $params["list_view_consumer_passbook"] = $this->Product_model->list_view_consumer_passbook_at_customer($id, $limit_per_page, $start_index, $srch_string);
+		//$params["list_view_consumer_passbook_cust_dist"] = $this->Product_model->list_view_consumer_passbook_at_customer_dist($id, $limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('product/view_consumer_passbook_at_customer/' . $id, $total_records);
+		//echo "test";
+        $this->load->view('view_consumer_passbook_at_customer_tpl', $params);
+    }
+
+	
+
+	public function list_packaging_and_ship_out_order_report() {
+        $this->checklogin();
+        
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_all_packaging_and_ship_out_orders($srch_string);
+        $params["list_all_consumers"] = $this->Product_model->list_all_packaging_and_ship_out_orders($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('product/list_packaging_and_ship_out_order_report', $total_records);
+		$params["total_records"] =  $total_records;
+		
+        $this->load->view('list_packaging_and_ship_out_order_report_tpl', $params);
+    }
+	
+	
+		public function list_packaging_and_ship_out_order_report_details() {
+        $this->checklogin();
+		$user_id 	= $this->session->userdata('admin_user_id');
+        $psoo_token_id = $this->uri->segment(3);
+		
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+       // $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+		$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+		
+			
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_all_packaging_and_ship_out_order_details($srch_string);
+        $params["list_all_consumers"] = $this->Product_model->list_all_packaging_and_ship_out_order_details($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('product/list_packaging_and_ship_out_order_report_details/' . $psoo_token_id, $total_records, null, 4);
+		$params["total_records"] =  $total_records;
+		
+        $this->load->view('list_packaging_and_ship_out_order_report_details_tpl', $params);
+    }
+	
+	/*
+	
+			public function list_packaging_and_ship_out_order_report_details() {
+				$this->checklogin();
+				   $user_id = $this->session->userdata('admin_user_id');
+				   $criteria_id = $this->uri->segment(3);
+				   $customer_id = $this->session->userdata('admin_user_id');
+					##--------------- pagination start ----------------##
+					// init params
+					$params = array();
+					if(!empty($this->input->get('page_limit'))){
+						$limit_per_page = $this->input->get('page_limit');
+					}else{
+						$limit_per_page = $this->config->item('pageLimit');
+					}
+					$this->config->set_item('pageLimit', $limit_per_page);
+					//$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+					$start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+					$srch_string = $this->input->get('search');
+
+					if (empty($srch_string)) {
+						$srch_string = '';
+					}
+					
+					$total_records = $this->Product_model->total_all_packaging_and_ship_out_order_details($srch_string);
+					$params["list_all_consumers"] = $this->Product_model->list_all_packaging_and_ship_out_orders($limit_per_page, $start_index, $srch_string,null,4);
+					
+				  $params["links"] = Utils::pagination('product/list_packaging_and_ship_out_order_report_details'.$criteria_id, $total_records);						
+				   
+					$this->load->view('list_packaging_and_ship_out_order_report_details_tpl', $params);
+				}
+	
+	*/
+	
+		public function list_products_packaging_and_ship_out_report() {
+        $this->checklogin();
+        
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+        $srch_string = $this->input->get('search');
+
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->Product_model->total_all_products_packaging_and_ship_out_report($srch_string);
+        $params["list_all_consumers"] = $this->Product_model->list_all_products_packaging_and_ship_out_report($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('product/list_products_packaging_and_ship_out_report', $total_records);
+		$params["total_records"] =  $total_records;
+		
+        $this->load->view('list_products_packaging_and_ship_out_report_tpl', $params);
+    }
+	
+		 public function change_assigned_packaging_supervisor() {
+ 		 $id = $this->input->post('id');
+		 $value = $this->input->post('value');
+		 
+		
+ 		 echo $status= $this->Product_model->change_assigned_packaging_supervisor($id,$value);exit;
+      }
+	  
+	  
+	   public function change_assigned_packer() {
+ 		 $id = $this->input->post('id');
+		 $value = $this->input->post('value');
+		 
+		
+ 		 echo $status= $this->Product_model->change_assigned_packer($id,$value);exit;
+      }
+	  
+	  
+	  
+	  		public function list_products_packaging_and_ship_out_report_packaging_id() {
+				$this->checklogin();
+				
+				##--------------- pagination start ----------------##
+				// init params
+				$params = array();
+				if(!empty($this->input->get('page_limit'))){
+					$limit_per_page = $this->input->get('page_limit');
+				}else{
+					$limit_per_page = $this->config->item('pageLimit');
+				}
+				$this->config->set_item('pageLimit', $limit_per_page);
+				$start_index = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+				$srch_string = $this->input->get('search');
+
+				if (empty($srch_string)) {
+					$srch_string = '';
+				}
+				$total_records = $this->Product_model->total_all_products_packaging_and_ship_out_report($srch_string);
+				$params["list_all_consumers"] = $this->Product_model->list_all_products_packaging_and_ship_out_report($limit_per_page, $start_index, $srch_string);
+				$params["links"] = Utils::pagination('product/list_products_packaging_and_ship_out_report', $total_records);
+				$params["total_records"] =  $total_records;
+				
+				$this->load->view('list_products_packaging_and_ship_out_report_tpl', $params);
+			}
+	  
 	
 }
 

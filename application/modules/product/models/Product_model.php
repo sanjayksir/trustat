@@ -61,6 +61,63 @@
 		} return $result;
     }
 	
+		 function IsCustomerERPProductID($name,$id='') {
+		$rows = 0;
+		$result = 'true';
+		$this->db->select("id");
+		$this->db->from("products");
+		$this->db->where("customer_erp_product_id", $name);
+		if(!empty($id)){
+			$this->db->where("id", $id);
+		}
+		$q = $this->db->get();
+        $rows = $q->num_rows();
+		if($rows>0){
+			$result = 'false';
+		} return $result;
+    }
+	
+	 function isDateMoreThanToday($referral_program_auto_off_date) {
+		$result = 'true';
+		
+		$date_now = date_create(date('Y-m-d'));
+		
+		$date_next = date_create(date('Y-m-d',strtotime($referral_program_auto_off_date)));
+		
+		$dateDiff = date_diff($date_now, $date_next);
+		$DaysDifference = $dateDiff->format("%R%a")+1;
+		
+	if ($DaysDifference > 1) {
+		//echo 'Date Not Passed';
+		//return false;
+		
+		}else{
+			//echo 'Date  Passed';	
+		$result = 'false';			
+		}
+		return $result;
+    }
+	
+	function isDateMoreThanTodayEdit($referral_program_auto_off_date) {
+		$result = 'true';
+		
+		$date_now = date_create(date('Y-m-d'));
+		
+		$date_next = date_create(date('Y-m-d',strtotime($referral_program_auto_off_date)));
+		
+		$dateDiff = date_diff($date_now, $date_next);
+		$DaysDifference = $dateDiff->format("%R%a")+1;
+	if ($DaysDifference > 1) {
+		//echo 'Date Not Passed';
+		//return false;
+		
+		}else{
+			//echo 'Date  Passed';	
+		$result = 'false';			
+		}
+		return $result;
+    }
+	
 	function getAttributeList() {
 		$this->db->select("*");
 		$this->db->from("attribute_name");
@@ -96,6 +153,7 @@
 		$industry 				=  json_encode(array_filter($this->input->post('industry')));
 		
 		$product_name 			= $this->input->post('product_name');
+		$customer_erp_product_id 			= $this->input->post('customer_erp_product_id');
 		$brand_name 			= $this->input->post('brand_name');
 		$product_sku  			= $this->input->post('product_sku');
 		$product_attr 			= json_encode($this->input->post('product_attr'));
@@ -124,12 +182,29 @@
 		$code_key_type  		= ($this->input->post('code_key_type'))?$this->input->post('code_key_type'):'';
 		$code_size  			= ($this->input->post('code_size'))?$this->input->post('code_size'):'';
 		$code_unity_type  		= ($this->input->post('code_unity_type'))?$this->input->post('code_unity_type'):'';	
+		$show_code_below_printed_bar_qr_code  		= ($this->input->post('show_code_below_printed_bar_qr_code'))?$this->input->post('show_code_below_printed_bar_qr_code'):'';	
 		$registration_pack  	= ($this->input->post('registration_pack'))?$this->input->post('registration_pack'):'';	
 		$retailer_pack  		= ($this->input->post('retailer_pack'))?$this->input->post('retailer_pack'):'';	
 	$min_shipper_pack_level  		= ($this->input->post('min_shipper_pack_level'))?$this->input->post('min_shipper_pack_level'):'';	
 	$max_shipper_pack_level  		= ($this->input->post('max_shipper_pack_level'))?$this->input->post('max_shipper_pack_level'):'';
-	$number_of_scans_for_super_loyalty  		= ($this->input->post('number_of_scans_for_super_loyalty'))?$this->input->post('number_of_scans_for_super_loyalty'):'';
-	$number_of_loyalty_points_for_super_loyalty  		= ($this->input->post('number_of_loyalty_points_for_super_loyalty'))?$this->input->post('number_of_loyalty_points_for_super_loyalty'):'';	
+	$max_packaging_level_product  		= ($this->input->post('max_packaging_level_product'))?$this->input->post('max_packaging_level_product'):'';
+	$number_of_scans_for_super_loyalty  		= $this->input->post('number_of_scans_for_super_loyalty');
+	$number_of_loyalty_points_for_super_loyalty  		= $this->input->post('number_of_loyalty_points_for_super_loyalty');	
+	$app_notification_message_for_super_loyalty  		= $this->input->post('app_notification_message_for_super_loyalty');	
+	$app_passbook_on_screen_display_message_sl  		= $this->input->post('app_passbook_on_screen_display_message_sl');	
+	$include_the_product_in_referral_program  		= ($this->input->post('include_the_product_in_referral_program'))?$this->input->post('include_the_product_in_referral_program'):'';	
+	$send_ref_message_frm_server  		= $this->input->post('send_ref_message_frm_server');	
+	$message_receiver_ref_frm_server  		= $this->input->post('message_receiver_ref_frm_server');	
+	$include_the_product_in_super_loyalty  		= ($this->input->post('include_the_product_in_super_loyalty'))?$this->input->post('include_the_product_in_super_loyalty'):'';	
+	$gap_period_for_last_activity_of_existing_consumer  		= $this->input->post('gap_period_for_last_activity_of_existing_consumer');	
+	$loyalty_rewards_to_sender_consumer_under_referral  		= $this->input->post('loyalty_rewards_to_sender_consumer_under_referral');	
+	$number_of_referrals_allowed_to_consumer 	= $this->input->post('number_of_referrals_allowed_to_consumer');	
+	$referral_program_auto_off_date = (date('Y-m-d',strtotime($this->input->post('referral_program_auto_off_date'))))?date('Y-m-d',strtotime($this->input->post('referral_program_auto_off_date'))):'';	
+	$media_type_for_sending_reference  		= ($this->input->post('media_type_for_sending_reference'))?$this->input->post('media_type_for_sending_reference'):'';
+	$custom_message_for_sending_reference  		= ($this->input->post('custom_message_for_sending_reference'))?$this->input->post('custom_message_for_sending_reference'):'';
+	$message_for_receiver_of_reference	= ($this->input->post('message_for_receiver_of_reference'))?$this->input->post('message_for_receiver_of_reference'):'';
+	$warranty_in_days	= $this->input->post('warranty_in_days');
+	$max_referrals_for_product  		= $this->input->post('max_referrals_for_product');
 	$message_above_code  		= ($this->input->post('message_above_code'))?$this->input->post('message_above_code'):'';
 	$message_below_code  		= ($this->input->post('message_below_code'))?$this->input->post('message_below_code'):'';
 	$space_between_twin_code  	= ($this->input->post('space_between_twin_code'))?$this->input->post('space_between_twin_code'):'';	
@@ -138,6 +213,7 @@
 	$space_between_code_rows  	= ($this->input->post('space_between_code_rows'))?$this->input->post('space_between_code_rows'):'';
 	$TextFontSize  	= ($this->input->post('TextFontSize'))?$this->input->post('TextFontSize'):'';
 	$print_codes_in_batches  	= ($this->input->post('print_codes_in_batches'))?$this->input->post('print_codes_in_batches'):'';
+	$space_for_code_below_batchid  	= ($this->input->post('space_for_code_below_batchid'))?$this->input->post('space_for_code_below_batchid'):'';
 	$height_of_the_bar_code  	= ($this->input->post('height_of_the_bar_code'))?$this->input->post('height_of_the_bar_code'):'';
 	$message_above_secondry_code  	= ($this->input->post('message_above_secondry_code'))?$this->input->post('message_above_secondry_code'):'';
 	$message_below_secondry_code  	= ($this->input->post('message_below_secondry_code'))?$this->input->post('message_below_secondry_code'):'';
@@ -159,12 +235,29 @@
 					"code_key_type"		  => $code_key_type,
 					"code_size"			  => $code_size,
 					"code_unity_type"	  => $code_unity_type,
+					"show_code_below_printed_bar_qr_code"	  => $show_code_below_printed_bar_qr_code,
 					"registration_pack"	  => $registration_pack,
 					"retailer_pack"	  	  => $retailer_pack,
 					"min_shipper_pack_level"	  => $min_shipper_pack_level,
 					"max_shipper_pack_level"	  => $max_shipper_pack_level,
+					"max_packaging_level_product"	  => $max_packaging_level_product,
 					"number_of_scans_for_super_loyalty"	  => $number_of_scans_for_super_loyalty,
 					"number_of_loyalty_points_for_super_loyalty"	  => $number_of_loyalty_points_for_super_loyalty,
+					"app_notification_message_for_super_loyalty"	  => $app_notification_message_for_super_loyalty,
+					"app_passbook_on_screen_display_message_sl"	  => $app_passbook_on_screen_display_message_sl,
+					"include_the_product_in_referral_program"	  => $include_the_product_in_referral_program,
+					"send_ref_message_frm_server"	  => $send_ref_message_frm_server,
+					"message_receiver_ref_frm_server"	  => $message_receiver_ref_frm_server,
+					"include_the_product_in_super_loyalty"	  => $include_the_product_in_super_loyalty,
+					"gap_period_for_last_activity_of_existing_consumer"	  => $gap_period_for_last_activity_of_existing_consumer,
+					"loyalty_rewards_to_sender_consumer_under_referral"	  => $loyalty_rewards_to_sender_consumer_under_referral,
+					"number_of_referrals_allowed_to_consumer"	  => $number_of_referrals_allowed_to_consumer,
+					"referral_program_auto_off_date"	  => $referral_program_auto_off_date,
+					"media_type_for_sending_reference"	  => $media_type_for_sending_reference,
+					"custom_message_for_sending_reference"	  => $custom_message_for_sending_reference,
+					"message_for_receiver_of_reference"	  => $message_for_receiver_of_reference,
+					"warranty_in_days"	  => $warranty_in_days,
+					"max_referrals_for_product"	  => $max_referrals_for_product,
 					"message_above_code"	  => $message_above_code,
 					"message_below_code"	  => $message_below_code,
 					"space_between_twin_code"	  => $space_between_twin_code,
@@ -173,6 +266,7 @@
 					"space_between_code_rows"	  => $space_between_code_rows,
 					"TextFontSize"	  => $TextFontSize,
 					"print_codes_in_batches"	  => $print_codes_in_batches,
+					"space_for_code_below_batchid"	  => $space_for_code_below_batchid,
 					"height_of_the_bar_code"	  => $height_of_the_bar_code,
 					"message_above_secondry_code"	  => $message_above_secondry_code,
 					"message_below_secondry_code"	  => $message_below_secondry_code,
@@ -191,6 +285,7 @@
 		 }else{
  			 $insertData=array(
 					"product_name"		  => $product_name,
+					"customer_erp_product_id"		  => $customer_erp_product_id,
 					"brand_name"		  => $brand_name,
 					"attribute_list"	  => $product_attr,
 					"industry_data"		  => $industry,
@@ -199,7 +294,7 @@
 					"status"			  => 1,
 					"product_description" => '',
 					"product_thumb_images"	  => '',
-					"product_images"	  => '',
+					"product_image"	  => '',
 					"product_code_print_bg_images"	  => '',
 					"product_video"	      => '',
 					"product_audio"		  => '',
@@ -223,8 +318,24 @@
 					"retailer_pack"		  => $retailer_pack,
 					"min_shipper_pack_level"	=> $min_shipper_pack_level,
 					"max_shipper_pack_level"	=> $max_shipper_pack_level,
+					"max_packaging_level_product"	  => $max_packaging_level_product,
 					"number_of_scans_for_super_loyalty"	=> $number_of_scans_for_super_loyalty,
 					"number_of_loyalty_points_for_super_loyalty"	=> $number_of_loyalty_points_for_super_loyalty,
+					"app_notification_message_for_super_loyalty"	=> $app_notification_message_for_super_loyalty,
+					"app_passbook_on_screen_display_message_sl"	=> $app_passbook_on_screen_display_message_sl,
+					"include_the_product_in_referral_program"	=> $include_the_product_in_referral_program,
+					"send_ref_message_frm_server"	=> $send_ref_message_frm_server,
+					"message_receiver_ref_frm_server"	=> $message_receiver_ref_frm_server,
+					"include_the_product_in_super_loyalty"	=> $include_the_product_in_super_loyalty,
+					"gap_period_for_last_activity_of_existing_consumer"	=> $gap_period_for_last_activity_of_existing_consumer,
+					"loyalty_rewards_to_sender_consumer_under_referral"	=> $loyalty_rewards_to_sender_consumer_under_referral,
+					"number_of_referrals_allowed_to_consumer"	=> $number_of_referrals_allowed_to_consumer,
+					"referral_program_auto_off_date"	=> $referral_program_auto_off_date,
+					"media_type_for_sending_reference"	=> $media_type_for_sending_reference,
+					"custom_message_for_sending_reference"	=> $custom_message_for_sending_reference,
+					"message_for_receiver_of_reference"	=> $message_for_receiver_of_reference,
+					"warranty_in_days"	=> $warranty_in_days,					
+					"max_referrals_for_product"	=> $max_referrals_for_product,
 					"TextFontSize"	  => $TextFontSize,
 					"height_of_the_bar_code"	  => $height_of_the_bar_code,
 					"space_for_message_above_code"	  => $space_for_message_above_code,
@@ -239,7 +350,9 @@
 					"space_between_twin_code"	=> $space_between_twin_code,
 					"code_size"			  => $code_size,
 					"code_unity_type"	  => $code_unity_type,
+					"show_code_below_printed_bar_qr_code"	  => $show_code_below_printed_bar_qr_code,
 					"print_codes_in_batches"	  => $print_codes_in_batches,
+					"space_for_code_below_batchid"	  => $space_for_code_below_batchid,
 					"other_industry"	  => $Other_industry_val
 					
 				); //echo '<pre>';print_r($insertData);exit;
@@ -261,6 +374,7 @@
 		$industry 				=  json_encode(array_filter($this->input->post('industry')));
 		
 		$product_name 			= $this->input->post('product_name');
+		$customer_erp_product_id 			= $this->input->post('customer_erp_product_id');
 		$brand_name 			= $this->input->post('brand_name');
 		$product_sku  			= $this->input->post('product_sku');
 		$product_attr 			= json_encode($this->input->post('product_attr'));
@@ -288,7 +402,8 @@
 		$delivery_method  		= ($this->input->post('delivery_method'))?$this->input->post('delivery_method'):'';
 		$code_key_type  		= ($this->input->post('code_key_type'))?$this->input->post('code_key_type'):'';
 		$code_size  			= ($this->input->post('code_size'))?$this->input->post('code_size'):'';
-		$code_unity_type  		= ($this->input->post('code_unity_type'))?$this->input->post('code_unity_type'):'';			
+		$code_unity_type  		= ($this->input->post('code_unity_type'))?$this->input->post('code_unity_type'):'';	
+		$show_code_below_printed_bar_qr_code  		= ($this->input->post('show_code_below_printed_bar_qr_code'))?$this->input->post('show_code_below_printed_bar_qr_code'):'';			
 		## essential attributes
 		
 		$id			  = $this->input->post('id');
@@ -309,6 +424,7 @@
 		 }else{
  			 $insertData=array(
 					"product_name"		  => $product_name,
+					"customer_erp_product_id"		  => $customer_erp_product_id,
 					"brand_name"		  => $brand_name,
 					"attribute_list"	  => $product_attr,
 					"industry_data"		  => $industry,
@@ -317,7 +433,7 @@
 					"status"			  => 1,
 					"product_description" => '',
 					"product_thumb_images"	  => '',
-					"product_images"	  => '',
+					"product_image"	  => '',
 					"product_code_print_bg_images"	  => '',
 					"product_video"	      => '',
 					"product_audio"		  => '',
@@ -339,6 +455,7 @@
 					"code_key_type"		  => $code_key_type,
 					"code_size"			  => $code_size,
 					"code_unity_type"	  => $code_unity_type,
+					"show_code_below_printed_bar_qr_code"	  => $show_code_below_printed_bar_qr_code,
 					"other_industry"	  => $Other_industry_val
 					
 				); //echo '<pre>';print_r($insertData);exit;
@@ -549,6 +666,69 @@
 		return $result_data;
     }
 	  
+	  
+	function total_product_listing_all($srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		 $customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR product_description LIKE '%$srch_string%') and (created_by=$user_id)");
+			}else{
+				$this->db->where(array('created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR product_description LIKE '%$srch_string%')");
+			}
+		}
+		$this->db->select('count(1) as total_rows');
+		$this->db->from('products');
+		if($user_id>1){
+		$this->db->where('created_by', $user_id);
+			}else{
+			//$this->db->where('created_by', $customer_id);
+			}
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+	
+	
+	function product_listing_all($limit,$start,$srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR created_by LIKE '%$srch_string%' OR brand_name LIKE '%$srch_string%') and (created_by=$user_id)");
+			}else{
+				$this->db->where(array('created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR created_by LIKE '%$srch_string%' OR brand_name LIKE '%$srch_string%')");
+			}
+		}
+		
+		$this->db->select("*");
+		$this->db->from("products");
+		if($user_id>1){
+		$this->db->where('created_by', $user_id);
+			}else{
+			//$this->db->where('created_by', $customer_id);
+			}
+		
+		$this->db->order_by("created_date", " desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+
+	
      function fetch_product_detail($id) {
 		$this->db->select("*");
 		$this->db->from("products");
@@ -608,7 +788,7 @@
 		
 		function delete_feedback_question($question_id){
 			$this->db->query("delete from feedback_question_bank where question_id='".$question_id."'");
-			$this->session->set_flashdata('success', 'Feedback Question Deleted Successfully!');
+			$this->session->set_flashdata('success', 'Deleted Successfully!');
 			redirect('product/list_product');
 		}
 		
@@ -646,6 +826,7 @@
 		 	 $updateArr=array(
 					//"product_id"	  => $product_id,
 					//"question_type"	  => $question_type,
+					"question_media_type"		  => $question_media_type,
 					"question"		  => $question,
 					"answer1"	 	  => $answer1,
 					"answer2"		  => $answer2,
@@ -965,7 +1146,7 @@
 			return $result_data;
 		}
 		
-		// Product Demo Audio Feedback Questions
+		// Product Demo Audio Feedback Questions Starts
 		function demo_audio_feedback_listing($limit,$start,$srch_string='', $id) {
 			$user_id 	= $this->session->userdata('admin_user_id');
 			if(!empty($srch_string)){ 
@@ -999,6 +1180,46 @@
 			}
 			return $result_data;
 		}
+		
+		// Product Demo Audio Feedback Questions ends
+		
+		
+				// Product  Referral response message Options Starts
+		function product_referral_response_message_options_listing($limit,$start,$srch_string='', $id) {
+			$user_id 	= $this->session->userdata('admin_user_id');
+			if(!empty($srch_string)){ 
+					$this->db->where("(question LIKE '%$srch_string%')");
+			} 
+			$this->db->select("*");
+			$this->db->from("feedback_question_bank");
+			//$this->db->where("question_type","Product PDF Feedback"); 
+			//$where = array('question_type ' => "Product ADemonstration Feedback" , 'product_id ' => $id);
+			$where = array('question_type ' => "ProductReferralResponseMessage", 'product_id ' => $id);
+			$this->db->where($where);	
+			$this->db->order_by("question_id", " desc");
+			$this->db->limit($limit, $start);
+			$resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+			return $resultDt ;
+		}
+		function total_product_referral_response_message_options_listing($srch_string='', $id) {
+			$user_id 	= $this->session->userdata('admin_user_id');
+			if(!empty($srch_string)){ 
+					$this->db->where("(question LIKE '%$srch_string%')");
+			} 
+			$this->db->select('count(1) as total_rows');
+			$this->db->from('feedback_question_bank');
+			//$where = array('question_type ' => "Product ADemonstration Feedback" , 'product_id ' => $id);
+			$where = array('question_type ' => "ProductReferralResponseMessage", 'product_id ' => $id);
+			$this->db->where($where);
+				$query = $this->db->get(); //echo '***'.$this->db->last_query();
+			if ($query->num_rows() > 0) {
+				$result = $query->result_array();
+				$result_data = $result[0]['total_rows'];
+			}
+			return $result_data;
+		}
+		
+		// Product  Referral response message Options ends
 		
 		function IsProductFeedback($pid,$qid='') {
 			$rows 		= 0;
@@ -1048,13 +1269,13 @@
         if ($user_id > 1) {
             //$this->db->where('created_by', $user_id);
             if (!empty($srch_string)) {
-                $this->db->where("(PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%'  OR C.user_name LIKE '%$srch_string%' OR PP.purchase_date LIKE '%$srch_string%') and (P.created_by=$user_id)");
+                $this->db->where("(PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%'  OR C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR PP.purchase_date LIKE '%$srch_string%') and (P.created_by=$user_id)");
             } else {
                 $this->db->where(array('P.created_by' => $user_id));
             }
         } else {
             if (!empty($srch_string)) {
-                $this->db->where("(PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%'  OR C.user_name LIKE '%$srch_string%' OR PP.purchase_date LIKE '%$srch_string%')");
+                $this->db->where("(PP.bar_code LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%'  OR C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR PP.purchase_date LIKE '%$srch_string%')");
             }
         }
 		
@@ -1188,6 +1409,35 @@
         
     }
 	
+	
+		function update_loyalty_redemption_tracek_user_request($data) {
+        $user_id = $this->session->userdata('admin_user_id');
+			$id = $data['tr_lr_id'];
+               // $this->db->set('profile_photo', $frmData['profile_photo']);
+                $UpdateData = array(
+                    
+					"coupon_number" 	=> $data['coupon_number'],
+					"coupon_type" 		=> $data['coupon_type'],
+					///"coupon_vendor" 	=> $data['coupon_vendor'],
+					"l_status" 			=> $data['l_status'],
+					"status_change_date" 	=>date("Y-m-d H:i:s"),
+					//"courier_details" 		=> $data['courier_details'],
+					"modified_at" 			=> date("Y-m-d H:i:s")
+                );
+             
+			$whereData = array(
+                'tr_lr_id' => $id
+					);
+
+            $this->db->where('tr_lr_id', $id);
+				if($this->db->update('tracek_loyalty_redemption', $UpdateData)) {// echo '===query===='.$this->db->last_query();
+					$this->session->set_flashdata('success', 'Status Updated Successfully!');
+					return true;
+	
+				}return false; 
+        
+    }
+	
 	function set_product_code_unregistered($data) {
         $user_id = $this->session->userdata('admin_user_id');
 			$id = $data['code_id'];
@@ -1266,6 +1516,21 @@
         return $res;
     }
 	
+	
+	function details_loyalty_redemption_request_tracek_user($id) {
+        $this->db->select('TLR.*, BU.*');
+        $this->db->from('tracek_loyalty_redemption AS TLR');
+        $this->db->join('backend_user AS BU', 'BU.user_id = TLR.tr_user_id');
+        $this->db->where(array('TLR.tr_lr_id' => $id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            //$res = $res[0];
+        }
+        return $res;
+    }
+	
 	function details_view_consumer_passbook($id) {
 
         $this->db->select('*');
@@ -1293,8 +1558,8 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'TRUSTAT product verifiction', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
-				  'data' => array('title' => 'TRUSTAT product verifiction', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
+		         'notification' => array('title' => 'TRUSTAT product Verification', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+				  'data' => array('title' => 'TRUSTAT product Verification', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
 		       
 		);
 		$fields = json_encode ( $fields );
@@ -1321,8 +1586,8 @@
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'TRUSTAT loyalty verification', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
-				  'data' => array('title' => 'TRUSTAT loyalty verification', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
+		         'notification' => array('title' => 'TRUSTAT Product Verification', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+				  'data' => array('title' => 'TRUSTAT Product Verification', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
 		       
 		);
 		$fields = json_encode ( $fields );
@@ -1410,6 +1675,7 @@
             'points' => $points_redeemed,
             'transaction_type_name' => "Loyalty Rewards redemption",
 			'transaction_type_slug' => "loyalty_loints_redeemed",
+            'product_id' => 0,
             'params' => json_encode($params),
             'transaction_lr_type' => $transaction_lr_type,
 			'customer_loyalty_type' => "TRUSTAT",
@@ -1420,12 +1686,82 @@
 			'points_short_of_redumption' => $PointsShortOfRedumption,
             'transaction_date' => $now,
             'loyalty_points_expiry_date' => $loyalty_points_expiry_date
+        ];        
+        return $this->db->insert('consumer_passbook',$input);
+    }
+	
+	
+	public function saveTracekUserPassbookLoyalty1($transactionType = null,$customer_a_user_id = null,$params = [],$transaction_lr_type = null,$points_redeemed = null){
+       //sanjay
+	   //$customer_id = $this->session->userdata('admin_user_id');
+	   $TotalAccumulatedPoints = $this->db->select_sum('points')->from('customer_passbook')->where(array('customer_a_user_id'=>$customer_a_user_id, 'transaction_lr_type'=>"Loyalty"))->get()->row();
+		
+	   $TotalRedeemedPoints = $this->db->select_sum('points')->from('customer_passbook')->where(array('customer_a_user_id'=>$customer_a_user_id, 'transaction_lr_type'=>"Redemption"))->get()->row();
+		
+		//$TotalExpiredPoints = $this->db->select_sum('points')->from('customer_passbook')->where(array('customer_a_user_id'=>$customer_a_user_id, 'transaction_lr_type'=>"Expiry"))->get()->row();	
+		
+		$FinalTotalAccumulatedPoints = $TotalAccumulatedPoints->points;
+		$FinalTotalRedeemedPoints = $TotalRedeemedPoints->points + $points_redeemed;
+		$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
+		/*
+		if(($TotalExpiredPoints->points)!='')
+		{
+			$FinalTotalExpiredPoints = $TotalExpiredPoints->points;
+		} else {
+			$FinalTotalExpiredPoints =0;
+			}	
+			*/
+		//$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
+		//$CurrentBalance = $FinalTotalAccumulatedPoints - $FinalTotalRedeemedPoints;
+		
+		/*
+		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
+		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
+						
+		
+		$Min_Locking_Balance = $result2->loyalty_points;
+		
+		$CurrentBalanceAfterMinBalanceLocking = $CurrentBalance - $Min_Locking_Balance;
+		$Points_Redeemed_in_Multiple_of = $result3->loyalty_points;
+
+		
+		$remainder = $CurrentBalanceAfterMinBalanceLocking % $Points_Redeemed_in_Multiple_of;
+		$quotient = ($CurrentBalanceAfterMinBalanceLocking - $remainder) / $Points_Redeemed_in_Multiple_of;
+
+		$Points_Redeemable = $Points_Redeemed_in_Multiple_of * $quotient;
+		$PointsShortOfRedumption =$Points_Redeemed_in_Multiple_of-$remainder;
+        
+		$loyalty_points_expiry_days = loyalty_points_expiry_days($customer_id);
+		$Current_Date = date('Y-m-d');
+		$loyalty_points_expiry_date = date('Y-m-d', strtotime($Current_Date. ' + ' . $loyalty_points_expiry_days. ' days'));
+		*/
+		//$FinalTotalRedeemedExpiredPoints = $FinalTotalRedeemedPoints + $FinalTotalExpiredPoints;
+		$date = new DateTime();
+        $now = $date->format('Y-m-d H:i:s');
+       // $date->modify('+3    month');
+        $input = [
+            'parent_customer_id' => getUserParentIDById($customer_a_user_id),
+			'customer_a_user_id' => $customer_a_user_id,
+            'points' => $points_redeemed,
+            'transaction_type_name' => "Tracek Loyalty redemption",
+			'transaction_type_slug' => "loyalty_loints_redeemed",
+            'product_id' => 0,
+			'accumulated_points_by_transaction_type' => $points_redeemed,
+            'params' => json_encode($params),
+            'transaction_lr_type' => $transaction_lr_type,
+			'customer_loyalty_type' => "TRUSTAT",
+			'total_accumulated_points' => $FinalTotalAccumulatedPoints,
+			'total_redeemed_points' => $FinalTotalRedeemedPoints,
+            'current_balance' => $CurrentBalance,
+			'points_redeemable' => $CurrentBalance,
+			'points_short_of_redumption' => 0,
+            'transaction_date' => $now,
+            'loyalty_points_expiry_date' => $now
         ];
         
-        return $this->db->insert('consumer_passbook',$input);
-		
-		
+        return $this->db->insert('customer_passbook',$input);
     }
+	
 	
 	public function findLoylityBySlug($transactionType = null){
         $items = [];
@@ -1459,7 +1795,7 @@
 			*/
 	
 	
-		public function saveConsumerPassbookLoyalty($transactionType = null, $transactionTypeName = null,$ProductID = null,$consumer_id = null,$params = [], $customer_id = null, $transaction_lr_type = null){
+	public function saveConsumerPassbookLoyalty($transactionType = null, $transactionTypeName = null,$ProductID = null,$consumer_id = null,$params = [], $customer_id = null, $transaction_lr_type = null){
         if( empty($transactionType) || empty($consumer_id) ){
             return false;
         }
@@ -1478,24 +1814,34 @@
 		$TRPoints = $result->$transactionType;
 		
 		if($customer_loyalty_type=="Brand"){
-		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalAccumulatedPointsBrand = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalAccumulatedPoints = $TotalAccumulatedPointsBrand->points;
 		
-		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
-
-		$TotalExpiredPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalRedeemedPointsBrand = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalRedeemedPoints = $TotalRedeemedPointsBrand->points;
+		
+		$TotalExpiredPointsBrand = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalExpiredPoints = $TotalExpiredPointsBrand->points;
+		
 			} else {
-		$TotalAccumulatedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalAccumulatedPointsCustomer = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalAccumulatedPointsISPL = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Loyalty", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>1))->get()->row();		
+		$TotalAccumulatedPoints = $TotalAccumulatedPointsCustomer->points + $TotalAccumulatedPointsISPL->points;
 		
-		$TotalRedeemedPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
-
-		$TotalExpiredPoints = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalRedeemedPointsCustomer = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalRedeemedPointsISPL = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Redemption", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>1))->get()->row();
+		$TotalRedeemedPoints = $TotalRedeemedPointsCustomer->points + $TotalRedeemedPointsISPL->points;
+		
+		$TotalExpiredPointsCustomer = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>$customer_id))->get()->row();
+		$TotalExpiredPointsISPL = $this->db->select_sum('points')->from('consumer_passbook')->where(array('consumer_id'=>$consumer_id, 'transaction_lr_type'=>"Expiry", 'customer_loyalty_type'=>$customer_loyalty_type, 'customer_id'=>1))->get()->row();
+		$TotalExpiredPoints = $TotalExpiredPointsCustomer->points + $TotalExpiredPointsISPL->points;
 		}
 		
-		$FinalTotalAccumulatedPoints = ($TotalAccumulatedPoints->points) + $TRPoints;
+		$FinalTotalAccumulatedPoints = ($TotalAccumulatedPoints) + $TRPoints;
 			
-		if(($TotalRedeemedPoints->points)!='')
+		if(($TotalRedeemedPoints)!='')
 		{
-			$FinalTotalRedeemedPoints = $TotalRedeemedPoints->points;
+			$FinalTotalRedeemedPoints = $TotalRedeemedPoints;
 		} else {
 			$FinalTotalRedeemedPoints =0;
 			}
@@ -1518,9 +1864,9 @@
 		$result2 = $this->db->select('*')->from('loylties')->where('id', 3)->get()->row();
 		$result3 = $this->db->select('*')->from('loylties')->where('id', 4)->get()->row();
 		
-		if(($TotalExpiredPoints->points)!='')
+		if(($TotalExpiredPoints)!='')
 		{
-			$FinalTotalExpiredPoints = $TotalExpiredPoints->points;
+			$FinalTotalExpiredPoints = $TotalExpiredPoints;
 		} else {
 			$FinalTotalExpiredPoints =0;
 			}	
@@ -1555,6 +1901,20 @@
 		$date = new DateTime();
         $now = $date->format('Y-m-d H:i:s');
        // $date->modify('+3    month');
+	   
+			$TRLRC_result = $this->db->select('billin_particular_name, billin_particular_slug')->from('customer_billing_particular_master')->where('cbpm_id', 6)->get()->row();
+			$TRLRC_billin_particular_name = $TRLRC_result->billin_particular_name;
+			$TRLRC_billin_particular_slug = $TRLRC_result->billin_particular_slug;
+			
+			$TRLRCData['customer_id'] = $customer_id;
+			$TRLRCData['consumer_id'] = $consumer_id;
+			$TRLRCData['billing_particular_name'] = $TRLRC_billin_particular_name.' '.$transactionTypeName;		
+			$TRLRCData['billing_particular_slug'] = $TRLRC_billin_particular_slug.'_'.$transactionType;
+			$TRLRCData['trans_quantity'] = $TRPoints; 
+			$TRLRCData['trans_date_time'] = date("Y-m-d H:i:s",time()); 
+			$TRLRCData['trans_status'] = 1; 			
+			$this->db->insert('tr_customer_bill_book', $TRLRCData);
+			
         $input = [
             'customer_id' => $customer_id,
 			'consumer_id' => $consumer_id,
@@ -1562,6 +1922,7 @@
             'points' => $TRPoints,
             'transaction_type_name' => $transactionTypeName,
 			'transaction_type_slug' => $transactionType,
+			'product_id' => $ProductID,
             'params' => json_encode($params),
             'transaction_lr_type' => $transaction_lr_type,
 			'customer_loyalty_type' => get_customer_loyalty_type_by_customer_id($customer_id),
@@ -1581,45 +1942,28 @@
 	function list_all_consumers($limit,$start,$srch_string='') {
 		$user_id 	= $this->session->userdata('admin_user_id');
 		$customer_id = $this->uri->segment(3);
-		if($user_id>1){
-			//$this->db->where('created_by', $user_id);
-			if(!empty($customer_id)){ 
-			
+		if($user_id==1){
 			if(!empty($srch_string)){ 
- 				$this->db->where("(user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%') and (created_by=$customer_id)");
-			}else{
-				$this->db->where(array('created_by'=>$customer_id));
-			}
-			
-			}else{
-				if(!empty($srch_string)){ 
- 				$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%'");
-			}else{
-				//$this->db->where(array('created_by'=>$customer_id));
-			}
-			}
-				
+ 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%' OR city_last_scan LIKE '%$srch_string%' OR gender LIKE '%$srch_string%' OR dob LIKE '%$srch_string%' OR registration_address LIKE '%$srch_string%' OR alternate_mobile_no LIKE '%$srch_string%' OR street_address LIKE '%$srch_string%' OR city LIKE '%$srch_string%' OR state LIKE '%$srch_string%' OR pin_code LIKE '%$srch_string%' OR monthly_earnings LIKE '%$srch_string%' OR job_profile LIKE '%$srch_string%' OR education_qualification LIKE '%$srch_string%' OR type_vehicle LIKE '%$srch_string%' OR profession LIKE '%$srch_string%' OR marital_status LIKE '%$srch_string%' OR no_of_family_members LIKE '%$srch_string%' OR loan_car_housing LIKE '%$srch_string%' OR personal_loan LIKE '%$srch_string%' OR credit_card_loan LIKE '%$srch_string%' OR own_a_car LIKE '%$srch_string%' OR house_type LIKE '%$srch_string%' OR last_location LIKE '%$srch_string%' OR life_insurance LIKE '%$srch_string%' OR medical_insurance LIKE '%$srch_string%' OR height_in_inches LIKE '%$srch_string%' OR weight_in_kg LIKE '%$srch_string%' OR hobbies LIKE '%$srch_string%' OR sports LIKE '%$srch_string%' OR entertainment LIKE '%$srch_string%' OR spouse_gender LIKE '%$srch_string%' OR spouse_phone LIKE '%$srch_string%' OR spouse_dob LIKE '%$srch_string%' OR marriage_anniversary LIKE '%$srch_string%' OR spouse_work_status LIKE '%$srch_string%' OR spouse_edu_qualification LIKE '%$srch_string%' OR spouse_monthly_income LIKE '%$srch_string%' OR spouse_loan LIKE '%$srch_string%' OR spouse_personal_loan LIKE '%$srch_string%' OR spouse_credit_card_loan LIKE '%$srch_string%' OR spouse_own_a_car LIKE '%$srch_string%' OR spouse_house_type LIKE '%$srch_string%' OR spouse_height_inches LIKE '%$srch_string%' OR spouse_weight_kg LIKE '%$srch_string%' OR spouse_hobbies LIKE '%$srch_string%' OR spouse_sports LIKE '%$srch_string%' OR spouse_entertainment LIKE '%$srch_string%' OR modified_at LIKE '%$srch_string%'");
+			}	
 		}else{
-			if(!empty($srch_string)){ 
- 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%' OR aadhaar_number LIKE '%$srch_string%' OR gender LIKE '%$srch_string%' OR dob LIKE '%$srch_string%' OR registration_address LIKE '%$srch_string%' OR alternate_mobile_no LIKE '%$srch_string%' OR street_address LIKE '%$srch_string%' OR city LIKE '%$srch_string%' OR state LIKE '%$srch_string%' OR pin_code LIKE '%$srch_string%' OR monthly_earnings LIKE '%$srch_string%' OR job_profile LIKE '%$srch_string%' OR education_qualification LIKE '%$srch_string%' OR type_vehicle LIKE '%$srch_string%' OR profession LIKE '%$srch_string%' OR marital_status LIKE '%$srch_string%' OR no_of_family_members LIKE '%$srch_string%' OR loan_car_housing LIKE '%$srch_string%' OR personal_loan LIKE '%$srch_string%' OR credit_card_loan LIKE '%$srch_string%' OR own_a_car LIKE '%$srch_string%' OR house_type LIKE '%$srch_string%' OR last_location LIKE '%$srch_string%' OR life_insurance LIKE '%$srch_string%' OR medical_insurance LIKE '%$srch_string%' OR height_in_inches LIKE '%$srch_string%' OR weight_in_kg LIKE '%$srch_string%' OR hobbies LIKE '%$srch_string%' OR sports LIKE '%$srch_string%' OR entertainment LIKE '%$srch_string%' OR spouse_gender LIKE '%$srch_string%' OR spouse_phone LIKE '%$srch_string%' OR spouse_dob LIKE '%$srch_string%' OR marriage_anniversary LIKE '%$srch_string%' OR spouse_work_status LIKE '%$srch_string%' OR spouse_edu_qualification LIKE '%$srch_string%' OR spouse_monthly_income LIKE '%$srch_string%' OR spouse_loan LIKE '%$srch_string%' OR spouse_personal_loan LIKE '%$srch_string%' OR spouse_credit_card_loan LIKE '%$srch_string%' OR spouse_own_a_car LIKE '%$srch_string%' OR spouse_house_type LIKE '%$srch_string%' OR spouse_height_inches LIKE '%$srch_string%' OR spouse_weight_kg LIKE '%$srch_string%' OR spouse_hobbies LIKE '%$srch_string%' OR spouse_sports LIKE '%$srch_string%' OR spouse_entertainment LIKE '%$srch_string%' OR modified_at LIKE '%$srch_string%'");
+			if(!empty($srch_string)){  			
+			$this->db->where("C.user_name LIKE '%$srch_string%' OR C.mobile_no LIKE '%$srch_string%' OR C.email LIKE '%$srch_string%' OR C.city_last_scan LIKE '%$srch_string%' OR C.gender LIKE '%$srch_string%' OR C.dob LIKE '%$srch_string%' OR C.registration_address LIKE '%$srch_string%' OR C.alternate_mobile_no LIKE '%$srch_string%' OR C.street_address LIKE '%$srch_string%' OR C.city LIKE '%$srch_string%' OR C.state LIKE '%$srch_string%' OR C.pin_code LIKE '%$srch_string%' OR C.monthly_earnings LIKE '%$srch_string%' OR C.job_profile LIKE '%$srch_string%' OR C.education_qualification LIKE '%$srch_string%' OR C.type_vehicle LIKE '%$srch_string%' OR C.profession LIKE '%$srch_string%' OR C.marital_status LIKE '%$srch_string%' OR C.no_of_family_members LIKE '%$srch_string%' OR C.loan_car_housing LIKE '%$srch_string%' OR C.personal_loan LIKE '%$srch_string%' OR C.credit_card_loan LIKE '%$srch_string%' OR C.own_a_car LIKE '%$srch_string%' OR C.house_type LIKE '%$srch_string%' OR C.last_location LIKE '%$srch_string%' OR C.life_insurance LIKE '%$srch_string%' OR C.medical_insurance LIKE '%$srch_string%' OR C.height_in_inches LIKE '%$srch_string%' OR C.weight_in_kg LIKE '%$srch_string%' OR C.hobbies LIKE '%$srch_string%' OR C.sports LIKE '%$srch_string%' OR C.entertainment LIKE '%$srch_string%' OR C.spouse_gender LIKE '%$srch_string%' OR C.spouse_phone LIKE '%$srch_string%' OR C.spouse_dob LIKE '%$srch_string%' OR C.marriage_anniversary LIKE '%$srch_string%' OR C.spouse_work_status LIKE '%$srch_string%' OR C.spouse_edu_qualification LIKE '%$srch_string%' OR C.spouse_monthly_income LIKE '%$srch_string%' OR C.spouse_loan LIKE '%$srch_string%' OR C.spouse_personal_loan LIKE '%$srch_string%' OR C.spouse_credit_card_loan LIKE '%$srch_string%' OR C.spouse_own_a_car LIKE '%$srch_string%' OR C.spouse_house_type LIKE '%$srch_string%' OR C.spouse_height_inches LIKE '%$srch_string%' OR C.spouse_weight_kg LIKE '%$srch_string%' OR C.spouse_hobbies LIKE '%$srch_string%' OR C.spouse_sports LIKE '%$srch_string%' OR C.spouse_entertainment LIKE '%$srch_string%' OR C.modified_at LIKE '%$srch_string%'");
 			}
 		}
-		
-		
 		if($user_id==1){
 		$this->db->select("*");
 		$this->db->from("consumers");
-		} else {
-		
+		} else {		
 		$this->db->select('C.*');	
 		$this->db->from('consumers C');		
 		$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
-		$this->db->where('CCL.customer_id', $user_id);
-		
-		}
-		
-		
-		$this->db->order_by("id", " desc");
+		//$this->db->where('CCL.customer_id', $user_id);
+		$this->db->where(array('CCL.customer_id' => $user_id, 'CCL.registration_status' => "Registered"));
+		$this->db->order_by("C.id", "DESC");		
+		}		
+		//$this->db->group_by("C.id");
+		$this->db->order_by("id", "DESC");
 		// $this->db->limit($limit, $start);
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 		return $resultDt ;
@@ -1648,7 +1992,7 @@
 				
 		}else{
 			if(!empty($srch_string)){ 
- 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%' OR aadhaar_number LIKE '%$srch_string%' OR gender LIKE '%$srch_string%' OR dob LIKE '%$srch_string%' OR registration_address LIKE '%$srch_string%' OR alternate_mobile_no LIKE '%$srch_string%' OR street_address LIKE '%$srch_string%' OR city LIKE '%$srch_string%' OR state LIKE '%$srch_string%' OR pin_code LIKE '%$srch_string%' OR monthly_earnings LIKE '%$srch_string%' OR job_profile LIKE '%$srch_string%' OR education_qualification LIKE '%$srch_string%' OR type_vehicle LIKE '%$srch_string%' OR profession LIKE '%$srch_string%' OR marital_status LIKE '%$srch_string%' OR no_of_family_members LIKE '%$srch_string%' OR loan_car_housing LIKE '%$srch_string%' OR personal_loan LIKE '%$srch_string%' OR credit_card_loan LIKE '%$srch_string%' OR own_a_car LIKE '%$srch_string%' OR house_type LIKE '%$srch_string%' OR last_location LIKE '%$srch_string%' OR life_insurance LIKE '%$srch_string%' OR medical_insurance LIKE '%$srch_string%' OR height_in_inches LIKE '%$srch_string%' OR weight_in_kg LIKE '%$srch_string%' OR hobbies LIKE '%$srch_string%' OR sports LIKE '%$srch_string%' OR entertainment LIKE '%$srch_string%' OR spouse_gender LIKE '%$srch_string%' OR spouse_phone LIKE '%$srch_string%' OR spouse_dob LIKE '%$srch_string%' OR marriage_anniversary LIKE '%$srch_string%' OR spouse_work_status LIKE '%$srch_string%' OR spouse_edu_qualification LIKE '%$srch_string%' OR spouse_monthly_income LIKE '%$srch_string%' OR spouse_loan LIKE '%$srch_string%' OR spouse_personal_loan LIKE '%$srch_string%' OR spouse_credit_card_loan LIKE '%$srch_string%' OR spouse_own_a_car LIKE '%$srch_string%' OR spouse_house_type LIKE '%$srch_string%' OR spouse_height_inches LIKE '%$srch_string%' OR spouse_weight_kg LIKE '%$srch_string%' OR spouse_hobbies LIKE '%$srch_string%' OR spouse_sports LIKE '%$srch_string%' OR spouse_entertainment LIKE '%$srch_string%' OR modified_at LIKE '%$srch_string%'");
+ 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%' OR city_last_scan LIKE '%$srch_string%' OR gender LIKE '%$srch_string%' OR dob LIKE '%$srch_string%' OR registration_address LIKE '%$srch_string%' OR alternate_mobile_no LIKE '%$srch_string%' OR street_address LIKE '%$srch_string%' OR city LIKE '%$srch_string%' OR state LIKE '%$srch_string%' OR pin_code LIKE '%$srch_string%' OR monthly_earnings LIKE '%$srch_string%' OR job_profile LIKE '%$srch_string%' OR education_qualification LIKE '%$srch_string%' OR type_vehicle LIKE '%$srch_string%' OR profession LIKE '%$srch_string%' OR marital_status LIKE '%$srch_string%' OR no_of_family_members LIKE '%$srch_string%' OR loan_car_housing LIKE '%$srch_string%' OR personal_loan LIKE '%$srch_string%' OR credit_card_loan LIKE '%$srch_string%' OR own_a_car LIKE '%$srch_string%' OR house_type LIKE '%$srch_string%' OR last_location LIKE '%$srch_string%' OR life_insurance LIKE '%$srch_string%' OR medical_insurance LIKE '%$srch_string%' OR height_in_inches LIKE '%$srch_string%' OR weight_in_kg LIKE '%$srch_string%' OR hobbies LIKE '%$srch_string%' OR sports LIKE '%$srch_string%' OR entertainment LIKE '%$srch_string%' OR spouse_gender LIKE '%$srch_string%' OR spouse_phone LIKE '%$srch_string%' OR spouse_dob LIKE '%$srch_string%' OR marriage_anniversary LIKE '%$srch_string%' OR spouse_work_status LIKE '%$srch_string%' OR spouse_edu_qualification LIKE '%$srch_string%' OR spouse_monthly_income LIKE '%$srch_string%' OR spouse_loan LIKE '%$srch_string%' OR spouse_personal_loan LIKE '%$srch_string%' OR spouse_credit_card_loan LIKE '%$srch_string%' OR spouse_own_a_car LIKE '%$srch_string%' OR spouse_house_type LIKE '%$srch_string%' OR spouse_height_inches LIKE '%$srch_string%' OR spouse_weight_kg LIKE '%$srch_string%' OR spouse_hobbies LIKE '%$srch_string%' OR spouse_sports LIKE '%$srch_string%' OR spouse_entertainment LIKE '%$srch_string%' OR modified_at LIKE '%$srch_string%'");
 			}
 		}
 		
@@ -1662,11 +2006,11 @@
 		$this->db->select('C.*');	
 		$this->db->from('consumers C');		
 		$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
-		$this->db->where('CCL.customer_id', $user_id);
-		
-		}
-		
-		
+		//$this->db->where('CCL.customer_id', $user_id);	
+		$this->db->where(array('CCL.customer_id' => $user_id, 'CCL.registration_status' => "Registered"));		
+		}		
+		//$this->db->group_by("C.id");
+		//$this->db->order_by("C.id", "DESC");
     		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -1702,7 +2046,7 @@
 				
 		}else{
 			if(!empty($srch_string)){ 
- 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%' OR aadhaar_number LIKE '%$srch_string%' OR gender LIKE '%$srch_string%' OR dob LIKE '%$srch_string%' OR registration_address LIKE '%$srch_string%' OR alternate_mobile_no LIKE '%$srch_string%' OR street_address LIKE '%$srch_string%' OR city LIKE '%$srch_string%' OR state LIKE '%$srch_string%' OR pin_code LIKE '%$srch_string%' OR monthly_earnings LIKE '%$srch_string%' OR job_profile LIKE '%$srch_string%' OR education_qualification LIKE '%$srch_string%' OR type_vehicle LIKE '%$srch_string%' OR profession LIKE '%$srch_string%' OR marital_status LIKE '%$srch_string%' OR no_of_family_members LIKE '%$srch_string%' OR loan_car_housing LIKE '%$srch_string%' OR personal_loan LIKE '%$srch_string%' OR credit_card_loan LIKE '%$srch_string%' OR own_a_car LIKE '%$srch_string%' OR house_type LIKE '%$srch_string%' OR last_location LIKE '%$srch_string%' OR life_insurance LIKE '%$srch_string%' OR medical_insurance LIKE '%$srch_string%' OR height_in_inches LIKE '%$srch_string%' OR weight_in_kg LIKE '%$srch_string%' OR hobbies LIKE '%$srch_string%' OR sports LIKE '%$srch_string%' OR entertainment LIKE '%$srch_string%' OR spouse_gender LIKE '%$srch_string%' OR spouse_phone LIKE '%$srch_string%' OR spouse_dob LIKE '%$srch_string%' OR marriage_anniversary LIKE '%$srch_string%' OR spouse_work_status LIKE '%$srch_string%' OR spouse_edu_qualification LIKE '%$srch_string%' OR spouse_monthly_income LIKE '%$srch_string%' OR spouse_loan LIKE '%$srch_string%' OR spouse_personal_loan LIKE '%$srch_string%' OR spouse_credit_card_loan LIKE '%$srch_string%' OR spouse_own_a_car LIKE '%$srch_string%' OR spouse_house_type LIKE '%$srch_string%' OR spouse_height_inches LIKE '%$srch_string%' OR spouse_weight_kg LIKE '%$srch_string%' OR spouse_hobbies LIKE '%$srch_string%' OR spouse_sports LIKE '%$srch_string%' OR spouse_entertainment LIKE '%$srch_string%' OR modified_at LIKE '%$srch_string%'");
+ 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%' OR city_last_scan LIKE '%$srch_string%' OR gender LIKE '%$srch_string%' OR dob LIKE '%$srch_string%' OR registration_address LIKE '%$srch_string%' OR alternate_mobile_no LIKE '%$srch_string%' OR street_address LIKE '%$srch_string%' OR city LIKE '%$srch_string%' OR state LIKE '%$srch_string%' OR pin_code LIKE '%$srch_string%' OR monthly_earnings LIKE '%$srch_string%' OR job_profile LIKE '%$srch_string%' OR education_qualification LIKE '%$srch_string%' OR type_vehicle LIKE '%$srch_string%' OR profession LIKE '%$srch_string%' OR marital_status LIKE '%$srch_string%' OR no_of_family_members LIKE '%$srch_string%' OR loan_car_housing LIKE '%$srch_string%' OR personal_loan LIKE '%$srch_string%' OR credit_card_loan LIKE '%$srch_string%' OR own_a_car LIKE '%$srch_string%' OR house_type LIKE '%$srch_string%' OR last_location LIKE '%$srch_string%' OR life_insurance LIKE '%$srch_string%' OR medical_insurance LIKE '%$srch_string%' OR height_in_inches LIKE '%$srch_string%' OR weight_in_kg LIKE '%$srch_string%' OR hobbies LIKE '%$srch_string%' OR sports LIKE '%$srch_string%' OR entertainment LIKE '%$srch_string%' OR spouse_gender LIKE '%$srch_string%' OR spouse_phone LIKE '%$srch_string%' OR spouse_dob LIKE '%$srch_string%' OR marriage_anniversary LIKE '%$srch_string%' OR spouse_work_status LIKE '%$srch_string%' OR spouse_edu_qualification LIKE '%$srch_string%' OR spouse_monthly_income LIKE '%$srch_string%' OR spouse_loan LIKE '%$srch_string%' OR spouse_personal_loan LIKE '%$srch_string%' OR spouse_credit_card_loan LIKE '%$srch_string%' OR spouse_own_a_car LIKE '%$srch_string%' OR spouse_house_type LIKE '%$srch_string%' OR spouse_height_inches LIKE '%$srch_string%' OR spouse_weight_kg LIKE '%$srch_string%' OR spouse_hobbies LIKE '%$srch_string%' OR spouse_sports LIKE '%$srch_string%' OR spouse_entertainment LIKE '%$srch_string%' OR modified_at LIKE '%$srch_string%'");
 			}
 		}
 		*/
@@ -1718,22 +2062,31 @@
 		$this->db->select('C.*, CCL.*');		
 		$this->db->from('consumers C');		
 		$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
-		$this->db->where('CCL.customer_id', $customer_id);
-		
+		//$this->db->where('CCL.customer_id', $customer_id);
+		$this->db->where(array('CCL.customer_id' => $customer_id, 'CCL.registration_status' => "Registered"));
+		$this->db->group_by("C.id");
+		$this->db->order_by("C.id", "DESC");		
 		//sanjay2
 		$query = $this->db->query("SELECT * FROM consumer_selection_criteria WHERE unique_system_selection_criteria_id =  '$unique_system_selection_criteria_id'");
 		$row = $query->row();
 		//$row->item_id
 		
-		$this->db->where('CCL.customer_id', $customer_id);
+		//$this->db->where('CCL.customer_id', $customer_id);
+		$this->db->where(array('CCL.customer_id' => $customer_id, 'CCL.registration_status' => "Registered"));
 		
 		if($row->consumer_gender!='all') {
 		$this->db->where('C.gender', $row->consumer_gender);
 			}
 		if($row->consumer_city!='all') {
-		$this->db->where('C.city', $row->consumer_city);
+		$this->db->where('C.city_last_scan', $row->consumer_city);
 			}
-		
+			
+		if($row->city_registration!='all') {
+		$this->db->where('C.registration_city', $row->city_registration);
+			}
+			
+		//if($row->city_registration!='all') { $this->db->where('C.registration_city', $row->city_registration); }	
+		if($row->consumer_age_option=='SpecifyAge') {
 		$consumer_min_dob = date('Y-m-d', strtotime('-' . $row->consumer_min_age . ' years'));
 		$consumer_max_dob = date('Y-m-d', strtotime('-' . $row->consumer_max_age . ' years'));
 		
@@ -1745,7 +2098,7 @@
 		$this->db->where('C.dob <=', $consumer_min_dob);
 		//$this->db->or_where('C.dob =', 'NULL');
 			}
-			
+		}
 			/*
 			$arr = explode(' ',trim($earned_loyalty_points_clubbed));
 			$ELP_from = $arr[0];
@@ -2029,7 +2382,7 @@
 				
 		}else{
 			if(!empty($srch_string)){ 
- 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%' OR aadhaar_number LIKE '%$srch_string%' OR gender LIKE '%$srch_string%' OR dob LIKE '%$srch_string%' OR registration_address LIKE '%$srch_string%' OR alternate_mobile_no LIKE '%$srch_string%' OR street_address LIKE '%$srch_string%' OR city LIKE '%$srch_string%' OR state LIKE '%$srch_string%' OR pin_code LIKE '%$srch_string%' OR monthly_earnings LIKE '%$srch_string%' OR job_profile LIKE '%$srch_string%' OR education_qualification LIKE '%$srch_string%' OR type_vehicle LIKE '%$srch_string%' OR profession LIKE '%$srch_string%' OR marital_status LIKE '%$srch_string%' OR no_of_family_members LIKE '%$srch_string%' OR loan_car_housing LIKE '%$srch_string%' OR personal_loan LIKE '%$srch_string%' OR credit_card_loan LIKE '%$srch_string%' OR own_a_car LIKE '%$srch_string%' OR house_type LIKE '%$srch_string%' OR last_location LIKE '%$srch_string%' OR life_insurance LIKE '%$srch_string%' OR medical_insurance LIKE '%$srch_string%' OR height_in_inches LIKE '%$srch_string%' OR weight_in_kg LIKE '%$srch_string%' OR hobbies LIKE '%$srch_string%' OR sports LIKE '%$srch_string%' OR entertainment LIKE '%$srch_string%' OR spouse_gender LIKE '%$srch_string%' OR spouse_phone LIKE '%$srch_string%' OR spouse_dob LIKE '%$srch_string%' OR marriage_anniversary LIKE '%$srch_string%' OR spouse_work_status LIKE '%$srch_string%' OR spouse_edu_qualification LIKE '%$srch_string%' OR spouse_monthly_income LIKE '%$srch_string%' OR spouse_loan LIKE '%$srch_string%' OR spouse_personal_loan LIKE '%$srch_string%' OR spouse_credit_card_loan LIKE '%$srch_string%' OR spouse_own_a_car LIKE '%$srch_string%' OR spouse_house_type LIKE '%$srch_string%' OR spouse_height_inches LIKE '%$srch_string%' OR spouse_weight_kg LIKE '%$srch_string%' OR spouse_hobbies LIKE '%$srch_string%' OR spouse_sports LIKE '%$srch_string%' OR spouse_entertainment LIKE '%$srch_string%' OR modified_at LIKE '%$srch_string%'");
+ 			$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%' OR city_last_scan LIKE '%$srch_string%' OR gender LIKE '%$srch_string%' OR dob LIKE '%$srch_string%' OR registration_address LIKE '%$srch_string%' OR alternate_mobile_no LIKE '%$srch_string%' OR street_address LIKE '%$srch_string%' OR city LIKE '%$srch_string%' OR state LIKE '%$srch_string%' OR pin_code LIKE '%$srch_string%' OR monthly_earnings LIKE '%$srch_string%' OR job_profile LIKE '%$srch_string%' OR education_qualification LIKE '%$srch_string%' OR type_vehicle LIKE '%$srch_string%' OR profession LIKE '%$srch_string%' OR marital_status LIKE '%$srch_string%' OR no_of_family_members LIKE '%$srch_string%' OR loan_car_housing LIKE '%$srch_string%' OR personal_loan LIKE '%$srch_string%' OR credit_card_loan LIKE '%$srch_string%' OR own_a_car LIKE '%$srch_string%' OR house_type LIKE '%$srch_string%' OR last_location LIKE '%$srch_string%' OR life_insurance LIKE '%$srch_string%' OR medical_insurance LIKE '%$srch_string%' OR height_in_inches LIKE '%$srch_string%' OR weight_in_kg LIKE '%$srch_string%' OR hobbies LIKE '%$srch_string%' OR sports LIKE '%$srch_string%' OR entertainment LIKE '%$srch_string%' OR spouse_gender LIKE '%$srch_string%' OR spouse_phone LIKE '%$srch_string%' OR spouse_dob LIKE '%$srch_string%' OR marriage_anniversary LIKE '%$srch_string%' OR spouse_work_status LIKE '%$srch_string%' OR spouse_edu_qualification LIKE '%$srch_string%' OR spouse_monthly_income LIKE '%$srch_string%' OR spouse_loan LIKE '%$srch_string%' OR spouse_personal_loan LIKE '%$srch_string%' OR spouse_credit_card_loan LIKE '%$srch_string%' OR spouse_own_a_car LIKE '%$srch_string%' OR spouse_house_type LIKE '%$srch_string%' OR spouse_height_inches LIKE '%$srch_string%' OR spouse_weight_kg LIKE '%$srch_string%' OR spouse_hobbies LIKE '%$srch_string%' OR spouse_sports LIKE '%$srch_string%' OR spouse_entertainment LIKE '%$srch_string%' OR modified_at LIKE '%$srch_string%'");
 			}
 		}
 		*/
@@ -2039,21 +2392,28 @@
 		$this->db->select('C.*, CCL.*');	
 		$this->db->from('consumers C');		
 		$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
-		$this->db->where('CCL.customer_id', $customer_id);
-		
+		//$this->db->where('CCL.customer_id', $customer_id);
+		$this->db->where(array('CCL.customer_id' => $customer_id, 'CCL.registration_status' => "Registered"));
 		$query = $this->db->query("SELECT * FROM consumer_selection_criteria WHERE unique_system_selection_criteria_id =  '$unique_system_selection_criteria_id'");
 		$row = $query->row();
 		//$row->item_id
 		
-		$this->db->where('CCL.customer_id', $customer_id);
+		//$this->db->where('CCL.customer_id', $customer_id);
+		$this->db->where(array('CCL.customer_id' => $customer_id, 'CCL.registration_status' => "Registered"));
 		
 		if($row->consumer_gender!='all') {
 		$this->db->where('C.gender', $row->consumer_gender);
 			}
 		if($row->consumer_city!='all') {
-		$this->db->where('C.city', $row->consumer_city);
+		$this->db->where('C.city_last_scan', $row->consumer_city);
 			}
-		
+			
+		if($row->city_registration!='all') {
+		$this->db->where('C.registration_city', $row->city_registration);
+			}
+			
+		//if($row->city_registration!='all') { $this->db->where('C.registration_city', $row->city_registration); }		
+		if($row->consumer_age_option=='SpecifyAge') {
 		$consumer_min_dob = date('Y-m-d', strtotime('-' . $row->consumer_min_age . ' years'));
 		$consumer_max_dob = date('Y-m-d', strtotime('-' . $row->consumer_max_age . ' years'));
 		
@@ -2065,7 +2425,7 @@
 		$this->db->where('C.dob <=', $consumer_min_dob);
 		//$this->db->or_where('C.dob =', 'NULL');
 			}
-			
+		}
 			/*
 			$arr = explode(' ',trim($earned_loyalty_points_clubbed));
 			$ELP_from = $arr[0];
@@ -2380,7 +2740,7 @@
 		
 			//$this->db->where('created_by', $user_id);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%') and (consumer_id=$id)");
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%' OR customer_id LIKE '%$srch_string%') and (consumer_id=$id)");
 			}else{
 				//$this->db->where(array('consumer_id'=>$id));
 			}			
@@ -2403,7 +2763,7 @@
 			//$id = 88;
 			//$id = $this->uri->segment(3);
 			if(!empty($srch_string)){ 
- 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%') and (consumer_id=$id)");
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%' OR customer_id LIKE '%$srch_string%') and (consumer_id=$id)");
 			}else{
 				$this->db->where(array('consumer_id'=>$id));
 			}
@@ -2451,6 +2811,7 @@
 				$this->db->where(array('consumer_id'=>$id));
 			}
 			
+			
 		$this->db->select("*");
 		$this->db->from("consumer_passbook");		
 		$this->db->where('consumer_id', $id);
@@ -2472,12 +2833,43 @@
 				$this->db->where(array('consumer_id'=>$id));
 			}
 			
+			if($this->uri->segment(2)=="list_view_blp_consumer_passbook"){
+				$customer_loyalty_type = "Brand";
+				}else{
+				$customer_loyalty_type = "TRUSTAT";
+				}
+			
 		$this->db->select("*");
 		$this->db->from("consumer_passbook");		
 		$this->db->where('consumer_id', $id);
-		$this->db->where('customer_loyalty_type', "Brand");
-		$this->db->group_by('consumer_id');
+		$this->db->where('customer_loyalty_type', $customer_loyalty_type);
+		$this->db->group_by('customer_id');
 		$this->db->order_by("transaction_date", "desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	
+	function list_all_customers_products() {
+		//echo $id;
+			//$this->db->where('created_by', $user_id);
+			//$id = 88;
+			//$id = $this->uri->segment(3);
+			/*
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%' OR customer_id LIKE '%$srch_string%') and (consumer_id=$id)");
+			}else{
+				$this->db->where(array('consumer_id'=>$id));
+			}
+			*/
+			
+		$this->db->select("*");
+		$this->db->from("products");		
+		//$this->db->where('consumer_id', $id);
+		//$this->db->where('customer_loyalty_type', "Brand");
+		$this->db->group_by('created_by');
+		$this->db->order_by("id", "desc");
 		$this->db->limit($limit, $start);
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 		return $resultDt ;
@@ -2489,6 +2881,7 @@
 			//$this->db->where('created_by', $user_id);
 			//$id = 88;
 			//$id = $this->uri->segment(3);
+		$user_id 	= $this->session->userdata('admin_user_id');	
 			if(!empty($srch_string)){ 
  				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%') and (customer_id=$id)");
 			}else{
@@ -2497,12 +2890,9 @@
 			
 		$this->db->select("*");
 		$this->db->from("consumer_passbook");	
-		if($user_id==1){
-			//$this->db->where('customer_id', $user_id);
-			$this->db->where(array('customer_id'=>$id));
-		}
-		//$this->db->where('customer_id', $id);
-		$this->db->where(array('customer_id'=>$id));
+		
+		$this->db->where(array('customer_id'=>$id, 'transaction_lr_type'=>"Loyalty"));
+		
 		$this->db->order_by("id", " desc");
 		$this->db->limit($limit, $start);
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
@@ -2512,6 +2902,7 @@
 	function count_total_list_customerwise_consumer_loyalty($id,$srch_string='') {
 		
 			//$this->db->where('created_by', $user_id);
+			$user_id 	= $this->session->userdata('admin_user_id');
 			if(!empty($srch_string)){ 
  				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%') and (customer_id=$id)");
 			}else{
@@ -2520,8 +2911,9 @@
 		
 		$this->db->select('count(1) as total_rows');
 		$this->db->from('consumer_passbook');
-		//$this->db->where('customer_id', $id);
-		$this->db->where(array('customer_id'=>$id));
+
+		$this->db->where(array('customer_id'=>$id, 'transaction_lr_type'=>"Loyalty"));
+		
     		$query = $this->db->get(); //echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -2660,9 +3052,10 @@ public function findLoylityBySlug($transactionType = null){
 			'user_id' => $userId,
             'points' => $loylty['loyalty_points'],
             'transaction_type' => $loylty['transaction_type'],
+			'product_id' => 0,
             'params' => json_encode($params),
             'loyalty_points_status' => "Redeemed",
-            'modified_at' => $now,
+            'modified_at' => "0000-00-00 00:00:00",
             'created_at' => $now,
             'loyalty_points_expiry_date' => $loyalty_points_expiry_date
         ];
@@ -2713,9 +3106,10 @@ public function findLoylityBySlug($transactionType = null){
             'points' => $result->$transactionType,
             'transaction_type' => $transactionType,
 			'customer_loyalty_type' => $customer_loyalty_type,
+			'product_id' => $ProductID,
             'params' => json_encode($params),
             'loyalty_points_status' => "Earned",
-            'modified_at' => $now,
+            'modified_at' => "0000-00-00 00:00:00",
             'created_at' => $now,
             'loyalty_points_expiry_date' => $loyalty_points_expiry_date
         ];
@@ -2742,7 +3136,7 @@ public function findLoylityBySlug($transactionType = null){
         return $result;
     }
 	
-		function list_all_customers($limit,$start,$srch_string='') {
+	function list_all_customers($limit,$start,$srch_string='') {
 		$user_id 	= $this->session->userdata('admin_user_id');
 		$customer_id = $this->uri->segment(3);
 		if($user_id>1){
@@ -2769,8 +3163,9 @@ public function findLoylityBySlug($transactionType = null){
 			}
 		}
 		
-		$this->db->select("*");
-		$this->db->from("backend_user");
+		$this->db->select("BU.*, RM.*");
+		$this->db->from("backend_user BU");
+		$this->db->join('role_master RM', 'BU.designation_id = RM.id');
 		if($user_id==1){
 		$this->db->where('is_parent>', 1);
 		} else {
@@ -2814,8 +3209,9 @@ public function findLoylityBySlug($transactionType = null){
 		
 		
 		
-		$this->db->select("*");
-		$this->db->from("backend_user");
+		$this->db->select("BU.*, RM.*");
+		$this->db->from("backend_user BU");
+		$this->db->join('role_master RM', 'BU.designation_id = RM.id');
 		if($user_id==1){
 		$this->db->where('is_parent>', 1);
 		} else {
@@ -2845,7 +3241,7 @@ public function findLoylityBySlug($transactionType = null){
 		$this->db->select('count(1) as total_rows');
 		$this->db->from('customer_passbook');
 		$this->db->where('customer_a_user_id', $id);		
-		$this->db->where('customer_loyalty_type', "Brand");
+		//$this->db->where('customer_loyalty_type', "Brand");
 		/*
 		if($user_id==1){
 		$this->db->where('parent_customer_id>', 1);
@@ -2875,7 +3271,7 @@ public function findLoylityBySlug($transactionType = null){
 		$this->db->select("*");
 		$this->db->from("customer_passbook");		
 		$this->db->where('customer_a_user_id', $id);
-		$this->db->where('customer_loyalty_type', "Brand");
+		//$this->db->where('customer_loyalty_type', "Brand");
 		/*
 		if($user_id==1){
 		$this->db->where('parent_customer_id>', 1);
@@ -2883,7 +3279,7 @@ public function findLoylityBySlug($transactionType = null){
 		$this->db->where('parent_customer_id', $user_id);		
 		}
 			*/
-		$this->db->order_by("transaction_date", "desc");
+		$this->db->order_by("id", "desc");
 		$this->db->limit($limit, $start);
         $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
 		return $resultDt ;
@@ -2915,7 +3311,732 @@ public function sendFCM($mess,$id) {
 		$result = curl_exec ( $ch );
 		//curl_close ( $ch );
 		return $result;
+		}
+		
+	function ConsumerReferralDetails2($ProductID, $ConsumerMobileNumber){
+		$this->db->select('referral_id,loyalty_points_referral');
+		$this->db->where(array("product_id"=> $ProductID, "referred_mobile_no"=> $ConsumerMobileNumber, "referral_consumed"=> 0));
+		$this->db->limit(1);// only apply if you have more than same id in your table othre wise comment this line
+		$query = $this->db->get('consumer_referral_table');
+		$row = $query->row();
+		return $row;
+	}
+	
+	
+	function total_referral_mis_listing($srch_string='', $from_date_data='', $to_date_data='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		 $customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(CRT.referral_reference_id LIKE '%$srch_string%' OR CRT.referred_mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR CRT.rs_referred_consumer_TRUSTAT LIKE '%$srch_string%' OR CRT.rs_referred_consumer_customer LIKE '%$srch_string%' OR CRT.geol_city LIKE '%$srch_string%' OR CRT.geol_pin_code LIKE '%$srch_string%' OR CRT.media_type LIKE '%$srch_string%') and (P.created_by=$user_id)");
+				if((!empty($from_date_data))&&(!empty($from_date_data))){ 
+			$this->db->where('DATE(CRT.referring_datetime) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->where('DATE(CRT.referring_datetime) <=', date('Y-m-d',strtotime($to_date_data)));
+				}
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(CRT.referral_reference_id LIKE '%$srch_string%' OR CRT.referred_mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR CRT.rs_referred_consumer_TRUSTAT LIKE '%$srch_string%' OR CRT.rs_referred_consumer_customer LIKE '%$srch_string%' OR CRT.geol_city LIKE '%$srch_string%' OR CRT.geol_pin_code LIKE '%$srch_string%' OR CRT.media_type LIKE '%$srch_string%')");
+			if((!empty($from_date_data))&&(!empty($from_date_data))){ 
+			$this->db->where('DATE(CRT.referring_datetime) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->where('DATE(CRT.referring_datetime) <=', date('Y-m-d',strtotime($to_date_data)));
+			}
+			}
+		}
+		$this->db->select('count(1) as total_rows');
+		$this->db->from("consumer_referral_table CRT");
+		$this->db->join('products P', 'CRT.product_id = P.id');		
+		if($user_id>1){
+		$this->db->where('P.created_by', $user_id);
+			}else{
+			$this->db->where('P.created_by', $customer_id);
+			}
+		if((!empty($from_date_data))&&(!empty($from_date_data))){ 
+		$this->db->where('DATE(CRT.referring_datetime) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(CRT.referring_datetime) <=', date('Y-m-d',strtotime($to_date_data)));
 		}	
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+	
+	
+		function referral_mis_listing($limit,$start,$srch_string='', $from_date_data='', $to_date_data='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(CRT.referral_reference_id LIKE '%$srch_string%' OR CRT.referred_mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR CRT.rs_referred_consumer_TRUSTAT LIKE '%$srch_string%' OR CRT.rs_referred_consumer_customer LIKE '%$srch_string%' OR CRT.geol_city LIKE '%$srch_string%' OR CRT.geol_pin_code LIKE '%$srch_string%' OR CRT.media_type LIKE '%$srch_string%') and (P.created_by=$user_id)");
+			if((!empty($from_date_data))&&(!empty($from_date_data))){ 
+			$this->db->where('DATE(CRT.referring_datetime) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->where('DATE(CRT.referring_datetime) <=', date('Y-m-d',strtotime($to_date_data)));
+				}
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(CRT.referral_reference_id LIKE '%$srch_string%' OR CRT.referred_mobile_no LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR CRT.rs_referred_consumer_TRUSTAT LIKE '%$srch_string%' OR CRT.rs_referred_consumer_customer LIKE '%$srch_string%' OR CRT.geol_city LIKE '%$srch_string%' OR CRT.geol_pin_code LIKE '%$srch_string%' OR CRT.media_type LIKE '%$srch_string%')");
+			if((!empty($from_date_data))&&(!empty($from_date_data))){ 
+			$this->db->where('DATE(CRT.referring_datetime) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->where('DATE(CRT.referring_datetime) <=', date('Y-m-d',strtotime($to_date_data)));
+				}
+			}
+		}
+		$this->db->select("CRT.*, P.*");		
+		$this->db->from("consumer_referral_table CRT");
+		$this->db->join('products P', 'CRT.product_id = P.id');		
+		if($user_id>1){
+		$this->db->where('P.created_by', $user_id);
+			}else{
+			$this->db->where('P.created_by', $customer_id);
+			}	
+		if((!empty($from_date_data))&&(!empty($from_date_data))){ 
+		$this->db->where('DATE(CRT.referring_datetime) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(CRT.referring_datetime) <=', date('Y-m-d',strtotime($to_date_data)));
+		}
+		$this->db->order_by("CRT.referral_id", " desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+
+	function total_in_store_redemption_mis_listing($srch_string='', $from_date_data, $to_date_data) {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		 $customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(BU.f_name LIKE '%$srch_string%' OR BU.user_id LIKE '%$srch_string%' OR LRCC.consumer_id LIKE '%$srch_string%') and (LRCC.brand_customer_id=$user_id)");
+	//$this->db->where('LRCC.request_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(LRCC.request_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(LRCC.request_date) <=', date('Y-m-d',strtotime($to_date_data)));
+		}else{
+				$this->db->where(array('LRCC.brand_customer_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(BU.f_name LIKE '%$srch_string%' OR BU.user_id LIKE '%$srch_string%' OR LRCC.consumer_id LIKE '%$srch_string%')");
+	//$this->db->where('LRCC.request_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(LRCC.request_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(LRCC.request_date) <=', date('Y-m-d',strtotime($to_date_data)));
+			}
+		}
+		$this->db->select('count(1) as total_rows');
+		$this->db->from("loyalty_redemption_customer_cashier LRCC");
+		$this->db->join('backend_user BU', 'LRCC.brand_customer_id = BU.user_id');		
+		if($user_id>1){
+		$this->db->where('LRCC.brand_customer_id', $user_id);
+			}else{
+			$this->db->where('LRCC.brand_customer_id', $customer_id);
+			}
+		
+		if (!empty($from_date_data)) {
+		//$this->db->where('LRCC.request_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(LRCC.request_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(LRCC.request_date) <=', date('Y-m-d',strtotime($to_date_data)));
+		}
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+	
+	
+		function in_store_redemption_mis_listing($limit,$start,$srch_string='', $from_date_data, $to_date_data) {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(BU.f_name LIKE '%$srch_string%' OR BU.user_id LIKE '%$srch_string%' OR LRCC.consumer_id LIKE '%$srch_string%') and (LRCC.brand_customer_id=$user_id)");
+		//$this->db->where('LRCC.request_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+			$this->db->where('DATE(LRCC.request_date) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->where('DATE(LRCC.request_date) <=', date('Y-m-d',strtotime($to_date_data)));
+		}else{
+				$this->db->where(array('LRCC.brand_customer_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(BU.f_name LIKE '%$srch_string%' OR BU.user_id LIKE '%$srch_string%' OR LRCC.consumer_id LIKE '%$srch_string%')");
+	//$this->db->where('LRCC.request_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(LRCC.request_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(LRCC.request_date) <=', date('Y-m-d',strtotime($to_date_data)));
+			}
+		}
+		$this->db->select("LRCC.*, BU.*");		
+		$this->db->from("loyalty_redemption_customer_cashier LRCC");
+		$this->db->join('backend_user BU', 'LRCC.brand_customer_id = BU.user_id');		
+		if($user_id>1){
+		$this->db->where('LRCC.brand_customer_id', $user_id);
+			}else{
+			$this->db->where('LRCC.brand_customer_id', $customer_id);
+			}
+		if (!empty($from_date_data)) {
+		//$this->db->where('LRCC.request_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(LRCC.request_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(LRCC.request_date) <=', date('Y-m-d',strtotime($to_date_data)));
+		}
+		
+		$this->db->order_by("LRCC.lrcc_id", "desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	
+	function total_tracek_loyalty_redemption_count($srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		 $customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR product_description LIKE '%$srch_string%') and (P.created_by=$user_id)");
+			}else{
+				$this->db->where(array('TLC.customer_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR product_description LIKE '%$srch_string%')");
+			}
+		}
+		$this->db->select('count(1) as total_rows');
+		$this->db->from("tracek_loyalty_redemption TLC");
+		$this->db->join('backend_user BU', 'TLC.tr_user_id = BU.user_id');		
+		if($user_id>1){
+		$this->db->where('TLC.customer_id', $user_id);
+			}else{
+			$this->db->where('TLC.customer_id', $customer_id);
+			}
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+	
+	
+		function tracek_loyalty_redemption_listing($limit,$start,$srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR product_description LIKE '%$srch_string%') and (P.created_by=$user_id)");
+			}else{
+				$this->db->where(array('TLC.customer_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(product_name LIKE '%$srch_string%' OR product_sku LIKE '%$srch_string%' OR product_description LIKE '%$srch_string%')");
+			}
+		}
+		$this->db->select("TLC.*, BU.*");		
+		$this->db->from("tracek_loyalty_redemption TLC");
+		$this->db->join('backend_user BU', 'TLC.tr_user_id = BU.user_id');		
+		if($user_id>1){
+		$this->db->where('TLC.customer_id', $user_id);
+			}else{
+			$this->db->where('TLC.customer_id', $customer_id);
+			}		
+		$this->db->order_by("TLC.tr_lr_id", " desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	
+		function total_mis_redemption_microsite_listing($srch_string='', $from_date_data, $to_date_data) {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		 $customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(BU.f_name LIKE '%$srch_string%' OR BU.user_id LIKE '%$srch_string%' OR BU.consumer_id LIKE '%$srch_string%') and (CP.customer_id=$user_id)");
+	//$this->db->where('CP.transaction_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(CP.transaction_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(CP.transaction_date) <=', date('Y-m-d',strtotime($to_date_data)));
+		}else{
+				$this->db->where(array('CP.customer_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(BU.f_name LIKE '%$srch_string%' OR BU.user_id LIKE '%$srch_string%' OR BU.consumer_id LIKE '%$srch_string%')");
+	//$this->db->where('CP.transaction_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(CP.transaction_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(CP.transaction_date) <=', date('Y-m-d',strtotime($to_date_data)));	
+		}
+		}
+		$this->db->select('count(1) as total_rows');
+		$this->db->from("consumer_passbook CP");
+		$this->db->join('backend_user BU', 'CP.customer_id = BU.user_id');		
+		if($user_id>1){
+		//$this->db->where('CP.customer_id', $user_id);
+		$this->db->where(array('CP.customer_id'=>$user_id, 'CP.transaction_type_slug'=>"loyalty_redemption_microsite"));
+			}else{
+			//$this->db->where('CP.customer_id', $customer_id);
+			$this->db->where(array('CP.customer_id'=>$customer_id, 'CP.transaction_type_slug'=>"loyalty_redemption_microsite"));
+			}
+		if (!empty($from_date_data)) {
+	//$this->db->where('CP.transaction_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(CP.transaction_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(CP.transaction_date) <=', date('Y-m-d',strtotime($to_date_data)));
+		}	
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+	
+	
+		function list_mis_redemption_microsite_listing($limit,$start,$srch_string='', $from_date_data, $to_date_data) {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(BU.f_name LIKE '%$srch_string%' OR BU.user_id LIKE '%$srch_string%' OR BU.consumer_id LIKE '%$srch_string%') and (CP.customer_id=$user_id)");
+	//$this->db->where('CP.transaction_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(CP.transaction_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(CP.transaction_date) <=', date('Y-m-d',strtotime($to_date_data)));
+    	}else{
+				$this->db->where(array('CP.customer_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(BU.f_name LIKE '%$srch_string%' OR BU.user_id LIKE '%$srch_string%' OR BU.consumer_id LIKE '%$srch_string%')");
+	//$this->db->where('CP.transaction_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(CP.transaction_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(CP.transaction_date) <=', date('Y-m-d',strtotime($to_date_data)));
+		}
+		}
+		$this->db->select("CP.*, BU.*");		
+		$this->db->from("consumer_passbook CP");
+		$this->db->join('backend_user BU', 'CP.customer_id = BU.user_id');		
+		if($user_id>1){
+		//$this->db->where('CP.customer_id', $user_id);
+		$this->db->where(array('CP.customer_id'=>$user_id, 'CP.transaction_type_slug'=>"loyalty_redemption_microsite"));
+			}else{
+			//$this->db->where('CP.customer_id', $customer_id);
+			$this->db->where(array('CP.customer_id'=>$customer_id, 'CP.transaction_type_slug'=>"loyalty_redemption_microsite"));
+			}	
+		if (!empty($from_date_data)) {
+	//$this->db->where('CP.transaction_date BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(CP.transaction_date) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(CP.transaction_date) <=', date('Y-m-d',strtotime($to_date_data)));
+		}		
+		$this->db->order_by("CP.id", " desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	
+	function total_ispl_billing_list_items_listing($srch_string='', $from_date_data='', $to_date_data='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		 $customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(customer_id LIKE '%$srch_string%' OR billing_particular_name LIKE '%$srch_string%' OR trans_quantity LIKE '%$srch_string%') and (customer_id=$user_id)");
+			$this->db->where('DATE(trans_date_time) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->where('DATE(trans_date_time) <=', date('Y-m-d',strtotime($to_date_data)));
+			}else{
+				$this->db->where(array('customer_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(customer_id LIKE '%$srch_string%' OR billing_particular_name LIKE '%$srch_string%' OR trans_quantity LIKE '%$srch_string%') and (customer_id=$customer_id)");
+			$this->db->or_where('DATE(trans_date_time) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->or_where('DATE(trans_date_time) <=', date('Y-m-d',strtotime($to_date_data)));
+			}else{
+				$this->db->where(array('customer_id'=>$customer_id));
+			}
+		}
+		$this->db->select('count(1) as total_rows');
+		$this->db->from("tr_customer_bill_book");
+		//$this->db->join('products P', 'CRT.product_id = P.id');		
+		if($user_id>1){
+		$this->db->where('customer_id', $user_id);
+			}else{
+			$this->db->where('customer_id', $customer_id);
+			}
+		if (!empty($from_date_data)) {
+			$this->db->where('DATE(trans_date_time) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->where('DATE(trans_date_time) <=', date('Y-m-d',strtotime($to_date_data)));
+		}	
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+	
+	
+		function ispl_billing_list_items_listing($limit,$start,$srch_string='', $from_date_data='', $to_date_data='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(customer_id LIKE '%$srch_string%' OR billing_particular_name LIKE '%$srch_string%' OR trans_quantity LIKE '%$srch_string%') and (customer_id=$user_id)");
+			$this->db->where('DATE(trans_date_time) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->where('DATE(trans_date_time) <=', date('Y-m-d',strtotime($to_date_data)));
+			}else{
+				$this->db->where(array('customer_id'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(customer_id LIKE '%$srch_string%' OR billing_particular_name LIKE '%$srch_string%' OR trans_quantity LIKE '%$srch_string%') and (customer_id=$customer_id)");
+			$this->db->or_where('DATE(trans_date_time) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->or_where('DATE(trans_date_time) <=', date('Y-m-d',strtotime($to_date_data)));
+			}else{
+				$this->db->where(array('customer_id'=>$customer_id));
+			}
+		}
+		$this->db->select("*");		
+		$this->db->from("tr_customer_bill_book");
+		//$this->db->join('products P', 'CRT.product_id = P.id');		
+		if($user_id>1){
+		$this->db->where('customer_id', $user_id);
+			}else{
+			$this->db->where('customer_id', $customer_id);
+			}	
+		if (!empty($from_date_data)) {
+		$this->db->where('DATE(trans_date_time) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(trans_date_time) <=', date('Y-m-d',strtotime($to_date_data)));
+		}
+		$this->db->order_by("cbb_id", "desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+
+// Consumer passbook at Customer
+
+	function count_total_list_view_consumer_passbook_at_customer($id,$srch_string='') {
+		$customer_id = $this->session->userdata('admin_user_id');
+			//$this->db->where('created_by', $user_id);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%' OR customer_id LIKE '%$srch_string%') and (consumer_id=$id)");
+			}else{
+				//$this->db->where(array('consumer_id'=>$id));
+			}			
+		
+		$this->db->select('count(1) as total_rows');
+		$this->db->from('consumer_passbook');
+		$this->db->where('consumer_id', $id);
+		$this->db->where('customer_id', $customer_id);
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+	
+	function list_view_consumer_passbook_at_customer($id,$limit,$start,$srch_string='') {
+		$customer_id = $this->session->userdata('admin_user_id');
+		//echo $id;
+			//$this->db->where('created_by', $user_id);
+			//$id = 88;
+			//$id = $this->uri->segment(3);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%' OR customer_id LIKE '%$srch_string%') and (consumer_id=$id)");
+			}else{
+				$this->db->where(array('consumer_id'=>$id));
+			}
+			
+			
+		$this->db->select("*");
+		$this->db->from("consumer_passbook");		
+		$this->db->where('consumer_id', $id);
+		$this->db->where('customer_id', $customer_id);
+		$this->db->order_by("transaction_date", "desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	/*	function list_view_consumer_passbook_at_customer_dist($id,$limit,$start,$srch_string='') {
+		//echo $id;
+			//$this->db->where('created_by', $user_id);
+			//$id = 88;
+			//$id = $this->uri->segment(3);
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(transaction_type_name LIKE '%$srch_string%' OR transaction_lr_type LIKE '%$srch_string%' OR current_balance LIKE '%$srch_string%' OR customer_id LIKE '%$srch_string%') and (consumer_id=$id)");
+			}else{
+				$this->db->where(array('consumer_id'=>$id));
+			}
+			
+			if($this->uri->segment(2)=="list_view_blp_consumer_passbook"){
+				$customer_loyalty_type = "Brand";
+				}else{
+				$customer_loyalty_type = "TRUSTAT";
+				}
+			
+		$this->db->select("*");
+		$this->db->from("consumer_passbook");		
+		$this->db->where('consumer_id', $id);
+		$this->db->where('customer_loyalty_type', $customer_loyalty_type);
+		$this->db->group_by('customer_id');
+		$this->db->order_by("transaction_date", "desc");
+		$this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+ */
+ 
+ 
+ 	function list_all_packaging_and_ship_out_orders($limit,$start,$srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		//$customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(psoo_id LIKE '%$srch_string%' OR tracek_user_id LIKE '%$srch_string%' OR tracek_user_name LIKE '%$srch_string%' OR tracek_packer_id LIKE '%$srch_string%' OR tracek_packer_name LIKE '%$srch_string%' OR tracek_packer_assigned_byid LIKE '%$srch_string%' OR tracek_packer_assigned_datetime LIKE '%$srch_string%' OR product_id LIKE '%$srch_string%' OR product_name LIKE '%$srch_string%' OR microsite_url LIKE '%$srch_string%' OR psoo_quantity LIKE '%$srch_string%' OR psoo_product_origin_type LIKE '%$srch_string%' OR psoo_bin_number LIKE '%$srch_string%' OR psoo_token_id LIKE '%$srch_string%' OR psoo_invoice_number LIKE '%$srch_string%' OR psoo_ip_address LIKE '%$srch_string%' OR psoo_city LIKE '%$srch_string%' OR psoo_pin_code LIKE '%$srch_string%' OR psoo_date_time LIKE '%$srch_string%' OR psoo_pack_date_time LIKE '%$srch_string%') and (customer_id=$user_id)");
+			}else{
+				$this->db->where(array('customer_id'=>$user_id));
+			}					
+		}else{
+			if(!empty($srch_string)){ 
+ 		$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%'");
+			}
+		}
+		
+		$this->db->select("*");
+		$this->db->from("packaging_ship_out_order");
+		//$this->db->join('role_master RM', 'BU.designation_id = RM.id');
+		if($user_id==1){
+		$this->db->where('is_parent>', 1);
+		} else {
+		
+		//$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		$this->db->where('customer_id', $user_id);
+		
+		}
+		$this->db->group_by("psoo_token_id");
+		$this->db->order_by("psoo_id", " desc");
+		// $this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	function total_all_packaging_and_ship_out_orders($srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		//$customer_id = $this->uri->segment(3);
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(psoo_id LIKE '%$srch_string%' OR tracek_user_id LIKE '%$srch_string%' OR tracek_user_name LIKE '%$srch_string%' OR tracek_packer_id LIKE '%$srch_string%' OR tracek_packer_name LIKE '%$srch_string%' OR tracek_packer_assigned_byid LIKE '%$srch_string%' OR tracek_packer_assigned_datetime LIKE '%$srch_string%' OR product_id LIKE '%$srch_string%' OR product_name LIKE '%$srch_string%' OR microsite_url LIKE '%$srch_string%' OR psoo_quantity LIKE '%$srch_string%' OR psoo_product_origin_type LIKE '%$srch_string%' OR psoo_bin_number LIKE '%$srch_string%' OR psoo_token_id LIKE '%$srch_string%' OR psoo_invoice_number LIKE '%$srch_string%' OR psoo_ip_address LIKE '%$srch_string%' OR psoo_city LIKE '%$srch_string%' OR psoo_pin_code LIKE '%$srch_string%' OR psoo_date_time LIKE '%$srch_string%' OR psoo_pack_date_time LIKE '%$srch_string%') and (customer_id=$user_id)");
+			}else{
+				$this->db->where(array('customer_id'=>$user_id));
+			}					
+		}else{
+			if(!empty($srch_string)){ 
+ 		$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%'");
+			}
+		}
+		
+		
+		$this->db->select("*");
+		$this->db->from("packaging_ship_out_order");
+		//$this->db->join('role_master RM', 'BU.designation_id = RM.id');
+		if($user_id==1){
+		$this->db->where('is_parent>', 1);
+		} else {
+		
+		//$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		$this->db->group_by("psoo_token_id");
+		$this->db->where('customer_id', $user_id);
+		
+		}
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+		
+		
+		
+	function list_all_products_packaging_and_ship_out_report($limit,$start,$srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$psoo_id = $this->uri->segment(3);
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(psoo_id LIKE '%$srch_string%' OR tracek_user_id LIKE '%$srch_string%' OR tracek_user_name LIKE '%$srch_string%' OR tracek_packer_id LIKE '%$srch_string%' OR tracek_packer_name LIKE '%$srch_string%' OR tracek_packer_assigned_byid LIKE '%$srch_string%' OR tracek_packer_assigned_datetime LIKE '%$srch_string%' OR product_id LIKE '%$srch_string%' OR product_name LIKE '%$srch_string%' OR microsite_url LIKE '%$srch_string%' OR psoo_quantity LIKE '%$srch_string%' OR psoo_product_origin_type LIKE '%$srch_string%' OR psoo_bin_number LIKE '%$srch_string%' OR psoo_token_id LIKE '%$srch_string%' OR psoo_invoice_number LIKE '%$srch_string%' OR psoo_ip_address LIKE '%$srch_string%' OR psoo_city LIKE '%$srch_string%' OR psoo_pin_code LIKE '%$srch_string%' OR psoo_date_time LIKE '%$srch_string%' OR psoo_pack_date_time LIKE '%$srch_string%') and (customer_id=$user_id)");
+			}else{
+				$this->db->where(array('customer_id'=>$user_id));
+			}					
+		}else{
+			if(!empty($srch_string)){ 
+ 		$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%'");
+			}
+		}
+		
+		$this->db->select("*");
+		$this->db->from("packaging_order_for_ship_out");
+		//$this->db->join('role_master RM', 'BU.designation_id = RM.id');
+		if($user_id==1){
+		$this->db->where('is_parent>', 1);
+		} else {		
+		//$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		if($this->uri->segment(2)=='products_packaging_and_ship_out_report_by_packaging_id'){
+		$this->db->where('psoo_id', $psoo_id);
+		}else{
+		$this->db->where('customer_id', $user_id);	
+		$this->db->order_by("psoo_id", " desc");
+		}		
+		}
+		//$this->db->group_by("psoo_token_id");
+		
+		// $this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	function total_all_products_packaging_and_ship_out_report($srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$psoo_id = $this->uri->segment(3);
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(psoo_id LIKE '%$srch_string%' OR tracek_user_id LIKE '%$srch_string%' OR tracek_user_name LIKE '%$srch_string%' OR tracek_packer_id LIKE '%$srch_string%' OR tracek_packer_name LIKE '%$srch_string%' OR tracek_packer_assigned_byid LIKE '%$srch_string%' OR tracek_packer_assigned_datetime LIKE '%$srch_string%' OR product_id LIKE '%$srch_string%' OR product_name LIKE '%$srch_string%' OR microsite_url LIKE '%$srch_string%' OR psoo_quantity LIKE '%$srch_string%' OR psoo_product_origin_type LIKE '%$srch_string%' OR psoo_bin_number LIKE '%$srch_string%' OR psoo_token_id LIKE '%$srch_string%' OR psoo_invoice_number LIKE '%$srch_string%' OR psoo_ip_address LIKE '%$srch_string%' OR psoo_city LIKE '%$srch_string%' OR psoo_pin_code LIKE '%$srch_string%' OR psoo_date_time LIKE '%$srch_string%' OR psoo_pack_date_time LIKE '%$srch_string%') and (customer_id=$user_id)");
+			}else{
+				$this->db->where(array('customer_id'=>$user_id));
+			}					
+		}else{
+			if(!empty($srch_string)){ 
+ 		$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%'");
+			}
+		}		
+		
+		$this->db->select("*");
+		$this->db->from("packaging_order_for_ship_out");
+		//$this->db->join('role_master RM', 'BU.designation_id = RM.id');
+		if($user_id==1){
+		$this->db->where('is_parent>', 1);
+		} else {
+		
+		//$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		if($this->uri->segment(2)=='products_packaging_and_ship_out_report_by_packaging_id'){
+		$this->db->where('psoo_id', $psoo_id);
+		}else{
+		$this->db->where('customer_id', $user_id);	
+		//$this->db->order_by("psoo_id", " desc");
+		}		
+		}
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+	
+	
+	
+	 	function list_all_packaging_and_ship_out_order_details($limit,$start,$srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$psoo_token_id = $this->uri->segment(3);
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(psoo_id LIKE '%$srch_string%' OR tracek_user_id LIKE '%$srch_string%' OR tracek_user_name LIKE '%$srch_string%' OR tracek_packer_id LIKE '%$srch_string%' OR tracek_packer_name LIKE '%$srch_string%' OR tracek_packer_assigned_byid LIKE '%$srch_string%' OR tracek_packer_assigned_datetime LIKE '%$srch_string%' OR product_id LIKE '%$srch_string%' OR product_name LIKE '%$srch_string%' OR microsite_url LIKE '%$srch_string%' OR psoo_quantity LIKE '%$srch_string%' OR psoo_product_origin_type LIKE '%$srch_string%' OR psoo_bin_number LIKE '%$srch_string%' OR psoo_token_id LIKE '%$srch_string%' OR psoo_invoice_number LIKE '%$srch_string%' OR psoo_ip_address LIKE '%$srch_string%' OR psoo_city LIKE '%$srch_string%' OR psoo_pin_code LIKE '%$srch_string%' OR psoo_date_time LIKE '%$srch_string%' OR psoo_pack_date_time LIKE '%$srch_string%') and (customer_id=$user_id)");
+			}else{
+				$this->db->where(array('customer_id'=>$user_id, 'psoo_token_id'=>$psoo_token_id));
+			}					
+		}else{
+			if(!empty($srch_string)){ 
+ 		$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%'");
+			}
+		}
+		
+		$this->db->select("*");
+		$this->db->from("packaging_ship_out_order");
+		//$this->db->join('role_master RM', 'BU.designation_id = RM.id');
+		if($user_id==1){
+		$this->db->where('is_parent>', 1);
+		} else {
+		
+		//$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		$this->db->where(array('customer_id'=>$user_id, 'psoo_token_id'=>$psoo_token_id));
+		
+		}
+		//$this->db->group_by("psoo_token_id");
+		$this->db->order_by("psoo_id", " desc");
+		// $this->db->limit($limit, $start);
+        $resultDt = $this->db->get()->result_array();//echo $this->db->last_query();
+		return $resultDt ;
+    }
+	
+	function total_all_packaging_and_ship_out_order_details($srch_string='') {
+		$user_id 	= $this->session->userdata('admin_user_id');
+		$psoo_token_id = $this->uri->segment(3);
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(psoo_id LIKE '%$srch_string%' OR tracek_user_id LIKE '%$srch_string%' OR tracek_user_name LIKE '%$srch_string%' OR tracek_packer_id LIKE '%$srch_string%' OR tracek_packer_name LIKE '%$srch_string%' OR tracek_packer_assigned_byid LIKE '%$srch_string%' OR tracek_packer_assigned_datetime LIKE '%$srch_string%' OR product_id LIKE '%$srch_string%' OR product_name LIKE '%$srch_string%' OR microsite_url LIKE '%$srch_string%' OR psoo_quantity LIKE '%$srch_string%' OR psoo_product_origin_type LIKE '%$srch_string%' OR psoo_bin_number LIKE '%$srch_string%' OR psoo_token_id LIKE '%$srch_string%' OR psoo_invoice_number LIKE '%$srch_string%' OR psoo_ip_address LIKE '%$srch_string%' OR psoo_city LIKE '%$srch_string%' OR psoo_pin_code LIKE '%$srch_string%' OR psoo_date_time LIKE '%$srch_string%' OR psoo_pack_date_time LIKE '%$srch_string%') and (customer_id=$user_id)");
+			}else{
+				$this->db->where(array('customer_id'=>$user_id, 'psoo_token_id'=>$psoo_token_id));
+			}					
+		}else{
+			if(!empty($srch_string)){ 
+ 		$this->db->where("user_name LIKE '%$srch_string%' OR mobile_no LIKE '%$srch_string%' OR email LIKE '%$srch_string%'");
+			}
+		}
+		
+		
+		$this->db->select("*");
+		$this->db->from("packaging_ship_out_order");
+		//$this->db->join('role_master RM', 'BU.designation_id = RM.id');
+		if($user_id==1){
+		$this->db->where('is_parent>', 1);
+		} else {
+		
+		//$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
+		//$this->db->group_by("psoo_token_id");
+		$this->db->where(array('customer_id'=>$user_id, 'psoo_token_id'=>$psoo_token_id));
+		
+		}
+    		$query = $this->db->get(); //echo '***'.$this->db->last_query();
+ 		if ($query->num_rows() > 0) {
+			$result = $query->result_array();
+			$result_data = $result[0]['total_rows'];
+ 		}
+		return $result_data;
+    }
+	
+	
+	function  change_assigned_packaging_supervisor($id,$value){
+		$this->db->set(array('tracek_user_id'=>$value, 'tracek_user_name'=>getTracekUserFullNameById($value), 'assigned_to_psupervisor_datetime'=>date('Y-m-d h:i:s')));
+		$this->db->where(array('psoo_token_id'=>$id));
+ 		if($this->db->update('packaging_ship_out_order')){//echo '***'.$this->db->last_query();exit;
+			return $value;
+		}else{
+			return '';
+		}
+	 }
+		
+	function  change_assigned_packer($id,$value){
+		$this->db->set(array('tracek_packer_id'=>$value, 'tracek_packer_name'=>getTracekUserFullNameById($value), 'tracek_packer_assigned_datetime'=>date('Y-m-d h:i:s')));
+		$this->db->where(array('psoo_token_id'=>$id));
+ 		if($this->db->update('packaging_ship_out_order')){//echo '***'.$this->db->last_query();exit;
+			return $value;
+		}else{
+			return '';
+		}
+	 }
 		
 }
 

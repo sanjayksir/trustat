@@ -39,7 +39,7 @@
 							<div class="col-xs-12">
  								<div class="widget-box widget-color-blue">
                                                                     <div class="widget-header widget-header-flat">
-                                                                        <h5 class="widget-title bigger lighter"><?php echo $label;?></h5>
+                                                                        <h5 class="widget-title bigger lighter"><?php echo $label;?><?php //echo  getCustomerCEmailById(404);?></h5>
                                                                         
                                                                     </div>
 									<div class="widget-body">
@@ -55,7 +55,7 @@
                                                                                 </div>
                                                                                 <div class="col-sm-6">
                                                                                     <div class="input-group">
-                                                                                        <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Code or Product Name or Consumer Name">
+                                                                                        <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Code, Product Name, Consumer Name, Consumer Mobile Number">
                                                                                         <span class="input-group-btn">
                                                                                             <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                                             <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -70,10 +70,12 @@
  												<thead>
 													<tr>
 														<th>#</th>
-														<th>Registered Product Code</th>
+														<th>Product Code</th>
 														<th>Invoice Image</th>
+														<th>Product ID</th>
 														<th>Product Name</th>
 														<th>Consumer Name</th>
+														<th>Consumer Mobile No.</th>
  														<!--<th>Product Registration Address</th>-->
 														<th>Purchase Date</th>
 														<th>Status</th>
@@ -94,11 +96,12 @@
 											   <td><?php echo $sno;$sno++; ?></td>
 											   <td><?php echo $listData['bar_code']; ?></td>
 											   <td>
-<a href="<?php echo base_url().$listData['invoice_image'];?>" onclick="window.open (this.href, 'child', 'height=800,width=900'); return false"><img alt="Invoice Image not available" src="<?php echo base_url(). $listData['invoice_image'];?>" height="50" width="50"></a>
+<a href="<?php echo base_url().$listData['invoice_image'];?>" onclick="window.open (this.href, 'child', 'height=800,width=900'); return false"><img alt="Non Warranty Product, Invoice Not Required" src="<?php echo base_url(). $listData['invoice_image'];?>" height="50" width="50"></a>
 
-	</td>
+	</td>										<td><?php echo $listData['product_id']; ?></td>
 												<td><?php echo $listData['product_name']; ?></td>
 												<td><?php echo $listData['user_name']; ?><?php //echo $listData['registration_process']; ?></td>
+												<td><?php echo $listData['mobile_no']; ?></td>
 												<!--<td>
 																								
 												<?php //echo $listData['latitude']. " / "; ?><?php //echo $listData['longitude']; ?>
@@ -107,7 +110,13 @@
 												<td><?php //echo $listData['status']; ?><?php if($listData['status']==1){
 													echo "<font color='green'>Yes</font>";													
 												} else { echo "<font color='red'>Pending</font>"; } ?></td>
-												<td><?php echo anchor("product/verity_registered_products_by_consumers/" . $listData['purchased_product_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?></td>
+												<td>
+												<?php if($listData['status']==0){ 
+												echo anchor("product/verity_registered_products_by_consumers/" . $listData['purchased_product_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); 
+												}else{
+												echo anchor("product/verity_registered_products_by_consumers_view/" . $listData['purchased_product_id'], '<i class="ace-icon fa fa-eye bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'View'));
+												}	?>
+												</td>
  												 
                                               </tr>
                                          <?php }

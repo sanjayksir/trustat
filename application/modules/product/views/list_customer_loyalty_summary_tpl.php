@@ -2,7 +2,11 @@
 
 <?php //echo '<pre>';print_r($product_list);exit;
 $this->load->view('../includes/admin_top_navigation'); ?>
-
+<!-- Export to Excel -->
+<script src="<?php echo base_url(); ?>assets/export_to_excel/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/export_to_excel/tableExport.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/export_to_excel/jquery.base64.js"></script>
+<!-- /Export to Excel -->
 <div class="main-container ace-save-state" id="main-container">
 
     <script type="text/javascript">
@@ -141,6 +145,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                                 </select>
                                             Records
                                             </label>
+			<label><a href="#" onclick="$('#dynamic-table').tableExport({type:'excel',escape:'false'});"> <img src="<?php echo base_url();?>assets/images/excel_xls.png" width="24px" style="margin-left:100px"> Export to Excel</a></label>								
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="input-group">
@@ -159,11 +164,16 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                             <thead>
                                 <tr>
 														<th>S No.</th>
-													   <th>Customer Name<?php echo $list_all_consumers->customer_id; ?></th>
+													   <th>Customer Name</th>
+													   <th>Customer Loyalty Type</th>
 													   <th>Total Purchased TRUSTAT Points</th>
 														<th>Total TRUSTAT Points awarded</th>
-														<th>Brand Points Redeemed</th>
+														<th>TRUSTAT Points Redeemed</th>
 														<th>TRUSTAT Closing Balance</th>
+														<th>Total Purchased Brand Points</th>
+														<th>Total Brand Points awarded</th>
+														<th>Brand Points Redeemed</th>
+														<th>Brand Closing Balance</th>
                                                        <th>Loyalty Details</th>
 
                                 </tr>
@@ -184,21 +194,13 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                          ?>
                                 <tr id="show<?php echo $attr['id'];?>" <?php if (!empty($customer_id)) { if($attr['customer_id']!=$customer_id) {  ?> style="display:none;" <?php } } ?>>
                                 <td><?php echo $sno; ?></td>
-                                <td><?php echo getUserFullNameById($attr['customer_id']);
-				
-				
-								?></td>
+                                <td><?php echo getUserFullNameById($attr['customer_id']); ?></td>
+								<td><?php echo $attr['customer_loyalty_type']; ?></td>
 								<td><?php echo total_approved_points2($attr['customer_id']);  ?> </td>  								
                                 <td><?php //echo base_url(); 								
-								if(base_url()=='http://localhost/trackingportal/') {									
-									mysql_connect("localhost", "root", "");
-								mysql_select_db("trackingportaldb");								
-								} else {								
-								mysql_connect("localhost", "tpdbuser", "india@123");
-								mysql_select_db("trackingprortaldb");
-								}
+								include('url_base_con_db2.php');
 								
-								$some_q = "SELECT SUM(points) AS `points` FROM loylty_points where customer_id = '".$attr['customer_id']."' AND customer_loyalty_type = 'TRUSTAT'";
+								$some_q = "SELECT SUM(points) AS `points` FROM loylty_points where customer_id = '".$attr['customer_id']."' AND customer_loyalty_type = 'TRUSTAT' AND loyalty_points_status = 'Earned'";
 
 							$results = mysql_query($some_q) or die(mysql_error());
 
@@ -209,15 +211,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 							}
 								?></td>
                            <td><?php //echo base_url(); 								
-								if(base_url()=='http://localhost/trackingportal/') {									
-									mysql_connect("localhost", "root", "");
-								mysql_select_db("trackingportaldb");								
-								} else {								
-								mysql_connect("localhost", "tpdbuser", "india@123");
-								mysql_select_db("trackingprortaldb");
-								}
 								
-								$some_q2 = "SELECT SUM(points) AS `points` FROM loylty_points where customer_id = '".$attr['customer_id']."' AND customer_loyalty_type = 'Brand'";
+								$some_q2 = "SELECT SUM(points) AS `points` FROM loylty_points where customer_id = '".$attr['customer_id']."' AND customer_loyalty_type = 'TRUSTAT' AND loyalty_points_status = 'Redeemed'";
 
 							$results2 = mysql_query($some_q2) or die(mysql_error());
 
@@ -228,7 +223,36 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 							}
 								?></td>
                                                
-                                                 <td><?php echo total_approved_points2($attr['customer_id']) - $TE_Points; ?> </td> 
+                                     <td><?php echo total_approved_points2($attr['customer_id']) - $TE_Points; ?> </td> 
+												 
+									<td><?php $total_brand_approved_points2 = 0; 
+									echo $total_brand_approved_points2;  ?> </td>  								
+                                <td><?php 
+								
+								$some_q3 = "SELECT SUM(points) AS `points` FROM loylty_points where customer_id = '".$attr['customer_id']."' AND customer_loyalty_type = 'Brand' AND loyalty_points_status = 'Earned'";
+
+							$results3 = mysql_query($some_q3) or die(mysql_error());
+
+							while($row3 = mysql_fetch_array($results3)){
+							$TE_Points3 = $row3['points'];
+							
+							echo $TE_Points3;							
+							}
+								?></td>
+                           <td><?php 
+								
+								$some_q4 = "SELECT SUM(points) AS `points` FROM loylty_points where customer_id = '".$attr['customer_id']."' AND customer_loyalty_type = 'Brand' AND loyalty_points_status = 'Redeemed'";
+
+							$results4 = mysql_query($some_q4) or die(mysql_error());
+
+							while($row4 = mysql_fetch_array($results4)){
+							$TE_Points4 = $row4['points'];
+							
+							echo $TE_Points4;							
+							}
+								?></td>
+                                               
+                                                 <td><?php echo 0 - $TE_Points3; ?> </td> 
 													<td><?php echo anchor("product/list_customerwise_consumer_loyalty_details/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Loyalty Details</i>', array('class' => 'btn btn-xs btn-info','title'=>' Loyalty Details')); ?>  
 													<?php echo anchor("textmessages/list_approved_purchases_by_customer/".$attr['customer_id'], '<i class="ace-icon fa fa-eye bigger-130"> Purchases</i>', array('class' => 'btn btn-xs btn-info','title'=>'Customer Purchase')); ?>
 													
@@ -268,12 +292,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="footer-content">
 
                         <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

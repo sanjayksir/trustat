@@ -56,8 +56,8 @@ class ScannedProduct extends ApiController {
             $this->db->insert('scanned_product_logs', $data);
             $this->response(['status'=>false,'message'=>'This product and barcode is not supported by TRUSTAT .'],200);
         }
-        if(!empty($result->product_images)){
-            $result->product_images = Utils::setFileUrl($result->product_images);
+        if(!empty($result->product_image)){
+            $result->product_image = Utils::setFileUrl($result->product_image);
         }
         if(!empty($result->product_video)){
             $result->product_video = Utils::setFileUrl($result->product_video);

@@ -2,7 +2,11 @@
 
 <?php //echo '<pre>';print_r($product_list);exit;
 $this->load->view('../includes/admin_top_navigation'); ?>
-
+<!-- Export to Excel -->
+<script src="<?php echo base_url(); ?>assets/export_to_excel/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/export_to_excel/tableExport.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/export_to_excel/jquery.base64.js"></script>
+<!-- /Export to Excel -->
 <div class="main-container ace-save-state" id="main-container">
 
     <script type="text/javascript">
@@ -38,7 +42,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                     </li>
 
-                    <li class="active">List View Consumer Loyalties </li>
+                    <li class="active">List View Customer wise Consumer Loyalties </li>
 
                 </ul><!-- /.breadcrumb -->
 
@@ -94,6 +98,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                                 </select>
                                             Records
                                             </label>
+											<label><a href="#" onclick="$('#dynamic-table').tableExport({type:'excel',escape:'false'});"> <img src="<?php echo base_url();?>assets/images/excel_xls.png" width="24px" style="margin-left:100px"> Export to Excel</a></label>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="input-group">
@@ -112,12 +117,12 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                             <thead>
                                 <tr>
                                     <th>S No.</th>
-                                    <th class="hidden-480">Transuction Date</th>
+                                    <th class="hidden-480">Transaction Date</th>
                                     <th class="hidden-480">Event Name</th>
                                     <th class="hidden-480">Event Detail</th>
 									<th>Customer Loyalty Type</th>
+									<th>Points</th>
 									<th>Transaction</th>
-                                    <th>Points</th>
 									<th>Consumer Name</th>
 									<th>Consumer Phone</th>
 									<th>Consumer Geo location</th>
@@ -222,12 +227,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="footer-content">
 
                         <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

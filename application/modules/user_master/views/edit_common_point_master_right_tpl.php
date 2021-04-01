@@ -26,12 +26,19 @@
 			<input name="loyalty_points" id="loyalty_points" type="text" value="<?php echo $get_user_details[0]['loyalty_points'];?>" class="form-control" placeholder="Loyalty Points"  maxlength="30">
 			</div>
 			 
-			<!--
+			
 			<div class="col-sm-6">
-			  <label for="form-field-8">Loyalty Points Redeemed in Multiple of</label>
-			 <input name="points_redeem_in_multiples_of" id="points_redeem_in_multiples_of" type="text" value="<?php //echo $get_user_details[0]['points_redeem_in_multiples_of'];?>" class="form-control" placeholder="Last Name"  maxlength="30">
-			</div>
-			-->
+			  <label for="form-field-8">Expiry Days</label>
+	<input name="expiry_days" id="expiry_days" type="text" value="<?php echo $get_user_details[0]['expiry_days'];?>" class="form-control" placeholder="Last Name"  maxlength="30">
+			</div>	
+
+			<div class="col-sm-6">
+			  <label for="form-field-8">Active Status</label>
+			<select name="active_status" id="active_status" class="form-control">
+			<option value="Active" <?php echo ($get_user_details['active_status']=='Active')?'selected':'';?>>Active</option>
+			<option value="InActive"<?php echo ($get_user_details['active_status']=='InActive')?'selected':'';?>>InActive</option>
+			</select>
+			</div>				
 		</div>
 		
 		<?php }?>

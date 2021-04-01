@@ -15,13 +15,15 @@
 					"unique_system_selection_criteria_id" => $frmData['unique_system_selection_criteria_id'],
 					"name_of_selection_criteria" => $frmData['name_of_selection_criteria'],
                     //"promotion_type" => $frmData['promotion_type'],
-                    "consumer_gender" => $frmData['consumer_gender'],
+                    "consumer_age_option" => $frmData['consumer_age_option'],
+					"consumer_gender" => $frmData['consumer_gender'],
 					"consumer_min_age" => $frmData['consumer_min_age'],
                     "consumer_max_age" => $frmData['consumer_max_age'],
                     "consumer_city" => $frmData['consumer_city'],
                     "consumer_pin" => "123456",
 					"updated_by_id" => $user_id,
 					"update_date" => date('Y-m-d H:i:s'),
+					"uptodate_date" => date('Y-m-d'),
                     "status" => 1,
 					"city_registration" 	=> $frmData['city_registration'],
 					"earned_loyalty_points" => $frmData['earned_loyalty_points'],
@@ -285,6 +287,7 @@
 					"unique_system_selection_criteria_id" => $frmData['unique_system_selection_criteria_id'],
 					"name_of_selection_criteria" => $frmData['name_of_selection_criteria'],                    
                     //"promotion_type" 		=> $frmData['promotion_type'],
+					"consumer_age_option" 		=> $frmData['consumer_age_option'],
                     "consumer_gender" 		=> $frmData['consumer_gender'],
 					"consumer_min_age" 		=> $frmData['consumer_min_age'],
                     "consumer_max_age" 		=> $frmData['consumer_max_age'],
@@ -292,6 +295,7 @@
                     "consumer_pin" 			=> "12345",
 					"created_by_id" 		=> $user_id,
 					"create_date" 			=> date('Y-m-d H:i:s'),
+					"uptodate_date" => date('Y-m-d'),
                     "status" 				=> 1,
 					"city_registration" 	=> $frmData['city_registration'],
 					"earned_loyalty_points" => $frmData['earned_loyalty_points'],
@@ -1114,7 +1118,151 @@
 				}
 			}
 	
-// FAQ Master Start
+// FAQ Master End
+
+		// Start Product Returned From Consumer CMS Items
+ 
+	    function get_total_product_returned_from_customer_cms_items_all($srch_string = '') {
+        $result_data = 0;
+        $user_id = $this->session->userdata('admin_user_id');
+        
+        if (!empty($srch_string)) {
+            $this->db->where("(cpm_type_name LIKE '%$srch_string%' OR cpm_name LIKE '%$srch_string%') and (created_by_id=$user_id)");
+        } else {
+            if (empty($user_id)) {
+                $user_id = 1;
+            }
+           // $this->db->where(array('created_by_id' => $user_id));
+        }
+
+        $this->db->select('count(1) as total_rows');
+        $this->db->from('product_returned_from_customer_cms_items');
+        $query = $this->db->get(); //echo '***'.$this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result = $query->result_array();
+            $result_data = $result[0]['total_rows'];
+        }
+        return $result_data;
+    }
+    function get_list_product_returned_from_customer_cms_items_all($limit,$start,$srch_string = '') {
+        $result_data = 0;
+        $user_id = $this->session->userdata('admin_user_id');
+        
+        if (!empty($srch_string)) {
+            $this->db->where("(cpm_type_name LIKE '%$srch_string%' OR cpm_name LIKE '%$srch_string%') and (created_by_id=$user_id)");
+        } else {
+            if (empty($user_id)) {
+                $user_id = 1;
+            }
+           // $this->db->where(array('created_by_id' => $user_id));
+        }
+
+        $this->db->select('*');
+        $this->db->from('product_returned_from_customer_cms_items');
+        $this->db->order_by('prfcci_id', 'desc');
+        if (empty($srch_string)) {
+            $this->db->limit($limit, $start);
+        }
+        //echo $this->db->last_query();die;
+        $query = $this->db->get(); //echo '***'.$this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $result_data = $query->result_array();
+        }
+        return $result_data;
+    }
+	
+	
+	
+	
+ function checkConsumerReturnCMSItem($return_cms_type_name_slug) {
+        $result = 'true';
+		/*
+        if ($this->input->post('register_username') != '') {
+            $uname = $this->input->post('register_username');
+        }
+		*/
+		//$cpm_type_slug1 = getAttributeSlugByName($Profile_Attribute);
+        $this->db->select('return_cms_type_name_slug');
+        $this->db->from('product_returned_from_customer_cms_items');
+		/*
+        if (!empty($cpmid)) {
+            $this->db->where(array('cpm_id!=' => $cpmid));
+        }*/
+        $this->db->where(array('return_cms_type_name_slug' => $return_cms_type_name_slug));
+        $query = $this->db->get();
+        //echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            $result = $res[0]['return_cms_type_name_slug'];
+            $result = 'false';
+        }
+        return $result;
+    }
+	
+
+	function save_consumer_return_cms_item($frmData) {   
+        $user_id = $this->session->userdata('admin_user_id'); 
+		
+        if (!empty($frmData['prfcci_id'])) {           
+                $UpdateData = array(
+					"return_cms_type" => $frmData['return_cms_type'],
+					"return_cms_type_name_value" => $frmData['return_cms_type_name_value'],
+					"return_cms_type_name_slug" => $frmData['return_cms_type_name_slug'],
+					"updated_date" => date('Y-m-d H:i:s'),
+                    "active_status" => $frmData['active_status']                    
+                );
+            //$this->db->insert("assign_plants_to_users", $insertData);
+            $whereData = array(
+                'prfcci_id' => $frmData['prfcci_id']
+            );
+
+            $this->db->set($UpdateData);
+            $this->db->where($whereData);
+            if ($this->db->update('product_returned_from_customer_cms_items')) {
+                //echo '***'.$this->db->last_query();exit;
+                $this->session->set_flashdata('success', 'Product Returned From Consumer CMS Item Updated Successfully!');
+                return 1;
+            }
+        } else {            
+            $insertData = array(
+					"return_cms_type" => $frmData['return_cms_type'],
+					"return_cms_type_name_value" => $frmData['return_cms_type_name_value'],
+					"return_cms_type_name_slug" => $frmData['return_cms_type_name_slug'],
+					"created_date" => date('Y-m-d H:i:s'),
+                    "active_status" => $frmData['active_status']
+            ); //echo '<pre>';print_r($insertData);exit;
+            if ($this->db->insert("product_returned_from_customer_cms_items", $insertData)) {
+                $this->session->set_flashdata('success', 'Product Returned From Consumer CMS Item Added Successfully!');
+                return 1;
+            }
+            return 0;
+        }
+    }
+	
+	
+	    function get_product_returned_from_customer_cms_item_details($id) {
+        $this->db->select('*');
+        $this->db->from('product_returned_from_customer_cms_items');
+       // $this->db->join('assign_locations_to_users AS ap', 'ap.user_id = bu.user_id','LEFT');
+        $this->db->where(array('prfcci_id' => $id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            //$res = $res[0];
+        }
+        return $res;
+    }
+	
+	    function Del_ConsumerReturnCMSItem($id) {
+        $this->db->where('prfcci_id', $id);
+        if ($this->db->delete('product_returned_from_customer_cms_items')) {
+            return '1';
+        }
+    }
+	
+	
+	// end Product Returned From Consumer CMS Items 
 
 }
 

@@ -71,7 +71,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                 <?php } ?>
 	
                 <b>Consumer Name :</b> <?php echo $consumer_details['user_name'];?>, <b>Consumer Phone :</b> <?php echo $consumer_details['mobile_no'];?>,  <b>Consumer GEO Location :</b> <?php //echo $consumer_details['ip'];?><?php
-    $ip = '157.38.220.26'; // your ip address here
+    $ip = $consumer_details['ip'] // your ip address here
     $query = @unserialize(file_get_contents('http://ip-api.com/php/'.$ip));
     if($query && $query['status'] == 'success')
     {
@@ -178,12 +178,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="footer-content">
 
                         <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

@@ -88,10 +88,26 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 								<tr>
 									<td><?php echo $Total_Earned_Points; ?></td>
 									<td><?php 
-									$user_id = $this->session->userdata('admin_user_id');
-									
-									echo anchor("product/list_customerwise_consumer_loyalty_details/".$user_id, '<i class="ace-icon fa fa-eye bigger-130"> Loyalties Details</i>', array('class' => 'btn btn-xs btn-info','title'=>' Loyalty Details')); ?> </td>
-									
+									$user_id = $this->session->userdata('admin_user_id');									
+									echo anchor("product/list_customerwise_consumer_loyalty_details/".$user_id, '<i class="ace-icon fa fa-eye bigger-130"> Loyalties Details</i>', array('class' => 'btn btn-xs btn-info','title'=>' Loyalty Details')); ?></td>
+								</tr>
+							</tbody>
+			 </table>
+			 
+			 			 <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                           <tr>
+								<th><span class="blue bolder">Total Loyalties Redemption Through Microsite Loyalties</span></th>
+								<th><span class="blue bolder">Redemption Through Microsite Loyalties Details</span></th>
+								
+							</tr>
+                     </thead>
+                            <tbody>
+								<tr>
+									<td><?php echo $Total_Points_Redeemed_ms; ?></td>
+									<td><?php 
+									$user_id = $this->session->userdata('admin_user_id');									
+									echo anchor("product/mis_redemption_microsite/", '<i class="ace-icon fa fa-eye bigger-130"> Redemption Through Microsite Loyalties Details</i>', array('class' => 'btn btn-xs btn-info','title'=>' Loyalty Details')); ?></td>
 								</tr>
 							</tbody>
 			 </table>
@@ -125,13 +141,10 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                     <div class="footer-content">
 
-                        <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+                       <span class="bigger-120">
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

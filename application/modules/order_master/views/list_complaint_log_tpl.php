@@ -54,7 +54,7 @@
                                                                             </div>
                                                                             <div class="col-sm-6">
                                                                                 <div class="input-group">
-                                                                                    <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Code or Product Name or Consumer Name">
+                                                                                    <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Product Code or Complaint Code or Product Name or Consumer Name">
                                                                                     <span class="input-group-btn">
                                                                                         <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                                         <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
@@ -74,7 +74,8 @@
 														<th>Complaint Status</th>
  														<!--<th>Location-latitude/longitude</th>-->
 														<th>date time - Complaint</th>
-														 <th>Complaint Description (Remarks)</th>
+														 <th>Complaint Description</th>
+														 <th>Reply</th>
 														 <th>Complaint type</th>
 														 
                                                        <!-- <th>Action</th> -->
@@ -102,7 +103,8 @@
 												<?php //echo $listData['latitude']. " / "; ?><?php //echo $listData['longitude']; ?>
 												</td>-->
 												<td><?php echo (date('j M Y H:i:s', strtotime($listData['created_at']))); ?></td>
- 												 <td><?php echo $listData['description']; ?> -<?php echo anchor("order_master/reply_consumer_complaint/" . $listData['id'], 'Reply <i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?></td>
+ 												 <td><?php echo $listData['description']; ?></td>
+												 <td><?php echo anchor("order_master/reply_consumer_complaint/" . $listData['id'], 'Reply <i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?></td>
 												 <td><?php echo $listData['type']; ?></td>
 												 
                                               </tr>

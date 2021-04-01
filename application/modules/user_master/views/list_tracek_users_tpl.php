@@ -53,7 +53,7 @@
                             <div class="widget-header widget-header-flat">
                                 <h5 class="widget-title bigger lighter">Manage <?php echo $label; ?><?php //echo $this->uri->segment(3); ?></h5>
                                 <div class="widget-toolbar">
-                                    <a href="<?php echo base_url('user_master/add_plant_controller/') ?>" class="btn btn-xs btn-warning" title="Add Users">Add <?php echo $label; ?> </a> | <a href="<?php echo base_url('user_master/list_user/') ?>" class="btn btn-xs btn-warning" title="Add Users">List Customer <?php //echo $label; ?> </a>
+                                    <a href="<?php echo base_url('user_master/add_plant_controller/') ?>/<?php echo $this->uri->segment(3); ?>" class="btn btn-xs btn-warning" title="Add Users"> Add <?php echo $label; ?> </a> | <a href="<?php echo base_url('user_master/list_user/') ?>" class="btn btn-xs btn-warning" title="Add Users"> List Customer <?php //echo $label; ?> </a> | <a href="<?php echo base_url('reports/tracek_user_activity_log') ?>" class="btn btn-xs btn-warning" title="Add Users"> List Tracek Users Activity Log <?php //echo $label; ?> </a>
                                 </div>
                             </div>
                         <div class="widget-body">
@@ -84,11 +84,11 @@
                                     <tr>
                                         <th>SNo.</th>
 										<!---<th><?php //echo $label; ?> Customer</th>-->
-                                        <th>First Name</th>
-										<th>Last Name</th>
+                                        <!--<th>First Name</th>-->
+										<th>Person Name</th>
                                         <th>User Name</th>
 										<th>User Type</th>
-										<!--<th>Assigned Locations</th>-->
+										<th>Assigned Locations</th>
                                         <th>Email ID</th>
                                         <th>Phone</th>
                                         <th>Action</th>
@@ -126,16 +126,16 @@
                                     <tr id="show<?php echo $listData['user_id']; ?>">
                                     <td><?php echo $sno; ?></td>
 									<!---<td><?php echo getUserNameById($listData['is_parent']); ?></td>-->
-                                    <td><?php echo $listData['f_name']; ?></td>
+                                   <!-- <td><?php echo $listData['f_name']; ?></td>-->
 									<td><?php echo $listData['l_name']; ?></td>
                                     <td><?php echo $listData['user_name']; ?></td>
 									<td><?php echo get_role_name_by_designation_id($listData['designation_id']); ?></td>
-									<!--<td><?php echo assigned_locations($listData['user_id']); ?></td>-->
+									<td><?php echo assigned_locations($listData['user_id']); ?></td>
                                     <td><?php echo $listData['email_id']; ?></td>
                                     <td><?php echo $listData['mobile_no']; ?></td>
                                     
                                     <td>
-                                        <div class="hidden-sm hidden-xs action-buttons">
+                                        <div class="hidden-sm hidden-xs action-buttons" style="width:177px">
                                             <a href="<?php echo base_url() . 'user_master/view_user/' . $listData['user_id']; ?>" class="btn btn-xs btn-success"  target="_blank" title="View"><i class="fa fa-eye"></i></a>
                                             <?php echo anchor("user_master/edit_plant_controller/" . $listData['user_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info', 'title' => 'Edit')); ?>
                                     <?php if ($listData['is_verified'] == 1) { ?>

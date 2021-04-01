@@ -1,5 +1,6 @@
 <?php $this->load->view('../includes/admin_header');?>
 <?php $this->load->view('../includes/admin_top_navigation');?>
+
 	<div class="main-container ace-save-state" id="main-container">
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
@@ -39,12 +40,17 @@
 							<div class="col-xs-12">
  								<div class="widget-box widget-color-blue">
                                                                     <div class="widget-header widget-header-flat">
-                                                                        <h5 class="widget-title bigger lighter"><?php echo $label;?> Closure Report<?php //echo $this->uri->segment(3);?></h5>
+                                                                        <h5 class="widget-title bigger lighter"><?php echo $label;?> Closure Report<?php //echo $this->uri->segment(3);?>
+																		<div class="widget-toolbar">
+                                                    <?php //echo anchor('reports/barcode/basic_customer_report_level0_download', 'Go to download report',array('class' => 'btn btn-xs btn-warning')); ?>
+					<a href="<?php echo base_url();?>advertisement/view_advertisement_response_by_question_answer_download/<?php echo $this->uri->segment(3);?>" class="btn btn-xs btn-warning"> Go to download report </a>								
+																	</div>	
+																		</h5>
                                                                     </div>
 									<div class="widget-body">
                                                                             <div class="row filter-box">
                                                                                 <form id="form-filter" action="" method="get" class="form-horizontal" >
-                                                                                    <div class="col-sm-6">
+                                                                                    <div class="col-sm-5">
                                                                                         <label>Display
                                                                                             <select name="page_limit" id="page_limit" class="form-control" onchange="this.form.submit()">
                                                                                             <?php echo Utils::selectOptions('pagelimit',['options'=>$this->config->item('pageOption'),'value'=>$this->config->item('pageLimit')]) ?>
@@ -52,32 +58,70 @@
                                                                                         Records
                                                                                         </label>
                                                                                     </div>
-                                                                                    <div class="col-sm-6">
+								<?php $Datetoday = date("m/d/Y"); ?>
+								<?php $dateoneMAgo = date("m/d/Y",strtotime("-1 month")); ?>	
+																					<div class="col-sm-2">  Start Date(mm/dd/yyyy) : <br /><br />End Date(mm/dd/yyyy) :<br /><br />  </div>
+                                                                                    <div class="col-sm-5">
                                                                                         <div class="input-group">
+						<div class="input-group date" data-provide="datepicker">
+                              <input type="text" name="from_date_data" id="from_date_data" readonly="readonly" value="<?php //echo $dateoneMAgo; ?>" class="form-control" />
+                                  <div class="input-group-addon">
+                                  <span class="glyphicon glyphicon-th"></span>
+                                  </div>
+                        </div>
+								  
+						<div class="input-group date" data-provide="datepicker">
+                               <input type="text" name="to_date_data" id="to_date_data" readonly="readonly" value="<?php //echo $Datetoday; ?>" class="form-control" />
+							      <div class="input-group-addon">
+                                  <span class="glyphicon glyphicon-th"></span>
+                                  </div>
+                        </div>
+								  <input type="hidden" name="c_date_data" id="c_date_data" value="<?php echo date('m/d/Y'); ?>" class="form-control" />	
                                                                                             <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Consumer Name, Product Name, Media Type or 	Advertisement Feedback Response">
                                                                                             <span class="input-group-btn">
-                                                                                                <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
+                                 <button type="submit" class="btn btn-inverse btn-white" onclick="DateCheck();"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                                                 <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
                                                                                             </span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </form>
                                                                             </div>
+										<script type="text/javascript">											
+								function DateCheck()
+											{
+											  var StartDate= document.getElementById('from_date_data').value;
+											  var EndDate= document.getElementById('to_date_data').value;
+											  var CurrentDate= document.getElementById('c_date_data').value;
+											  var eDate = new Date(EndDate);
+											  var sDate = new Date(StartDate);
+											  var cDate = new Date(CurrentDate);
+											  if(sDate> eDate || eDate> cDate)
+												{
+												alert("Please ensure that the End Date is greater than or equal to the Start Date. End Date is not greater than Current Date");
+												return false;
+												}
+											}
+											</script>
 	<div class="widget-main">																		
 		<div class="form-group row">			
 			<div class="col-sm-12">
+			<label for="form-field-8"><b>Promotion report date</b></label> : <?php echo date('Y-m-d h:i:s');?>	 <br />
+			<label for="form-field-8"><b>Name of Company</b></label> : <?php echo getUserFullNameById(get_customer_id_by_product_id($product_id));?> <br />
+			<label for="form-field-8"><b>Product Name</b></label> : <?php echo get_products_name_by_id($product_id);?> <br />
+			<label for="form-field-8"><b>Product ID</b></label> : <?php echo get_product_sku_by_id($product_id);?> <br />
 			<label for="form-field-8"><b>Promotion Category</b></label> : <?php echo $promotion_type;?> <br />
+			<label for="form-field-8"><b>Media of Promotion</b></label> : <?php echo $promotion_media_type;?>	 <br />
 			<label for="form-field-8"><b>Name of Promotion</b></label> : <?php echo $promotion_title;?>	 <br />
 			<label for="form-field-8"><b>Promotion Number</b></label> : <?php echo $promotion_request_id;?> <br />
-			<label for="form-field-8"><b>Promotion Launch Date</b></label> : <?php echo $promotion_launch_date_time;?> <br />
-			<label for="form-field-8"><b>Promotion Closure date</b></label> : <?php echo $promotion_closure_date_time;?>	 <br />
-			<label for="form-field-8"><b>Promotion report date</b></label> : <?php echo date('Y-m-d h:i:s');?>	 <br />
+			<label for="form-field-8"><b>Promotion Launch Date Time</b></label> : <?php echo $promotion_launch_date_time;?> <br />
+			<label for="form-field-8"><b>Promotion Closure Date Time</b></label> : <?php if($promotion_closure_date_time == ""){ echo "Promotion not Closed yet."; }else{ echo $promotion_closure_date_time; } ?>	 <br />
 			<label for="form-field-8"><b>Unique System Selection CriteriaID</b></label> : <?php if($unique_system_selection_criteria_id=="all"){ echo "No Selection Criteria was chosen, the Advertisement was sent to all the Consumers."; } else { echo $unique_system_selection_criteria_id; } ?>	 <br />
-			<label for="form-field-8"><b>Number of consumers selected</b></label> : <?php echo $number_of_consumers . " Consumers";?>	 <br />
-			<label for="form-field-8"><b>Number of responses from consumers</b></label> : <?php echo $Number_of_responses_from_consumers;?> <a href=""> Click here to Download </a><br />
-			<label for="form-field-8"><b>Media</b></label> : <?php echo $promotion_media_type; ?>
+			<label for="form-field-8"><b>Total Number of Consumers of Company</b></label> : <?php echo NumberOfAllConsumersOfACustomer(get_customer_id_by_product_id($product_id)) . " Consumers";?><br />
+			<label for="form-field-8"><b>Number of consumers selected</b></label> : <?php echo $number_of_consumers . " Consumers";?><br />
+			<label for="form-field-8"><b>Number of responses from consumers till Date</b></label> : <?php echo $Number_of_responses_from_consumers;?> 
+			<a href="<?php echo base_url();?>advertisement/view_advertisement_response_by_question_answer_download/<?php echo $this->uri->segment(3);?>"> Go to download report </a><?php //echo anchor('product/in_store_redemption_mis_download', 'Go to download report',array('class' => 'btn btn-primary pull-center')); ?>
+			<!--<label><a href="#" onclick="$('#List_Consumer').tableExport({type:'excel',escape:'false'});"> <img src="<?php echo base_url();?>assets/images/excel_xls.png" width="24px" style="margin-left:10px"> Click here to Download</a></label>--><!--<a href=""> Click here to Download </a>--><br />
 			
-									
 										<?php if($promotion_media_type=='Video'){?>
 									<?php if($product_push_ad_video!=''){?>
 										<div class="row">	
@@ -161,12 +205,15 @@
 		</div>								
 										
  											<div style="overflow-x:auto;">
-											<table id="missing_people" class="table table-striped table-bordered table-hover">
+			<table id="List_Consumer"  class="table table-striped table-bordered table-hover">
+			
  												<thead>
 													<tr>
 														<th>#</th>
-														<th width="300px">Response Date time</th>
-														<th width="300px">Consumer Name</th>
+														<th>Promotion Number </th>
+														<th><div style="word-wrap:break-word; width:200px;">Name of Promotion</div></th>
+														<th><div style="word-wrap:break-word; width:200px;">Response Date time</div></th>
+														<th>Consumer Name</th>
 														<!--<th>Product Name</th>
  														<th>Media Type</th> 
 														<th>Push Date Time</th> -->
@@ -177,11 +224,12 @@
 											$survey_promotion_media_type = $promotion_type . " " . $promotion_media_type;
 													   $promotion_id = $this->uri->segment(3);
 														foreach ($ScanedCodeListing as $key=>$listData){
-								$qproduct_data 	= getquestionFeedbackDetailsBygetquestionID($listData['product_id'], $listData['consumer_id'], $promotion_id, $survey_promotion_media_type); 
+								$qproduct_data 	= getquestionFeedbackDetailsBygetquestionID($listData['product_id'], $listData['consumer_id'], $promotion_id); 
 											$i = 1;
 											foreach($qproduct_data as $res){ 
+											
 														?>
-														<th width="500px">
+														<th><div style="word-wrap:break-word; width:400px;">
 														<?php 
 											echo  "Q. " . $i . " - " . get_question_desc_by_id($res['question_id']);	
 												$options = get_question_desc_by_id_options($res['question_id']);
@@ -193,11 +241,12 @@
 												
 												echo "Correct Answer - " . $options->row()->$correct_answer;
 														?>
-													</th>
+													</div></th>
 													<?php
 													$i++;
+													//if($i==1) break;
 														}
-														
+													break;														
 														}
 										 ?>
 											<th>Consumer Phone</th>
@@ -461,43 +510,40 @@
 											<?php
 											}											
 											?>
-
-
-											
   													</tr>
 												</thead>
+												
 												<tbody>
 
                                         <?php $i = 0;  //  echo '***<pre>';print_r($orderListing);
 										if(count($ScanedCodeListing)>0){
 											$i=0;
                                             $page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
-        $sno =  $page + 1;
+										$sno =  $page + 1;
                                         foreach ($ScanedCodeListing as $key=>$listData){
 											$i++;
 											?>
                                                <tr id="show<?php echo $key; ?>">
 											   <td><?php echo $sno;$sno++; ?></td>
+											   <td><?php echo $promotion_request_id;?></td>
+											   <td><?php echo $promotion_title;?></td>	
 											   <td><?php 
-													
-								$qproduct_data 	= getquestionFeedbackDetails($listData['product_id'], $listData['consumer_id'], $promotion_id, $survey_promotion_media_type);
+								$qproduct_data 	= getquestionFeedbackDetails($listData['product_id'], $listData['consumer_id'], $promotion_id);
 										 $i = 0;
 										 foreach($qproduct_data as $res){ 
 										$i++;
 										echo (date('j M Y H:i:s D', strtotime($res['updated_date'])));
 										 if($i==1) break;
 										 }
-										 
-												?>
-												
-												</td>
+										 ?>	
+										 </td>
 											   <td><?php echo $listData['user_name']; ?></td>
 											  <!-- <td><?php //echo $listData['product_name']; ?></td>
 												<td><?php //echo $listData['media_type']; ?></td>
 												<td><?php //echo (date('j M Y H:i:s D', strtotime($listData['advertisement_push_date']))); ?></td>  -->
 												
 												<?php 													
-								$qproduct_data 	= getquestionFeedbackDetailsBygetquestionID($listData['product_id'], $listData['consumer_id'], $promotion_id, $survey_promotion_media_type); 
+								$qproduct_data 	= getquestionFeedbackDetailsBygetquestionID($listData['product_id'], $listData['consumer_id'], $promotion_id); 
 											foreach($qproduct_data as $res){ 
 														?>
 														<td>
@@ -515,6 +561,7 @@
 													</td>
 													<?php
 												}
+												//break;
 												
 										 /*
 										 foreach($qproduct_data as $res){ 										 

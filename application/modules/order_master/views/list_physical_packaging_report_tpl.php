@@ -160,9 +160,12 @@
 														<th>Child Code</th>
 														<th>Child Packaging Level</th>
 														<th>Packaging Date Time</th>
-														<th>User Name</th>
-														<th>Location Name</th>
-														<th>Status</th>
+														<th>Packaging User Name</th>
+														<th>Packaging Location Name</th>
+														<th>Un-Packaging Date Time</th>
+														<th>Un-Packaging User Name</th>
+														<th>Un-Packaging Location Name</th>
+														<th>Current Status</th>
  														
 														
                                                        <!-- <th>Action</th> -->
@@ -186,8 +189,11 @@
 											   <td><?php echo $listData['bar_code']; ?></td>
 											   <td><?php echo $listData['packaging_level']; ?></td>
 											   <td><?php echo (date('j M Y H:i:s D', strtotime($listData['create_date']))); ?></td>
-											   <td><?php echo getUserFullNameById($listData['customer_user_id']); ?></td>
+											   <td><?php echo getTracekUserFullNameById($listData['customer_user_id']); ?></td>
 											   <td><?php echo get_locations_name_by_id($listData['location_id']); ?></td>
+											   <td><?php if($listData['unpackaging_date']==''){}else{echo (date('j M Y H:i:s D', strtotime($listData['unpackaging_date'])));} ?></td>
+											    <td><?php echo getTracekUserFullNameById($listData['unpacked_by_id']); ?></td>
+											   <td><?php echo get_locations_name_by_id($listData['unpackaging_location_id']); ?></td>
 											    <td><?php  echo $listData['unpackaging_status']; ?></td>
                                               </tr>
                                          <?php }

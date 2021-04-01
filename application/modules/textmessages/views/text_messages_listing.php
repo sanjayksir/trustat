@@ -163,7 +163,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 										$push_message_req_status = $attr['send_status'];
                                             if($push_message_req_status=='0'){
 											$push_message_req_status ='Waiting for Message pushed approval';
- 												$colorStyle="style='color:white;border-radius:10px;background-color:yellow;border:none;pointer-events: none;'";
+ 												$colorStyle="style='color:white;border-radius:10px;background-color:orange;border:none;pointer-events: none;'";
 											} elseif($push_message_req_status ==1){
 											$push_message_req_status ='Message pushed successfully';
 												$colorStyle="style='color:black;border-radius:10px;background-color:green;border:none;pointer-events: none;'";
@@ -197,7 +197,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 	?>
 	<input <?php 
 	
-						if($attr['send_status']==1){ ?>checked="checked"<?php } ?> id="product_<?php echo $attr['id'];?>"name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $attr['customer_id'];?>','<?php echo $attr['id'];?>','<?php echo $attr['text_message']; ?>','<?php echo $attr['unique_system_selection_criteria_id']; ?>');" type="checkbox">
+	if($attr['send_status']==1){ ?>checked="checked"<?php } ?> id="product_<?php echo $attr['id'];?>" name="addquestion" class="ace" onclick="return add_question_to_product('<?php echo $attr['customer_id'];?>','<?php echo $attr['id'];?>','<?php echo $attr['text_message']; ?>','<?php echo $attr['unique_system_selection_criteria_id']; ?>');" type="checkbox">
 	<span class="lbl"></span>
 	<?php //} else { echo "No Ad Push Request"; } ?>
 	
@@ -234,12 +234,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="footer-content">
 
                         <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

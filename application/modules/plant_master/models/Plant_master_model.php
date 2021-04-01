@@ -118,7 +118,7 @@ class plant_master_model extends CI_Model {
         $mail_conf = array(
             'subject' => $subject,
             'to_email' => $email,
-            'from_email' => 'admin@innovigents.com',
+            'from_email' => 'admin@'.$_SERVER['SERVER_NAME'],
             'from_name' => 'Admin',
             'body_part' => $body
         );
@@ -401,13 +401,13 @@ class plant_master_model extends CI_Model {
 			 if (!empty($customer_id)) {
             //$this->db->where('created_by', $user_id);
             if (!empty($srch_string)) {
-                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%') and (created_by=$customer_id)");
+                $this->db->where("(location_code LIKE '%$srch_string%' OR location_type LIKE '%$srch_string%' OR location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR phone LIKE '%$srch_string%') and (created_by=$customer_id)");
             } else {
                // $this->db->where(array('created_by' => $user_id));
             }
 			} else {
                 if (!empty($srch_string)) {
-                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%') and (created_by=$user_id)");
+                $this->db->where("(location_code LIKE '%$srch_string%' OR location_type LIKE '%$srch_string%' OR location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR phone LIKE '%$srch_string%') and (created_by=$user_id)");
             } else {
                 $this->db->where(array('created_by' => $user_id));
             }
@@ -415,16 +415,16 @@ class plant_master_model extends CI_Model {
 			
         } else {
             if (!empty($srch_string)) {
-                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%')");
+                $this->db->where("(location_code LIKE '%$srch_string%' OR location_type LIKE '%$srch_string%' OR location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR phone LIKE '%$srch_string%')");
             }
         }
 
         $this->db->select('count(1) as total_rows');
         $this->db->from('location_master');
 		if($user_id>1){
-			if(!empty($customer_id)){ 
-			$this->db->where('created_by', $customer_id);
-			}
+			$this->db->where('created_by', $user_id);
+		}else{
+		$this->db->where('created_by', $customer_id);
 		}
         $query = $this->db->get(); //echo '***'.$this->db->last_query();
         if ($query->num_rows() > 0) {
@@ -438,36 +438,33 @@ class plant_master_model extends CI_Model {
         $result = '';
         $srch_string = trim($srch_string);
         $user_id = $this->session->userdata('admin_user_id');
-        $customer_id = $this->uri->segment(3);
-        
+        $customer_id = $this->uri->segment(3);        
         if ($user_id > 1) {
 			 if (!empty($customer_id)) {
             //$this->db->where('created_by', $user_id);
             if (!empty($srch_string)) {
-                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%') and (created_by=$customer_id)");
+                $this->db->where("(location_code LIKE '%$srch_string%' OR location_type LIKE '%$srch_string%' OR location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR phone LIKE '%$srch_string%') and (created_by=$customer_id)");
             } else {
                // $this->db->where(array('created_by' => $user_id));
             }
 			} else {
                 if (!empty($srch_string)) {
-                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%') and (created_by=$user_id)");
+                $this->db->where("(location_code LIKE '%$srch_string%' OR location_type LIKE '%$srch_string%' OR location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR phone LIKE '%$srch_string%') and (created_by=$user_id)");
             } else {
                 $this->db->where(array('created_by' => $user_id));
             }
-            }
-			
+            }			
         } else {
             if (!empty($srch_string)) {
-                $this->db->where("(location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR plant_code LIKE '%$srch_string%')");
+                $this->db->where("(location_code LIKE '%$srch_string%' OR location_type LIKE '%$srch_string%' OR location_name LIKE '%$srch_string%' OR email_id LIKE '%$srch_string%' OR phone LIKE '%$srch_string%')");
             }
         }
-
         $this->db->select('*');
         $this->db->from('location_master');
 		if($user_id>1){
-			if(!empty($customer_id)){ 
-			$this->db->where('created_by', $customer_id);
-			}
+			$this->db->where('created_by', $user_id);
+		}else{
+		$this->db->where('created_by', $customer_id);
 		}
         $this->db->order_by('location_id', 'asc');
         if (empty($srch_string)) {
@@ -480,11 +477,27 @@ class plant_master_model extends CI_Model {
         return $result;
     }
 	
+	
+	
 	function get_location_details($location_id) {
         $res = 0;
         $this->db->select('*');
         $this->db->from('location_master');
         $this->db->where(array('location_id' => $location_id));
+        $query = $this->db->get();
+        // echo '***'.$this->db->last_query();exit;
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            // $res=1;
+        }
+        return $res;
+    }
+	
+		function get_assign_loyalty_activity_role_details($assign_id) {
+        $res = 0;
+        $this->db->select('*');
+        $this->db->from('assign_loyalty_functionalities_rolewise');
+        $this->db->where(array('assign_id' => $assign_id));
         $query = $this->db->get();
         // echo '***'.$this->db->last_query();exit;
         if ($query->num_rows() > 0) {
@@ -502,6 +515,11 @@ class plant_master_model extends CI_Model {
         }
 
         if (!empty($frmData['location_id'])) {
+			
+			if(!empty($frmData['location_image'])){
+ 				$this->db->set('location_image', $frmData['location_image']);
+			}
+			
             $UpdateData = array(
                 "location_code" => $frmData['location_code'],
                 "location_name" => $frmData['location_name'],
@@ -509,7 +527,16 @@ class plant_master_model extends CI_Model {
                 "email_id" => $frmData['user_email'],
                 "phone " => $frmData['user_mobile'],
                 "gst" => $frmData['gst'],
-                "address" => $frmData['address'],
+                "street_address" => $frmData['street_address'],
+				"locality" => $frmData['locality'],
+				"city" => $frmData['city'],
+				"district" => $frmData['district'],
+				"pin_code" => $frmData['pin_code'],
+				"landmark" => $frmData['landmark'],
+				"store_timings" => $frmData['store_timings'],
+				"location_longitude" => $frmData['location_longitude'],
+				"location_latitude" => $frmData['location_latitude'],
+				//"location_image" => $frmData['location_image'],
                 "remark" => $frmData['remark'],
                 "status" => 1,
                 "state" => $frmData['state_name'],
@@ -537,7 +564,16 @@ class plant_master_model extends CI_Model {
                 "email_id" => $frmData['user_email'],
                 "phone " => $frmData['user_mobile'],
                 "gst" => $frmData['gst'],
-                "address" => $frmData['address'],
+                "street_address" => $frmData['street_address'],
+				"locality" => $frmData['locality'],
+				"city" => $frmData['city'],
+				"district" => $frmData['district'],
+				"pin_code" => $frmData['pin_code'],
+				"landmark" => $frmData['landmark'],
+				"store_timings" => $frmData['store_timings'],
+				"location_longitude" => $frmData['location_longitude'],
+				"location_latitude" => $frmData['location_latitude'],
+				"location_image" => $frmData['location_image'],
                 "remark" => $frmData['remark'],
                 "status" => 1,
                 "state" => $frmData['state_name'],
@@ -552,6 +588,311 @@ class plant_master_model extends CI_Model {
                 // echo $this->db->last_query();exit;
                // $this->user_registration_mail($plant_code, $plant_name, $frmData['user_email']);
                 $this->session->set_flashdata('success', 'Location Added Successfully!');
+                return 1;
+            }
+            return 0;
+        }
+    }
+	
+
+
+
+
+  function save_userL($frmData) {   //echo '<pre>';print_r($frmData);exit;
+        $user_id = $this->session->userdata('admin_user_id');
+        $is_parent = $this->session->userdata('admin_user_id');
+        if (isset($frmData['ccadmin']) && $frmData['ccadmin'] != '') {
+            $is_parent = $frmData['ccadmin'];
+        }
+        
+        /* if($user_id>1){## if user id is greater than one means plant controller is created by cc admin
+          $user_type='plant controller';
+          }else{
+          $user_type='ccc admin';
+          } */
+        //$user_exists = $this->checkDuplicateUser($frmData['user_name']);
+        if (!empty($user_exists)) {
+            return 2;
+        }
+        //$frmData['profile_photo']=
+
+        if (!empty($frmData['user_id'])) {
+            if (!empty($frmData['profile_photo'])) {
+                $UpdateData = array(
+                    "customer_code " => $frmData['customer_code'],
+                    "mobile_no" => $frmData['user_mobile'],
+                    "industry" => $frmData['industry'],
+					"designation_id" => $frmData['role'],
+                    "pan " => $frmData['pan'],
+                    "f_name" => $frmData['f_name'],
+                    "l_name" => $frmData['l_name'],
+					"l_name"=>$frmData['l_name'],
+					"days_for_expiry_of_point_credited"=>$frmData['days_for_expiry_of_point_credited'],
+					"days_for_notification_before_expiry_of_lps"=>$frmData['days_for_notification_before_expiry_of_lps'],
+					"loyalty_points_consumer_view_notification_lps"=>$frmData['loyalty_points_consumer_view_notification_lps'],
+					"percent_lty_pts_consumer_red_cashier"=>$frmData['percent_lty_pts_consumer_red_cashier'],
+					"brand_loyalty_redemption_type"=>$frmData['brand_loyalty_redemption_type'],
+					"brand_loyalty_store_redemption_message"=>$frmData['brand_loyalty_store_redemption_message'],
+					"trustat_coupon_type_name_number"=>$frmData['trustat_coupon_type_name_number'],
+					"customer_loyalty_type" => $frmData['Customer_Loyalty_Type'],
+					"customer_microsite_url" => $frmData['customer_microsite_url'],
+                    "user_name" => $frmData['user_name'],
+                    "email_id" => $frmData['user_email'],
+                    "state " => $frmData['state_name'],					
+                    "city " => $frmData['city_name'],
+                    "remark " => $frmData['remark'],
+                    "profile_photo" => $frmData['profile_photo'],
+                    "last_updated_by" => $user_id,
+                    "last_updated_on" => date('Y-m-d H:i:s')
+                );
+            } else {
+                $UpdateData = array(
+                    "customer_code " => $frmData['customer_code'],
+                    "mobile_no" => $frmData['user_mobile'],
+                    "industry" => $frmData['industry'],
+					"designation_id" => $frmData['role'],
+                    "pan " => $frmData['pan'],
+                    "f_name" => $frmData['f_name'],
+                    "l_name" => $frmData['l_name'],
+					"l_name"=>$frmData['l_name'],
+					"days_for_expiry_of_point_credited"=>$frmData['days_for_expiry_of_point_credited'],
+					"days_for_notification_before_expiry_of_lps"=>$frmData['days_for_notification_before_expiry_of_lps'],
+					"loyalty_points_consumer_view_notification_lps"=>$frmData['loyalty_points_consumer_view_notification_lps'],
+					"brand_loyalty_redemption_type"=>$frmData['brand_loyalty_redemption_type'],
+					"brand_loyalty_store_redemption_message"=>$frmData['brand_loyalty_store_redemption_message'],
+					"trustat_coupon_type_name_number"=>$frmData['trustat_coupon_type_name_number'],
+					"percent_lty_pts_consumer_red_cashier"=>$frmData['percent_lty_pts_consumer_red_cashier'],
+					"customer_loyalty_type" => $frmData['Customer_Loyalty_Type'],
+					"customer_microsite_url" => $frmData['customer_microsite_url'],
+                    "user_name" => $frmData['user_name'],
+                    "email_id" => $frmData['user_email'],
+                    "state " => $frmData['state_name'],
+                    "remark " => $frmData['remark'],
+                    "city " => $frmData['city_name'],
+                    "last_updated_by" => $user_id,
+                    "last_updated_on" => date('Y-m-d H:i:s')
+                );
+            }
+			
+			if($frmData['plant_id']!=''){
+            $assignedPlant = [
+                "plant_id" => $frmData['plant_id'],
+                "assigned_by" => $this->session->userdata('admin_user_id')
+            ];
+            $apQuery = $this->db->get_where('assign_plants_to_users',['user_id'=>$frmData['user_id']]);
+            if($apQuery->num_rows() > 0){
+                $this->db->where(['user_id'=>$frmData['user_id']]);
+                $this->db->set($assignedPlant);
+                $this->db->update("assign_plants_to_users");
+            }else{
+                $assignedPlant['user_id'] = $frmData['user_id'];
+                $this->db->insert("assign_plants_to_users", $assignedPlant);
+            } 
+			}
+				
+            //$this->db->insert("assign_plants_to_users", $insertData);
+            $whereData = array(
+                'user_id' => $frmData['user_id']
+            );
+
+            $this->db->set($UpdateData);
+            $this->db->where($whereData);
+            if ($this->db->update('backend_user')) {
+                //echo '***'.$this->db->last_query();exit;
+                $this->session->set_flashdata('success', 'User Updated Successfully!');
+                return 1;
+            }
+        } else {
+            if (empty($frmData['profile_photo'])) {
+                $frmData['profile_photo'] = '';
+            }
+            $password = generate_password(6);
+			 //$password = "password";
+            $insertData = array(
+                "customer_code " => $frmData['customer_code'],
+                "mobile_no" => $frmData['user_mobile'],
+                "industry" => $frmData['industry'],
+				"designation_id" => $frmData['role'],
+                "pan " => $frmData['pan'],
+                "f_name" => $frmData['f_name'],
+                "l_name" => $frmData['l_name'],
+				"days_for_expiry_of_point_credited"=>$frmData['days_for_expiry_of_point_credited'],
+				"days_for_notification_before_expiry_of_lps"=>$frmData['days_for_notification_before_expiry_of_lps'],
+				"loyalty_points_consumer_view_notification_lps"=>$frmData['loyalty_points_consumer_view_notification_lps'],
+				"percent_lty_pts_consumer_red_cashier"=>$frmData['percent_lty_pts_consumer_red_cashier'],
+				"brand_loyalty_redemption_type"=>$frmData['brand_loyalty_redemption_type'],
+				"brand_loyalty_store_redemption_message"=>$frmData['brand_loyalty_store_redemption_message'],
+				"trustat_coupon_type_name_number"=>$frmData['trustat_coupon_type_name_number'],
+				"customer_loyalty_type" => $frmData['Customer_Loyalty_Type'],
+				"customer_microsite_url" => $frmData['customer_microsite_url'],
+                "user_name" => $frmData['user_name'],
+                "password" => md5($password),
+                "email_id" => $frmData['user_email'],
+                "state " => $frmData['state_name'],
+                "city " => $frmData['city_name'],
+                "remark " => $frmData['remark'],
+                "profile_photo" => $frmData['profile_photo'],
+                "created_by" => $user_id,
+                "is_parent" => $is_parent,
+                "is_admin" => 1
+            ); //echo '<pre>';print_r($insertData);exit;
+
+            if ($this->db->insert("backend_user", $insertData)) {
+				if($frmData['plant_id']!=''){
+              $assignedPlant = [
+                    "plant_id" => $frmData['plant_id'],
+                    "user_id" => $this->db->insert_id(),
+                    "assigned_by" => $this->session->userdata('admin_user_id')
+                ];
+                $this->db->insert("assign_plants_to_users", $assignedPlant);
+				}
+				
+				
+				$first_name = $frmData['f_name'];
+				$last_name = $frmData['l_name'];
+                $full_name = $frmData['f_name'] . ' ' . $frmData['l_name'];
+                $username = $frmData['user_name'];
+				
+                // echo $this->db->last_query();exit;
+				$email = $frmData['user_email']; 
+				// Email is not going to the user right now
+                $this->user_registration_mail($first_name, $full_name, $username, $password, $email, $last_name);
+                $this->session->set_flashdata('success', 'User Added Successfully!');
+                return 1;
+            }
+            return 0;
+        }
+    }	
+	
+	function save_assign_loyalty_activity_role($frmData) { //echo '<pre>';print_r($frmData);exit;
+        $user_id = $this->session->userdata('admin_user_id');		
+		/*
+		if($user_id==1){
+			 			$customer_id = $this->uri->segment(4);
+			 			 }else{
+			 				$customer_id = $user_id;	
+						 } 
+        $is_parent = $this->session->userdata('admin_user_id');
+		      
+	   if (isset($frmData['ccadmin']) && $frmData['ccadmin'] != '') {
+            $is_parent = $frmData['ccadmin'];
+        }	*/	
+        if (!empty($frmData['assign_id'])) {
+            $UpdateData = array(
+					"role_id" => $frmData['role_id'],
+					"product_management" => $frmData['product_management'],
+					"bar_code_ordering" => $frmData['bar_code_ordering'],
+					"bar_code_delivery_online" => $frmData['bar_code_delivery_online'],
+					"bar_code_printing_online" => $frmData['bar_code_printing_online'],
+					"bar_code_printing_offline" => $frmData['bar_code_printing_offline'],
+					"bar_code_activation_for_all_levels" => $frmData['bar_code_activation_for_all_levels'],
+					"dispatch_from_plant_or_warehouse_to_warehouse" => $frmData['dispatch_from_plant_or_warehouse_to_warehouse'],
+					"receipt_at_warehouse_or_plant" => $frmData['receipt_at_warehouse_or_plant'],
+					"dispatch_from_plant_or_warehouse_to_customers" => $frmData['dispatch_from_plant_or_warehouse_to_customers'],
+					"product_return_from_customer" => $frmData['product_return_from_customer'],
+					"physical_inventory_check" => $frmData['physical_inventory_check'],
+					"packaging" => $frmData['packaging'],
+					"unpackaging" => $frmData['unpackaging'],
+					"physical_inventory_on_hand" => $frmData['physical_inventory_on_hand'],
+					"link_barcode_with_production_batch_id" => $frmData['link_barcode_with_production_batch_id'],
+					"shipper_box_barcode_activation" => $frmData['shipper_box_barcode_activation'],
+					"ship_out_order" => $frmData['ship_out_order'],
+					"activate_printed_batched_of_codes" => $frmData['activate_printed_batched_of_codes'],
+					"loyalty_redemption_while_consumer_shopping" => $frmData['loyalty_redemption_while_consumer_shopping'],					
+					"functionality_1" => $frmData['functionality_1'],
+					"functionality_2" => $frmData['functionality_2'],
+					"functionality_3" => $frmData['functionality_3'],
+					"functionality_4" => $frmData['functionality_4'],
+					"functionality_5" => $frmData['functionality_5'],
+					"functionality_6" => $frmData['functionality_6'],
+					"functionality_7" => $frmData['functionality_7'],
+					"functionality_8" => $frmData['functionality_8'],
+					"functionality_9" => $frmData['functionality_9'],
+					"functionality_10" => $frmData['functionality_10'],
+					"functionality_11" => $frmData['functionality_11'],
+					"functionality_12" => $frmData['functionality_12'],
+					"functionality_13" => $frmData['functionality_13'],
+					"functionality_14" => $frmData['functionality_14'],
+					"functionality_15" => $frmData['functionality_15'],
+					"functionality_16" => $frmData['functionality_16'],
+					"functionality_17" => $frmData['functionality_17'],
+					"functionality_18" => $frmData['functionality_18'],
+					"functionality_19" => $frmData['functionality_19'],
+					"functionality_20" => $frmData['functionality_20'],
+					"functionality_21" => $frmData['functionality_21'],
+					"assigned_by" => $user_id,
+					"customer_id" => $frmData['ccadmin'],
+					"status" => 1
+            );
+	
+            $whereData = array(
+                'assign_id' => $frmData['assign_id']
+            );
+	
+            $this->db->set($UpdateData);
+            $this->db->where($whereData);
+            if($this->db->update('assign_loyalty_functionalities_rolewise')) {
+                 //echo '***'.$this->db->last_query();exit;
+                $this->session->set_flashdata('success', 'Loyalty Points Updated Successfully!');
+                return 1;
+            }
+        } else {
+            $insertData = array(
+                "role_id" => $frmData['role_id'],
+				"product_management" => $frmData['product_management'],
+				"bar_code_ordering" => $frmData['bar_code_ordering'],
+				"bar_code_delivery_online" => $frmData['bar_code_delivery_online'],
+				"bar_code_printing_online" => $frmData['bar_code_printing_online'],
+				"bar_code_printing_offline" => $frmData['bar_code_printing_offline'],
+				"bar_code_activation_for_all_levels" => $frmData['bar_code_activation_for_all_levels'],
+				"dispatch_from_plant_or_warehouse_to_warehouse" => $frmData['dispatch_from_plant_or_warehouse_to_warehouse'],
+				"receipt_at_warehouse_or_plant" => $frmData['receipt_at_warehouse_or_plant'],
+				"dispatch_from_plant_or_warehouse_to_customers" => $frmData['dispatch_from_plant_or_warehouse_to_customers'],
+				"product_return_from_customer" => $frmData['product_return_from_customer'],
+				"physical_inventory_check" => $frmData['physical_inventory_check'],
+				"packaging" => $frmData['packaging'],
+				"unpackaging" => $frmData['unpackaging'],
+				"physical_inventory_on_hand" => $frmData['physical_inventory_on_hand'],
+				"link_barcode_with_production_batch_id" => $frmData['link_barcode_with_production_batch_id'],
+				"shipper_box_barcode_activation" => $frmData['shipper_box_barcode_activation'],
+				"ship_out_order" => $frmData['ship_out_order'],
+				"activate_printed_batched_of_codes" => $frmData['activate_printed_batched_of_codes'],
+				"loyalty_redemption_while_consumer_shopping" => $frmData['loyalty_redemption_while_consumer_shopping'],					
+				"scan_for_list_following_codes" => $frmData['scan_for_list_following_codes'],
+					"functionality_1" => $frmData['functionality_1'],
+					"functionality_2" => $frmData['functionality_2'],
+					"functionality_3" => $frmData['functionality_3'],
+					"functionality_4" => $frmData['functionality_4'],
+					"functionality_5" => $frmData['functionality_5'],
+					"functionality_6" => $frmData['functionality_6'],
+					"functionality_7" => $frmData['functionality_7'],
+					"functionality_8" => $frmData['functionality_8'],
+					"functionality_9" => $frmData['functionality_9'],
+					"functionality_10" => $frmData['functionality_10'],
+					"functionality_11" => $frmData['functionality_11'],
+					"functionality_12" => $frmData['functionality_12'],
+					"functionality_13" => $frmData['functionality_13'],
+					"functionality_14" => $frmData['functionality_14'],
+					"functionality_15" => $frmData['functionality_15'],
+					"functionality_16" => $frmData['functionality_16'],
+					"functionality_17" => $frmData['functionality_17'],
+					"functionality_18" => $frmData['functionality_18'],
+					"functionality_19" => $frmData['functionality_19'],
+					"functionality_20" => $frmData['functionality_20'],
+					"functionality_21" => $frmData['functionality_21'],
+				"assigned_by" => $user_id,
+				"customer_id" => $frmData['ccadmin'],
+				"status" => 1,
+				"created_date" => date("Y-m-d H:i:s")
+				
+            ); //echo '<pre>';print_r($insertData);exit;
+
+            if ($this->db->insert("assign_loyalty_functionalities_rolewise", $insertData)) {
+                //$plant_code = $frmData['plant_code'];
+                //$plant_name = $frmData['plant_name'];
+                // echo $this->db->last_query();exit;
+               // $this->user_registration_mail($plant_code, $plant_name, $frmData['user_email']);
+                $this->session->set_flashdata('success', 'Loyalty Points Assigned Successfully!');
                 return 1;
             }
             return 0;
@@ -681,7 +1022,8 @@ class plant_master_model extends CI_Model {
         $plant_arr = json_decode($plant_array, true);
         //print_r($plant_arr);
         $sku_arr = json_decode($sku_array, true);
-        $user_id = $this->session->userdata('admin_user_id');
+        //$user_id = $this->session->userdata('admin_user_id');
+		$user_id = getOwnerCustNameByLocationId($plant_arr[0]);
         //echo 'delete from assign_plants where plant_id="'.$plant_arr.'" and assigned_by="'.$user_id.'"';
         $this->db->query('delete from assign_locations where location_id="' . $plant_arr[0] . '" and assigned_by="' . $user_id . '"');
 
@@ -802,6 +1144,61 @@ class plant_master_model extends CI_Model {
        } 
         $this->session->set_flashdata('success', 'Location Assigned Successfully!');
         return 1;
+    }
+	
+	
+	function save_assign_role_to_activitis($plant_array, $plant_controller_user, $assigned_by, $is_edit = '', $loyalty_points) {  
+        $user_id = $this->session->userdata('admin_user_id');
+        $plant_arr = json_decode($plant_array, true); 
+       if($user_id==1){
+                   
+            if ($this->input->post('is_edit') == 1) {
+                $this->db->query('delete from assign_activities_to_roles where role_id="' . $plant_controller_user . '" and assigned_by="' . $assigned_by . '"');
+            }
+            foreach ($plant_arr as $plants) { 
+                $insertData = array(
+                    "activity_id" => $plants,
+                    "role_id" => $plant_controller_user,
+					"loyalty_points" => $loyalty_points,
+                    "assigned_by" => $assigned_by
+                );
+                if ($this->check_exists_role_activity($plants, $users) == 0) {
+                    $this->db->insert("assign_activities_to_roles", $insertData);
+                     // echo $this->db->last_query();
+                } 
+            }
+       }else{ 
+           $users =$plant_controller_user;
+            if ($this->input->post('is_edit') == 1) {
+                $this->db->query('delete from assign_activities_to_roles where role_id="' . $users . '" and assigned_by="' . $user_id . '"');
+            }
+            foreach ($plant_arr as $plants) { 
+                $insertData = array(
+                    "activity_id" => $plants,
+                    "role_id" => $users,
+					"loyalty_points" => $loyalty_points,
+                    "assigned_by" => $user_id
+                );
+                if ($this->check_exists_role_activity($plants, $users) == 0) {
+                    $this->db->insert("assign_activities_to_roles", $insertData); 
+                } 
+            } 
+       } 
+        $this->session->set_flashdata('success', 'Activities Assigned Successfully!');
+        return 1;
+    }
+	
+	
+	function check_exists_role_activity($plant_id, $userid) {
+        $this->db->select('id');
+        $this->db->from('assign_activities_to_roles');
+        $this->db->where(array('activity_id' => $plant_id, 'role_id' => $userid));
+        $query = $this->db->get(); //echo $this->db->last_query();
+        if ($query->num_rows() > 0) {
+            $res = $query->result_array();
+            $result = $res[0]['id'];
+        }
+        return $result;
     }
 	
 function check_exists_users_location($plant_id, $userid) {

@@ -49,12 +49,20 @@
 												  <?php
 													$user_id 	= $this->session->userdata('admin_user_id');
 
-												  if($user_id>1){  ?>
-                                                    <a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Make Order" data-toggle="modal" data-target="#myModal">Make Order</a>
+												  if($user_id==1){  ?>
+                                                    
+													<!--<a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Upload Customer Codes" data-toggle="modal" data-target="#myUploadModal">Upload Customer Codes</a>
 													<a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Upload Customer Codes" data-toggle="modal" data-target="#myUploadModal">Upload Customer Codes</a>
+													-->
+													<a href="<?php echo base_url('user_master/view_user'); ?>/<?php echo $this->uri->segment(3); ?>" class="btn btn-xs btn-warning" title="Go to Customer Dashboard">Back to Home </a>
+													
+												  <?php }else{ ?>
+												  
+												  <a href="javascript:void(0);" class="btn btn-xs btn-warning" title="Make Order" data-toggle="modal" data-target="#myModal">Make Order</a>
+												  <a href="<?php echo base_url('backend/dashboard'); ?>" class="btn btn-xs btn-warning" title="Go to Customer Dashboard">Back to Home </a>
 												  <?php } ?>
 													
-													<a href="<?php echo base_url('backend/dashboard') ?>" class="btn btn-xs btn-warning" title="List Plant Controllers Orders">Back to Home </a>
+													
                                                 </div>
                                             </div>
                                             <div class="widget-body">
@@ -157,7 +165,7 @@
          <?php //if($essentialAttributeArr['delivery_method']==4){?>
                 <select name="change_order_status" id="change_order_status" onchange="return change_order_status('<?php echo $listData['order_id'];?>',this.value,'<?php echo $print_opt;?>');">
                                                                 <option value="0" <?php if($listData['order_status']=='0'){echo 'selected';}?>>Pending</option>
-                                                                <option value="1" <?php if($listData['order_status']=='1'){echo 'selected';}?>>Accepted</option>
+                                                                <option value="4" <?php if($listData['order_status']=='4'){echo 'selected';}?>>Accepted</option>
                                                                 <option value="2" <?php if($listData['order_status']=='2'){echo 'selected';}?>>Rejected</option>
                                                                 </select>
         <?php //}else{
@@ -177,7 +185,7 @@
                                                         $display		= "none;";
 
                                                         //echo '***--'.$user_id.'***--'.$listData['user_id'].'***--'.$listData['order_status'].'***--'.$essentialAttributeArr['delivery_method'];
-                                                        if($listData['order_status']==1){
+                                                        if($listData['order_status']==4){
                                                          if($user_id==1 && $essentialAttributeArr['delivery_method']==1){
                                                                 $display	= "block;";
                                                          }else if($user_id>1 && $get_parent_id==1 && $essentialAttributeArr['delivery_method']==2){
@@ -188,10 +196,10 @@
                                                         }else{
                                                                 $display	= "none;";
                                                         }
-                                                        /*if($listData['order_status']!=1 ){
+                                                        /*if($listData['order_status']!=4 ){
                                                                 $display	= "none;";
                                                         }
-                                                        if($listData['order_status']==1){
+                                                        if($listData['order_status']==4){
                                                                 $display	= "block;";
                                                         }*/
 

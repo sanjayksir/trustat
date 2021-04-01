@@ -112,7 +112,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                             <thead>
                                 <tr>
                                     <th>S No.</th>
-                                    <th class="hidden-480">Transuction Date</th>
+                                    <th class="hidden-480">Transaction Date</th>
                                     <th class="hidden-480">Event Name</th>
                                     <th class="hidden-480">Event Detail</th>
                                     <th>Points </th>
@@ -209,13 +209,10 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                     <div class="footer-content">
 
-                        <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+                       <span class="bigger-120">
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

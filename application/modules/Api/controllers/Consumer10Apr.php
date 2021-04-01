@@ -316,7 +316,7 @@ class Consumer extends ApiController {
         $this->email->initialize($this->config->item('smtp'));
         $this->email->set_newline("\r\n");
         $this->email->from($data['email'], $data['user_name']);
-        $this->email->reply_to('no-reply@innovigents.com', 'Team');
+        $this->email->reply_to('no-reply@'.$_SERVER['SERVER_NAME'], 'Team');
         $this->email->to($this->config->item('admin_email'));
         $this->email->subject('Signup with with '.$this->config->item("site_name"));        
         $body = $this->load->view('signup_mail.php',$data,TRUE);

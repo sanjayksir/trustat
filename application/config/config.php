@@ -999,6 +999,7 @@ $config['rewrite_short_tags'] = FALSE;
   | Array:		array('10.0.1.200', '192.168.5.0/24')
 
  */
+ 
 
 $config['proxy_ips'] = '';
 
@@ -1015,7 +1016,7 @@ $config['smtp'] = [
     'protocol' => 'smtp',
     'smtp_host' => 'ssl://smtp.gmail.com',
     'smtp_user' => 'kumar.47274760@gmail.com',
-    'smtp_pass' => '4727kumar',
+    'smtp_pass' => '4727sktrust',
     'smtp_port' => 465,
     'charset' =>'utf-8',
     'mailtype' => 'html',
@@ -1025,18 +1026,26 @@ $config['smtp'] = [
 $config['sms_gateway'] = [
     'apikey'=>'RtE51pSPDUm5nPJPAa2Pwg',
     'url' =>'https://www.smsgatewayhub.com/api/mt/SendSMS',
-    'user' => 'innovigents',
-    'password' => 'sanjay123',
-    'senderid' => 'TESTIN'
-];
+    'user' => 'innovigent',
+    'password' => 'innovigent',
+    'senderid' => 'TRUSTT'
+]; /*
 $config['sms'] = [
     'url' =>'http://203.212.70.200/smpp/sendsms',
     'username' => 'sanjaysirohi',
     'password' => 'Del12345',
     'from' => 'STDOTP'
+]; */
+$config['sms'] = [
+    'url' =>'https://nimbusit.biz/api/SmsApi/SendSingleApi?UserID=',
+    'username' => 'innovigent',
+    'password' => 'ispl@6664',
+    'from' => 'TRUSTT'
 ];
 $config['pageLimit'] = 15;
+$config['pageLimit2'] = 101;
 $config['pageOption'] = [10=>10,15=>15,25=>25,50=>50,100=>100];
+$config['pageOption2'] = [101=>101];
 $config['media_location'] = 'uploads';
 $config['image_type']='jpeg|jpg|png|gif';
 $config['video_type']='mp4|avi';

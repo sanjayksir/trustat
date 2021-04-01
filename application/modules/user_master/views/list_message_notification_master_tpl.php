@@ -54,7 +54,8 @@
                                                                     <div class="widget-header widget-header-flat">
                                                                     <h5 class="widget-title bigger lighter">List <?php echo $label;?></h5>
                                                                     <div class="widget-toolbar">
-                                                                     <a href="<?php echo base_url('consumer/list_faqs_master') ?>" class="btn btn-xs btn-warning" title="Manage FAQs">Manage FAQs <?php //echo $label; ?> </a>
+                                                                     <a href="<?php echo base_url('consumer/list_faqs_master') ?>" class="btn btn-xs btn-warning" title="Manage FAQs">Manage FAQs <?php //echo $label; ?> </a> 
+																	 <a href="<?php echo base_url('consumer/list_consumer_return_cms_items') ?>" class="btn btn-xs btn-warning" title="Manage FAQs">Product Returned From Customer CMS<?php //echo $label; ?> </a>
                                                                     </div>
                                                                 </div>
 									<div class="widget-body">
@@ -95,6 +96,7 @@
                                     <tr>
                                             <th>#</th>
                                             <th>Message  Type</th>
+											<th>Module Name</th>
                                             <th>Module Sub-module</th>
 											<th>Message Notification Value</th>                                            
                                             <th>Action</th>
@@ -119,16 +121,17 @@ if($status ==1){
 <tr id="show<?php echo $listData['id']; ?>">
                                            <td><?php echo $sno;$sno++; ?></td>
                                                 <td><?php echo $listData['message_type']; ?></td>
+												<td><?php echo $listData['module_name']; ?></td>
                                                 <td><?php echo $listData['module_submodule_location_details']; ?></td>
 												 <td><?php echo $listData['message_notification_value']; ?>
 													<?php 
-														  if(($listData['id']==1)||($listData['id']==5))
+														  if(($listData['id']==1)||($listData['id']==5)||($listData['id']==53)||($listData['id']==54))
 														  { 
 													  echo "[....]";
 														  }
 														  ?>
 														<?php 
-														  if($listData['id']==6)
+														  if($listData['id']==2)
 														  {
 															 echo $user_registration_points;
 														  }
@@ -139,9 +142,25 @@ if($status ==1){
 															 echo "X";
 														  }
 														 ?>
+														  <?php echo $listData['message_notification_value_part2']; ?>
+														<?php 
+														  if(($listData['id']==53)||($listData['id']==54))
+														  { 
+													  echo "[....]";
+														  }
+														  ?>
+
+														  <?php echo $listData['message_notification_value_part3']; ?> 
 														  
+														  <?php 
+														  if(($listData['id']==54))
+														  { 
+													  echo "[....]";
+														  }
+														  ?>
 														  
-														  <?php echo $listData['message_notification_value_part2']; ?> </td>
+														  <?php echo $listData['message_notification_value_part4']; ?> 
+														  </td>
                                                  <td>
 												 <div class="hidden-sm hidden-xs action-buttons">
 												 

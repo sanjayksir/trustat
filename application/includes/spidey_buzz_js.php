@@ -26,7 +26,7 @@ function showHide_special(cls, fld, span){
                                 autoclose: true,
                                 todayHighlight: true,
                                 format: 'dd-mm-yyyy',
-                startDate: '0',
+								startDate: '0',
                 })
                 .next().on(ace.click_event, function(){  //show datepicker when clicking on the icon
                                 $(this).prev().focus();

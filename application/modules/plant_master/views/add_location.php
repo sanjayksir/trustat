@@ -32,6 +32,7 @@
 							  $constant = "Add Location" ;
 
 					 			}?>	
+                                <input type="hidden" name="urlredirect" id="urlredirect" value="<?php echo $urlredirect;?>" />
           <li class="active">Administration</li><li class="active"><?php echo $constant;?></li>
 
         </ul>
@@ -56,6 +57,7 @@
 
               <div class="col-xs-12">
 
+                <h3 class="header smaller lighter blue"><?php echo $constant;?></h3>
 
                  <?php if($this->session->flashdata('success')): ?>
 
@@ -73,7 +75,7 @@
 
 											Results for "Locations"
 
-										</div>-->
+										</div>--><br>
 
                 <div class="row">
 
@@ -291,118 +293,77 @@ get_related_city_list('<?php echo $get_user_details[0]['state'];?>')
  
 
 	$("form#user_frm").validate({
- 		rules: {
-   			location_name:{
- 						 required: true,
- 						 //noSpace: true,
-						 remote: {
-                        	 	url: "<?php echo base_url().'plant_master/';?>checkLocationName",
-                          	type: "post",
- 							data: {  location_id: $( "#location_id" ).val() }
-                     	 }
- 					  },
- 			 user_email: {
-						required: true,
-            			 email: true/*,
- 						 remote: {
-                        	 	url: "<?php echo base_url().'plant_master/';?>checkUnameEmail",
-                          	type: "post",
- 							data: {  userid: $( "#user_id" ).val() }
-                     	 }*/
 
-       		} ,
-  			 user_mobile: {
-			 	 required: true,
-				 digits: true, 
-                 minlength: 10,
- 				 maxlength:12
-			 },
- 			 gst: {
-			 	 required: true,
-				 minlength:14,
- 				 maxlength:14
-				 //digits: true
-			},
-			address: {
-			 	 required: true
- 			},
-			ccadmin: {
-			 	 required: true
- 			}	
+		rules: {
+  			
+
+		    
+			
   		},
- 		messages: {
- 				location_name: {
- 					required: "Please enter Location Name" ,
-					remote: "Location Already Exists!!" 
-				} , 
-  				user_email: {
- 					required: "Please enter Email",
-					email: "Please enter valid Email",
- 					//remote: "Email already exists!" 
- 				},
-				user_mobile: {
-					required: "Please enter Mobile No.",
-					digits:"Only Numeric value accepted",
- 					minlength: "Please enter valid Number",
-					maxlength: "This is not a phone no." 
- 				},
-				gst: {
- 					required: "Please enter GST",
-					//digits: "Only numeric value allowed",
-					minlength: "GST Number can not be less than 14 digits",
-					maxlength: "GST Number can not be more than 14 digits"
-  				}, 
-				address: {
- 					required: "Please enter address",
-   				},
-				ccadmin: {
- 					required: "Please select ccc-admin name",
-   				}
- 		},
+
+		messages: {
+ 
+				
+
+		},
 
 		submitHandler: function(form) {
-  			var formData;
- 			var dataSend 	= $("#user_frm").serialize();
- 		/*	formData 		= new FormData();
- 			formData.append('file', $('#file')[0].files[0]);
-  			formData.append("newdata",dataSend);*/
- 
+
+ 			var formData;
+
+			var dataSend 	= $("#user_frm").serialize();
+
+			formData 		= new FormData();
+
+			formData.append('file', $('#file')[0].files[0]);
+
+ 			formData.append("newdata",dataSend);
+
+			 
+
  			$.ajax({
- 				type: "POST",
- 				dataType:"json",
- 				beforeSend: function(){
+
+				type: "POST",
+
+				dataType:"json",
+
+				beforeSend: function(){
  						$(".show_loader").show();
   						$(".show_loader").click();
  				},
- 				url: "<?php echo base_url(); ?>plant_master/save_location/",
- 				data: dataSend,
-				success: function (msg) {
-					if(parseInt(msg)==1){
-						$('#ajax_msg').text("Locations Added Successfully!").css("color","green").show();
-						$('#blah').attr('src', '').hide();
-						$('#user_frm')[0].reset(); 
-						  window.location.href="<?php echo base_url(); ?>plant_master/list_locations/";						
-					}
-					else if(parseInt(msg)==2){
-						$('#ajax_msg').text("Locations Aalready Exists!").css("color","red").show();
-  					      window.location.href="<?php echo base_url(); ?>plant_master/list_locations/";						
-					}
-					else{
-						$('#ajax_msg').text("Error in saving data!").css("color","red").show();
-						$('#blah').attr('src', '').hide();
-						$('#user_frm')[0].reset(); 
-						 window.location.href="<?php echo base_url(); ?>plant_master/list_locations/";						
-					}
-				},
-				complete: function(){
-					$(".show_loader").hide();
-				}
-			});
-			 return false;
- 		}
-	});
-
-});
+ 				url: "<?php echo base_url(); ?>plant_master/save_location11/",
+ 				data: formData,
+ 				async: false,
+ 				cache: false,	
+ 				contentType: false,  // NEEDED, DON'T OMIT THIS (requires jQuery 1.6+)
+ 				processData: false, // NEEDED, DON'T OMIT THIS	
+ 				success: function (msg) {
+					var urlredirect = $("#urlredirect").val();
+ 					if(parseInt(msg)==1){
+ 						$('#ajax_msg').text("User Added Successfully!").css("color","green").show();
+ 						$('#blah').attr('src', '').hide();
+ 						$('#user_frm')[0].reset(); 
+						window.location.href="<?php echo base_url(); ?>plant_master/list_locations/";
+ 					}
+ 					else if(parseInt(msg)==2){
+ 						$('#ajax_msg').text("User Aalready Exists!").css("color","red").show();
+ 					}
+ 					else{
+ 						$('#ajax_msg').text("Error in saving data!").css("color","red").show();
+ 						$('#blah').attr('src', '').hide();
+ 						$('#user_frm')[0].reset(); 
+  					}
+					window.location.href="<?php echo base_url(); ?>plant_master/list_locations/";		
+ 				},
+ 				complete: function(){
+ 					$(".show_loader").hide();
+					window.location.href="<?php echo base_url(); ?>plant_master/list_locations/";	
+ 				}
+ 			});
+ 			 return false;
+  		}
+ 	});
+ });
 
  </script>
 

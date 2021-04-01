@@ -194,6 +194,7 @@ class Backend extends MX_Controller
 		$params["NumberofPendingSurveyOrders"] = $this->db->where(array('request_status'=>0, 'promotion_type'=>"Survey"))->count_all_results('push_promotion_master');
 		$params["NumberofPendingMessagesOrders"] = $this->db->where(array('send_status'=>0))->count_all_results('push_text_message_request');
 		$params["NumberofPendingLoyaltyRedemptionsRequests"] = $this->db->where(array('l_status'=>0))->count_all_results('loyalty_redemption');
+		$params["NumberofPendingPurchaseLoyaltyRequests"] = $this->db->where(array('approval_status'=>0))->count_all_results('purchased_loyalty_points');
 		
 		
 		
@@ -226,12 +227,12 @@ class Backend extends MX_Controller
 		// Today 
 		$params["TotalNumberofRegisteredConsumersToday"] = $this->db->where(array('terms_conditions'=>1,'date_of_registration'=>date("Y-m-d")))->count_all_results('consumers');
 		
-		$params["TotalNumberofScannedCodesLevel0Today"] = $this->db->where(array('pack_level'=>0,'DATE(created_at)'=>date("Y-m-d")))
+		$params["TotalNumberofScannedCodesLevel0Today"] = $this->db->where(array('pack_level'=>0,'DATE(code_scan_date)'=>date("Y-m-d")))
 		->from("scanned_products")
 		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
 		->count_all_results();  
 		
-		$params["TotalNumberofScannedCodesLevel1Today"] = $this->db->where(array('pack_level'=>1,'DATE(created_at)'=>date("Y-m-d")))
+		$params["TotalNumberofScannedCodesLevel1Today"] = $this->db->where(array('pack_level'=>1,'DATE(code_scan_date)'=>date("Y-m-d")))
 		->from("scanned_products")
 		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
 		->count_all_results(); 
@@ -249,12 +250,12 @@ class Backend extends MX_Controller
 		$DateToday = date("Y-m-d");
 		$params["TotalNumberofRegisteredConsumers7Days"] = $this->db->where(array('terms_conditions'=>1,'date_of_registration >= '=>$PreDate7Days,'date_of_registration <= '=>$DateToday))->count_all_results('consumers');
 		
-		$params["TotalNumberofScannedCodesLevel07Days"] = $this->db->where(array('pack_level'=>0,'DATE(created_at) >= '=>$PreDate7Days,'DATE(created_at) <= '=>$DateToday))
+		$params["TotalNumberofScannedCodesLevel07Days"] = $this->db->where(array('pack_level'=>0,'DATE(code_scan_date) >= '=>$PreDate7Days,'DATE(code_scan_date) <= '=>$DateToday))
 		->from("scanned_products")
 		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
 		->count_all_results();  
 		
-		$params["TotalNumberofScannedCodesLevel17Days"] = $this->db->where(array('pack_level'=>1,'DATE(created_at) >= '=>$PreDate7Days,'DATE(created_at) <= '=>$DateToday))
+		$params["TotalNumberofScannedCodesLevel17Days"] = $this->db->where(array('pack_level'=>1,'DATE(code_scan_date) >= '=>$PreDate7Days,'DATE(code_scan_date) <= '=>$DateToday))
 		->from("scanned_products")
 		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
 		->count_all_results(); 
@@ -274,12 +275,12 @@ class Backend extends MX_Controller
 		
 		$params["TotalNumberofRegisteredConsumers30Days"] = $this->db->where(array('terms_conditions'=>1,'date_of_registration >= '=>$PreDate30Days,'date_of_registration <= '=>$DateToday))->count_all_results('consumers');
 		
-		$params["TotalNumberofScannedCodesLevel030Days"] = $this->db->where(array('pack_level'=>0,'DATE(created_at) >= '=>$PreDate30Days,'DATE(created_at) <= '=>$DateToday))
+		$params["TotalNumberofScannedCodesLevel030Days"] = $this->db->where(array('pack_level'=>0,'DATE(code_scan_date) >= '=>$PreDate30Days,'DATE(code_scan_date) <= '=>$DateToday))
 		->from("scanned_products")
 		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
 		->count_all_results();  
 		
-		$params["TotalNumberofScannedCodesLevel130Days"] = $this->db->where(array('pack_level'=>1,'DATE(created_at) >= '=>$PreDate30Days,'DATE(created_at) <= '=>$DateToday))
+		$params["TotalNumberofScannedCodesLevel130Days"] = $this->db->where(array('pack_level'=>1,'DATE(code_scan_date) >= '=>$PreDate30Days,'DATE(code_scan_date) <= '=>$DateToday))
 		->from("scanned_products")
 		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
 		->count_all_results(); 
@@ -306,11 +307,14 @@ $query=$this->db->get();
 		
 		$params["BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0"] = $this->db->select_sum('points')->from('consumer_passbook')->where('transaction_type_slug',"product_registration_lps")->get()->row()->points;
 		
-		$params["BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1"] = $this->db->select_sum('points')->from('consumer_passbook')->where('transaction_type_slug',"product_video_response_lps")->or_where('transaction_type_slug',"product_audio_response_lps")->or_where('transaction_type_slug',"product_image_response_lps")->or_where('transaction_type_slug',"product_pdf_response_lps")->get()->row()->points;
+		//$params["BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1"] = $this->db->select_sum('points')->from('consumer_passbook')->where('transaction_type_slug',"product_video_response_lps")->or_where('transaction_type_slug',"product_audio_response_lps")->or_where('transaction_type_slug',"product_image_response_lps")->or_where('transaction_type_slug',"product_pdf_response_lps")->get()->row()->points;
+		$params["BrandwiseTRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('transaction_type_slug' => "product_video_response_lps", 'transaction_type_slug' => "product_audio_response_lps", 'transaction_type_slug' => "product_image_response_lps", 'transaction_type_slug' => "product_pdf_response_lps"))->get()->row()->points;
 		 
-		$params["BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment"] = $this->db->select_sum('points')->from('consumer_passbook')->where('transaction_type_slug',"product_ad_video_response_lps")->or_where('transaction_type_slug',"product_ad_audio_response_lps")->or_where('transaction_type_slug',"product_ad_image_response_lps")->or_where('transaction_type_slug',"product_ad_pdf_response_lps")->get()->row()->points;
+		//$params["BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment"] = $this->db->select_sum('points')->from('consumer_passbook')->where('transaction_type_slug',"product_ad_video_response_lps")->or_where('transaction_type_slug',"product_ad_audio_response_lps")->or_where('transaction_type_slug',"product_ad_image_response_lps")->or_where('transaction_type_slug',"product_ad_pdf_response_lps")->get()->row()->points;
+		$params["BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('transaction_type_slug' => "product_ad_video_response_lps", 'transaction_type_slug' => "product_ad_audio_response_lps", 'transaction_type_slug' => "product_ad_image_response_lps", 'transaction_type_slug' => "product_ad_pdf_response_lps"))->get()->row()->points;
 		
-		$params["BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys"] = $this->db->select_sum('points')->from('consumer_passbook')->where('transaction_type_slug',"product_survey_video_response_lps")->or_where('transaction_type_slug',"product_survey_audio_response_lps")->or_where('transaction_type_slug',"product_survey_image_response_lps")->or_where('transaction_type_slug',"product_survey_pdf_response_lps")->get()->row()->points;
+		//$params["BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys"] = $this->db->select_sum('points')->from('consumer_passbook')->where('transaction_type_slug',"product_survey_video_response_lps")->or_where('transaction_type_slug',"product_survey_audio_response_lps")->or_where('transaction_type_slug',"product_survey_image_response_lps")->or_where('transaction_type_slug',"product_survey_pdf_response_lps")->get()->row()->points;		
+		$params["BrandwiseTRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('transaction_type_slug' => "product_survey_video_response_lps", 'transaction_type_slug' => "product_survey_audio_response_lps", 'transaction_type_slug' => "product_survey_image_response_lps", 'transaction_type_slug' => "product_survey_pdf_response_lps"))->get()->row()->points;
 		
 		//  TRUSTAT Total Earned Loyalty Points 
 	
@@ -318,27 +322,38 @@ $query=$this->db->get();
 		
 		$params["TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel0"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('transaction_type_slug'=>"product_registration_lps", 'customer_loyalty_type'=>"TRUSTAT"))->get()->row()->points;
 		
-		$params["TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1"] = $this->db->select_sum('points')->from('consumer_passbook')->where('customer_loyalty_type',"TRUSTAT")->where('transaction_type_slug',"product_video_response_lps")->or_where('transaction_type_slug',"product_audio_response_lps")->or_where('transaction_type_slug',"product_image_response_lps")->or_where('transaction_type_slug',"product_pdf_response_lps")->get()->row()->points;
+		//$params["TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1"] = $this->db->select_sum('points')->from('consumer_passbook')->where('customer_loyalty_type',"TRUSTAT")->where('transaction_type_slug',"product_video_response_lps")->or_where('transaction_type_slug',"product_audio_response_lps")->or_where('transaction_type_slug',"product_image_response_lps")->or_where('transaction_type_slug',"product_pdf_response_lps")->get()->row()->points;
+		$params["TRUSTATTotalEarnedLoyaltyPointsScannedCodesLevel1"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_loyalty_type' => "TRUSTAT", 'transaction_type_slug' => "product_video_response_lps", 'transaction_type_slug' => "product_audio_response_lps", 'transaction_type_slug' => "product_image_response_lps", 'transaction_type_slug' => "product_pdf_response_lps"))->get()->row()->points;
 		 
-		$params["TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment"] = $this->db->select_sum('points')->from('consumer_passbook')->where('customer_loyalty_type',"TRUSTAT")->where('transaction_type_slug',"product_ad_video_response_lps")->or_where('transaction_type_slug',"product_ad_audio_response_lps")->or_where('transaction_type_slug',"product_ad_image_response_lps")->or_where('transaction_type_slug',"product_ad_pdf_response_lps")->get()->row()->points;
+		//$params["TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment"] = $this->db->select_sum('points')->from('consumer_passbook')->where('customer_loyalty_type',"TRUSTAT")->where('transaction_type_slug',"product_ad_video_response_lps")->or_where('transaction_type_slug',"product_ad_audio_response_lps")->or_where('transaction_type_slug',"product_ad_image_response_lps")->or_where('transaction_type_slug',"product_ad_pdf_response_lps")->get()->row()->points;
+		$params["TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_loyalty_type' => "TRUSTAT", 'transaction_type_slug' => "product_ad_video_response_lps", 'transaction_type_slug' => "product_ad_audio_response_lps", 'transaction_type_slug' => "product_ad_image_response_lps", 'transaction_type_slug' => "product_ad_pdf_response_lps"))->get()->row()->points;
 		
-		$params["TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('transaction_type_slug'=>"product_survey_video_response_lps", 'customer_loyalty_type'=>"TRUSTAT"))->or_where('transaction_type_slug',"product_survey_audio_response_lps")->or_where('transaction_type_slug',"product_survey_image_response_lps")->or_where('transaction_type_slug',"product_survey_pdf_response_lps")->get()->row()->points;
+		
+	//$params["TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('transaction_type_slug'=>"product_survey_video_response_lps", 'customer_loyalty_type'=>"TRUSTAT"))->or_where('transaction_type_slug',"product_survey_audio_response_lps")->or_where('transaction_type_slug',"product_survey_image_response_lps")->or_where('transaction_type_slug',"product_survey_pdf_response_lps")->get()->row()->points;
+		
+		$params["TRUSTATTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_loyalty_type' => "TRUSTAT", 'transaction_type_slug' => "product_survey_video_response_lps", 'transaction_type_slug' => "product_survey_audio_response_lps", 'transaction_type_slug' => "product_survey_image_response_lps", 'transaction_type_slug' => "product_survey_pdf_response_lps"))->get()->row()->points;
 		
 		//  Brand Total Earned Loyalty Points 
 		$params["BrandTotalEarnedLoyaltyPointsConsumerRegistration"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('transaction_type_slug'=>"user-registration",'customer_id'=>1, 'customer_loyalty_type'=>"Brand"))->get()->row()->points;
 		
 		$params["BrandTotalEarnedLoyaltyPointsScannedCodesLevel0"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('transaction_type_slug'=>"product_registration_lps", 'customer_loyalty_type'=>"Brand"))->get()->row()->points;
 		
-		$params["BrandTotalEarnedLoyaltyPointsScannedCodesLevel1"] = $this->db->select_sum('points')->from('consumer_passbook')->where('customer_loyalty_type',"Brand")->where('transaction_type_slug',"product_video_response_lps")->or_where('transaction_type_slug',"product_audio_response_lps")->or_where('transaction_type_slug',"product_image_response_lps")->or_where('transaction_type_slug',"product_pdf_response_lps")->get()->row()->points;
-		 
-		$params["BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment"] = $this->db->select_sum('points')->from('consumer_passbook')->where('customer_loyalty_type',"Brand")->where('transaction_type_slug',"product_ad_video_response_lps")->or_where('transaction_type_slug',"product_ad_audio_response_lps")->or_where('transaction_type_slug',"product_ad_image_response_lps")->or_where('transaction_type_slug',"product_ad_pdf_response_lps")->get()->row()->points;
+		//$params["BrandTotalEarnedLoyaltyPointsScannedCodesLevel1"] = $this->db->select_sum('points')->from('consumer_passbook')->where('customer_loyalty_type',"Brand")->where('transaction_type_slug',"product_video_response_lps")->or_where('transaction_type_slug',"product_audio_response_lps")->or_where('transaction_type_slug',"product_image_response_lps")->or_where('transaction_type_slug',"product_pdf_response_lps")->get()->row()->points;
 		
-		$params["BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('transaction_type_slug'=>"product_survey_video_response_lps", 'customer_loyalty_type'=>"Brand"))->or_where('transaction_type_slug',"product_survey_audio_response_lps")->or_where('transaction_type_slug',"product_survey_image_response_lps")->or_where('transaction_type_slug',"product_survey_pdf_response_lps")->get()->row()->points;
+		$params["BrandTotalEarnedLoyaltyPointsScannedCodesLevel1"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_loyalty_type' => "Brand", 'transaction_type_slug' => "product_video_response_lps", 'transaction_type_slug' => "product_audio_response_lps", 'transaction_type_slug' => "product_image_response_lps", 'transaction_type_slug' => "product_pdf_response_lps"))->get()->row()->points;
+		
+		 
+		//$params["BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment"] = $this->db->select_sum('points')->from('consumer_passbook')->where('customer_loyalty_type',"Brand")->where('transaction_type_slug',"product_ad_video_response_lps")->or_where('transaction_type_slug',"product_ad_audio_response_lps")->or_where('transaction_type_slug',"product_ad_image_response_lps")->or_where('transaction_type_slug',"product_ad_pdf_response_lps")->get()->row()->points;
+		
+		$params["BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_loyalty_type' => "Brand", 'transaction_type_slug' => "product_ad_video_response_lps", 'transaction_type_slug' => "product_ad_audio_response_lps", 'transaction_type_slug' => "product_ad_image_response_lps", 'transaction_type_slug' => "product_ad_pdf_response_lps"))->get()->row()->points;
+		
+	//$params["BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('transaction_type_slug'=>"product_survey_video_response_lps", 'customer_loyalty_type'=>"Brand"))->or_where('transaction_type_slug',"product_survey_audio_response_lps")->or_where('transaction_type_slug',"product_survey_image_response_lps")->or_where('transaction_type_slug',"product_survey_pdf_response_lps")->get()->row()->points;
+		
+		$params["BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_loyalty_type' => "Brand", 'transaction_type_slug' => "product_survey_video_response_lps", 'transaction_type_slug' => "product_survey_audio_response_lps", 'transaction_type_slug' => "product_survey_image_response_lps", 'transaction_type_slug' => "product_survey_pdf_response_lps"))->get()->row()->points;
 		
 		}else{
 			
-			
-		$params["TotalNumberofRegisteredConsumers"] = $this->db->where(array('customer_id'=>$user_id))->count_all_results('consumer_customer_link');
+		$params["TotalNumberofRegisteredConsumers"] = $this->db->where(array('customer_id'=>$user_id, 'registration_status'=> "Registered"))->count_all_results('consumer_customer_link');
 		$params["TotalNumberofScannedCodesLevel0"] = $this->db->where('printed_barcode_qrcode.pack_level', 0)->where('scanned_products.customer_id', $user_id)
 		->from("scanned_products")
 		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
@@ -354,14 +369,14 @@ $query=$this->db->get();
 		
 		// Today 
 				
-		$params["TotalNumberofRegisteredConsumersToday"] = $this->db->where(array('customer_id'=>$user_id,'DATE(created_at)'=>date("Y-m-d")))->count_all_results('consumer_customer_link');
+		$params["TotalNumberofRegisteredConsumersToday"] = $this->db->where(array('customer_id'=>$user_id, 'registration_status'=> "Registered", 'DATE(code_scan_date)'=>date("Y-m-d")))->count_all_results('consumer_customer_link');
 		
-		$params["TotalNumberofScannedCodesLevel0Today"] = $this->db->where(array('scanned_products.customer_id'=>$user_id,'pack_level'=>0,'DATE(created_at)'=>date("Y-m-d")))
+		$params["TotalNumberofScannedCodesLevel0Today"] = $this->db->where(array('scanned_products.customer_id'=>$user_id,'pack_level'=>0,'DATE(code_scan_date)'=>date("Y-m-d")))
 		->from("scanned_products")
 		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
 		->count_all_results();  
 		
-		$params["TotalNumberofScannedCodesLevel1Today"] = $this->db->where(array('scanned_products.customer_id'=>$user_id,'pack_level'=>1,'DATE(created_at)'=>date("Y-m-d")))
+		$params["TotalNumberofScannedCodesLevel1Today"] = $this->db->where(array('scanned_products.customer_id'=>$user_id,'pack_level'=>1,'DATE(code_scan_date)'=>date("Y-m-d")))
 		->from("scanned_products")
 		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
 		->count_all_results(); 
@@ -378,14 +393,14 @@ $query=$this->db->get();
 		$PreDate7Days = date('Y-m-d', strtotime('-7 days'));
 		$DateToday = date("Y-m-d");
 		
-		$params["TotalNumberofRegisteredConsumers7Days"] = $this->db->where(array('customer_id'=>$user_id,'DATE(created_at) >= '=>$PreDate7Days,'DATE(created_at) <= '=>$DateToday))->count_all_results('consumer_customer_link');
+		$params["TotalNumberofRegisteredConsumers7Days"] = $this->db->where(array('customer_id'=>$user_id, 'registration_status'=> "Registered",'DATE(code_scan_date) >= '=>$PreDate7Days,'DATE(code_scan_date) <= '=>$DateToday))->count_all_results('consumer_customer_link');
 		
-		$params["TotalNumberofScannedCodesLevel07Days"] = $this->db->where(array('scanned_products.customer_id'=>$user_id,'pack_level'=>0,'DATE(created_at) >= '=>$PreDate7Days,'DATE(created_at) <= '=>$DateToday))
+		$params["TotalNumberofScannedCodesLevel07Days"] = $this->db->where(array('scanned_products.customer_id'=>$user_id,'pack_level'=>0,'DATE(code_scan_date) >= '=>$PreDate7Days,'DATE(code_scan_date) <= '=>$DateToday))
 		->from("scanned_products")
 		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
 		->count_all_results();  
 		
-		$params["TotalNumberofScannedCodesLevel17Days"] = $this->db->where(array('scanned_products.customer_id'=>$user_id,'pack_level'=>1,'DATE(created_at) >= '=>$PreDate7Days,'DATE(created_at) <= '=>$DateToday))
+		$params["TotalNumberofScannedCodesLevel17Days"] = $this->db->where(array('scanned_products.customer_id'=>$user_id,'pack_level'=>1,'DATE(code_scan_date) >= '=>$PreDate7Days,'DATE(code_scan_date) <= '=>$DateToday))
 		->from("scanned_products")
 		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
 		->count_all_results(); 
@@ -402,14 +417,14 @@ $query=$this->db->get();
 		// 30 Days 
 		$PreDate30Days = date('Y-m-d', strtotime('-30 days'));
 				
-		$params["TotalNumberofRegisteredConsumers30Days"] = $this->db->where(array('customer_id'=>$user_id,'DATE(created_at) >= '=>$PreDate30Days,'DATE(created_at) <= '=>$DateToday))->count_all_results('consumer_customer_link');
+		$params["TotalNumberofRegisteredConsumers30Days"] = $this->db->where(array('customer_id'=>$user_id, 'registration_status'=> "Registered",'DATE(code_scan_date) >= '=>$PreDate30Days,'DATE(code_scan_date) <= '=>$DateToday))->count_all_results('consumer_customer_link');
 		
-		$params["TotalNumberofScannedCodesLevel030Days"] = $this->db->where(array('scanned_products.customer_id'=>$user_id,'printed_barcode_qrcode.pack_level'=>0,'DATE(created_at) >= '=>$PreDate30Days,'DATE(created_at) <= '=>$DateToday))
+		$params["TotalNumberofScannedCodesLevel030Days"] = $this->db->where(array('scanned_products.customer_id'=>$user_id,'printed_barcode_qrcode.pack_level'=>0,'DATE(code_scan_date) >= '=>$PreDate30Days,'DATE(code_scan_date) <= '=>$DateToday))
 		->from("scanned_products")
 		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
 		->count_all_results();  
 		
-		$params["TotalNumberofScannedCodesLevel130Days"] = $this->db->where(array('scanned_products.customer_id'=>$user_id,'printed_barcode_qrcode.pack_level'=>1,'DATE(created_at) >= '=>$PreDate30Days,'DATE(created_at) <= '=>$DateToday))
+		$params["TotalNumberofScannedCodesLevel130Days"] = $this->db->where(array('scanned_products.customer_id'=>$user_id,'printed_barcode_qrcode.pack_level'=>1,'DATE(code_scan_date) >= '=>$PreDate30Days,'DATE(code_scan_date) <= '=>$DateToday))
 		->from("scanned_products")
 		->join('printed_barcode_qrcode', 'printed_barcode_qrcode.barcode_qr_code_no = scanned_products.bar_code', 'left')
 		->count_all_results(); 
@@ -453,11 +468,56 @@ $query=$this->db->get();
 		
 		$params["BrandTotalEarnedLoyaltyPointsScannedCodesLevel0"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id'=>$user_id,'transaction_type_slug'=>"product_registration_lps", 'customer_loyalty_type'=>"Brand"))->get()->row()->points;
 		
-		$params["BrandTotalEarnedLoyaltyPointsScannedCodesLevel1"] = $this->db->select_sum('points')->from('consumer_passbook')->where('customer_id', $user_id)->where('customer_loyalty_type',"Brand")->where('transaction_type_slug',"product_video_response_lps")->or_where('transaction_type_slug',"product_audio_response_lps")->or_where('transaction_type_slug',"product_image_response_lps")->or_where('transaction_type_slug',"product_pdf_response_lps")->get()->row()->points;
-		 
-		$params["BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment"] = $this->db->select_sum('points')->from('consumer_passbook')->where('customer_id', $user_id)->where('customer_loyalty_type',"Brand")->where('transaction_type_slug',"product_ad_video_response_lps")->or_where('transaction_type_slug',"product_ad_audio_response_lps")->or_where('transaction_type_slug',"product_ad_image_response_lps")->or_where('transaction_type_slug',"product_ad_pdf_response_lps")->get()->row()->points;
+		//$params["BrandTotalEarnedLoyaltyPointsScannedCodesLevel1"] = $this->db->select_sum('points')->from('consumer_passbook')->where('customer_id', $user_id)->where('customer_loyalty_type',"Brand")->where('transaction_lr_type',"Loyalty")->where('transaction_type_slug',"product_video_response_lps")->or_where('transaction_type_slug',"product_audio_response_lps")->or_where('transaction_type_slug',"product_image_response_lps")->or_where('transaction_type_slug',"product_pdf_response_lps")->get()->row()->points;
 		
-		$params["BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id'=>$user_id,'transaction_type_slug'=>"product_survey_video_response_lps", 'customer_loyalty_type'=>"Brand"))->or_where('transaction_type_slug',"product_survey_audio_response_lps")->or_where('transaction_type_slug',"product_survey_image_response_lps")->or_where('transaction_type_slug',"product_survey_pdf_response_lps")->get()->row()->points;
+		$product_video_response_lps = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_lr_type' => "Loyalty", 'transaction_type_slug' => "product_video_response_lps"))->get()->row()->points;
+		
+		$product_audio_response_lps = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_lr_type' => "Loyalty", 'transaction_type_slug' => "product_audio_response_lps"))->get()->row()->points;
+		
+		$product_image_response_lps = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_lr_type' => "Loyalty", 'transaction_type_slug' => "product_image_response_lps"))->get()->row()->points;
+		
+		$product_pdf_response_lps = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_lr_type' => "Loyalty", 'transaction_type_slug' => "product_pdf_response_lps"))->get()->row()->points;
+		
+		
+		
+		$params["BrandTotalEarnedLoyaltyPointsScannedCodesLevel1"] = $product_video_response_lps+$product_audio_response_lps+$product_image_response_lps+$product_pdf_response_lps;
+		 
+		//$params["BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment"] = $this->db->select_sum('points')->from('consumer_passbook')->where('customer_id', $user_id)->where('customer_loyalty_type',"Brand")->where('transaction_type_slug',"product_ad_video_response_lps")->or_where('transaction_type_slug',"product_ad_audio_response_lps")->or_where('transaction_type_slug',"product_ad_image_response_lps")->or_where('transaction_type_slug',"product_ad_pdf_response_lps")->get()->row()->points;
+		
+		$product_ad_video_response_lps = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_lr_type' => "Loyalty", 'transaction_type_slug' => "product_ad_video_response_lps"))->get()->row()->points;
+		
+		$product_ad_audio_response_lps = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_lr_type' => "Loyalty", 'transaction_type_slug' => "product_ad_audio_response_lps"))->get()->row()->points;
+		
+		$product_ad_image_response_lps = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_lr_type' => "Loyalty", 'transaction_type_slug' => "product_ad_image_response_lps"))->get()->row()->points;
+		
+		$product_ad_pdf_response_lps = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_lr_type' => "Loyalty", 'transaction_type_slug' => "product_ad_pdf_response_lps"))->get()->row()->points;
+		
+		$params["BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedAdvertisment"] = $product_ad_video_response_lps+$product_ad_audio_response_lps+$product_ad_image_response_lps+$product_ad_pdf_response_lps;
+		
+		
+		
+		//$this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_type_slug' => "product_ad_video_response_lps", 'transaction_type_slug' => "product_ad_audio_response_lps", 'transaction_type_slug' => "product_ad_image_response_lps", 'transaction_type_slug' => "product_ad_pdf_response_lps"))->get()->row()->points;
+		
+		
+		//$params["BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys"] = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id'=>$user_id,'transaction_type_slug'=>"product_survey_video_response_lps", 'customer_loyalty_type'=>"Brand"))->or_where('transaction_type_slug',"product_survey_audio_response_lps")->or_where('transaction_type_slug',"product_survey_image_response_lps")->or_where('transaction_type_slug',"product_survey_pdf_response_lps")->get()->row()->points;
+		
+		$product_survey_video_response_lps = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_lr_type' => "Loyalty", 'transaction_type_slug' => "product_survey_video_response_lps"))->get()->row()->points;
+		
+		$product_survey_audio_response_lps = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_lr_type' => "Loyalty", 'transaction_type_slug' => "product_survey_audio_response_lps"))->get()->row()->points;
+		
+		$product_survey_image_response_lps = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_lr_type' => "Loyalty", 'transaction_type_slug' => "product_survey_image_response_lps"))->get()->row()->points;
+		
+		$product_survey_pdf_response_lps = $this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_lr_type' => "Loyalty", 'transaction_type_slug' => "product_survey_pdf_response_lps"))->get()->row()->points;
+		
+		$params["BrandTotalEarnedLoyaltyPointsFeedbackGivenPushedSurveys"] = $product_survey_video_response_lps+$product_survey_audio_response_lps+$product_survey_image_response_lps+$product_survey_pdf_response_lps;
+		
+		
+		//$this->db->select_sum('points')->from('consumer_passbook')->where(array('customer_id' => $user_id, 'customer_loyalty_type' => "Brand", 'transaction_type_slug' => "product_survey_video_response_lps", 'transaction_type_slug' => "product_survey_audio_response_lps", 'transaction_type_slug' => "product_survey_image_response_lps", 'transaction_type_slug' => "product_survey_pdf_response_lps"))->get()->row()->points;
+		
+		//$params["TotalNumberofFeedbackGivenPushedSurveys30Days"] = $this->db->where(array('survey_feedback_response'=>"Yes",'DATE(survey_response_datetime)'=>$PreDate30Days,'DATE(survey_response_datetime)'=>$DateToday))->count_all_results('push_surveys');
+		
+		
+		
 		}
 		
 		
@@ -1233,7 +1293,7 @@ $query=$this->db->get();
 
         $spidey_title = $this->backend_model->getSpideyTitle($spidey_pic_id);
 
-        redirect('http://www.innovigents.com/spideypick_detail.php?id=' . $spidey_pic_id . '&sef=' . $spidey_title[0]['spidyName']);
+        redirect('http://www.'.$_SERVER['SERVER_NAME'].'backend/dashboard');
 
     }
 
@@ -1269,7 +1329,7 @@ $query=$this->db->get();
 
         $title = 'Fresh on Tracek Portal: ' . strip_tags($title);
 
-        $remoturl = 'https://innovigents.com/backend/getLoggedIn' . $spidey_id;
+        $remoturl = 'http://'.$_SERVER['SERVER_NAME'].'backend/dashboard';
 
         //$this->db->pushNotification('', '', '', '', '', $title, '', $type, $remoturl);
 
@@ -1694,7 +1754,7 @@ $this->image_lib->initialize($config);
 		$mail_conf =  array(
 		'subject'=>$subject,
 		'to_email'=>$email,
-		'from_email'=>'admin@innovigents.com',
+		'from_email'=>'admin@'.$_SERVER['SERVER_NAME'],
 		'from_name'=> 'TRUSTAT System Portal',
 		'body_part'=>$body
 		);
@@ -1711,7 +1771,7 @@ $this->image_lib->initialize($config);
 		$mail_conf =  array(
 		'subject'=>$subject,
 		'to_email'=>$email,
-		'from_email'=>'admin@innovigents.com',
+		'from_email'=>'admin@'.$_SERVER['SERVER_NAME'],
 		'from_name'=> 'TRUSTAT System Portal',
 		'body_part'=>$body
 		);

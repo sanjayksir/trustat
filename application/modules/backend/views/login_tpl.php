@@ -8,7 +8,7 @@
 
 		<meta charset="utf-8" />
 
-		<title>Company Login</title>
+		<title>Customer Login</title>
 
  		<meta name="description" content="User login page" />
 
@@ -114,13 +114,11 @@
  								<div id="login-box" class="login-box visible widget-box no-border">
  									<div class="widget-body">
  										<div class="widget-main">
- 											<h4 class="header blue lighter bigger center" style="color:#ff6600 !important; font-weight:bold;">
- 												 <br /> 
-					<img src="<?php echo base_url()?>/assets/images/tlogo.jpg" height="70" width="200">
-											<br />
-												<br /> <font size="3" color="Gray">Enter Username and Password </font>
-												
-												<br /><br />
+ 											<h2 class="header blue lighter bigger center" style="color:#4a4a4a !important; font-weight:bold;">
+ 												Innovigent Solutions Private Limited
+ 											</h2>
+ 											<h4 class="header blue lighter bigger center" style="color:#4a4a4a !important; font-weight:bold;">
+ 												Customer Portal
  											</h4>
  											<span class="space-6" id="eror_msg" style="display:none;"></span>
 											<span class="space-6" >
@@ -703,7 +701,7 @@
 						else if($.trim(msg)=='status'){
  							$('#eror_msg').html('Your registration is waiting for admin approval!').css('color', 'red').show().delay(5000).fadeOut('slow');
  						}else if($.trim(msg)=='wrong-pass'){
- 							$('#eror_msg').html('User Not Exists!').css('color', 'red').show().delay(5000).fadeOut('slow');;
+ 							$('#eror_msg').html('User Name and password does not match!!').css('color', 'red').show().delay(5000).fadeOut('slow');;
  							$("#displayAfter").hide();
  							$("#submitbtn").show();
  						}else{					

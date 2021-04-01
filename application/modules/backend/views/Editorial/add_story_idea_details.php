@@ -12,13 +12,13 @@ $medisUrl = $this->config->item('media_location');
                 <ul class="breadcrumb">
                     <li> <i class="ace-icon fa fa-home home-icon"></i> <a href="#">Home</a> </li>
                     
-                    <li class="active">Add Product Media</li>
+                    <li class="active">Product Media Management</li>
                 </ul>
                 <!-- /.breadcrumb -->
             </div>
             <div class="page-content">
                 <div class="page-header">
-                    <h1>Add Product Media</h1>
+                    <h1>Product Media Management</h1>
                 </div>
                 <div class="row">
                     <div class="col-xs-12">
@@ -32,18 +32,25 @@ $medisUrl = $this->config->item('media_location');
                         <h4 class="widget-title smaller">Product Name : <?php echo get_products_name_by_id($this->uri->segment(4)); ?></h4>
                         <div class="widget-toolbar no-border">
                             <a href="#description-modal" class="btn btn-success btn-sm" data-toggle="modal">Add Product Loyalty Points, Feedback Question Quantity & Product Description</a>
-                            <a href="<?php echo base_url();?>product/list_product" class="btn btn-info btn-sm">List Product SKUs</a>
+							<?php if($this->session->userdata('admin_user_id')==1){ ?>
+                            <a href="<?php echo base_url();?>product/list_product/<?php echo get_customer_id_by_product_id($this->uri->segment(4)); ?>" class="btn btn-info btn-sm">List Product SKUs</a>
+							<?php }else{ ?>
+							<a href="<?php echo base_url();?>product/list_product" class="btn btn-info btn-sm">List Product SKUs</a>
+							<?php } ?>
                         </div>
                     </div>
                     <div class="widget-body">
                         <div class="widget-main">                            
                             <div class="row">
+							<fieldset>
+								<legend>Product Thumb Image:</legend>
                                 <div class="col-xs-12 col-sm-4 widget-box transparent text-center">
                                     <div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Thum Image</h6>
                                     </div>
-                                    <div class="widget-body">                                        
-                                        <div class="widget-main">
+									
+                                    <div class="widget-body">   
+							<h4 class="widget-title smaller lighter">Product Thumb Image</h4>			
+									<div class="widget-main">
                                             <div class="form-group">
                                                 <div class="col-xs-12">
                                                     <span id="product_thumb_images"></span>
@@ -51,58 +58,18 @@ $medisUrl = $this->config->item('media_location');
                                             </div>
                                         </div>
                                     </div>
-									</div>
 									
+								</div>
+							</fieldset>
+							<hr />
+							<fieldset>
+								<legend style="margin-bottom: 0px !important;">For Level 1: Video/Audio/PDF/Image Management</legend>	
 									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Ad Images</h6>
+                                       
                                     </div>
-                                    <div class="widget-body">                                        
-                                        <div class="widget-main">
-                                            <div class="form-group">
-                                                <div class="col-xs-12">
-                                                    <span id="product_images"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-									</div>
-									
-									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
-                                    <div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Code Print BG Image</h6>
-                                    </div>
-                                    <div class="widget-body">                                        
-                                        <div class="widget-main">
-                                            <div class="form-group">
-                                                <div class="col-xs-12">
-                                                    <span id="product_code_print_bg_images"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-									</div>
-									
-									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
-									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Audio</h6>
-                                    </div>
-                                    <div class="widget-body">                                        
-                                        <div class="widget-main">
-                                            <div class="form-group">
-                                                <div class="col-xs-12">
-                                                    <span id="product_audio"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-									</div>
-									
-									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
-									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Video</h6>
-                                    </div>
-                                    <div class="widget-body">                                        
+                                    <div class="widget-body">    
+									<h4 class="widget-title smaller lighter">Product Video</h4>
                                         <div class="widget-main">
                                             <div class="form-group">
                                                 <div class="col-xs-12">
@@ -113,132 +80,51 @@ $medisUrl = $this->config->item('media_location');
                                     </div>
 									</div>
 									
+									
 									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Advertisement Video</h6>
+                                        
                                     </div>
-                                    <div class="widget-body">                                        
+                                    <div class="widget-body">   
+										<h4 class="widget-title smaller lighter">Product Audio</h4>
                                         <div class="widget-main">
                                             <div class="form-group">
                                                 <div class="col-xs-12">
-                                                    <span id="product_push_ad_video"></span>
+                                                    <span id="product_audio"></span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-									 </div>
-
-									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
-									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Advertisement Audio</h6>
-                                    </div>
-                                    <div class="widget-body">                                        
-                                        <div class="widget-main">
-                                            <div class="form-group">
-                                                <div class="col-xs-12">
-                                                    <span id="product_push_ad_audio"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-									 </div>
-
-									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
-									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Advertisement PDF</h6>
-                                    </div>
-                                    <div class="widget-body">                                        
-                                        <div class="widget-main">
-                                            <div class="form-group">
-                                                <div class="col-xs-12">
-                                                    <span id="product_push_ad_pdf"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-									 </div>
-
-
+									</div>
+								
+									 
+									 
 								<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Advertisement Image</h6>
+                                        
                                     </div>
-                                    <div class="widget-body">                                        
+                                    <div class="widget-body"> 
+						<h4 class="widget-title smaller lighter">Product Ad Images</h4>									
                                         <div class="widget-main">
                                             <div class="form-group">
                                                 <div class="col-xs-12">
-                                                    <span id="product_push_ad_image"></span>
+                                                    <span id="product_image"></span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-									 </div>									 
-									
-									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
-									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Survey Video</h6>
-                                    </div>
-                                    <div class="widget-body">                                        
-                                        <div class="widget-main">
-                                            <div class="form-group">
-                                                <div class="col-xs-12">
-                                                    <span id="product_survey_video"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>	
-									 </div> 
+									</div>	 
 									 
-									 <div class="col-xs-12 col-sm-4 widget-box transparent text-center">
-									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Survey Audio</h6>
-                                    </div>
-                                    <div class="widget-body">                                        
-                                        <div class="widget-main">
-                                            <div class="form-group">
-                                                <div class="col-xs-12">
-                                                    <span id="product_survey_audio"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>	
-									 </div> 
-									 
-									 <div class="col-xs-12 col-sm-4 widget-box transparent text-center">
-									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Survey PDF</h6>
-                                    </div>
-                                    <div class="widget-body">                                        
-                                        <div class="widget-main">
-                                            <div class="form-group">
-                                                <div class="col-xs-12">
-                                                    <span id="product_survey_pdf"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>	
-									 </div> 
-									 
-									 <div class="col-xs-12 col-sm-4 widget-box transparent text-center">
-									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Survey Image</h6>
-                                    </div>
-                                    <div class="widget-body">                                        
-                                        <div class="widget-main">
-                                            <div class="form-group">
-                                                <div class="col-xs-12">
-                                                    <span id="product_survey_image"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>	
-									 </div> 
-									
+								</fieldset>
+								
+								<hr />	
+							<fieldset>
+								<legend>For Level 0: Demo Video/Demo Audio/User Manual Management</legend>			
 									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									 <div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Demo Video</h6>
                                     </div>
-                                    <div class="widget-body">                                        
+                                    <div class="widget-body"> 
+											<h4 class="widget-title smaller lighter">Product Demo Video</h4>									
                                         <div class="widget-main">
                                             <div class="form-group">
                                                 <div class="col-xs-12">
@@ -252,9 +138,10 @@ $medisUrl = $this->config->item('media_location');
 									
 									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Demo Audio</h6>
+                                        
                                     </div>
-                                    <div class="widget-body">                                        
+                                    <div class="widget-body"> 
+										<h4 class="widget-title smaller lighter">Product Demo Audio</h4>									
                                         <div class="widget-main">
                                             <div class="form-group">
                                                 <div class="col-xs-12">
@@ -265,26 +152,14 @@ $medisUrl = $this->config->item('media_location');
                                     </div>
 									 </div> 
 								
-								<div class="col-xs-12 col-sm-4 widget-box transparent text-center">								
-								<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product Brochure</h6>
-                                    </div>
-                                    <div class="widget-body">                                        
-                                        <div class="widget-main">
-                                            <div class="form-group">
-                                                <div class="col-xs-12">
-                                                    <span id="product_pdf"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>	
-									 </div> 
+								 
 									
 									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
 									<div class="widget-header widget-header-small">
-                                        <h6 class="widget-title smaller lighter">Product User Manual</h6>
+                                       
                                     </div>
-                                    <div class="widget-body">                                        
+                                    <div class="widget-body"> 
+										<h4 class="widget-title smaller lighter">Product User Manual</h4>									
                                         <div class="widget-main">
                                             <div class="form-group">
                                                 <div class="col-xs-12">
@@ -294,6 +169,185 @@ $medisUrl = $this->config->item('media_location');
                                         </div>
                                     </div>	
                                 </div> 
+								
+								<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+								<div class="widget-header widget-header-small">
+                                    </div>
+                                    <div class="widget-body"> 
+									<h4 class="widget-title smaller lighter">Product Brochure</h4>									
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_pdf"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>	
+								</div>
+									
+									
+							</fieldset>
+							<hr />
+							
+							<fieldset>
+								<legend>Image on Code Sticker Management</legend>	
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+                                    <div class="widget-header widget-header-small">
+                                        
+                                    </div>
+                                    <div class="widget-body">  
+										<h4 class="widget-title smaller lighter">Product Code Print BG Image</h4>									
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_code_print_bg_images"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+									</div>
+							</fieldset>
+									
+									
+								<hr />	
+									
+							<fieldset>
+								<legend>Push Advertisement Management</legend>	
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        
+                                    </div>
+                                    <div class="widget-body"> 
+					<h4 class="widget-title smaller lighter">Product Advertisement Video</h4>									
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_push_ad_video"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+									 </div>
+
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        
+                                    </div>
+                                    <div class="widget-body">   
+						<h4 class="widget-title smaller lighter">Product Advertisement Audio</h4>									
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_push_ad_audio"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+									 </div>
+
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        
+                                    </div>
+                                    <div class="widget-body">   
+						<h4 class="widget-title smaller lighter">Product Advertisement PDF</h4>									
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_push_ad_pdf"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+									 </div>
+
+
+								<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        
+                                    </div>
+                                    <div class="widget-body">  
+									<h4 class="widget-title smaller lighter">Product Advertisement Image</h4>									
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_push_ad_image"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+									 </div>	
+							</fieldset>		
+									
+							<hr />									
+								<fieldset>
+								<legend>Push Survey Management</legend>	
+								
+									<div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        
+                                    </div>
+                                    <div class="widget-body"> 
+							<h4 class="widget-title smaller lighter">Product Survey Video</h4>									
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_survey_video"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>	
+									 </div> 
+									 
+									 <div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        
+                                    </div>
+                                    <div class="widget-body"> 
+							<h4 class="widget-title smaller lighter">Product Survey Audio</h4>									
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_survey_audio"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>	
+									 </div> 
+									 
+									 <div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        
+                                    </div>
+                                    <div class="widget-body">  
+								<h4 class="widget-title smaller lighter">Product Survey PDF</h4>									
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_survey_pdf"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>	
+									 </div> 
+									 
+									 <div class="col-xs-12 col-sm-4 widget-box transparent text-center">
+									<div class="widget-header widget-header-small">
+                                        
+                                    </div>
+                                    <div class="widget-body">  
+										<h4 class="widget-title smaller lighter">Product Survey Image</h4>									
+                                        <div class="widget-main">
+                                            <div class="form-group">
+                                                <div class="col-xs-12">
+                                                    <span id="product_survey_image"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>	
+									 </div> 
+									</fieldset>
+									
 								
 								
 								<!--
@@ -346,21 +400,44 @@ $medisUrl = $this->config->item('media_location');
                         <div class="col-xs-12 col-sm-12" align="right">
                             <div class="form-group">
 							
-							 
-							  <label for="form-field-description">Product Image Response Loyalty Points : <input type="text" name="product_image_response_lps" id="product_image_response_lps" value="<?php echo $product_image_response_lps; ?>" style="width:80px" /></label>
-							  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_image_response_fbqq" id="product_image_response_fbqq" value="<?php echo $product_image_response_fbqq; ?>" style="width:40px" /> </label><br />
-							  
+							 <fieldset>
+								<legend>Level 1 Loyalty Management</legend>
+								
+								 <label for="form-field-description">Product Video Response Loyalty Points : <input type="text" name="product_video_response_lps" id="product_video_response_lps" value="<?php echo $product_video_response_lps; ?>" style="width:80px" /></label>
+								<label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_video_response_fbqq" id="product_video_response_fbqq" value="<?php echo $product_video_response_fbqq; ?>" style="width:40px" /> </label><br />
+								
 							   <label for="form-field-description">Product Audio Response Loyalty Points : <input type="text" name="product_audio_response_lps" id="product_audio_response_lps" value="<?php echo $product_audio_response_lps; ?>" style="width:80px" /></label>
 							   <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_audio_response_fbqq" id="product_audio_response_fbqq" value="<?php echo $product_audio_response_fbqq; ?>" style="width:40px" /> </label><br />
 							   
-							    <label for="form-field-description">Product Video Response Loyalty Points : <input type="text" name="product_video_response_lps" id="product_video_response_lps" value="<?php echo $product_video_response_lps; ?>" style="width:80px" /></label>
-								<label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_video_response_fbqq" id="product_video_response_fbqq" value="<?php echo $product_video_response_fbqq; ?>" style="width:40px" /> </label><br />
-								
 								
 								<label for="form-field-description">Product Brochure Response Loyalty Points : <input type="text" name="product_pdf_response_lps" id="product_pdf_response_lps" value="<?php echo $product_pdf_response_lps; ?>" style="width:80px" /></label>
 								  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_pdf_response_fbqq" id="product_pdf_response_fbqq" value="<?php echo $product_pdf_response_fbqq; ?>" style="width:40px" /> </label><br />
 								
-								
+								<label for="form-field-description">Product Image Response Loyalty Points : <input type="text" name="product_image_response_lps" id="product_image_response_lps" value="<?php echo $product_image_response_lps; ?>" style="width:80px" /></label>
+							  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_image_response_fbqq" id="product_image_response_fbqq" value="<?php echo $product_image_response_fbqq; ?>" style="width:40px" /> </label><br />
+							  
+								</fieldset>
+								<hr />
+								<fieldset>
+									<legend>Level 0 Loyalty Management</legend>
+										<label for="form-field-description" style="margin-left: 11px;">Product Registration Loyalty Points : <input type="text" name="product_registration_lps" id="product_registration_lps" value="<?php echo $product_registration_lps; ?>" style="width:80px" /> </label> 
+										<br />
+										
+								<label for="form-field-description">Product Demo Video Response Loyalty Points : <input type="text" name="product_demo_video_response_lps" id="product_demo_video_response_lps" value="<?php echo $product_demo_video_response_lps; ?>" style="width:80px" /></label>
+								  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_demo_video_response_fbqq" id="product_demo_video_response_fbqq" value="<?php echo $product_demo_video_response_fbqq; ?>" style="width:40px" /> </label><br />
+								  
+								  
+								  <label for="form-field-description">Product Demo Audio Response Loyalty Points : <input type="text" name="product_demo_audio_response_lps" id="product_demo_audio_response_lps" value="<?php echo $product_demo_audio_response_lps; ?>" style="width:80px" /></label>
+								  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_demo_audio_response_fbqq" id="product_demo_audio_response_fbqq" value="<?php echo $product_demo_audio_response_fbqq; ?>" style="width:40px" /> </label><br />
+								  
+							 <label for="form-field-description" style="margin-left: 11px;">Product Feedback Loyalty Points : <input type="text" name="feedback_on_product_lps" id="feedback_on_product_lps" value="<?php echo $feedback_on_product_lps; ?>" style="width:80px" /> </label> 
+							 <br />
+
+								</fieldset>
+
+							<hr />
+					<fieldset>
+						<legend>Push Advertisement Loyalty Management</legend>
 								 <label for="form-field-description">Product Ad Video Response Loyalty Points : <input type="text" name="product_ad_video_response_lps" id="product_ad_video_response_lps" value="<?php echo $product_ad_video_response_lps; ?>" style="width:80px" /></label>
 								 <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_ad_video_response_fbqq" id="product_ad_video_response_fbqq" value="<?php echo $product_ad_video_response_fbqq; ?>" style="width:40px" /> </label><br />
 								 
@@ -374,8 +451,11 @@ $medisUrl = $this->config->item('media_location');
 								 
 								 <label for="form-field-description">Product Ad Image Response Loyalty Points : <input type="text" name="product_ad_image_response_lps" id="product_ad_image_response_lps" value="<?php echo $product_ad_image_response_lps; ?>" style="width:80px" /></label>
 								 <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_ad_image_response_fbqq" id="product_ad_image_response_fbqq" value="<?php echo $product_ad_image_response_fbqq; ?>" style="width:40px" /> </label><br />
-								 
-								 
+								 </fieldset>
+								<hr /> 
+					<fieldset>
+						<legend>Push Survey Loyalty Management</legend>
+					
 								  <label for="form-field-description">Product Survey Video Response Loyalty Points : <input type="text" name="product_survey_video_response_lps" id="product_survey_video_response_lps" value="<?php echo $product_survey_video_response_lps; ?>" style="width:80px" /></label>
 								  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_survey_video_response_fbqq" id="product_survey_video_response_fbqq" value="<?php echo $product_survey_video_response_fbqq; ?>" style="width:40px" /> </label><br />
 								  
@@ -389,27 +469,16 @@ $medisUrl = $this->config->item('media_location');
 								  
 								   <label for="form-field-description">Product Survey Image Response Loyalty Points : <input type="text" name="product_survey_image_response_lps" id="product_survey_image_response_lps" value="<?php echo $product_survey_image_response_lps; ?>" style="width:80px" /></label>
 								  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_survey_image_response_fbqq" id="product_survey_image_response_fbqq" value="<?php echo $product_survey_image_response_fbqq; ?>" style="width:40px" /> </label><br />
-								  
-								  
-								  <label for="form-field-description">Product Demo Video Response Loyalty Points : <input type="text" name="product_demo_video_response_lps" id="product_demo_video_response_lps" value="<?php echo $product_demo_video_response_lps; ?>" style="width:80px" /></label>
-								  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_demo_video_response_fbqq" id="product_demo_video_response_fbqq" value="<?php echo $product_demo_video_response_fbqq; ?>" style="width:40px" /> </label><br />
-								  
-								  
-								  <label for="form-field-description">Product Demo Audio Response Loyalty Points : <input type="text" name="product_demo_audio_response_lps" id="product_demo_audio_response_lps" value="<?php echo $product_demo_audio_response_lps; ?>" style="width:80px" /></label>
-								  <label for="form-field-description" style="margin-left: 25px;"> FbQQ : <input type="text" name="product_demo_audio_response_fbqq" id="product_demo_audio_response_fbqq" value="<?php echo $product_demo_audio_response_fbqq; ?>" style="width:40px" /> </label><br />
-								  
-								 
+								  </fieldset>
+						<hr />		  
+					<fieldset>
+						<legend>Add Product Description</legend>
+							<!--<label for="form-field-description" style="margin-left: 11px;"> Add Product Description : </label><br />-->
+                                    <textarea class="form-control" name="product_description" id="product-description" placeholder="Product description" rows="4"><?php echo $product_description; ?></textarea>
+					</fieldset>  
                             </div>
                         </div>
-						<div>
-						 <label for="form-field-description" style="margin-left: 11px;">Product Registration Loyalty Points : <input type="text" name="product_registration_lps" id="product_registration_lps" value="<?php echo $product_registration_lps; ?>" style="width:80px" /> </label> 
-							 <br />
-							 <label for="form-field-description" style="margin-left: 11px;">Product Feedback Loyalty Points : <input type="text" name="feedback_on_product_lps" id="feedback_on_product_lps" value="<?php echo $feedback_on_product_lps; ?>" style="width:80px" /> </label> 
-							 <br />
 						
-								<label for="form-field-description" style="margin-left: 11px;"> Add Product Description : </label><br />
-                                    <textarea class="form-control" name="product_description" id="product-description" placeholder="Product description" rows="4"><?php echo $product_description; ?></textarea>
-                                </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -468,10 +537,10 @@ $medisUrl = $this->config->item('media_location');
                     pd.statusbar.hide(); //You choice.
                 }
             }); // upload product thumb images 
-			$("#product_images").uploadFile({
+			$("#product_image").uploadFile({
                 uploadStr:"Select Image",
-                url:site_url+"backend/product_attrribute/media_attribute/product_images/<?php echo base64_encode($id); ?>",
-                fileName:"product_images",
+                url:site_url+"backend/product_attrribute/media_attribute/product_image/<?php echo base64_encode($id); ?>",
+                fileName:"product_image",
                 showDelete: true,
                 sequential:true,
                 sequentialCount:1,
@@ -482,7 +551,7 @@ $medisUrl = $this->config->item('media_location');
                 onLoad:function(obj){
                     $.ajax({
                         cache: false,
-                        url:site_url+"backend/product_attrribute/view_media_file/product_images/<?php echo base64_encode($id); ?>",
+                        url:site_url+"backend/product_attrribute/view_media_file/product_image/<?php echo base64_encode($id); ?>",
                         dataType: "json",
                         success: function(data){
                             for(var i=0;i<data.length;i++){
@@ -494,7 +563,7 @@ $medisUrl = $this->config->item('media_location');
                 deleteCallback: function (data, pd) {
                     $(".alert-box").removeClass('alert-success').removeClass('alert-danger');
                     for (var i = 0; i < data.length; i++) {
-                        $.post(site_url+"backend/product_attrribute/delete_media_file/product_images/<?php echo base64_encode($id); ?>", {
+                        $.post(site_url+"backend/product_attrribute/delete_media_file/product_image/<?php echo base64_encode($id); ?>", {
                             file: data[i]
                         },function (resp,textStatus, jqXHR) {
                             if(resp.status){

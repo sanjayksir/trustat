@@ -1,10 +1,17 @@
 <?php $this->load->view('../includes/admin_header');?>
 <?php $this->load->view('../includes/admin_top_navigation');?>
+
+<!-- Export to Excel -->
+<script src="<?php echo base_url(); ?>assets/export_to_excel/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/export_to_excel/tableExport.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/export_to_excel/jquery.base64.js"></script>
+<!-- /Export to Excel -->
+
 	<div class="main-container ace-save-state" id="main-container">
 			<script type="text/javascript">
 				try{ace.settings.loadState('main-container')}catch(e){}
 			</script>
-			<?php $label = 'Basic Customer Report Level 1';?>
+			<?php $label = 'Pre Purchase Scan Report';?>
 
 			<?php $this->load->view('../includes/admin_sidebar');?>
 			
@@ -39,233 +46,229 @@
 							<div class="col-xs-12">
  								<div class="widget-box widget-color-blue">
                                                                     <div class="widget-header widget-header-flat">
-                                                                        <h5 class="widget-title bigger lighter">List <?php echo $label;?></h5>
-                                                                    </div>
+                                                                        <h5 class="widget-title bigger lighter">List <?php echo $label;?> All Products</h5>
+                                                                    <div class="widget-toolbar">
+                                                    <?php echo anchor('reports/barcode/basic_customer_report_level1_download', 'Go to download report',array('class' => 'btn btn-xs btn-warning')); ?>
+																	</div>
+																	</div>
 									<div class="widget-body">
                                                                             <div class="row filter-box">
                                                                                 <form id="form-filter" action="" method="get" class="form-horizontal" >
-                                                                                    <div class="col-sm-6">
+                                                                                    <div class="col-sm-5">
                                                                                         <label>Display
                                                                                             <select name="page_limit" id="page_limit" class="form-control" onchange="this.form.submit()">
                                                                                             <?php echo Utils::selectOptions('pagelimit',['options'=>$this->config->item('pageOption'),'value'=>$this->config->item('pageLimit')]) ?>
                                                                                             </select>
                                                                                         Records
                                                                                         </label>
+																						
+					<?php $Datetoday = date("m/d/Y"); ?>
+					<?php $dateoneMAgo = date("m/d/Y",strtotime("-1 year")); ?>	
+													
+												<!--<label><a href="#" onclick="$('#List_Consumer').tableExport({type:'excel',escape:'false'});"> <img src="<?php //echo base_url();?>assets/images/excel_xls.png" width="24px" style="margin-left:100px"> Export to Excel</a></label>-->
                                                                                     </div>
-                                                                                    <div class="col-sm-6">
-                                                                                        <div class="input-group">
-                                                                                            <input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Bar-QR Code,Product Name or Consumer Name">
-                                                                                            <span class="input-group-btn">
-                                                                                                <button type="submit" class="btn btn-inverse btn-white"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
+                                <div class="col-sm-2">  From Date(mm/dd/yyyy) : <br /><br />To Date(mm/dd/yyyy) :<br /><br />  </div>
+								<div class="col-sm-5">
+								                              <div class="input-group">
+							<div class="input-group date" data-provide="datepicker">
+                              <input type="text" name="from_date_data" id="from_date_data" readonly="readonly" value="<?php //echo $dateoneMAgo; ?>" class="form-control" />
+                                  <div class="input-group-addon">
+                                  <span class="glyphicon glyphicon-th"></span>
+                                  </div>
+                        </div>
+								  
+								  <div class="input-group date" data-provide="datepicker">
+                               <input type="text" name="to_date_data" id="to_date_data" readonly="readonly" value="<?php //echo $Datetoday; ?>" class="form-control" />
+							   
+                                  <div class="input-group-addon">
+                                  <span class="glyphicon glyphicon-th"></span>
+                                  </div>
+                                  </div>															
+									<input type="hidden" name="c_date_data" id="c_date_data" value="<?php echo date('m/d/Y'); ?>" class="form-control" />					                                     
+									<input type="text" name="search" id="search" value="<?= $this->input->get('search',null); ?>" class="form-control search-query" placeholder="Customer Name OR Bar-QR Code OR Product Name or Consumer ID">
+                                                   <span class="input-group-btn">
+                                                    <button type="submit" class="btn btn-inverse btn-white" onclick="DateCheck();"><span class="ace-icon fa fa-search icon-on-right bigger-110"></span>Search</button>
                                                                                                 <button type="button" class="btn btn-inverse btn-white" onclick="redirect()"><span class="ace-icon fa fa-times bigger-110"></span>Reset</button>
                                                                                             </span>
                                                                                         </div>
                                                                                     </div>
                                                                                 </form>
                                                                             </div>
-										
- 											<table id="missing_people" class="table table-striped table-bordered table-hover">
+										<script type="text/javascript">											
+								function DateCheck()
+											{
+											  var StartDate= document.getElementById('from_date_data').value;
+											  var EndDate= document.getElementById('to_date_data').value;
+											  var CurrentDate= document.getElementById('c_date_data').value;
+											  var eDate = new Date(EndDate);
+											  var sDate = new Date(StartDate);
+											  var cDate = new Date(CurrentDate);
+											  if(sDate> eDate || eDate> cDate)
+												{
+												alert("Please ensure that the End Date is greater than or equal to the Start Date. End Date is not greater than Current Date");
+												return false;
+												}
+											}
+											</script>									
+										<div style="overflow-x:auto;">
+ 											<table id="List_Consumer" class="table table-striped table-bordered table-hover">
  												<thead>
 												<tr>
-														<th>	1	</th>
-														<th>	2	</th>
-														<th>	3	</th>
-														<th>	4	</th>
-														<th>	5	</th>
-														<th>	6	</th>
-														<th>	7	</th>
-														<th>	8	</th>
-														<th>	9	</th>
-														<th>	10	</th>
-														<th>	11	</th>
-														<th>	12	</th>
-														<th>	13	</th>
-														<th>	14	</th>
-														<th>	15	</th>
-														<th>	16	</th>
-														<th>	17	</th>
-														<th>	18	</th>
-														<th>	19	</th>
-														<th>	20	</th>
-														<th>	21	</th>
-														<th>	22	</th>
-														<th>	23	</th>
-														<th>	24	</th>
-														<th>	25	</th>
-														<th>	26	</th>
-														<th>	27	</th>
-														<th>	28	</th>
-														<th>	29	</th>
-														<th>	30	</th>
-														<th>	31	</th>
-														<th>	32	</th>
-														<th>	33	</th>
-														<th>	34	</th>
-														<th>	35	</th>
-														<th>	36	</th>
-														<th>	37	</th>
-														<th>	38	</th>
-														<th>	39	</th>
-														<th>	40	</th>
-														<th>	41	</th>
-														<th>	42	</th>
-														<th>	43	</th>
-														<th>	44	</th>
-														<th>	45	</th>
-														<th>	46	</th>
-														<th>	47	</th>
-														<th>	48	</th>
-														<th>	49	</th>
-														<th>	50	</th>
-														<th>	51	</th>
-														<th>	52	</th>
-														<th>	53	</th>
-														<th>	54	</th>
-														<th>	55	</th>
-														<th>	56	</th>
-														<th>	57	</th>
-														<th>	58	</th>
-														<th>	59	</th>
-														<th>	60	</th>
-														<th>	61	</th>
-														<th>	62	</th>
-														<th>	63	</th>
-														<th>	64	</th>
-														<th>	65	</th>
-														<th>	66	</th>
-														<th>	67	</th>
-														<th>	68	</th>
-														<th>	69	</th>
-														<th>	70	</th>
-														<th>	71	</th>
-														<th>	72	</th>
-														<th>	73	</th>
-														<th>	74	</th>
-														<th>	75	</th>
-														<th>	76	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:40px;">		1	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:200px;">	2	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	3	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	4	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	5	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	6	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	7	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	8	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	9	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	10	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	11	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	12	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	13	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	14	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	15	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	16	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	17	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	18	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	19	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	20	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	21	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	22	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	23	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	24	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	25	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	26	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	27	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	28	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	29	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	30	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	31	</div>	</th>
+								    <th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	32	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	33	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	34	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	35	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	36	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	37	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	38	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	39	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	40	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	41	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	42	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	43	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	44	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	45	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	46	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	47	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	48	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	49	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	50	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	51	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	52	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	53	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	54	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	55	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	56	</div>	</th>
+									<th style="text-align:center">	<div style="word-wrap:break-word; width:150px;">	57	</div>	</th>
+									
   													</tr>
+													
 													<tr>
-														<th>	S. No.	</th>
-														<th>	Date and time of scan	</th>
-														<th>	Customer Name 	</th>
-														<th>	Customer ID	</th>
-														<th>	Product Name	</th>
-														<th>	Unique Product Code	</th>
-														<th>	Geolocation of Scan of Level 1	</th>
-														<th>	Consumer ID	</th>
-														<th>	Last Retail Store Stock under TRACEK	</th>
-														<th>	Scanned Product Batch Details	</th>
-														<th>If Consumer bought the product scanned with same Product ID	</th>
-														<th>	12	</th>
-														<th>	13	</th>
-														<th>	14	</th>
-														<th>	15	</th>
-														<th>	16	</th>
-														<th>	17	</th>
-														<th>	18	</th>
-														<th>	19	</th>
-														<th>	20	</th>
-														<th>	21	</th>
-														<th>	22	</th>
-														<th>	23	</th>
-														<th>	24	</th>
-														<th>	25	</th>
-														<th>	26	</th>
-														<th>	27	</th>
-														<th>	28	</th>
-														<th>	29	</th>
-														<th>	30	</th>
-														<th>	31	</th>
-														<th>	32	</th>
-														<th>	33	</th>
-														<th>	34	</th>
-														<th>	35	</th>
-														<th>	36	</th>
-														<th>	37	</th>
-														<th>	38	</th>
-														<th>	39	</th>
-														<th>	40	</th>
-														<th>	41	</th>
-														<th>	42	</th>
-														<th>	43	</th>
-														<th>	44	</th>
-														<th>	45	</th>
-														<th>	46	</th>
-														<th>	47	</th>
-														<th>	48	</th>
-														<th>	49	</th>
-														<th>	50	</th>
-														<th>	51	</th>
-														<th>	52	</th>
-														<th>	53	</th>
-														<th>	54	</th>
-														<th>	55	</th>
-														<th>	56	</th>
-														<th>	57	</th>
-														<th>	58	</th>
-														<th>	59	</th>
-														<th>	60	</th>
-														<th>	61	</th>
-														<th>	62	</th>
-														<th>	63	</th>
-														<th>	64	</th>
-														<th>	65	</th>
-														<th>	66	</th>
-														<th>	67	</th>
-														<th>	68	</th>
-														<th>	69	</th>
-														<th>	70	</th>
-														<th>	71	</th>
-														<th>	72	</th>
-														<th>	73	</th>
-														<th>	74	</th>
-														<th>	75	</th>
-														<th>	76	</th>
+									<th style="text-align:center">	S. No.	</th>
+									<th style="text-align:center">	Date and time of scan	</th>
+									<th style="text-align:center">	First Scan (Yes/No)	</th>
+									<th style="text-align:center">	Customer Name	</th>
+									<th style="text-align:center">	Customer ID	</th>
+									<th style="text-align:center">	Product Name	</th>
+									<th style="text-align:center">	Unique Product Code	</th>
+									<th style="text-align:center">	Geolocation Latitude/Longitude	</th>
+									<th style="text-align:center">	Geolocation City	</th>
+									<th style="text-align:center">	Geolocation PIN Code	</th>
+									<th style="text-align:center">	Consumer name	</th>
+									<th style="text-align:center">	Consumer ID	</th>
+									<th style="text-align:center">	Last Retail Store Stock under TRACEK	</th>
+									<th style="text-align:center">	Scanned Product Batch Details	</th>
+									<th style="text-align:center">	If Consumer bought the product scanned with same Product ID	</th>
+									<th style="text-align:center">	If Consumer bought any product of Brand earlier (Yes/No)	</th>
+									<th style="text-align:center">	Date and Time of Last Buying	</th>
+									<th style="text-align:center">	Product ID bought & registered	</th>
+									<th style="text-align:center">	Video Played after Scan (Yes/No)	</th>
+									<th style="text-align:center">	Video played from Scan/History	</th>
+									<th style="text-align:center">	Video played Complete(Yes/No)	</th>
+									<th style="text-align:center">	Responded to feedback questions (Yes/No)	</th>
+									<th style="text-align:center">	Level 1 Video Question 1	</th>
+									<th style="text-align:center">	Response to Question 1	</th>
+									<th style="text-align:center">	Level 1 Video Question 2	</th>
+									<th style="text-align:center">	Response to Question 2	</th>
+									<th style="text-align:center">	Level 1 Video Question 3	</th>
+									<th style="text-align:center">	Response to Question 3	</th>
+									<th style="text-align:center">	Level 1 Video Question 4	</th>
+									<th style="text-align:center">	Response to Question 4	</th>
+									<th style="text-align:center">	Loyalty Points Awarded	</th>
+									<th style="text-align:center">	Audio Played after Scan (Yes/No)	</th>
+									<th style="text-align:center">	Audio played from Scan/History	</th>
+									<th style="text-align:center">	Audio played Complete(Yes/No)	</th>
+									<th style="text-align:center">	Responded to feedback questions (Yes/No)	</th>
+									<th style="text-align:center">	Level 1 Audio Question 1	</th>
+									<th style="text-align:center">	Response to Question 1	</th>
+									<th style="text-align:center">	Level 1 Audio Question 2	</th>
+									<th style="text-align:center">	Response to Question 2	</th>
+									<th style="text-align:center">	Level 1 Audio Question 3	</th>
+									<th style="text-align:center">	Response to Question 3	</th>
+									<th style="text-align:center">	Level 1 Audio Question 4	</th>
+									<th style="text-align:center">	Response to Question 4	</th>
+									<th style="text-align:center">	Loyalty Points Awarded	</th>
+									<th style="text-align:center">	PDF Played after Scan (Yes/No)	</th>
+									<th style="text-align:center">	PDF played from Scan/History	</th>
+									<th style="text-align:center">	PDF played Complete(Yes/No)	</th>
+									<th style="text-align:center">	Responded to feedback questions (Yes/No)	</th>
+									<th style="text-align:center">	Level 1 PDF Question 1	</th>
+									<th style="text-align:center">	Response to Question 1	</th>
+									<th style="text-align:center">	Level 1 PDF Question 2	</th>
+									<th style="text-align:center">	Response to Question 2	</th>
+									<th style="text-align:center">	Level 1 PDF Question 3	</th>
+									<th style="text-align:center">	Response to Question 3	</th>
+									<th style="text-align:center">	Level 1 PDF Question 4	</th>
+									<th style="text-align:center">	Response to Question 4	</th>
+									<th style="text-align:center">	Loyalty Points Awarded	</th>
+														
   													</tr>
-													<tr>
-													<th>	1	</th>
-													<th>	2	</th>
-													<th>	3	</th>
-													<th>	4	</th>
-													<th>	5	</th>
-													<th>	6	</th>
-													<th>	7	</th>
-													<th>	8	</th>
-													<th>	9	</th>
-													<th>	10	</th>
-													<th>	Yes/No	</th>
-													<th>	Yes/No	</th>
-													<th>	Date and Time of Buying	</th>
-													<th>	Product ID bought & registered	</th>
-													<th>	Yes/No	</th>
-													<th>	Video played from Scan/History	</th>
-													<th>	Complete/Incomplete	</th>
-													<th>	Responded/Not Responded	</th>
-													<th>	Response to Question No. 1	</th>
-													<th>	Response to Question No. 2	</th>
-													<th>	Response to Question No. 3	</th>
-													<th>	Response to Question No. 4	</th>
-													<th>	Loyalty Points Awarded	</th>
-													<th>	Yes/No	</th>
-													<th>	Audio played from Scan/History	</th>
-													<th>	Complete/Incomplete	</th>
-													<th>	Responded/Not Responded	</th>
-													<th>	Response to Question No. 1	</th>
-													<th>	Response to Question No. 2	</th>
-													<th>	Response to Question No. 3	</th>
-													<th>	Response to Question No. 4	</th>
-													<th>	Loyalty Points Awarded	</th>
-													<th>	Yes/No	</th>
-													<th>	PDF played from Scan/History	</th>
-													<th>	Complete/Incomplete	</th>
-													<th>	Responded/Not Responded	</th>
-													<th>	Response to Question No. 1	</th>
-													<th>	Response to Question No. 2	</th>
-													<th>	Response to Question No. 3	</th>
-													<th>	Response to Question No. 4	</th>
-													<th>	Loyalty Points Awarded	</th>
-
-													</tr>
+													<!--<tr>
+													  <th>Latitude/Longitude</th>
+													  <th>City</th>
+													  <th>PIN</th>
+													  <th>Yes/No</th>
+												      <th>Date and Time of Last Buying</th>
+												      <th>Product ID bought &amp; registered</th>
+												      <th>Yes/No</th>
+												      <th>Video played from Scan/History</th>
+												      <th>Complete/Incomplete</th>
+												      <th>Responded/Not Responded</th>
+												      <th>Response to Question No. 1</th>
+												      <th>Response to Question No. 2 </th>
+												      <th>Response to Question No. 3 </th>
+												      <th>Response to Question No. 4 </th>
+												      <th>Loyalty Points Awarded</th>
+												      <th>Yes/No</th>
+												      <th>Audio played from Scan/History</th>
+												      <th>Complete/Incomplete</th>
+												      <th>Responded/Not Responded</th>
+												      <th>Response to Question No. 1</th>
+												      <th>Response to Question No. 2 </th>
+												      <th>Response to Question No. 3 </th>
+												      <th>Response to Question No. 4 </th>
+												      <th>Loyalty Points Awarded</th>
+												      <th>Yes/No</th>
+												      <th>PDF played from Scan/History</th>
+												      <th>Complete/Incomplete</th>
+												      <th>Responded/Not Responded</th>
+												      <th>Response to Question No. 1</th>
+												      <th>Response to Question No. 2 </th>
+												      <th>Response to Question No. 3 </th>
+												      <th>Response to Question No. 4 </th>
+												      <th>Loyalty Points Awarded</th>
+												  </tr>-->
 												</thead>
 												<tbody>
 
@@ -278,24 +281,265 @@
 											$i++;
 											?>
                                                <tr id="show<?php echo $key; ?>">
-											   <td><?php echo $sno;$sno++; ?></td>
-											   <td><?php echo $listData['bar_code']; ?></td>
-												<td><?php echo $listData['product_name']; ?></td>
-												<td><?php echo $listData['user_name']; ?></td>
-												<td>
-																								
-												<?php echo $listData['latitude']. " / "; ?><?php echo $listData['longitude']; ?>
-												</td>
-												<td><?php echo (date('j M Y H:i:s D', strtotime($listData['created_at']))); ?></td>
- 												 
-                                              </tr>
+											   <td style="text-align:center"><?php echo $sno;$sno++; ?></td>
+											<td style="text-align:center"><?php echo (date('j M Y H:i:s D', strtotime($listData['code_scan_date']))); ?></td>
+											<?php 
+									include('url_base_con_db.php');
+								
+								$sql02 = "select * FROM scanned_products where customer_id = '".$listData['created_by']."' AND consumer_id = '".$listData['consumer_id']."' ORDER BY scan_id ASC";
+											
+								$result02 = mysql_query($sql02, $link) or die(mysql_error());
+								$number_of_answers02=mysql_num_rows($result02);
+								//$req_number_of_answers = 4-$number_of_answers;
+								//$row02 = mysql_fetch_assoc($result02);
+								if($number_of_answers02 > 1){
+								?> <td style="text-align:center">	<?php echo "No"; ?></td> <?php															
+								}else{
+								?> <td style="text-align:center">	<?php echo "Yes"; ?></td> <?php									
+								}
+								?>
+											<td style="text-align:center"><?php echo $listData['f_name']; ?> <?php //echo $listData['l_name']; ?></td>
+											<td style="text-align:center"><?php echo $listData['created_by']; ?></td>
+											<td style="text-align:center"><?php echo $listData['product_name']; ?></td>
+											<td style="text-align:center"><?php echo $listData['bar_code']; ?></td>
+											<td style="text-align:center"><?php echo $listData['latitude'] . "/ " . $listData['longitude']; ?></td>
+											<td style="text-align:center"><?php echo $listData['scan_city']; ?></td>
+											<td style="text-align:center"><?php echo $listData['pr_pin_code']; ?></td>
+											<td style="text-align:center"><?php echo get_consumer_name_by_consumer_id($listData['consumer_id']); ?></td>
+											<td style="text-align:center"><?php echo $listData['consumer_id']; ?></td>
+											<td style="text-align:center"><?php echo $listData['issue_location']; ?></td>
+											<td style="text-align:center"><?php echo $listData['print_batch_id']; ?></td>
+											<td style="text-align:center"><?php  								
+								
+								$sql = "select purchased_product_id FROM purchased_product where product_id = '".$listData['product_id']."' AND consumer_id = '".$listData['consumer_id']."' ORDER BY purchased_product_id DESC";
+													
+								$result = mysql_query($sql, $link) or die(mysql_error());
+								$row = mysql_fetch_assoc($result);
+								if($row['purchased_product_id']!=''){
+									echo "Yes";
+								}else{
+									echo "No";
+								}
+								?></td>
+								<?php 
+								
+								//$sql1 = "select purchased_product_id, create_date, product_id FROM purchased_product where product_id != '".$listData['product_id']."' AND consumer_id = '".$listData['consumer_id']."'  AND customer_id = '".$listData['created_by']."' ORDER BY purchased_product_id DESC";
+								
+								$sql1 = "select purchased_product_id, create_date, product_id FROM purchased_product where consumer_id = '".$listData['consumer_id']."'  AND customer_id = '".$listData['created_by']."' ORDER BY purchased_product_id DESC";
+													
+								$result1 = mysql_query($sql1, $link) or die(mysql_error());
+								$row1 = mysql_fetch_assoc($result1);
+								if($row1['purchased_product_id']!=''){
+									?> <td style="text-align:center"><?php echo "Yes"; ?></td> <?php
+									?> <td style="text-align:center"><?php echo $row1['create_date']; ?></td> <?php
+									?> <td style="text-align:center"><?php echo $row1['product_id']; ?></td> <?php
+									
+								}else{
+									?> <td style="text-align:center"><?php echo "No"; ?></td> <?php
+									?> <td style="text-align:center"><?php echo "No"; ?></td> <?php
+									?> <td style="text-align:center"><?php echo "No"; ?></td> <?php
+								}
+								?>
+								
+								<?php 
+								$sql2 = "select id, watched_complete, media_play_location FROM consumer_media_view_details where product_qr_code = '".$listData['bar_code']."' AND consumer_id = '".$listData['consumer_id']."' AND media_type = 'Product Video' ORDER BY id ASC";
+											
+								$result2 = mysql_query($sql2, $link) or die(mysql_error());
+								//$number_of_answers=mysql_num_rows($result2);
+								//$req_number_of_answers = 4-$number_of_answers;
+								$row2 = mysql_fetch_assoc($result2);
+								if($row2['id']!=''){
+								?> <td style="text-align:center">	<?php echo "Yes"; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo $row2['media_play_location']; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo $row2['watched_complete']; ?></td> <?php								
+								}else{
+								?> <td style="text-align:center">	<?php echo "No"; ?></td> <?php	
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								
+								}
+								?>
+								
+								<?php 
+								$sql3 = "select id, question_id, selected_answer FROM consumer_feedback where product_qr_code = '".$listData['bar_code']."' AND user_id = '".$listData['consumer_id']."' AND media_type = 'Product Video' ORDER BY id ASC";
+											
+								$result3 = mysql_query($sql3, $link) or die(mysql_error());
+								$number_of_answers3 = mysql_num_rows($result3);
+								$req_number_of_answers3 = 4-$number_of_answers3;
+								$row3 = mysql_fetch_assoc($result3);
+								if($row3['id']!=''){	
+								?> <td style="text-align:center">	<?php echo "Yes"; ?></td> <?php	
+								?> <td style="text-align:center">	<?php echo get_question_by_id($row3['question_id']); ?></td> <?php
+								?> <td style="text-align:center">	<?php echo $row3['selected_answer']; ?></td> <?php
+								while($row3s = mysql_fetch_array($result3))
+								{
+								?> <td style="text-align:center">	<?php echo get_question_by_id($row3s['question_id']); ?></td> <?php	
+								?> <td style="text-align:center"><?php echo $row3s['selected_answer']; ?></td> <?php
+								}
+								
+								for($x = 0; $x <= $req_number_of_answers3-1; $x++) {
+									?> <td style="text-align:center">	<?php echo "-"; ?></td> <?php
+									?> <td style="text-align:center">	<?php echo "-"; ?></td> <?php
+									}									
+								}else{
+								?> <td style="text-align:center">	<?php echo "No"; ?></td> <?php	
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								}
+								?>
+								
+								<td style="text-align:center"><?php 
+								$sql4 = "select id, points FROM loylty_points where promotion_id = '".$listData['bar_code']."' AND user_id = '".$listData['consumer_id']."'";
+													
+								$result4 = mysql_query($sql4, $link) or die(mysql_error());
+								$row4 = mysql_fetch_assoc($result4);
+								if($row4['id']!=''){
+									echo $row4['points'];
+								}else{
+									echo "-";
+								}
+								?></td>
+								
+								<?php 
+								$sql5 = "select id, watched_complete, media_play_location FROM consumer_media_view_details where product_qr_code = '".$listData['bar_code']."' AND consumer_id = '".$listData['consumer_id']."' AND media_type = 'Product Audio' ORDER BY id ASC";
+											
+								$result5 = mysql_query($sql5, $link) or die(mysql_error());
+								$row5 = mysql_fetch_assoc($result5);
+								if($row5['id']!=''){
+								?> <td style="text-align:center">	<?php echo "Yes"; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo $row5['media_play_location']; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo $row5['watched_complete']; ?></td> <?php								
+								}else{
+								?> <td style="text-align:center">	<?php echo "No"; ?></td> <?php	
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								
+								}
+								?>
+								
+								<?php 
+								$sql6 = "select id, question_id, selected_answer FROM consumer_feedback where product_qr_code = '".$listData['bar_code']."' AND user_id = '".$listData['consumer_id']."' AND media_type = 'Product Audio' ORDER BY id ASC";
+											
+								$result6 = mysql_query($sql6, $link) or die(mysql_error());
+								$number_of_answers6 = mysql_num_rows($result6);
+								$req_number_of_answers6 = 4-$number_of_answers6;
+								$row6 = mysql_fetch_assoc($result6);
+								if($row6['id']!=''){	
+								?> <td style="text-align:center">	<?php echo "Yes"; ?></td> <?php	
+								?> <td style="text-align:center">	<?php echo get_question_by_id($row6['question_id']); ?></td> <?php	
+								?> <td style="text-align:center">	<?php echo $row6['selected_answer']; ?></td> <?php
+								while($row6s = mysql_fetch_array($result6))
+								{
+								?> <td style="text-align:center">	<?php echo get_question_by_id($row6s['question_id']); ?></td> <?php	
+								?> <td style="text-align:center">	<?php echo $row6s['selected_answer']; ?></td> <?php
+								}								
+								for($x = 0; $x <= $req_number_of_answers6-1; $x++) {
+									?> <td style="text-align:center">	<?php echo "-"; ?></td> <?php
+									?> <td style="text-align:center">	<?php echo "-"; ?></td> <?php
+									}
+								}else{
+								?> <td style="text-align:center">	<?php echo "No"; ?></td> <?php	
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								}
+								?>
+								
+								<td style="text-align:center"><?php 
+								$sql7 = "select id, points FROM loylty_points where promotion_id = '".$listData['bar_code']."' AND user_id = '".$listData['consumer_id']."'";
+													
+								$result7 = mysql_query($sql7, $link) or die(mysql_error());
+								$row7 = mysql_fetch_assoc($result7);
+								if($row7['id']!=''){
+									echo $row7['points'];
+								}else{
+									echo "-";
+								}
+								?></td>
+								
+								<?php 
+								$sql8 = "select id, watched_complete, media_play_location FROM consumer_media_view_details where product_qr_code = '".$listData['bar_code']."' AND consumer_id = '".$listData['consumer_id']."' AND media_type = 'Product PDF' ORDER BY id ASC";
+											
+								$result8 = mysql_query($sql8, $link) or die(mysql_error());
+								//$number_of_answers=mysql_num_rows($result2);
+								//$req_number_of_answers = 4-$number_of_answers;
+								$row8 = mysql_fetch_assoc($result8);
+								if($row8['id']!=''){
+								?> <td style="text-align:center">	<?php echo "Yes"; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo $row8['media_play_location']; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo $row8['watched_complete']; ?></td> <?php								
+								}else{
+								?> <td style="text-align:center">	<?php echo "No"; ?></td> <?php	
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								
+								}
+								?>
+								
+								<?php 
+								$sql9 = "select id, question_id, selected_answer FROM consumer_feedback where product_qr_code = '".$listData['bar_code']."' AND user_id = '".$listData['consumer_id']."' AND media_type = 'Product PDF' ORDER BY id ASC";
+											
+								$result9 = mysql_query($sql9, $link) or die(mysql_error());
+								$number_of_answers9 = mysql_num_rows($result9);
+								$req_number_of_answers9 = 4-$number_of_answers9;
+								$row9 = mysql_fetch_assoc($result9);
+								if($row9['id']!=''){	
+								?> <td style="text-align:center">	<?php echo "Yes"; ?></td> <?php	
+								?> <td style="text-align:center">	<?php echo get_question_by_id($row9['question_id']); ?></td> <?php	
+								?> <td style="text-align:center">	<?php echo $row9['selected_answer']; ?></td> <?php
+								while($row9s = mysql_fetch_array($result9))
+								{
+								?> <td style="text-align:center">	<?php echo get_question_by_id($row9s['question_id']); ?></td> <?php	
+								?> <td style="text-align:center">	<?php echo $row9s['selected_answer']; ?></td> <?php
+								}
+								
+								for($x = 0; $x <= $req_number_of_answers9-1; $x++) {
+									?> <td style="text-align:center">	<?php echo "-"; ?></td> <?php
+									?> <td style="text-align:center">	<?php echo "-"; ?></td> <?php
+									}
+								}else{
+								?> <td style="text-align:center">	<?php echo "No"; ?></td> <?php	
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								?> <td style="text-align:center">	<?php echo ""; ?></td> <?php
+								}
+								?>
+								
+								<td style="text-align:center"><?php 
+								$sql10 = "select id, points FROM loylty_points where promotion_id = '".$listData['bar_code']."' AND user_id = '".$listData['consumer_id']."'";
+													
+								$result10 = mysql_query($sql10, $link) or die(mysql_error());
+								$row10 = mysql_fetch_assoc($result10);
+								if($row10['id']!=''){
+									echo $row10['points'];
+								}else{
+									echo "-";
+								}
+								?></td>
+                                              </tr>	
                                          <?php }
 										}else{ ?>
-										<tr><td align="center" colspan="8" class="color error">No Records Founds</td></tr>
+										<tr><td align="center" colspan="11" class="color error">No Records Founds</td></tr>
 										<?php }?>
-                                       
                                     </tbody>
                                         </table>
+										</div> 
                                         <div class="row paging-box">
                                         <?php echo $links ?>
                                         </div>                                    

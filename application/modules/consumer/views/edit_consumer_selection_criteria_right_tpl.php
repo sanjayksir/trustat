@@ -37,9 +37,55 @@
 			  <input type="text" placeholder="Unique System Selection Criteria ID" name="unique_system_selection_criteria_id" id="unique_system_selection_criteria_id" class="form-control" value="<?php echo $get_user_details[0]['unique_system_selection_criteria_id'];?>" readonly>			  
 			</div>
 			
+						 <div class="col-sm-4">
+			  <label for="form-field-8">Please select Age Option</label>
+			  <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+				<script>
+				$(document).ready(function(){
+					$("select").change(function(){
+						$(this).find("option:selected").each(function(){
+							var optionValue = $(this).attr("value");
+							if(optionValue){
+								$(".box").not("." + optionValue).hide();
+								$("." + optionValue).show();
+							} else{
+								$(".box").hide();
+							}
+						});
+					}).change();
+				});
+				</script>
+			<select  name="consumer_age_option" id="consumer_age_option" class="form-control" required>
+			 <option value="">-Select an age Option-</option>
+			 <option value="AnyAge"  <?php echo ($get_user_details[0]['consumer_age_option']=='AnyAge')?'selected':'';?>>Any Age</option>
+<option value="SpecifyAge"  <?php echo ($get_user_details[0]['consumer_age_option']=='SpecifyAge')?'selected':'';?>>Specify Age</option>
+           <!-- <option value="AnyAge">Any Age</option>
+			<option value="SpecifyAge">Specify Age</option>-->
+            </select> 
+			</div>
+			<div class="AnyAge box">
+			<div class="col-sm-4"><br />
+			   <label for="form-field-8">Age filter will not be applied</label>
+              <!-- <input name="customer_microsite_url" id="customer_microsite_url" type="text" class="form-control" placeholder="Customer Microsite URL" maxlength="200">-->
+			</div>
+			</div>
+			<div class="SpecifyAge box">			
+			<div class="col-sm-2">
+			  <label for="form-field-8">Min Age in Years</label>
+			 <input type="number" placeholder="Minimum Age of the consumer in Years" value="<?php echo $get_user_details[0]['consumer_min_age'];?>" min="5" max="99" name="consumer_min_age" id="consumer_min_age" class="form-control" required>
+			 </div>
+			 
+			
+			<div class="col-sm-2">
+			  <label for="form-field-8">Max Age in Years</label>
+			<input type="number" placeholder="Maximum Age of the consumer in Years"  value="<?php echo $get_user_details[0]['consumer_max_age'];?>" min="6" max="100" name="consumer_max_age" onblur="compare();" id="consumer_max_age" class="form-control" required>
+			</div>	
+			</div>
+			
+			<!--
 			<div class="col-sm-4">
 			  <label for="form-field-8">Minimum Age of the consumer in Years</label>
-             <!--<input name="consumer_min_age"  id="consumer_min_age" type="text" class="form-control" value="<?php echo $get_user_details[0]['consumer_min_age'];?>" placeholder="Minimum Age in Years">-->
+             <!--<input name="consumer_min_age"  id="consumer_min_age" type="text" class="form-control" value="<?php echo $get_user_details[0]['consumer_min_age'];?>" placeholder="Minimum Age in Years">
 			 
 			  <input type="number" placeholder="Minimum Age of the consumer in Years" value="<?php echo $get_user_details[0]['consumer_min_age'];?>" min="5" max="99" name="consumer_min_age" id="consumer_min_age" class="form-control" required>	
 			</div>
@@ -48,11 +94,11 @@
 			<div class="col-sm-4">
 			  <label for="form-field-8">Maximum Age of the consumer in Years</label>
 
-            <!--<input name="consumer_max_age" id="consumer_max_age" type="text" class="form-control" value="<?php echo $get_user_details[0]['consumer_max_age'];?>" placeholder="Maximum Age in Years"  maxlength="50">-->
+            <!--<input name="consumer_max_age" id="consumer_max_age" type="text" class="form-control" value="<?php echo $get_user_details[0]['consumer_max_age'];?>" placeholder="Maximum Age in Years"  maxlength="50">
 			
 			<input type="number" placeholder="Maximum Age of the consumer in Years"  value="<?php echo $get_user_details[0]['consumer_max_age'];?>" min="6" max="100" name="consumer_max_age" onblur="compare();" id="consumer_max_age" class="form-control" required>
 			
-			</div>
+			</div>-->
 		</div>
 				<div class="form-group row">
 			<div class="col-sm-4">
@@ -83,8 +129,8 @@
            <option value="">-Consumer City of Last Scan-</option>	
 		   <option value="<?php echo $get_user_details[0]['consumer_city'];?>" selected><?php echo $get_user_details[0]['consumer_city'];?></option>	 
 			<option value="all">All</option>		   
-            <?php foreach(getConsumerCitiesofLastScan('0') as $val){?>
-				<option value="<?php echo $val['scan_city'];?>"><?php  echo $val['scan_city'];?></option> 
+            <?php foreach(getConsumerData('city_last_scan') as $val){?>
+				<option value="<?php echo $val['city_last_scan'];?>"><?php  echo $val['city_last_scan'];?></option> 
 			<?php } ?>				
             </select>	
 			
@@ -97,13 +143,256 @@
            <option value="">-Consumer City of Registration-</option>	
 			<option value="<?php echo $get_user_details[0]['city_registration'];?>" selected><?php echo $get_user_details[0]['city_registration'];?></option>	
 				<option value="all">All</option>
-            <?php foreach(getConsumerData('city') as $val){?>
-				<option value="<?php echo $val['city'];?>"><?php  echo $val['city'];?></option> 
+            <?php foreach(getConsumerData('registration_city') as $val){?>
+				<option value="<?php echo $val['registration_city'];?>"><?php  echo $val['registration_city'];?></option> 
 			<?php } ?>				
             </select>				
 			</div>			
 		</div>
 		
+			<input type="hidden" name="earned_loyalty_points" value="all"> 
+			<input type="hidden" name="monthly_earnings" value="all"> 
+			<input type="hidden" name="job_profile" value="all"> 
+			<input type="hidden" name="education_qualification" value="all"> 
+			<input type="hidden" name="type_vehicle" value="all"> 
+			<input type="hidden" name="profession" value="all"> 
+			<input type="hidden" name="marital_status" value="all"> 
+			<input type="hidden" name="no_of_family_members" value="all"> 
+			<input type="hidden" name="loan_car" value="all"> 
+			<input type="hidden" name="loan_housing" value="all"> 
+			<input type="hidden" name="personal_loan" value="all"> 
+			<input type="hidden" name="credit_card_loan" value="all"> 
+			<input type="hidden" name="own_a_car" value="all"> 
+			<input type="hidden" name="house_type" value="all"> 
+			<input type="hidden" name="last_location" value="all"> 
+			<input type="hidden" name="life_insurance" value="all"> 
+			<input type="hidden" name="medical_insurance" value="all"> 
+			<input type="hidden" name="height_in_inches" value="all"> 
+			<input type="hidden" name="weight_in_kg" value="all"> 
+			<input type="hidden" name="hobbies" value="all"> 
+			<input type="hidden" name="sports" value="all"> 
+			<input type="hidden" name="entertainment" value="all"> 
+			<input type="hidden" name="spouse_gender" value="all"> 
+			<input type="hidden" name="spouse_phone" value="all"> 
+			<input type="hidden" name="spouse_dob" value="all"> 
+			<input type="hidden" name="marriage_anniversary" value="all"> 
+			<input type="hidden" name="spouse_work_status" value="all"> 
+			<input type="hidden" name="spouse_edu_qualification" value="all"> 
+			<input type="hidden" name="spouse_monthly_income" value="all"> 
+			<input type="hidden" name="spouse_loan" value="all"> 
+			<input type="hidden" name="spouse_personal_loan" value="all"> 
+			<input type="hidden" name="spouse_credit_card_loan" value="all"> 
+			<input type="hidden" name="spouse_own_a_car" value="all"> 
+			<input type="hidden" name="spouse_house_type" value="all"> 
+			<input type="hidden" name="spouse_height_inches" value="all"> 
+			<input type="hidden" name="spouse_weight_kg" value="all"> 
+			<input type="hidden" name="spouse_hobbies" value="all"> 
+			<input type="hidden" name="spouse_sports" value="all"> 
+			<input type="hidden" name="spouse_entertainment" value="all"> 
+			<input type="hidden" name="field_1" value="all"> 
+			<input type="hidden" name="field_2" value="all"> 
+			<input type="hidden" name="field_3" value="all"> 
+			<input type="hidden" name="field_4" value="all"> 
+			<input type="hidden" name="field_5" value="all"> 
+			<input type="hidden" name="field_6" value="all"> 
+			<input type="hidden" name="field_7" value="all"> 
+			<input type="hidden" name="field_8" value="all"> 
+			<input type="hidden" name="field_9" value="all"> 
+			<input type="hidden" name="field_10" value="all"> 
+			<input type="hidden" name="field_11" value="all"> 
+			<input type="hidden" name="field_12" value="all"> 
+			<input type="hidden" name="field_13" value="all"> 
+			<input type="hidden" name="field_14" value="all"> 
+			<input type="hidden" name="field_15" value="all"> 
+			<input type="hidden" name="field_16" value="all"> 
+			<input type="hidden" name="field_17" value="all"> 
+			<input type="hidden" name="field_18" value="all"> 
+			<input type="hidden" name="field_19" value="all"> 
+			<input type="hidden" name="field_20" value="all"> 
+			<input type="hidden" name="field_21" value="all"> 
+			<input type="hidden" name="field_22" value="all"> 
+			<input type="hidden" name="field_23" value="all"> 
+			<input type="hidden" name="field_24" value="all"> 
+			<input type="hidden" name="field_25" value="all"> 
+			<input type="hidden" name="field_26" value="all"> 
+			<input type="hidden" name="field_27" value="all"> 
+			<input type="hidden" name="field_28" value="all"> 
+			<input type="hidden" name="field_29" value="all"> 
+			<input type="hidden" name="field_30" value="all"> 
+			<input type="hidden" name="field_31" value="all"> 
+			<input type="hidden" name="field_32" value="all"> 
+			<input type="hidden" name="field_33" value="all"> 
+			<input type="hidden" name="field_34" value="all"> 
+			<input type="hidden" name="field_35" value="all"> 
+			<input type="hidden" name="field_36" value="all"> 
+			<input type="hidden" name="field_37" value="all"> 
+			<input type="hidden" name="field_38" value="all"> 
+			<input type="hidden" name="field_39" value="all"> 
+			<input type="hidden" name="field_40" value="all"> 
+			<input type="hidden" name="field_41" value="all"> 
+			<input type="hidden" name="field_42" value="all"> 
+			<input type="hidden" name="field_43" value="all"> 
+			<input type="hidden" name="field_44" value="all"> 
+			<input type="hidden" name="field_45" value="all"> 
+			<input type="hidden" name="field_46" value="all"> 
+			<input type="hidden" name="field_47" value="all"> 
+			<input type="hidden" name="field_48" value="all"> 
+			<input type="hidden" name="field_49" value="all"> 
+			<input type="hidden" name="field_50" value="all"> 
+			<input type="hidden" name="field_51" value="all"> 
+			<input type="hidden" name="field_52" value="all"> 
+			<input type="hidden" name="field_53" value="all"> 
+			<input type="hidden" name="field_54" value="all"> 
+			<input type="hidden" name="field_55" value="all"> 
+			<input type="hidden" name="field_56" value="all"> 
+			<input type="hidden" name="field_57" value="all"> 
+			<input type="hidden" name="field_58" value="all"> 
+			<input type="hidden" name="field_59" value="all"> 
+			<input type="hidden" name="field_60" value="all"> 
+			<input type="hidden" name="field_61" value="all"> 
+			<input type="hidden" name="field_62" value="all"> 
+			<input type="hidden" name="field_63" value="all"> 
+			<input type="hidden" name="field_64" value="all"> 
+			<input type="hidden" name="field_65" value="all"> 
+			<input type="hidden" name="field_66" value="all"> 
+			<input type="hidden" name="field_67" value="all"> 
+			<input type="hidden" name="field_68" value="all"> 
+			<input type="hidden" name="field_69" value="all"> 
+			<input type="hidden" name="field_70" value="all"> 
+			<input type="hidden" name="field_71" value="all"> 
+			<input type="hidden" name="field_72" value="all"> 
+			<input type="hidden" name="field_73" value="all"> 
+			<input type="hidden" name="field_74" value="all"> 
+			<input type="hidden" name="field_75" value="all"> 
+			<input type="hidden" name="field_76" value="all"> 
+			<input type="hidden" name="field_77" value="all"> 
+			<input type="hidden" name="field_78" value="all"> 
+			<input type="hidden" name="field_79" value="all"> 
+			<input type="hidden" name="field_80" value="all"> 
+			<input type="hidden" name="field_81" value="all"> 
+			<input type="hidden" name="field_82" value="all"> 
+			<input type="hidden" name="field_83" value="all"> 
+			<input type="hidden" name="field_84" value="all"> 
+			<input type="hidden" name="field_85" value="all"> 
+			<input type="hidden" name="field_86" value="all"> 
+			<input type="hidden" name="field_87" value="all"> 
+			<input type="hidden" name="field_88" value="all"> 
+			<input type="hidden" name="field_89" value="all"> 
+			<input type="hidden" name="field_90" value="all"> 
+			<input type="hidden" name="field_91" value="all"> 
+			<input type="hidden" name="field_92" value="all"> 
+			<input type="hidden" name="field_93" value="all"> 
+			<input type="hidden" name="field_94" value="all"> 
+			<input type="hidden" name="field_95" value="all"> 
+			<input type="hidden" name="field_96" value="all"> 
+			<input type="hidden" name="field_97" value="all"> 
+			<input type="hidden" name="field_98" value="all"> 
+			<input type="hidden" name="field_99" value="all"> 
+			<input type="hidden" name="field_100" value="all"> 
+			<input type="hidden" name="field_101" value="all"> 
+			<input type="hidden" name="field_102" value="all"> 
+			<input type="hidden" name="field_103" value="all"> 
+			<input type="hidden" name="field_104" value="all"> 
+			<input type="hidden" name="field_105" value="all"> 
+			<input type="hidden" name="field_106" value="all"> 
+			<input type="hidden" name="field_107" value="all"> 
+			<input type="hidden" name="field_108" value="all"> 
+			<input type="hidden" name="field_109" value="all"> 
+			<input type="hidden" name="field_110" value="all"> 
+			<input type="hidden" name="field_111" value="all"> 
+			<input type="hidden" name="field_112" value="all"> 
+			<input type="hidden" name="field_113" value="all"> 
+			<input type="hidden" name="field_114" value="all"> 
+			<input type="hidden" name="field_115" value="all"> 
+			<input type="hidden" name="field_116" value="all"> 
+			<input type="hidden" name="field_117" value="all"> 
+			<input type="hidden" name="field_118" value="all"> 
+			<input type="hidden" name="field_119" value="all"> 
+			<input type="hidden" name="field_120" value="all"> 
+			<input type="hidden" name="field_121" value="all"> 
+			<input type="hidden" name="field_122" value="all"> 
+			<input type="hidden" name="field_123" value="all"> 
+			<input type="hidden" name="field_124" value="all"> 
+			<input type="hidden" name="field_125" value="all"> 
+			<input type="hidden" name="field_126" value="all"> 
+			<input type="hidden" name="field_127" value="all"> 
+			<input type="hidden" name="field_128" value="all"> 
+			<input type="hidden" name="field_129" value="all"> 
+			<input type="hidden" name="field_130" value="all"> 
+			<input type="hidden" name="field_131" value="all"> 
+			<input type="hidden" name="field_132" value="all"> 
+			<input type="hidden" name="field_133" value="all"> 
+			<input type="hidden" name="field_134" value="all"> 
+			<input type="hidden" name="field_135" value="all"> 
+			<input type="hidden" name="field_136" value="all"> 
+			<input type="hidden" name="field_137" value="all"> 
+			<input type="hidden" name="field_138" value="all"> 
+			<input type="hidden" name="field_139" value="all"> 
+			<input type="hidden" name="field_140" value="all"> 
+			<input type="hidden" name="field_141" value="all"> 
+			<input type="hidden" name="field_142" value="all"> 
+			<input type="hidden" name="field_143" value="all"> 
+			<input type="hidden" name="field_144" value="all"> 
+			<input type="hidden" name="field_145" value="all"> 
+			<input type="hidden" name="field_146" value="all"> 
+			<input type="hidden" name="field_147" value="all"> 
+			<input type="hidden" name="field_148" value="all"> 
+			<input type="hidden" name="field_149" value="all"> 
+			<input type="hidden" name="field_150" value="all"> 
+			<input type="hidden" name="field_151" value="all"> 
+			<input type="hidden" name="field_152" value="all"> 
+			<input type="hidden" name="field_153" value="all"> 
+			<input type="hidden" name="field_154" value="all"> 
+			<input type="hidden" name="field_155" value="all"> 
+			<input type="hidden" name="field_156" value="all"> 
+			<input type="hidden" name="field_157" value="all"> 
+			<input type="hidden" name="field_158" value="all"> 
+			<input type="hidden" name="field_159" value="all"> 
+			<input type="hidden" name="field_160" value="all"> 
+			<input type="hidden" name="field_161" value="all"> 
+			<input type="hidden" name="field_162" value="all"> 
+			<input type="hidden" name="field_163" value="all"> 
+			<input type="hidden" name="field_164" value="all"> 
+			<input type="hidden" name="field_165" value="all"> 
+			<input type="hidden" name="field_166" value="all"> 
+			<input type="hidden" name="field_167" value="all"> 
+			<input type="hidden" name="field_168" value="all"> 
+			<input type="hidden" name="field_169" value="all"> 
+			<input type="hidden" name="field_170" value="all"> 
+			<input type="hidden" name="field_171" value="all"> 
+			<input type="hidden" name="field_172" value="all"> 
+			<input type="hidden" name="field_173" value="all"> 
+			<input type="hidden" name="field_174" value="all"> 
+			<input type="hidden" name="field_175" value="all"> 
+			<input type="hidden" name="field_176" value="all"> 
+			<input type="hidden" name="field_177" value="all"> 
+			<input type="hidden" name="field_178" value="all"> 
+			<input type="hidden" name="field_179" value="all"> 
+			<input type="hidden" name="field_180" value="all"> 
+			<input type="hidden" name="field_181" value="all"> 
+			<input type="hidden" name="field_182" value="all"> 
+			<input type="hidden" name="field_183" value="all"> 
+			<input type="hidden" name="field_184" value="all"> 
+			<input type="hidden" name="field_185" value="all"> 
+			<input type="hidden" name="field_186" value="all"> 
+			<input type="hidden" name="field_187" value="all"> 
+			<input type="hidden" name="field_188" value="all"> 
+			<input type="hidden" name="field_189" value="all"> 
+			<input type="hidden" name="field_190" value="all"> 
+			<input type="hidden" name="field_191" value="all"> 
+			<input type="hidden" name="field_192" value="all"> 
+			<input type="hidden" name="field_193" value="all"> 
+			<input type="hidden" name="field_194" value="all"> 
+			<input type="hidden" name="field_195" value="all"> 
+			<input type="hidden" name="field_196" value="all"> 
+			<input type="hidden" name="field_197" value="all"> 
+			<input type="hidden" name="field_198" value="all"> 
+			<input type="hidden" name="field_199" value="all"> 
+			<input type="hidden" name="field_200" value="all"> 
+			<input type="hidden" name="field_201" value="all"> 
+
+		
+		<!--
 	<div class="form-group row">			
 			<div class="col-sm-4">
 			  <label for="form-field-8">Earned Loyalty Points</label>			
@@ -531,8 +820,8 @@
             </select>				
 			</div>	
 			<div class="col-sm-4">
-			  <label for="form-field-8">Spouse Weight Kg</label>			
-			 <select  name="spouse_weight_kg" id="spouse_weight_kg" class="form-control" required>
+			  <label fo<input type="hidden" name="field_165" value="all"> 
+	ect  name="spouse_weight_kg" id="spouse_weight_kg" class="form-control" required>
            <option value="">-Spouse Weight Kg-</option>	  
 			<option value="<?php echo $get_user_details[0]['spouse_weight_kg'];?>" selected><?php echo $get_user_details[0]['spouse_weight_kg'];?></option>
 			<option value="all">All</option>
@@ -579,18 +868,7 @@
 			</div>			
 		</div>
 		
-		<!--
-		<div class="col-sm-4">
-			  <label for="form-field-8"><?php echo getConsumerFieldName('field_1'); ?></label>			
-			 <select  name="field_1" id="field_1" class="form-control" required>
-           <option value="">-<?php echo getConsumerFieldName('field_1'); ?>-</option>	  
-			<option value="<?php echo $get_user_details[0]['field_1'];?>" selected><?php echo $get_user_details[0]['field_1'];?></option>
-			<option value="all">All</option>
-            <?php foreach(getConsumerData('field_1') as $val){?>
-				<option value="<?php echo $val['field_1'];?>"><?php  echo $val['field_1'];?></option> 
-			<?php } ?>				
-            </select>
-			-->
+	
 		
 		
 		<?php if((Check_Selection_Criteria_Exists('field_1')==true)||(Check_Selection_Criteria_Exists('field_2')==true)||(Check_Selection_Criteria_Exists('field_3')==true)){ ?> <div class="form-group row">	
@@ -2961,7 +3239,7 @@
 								 <input type="hidden" name="field_200" value="all">
 								 <input type="hidden" name="field_201" value="all">  <?php  } ?>
 		
-		
+		-->
 		
 		
 		<script>
@@ -3008,3 +3286,4 @@ function compare()
  		}
  	}
   </script>
+

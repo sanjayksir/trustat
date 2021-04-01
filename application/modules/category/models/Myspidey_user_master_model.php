@@ -51,6 +51,7 @@
 				"customer_microsite_url"=>$frmData['customer_microsite_url'],
 				"days_for_expiry_of_point_credited"=>$frmData['days_for_expiry_of_point_credited'],
 				"days_for_notification_before_expiry_of_lps"=>$frmData['days_for_notification_before_expiry_of_lps'],
+				"loyalty_points_consumer_view_notification_lps"=>$frmData['loyalty_points_consumer_view_notification_lps'],
 				"mobile_no"=>$frmData['user_mobile'],
 				"email_id"=>$frmData['user_email'],
                 "usergroup_id "=>$frmData['user_group'],
@@ -90,7 +91,8 @@
 			    "l_name"=>$frmData['l_name'],
 				"customer_microsite_url"=>$frmData['customer_microsite_url'],
 				"days_for_expiry_of_point_credited"=>$frmData['days_for_expiry_of_point_credited'],
-			    "days_for_notification_before_expiry_of_lps"=>$frmData['days_for_notification_before_expiry_of_lps']
+			    "days_for_notification_before_expiry_of_lps"=>$frmData['days_for_notification_before_expiry_of_lps'],
+			    "loyalty_points_consumer_view_notification_lps"=>$frmData['loyalty_points_consumer_view_notification_lps']
 			
 			);//echo '<pre>';print_r($insertData);exit;
 			if($this->db->insert("backend_user", $insertData)){

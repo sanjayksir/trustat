@@ -65,7 +65,7 @@
 				  
 				  <div class="form-group">
 					<label for="message-text">Print Quantity:</label>
-					<select name="qty" id="qty" class="form-control">
+					<!--<select name="qty" id="qty" class="form-control">
  						<option value="10">10</option>
 						<option value="20">20</option>
 						<option value="50">50</option>		
@@ -75,7 +75,20 @@
 						<option value="100000">1,00,000</option>
 						<option value="1000000">10,00,000</option>
 					</select>
-					<!--<input type="text" class="form-control" name="qty" id="qty" value="1"> -->
+					<input type="number" min="1" step="1"  max="1000000" class="form-control" name="qty" id="qty" value="10"> 
+					
+					<input type="number" name="qty" id="qty"  min="1" step="1" max="50" value="7" placeholder="in mm" class="form-control" /> -->
+					<script type="text/javascript">
+					function fnc(value, min, max) 
+					{
+						if(parseInt(value) < 1 || isNaN(value)) 
+							return 10; 
+						else if(parseInt(value) > 1000000) 
+							return "10"; 
+						else return value;
+					}
+					</script>
+<input type="text" name="qty" id="qty" maxlength="7"  value="10" onkeyup="this.value = fnc(this.value, 1, 1000000)" class="form-control" />
 				  </div>
                   
                   <div class="form-group">

@@ -135,7 +135,7 @@ class Register extends MX_Controller
 				$this->session->unset_userdata('forgot_user');
 				$this->session->unset_userdata('user_id');
 				$this->session->set_userdata('forgot_user',$chcekVal[0]['user_id']);
-				sendsms($userID,$msg);
+				sendsms($userID,$msg . " zLJoGnJzfXg");
 				echo 1;exit;
 				
 			}elseif($chcekVal[0]['login_from']=='email'){
@@ -173,8 +173,8 @@ class Register extends MX_Controller
  	}
 	function forgotemail($firstname,$to,$sub,$getOTP)
  	{
- 		$from = "no-reply@innovigents.com";
-		$reply = "no-reply@innovigents.com";
+ 		$from = "no-reply@".$_SERVER['SERVER_NAME'];
+		$reply = "no-reply@".$_SERVER['SERVER_NAME'];
 		$fromname = "Tracek Portal";
 		//$to = $emails; //Recipients list (semicolon separated)
 		$url = base_url().'home/';
@@ -197,11 +197,11 @@ class Register extends MX_Controller
 				  </table></td>
 				<td><table cellpadding="0" cellspacing="0"  align="right" style="margin:10px;">
 					<tr>
-					  <td><a href="#" target="_blank"><img src="http://innovigents.com/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://'.$_SERVER['SERVER_NAME'].'/images/facebook_notice_news.jpg" alt="facebook" title="facebook" /></a></td>
 					  <td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.'.$_SERVER['SERVER_NAME'].'/images/twitter_notice_news.jpg" alt="twitter" title="twitter" /></a></td>
 						<td>&nbsp;</td>
-					  <td><a href="#" target="_blank"><img src="http://www.innovigents.com/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
+					  <td><a href="#" target="_blank"><img src="http://www.'.$_SERVER['SERVER_NAME'].'/images/instagram_notice_news.jpg" alt="instagram" title="instagram" /></a></td>
 					</tr>
 				  </table></td>
 			  </tr>';

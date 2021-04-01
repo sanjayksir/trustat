@@ -190,7 +190,7 @@
                                                
 												 <td><select name="change_order_status" id="change_order_status" onchange="return change_order_status('<?php echo $listData['order_id'];?>',this.value);">
  													<option value="0" <?php if($listData['order_status']==0){echo 'selected';}?>>Pending</option>
-													<option value="1" <?php if($listData['order_status']==1){echo 'selected';}?>>Success</option>
+													<option value="4" <?php if($listData['order_status']==4){echo 'selected';}?>>Success</option>
 													<option value="2" <?php if($listData['order_status']==2){echo 'selected';}?>>Rejected</option>
 													</select>
 												</td> 
@@ -206,7 +206,7 @@
 												$lable1='';
 												$lable2='';
 												$display		= "none;";
-												if($listData['order_status']==1){
+												if($listData['order_status']==4){
 												 if($user_id==1 && $essentialAttributeArr['delivery_method']==1){
 												 	$display	= "block;";
  												 }else if($user_id>1 && $get_parent_id==1 && $essentialAttributeArr['delivery_method']==2){

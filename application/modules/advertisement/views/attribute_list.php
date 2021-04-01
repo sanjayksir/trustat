@@ -167,11 +167,11 @@
 
                         <span class="bigger-120">
 
-                            <span class="blue bolder">Tracking Portal</span>
+				<span class="blue bolder">Copyright ©</span>
 
-                            <?=date('Y');?>
+				<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
 
-                        </span>
+			</span>
 
                          &nbsp; &nbsp;
 

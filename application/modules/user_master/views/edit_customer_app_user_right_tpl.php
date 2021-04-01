@@ -160,8 +160,6 @@
 		<div class="form-group row">
                 <div class="col-sm-6">
                     <label for="form-field-8">Assigned Plant</label>
-					
-					
                     <select name="plant_id" id="plant_id" class="form-control" required="required">				
 					<option value="<?php echo get_assigned_active_plants_list($get_user_details[0]['user_id']);?>" selected><?php echo assigned_plants($get_user_details[0]['user_id']);?></option>
 					

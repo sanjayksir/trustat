@@ -11,9 +11,6 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
     <?php $this->load->view('../includes/admin_sidebar'); ?>
 	
-	 
-	
-
      <div class="main-content">
 
         <div class="main-content-inner">
@@ -38,7 +35,11 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                     </li>
 
-                    <li class="active">MANAGE ATTRIBUTES</li>
+                    <li class="active">MANAGE PRODUCTS
+					<?php 
+					//echo date("Y-m-d") . "-";
+					//echo (new DateTime("2020-07-20"))->diff(new DateTime(date("Y-m-d")))->days; ?> 
+				   </li>
 
                 </ul><!-- /.breadcrumb -->
 
@@ -58,8 +59,6 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                         </button>
 
-
-
                         <i class="ace-icon fa fa-check green"></i>
 
 
@@ -78,10 +77,19 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                         <div class="widget-box widget-color-blue">
                             <div class="widget-header widget-header-flat">
-                                <h5 class="widget-title bigger lighter">MANAGE PRODUCTS</h5>
-                                <div class="widget-toolbar">
-                                    <a href="<?php echo base_url('product/add_product') ?>" class="btn btn-xs btn-warning" title="Add Product">Add New Product<?php //echo $label; ?> </a>
+                                <h5 class="widget-title bigger lighter">MANAGE PRODUCTS<?php //echo getMaxPackagingLevelProductByProductID(230); ?> <?php if($this->session->userdata('admin_user_id')==1){ echo "for " . getUserFullNameById($this->uri->segment(3)); }?>
+								
+								
+							</h5>
+								<?php if($this->session->userdata('admin_user_id')==1){ ?>
+								<div class="widget-toolbar">
+                                    <a href="<?php echo base_url('product/add_product/'.$this->uri->segment(3)); ?>" class="btn btn-xs btn-warning" title="Add Product">Add New Product<?php //echo $label; ?> </a>
                                 </div>
+								<?php }else{ ?>
+                                <div class="widget-toolbar">
+                                   <!-- <a href="<?php echo base_url('product/add_product'); ?>" class="btn btn-xs btn-warning" title="Add Product">Add New Product<?php //echo $label; ?> </a>-->
+                                </div>
+								<?php } ?>
                             </div>
 							
                             <div class="widget-body">
@@ -108,18 +116,21 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                 </div>
 
                       <!--------------- Search Tab start----------------->
+					  <div style="overflow-x:auto;">
                         <table id="dynamic-table" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>S No.</th>
+                                    <th>#</th>
                                     <th class="hidden-480">Product Name</th>
                                     <th class="hidden-480">Product SKU</th>
                                     <th class="hidden-480">Product Industry</th>
                                     <!-- <th>Created By</th>-->
                                     <th>Creation Date</th>
-                                    <th>Edit/Delete Product </th>
-                                    <th>View</th>
+									<?php if($this->session->userdata('admin_user_id')==1){ ?>
+                                    <th>Edit/Delete Product </th>   
                                     <th>Feedback Questions (View/Edit/Add)</th>
+									<?php } ?>
+									<th>View Product</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -143,9 +154,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                          ?>
                                 <tr id="show<?php echo $attr['id'];?>">
                                 <td><?php echo $sno; ?></td>
-                                <td><?php echo $attr['product_name']; ?></td>
-                                <td><?php echo $attr['product_sku']; ?></td>
-                                <td><div style="word-wrap:break-word; width:200px;"> 
+                                <td><div style="word-wrap:break-word; width:200px;"><?php echo $attr['product_name']; ?></div></td>
+                                <td><div style="word-wrap:break-word; width:100px;"><?php echo $attr['product_sku']; ?></div></td>
+                                <td><div style="word-wrap:break-word; width:300px;"> 
                                 <?php $industryList =  get_industry_by_id(implode(',',json_decode($attr['industry_data'],true)));
                                    $indus='';
                                    $i=0;
@@ -160,49 +171,55 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                                    ?></div>
                                 </td>
                                               <!--<td><?php echo getUserFullNameById($attr['created_by']);?></td>-->
-                                                 <td><?php echo(date('j M Y H:i:s D', strtotime($attr['created_date'])));  ?></td>
-                                                  <td><form name="frm_<?php echo $attr['id'];?>" id="frm_<?php echo $attr['id'];?>" method="post" action="">
+                                                 <td><div style="word-wrap:break-word; width:170px;"><?php echo(date('j M Y H:i:s D', strtotime($attr['created_date'])));  ?></div></td>
+												 <?php if($this->session->userdata('admin_user_id')==1){ ?>
+                                                  <td><div style="word-wrap:break-word; width:200px;">
+												  <form name="frm_<?php echo $attr['id'];?>" id="frm_<?php echo $attr['id'];?>" method="post" action="">
  														<div class="hidden-sm hidden-xs btn-group">
-   															<a href="<?php echo base_url();?>product/update_product/<?php echo $attr['id'];?>" title="Edit Product"  class="btn btn-xs btn-info">
+															<a href="<?php echo base_url();?>product/update_product/<?php echo $attr['id'];?>" title="Edit Product"  class="btn btn-xs btn-info">
  																<i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
  															</a>
 															
 															<a href="<?php echo base_url();?>product/add_product_attributes/<?php echo $attr['id'];?>" title="Manage Product Attributes"  class="btn btn-xs btn-info">
- 																&nbsp;<i class="ace-icon fa fa-plus-square bigger-120"></i>
+ 																<i class="ace-icon fa fa-plus-square bigger-120"></i>
  															</a>
-															 &nbsp;
-															 <a title="add media" href="<?php echo base_url();?>backend/product_attrribute/att_detail/<?php echo $attr['id'];?>" class="btn btn-xs btn-info">
- 																<i class="ace-icon fa fa-camera-retro"></i>
+															<a href="<?php echo base_url();?>backend/product_attrribute/att_detail/<?php echo $attr['id'];?>" title="Product Loyalty Points and Feedback Question Quantity"  class="btn btn-xs btn-info">
+ 																<i class="ace-icon fa fa-briefcase bigger-120"></i>
  															</a>
-															&nbsp;
+															
+															 <a title="Product Media Management" href="<?php echo base_url();?>backend/product_attrribute/att_detail/<?php echo $attr['id'];?>" class="btn btn-xs btn-info">
+ 																<i class="ace-icon fa fa-cloud-upload"></i>
+ 															</a>
+															
 															<a href="<?php echo base_url();?>product/manage_packaging/<?php echo $attr['id'];?>" title="Manage Packaging"  class="btn btn-xs btn-info">
  																<i class="fa fa-sort-numeric-asc bigger-120"></i>
  															</a>
+															
+															<!--<a href="<?php echo base_url();?>product/ask_product_referral_response_message_options/<?php echo $attr['id'];?>" title="Referral response message Options"  class="btn btn-xs btn-info">
+ 																<i class="ace-icon glyphicon glyphicon-share"></i>
+ 															</a>-->
 															
   															<a href="javascript:void(0);" title="Delete Product" class="btn btn-xs btn-danger" onclick="delete_attr('<?php echo $attr['id'];?>');">
  																<i class="ace-icon fa fa-trash-o bigger-120"></i>
  															</a>
                                                             <input type="hidden" name="del_submit" value="<?php echo $attr['id'];?>" />
+															
  
 														</div>
 														</form>
+														</div>
  													</td> 
+                                                    
                                                     <td> 
- 														<div class="hidden-sm hidden-xs btn-group">
-   															&nbsp;&nbsp; <a title="View" href="<?php echo base_url();?>backend/product_attrribute/view/<?php echo $attr['id'];?>" class="btn btn-xs btn-info">
- 																<i class="fa fa-eye" aria-hidden="true"></i>
-
- 															</a>
- 														</div>
-  													</td>
-                                                    <td> 
- 														<div class="hidden-sm hidden-xs btn-group">
+ 														<div style="word-wrap:break-word; width:250px;">
 														<!--
    															<a title="Product Description Feedback" href="<?php //echo base_url();?>product/ask_feedback/<?php //echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa 	fa-barcode" aria-hidden="true"></i></a> -->
 															<a title="Product Image Feedback" href="<?php echo base_url();?>product/ask_image_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa 	fa-file-image-o" aria-hidden="true"></i></a>
 															<a title="Product Video Feedback" href="<?php echo base_url();?>product/ask_video_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-video-camera" aria-hidden="true"></i> </a>
-															<a title="Product Audio Feedback" href="<?php echo base_url();?>product/ask_audio_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-bullhorn" aria-hidden="true"></i> </a>&nbsp;
+															<a title="Product Audio Feedback" href="<?php echo base_url();?>product/ask_audio_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-bullhorn" aria-hidden="true"></i> </a>
+															
 															<a title="Product PDF Feedback" href="<?php echo base_url();?>product/ask_pdf_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-book" aria-hidden="true"></i> </a>
+															
 															<a title="Product Advertisement Feedback" href="<?php echo base_url();?>product/ask_pushed_ad_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-globe " aria-hidden="true"></i> </a>
 															<a title="Product Survey Feedback" href="<?php echo base_url();?>product/ask_survey_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-laptop" aria-hidden="true"></i> </a>
 															
@@ -215,8 +232,26 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 															-->
 															<a title="Product Demo Video Feedback" href="<?php echo base_url();?>product/ask_demo_video_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-video-camera" aria-hidden="true"></i> </a>
 															<a title="Product Demo Audio Feedback" href="<?php echo base_url();?>product/ask_demo_audio_feedback/<?php echo $attr['id'];?>" class="btn btn-xs btn-info"><i class="fa fa-bullhorn" aria-hidden="true"></i> </a>
+															
  														</div>
   													</td>
+												 <?php } ?>
+													<td> 
+ 														<div style="word-wrap:break-word; width:140px;">
+															<a title="View Product Details" href="<?php echo base_url();?>backend/product_attrribute/view/<?php echo $attr['id'];?>" class="btn btn-xs btn-info">
+ 																<i class="fa fa-eye" aria-hidden="true"></i>
+ 															</a>
+															 <?php if($this->session->userdata('admin_user_id')==1){ ?>
+															<a title="View Report Level 0" href="<?php echo base_url();?>reports/barcode/basic_customer_report_level0_product/<?php echo $attr['id'];?>" class="btn btn-xs btn-info">
+ 																L0 <i class="fa fa-print" aria-hidden="true"></i>
+ 															</a>
+															<a title="View Report Level 1" href="<?php echo base_url();?>reports/barcode/basic_customer_report_level1_product/<?php echo $attr['id'];?>" class="btn btn-xs btn-info">
+ 																L1 <i class="fa fa-print" aria-hidden="true"></i>
+ 															</a>
+														<?php	} ?>
+ 														</div>														
+  													</td>
+													
 													<!--<td><input type="checkbox" name="assignProduct[]" class="assignProduct" /></td>-->
 
                                              </tr>
@@ -231,6 +266,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                                     </tbody>
                                 </table>
+								</div> 
                             <div class="row paging-box">
                             <?php echo $links ?>
                             </div>    
@@ -248,12 +284,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="footer-content">
 
                         <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

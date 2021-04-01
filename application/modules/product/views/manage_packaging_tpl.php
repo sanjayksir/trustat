@@ -40,7 +40,13 @@ if(!empty($isOtherIndustry)){
       <div class="page-content">
         <div class="row">
           <div class="col-xs-12">
-            <div class="row"><div style="clear:both;"><?php echo anchor('product/list_product', 'List Product',array('class' => 'btn btn-primary pull-right')); ?></div>
+            <div class="row">
+			<?php if($this->session->userdata('admin_user_id')==1){ ?>
+			<div style="clear:both;"><?php echo anchor('product/list_product/'.get_customer_id_by_product_id($this->uri->segment(3)), 'List Product',array('class' => 'btn btn-primary pull-right')); ?></div>
+			<?php }else{ ?>
+			<div style="clear:both;"><?php echo anchor('product/list_product', 'List Product',array('class' => 'btn btn-primary pull-right')); ?></div>
+			<?php } ?>
+			
               <div class="col-xs-12">
                 <div class="accordion-style1 panel-group" id="accordion">
                   <div class="">
@@ -56,7 +62,7 @@ if(!empty($isOtherIndustry)){
 		     <div class="col-sm-6">
             <?php $userId 	=$this->session->userdata('admin_user_id');
 			if($userId==1){?>
-				  <label for="form-field-9">Assined to CCC Admin</label>
+				  <label for="form-field-9">Assigned to CCC Admin</label>
 			 <?php $ccadmin = getParentUsers('','1');?>
              <select class="form-control" placeholder="Select Admin" id="ccadmin" name="ccadmin">
 			 <option value="">-Select CCC Admin-</option>
@@ -775,7 +781,8 @@ if(!empty($isOtherIndustry)){
 				processData: false, // NEEDED, DON'T OMIT THIS	
  				success: function (msg) { 
 					if(parseInt(msg)==1){
-						window.location.href="<?php echo base_url().'product/list_product';?>";
+						//window.location.href="<?php echo base_url().'product/list_product';?>";
+						 window.location.href="<?php if($this->session->userdata('admin_user_id')==1){ echo base_url().'product/list_product/'.get_customer_id_by_product_id($this->uri->segment(3)); }else { echo base_url().'product/list_product'; }?>";  
 					}
 				}
 			});

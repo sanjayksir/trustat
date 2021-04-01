@@ -89,10 +89,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 								
 								</h5>
                                 <div class="widget-toolbar">
-                                    <a href="<?php echo base_url('/backend/dashboard') ?>" class="btn btn-xs btn-warning" title="Add Product">Back to Home <?php //echo $label; ?> </a>
-									 <?php
-								
-									 if($user_id>1) {  ?><a href="<?php echo base_url('textmessages/purchase_points') ?>" class="btn btn-xs btn-warning" title="Add Product">Purchase More Points <?php //echo $label; ?> </a> <?php }  ?>
+                                    <a href="<?php echo base_url('/backend/dashboard') ?>" class="btn btn-xs btn-warning" title="Add Product">Back to Home  </a>
+			<?php
+			 if($user_id>1) {  ?><a href="<?php echo base_url('textmessages/purchase_points') ?>" class="btn btn-xs btn-warning" title="Add Product">Purchase More Points  </a> <?php }  ?>
                                 </div>
                             </div>
 							
@@ -219,12 +218,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="footer-content">
 
                         <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

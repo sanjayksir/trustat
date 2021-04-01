@@ -91,7 +91,7 @@
                                                     ?>
            <tr id="show<?php echo $key; ?>">
                                                        <td><?php echo $sno; ?></td>
-                                                       <td><?php echo $listData['barcode_qr_code_no']; ?>--<?php echo get_product_id_by_product_code($listData['barcode_qr_code_no']); ?></td>
+                                                       <td><?php echo $listData['barcode_qr_code_no']; ?><?php //echo get_product_id_by_product_code($listData['barcode_qr_code_no']); ?></td>
                                                             <td><?php echo $listData['product_name']; ?></td>
                                                             <td><?php echo $listData['user_name']; ?></td>
                                                             <td><?php echo $listData['location_name']; ?></td>
@@ -125,7 +125,7 @@
                                     <?php echo $links ?>
                                     </div>                
   								<!-- PAGE CONTENT ENDS -->
-							</div><!-- /.col -->
+							</div><!-- /.col  -->
 						</div><!-- /.row -->
 					</div><!-- /.page-content -->
 				</div><div class="footer">

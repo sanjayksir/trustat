@@ -19,7 +19,7 @@
 		 <input name="ProductID" id="ProductID" type="hidden" value="<?php echo $dt['product_id']; ?>" class="form-control">
 		 <div class="form-group row">
 			<div class="col-sm-12">
-			<label for="form-field-8">Question Type-<?php //echo $this->uri->segment(3); ?></label> <?php //echo basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)); ?>
+			<label for="form-field-8">Question Type<?php //echo $this->uri->segment(3); ?></label> <?php //echo basename(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH)); ?>
 			<select name="QuestionType" id="questiontype" class="form-control">
               <option value="0">-Select Question Type-</option>
                      <!--<option value="Product Description Feedback">Product Description Feedback</option>-->

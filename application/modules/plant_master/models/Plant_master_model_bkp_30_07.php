@@ -103,7 +103,7 @@ class plant_master_model extends CI_Model {
         $mail_conf = array(
             'subject' => $subject,
             'to_email' => $email,
-            'from_email' => 'admin@innovigents.com',
+            'from_email' => 'admin@'.$_SERVER['SERVER_NAME'],
             'from_name' => 'Admin',
             'body_part' => $body
         );

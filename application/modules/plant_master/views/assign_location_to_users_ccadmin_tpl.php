@@ -76,7 +76,7 @@
 
                     <!--left end---->
 
-                    <div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/list_assigned_locations_user" class="btn btn-primary pull-right" title="List Assign Locations to Locations Controllers">List Assign Locations to Locations Controllers</a></div>
+   <div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/list_assigned_locations_user/<?php echo $this->uri->segment(3); ?>" class="btn btn-primary pull-right" title="List Assign Locations to Locations Controllers">List Assign Locations to Locations Controllers</a></div>
 
                     <div class="col-xs-12">
 
@@ -127,13 +127,14 @@ if( $this->uri->segment(3)!=''){
 		 
 		<div class="form-group row">
 			<div class="col-sm-4">
-			<label for="form-field-8">Select CCC admin User</label>
+			<label for="form-field-8">Select CCC Admin</label>
             <select class="form-control" name="user" id="user" onchange="return get_locations_controller(this.value),get_locations(this.value);;">
 			<?php if($SelectDD!=''){?><option value="">-Select Locations Controller-</option>
             <?php }
  			//$plant_data = get_all_plants($user_id);
  			foreach($UserData as $res){?>
-            <option value="<?php echo $res['user_id'];?>" <?php if($this->uri->segment(3)==$res['user_id']){echo 'selected';}?>><?php echo ucfirst($res['user_name']);?></option>
+			<option value="" selected>-Select CCC Admin-</option>			
+            <option value="<?php echo $res['user_id'];?>" <?php //if($this->uri->segment(3)==$res['user_id']){echo 'selected';}?>><?php echo ucfirst($res['user_name']);?></option>
  			<?php }?>
             </select> 
 			</div>
@@ -384,7 +385,7 @@ $.ajax({
 				$('#ajax_msg').text("Locations Assigned Successfully!").css("color","green").show();
 				$('#blah').attr('src', '').hide();
 				$('#user_frm')[0].reset(); 
-				  window.location.href="<?php echo base_url(); ?>plant_master//list_assigned_locations_user";						
+				  window.location.href="<?php echo base_url(); ?>plant_master/list_assigned_locations_user/<?php echo $this->uri->segment(3); ?>";						
 			}
 			 
 		},

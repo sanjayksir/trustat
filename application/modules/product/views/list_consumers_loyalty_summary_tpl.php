@@ -2,7 +2,11 @@
 
 <?php //echo '<pre>';print_r($product_list);exit;
 $this->load->view('../includes/admin_top_navigation'); ?>
-
+<!-- Export to Excel -->
+<script src="<?php echo base_url(); ?>assets/export_to_excel/jquery.min.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/export_to_excel/tableExport.js"></script>
+<script type="text/javascript" src="<?php echo base_url(); ?>assets/export_to_excel/jquery.base64.js"></script>
+<!-- /Export to Excel -->
 <div class="main-container ace-save-state" id="main-container">
 
     <script type="text/javascript">
@@ -34,11 +38,11 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                     <li>
 
-                        <a href="#">Loyalty Mgmt</a>
+                        <a href="#">Loyalty Management</a>
 
                     </li>
 
-                    <li class="active">Consumer Loyalty Mgmt</li>
+                    <li class="active">Consumer Loyalty Management</li>
 
                 </ul><!-- /.breadcrumb -->
 
@@ -73,63 +77,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                 
 
                  <div class="row">
- <?php 
- /*
-                   mysql_connect("localhost", "root", "");
-				mysql_select_db("trackingportaldb");								
-$query  = "SELECT params FROM consumer_passbook WHERE consumer_id='65'";
-$result = mysql_query($query) or trigger_error(mysql_error().$query);
-
-$row = mysql_fetch_array($result);
-
-//and finally
-//$fieldname = "customer_loyalty_type";
-$retval = $row[6];
-
-
-
-//$dt = $product_data[0];
-$attr_list = implode(',',json_decode($retval,true));
-echo $retval . "-";
-*/
-
-
-				 ?>
-				 
-				 <?php /*
-$link = mysqli_connect("localhost", "root", "", "trackingportaldb"); 
-  
-if($link === false){ 
-    die("ERROR: Could not connect. " 
-                . mysqli_connect_error()); 
-} 
-  
-$sql = "SELECT * FROM consumer_passbook WHERE consumer_id='65' AND transaction_lr_type = 'Loyalty'"; 
-if($res = mysqli_query($link, $sql)){ 
-    if(mysqli_num_rows($res) > 0){ 
-       
-        while($row = mysqli_fetch_array($res)){ 
-            
-                echo "-" . $row['consumer_id'] . "-"; 
-                echo "-" . $row['points'] . "-"; 
-                 //$row['params']
-						$arr = json_decode($row['params'], true);					
-				
-				echo "-" . $arr["customer_loyalty_type"] . "-<br>"; 
-        } 
-        mysqli_free_result($res); 
-    } else{ 
-        echo "No Matching records are found."; 
-    } 
-} else{ 
-    echo "ERROR: Could not able to execute $sql. "  
-                                . mysqli_error($link); 
-} 
-  
-mysqli_close($link); 
-*/
-?> 
-			 <table class="table table-striped table-bordered table-hover">
+ 			 <table class="table table-striped table-bordered table-hover">
                     <thead>
                            <tr>
 								<th><span class="blue bolder">Total Numer of Customers</span></th>
@@ -177,6 +125,8 @@ mysqli_close($link);
                                                 </select>
                                             Records
                                             </label>
+		<label><a href="#" onclick="$('#dynamic-table').tableExport({type:'excel',escape:'false'});"> <img src="<?php echo base_url();?>assets/images/excel_xls.png" width="24px" style="margin-left:100px"> Export to Excel</a></label>
+                                                                                   
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="input-group">
@@ -191,20 +141,24 @@ mysqli_close($link);
                                 </div>
 
                       <!--------------- Search Tab start----------------->
+					  <div style="overflow-x:auto;">
                         <table id="dynamic-table" class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
 														<th>S No.</th>
 													    <th>Consumer Name</th>
+														<th>Consumer ID</th>
 														<th>Phone Number</th>
-														<th>Total HLP Earned</th>
-														<th>Total HLP Redeemed</th>
-														<th>Total HLP O/S</th>
+														<th>Total TLP Earned</th>
+														<th>Total TLP Redeemed</th>
+														<th>Total TLP Expired</th>
+														<th>Total TLP O/S</th>
+														<th>TLP Consumer Passbook</th>
 														<th>Total BLP Earned</th>
 														<th>Total BLP Redeemed</th>
+														<th>Total BLP Expired</th>
 														<th>Total BLP O/S</th>
-														<th>HLP Consumer Passbook & Feedback Report data</th>
-														<th>BLP Consumer Passbook & Feedback Report data</th>
+														<th>BLP Consumer Passbook</th>
 
                                 </tr>
                             </thead>
@@ -221,21 +175,16 @@ mysqli_close($link);
                                 <tr id="show<?php echo $attr['id'];?>">
                                 <td><?php echo $sno; ?></td>
                                 <td><?php echo $attr['user_name']; ?></td>
+								<td><?php echo $attr['id']; ?></td>
                                 <td><?php echo $attr['mobile_no']; ?></td>
                                 <td><?php //echo base_url(); 
 								//echo "<br>"; 
-								if(base_url()=='http://localhost/trackingportal/') {									
-							mysql_connect("localhost", "root", "");
-								mysql_select_db("trackingportaldb");								
-								} else {								
-								mysql_connect("localhost", "tpdbuser", "india@123");
-								mysql_select_db("trackingprortaldb");
-								}
+								include('url_base_con_db2.php');
 												
 							//$character = json_decode($attr['params']);
 							//$searchdata = $character->customer_loyalty_type;
 							//echo $searchdata;
-		$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND customer_loyalty_type = 'TRUSTAT' AND transaction_lr_type = 'Loyalty'";
+		$some_q = "SELECT SUM(points) AS `points` FROM loylty_points where user_id = '".$attr['id']."' AND customer_loyalty_type = 'TRUSTAT' AND loyalty_points_status = 'Earned'";
 								$results = mysql_query($some_q) or die(mysql_error());
 								while($row = mysql_fetch_array($results)){
 								$TE_Points = $row['points'];							
@@ -243,44 +192,56 @@ mysqli_close($link);
 								//echo $query_getShows;								
 								} ?>
 								</td>
-								<td><?php $some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."'  AND customer_loyalty_type = 'TRUSTAT' AND transaction_lr_type = 'Redemption'";
-								$results = mysql_query($some_q) or die(mysql_error());
-								while($row = mysql_fetch_array($results)){
-								$TR_Points = $row['points'];
-								echo $TR_Points;			
+								<td><?php $some_q1 = "SELECT SUM(points) AS `points` FROM loylty_points where user_id = '".$attr['id']."'  AND customer_loyalty_type = 'TRUSTAT' AND loyalty_points_status = 'Redeemed'";
+								$results1 = mysql_query($some_q1) or die(mysql_error());
+								while($row1 = mysql_fetch_array($results1)){
+								$TR_Points1 = $row1['points'];
+								echo $TR_Points1;			
 								} ?>
 								</td>
-								<td><?php $TBalance_Points = $TE_Points - $TR_Points;												 
+								<td><?php $some_q2 = "SELECT SUM(points) AS `points` FROM loylty_points where user_id = '".$attr['id']."'  AND customer_loyalty_type = 'TRUSTAT' AND loyalty_points_status = 'Expired'";
+								$results2 = mysql_query($some_q2) or die(mysql_error());
+								while($row2 = mysql_fetch_array($results2)){
+								$TR_Points2 = $row2['points'];
+								echo $TR_Points2;			
+								} ?>
+								</td>
+								<td><?php $TBalance_Points = $TE_Points - ($TR_Points1 + $TR_Points2);												 
 												 echo $TBalance_Points; ?>
 								</td>
+								<td><?php echo anchor("product/list_view_consumer_passbook/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> View Passbook</i>', array('class' => 'btn btn-xs btn-info','title'=>' View Passbook')); ?>  
+										<?php //echo anchor("product/list_view_consumer_feedback_details/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> Feedback Report data</i>', array('class' => 'btn btn-xs btn-info','title'=>' Feedback Report data')); ?>
+										</td>
 								 <td><?php //echo base_url(); 
 								
 								// MySQL connect info
-								//mysql_connect("localhost", "tpdbuser", "india@123");
-								//mysql_select_db("trackingprortaldb");								
-								//mysql_connect("localhost", "root", "");
-								//mysql_select_db("trackingportaldb");								
-								$some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND customer_loyalty_type = 'Brand' AND transaction_lr_type = 'Loyalty'";
-								$results = mysql_query($some_q) or die(mysql_error());
-								while($row = mysql_fetch_array($results)){
-								$TE_PointsBLP  = $row['points'];							
-								echo $TE_PointsBLP ;							
+															
+								$some_q3 = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND customer_loyalty_type = 'Brand' AND transaction_lr_type = 'Loyalty'";
+								$results3 = mysql_query($some_q3) or die(mysql_error());
+								while($row3 = mysql_fetch_array($results3)){
+								$TE_PointsBLP3  = $row3['points'];							
+								echo $TE_PointsBLP3 ;							
 								} ?>
 								</td>
-								<td><?php $some_q = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND customer_loyalty_type = 'Brand' AND transaction_lr_type = 'Redemption'";
-								$results = mysql_query($some_q) or die(mysql_error());
-								while($row = mysql_fetch_array($results)){
-								$TR_PointsBLP = $row['points'];
-								echo $TR_PointsBLP ;			
+								<td><?php $some_q4 = "SELECT SUM(points) AS `points` FROM consumer_passbook where consumer_id = '".$attr['id']."' AND customer_loyalty_type = 'Brand' AND transaction_lr_type = 'Redemption'";
+								$results4 = mysql_query($some_q4) or die(mysql_error());
+								while($row4 = mysql_fetch_array($results4)){
+								$TR_PointsBLP4 = $row4['points'];
+								echo $TR_PointsBLP4 ;			
 								} ?>
 								</td>
-								<td><?php $TBalance_PointsBLP  = $TE_PointsBLP  - $TR_PointsBLP ;											echo $TBalance_PointsBLP ; // Sanjay ?>
+								<td><?php $some_q5 = "SELECT SUM(points) AS `points` FROM loylty_points where user_id = '".$attr['id']."' AND customer_loyalty_type = 'Brand' AND loyalty_points_status = 'Expired'";
+								$results5 = mysql_query($some_q5) or die(mysql_error());
+								while($row5 = mysql_fetch_array($results5)){
+								$TR_PointsBLP5 = $row5['points'];
+								echo $TR_PointsBLP5 ;			
+								} ?>
+								</td>
+								<td><?php $TBalance_PointsBLP  = $TE_PointsBLP3  - ($TR_PointsBLP4 + $TR_PointsBLP5);											echo $TBalance_PointsBLP ; // Sanjay ?>
 								</td> 
-									<td><?php echo anchor("product/list_view_consumer_passbook/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> View Passbook</i>', array('class' => 'btn btn-xs btn-info','title'=>' View Passbook')); ?>  
-										<?php echo anchor("product/list_view_consumer_feedback_details/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> Feedback Report data</i>', array('class' => 'btn btn-xs btn-info','title'=>' Feedback Report data')); ?>
-										</td>
+									
 										<td><?php echo anchor("product/list_view_blp_consumer_passbook/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> View Passbook</i>', array('class' => 'btn btn-xs btn-info','title'=>' View Passbook')); ?>  
-										<?php echo anchor("product/list_view_consumer_feedback_details/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> Feedback Report data</i>', array('class' => 'btn btn-xs btn-info','title'=>' Feedback Report data')); ?>
+										<?php //echo anchor("product/list_view_consumer_feedback_details/".$attr['id'], '<i class="ace-icon fa fa-eye bigger-130"> Feedback Report data</i>', array('class' => 'btn btn-xs btn-info','title'=>' Feedback Report data')); ?>
 										</td>
                                              </tr>
 
@@ -294,6 +255,7 @@ mysqli_close($link);
 
                                     </tbody>
                                 </table>
+								</div>
                             <div class="row paging-box">
                             <?php echo $links ?>
                             </div>    
@@ -311,12 +273,9 @@ mysqli_close($link);
                     <div class="footer-content">
 
                         <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

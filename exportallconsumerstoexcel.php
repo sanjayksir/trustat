@@ -4,7 +4,7 @@ $DB_Server = "localhost"; //MySQL Server
 /* 
 $DB_Username = "root"; //MySQL Username     
 $DB_Password = "";             //MySQL Password     
-$DB_DBName = "trackingportaldb";         //MySQL Database Name  
+$DB_DBName = "trackingportaldb2";         //MySQL Database Name  
 */
 $DB_Username = "tpdbuser"; //MySQL Username     
 $DB_Password = "india@123";             //MySQL Password     

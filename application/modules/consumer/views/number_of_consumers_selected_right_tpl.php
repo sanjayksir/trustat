@@ -26,7 +26,7 @@
 			  ?>
 				<form name="user_frm" id="user_frm" action="#" method="POST">
 		<input type="hidden" name="unique_system_selection_criteria_id" id="unique_system_selection_criteria_id" value="<?php echo  $unique_system_selection_criteria_id; ?>" />
-		<input type="hidden" name="number_of_consumers_selected" id="number_of_consumers_selected" value="<?php echo  $number_of_consumers_selected; ?>" />
+		<input type="hidden" name="number_of_consumers_selected" id="number_of_consumers_selected" value="<?php echo $number_of_consumers_selected; ?>" />
         <div class="widget-main">
 		
 		<div class="form-group row">
@@ -57,7 +57,7 @@
 			<?php echo $get_user_details[0]['unique_system_selection_criteria_id'];?>
 		 		
 			</div>
-			
+			<?php if($get_user_details[0]['consumer_age_option']=="SpecifyAge"){ ?>
 			<div class="col-sm-4">
 			  <label for="form-field-8"><b>Minimum Age of the consumer in Years</b></label> :
              <?php echo $get_user_details[0]['consumer_min_age'];?>
@@ -67,7 +67,12 @@
 			  <label for="form-field-8"><b>Maximum Age of the consumer in Years</b></label> :
              <?php echo $get_user_details[0]['consumer_max_age'];?>
 			</div>
-
+			<?php }else{ ?>			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Age</b></label> :
+			  Age filter is not applied. 
+			</div>
+			<?php } ?>
 		</div>
 		
 		<div class="form-group row">
@@ -86,7 +91,7 @@
 			<?php echo $get_user_details[0]['city_registration'];?>
 			</div>
 		</div>
-		
+		<!--
 			<div class="form-group row">			
 			<div class="col-sm-4">
 			  <label for="form-field-8">Earned Loyalty Points</label> : <?php echo $get_user_details[0]['earned_loyalty_points'];?>		
@@ -173,7 +178,7 @@
 			</div>			
 		</div>
 		
-		
+		-->
 
           <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
 

@@ -66,7 +66,7 @@
 			     	 $("#reported_by").html(resDataRESULT.resData.user_name); 
 					 //$('#notifications-box').css({'position':'absolute', 'width':'380px'}).animate({"left":"100%"});
 
-					 $('#notifications-box').show('slow').delay(7000);;
+					 $('#notifications-box').show('slow').delay(7000);
 
 					 update_notification(resDataRESULT.resData.id);
 					  $('#notifications-box').hide('slow');

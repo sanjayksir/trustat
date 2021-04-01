@@ -186,7 +186,7 @@
 												<td>
                                                 <!--<a class="btn btn-primary pull-right modellink" data-toggle="modal" href="#printMyModal" id="" onclick="return print_order('<?php echo $listData['order_id'];?>');">Print</a>-->
                                                 <span id="order_status_<?php echo $listData['order_id'];?>"> 
-												<?php if($listData['order_status']==1){?>
+												<?php if($listData['order_status']==4){?>
  												<!--<select name="print_order" id="print_order_<?php echo $listData['order_id'];?>">
  													<option value="1">Bar Code</option>
 													<option value="2">Q.R Code</option>

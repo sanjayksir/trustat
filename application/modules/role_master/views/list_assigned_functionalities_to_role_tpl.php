@@ -44,7 +44,8 @@
                             <div class="widget-header widget-header-flat">
                                 <h5 class="widget-title bigger lighter">List Assigned Functionalities to Role </h5>
                                 <div class="widget-toolbar">
-                                    <a href="<?php echo base_url('role_master/assign_functionalities_to_role') ?>" class="btn btn-xs btn-warning" title="Assign Plant to Plant Controller"> Assign Functionalities to Role </a>
+								<?php //echo $this->uri->segment(3); ?>
+                                    <a href="<?php echo base_url('role_master/assign_functionalities_to_role'); ?>/<?php echo $this->uri->segment(3); ?>" class="btn btn-xs btn-warning" title="Assign Plant to Plant Controller"> Assign Functionalities to Role </a>
                                 </div>
                             </div>
                             <div class="widget-body">
@@ -72,21 +73,25 @@
                                 <table id="missing_people" class="table table-striped table-bordered table-hover">
                                     <thead>
                                         <tr>
-                                            <th>Sno</th>
+                                            <th>Sno <?php //echo $this->uri->segment(3); ?></th>
                                             <th>Role Name</th>
-											 <th>Total Users</th>
-											 <th>Created</th>
-											 <th>Remained</th>
-                                            <th>Assign Functionalities</th>
+											 <th>Users Created</th>
+											 
+                                             <th>Assign Functionalities</th>
                                             <!--<th>Updated on</th>-->
-                                           <th>Edit</th>
+                                             <th>Edit</th>
+											 <th>Assign Loyalty</th>
                                         </tr>
                                     </thead>
                                     <tbody>
 
                                         <?php
                                         $i = 0;
-                                        $page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+                                        if($this->session->userdata('admin_user_id')==1){
+											$page = !empty($this->uri->segment(4))?$this->uri->segment(4):0;
+										}else{
+											$page = !empty($this->uri->segment(3))?$this->uri->segment(3):0;
+										}
                                         $sno =  $page + 1;
                                         if (count($plant_data) > 0) {
                                             foreach ($plant_data as $listData) {
@@ -103,11 +108,16 @@
                                                 <tr id="show<?php echo $listData['id']; ?>">
                                                     <td><?php echo $sno; ?></td>
                                                     <td><?php echo $listData['role_name_value']; ?></td>
-													<td><?php $required_users_for_the_role = get_required_users_for_the_role($listData['id']); echo $required_users_for_the_role; ?>
-													</td>
-													<td><?php echo get_created_users_for_the_role($listData['id']); ?></td>
-													<td><?php echo $remained = $required_users_for_the_role-get_created_users_for_the_role($listData['id']); ?></td>
-                                                    <td><?php $plants = get_assigned_functionalities_to_role_list($listData['id']);
+										<td><?php echo get_created_users_for_the_role($listData['id']); ?></td>
+													<!--<td><?php echo get_created_users_for_the_role($listData['id']); ?></td>
+													<td><?php echo $remained = $required_users_for_the_role-get_created_users_for_the_role($listData['id']); ?></td>-->
+                                                    <td><?php 
+													if($this->session->userdata('admin_user_id')==1){
+														$CustomerId = $this->uri->segment(3);
+													}else{
+														$CustomerId = $this->session->userdata('admin_user_id');
+													}
+													$plants = get_assigned_functionalities_to_role_list($listData['id'], $CustomerId);
 
 //echo $listData['id'];
                                                 echo get_functionality_name_by_id($plants);
@@ -117,11 +127,24 @@
                                                    <td>
                                                         <div class="hidden-sm hidden-xs action-buttons">
                                                             <!--<a href="<?php echo base_url() . 'plant_master/view_plant/' . $listData['user_id']; ?>" class="blue" target="_blank" title="View"><i class="ace-icon fa fa-search-plus bigger-130"></i></a>-->
-        <?php echo anchor("role_master/assign_functionalities_to_role/" . $listData['id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green', 'title' => 'Edit')); ?>
+        <?php echo anchor("role_master/assign_functionalities_to_role/" . $this->uri->segment(3) . '/'. $listData['id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'green', 'title' => 'Edit')); ?>
                                                            <!-- <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['user_id']; ?>" value="<?php echo $status; ?>" onclick="return change_status('<?php echo $listData['user_id']; ?>', this.value, '<?php echo $plants; ?>');" />-->
 
                                                         </div>
 
+                                                    </td>
+													<td>
+                                                        <div class="hidden-sm hidden-xs action-buttons">
+						<?php $role_id = $listData['id']; 
+							  $customer_id 	= $this->uri->segment(3);;
+						$CLPAssignId = getAssignIdByCustomerIDNRoleID($customer_id, $role_id);
+						if($CLPAssignId != ''){
+							echo anchor("plant_master/edit_assign_loyalty_activity_role/" . $CLPAssignId .'/'. $customer_id, '<i class="ace-icon fa fa-pencil-square-o bigger-130"></i>', array('class' => 'green', 'title' => 'Edit'));
+						}else{
+						echo anchor("plant_master/add_assign_loyalty_activity_role/" . $listData['id'] .'/'.$customer_id, '<i class="ace-icon fa fa-plus-square bigger-130"></i>', array('class' => 'green', 'title' => 'Add'));
+						}
+						?>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             <?php $sno++; 

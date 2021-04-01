@@ -24,7 +24,11 @@ $this->load->view('../includes/admin_header');?>
              <div class="row">
                <div class="col-xs-12">
                  <h3 class="header smaller lighter blue"><?php echo $constant;?></h3>
-                   <div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/list_locations" class="btn btn-primary pull-right" title="Add Location">Back to List Locations</a></div>
+				 <?php if($this->session->userdata('admin_user_id')==1){ ?>
+           <div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/list_locations/<?php echo $get_user_details[0]['created_by'];?>" class="btn btn-primary pull-right" title="Add Location">Back to List Locations</a></div>
+			<?php	 }else{ ?>
+		<div style="clear:both;height:40px;"><a href="<?php echo base_url()?>plant_master/list_locations" class="btn btn-primary pull-right" title="Add Location">Back to List Locations</a></div>			 
+				<?php } ?>
                   <!--<div class="table-header">
  											Results for "Locations"
  										</div>--><br>
@@ -57,73 +61,136 @@ $this->load->view('../includes/admin_header');?>
 <input type="hidden" name="location_id" id="location_id" value="<?php echo  $get_user_details[0]['location_id']?>" />
         <div class="widget-main">
 		<div class="form-group row">
-			<div class="col-sm-6">
-			<label for="form-field-8">Location Code</label>
-			<div class="form-control"> <?php echo $get_user_details[0]['location_code'];?></div>
+			<div class="col-sm-4">
+			<label for="form-field-8"><b>Location Code</b></label> :
+			<?php echo $get_user_details[0]['location_code'];?>			 
+			</div>
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Location Name</b></label> : 
+             <?php echo $get_user_details[0]['location_name'];?>
+			</div>
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Location Type</b></label> : 
+             <?php echo $get_user_details[0]['location_type'];?>
+			</div>
+		</div>
+		
+		<div class="form-group row">
+			<div class="col-sm-4">
+			<label for="form-field-8"><b>Email</b></label> : 
+			<?php echo $get_user_details[0]['email_id'];?>
+			</div>
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Phone</b></label> : 
+             <?php echo $get_user_details[0]['phone'];?>
+			</div>
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>GST</b></label> : 
+			<?php echo $get_user_details[0]['gst'];?>
+			</div>
+		</div>
+		
+				
+		<div class="form-group row">
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Street Address</b></label> : 
+			<?php echo $get_user_details[0]['street_address'];?>
+			</div>
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Locality</b></label> : 
+			 <?php echo $get_user_details[0]['locality'];?>
+			</div>
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>City</b></label> : 
+			<?php echo $get_user_details[0]['city'];?>
+			</div>
+		</div>
+		
+		
+		
+		<div class="form-group row">
+		
+		<div class="col-sm-4">
+			  <label for="form-field-8"><b>District</b></label> : 
+			 <?php echo $get_user_details[0]['district'];?>
+			</div>
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Pin Code</b></label> : 
+			 <?php echo $get_user_details[0]['pin_code'];?>
+			</div>
 			 
-			</div>
-			
-			<div class="col-sm-6">
-			  <label for="form-field-8">Location Name</label>
-             <div class="form-control"> <?php echo $get_user_details[0]['location_name'];?></div>
-			</div>
-		</div>
-		
-		<div class="form-group row">
-			<div class="col-sm-6">
-			<label for="form-field-8">Email</label>
-			<div class="form-control"> <?php echo $get_user_details[0]['email_id'];?></div>
-			</div>
-			
-			<div class="col-sm-6">
-			  <label for="form-field-8">Phone</label>
-             <div class="form-control"> <?php echo $get_user_details[0]['phone'];?></div>
-			</div>
-		</div>
-		
-		<div class="form-group row">
-			<div class="col-sm-6">
-			  <label for="form-field-8">GST</label>
-			<div class="form-control"> <?php echo $get_user_details[0]['gst'];?></div>
-			</div>
-			 
-			
-			<div class="col-sm-6">
-			  <label for="form-field-8">Created By</label>
-			 <div class="form-control"> <?php echo getUserNameById($get_user_details[0]['created_by']);?></div>
-			</div>
-		</div>
-		
-		<div class="form-group row">
-			<div class="col-sm-6">
-			  <label for="form-field-8">Address</label>
-             <div class="form-control"> <?php echo $get_user_details[0]['address'];?></div>
-			</div>
-			 
-			
-			<div class="col-sm-6">
-			  <label for="form-field-8">Remark</label>
-
-            <div class="form-control"> <?php echo $get_user_details[0]['remark'];?></div>
-			</div>
-		</div>
-		
-		
-		<div class="form-group row">
-			<div class="col-sm-6">
-			 <label for="form-field-9">State</label>
+			<div class="col-sm-4">
+			 <label for="form-field-9"><b>State</b></label> : 
 			 <?php $states = get_state_name(31);?>
-             <div class="form-control">
+             
   		  		<?php foreach($states as $val){
 					if($val['state_id']==$get_user_details[0]['state']){?>
 					 <?php  echo $val['state_name'];?>
 			 	<?php }}?>
-			</div>
-			</div>
-			 
 			
-			 
+			</div>
 		</div>
+		
+				<div class="form-group row">		
+		<div class="col-sm-4">
+			  <label for="form-field-8"><b>Location Longitude</b></label> : 
+			  <?php echo $get_user_details[0]['location_longitude'];?>
+			</div>
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Location Latitude</b></label> : 
+			  <?php echo $get_user_details[0]['location_latitude'];?>
+			</div>
+			 
+			 <div class="col-sm-4">
+			  <label for="form-field-8"><b>Landmark or Near by</b></label> : 
+			  <?php echo $get_user_details[0]['landmark'];?>
+			  
+            <!--<textarea  class="form-control" name="landmark" id="landmark" placeholder="Landmark or Near by..."><?php echo $get_user_details[0]['landmark'];?></textarea> -->
+			</div>
+			
+		</div>
+		
+		
+				<div class="form-group row">
+			
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Store Timings</b></label> : 
+			  <?php echo $get_user_details[0]['store_timings'];?>
+			</div>
+			
+			
+			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Location Image</b></label> : 
+ <a href="<?php echo $get_user_details[0]['location_image'];?>" onclick="window.open (this.href, 'child', 'height=800,width=900'); return false"><img alt="Image Not Available" src="<?php echo $get_user_details[0]['location_image'];?>" height="50" width="50"></a>
+ <!--<img src="<?php echo $get_user_details[0]['location_image'];?>" width="150px" height="120px;" title="<?php echo $get_user_details[0]['location_image'];?>" />-->
+	
+	
+			</div>
+			
+ 			<div class="col-sm-4">
+			  <label for="form-field-8"><b>Remark</b></label> : 
+			  <?php echo $get_user_details[0]['remark'];?>
+			</div>
+		</div>
+		
+		
+		<!--
+		<div class="form-group row">			
+			<div class="col-sm-4">
+			  <label for="form-field-8">Created By</label>
+			 <div class="form-control"> <?php //echo getUserNameById($get_user_details[0]['created_by']);?></div>
+			</div>
+		</div>
+		-->
 		
 		
 		 

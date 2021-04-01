@@ -91,7 +91,18 @@
 
                             <div class="row" id="add_edit_div">
 
-                              <?php  $this->load->view('verity_registered_products_by_consumers_right_tpl'); ?>
+                              
+							  <?php 
+						
+						
+							if($this->uri->segment(2)=='verity_registered_products_by_consumers'){
+
+								  	$this->load->view('verity_registered_products_by_consumers_right_tpl');
+
+                              }else{ // $this->load->view('add_member_right_tpl'); 
+							  $this->load->view('verity_registered_products_by_consumers_view_tpl');
+
+					 			}?>	
 
                             </div>
 
@@ -235,11 +246,11 @@
 			warranty_end_date: {
 			 	 required: true
 				 },
-
+				/*
 			expiry_date: {
 			 	 required: true
 				 },
-
+				*/
 			status: {
 			 	 required: true
 				 },
@@ -289,13 +300,13 @@
 					minlength: "Please enter a warranty end date" ,
 					maxlength : "Please enter a warranty end date" 
 				},
-				
+				/*
 				expiry_date: {
 					required: "Please enter expiry date.",
 					minlength: "Please enter a expiry date." ,
 					maxlength : "Please enter a expiry date." 
 				},
-				
+				*/
 				status: {
 					required: "Please enter status.",
 					minlength: "Please enter a status." ,

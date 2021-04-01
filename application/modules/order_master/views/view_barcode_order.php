@@ -173,14 +173,14 @@
 															</div>
 															<?php }?>
 															<br />
-															<?php if($details['product_images']!=''){?>
+															<?php if($details['product_image']!=''){?>
 															<div class="row">
 																<div class="col-xs-12"> 
 																	<div class="col-xs-3 col-sm-3">
 																	 	<label><strong>Product Images</strong></label>
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
-																	<?php $arrImg = explode(',',$get_detail['product_images']);
+																	<?php $arrImg = explode(',',$get_detail['product_image']);
  																	if(count($arrImg)>0){
 																		foreach($arrImg as $recs){	
 																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;

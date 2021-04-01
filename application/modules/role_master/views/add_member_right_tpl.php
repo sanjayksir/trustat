@@ -18,13 +18,7 @@
       </div>
 		<?php
 		// MySQL connect info
-						if(base_url()=='http://localhost/trackingportal/') {									
-							mysql_connect("localhost", "root", "");
-								mysql_select_db("trackingportaldb");								
-								} else {								
-								mysql_connect("localhost", "tpdbuser", "india@123");
-								mysql_select_db("trackingprortaldb");
-								}
+						include('url_base_con_db2.php');
 			
 			
 			//$query = mysql_query("SELECT MAX( plant_id ) FROM plant_master;");
@@ -99,7 +93,7 @@
 		     <div class="col-sm-6">
             <?php $userId 	=$this->session->userdata('admin_user_id');
 			if($userId==1){?>
-				  <label for="form-field-9">Assined to CCC Admin</label>
+				  <label for="form-field-9">Assigned to CCC Admin</label>
 			 <?php $ccadmin = getParentUsers('','1');?>
              <select class="form-control" placeholder="Select Admin" id="ccadmin" name="ccadmin">
 			 <option value="">-Select CCC Admin-</option>

@@ -67,7 +67,7 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 
                 <?php } ?>
 	
-                Tracek User Name : <?php echo getUserFullNameById($this->uri->segment(3));?>
+                Tracek User Name : <?php echo getTracekUserFullNameById($this->uri->segment(3));?> <?php //echo $this->uri->segment(3);?>
 
                  <div class="row">
 
@@ -109,18 +109,19 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                             <thead>
                                 <tr>
                                     <th>S No.</th>
-                                    <th class="hidden-480">Transuction Date</th>
+                                    <th class="hidden-480">Transaction Date</th>
                                     <th class="hidden-480">Event Name</th>
                                     <th class="hidden-480">Event Detail</th>
                                     <th>Points </th>
-									<th>Loyalty Source</th>
+									<!--<th>Loyalty Source</th> -->
                                     <th>Transaction Type (Earned/Redeemed) </th>
 									<td>Total accumulated points</td>
+									<td>Accumulated points for Activity</td>
 								   <td>Total redeemed points</td>
 								    <td>Current balance</td>
-									 <td>Points redeemable</td>
+									<!-- <td>Points redeemable</td>
 									 <td>Points short of redemption</td>
-                                   <!-- <th>Balance Available for Redemption</th>
+                                    <th>Balance Available for Redemption</th>
 									Points req. for next Redemption-->
                                 </tr>
                             </thead>
@@ -159,15 +160,15 @@ $this->load->view('../includes/admin_top_navigation'); ?>
 							
 								?></td>
                                  <td><?php echo $attr['points']; ?></td>
-								 <td><?php echo getUserFullNameById($attr['customer_id']); ?></td>
+								<!-- <td><?php echo getUserFullNameById($attr['customer_id']); ?></td>-->
                                    <td><?php echo $attr['transaction_lr_type']; ?>-<?php echo $attr['customer_loyalty_type']; ?></td>
 								   <td><?php echo $attr['total_accumulated_points']; ?></td>
+								   <td><?php echo $attr['accumulated_points_by_transaction_type']; ?></td>
 								   <td><?php echo $attr['total_redeemed_points']; ?></td>
 								    <td><?php echo $attr['current_balance']; ?></td>
-									 <td><?php echo $attr['points_redeemable']; ?></td>
+									 <!--<td><?php echo $attr['points_redeemable']; ?></td>
 									 <td><?php echo $attr['points_short_of_redumption']; ?></td>
-                                                 
-													<!--<td><input type="checkbox" name="assignConsumer[]" class="assignConsumer" /></td>-->
+                                      <td><input type="checkbox" name="assignConsumer[]" class="assignConsumer" /></td>-->
 
                                              </tr>
 
@@ -199,12 +200,9 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                     <div class="footer-content">
 
                         <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

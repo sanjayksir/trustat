@@ -157,7 +157,7 @@
 					"created_by"		  => $is_parent,
 					"status"			  => 1,
 					"product_description" => '',
-					"product_images"	  => '',
+					"product_image"	  => '',
 					"product_video"	      => '',
 					"product_audio"		  => '',
 					"product_pdf"         => '',
@@ -628,8 +628,8 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		$this->db->select('C.id');	
 		$this->db->from('consumers C');		
 		$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
-		$this->db->where('CCL.customer_id', $customer_id);
-		
+		//$this->db->where('CCL.customer_id', $customer_id);
+		$this->db->where(array('CCL.customer_id' => $customer_id, 'CCL.registration_status' => "Registered"));
 		
 		
 		$query = $this->db->query("SELECT * FROM consumer_selection_criteria WHERE unique_system_selection_criteria_id =  '$consumer_selection_criteria'");
@@ -644,7 +644,7 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		if($row->consumer_city!='all') {
 		$this->db->where('C.city', $row->consumer_city);
 			}
-		
+		if($row->consumer_age_option=='SpecifyAge') {
 		$consumer_min_dob = date('Y-m-d', strtotime('-' . $row->consumer_min_age . ' years'));
 		$consumer_max_dob = date('Y-m-d', strtotime('-' . $row->consumer_max_age . ' years'));
 		
@@ -656,7 +656,7 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		$this->db->where('C.dob <=', $consumer_min_dob);
 		//$this->db->or_where('C.dob =', 'NULL');
 			}
-			
+		}
 			/*
 			$arr = explode(' ',trim($earned_loyalty_points_clubbed));
 			$ELP_from = $arr[0];
@@ -944,10 +944,10 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 				*/
 				/*  new work */
 				
-				//$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+				//$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."' AND registration_status='Registered';");
 				if($consumer_selection_criteria=="All") {
 					
-					$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+					$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."' AND registration_status='Registered';");
 				
 				foreach ($query->result() as $user)  
 				{  
@@ -1009,13 +1009,14 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		
 		
 		public function sendFCM($mess,$id) {
+			
 		$url = 'https://fcm.googleapis.com/fcm/send';
 		
 		$fields = array (
 		        'to' => $id,
 		         
-		         'notification' => array('title' => 'TRUSTAT survey', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
-				  'data' => array('title' => 'TRUSTAT survey', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
+		         'notification' => array('title' => 'TRUSTAT!!', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
+				  'data' => array('title' => 'TRUSTAT!!', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'low', 'time_to_live'=>300, 'timestamp'=>date("Y-m-d H:i:s",time()))
 		       
 		);
 		$fields = json_encode ( $fields );
@@ -1141,6 +1142,7 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 								"product_name"			=> $product_arr[0]['product_name'],
 								"promotion_media_type"	=> $frmData['promotion_media_type'],
 								"number_of_consumers"	=> $qty,
+								"promotion_notification_message"	=> $frmData['promotion_notification_message'],
 								"request_status"		=> 0,
 								"promotion_type"		=> $frmData['promotion_type'],								
 								"updated_by_id"			=> '0'
@@ -1192,7 +1194,7 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		$mail_conf =  array(
 		'subject'=>$subject,
 		'to_email'=>$email,
-		'from_email'=>'admin@innovigents.com',
+		'from_email'=>'admin@'.$_SERVER['SERVER_NAME'],
 		'from_name'=> 'ISPL Admin',
 		'body_part'=>$body
 		);
@@ -1519,13 +1521,27 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 	 } 
 	
 
-	function count_survey_details_by_question_answer($srch_string=''){
+	function count_survey_details_by_question_answer($srch_string='', $from_date_data, $to_date_data){
 		$pi_number = $this->uri->segment(3);
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
  
-		if(!empty($srch_string) && $user_id>1){ 
- 			$this->db->where("(S.user_name LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.media_type LIKE '%$srch_string%' OR C.survey_feedback_response LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(S.user_name LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.media_type LIKE '%$srch_string%' OR C.ad_feedback_response LIKE '%$srch_string%') and (P.created_by=$user_id)");
+//$this->db->where('C.survey_response_datetime BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(C.survey_response_datetime) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(C.survey_response_datetime) <=', date('Y-m-d',strtotime($to_date_data)));
+	}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(S.user_name LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.media_type LIKE '%$srch_string%' OR C.ad_feedback_response LIKE '%$srch_string%')");
+			//$this->db->where('C.survey_response_datetime BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+			$this->db->where('DATE(C.survey_response_datetime) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->where('DATE(C.survey_response_datetime) <=', date('Y-m-d',strtotime($to_date_data)));
+			}
 		}
 		 
  		$this->db->select('count(1) as total_rows');
@@ -1537,6 +1553,11 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		if($user_id>1){
 			$this->db->where('P.created_by', $user_id);
 		}
+		if (!empty($from_date_data)) {
+//$this->db->where('C.survey_response_datetime BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(C.survey_response_datetime) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(C.survey_response_datetime) <=', date('Y-m-d',strtotime($to_date_data)));
+	}
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();
  		if ($query->num_rows() > 0) {
 			$result = $query->result_array();
@@ -1545,267 +1566,31 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		return $result_data;
 	 }
 	 
-	 function get_survey_details_by_question_answer($limit,$start,$srch_string=''){
+	 function get_survey_details_by_question_answer($limit,$start,$srch_string='', $from_date_data, $to_date_data){
 		 $pi_number = $this->uri->segment(3);
 		$resultData = array();
  		$user_id 	= $this->session->userdata('admin_user_id');
  
-		if(!empty($srch_string) && $user_id>1){ 
- 			$this->db->where("(S.user_name LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.media_type LIKE '%$srch_string%' OR C.survey_feedback_response LIKE '%$srch_string%' AND P.created_by LIKE '%$user_id%')");              
+		
+		if($user_id>1){
+			if(!empty($srch_string)){ 
+ 				$this->db->where("(S.user_name LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.media_type LIKE '%$srch_string%' OR C.ad_feedback_response LIKE '%$srch_string%') and (P.created_by=$user_id)");
+				//$this->db->where('C.survey_response_datetime BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+				$this->db->where('DATE(C.survey_response_datetime) >=', date('Y-m-d',strtotime($from_date_data)));
+				$this->db->where('DATE(C.survey_response_datetime) <=', date('Y-m-d',strtotime($to_date_data)));
+			}else{
+				$this->db->where(array('P.created_by'=>$user_id));
+			}			
+		}else{
+			if(!empty($srch_string)){ 
+ 			$this->db->where("(S.user_name LIKE '%$srch_string%' OR P.product_name LIKE '%$srch_string%' OR C.media_type LIKE '%$srch_string%' OR C.ad_feedback_response LIKE '%$srch_string%')");
+			//$this->db->where('C.survey_response_datetime BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+			$this->db->where('DATE(C.survey_response_datetime) >=', date('Y-m-d',strtotime($from_date_data)));
+			$this->db->where('DATE(C.survey_response_datetime) <=', date('Y-m-d',strtotime($to_date_data)));
+			}
 		}
 		 
- 		$this->db->select(' C.*, P.product_name, S.user_name, S.mobile_no, email,
-																				avatar_url,
-																				created_at,
-																				aadhaar_number,
-																				gender,
-																				dob,
-																				registration_address,
-																				alternate_mobile_no,
-																				street_address,
-																				city,
-																				state,
-																				pin_code,
-																				monthly_earnings,
-																				job_profile,
-																				education_qualification,
-																				type_vehicle,
-																				profession,
-																				marital_status,
-																				no_of_family_members,
-																				loan_car,
-																				loan_housing,
-																				personal_loan,
-																				credit_card_loan,
-																				own_a_car,
-																				house_type,
-																				last_location,
-																				life_insurance,
-																				medical_insurance,
-																				height_in_inches,
-																				weight_in_kg,
-																				hobbies,
-																				sports,
-																				entertainment,
-																				spouse_gender,
-																				spouse_phone,
-																				spouse_dob,
-																				marriage_anniversary,
-																				spouse_work_status,
-																				spouse_edu_qualification,
-																				spouse_monthly_income,
-																				spouse_loan,
-																				spouse_personal_loan,
-																				spouse_credit_card_loan,
-																				spouse_own_a_car,
-																				spouse_house_type,
-																				spouse_height_inches,
-																				spouse_weight_kg,
-																				spouse_hobbies,
-																				spouse_sports,
-																				spouse_entertainment,
-																				modified_at,
-																				field_1,
-																				field_2,
-																				field_3,
-																				field_4,
-																				field_5,
-																				field_6,
-																				field_7,
-																				field_8,
-																				field_9,
-																				field_10,
-																				field_11,
-																				field_12,
-																				field_13,
-																				field_14,
-																				field_15,
-																				field_16,
-																				field_17,
-																				field_18,
-																				field_19,
-																				field_20,
-																				field_21,
-																				field_22,
-																				field_23,
-																				field_24,
-																				field_25,
-																				field_26,
-																				field_27,
-																				field_28,
-																				field_29,
-																				field_30,
-																				field_31,
-																				field_32,
-																				field_33,
-																				field_34,
-																				field_35,
-																				field_36,
-																				field_37,
-																				field_38,
-																				field_39,
-																				field_40,
-																				field_41,
-																				field_42,
-																				field_43,
-																				field_44,
-																				field_45,
-																				field_46,
-																				field_47,
-																				field_48,
-																				field_49,
-																				field_50,
-																				field_51,
-																				field_52,
-																				field_53,
-																				field_54,
-																				field_55,
-																				field_56,
-																				field_57,
-																				field_58,
-																				field_59,
-																				field_60,
-																				field_61,
-																				field_62,
-																				field_63,
-																				field_64,
-																				field_65,
-																				field_66,
-																				field_67,
-																				field_68,
-																				field_69,
-																				field_70,
-																				field_71,
-																				field_72,
-																				field_73,
-																				field_74,
-																				field_75,
-																				field_76,
-																				field_77,
-																				field_78,
-																				field_79,
-																				field_80,
-																				field_81,
-																				field_82,
-																				field_83,
-																				field_84,
-																				field_85,
-																				field_86,
-																				field_87,
-																				field_88,
-																				field_89,
-																				field_90,
-																				field_91,
-																				field_92,
-																				field_93,
-																				field_94,
-																				field_95,
-																				field_96,
-																				field_97,
-																				field_98,
-																				field_99,
-																				field_100,
-																				field_101,
-																				field_102,
-																				field_103,
-																				field_104,
-																				field_105,
-																				field_106,
-																				field_107,
-																				field_108,
-																				field_109,
-																				field_110,
-																				field_111,
-																				field_112,
-																				field_113,
-																				field_114,
-																				field_115,
-																				field_116,
-																				field_117,
-																				field_118,
-																				field_119,
-																				field_120,
-																				field_121,
-																				field_122,
-																				field_123,
-																				field_124,
-																				field_125,
-																				field_126,
-																				field_127,
-																				field_128,
-																				field_129,
-																				field_130,
-																				field_131,
-																				field_132,
-																				field_133,
-																				field_134,
-																				field_135,
-																				field_136,
-																				field_137,
-																				field_138,
-																				field_139,
-																				field_140,
-																				field_141,
-																				field_142,
-																				field_143,
-																				field_144,
-																				field_145,
-																				field_146,
-																				field_147,
-																				field_148,
-																				field_149,
-																				field_150,
-																				field_151,
-																				field_152,
-																				field_153,
-																				field_154,
-																				field_155,
-																				field_156,
-																				field_157,
-																				field_158,
-																				field_159,
-																				field_160,
-																				field_161,
-																				field_162,
-																				field_163,
-																				field_164,
-																				field_165,
-																				field_166,
-																				field_167,
-																				field_168,
-																				field_169,
-																				field_170,
-																				field_171,
-																				field_172,
-																				field_173,
-																				field_174,
-																				field_175,
-																				field_176,
-																				field_177,
-																				field_178,
-																				field_179,
-																				field_180,
-																				field_181,
-																				field_182,
-																				field_183,
-																				field_184,
-																				field_185,
-																				field_186,
-																				field_187,
-																				field_188,
-																				field_189,
-																				field_190,
-																				field_191,
-																				field_192,
-																				field_193,
-																				field_194,
-																				field_195,
-																				field_196,
-																				field_197,
-																				field_198,
-																				field_199,
-																				field_200,
-																				field_201, S.id',false);
+ 		$this->db->select('C.*, P.product_name, S.*',false);
 		$this->db->from('push_surveys C');
 		$this->db->join('consumers S', 'S.id = C.consumer_id');
 		$this->db->join('products P', 'P.id = C.product_id');
@@ -1815,7 +1600,11 @@ function AllSelectedConsumersByACustomer2($customer_id, $consumer_selection_crit
 		if($user_id>1){
 			$this->db->where('P.created_by', $user_id);
 		}
-		
+		if (!empty($from_date_data)) {
+		//$this->db->where('C.survey_response_datetime BETWEEN "'. date('Y-m-d', strtotime($from_date_data)). '" and "'. date('Y-m-d', strtotime($to_date_data)).'"');
+		$this->db->where('DATE(C.survey_response_datetime) >=', date('Y-m-d',strtotime($from_date_data)));
+		$this->db->where('DATE(C.survey_response_datetime) <=', date('Y-m-d',strtotime($to_date_data)));
+		}
    		$this->db->order_by('C.promotion_id','desc');
 		$this->db->limit($limit, $start);
    		$query = $this->db->get(); // echo '***'.$this->db->last_query();

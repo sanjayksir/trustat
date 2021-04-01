@@ -73,62 +73,8 @@ $this->load->view('../includes/admin_top_navigation'); ?>
                 
 
                  <div class="row">
- <?php 
- /*
-                   mysql_connect("localhost", "root", "");
-				mysql_select_db("trackingportaldb");								
-$query  = "SELECT params FROM consumer_passbook WHERE consumer_id='65'";
-$result = mysql_query($query) or trigger_error(mysql_error().$query);
-
-$row = mysql_fetch_array($result);
-
-//and finally
-//$fieldname = "customer_loyalty_type";
-$retval = $row[6];
-
-
-
-//$dt = $product_data[0];
-$attr_list = implode(',',json_decode($retval,true));
-echo $retval . "-";
-*/
-
-
-				 ?>
 				 
-				 <?php /*
-$link = mysqli_connect("localhost", "root", "", "trackingportaldb"); 
-  
-if($link === false){ 
-    die("ERROR: Could not connect. " 
-                . mysqli_connect_error()); 
-} 
-  
-$sql = "SELECT * FROM consumer_passbook WHERE consumer_id='65' AND transaction_lr_type = 'Loyalty'"; 
-if($res = mysqli_query($link, $sql)){ 
-    if(mysqli_num_rows($res) > 0){ 
-       
-        while($row = mysqli_fetch_array($res)){ 
-            
-                echo "-" . $row['consumer_id'] . "-"; 
-                echo "-" . $row['points'] . "-"; 
-                 //$row['params']
-						$arr = json_decode($row['params'], true);					
-				
-				echo "-" . $arr["customer_loyalty_type"] . "-<br>"; 
-        } 
-        mysqli_free_result($res); 
-    } else{ 
-        echo "No Matching records are found."; 
-    } 
-} else{ 
-    echo "ERROR: Could not able to execute $sql. "  
-                                . mysqli_error($link); 
-} 
-  
-mysqli_close($link); 
-*/
-?> 
+	 
 <?php
 $user_id 	= $this->session->userdata('admin_user_id');
 if($user_id==1){ ?> 
@@ -195,8 +141,10 @@ if($user_id==1){ ?>
                             <thead>
                                 <tr>
 														<th>S No.</th>
-													    <th>Tracek Users Name</th>
+														<th>Users Person Name</th>
+													    <th>Users Login Name</th>
 														<th>Phone Number</th>
+														<th>Role</th>
 														<!--<th>Total HLP Earned</th>
 														<th>Total HLP Redeemed</th>
 														<th>Total HLP O/S</th> -->
@@ -220,17 +168,18 @@ if($user_id==1){ ?>
                          ?>
                                 <tr id="show<?php echo $attr['user_id'];?>">
                                 <td><?php echo $sno; ?></td>
-                                <td><?php echo $attr['user_name']; ?></td>
+								<td><?php echo $attr['f_name']." ".$attr['l_name']; ?></td>
+                                <td><?php echo $attr['user_name']; ?></td>								
                                 <td><?php echo $attr['mobile_no']; ?></td>
+								<td><?php echo $attr['role_name_value']; ?></td>
                                <!-- <td><?php //echo base_url(); 
 								//echo "<br>"; 
-								if(base_url()=='http://localhost/trackingportal/') {									
-							mysql_connect("localhost", "root", "");
-								mysql_select_db("trackingportaldb");								
-								} else {								
-								mysql_connect("localhost", "tpdbuser", "india@123");
-								mysql_select_db("trackingprortaldb");
-								}
+							include('url_base_con_db2.php');
+							
+							//mysql_connect('127.0.0.1','mtrck_tpdbuser','TP.P@wdd#1!@2dbu');
+							//mysql_select_db('mtrck_trackingportaltestingdb');
+								
+							
 												
 							//$character = json_decode($attr['params']);
 							//$searchdata = $character->customer_loyalty_type;
@@ -256,10 +205,7 @@ if($user_id==1){ ?>
 								 <td><?php //echo base_url(); 
 								
 								// MySQL connect info
-								//mysql_connect("localhost", "tpdbuser", "india@123");
-								//mysql_select_db("trackingprortaldb");								
-								//mysql_connect("localhost", "root", "");
-								//mysql_select_db("trackingportaldb");								
+														
 								$some_q = "SELECT SUM(points) AS `points` FROM customer_passbook where customer_a_user_id = '".$attr['user_id']."' AND customer_loyalty_type = 'Brand' AND transaction_lr_type = 'Loyalty'";
 								$results = mysql_query($some_q) or die(mysql_error());
 								while($row = mysql_fetch_array($results)){
@@ -274,7 +220,7 @@ if($user_id==1){ ?>
 								echo $TR_PointsBLP ;			
 								} ?>
 								</td>
-								<td><?php $TBalance_PointsBLP  = $TE_PointsBLP  - $TR_PointsBLP ;											echo $TBalance_PointsBLP ; // Sanjay ?>
+								<td><?php $TBalance_PointsBLP  = $TE_PointsBLP  - $TR_PointsBLP ;	echo $TBalance_PointsBLP ; // Sanjay ?>
 								</td> 
 									<!--<td><?php //echo anchor("product/list_view_tracek_user_passbook/".$attr['user_id'], '<i class="ace-icon fa fa-eye bigger-130"> View Passbook</i>', array('class' => 'btn btn-xs btn-info','title'=>' View Passbook')); ?>  
 										<?php //echo anchor("product/list_view_consumer_feedback_details/".$attr['user_id'], '<i class="ace-icon fa fa-eye bigger-130"> Feedback Report data</i>', array('class' => 'btn btn-xs btn-info','title'=>' Feedback Report data')); ?>
@@ -311,12 +257,9 @@ if($user_id==1){ ?>
                     <div class="footer-content">
 
                         <span class="bigger-120">
-
-                            <span class="blue bolder">Tracking Portal</span>
-
-                            <?=date('Y');?>
-
-                        </span>
+						<span class="blue bolder">Copyright ©</span>
+						<?php //echo date('Y');?> <a href="https://innovigent.in/" target="_blank"> Innovigent Solutions Private Limited </a>
+					   </span>
 
                          &nbsp; &nbsp;
 

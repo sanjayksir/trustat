@@ -176,7 +176,7 @@
                                                
 												 <td><select name="change_order_status" id="change_order_status" onchange="return change_order_status('<?php echo $listData['order_id'];?>',this.value);">
  													<option value="0" <?php if($listData['order_status']==0){echo 'selected';}?>>Pending</option>
-													<option value="1" <?php if($listData['order_status']==1){echo 'selected';}?>>Success</option>
+													<option value="4" <?php if($listData['order_status']==4){echo 'selected';}?>>Success</option>
 													<option value="2" <?php if($listData['order_status']==2){echo 'selected';}?>>Rejected</option>
 													</select>
 												</td> 
@@ -185,7 +185,7 @@
 												<?php }?>
 												<td>
                                                 <!--<a class="btn btn-primary pull-right modellink" data-toggle="modal" href="#printMyModal" id="" onclick="return print_order('<?php echo $listData['order_id'];?>');">Print</a>-->
-												<?php if($listData['order_status']==1){$display="block;" ;}else{$display="none;";}?>
+												<?php if($listData['order_status']==4){$display="block;" ;}else{$display="none;";}?>
                                                 <span id="order_status_<?php echo $listData['order_id'];?>" style="display:<?php echo $display;?>"> 
 												
  												<!--<select name="print_order" id="print_order_<?php echo $listData['order_id'];?>">

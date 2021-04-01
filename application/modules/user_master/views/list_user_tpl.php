@@ -54,7 +54,9 @@
                                                                     <div class="widget-header widget-header-flat">
                                                                     <h5 class="widget-title bigger lighter">List <?php echo $label;?>s</h5>
                                                                     <div class="widget-toolbar">
+																<?php 	if($this->session->userdata('admin_user_id')==1){ ?>
                                                                         <a href="<?php echo base_url('user_master/add_user') ?>" class="btn btn-xs btn-warning" title="Add User">Add <?php echo $label; ?> </a>
+																	<?php 	}?>
                                                                     </div>
                                                                 </div>
 									<div class="widget-body">
@@ -94,12 +96,15 @@
                             <thead>
                                     <tr>
                                             <th>#</th>
-                                            <th>Full Name</th>
-                                            <th>User Name</th>
+											<?php if($this->session->userdata('admin_user_id')==1){ ?>
+											<th>Company Name</th>
+											<?php } ?>                                            
+                                            <th>Person Name</th>
+											<th>User Name</th>
                                             <th>Email ID</th>
                                             <th>Phone</th>
-                                            <th>Select</th>
-                                            <th>Action</th>
+                                            <th>Assigned Location(s)</th>
+                                            <th>Status</th>
                                     </tr>
                             </thead>
                             <tbody>
@@ -120,7 +125,10 @@
                                         }?>
 										<tr id="show<?php echo $listData['user_id']; ?>">
                                            <td><?php echo $sno;$sno++; ?></td>
-                                                <td><?php echo $listData['f_name'].' '. $listData['l_name']; ?></td>
+											   <?php if($this->session->userdata('admin_user_id')==1){ ?>
+												<td><?php echo $listData['f_name']; ?></td>
+												<?php } ?>                                                 
+												<td><?php echo $listData['l_name']; ?></td>
                                                 <td><?php echo $listData['user_name']; ?></td>
                                                 <td><?php echo $listData['email_id']; ?></td>
                                                 <td><?php echo $listData['mobile_no']; ?></td>
@@ -136,7 +144,11 @@
 															}
 															*/
 															?>
-															<a href="<?php  echo base_url().'user_master/view_user/'.$listData['user_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"> Select </i></a>
+															<a href="<?php  echo base_url().'user_master/view_user/'.$listData['user_id'];?>" class="btn btn-xs btn-success" target="_self" title="View"><i class="fa fa-eye"> Select </i></a>
+															
+															
+															<?php echo anchor("user_master/edit_user/" . $listData['user_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>
+															
 															<?php
 															}else{
 																echo assigned_locations($listData['user_id']);
@@ -147,22 +159,45 @@
 												
 												</td>
                                                  <td>
-
+												 <?php if($this->session->userdata('admin_user_id')==1){ ?>
                                                     <div class="hidden-sm hidden-xs action-buttons">
-
-												 
-
                                                         <a href="<?php  echo base_url().'user_master/view_user/'.$listData['user_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a>
-                                                         <?php echo anchor("user_master/edit_user/" . $listData['user_id'], '<i class="ace-icon fa fa-pencil bigger-130"></i>', array('class' => 'btn btn-xs btn-info','title'=>'Edit')); ?>
+                                                         
                                                        <?php if($listData['is_verified']==1){?>  
-													    <a title="Delete User" href="javascript:void(0);" onclick="return confirmDelete('<?php echo base64_encode($listData['user_id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
-													   
+													    <?php if($this->session->userdata('admin_user_id')==1){ ?>
+														<?php if($listData['otp']==0){?>
+													    <a title="Delete User" href="javascript:void(0);" onclick="return SendOTPDelete('<?php echo base64_encode($listData['user_id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>
+														<?php }else{ ?>
+			
+			
+												 <?php echo anchor("user_master/delete_user_accept_otp/" . $listData['user_id'], '<i class="ace-icon fa fa-fire bigger-120"></i>', array('class' => 'btn btn-xs btn-danger','title'=>'Edit')); ?>
+													<!--
+												<a title="Deletion Pending Please Provide OTP" class="btn btn-xs btn-danger" data-toggle="modal" id="" onclick="return delete_user_accept_otp('<?php echo $listData['user_id'];?>');"><i class="ace-icon fa fa-fire bigger-120"></i></a>
+														
+														<a title="Deletion Pending Please Provide OTP" href="javascript:void(0);" onclick="return confirmDelete('<?php echo base64_encode($listData['user_id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-fire bigger-120"></i></a>-->
+														
+														<?php } ?>
+														
+														
+														<?php }else{ ?>
+														<?php if($listData['otp']==0){?>
+														<!--<a title="Delete User" href="javascript:void(0);" onclick="return SendOTPDeleteCustomer('<?php echo base64_encode($listData['user_id']);?>');" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-trash-o bigger-120"></i></a>	-->
+														<?php }else{ ?>
+															<!--<a title="Deletion Pending" href="" class="btn btn-xs btn-danger"><i class="ace-icon fa fa-fire bigger-120"></i></a>-->															
+														<?php } ?>
+														<?php } ?>
 													   <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['user_id'];?>" value="<?php echo $status ;?>" onclick="return change_status('<?php echo $listData['user_id'];?>',this.value);" />
 													   
-													   <?php }else{?>
+													   <?php }else{ ?>
 													   <span><a href="javascript:void(0);" onclick="return confirmDelete('<?php echo base64_encode($listData['user_id']);?>');" class="btn btn-xs btn-warning" title="Email Not Verified">X</a></span>
 													   <?php }?>
-
+						 <?php }else{ ?>
+						 <div style="width:100px">
+						 <a href="<?php  echo base_url().'user_master/view_user/'.$listData['user_id'];?>" class="btn btn-xs btn-success" target="_blank" title="View"><i class="fa fa-eye"></i></a> 
+						 
+						 <input <?php echo $colorStyle; ?>type="button" name="status" id="status_<?php echo $listData['user_id'];?>" value="<?php echo $status ;?>" />
+						 </div>
+						<?php }?>
                                                     </div>
 
                                                 </td>
@@ -212,7 +247,10 @@
 				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
 			</a>
 		</div><!-- /.main-container -->
-<?php $this->load->view('../includes/admin_footer');?>
+		
+
+
+<?php //$this->load->view('../includes/admin_footer');?>
 <script>
 
 function validateSrch(){
@@ -223,7 +261,36 @@ function validateSrch(){
 		return false;
 	}
 }
-	
+
+
+function SendOTPDeleteCustomer(val='')
+{
+	if(val!=''){
+		var x = confirm("The information to delete this user has been sent to ISPL Admin, are you sure to delete? Please contact ISPL Admin meanwhile this activity will keep pending for approval.");
+		 if (x){
+		 		window.location.href="<?php echo base_url().'user_master/send_otp_delete_customer/';?>"+val;
+ 			  //return true;
+		 }
+		 else{
+			return false;
+		 }
+	}
+}
+
+
+function SendOTPDelete(val='')
+{
+	if(val!=''){
+		var x = confirm("An OTP will be sent to your email id to complete this process, are you sure you want to delete?");
+		 if (x){
+		 		window.location.href="<?php echo base_url().'user_master/send_otp_delete_customer/';?>"+val;
+ 			  //return true;
+		 }
+		 else{
+			return false;
+		 }
+	}
+}	
 	
 function confirmDelete(val='')
 {
@@ -351,5 +418,21 @@ $(document).ready(function () {
 		                     });
 	
 }
+
+
+
 </script>
+
+<?php //$this->load->view('../includes/admin_footer');?>
+    <script type="text/javascript">
+    //$(document).ready(function(){
+    function delete_user_accept_otp(val){
+		
+		window.location.href = "<?php echo base_url().'user_master/delete_user_accept_otp/';?>"+val;
+   
+    //});
+    }
+    //});
+    </script>
+	
 <?php $this->load->view('../includes/admin_footer');?>

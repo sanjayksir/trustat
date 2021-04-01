@@ -33,14 +33,14 @@ if(!empty($isOtherIndustry)){
       <div class="breadcrumbs ace-save-state" id="breadcrumbs">
         <ul class="breadcrumb">
           <li> <i class="ace-icon fa fa-home home-icon"></i> <a href="<?php echo base_url(); ?>dashboard">Home</a> </li>
-          <li class="active">Manage Product Attributes</li>
+          <li class="active">Manage Product Attributes<?php //echo $dt['created_by'];?></li>
         </ul>
         <!-- /.breadcrumb --> 
       </div>
       <div class="page-content">
         <div class="row">
           <div class="col-xs-12">
-            <div class="row"><div style="clear:both;"><?php echo anchor('product/list_product', 'List Products',array('class' => 'btn btn-primary pull-right')); ?></div>
+            <div class="row"><div style="clear:both;"><?php if($this->session->userdata('admin_user_id')==1){ echo anchor('product/list_product/'.$dt['created_by'], 'List Products',array('class' => 'btn btn-primary pull-right')); } else { echo anchor('product/list_product', 'List Products',array('class' => 'btn btn-primary pull-right')); } ?></div>
               <div class="col-xs-12">
                 <div class="accordion-style1 panel-group" id="accordion">
                   <div class="">
@@ -56,7 +56,7 @@ if(!empty($isOtherIndustry)){
 		     <div class="col-sm-6"> 
             <?php $userId 	=$this->session->userdata('admin_user_id');
 			if($userId==1){?>
-				  <label for="form-field-9">Assined to CCC Admin</label>
+				  <label for="form-field-9">Assigned to CCC Admin</label>
 			 <?php $ccadmin = getParentUsers('','1');?>
              <select class="form-control" placeholder="Select Admin" id="ccadmin" name="ccadmin">
 			 <option value="">-Select CCC Admin-</option>
@@ -234,7 +234,8 @@ getChildAttr('<?php echo implode(',',$id_parents); ?>',$("#childs_selected").val
 				processData: false, // NEEDED, DON'T OMIT THIS	
  				success: function (msg) { 
 					if(parseInt(msg)==1){
-						window.location.href="<?php echo base_url().'product/list_product';?>";
+						//window.location.href="<?php echo base_url().'product/list_product';?>";
+						window.location.href="<?php if($this->session->userdata('admin_user_id')==1){ echo base_url().'product/list_product/'.$dt['created_by']; }else { echo base_url().'product/list_product'; }?>";
 					}
 				}
 			});

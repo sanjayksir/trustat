@@ -143,14 +143,11 @@
         if (empty($srch_string)) {
             $srch_string = '';
         }
-        $total_records = $this->order_master_model->get_total_printed_code_list_all($srch_string);
-		
+        $total_records = $this->order_master_model->get_total_printed_code_list_all($srch_string);		
 		//echo $total_records;
 		//$total_records = 1000;
         $params["PrintedCodeListing"] = $this->order_master_model->get_printed_barqrcodelist($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('order_master/barcode/list_printed_report', $total_records,null,4);
-        
-        
+        $params["links"] = Utils::pagination('order_master/barcode/list_printed_report', $total_records,null,4);        
         ##--------------- pagination End ----------------##
         $data = array();
         $user_id = $this->session->userdata('admin_user_id');
@@ -188,6 +185,99 @@
     }
 	
 	
+	    ## Consumer Activity Log Starts
+    public function ConsumerActivityLog() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_consumer_activity_log_list_records($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_consumer_activity_log_list($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/ConsumerActivityLog', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('consumer_activity_log_tpl', $params);
+    }
+	
+	## Consumer Activity Log End
+	
+	
+		    ## Consumer Product Referral Report Starts
+    public function ConsumerProductReferralReport() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_consumer_product_referral_report_records($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_consumer_product_referral_report_list_records($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/ConsumerProductReferralReport', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('consumer_product_referral_report_tpl', $params);
+    }	
+	## Consumer Product Referral Report End
+	
+	
+		    ## Tracek User Activity Log
+    public function TracekUserActivityLog() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_tracek_user_activity_log_list_records($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_tracek_user_activity_log_list($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/TracekUserActivityLog', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('tracek_user_activity_log_tpl', $params);
+    }
+	
+	 ## Tracek User Activity Log end 
 	    public function BasicCustomerReportLevel0() {
         ##--------------- pagination start ----------------##
         // init params
@@ -197,6 +287,10 @@
         }else{
             $limit_per_page = $this->config->item('pageLimit');
         }
+		
+		$from_date_data = $this->input->get('from_date_data');
+		$to_date_data = $this->input->get('to_date_data');
+		
         $this->config->set_item('pageLimit', $limit_per_page);
         $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
         $srch_string = $this->input->get('search');
@@ -204,11 +298,12 @@
         if (empty($srch_string)) {
             $srch_string = '';
         }
-        $total_records = $this->order_master_model->count_scanned_barqrcodelist($srch_string);
+        $total_records = $this->order_master_model->count_basic_customer_report_level0_list($srch_string, $from_date_data, $to_date_data);
 
-        $params["ScanedCodeListing"] = $this->order_master_model->get_scanned_barqrcodelist($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('order_master/barcode/list_scanned_report', $total_records,null,4);
-        
+        $params["ScanedCodeListing"] = $this->order_master_model->get_basic_customer_report_level0_list($limit_per_page, $start_index, $srch_string, $from_date_data, $to_date_data);
+        $params["links"] = Utils::pagination('order_master/barcode/BasicCustomerReportLevel0', $total_records,null,4);
+        $params["links2"] = Utils::pagination2('order_master/barcode/BasicCustomerReportLevel0', $total_records,null,4);
+        $params["total_records2"] = $total_records;
         ##--------------- pagination End ----------------##
         $data = array();
         $user_id = $this->session->userdata('admin_user_id');
@@ -216,8 +311,45 @@
         $this->load->view('list_basic_customer_report_level0_tpl', $params);
     }
 	
+	public function BasicCustomerReportLevel0Download() {
+        ##--------------- pagination start ----------------##
+        // init params
+		
+		$mnv58_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 58)->get()->row();
+		$mnvtext58 = $mnv58_result->message_notification_value;
+		
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $mnvtext58;
+        }else{
+            $limit_per_page = $mnvtext58;
+        }
+		
+		$from_date_data = $this->input->get('from_date_data');
+		$to_date_data = $this->input->get('to_date_data');
+		
+        $this->config->set_item('pageLimit2', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_basic_customer_report_level0_list($srch_string, $from_date_data, $to_date_data);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_basic_customer_report_level0_list($limit_per_page, $start_index, $srch_string, $from_date_data, $to_date_data);
+        $params["links"] = Utils::pagination('order_master/barcode/BasicCustomerReportLevel0Download', $total_records,null,4);
+        $params["links2"] = Utils::pagination2('order_master/barcode/BasicCustomerReportLevel0Download', $total_records,null,4);
+        $params["total_records2"] = $total_records;
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_basic_customer_report_level0_download_tpl', $params);
+    }
+
 	
-		    public function BasicCustomerReportLevel1() {
+	public function BasicCustomerReportLevel1() {
         ##--------------- pagination start ----------------##
         // init params
         $params = array();
@@ -229,20 +361,124 @@
         $this->config->set_item('pageLimit', $limit_per_page);
         $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
         $srch_string = $this->input->get('search');
+		
+		$from_date_data = $this->input->get('from_date_data');
+		$to_date_data = $this->input->get('to_date_data');
         
         if (empty($srch_string)) {
             $srch_string = '';
         }
-        $total_records = $this->order_master_model->count_scanned_barqrcodelist($srch_string);
+        $total_records = $this->order_master_model->count_basic_customer_report_level1_list($srch_string, $from_date_data, $to_date_data);
 
-        $params["ScanedCodeListing"] = $this->order_master_model->get_scanned_barqrcodelist($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('order_master/barcode/list_scanned_report', $total_records,null,4);
+        $params["ScanedCodeListing"] = $this->order_master_model->get_basic_customer_report_level1_list($limit_per_page, $start_index, $srch_string, $from_date_data, $to_date_data);
+        $params["links"] = Utils::pagination('order_master/barcode/BasicCustomerReportLevel1', $total_records,null,4);
+		
+	   // $params["links2"] = Utils::pagination2('order_master/barcode/BasicCustomerReportLevel1', $total_records,null,4);
+        //$params["total_records2"] = $total_records;
         
         ##--------------- pagination End ----------------##
         $data = array();
         $user_id = $this->session->userdata('admin_user_id');
         //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
         $this->load->view('list_basic_customer_report_level1_tpl', $params);
+    }
+	
+	
+		public function BasicCustomerReportLevel1Download() {
+        ##--------------- pagination start ----------------##
+        // init params
+		$mnv58_result = $this->db->select('message_notification_value')->from('message_notification_master')->where('id', 58)->get()->row();
+		$mnvtext58 = $mnv58_result->message_notification_value;
+		
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $mnvtext58;
+        }else{
+            $limit_per_page = $mnvtext58;
+        }
+        $this->config->set_item('pageLimit2', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+		
+		$from_date_data = $this->input->get('from_date_data');
+		$to_date_data = $this->input->get('to_date_data');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_basic_customer_report_level1_list($srch_string, $from_date_data, $to_date_data);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_basic_customer_report_level1_list($limit_per_page, $start_index, $srch_string, $from_date_data, $to_date_data);
+        $params["links"] = Utils::pagination('order_master/barcode/BasicCustomerReportLevel1Download', $total_records,null,4);
+		
+	    $params["links2"] = Utils::pagination2('order_master/barcode/BasicCustomerReportLevel1Download', $total_records,null,4);
+        $params["total_records2"] = $total_records;
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_basic_customer_report_level1_download_tpl', $params);
+    }
+	
+	
+public function BasicCustomerReportLevel0Product() {
+        ##--------------- pagination start ----------------##
+        // init params
+		$product_id = $this->uri->segment(4);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_basic_customer_report_level0_list_product($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_basic_customer_report_level0_list_product($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/BasicCustomerReportLevel0Product/'.$product_id, $total_records,null,5);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_basic_customer_report_level0_product_tpl', $params);
+    }
+	
+	
+	public function BasicCustomerReportLevel1Product() {
+        ##--------------- pagination start ----------------##
+        // init params
+		$product_id = $this->uri->segment(4);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(5)) ? $this->uri->segment(5) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_basic_customer_report_level1_list_product($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_basic_customer_report_level1_list_product($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/BasicCustomerReportLevel1Product/'.$product_id, $total_records,null,5);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_basic_customer_report_level1_product_tpl', $params);
     }
 	
 	public function list_physical_packaging_report() {
@@ -321,7 +557,7 @@
         $total_records = $this->order_master_model->count_ship_out_order_report_list($srch_string);
 
         $params["ScanedCodeListing"] = $this->order_master_model->get_ship_out_order_report_list($limit_per_page, $start_index, $srch_string);
-        $params["links"] = Utils::pagination('order_master/barcode/list_stock_transfer_out_report', $total_records,null,4);
+        $params["links"] = Utils::pagination('order_master/barcode/ship_out_order_report_list', $total_records,null,4);
         
         ##--------------- pagination End ----------------##
         $data = array();
@@ -785,8 +1021,584 @@
 	
         $this->load->view('list_complaint_log_tpl', $params);
      }
+	 
+	public function overall_global_inventory_in_hand() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_in_hand_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_in_hand_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/overall_global_inventory_in_hand', $total_records,null,4);
+        
+		//$params["just_before_closing_id"] = 
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_in_hand_report_tpl', $params);
+    }
+
+	public function overall_global_inventory_in_hand_download() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_in_hand_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_in_hand_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/overall_global_inventory_in_hand_download', $total_records,null,4);
+		
+		$params["links2"] = Utils::pagination2('product/overall_global_inventory_in_hand_download', $total_records);
+		$params["total_records2"] = $total_records;	
+        
+		//$params["just_before_closing_id"] = 
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_in_hand_report_download_tpl', $params);
+    }	
+	
+	public function list_overall_global_inventory_stock_transfer_out_invoice_details() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_stock_transfer_out_invoice_details($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_stock_transfer_out_invoice_details($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_overall_global_inventory_stock_transfer_out_invoice_details', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_stock_transfer_out_invoice_details_tpl', $params);
+    }
+	
+	
+		public function list_overall_global_inventory_stock_transfer_in_invoice_details() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_stock_transfer_in_invoice_details($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_stock_transfer_in_invoice_details($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_overall_global_inventory_stock_transfer_in_invoice_details', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_stock_transfer_in_invoice_details_tpl', $params);
+    }
+	
+	
+	public function list_overall_global_inventory_product_sale_details() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_product_sale_details($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_product_sale_details($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_overall_global_inventory_product_sale_details', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_product_sale_details_tpl', $params);
+    }
+	
+	public function list_overall_global_inventory_product_returned_details() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_product_returned_details($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_product_returned_details($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_overall_global_inventory_product_returned_details', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_product_returned_details_tpl', $params);
+    }
+	
+	
+	public function list_overall_global_inventory_closing_details() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_closing_details($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_closing_details($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_overall_global_inventory_closing_details', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_closing_details_tpl', $params);
+    }
+	
+		public function list_overall_global_inventory_opening_details() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_opening_details($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_opening_details($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_overall_global_inventory_opening_details', $total_records,null,4);
+        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_opening_details_tpl', $params);
+    }
 	
 	
 	
-   }?>
+		## For Product Bar/Qr Code History report
+    public function list_product_code_history() {
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->get_total_product_code_history_all($srch_string);		
+		//echo $total_records;
+		//$total_records = 1000;
+        $params["PrintedCodeListing"] = $this->order_master_model->get_product_code_history_list($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/list_product_code_history', $total_records,null,4);        
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_product_code_report_tpl', $params);
+		}
+	
+	
+		public function unpacked_inventory_in_hand() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_unpacked_inventory_in_hand_barqrcodes($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_unpacked_inventory_in_hand_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/unpacked_inventory_in_hand', $total_records,null,4);
+        
+		//$params["just_before_closing_id"] = 
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_unpacked_inventory_in_hand_report_tpl', $params);
+    }
+
+	public function unpacked_inventory_in_hand_download() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_unpacked_inventory_in_hand_barqrcodes($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_unpacked_inventory_in_hand_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/unpacked_inventory_in_hand_download', $total_records,null,4);
+        
+		$params["links2"] = Utils::pagination2('product/unpacked_inventory_in_hand_download', $total_records);
+		$params["total_records2"] = $total_records;	
+		//$params["just_before_closing_id"] = 
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_unpacked_inventory_in_hand_report_download_tpl', $params);
+    }
+
+
+		public function unpacked_inventory_in_hand_list_codes() {
+        ##--------------- pagination start ----------------##
+        // init params
+		$product_id 	= $this->uri->segment(4);
+		$code_pack_level 	= $this->uri->segment(5);
+		
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(6)) ? $this->uri->segment(6) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_unpacked_inventory_in_hand_list_codes($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_unpacked_inventory_in_hand_list_codes($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/unpacked_inventory_in_hand_list_codes/'.$product_id.'/'.$code_pack_level, $total_records,null,6);
+        
+		//$params["just_before_closing_id"] = 
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_unpacked_inventory_in_hand_list_codes_tpl', $params);
+		}
+
+		public function unpacked_inventory_in_hand_list_codes_download() {
+        ##--------------- pagination start ----------------##
+        // init params
+		$product_id 	= $this->uri->segment(4);
+		$code_pack_level 	= $this->uri->segment(5);
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(6)) ? $this->uri->segment(6) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_unpacked_inventory_in_hand_list_codes($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_unpacked_inventory_in_hand_list_codes($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/unpacked_inventory_in_hand_list_codes_download/'.$product_id.'/'.$code_pack_level, $total_records,null,6);
+		
+		$params["links2"] =  Utils::pagination('order_master/barcode/unpacked_inventory_in_hand_list_codes_download/'.$product_id.'/'.$code_pack_level, $total_records,null,6);
+		$params["total_records2"] = $total_records;	
+        
+		//$params["just_before_closing_id"] = 
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_unpacked_inventory_in_hand_list_codes_download_tpl', $params);
+		}
+		
+		
+	public function overall_global_inventory_in_hand_tr_records() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_in_hand_tr_records_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_in_hand_tr_records_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/overall_global_inventory_in_hand_tr_records', $total_records,null,4);
+        
+		//$params["just_before_closing_id"] = 
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_in_hand_report_tr_records_tpl', $params);
+    }
+
+	public function overall_global_inventory_in_hand_tr_records_download() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_in_hand_tr_records_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_in_hand_tr_records_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/overall_global_inventory_in_hand_tr_records_download', $total_records,null,4);
+		
+		$params["links2"] = Utils::pagination2('product/overall_global_inventory_in_hand_tr_records_download', $total_records);
+		$params["total_records2"] = $total_records;	
+        
+		//$params["just_before_closing_id"] = 
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_in_hand_report_tr_records_download_tpl', $params);
+    }
+
+
+	public function overall_global_inventory_in_hand_all_records() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_in_hand_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_in_hand_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/overall_global_inventory_in_hand_all_records', $total_records,null,4);
+        
+		//$params["just_before_closing_id"] = 
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_in_hand_report_tpl', $params);
+    }
+
+	public function overall_global_inventory_in_hand_all_records_download() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_in_hand_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_in_hand_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/overall_global_inventory_in_hand_all_records_download', $total_records,null,4);
+		
+		$params["links2"] = Utils::pagination2('product/overall_global_inventory_in_hand_all_records_download', $total_records);
+		$params["total_records2"] = $total_records;	
+        
+		//$params["just_before_closing_id"] = 
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_in_hand_report_download_tpl', $params);
+    }
+	
+	
+		public function overall_global_inventory_in_hand_tr_all_records() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_in_hand_tr_records_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_in_hand_tr_records_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/overall_global_inventory_in_hand_tr_records', $total_records,null,4);
+        
+		//$params["just_before_closing_id"] = 
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_in_hand_report_tr_records_tpl', $params);
+    }
+
+	public function overall_global_inventory_in_hand_tr_all_records_download() {
+        ##--------------- pagination start ----------------##
+        // init params
+        $params = array();
+        if(!empty($this->input->get('page_limit'))){
+            $limit_per_page = $this->input->get('page_limit');
+        }else{
+            $limit_per_page = $this->config->item('pageLimit');
+        }
+        $this->config->set_item('pageLimit', $limit_per_page);
+        $start_index = ($this->uri->segment(4)) ? $this->uri->segment(4) : 0;
+        $srch_string = $this->input->get('search');
+        
+        if (empty($srch_string)) {
+            $srch_string = '';
+        }
+        $total_records = $this->order_master_model->count_overall_global_inventory_in_hand_tr_records_barqrcodelist($srch_string);
+
+        $params["ScanedCodeListing"] = $this->order_master_model->get_overall_global_inventory_in_hand_tr_records_barqrcodelist($limit_per_page, $start_index, $srch_string);
+        $params["links"] = Utils::pagination('order_master/barcode/overall_global_inventory_in_hand_tr_records_download', $total_records,null,4);
+		
+		$params["links2"] = Utils::pagination2('product/overall_global_inventory_in_hand_tr_records_download', $total_records);
+		$params["total_records2"] = $total_records;	
+        
+		//$params["just_before_closing_id"] = 
+        ##--------------- pagination End ----------------##
+        $data = array();
+        $user_id = $this->session->userdata('admin_user_id');
+        //$data['orderListing'] 	= $this->order_master_model->get_order_list_all($user_id);
+        $this->load->view('list_overall_global_inventory_in_hand_report_tr_records_download_tpl', $params);
+    }
+	
+	
+   }
+   
+   ?>
 

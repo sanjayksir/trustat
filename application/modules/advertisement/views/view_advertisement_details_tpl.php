@@ -72,7 +72,7 @@
 														<th>Product Name</th>
  														 <th>Media Type</th>
 														 <th>Push Date Time</th> 
-														<th>Survey Feedback Question, Response, Date Time</th>
+														<th>Advertisement Feedback Question, Response, Date Time</th>
   													</tr>
 												</thead>
 												<tbody>

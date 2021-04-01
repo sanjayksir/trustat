@@ -102,16 +102,22 @@
 
           <div class="clearfix form-actions" style="background-color:white;border-top: none;padding:0px;">
 
-            <input class="btn btn-info" type="submit" name="submit" value="Save Menu" id="savemenu" />
+ <input class="btn btn-info" type="submit" name="submit" value="Save" id="savemenu" onclick="this.style.display='none'" />
 			<a href="<?php echo base_url('product/list_loyalty_redemption_requests') ?>" class="btn btn-info" title="Back to List Loyalty Matrix">Back to List Loyalty Redemption Requests <?php echo $label; ?> </a>
           </div>
-
         </div>
 
       </form>
 		</div>
 </div>
 </div>
+
+<div class="submit-progress hidden">
+ <i class="fa fa-2x fa-spinner fa-spin"></i>
+ <label>Please wait while Saving Data...</label>
+</div>
+
+
 <script type="text/javascript">
  	function readURL(input) {
  		 if (input.files && input.files[0]) {
@@ -122,4 +128,4 @@
  			 reader.readAsDataURL(input.files[0]);
  		}
  	}
-  </script>
+</script>

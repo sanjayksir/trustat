@@ -41,7 +41,7 @@
                     <div class="col-xs-12">
                         <div class="row">
                             <div class="col-xs-12">
-                                <h3 class="header smaller lighter blue">Product Details</h3>
+                                <h3 class="header smaller lighter blue">View Product Details</h3>
                                 <?php if ($feedback = $this->session->flashdata('feedback')) { ?>
                                     <div class="alert alert-dismissible <?php echo $this->session->flashdata('feedback_class') ?>">
                                         <strong><?php echo $feedback; ?></strong>
@@ -88,6 +88,14 @@
 																		</div>
 																</div>
 																<br />
+															<div class="row">
+																		<div class="col-xs-12"> 
+																			<div class="col-xs-3 col-sm-3">
+																			 <label><strong>Customer ERP Product ID :</strong></label></div>
+																			 <div class="col-xs-3 col-sm-3"><?php echo $details['customer_erp_product_id'];?></div>
+																		</div>
+																</div>
+																<br />	
 															<div class="row">
 																<div class="col-xs-12"> 
 																	<div class="col-xs-3 col-sm-3">
@@ -173,12 +181,14 @@
   																</div>
 															</div>
 															<br /><br />
+											<fieldset>
+												<legend>Product Thumb Image</legend>
 															<?php }?>
 															<?php if($details['product_thumb_images']!=''){?>
 															<div class="row">
 																<div class="col-xs-12"> 
 																	<div class="col-xs-3 col-sm-3">
-																	 	<label><strong>Product Thum Image</strong></label>
+																	 	<label><strong>Product Thumb Image</strong></label>
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
 																	<?php $arrImg = explode(',',$details['product_thumb_images']);
@@ -195,14 +205,17 @@
 															</div>
 															<br /><br />
 															<?php }?>
-															<?php if($details['product_images']!=''){?>
+														</fieldset>	
+									<fieldset>
+										<legend>For Level 1: Video/Audio/PDF/Image Management</legend>
+										<?php if($details['product_image']!=''){?>
 															<div class="row">
 																<div class="col-xs-12"> 
 																	<div class="col-xs-3 col-sm-3">
 																	 	<label><strong>Product Image</strong></label>
 																	</div>
 																	<div class="col-xs-9 col-sm-9">
-																	<?php $arrImg = explode(',',$details['product_images']);
+																	<?php $arrImg = explode(',',$details['product_image']);
  																	if(count($arrImg)>0){
 																		foreach($arrImg as $recs){	
 																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
@@ -217,28 +230,10 @@
 															
 															<br /><br />
 															<?php }?>
-															<br />
-															<?php if($details['product_code_print_bg_images']!=''){?>
-															<div class="row">
-																<div class="col-xs-12"> 
-																	<div class="col-xs-3 col-sm-3">
-																	 	<label><strong>Product Code BG Image</strong></label>
-																	</div>
-																	<div class="col-xs-9 col-sm-9">
-																	<?php $arrImg = explode(',',$details['product_code_print_bg_images']);
- 																	if(count($arrImg)>0){
-																		foreach($arrImg as $recs){	
-																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
-																	?>
-																		<img style="border:1px solid grey;"  src="<?php echo base_url().'/uploads/'.$recs;?>" width="100px" height="100px;" />
-																		  <?php }
-																			}
-																		}?>
-																	</div>
-  																</div>
-															</div>
-															<br /><br />
-															<?php }?>
+									 
+															
+															
+															
 															<!-- Product Video -->
 									<?php if($details['product_video']!=''){?>
 										<div class="row">
@@ -301,9 +296,13 @@ Your browser does not support audio in video tag.
 															</div>
 															<br /><br />
 															<?php }?>
+															 </fieldset>
 															<!-- /Product PDF -->
 															<!-- Product Demo Items  -->
 															<br />
+															
+							<fieldset>
+							<legend>For Level 0: Demo Video/Demo Audio/User Manual Management</legend>
 															<!-- Product Demo Video -->
 															<?php if($details['product_demo_video']!=''){?>
 															<div class="row">
@@ -362,10 +361,37 @@ Your browser does not support audio in video tag.
 															</div>
 															<br /><br />
 															<?php }?>
+															</fieldset>
 															<!-- /Product User Manual -->
-															
+							<fieldset>
+								<legend>Image on Code Sticker Management</legend>
+														<br />
+															<?php if($details['product_code_print_bg_images']!=''){?>
+															<div class="row">
+																<div class="col-xs-12"> 
+																	<div class="col-xs-3 col-sm-3">
+																	 	<label><strong>Product Code BG Image</strong></label>
+																	</div>
+																	<div class="col-xs-9 col-sm-9">
+																	<?php $arrImg = explode(',',$details['product_code_print_bg_images']);
+ 																	if(count($arrImg)>0){
+																		foreach($arrImg as $recs){	
+																			if(file_exists('./uploads/'.$recs)){//echo '***'.$recs;exit;
+																	?>
+																		<img style="border:1px solid grey;"  src="<?php echo base_url().'/uploads/'.$recs;?>" width="100px" height="100px;" />
+																		  <?php }
+																			}
+																		}?>
+																	</div>
+  																</div>
+															</div>
+															<br /><br />
+															<?php }?>
+							</fieldset>
 															<!-- /Product Demo Items  -->
 														<!-- Product Advertisement video -->
+										<fieldset>
+											<legend>Push Advertisement Management</legend>	
 															<?php if($details['product_push_ad_video']!=''){?>
 															<div class="row">
 																<div class="col-xs-12"> 
@@ -454,10 +480,12 @@ Your browser does not support audio in video tag.
 															<br /><br />
 															<?php }?>
 															<!-- /Product Advertisement image -->
-															
+														</fieldset>	
 															
 												<br />
 															<!-- Product Survey Video -->
+								<fieldset>
+									<legend>Push Survey Management</legend>
 															<?php if($details['product_survey_video']!=''){?>
 															<div class="row">
 																<div class="col-xs-12"> 
@@ -539,31 +567,287 @@ Your browser does not support audio in video tag.
 															<br /><br />
 															<?php }?>
 															<!-- /Product Survey Image -->	
-															
+																</fieldset>	
 
 														
 														</div>
                                                          <br />
 														 <hr />
-                                                        <h3> Essential Attributes</h3>
-                                                         <hr />
-                                                         
+                                                   
                            <!-------------- Essential attributes-------------------->
-            <div class="row">
-              <div class="col-xs-12" style="margin-left:25px"> 
-					<label><strong>Code Unity Type : </strong> <?php echo $details['code_unity_type'];?></label><br />
-					<label><strong>Code Type : </strong> <?php echo $details['code_type'];?></label><br />
-					<label><strong>Code Activation Type : </strong> <?php if($details['code_activation_type']==1) { echo "Pre-Activated";} else echo "Post-Activated"; ?>
-										   </label><br />
-					<label><strong>Delivery Method : </strong> <?php echo product_delivery_method($details['delivery_method']);?></label><br />
-					<label><strong>Code Key Type : </strong><?php echo $details['code_key_type'];?></label><br />
-					<label><strong>Code Size : </strong><?php //echo getProductSize($details['code_size']);?><?php echo $details['code_size'];?> mm</label>
-					
-				<br /><br /><br /><br />
-            
-                                                            </div>
-                                                         </div>
-                                                            
+		
+		
+		
+  
+		<fieldset>
+			<legend>Bar Code Management</legend>
+			<div class="form-group row">
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Barcode Type – Line Barcode or QR</b> : </label>
+				<?php echo $details['code_type'];?>
+  			</div> 
+			
+			<div class="col-sm-4">
+				<label for="form-field-8">Code Activation Type – Pre or Post : </label> 
+				<?php if($details['code_activation_type']==0){ echo "Post-Activated";}else{echo "Pre-Activated";} ?>
+ 		    </div>
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b> Method of Delivery – Printing by Super/CCC Admin</b> : </label>
+				<?php if($details['delivery_method']==1){ echo "Physical Printing by Super Admin";}elseif($details['delivery_method']==2){echo "Physical Printing by CCC Admin";}else{echo "Physical Printing by Designated Plant Controller";} ?>
+ 		    </div>
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b> Code Key Type – Serial or Random</b> :  </label>
+				<?php if($details['code_key_type']=='serial'){ echo "Serial Unique";}else{echo "Random Unique";} ?>				
+ 		    </div> 
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b> Code Unity Type – Single or Twin</b>  : </label>
+				<?php echo $details['code_unity_type'];?>				
+ 		    </div>
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Show Code Below Printed Bar/QR Code</b> : </label>
+				<?php echo $details['show_code_below_printed_bar_qr_code'];?>				
+ 		    </div>
+			</div>
+		</fieldset>
+          
+		
+		  <fieldset>
+			<legend>Packaging Level Management</legend>
+          <div class="form-group row"> 			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Print codes in Batches?</b> : </label>
+				<?php echo $details['print_codes_in_batches'];?>
+ 		    </div>
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Registration Pack</b> : </label>
+				<?php echo $details['registration_pack'];?>	
+ 		    </div>
+
+		<div class="col-sm-4">
+				<label for="form-field-8"><b>Retailer Pack</b> : </label>
+				<?php echo $details['retailer_pack'];?>	
+ 		    </div>
+
+		<div class="col-sm-4">
+				<label for="form-field-8"><b>Min Shipper Pack Level </b> : </label>
+				<?php echo $details['min_shipper_pack_level'];?>	
+ 		    </div>
+
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Max Shipper Pack Level</b>  : </label>
+				<?php echo $details['max_packaging_level_product'];?>	
+ 		    </div> 
+  		</div> 
+		</fieldset>
+		
+		 <fieldset>
+			<legend>Code Size and Message Printing Management</legend>
+				<div class="form-group row"> 
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Text Font Size</b> : </label>
+				<?php echo $details['TextFontSize'];?>
+ 		    </div> 
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Height of Barcode(mm) </b> : </label>
+				<?php echo $details['height_of_the_bar_code'];?>
+ 		    </div> 
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Size of the Code (mm)</b> : </label>
+				<?php echo $details['code_size'];?>
+ 		    </div>
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Space for Message above the Code(mm)</b> : </label>
+				<?php echo $details['space_for_message_above_code'];?>
+ 		    </div>
+			
+           <div class="col-sm-4">
+				<label for="form-field-8"><b>Message print above the Code</b> : </label>
+				<?php echo $details['message_above_code'];?>
+ 		    </div> 
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Space for Message below the Code(mm)</b> : </label>
+				<?php echo $details['space_for_message_below_code'];?>
+ 		    </div> 
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Message print below the Code</b> : </label>
+				<?php echo $details['message_below_code'];?>
+ 		    </div>
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Space for Code below BatchID(mm)</b> : </label>
+				<?php echo $details['space_for_code_below_batchid'];?>
+ 		    </div>
+			
+  		</div>
+		</fieldset>
+		
+		<div <?php if($details['code_unity_type']=='Single'){ ?> style="display:none;" <?php } ?>>
+		<fieldset>
+			<legend>Twin Codes Management</legend>
+		<div class="form-group row">  
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Space between Code Rows</b> : </label>
+				<?php echo $details['space_between_code_rows'];?>
+ 		    </div>
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Message above Secondary Code of twin</b> : </label>
+				<?php echo $details['message_above_secondry_code'];?>
+ 		    </div> 
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Message Below Secondary Code of twin</b> : </label>
+				<?php echo $details['message_below_secondry_code'];?>
+ 		    </div>
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Space for Message above Sec. Code of twin(mm)</b> : </label>
+				<?php echo $details['space_for_message_above_secondry_code'];?>
+ 		    </div>
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Space for Message Below Sec.  Code of twin(mm)</b> : </label>
+				<?php echo $details['space_for_message_below_secondry_code'];?>
+ 		    </div>
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Space between QR Code and Barcode(mm) </b> : </label>
+			<?php echo $details['space_between_twin_code'];?>
+ 		    </div>
+			 
+  		</div>		
+		</fieldset>
+		</div>	
+		
+		<fieldset>
+			<legend>Super Loyalty Management</legend>
+		<div class="form-group row"> 
+
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Include the Product in Super Loyalty </b> : </label>
+				<?php echo $details['include_the_product_in_super_loyalty'];?>				
+ 		    </div> 
+			<div <?php if($details['include_the_product_in_super_loyalty']=='No'){ ?> style="display:none;" <?php } ?>>
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Super Loyalty trigger every... times Scan </b> : </label>
+				<?php echo $details['number_of_scans_for_super_loyalty'];?>				
+ 		    </div> 			
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>APP Passbook On Screen Display Message </b> : </label>
+				<?php echo $details['app_passbook_on_screen_display_message_sl'];?>			
+ 		    </div>
+			
+			<div class="col-sm-8">
+				<label for="form-field-8"><b> APP Notification Message for Super Loyalty  </b> : </label>
+				<?php echo $details['app_notification_message_for_super_loyalty'];?>			
+ 		    </div> 
+			
+			
+			</div>
+  		</div>
+		</fieldset>
+		
+		<fieldset>
+			<legend>Referral Program Management</legend>
+		<div class="form-group row">            
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Include the Product in Referral Program </b> : </label>
+				<?php echo $details['include_the_product_in_referral_program'];?>				
+ 		    </div> 
+			<div <?php if($details['include_the_product_in_referral_program']=='No'){ ?> style="display:none;" <?php } ?>>
+			<div class="col-sm-4">
+				<label for="form-field-8"><b> Gap Period(Days) for last activity of Receiver </b> : </label>
+				<?php echo $details['gap_period_for_last_activity_of_existing_consumer'];?>			
+ 		    </div> 
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b> Loyalty rewards to sender consumer under Referral </b> : </label>
+				<?php echo $details['loyalty_rewards_to_sender_consumer_under_referral'];?>			
+ 		    </div>
+			</div>
+  		</div>
+		<div <?php if($details['include_the_product_in_referral_program']=='No'){ ?> style="display:none;" <?php } ?>>
+		<div class="form-group row">            
+			<div class="col-sm-4">
+				<label for="form-field-8"><b> Media Type for Sending Reference</b> : </label>
+				<?php echo $details['media_type_for_sending_reference'];?>			
+ 		    </div> 
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Max Referrals for the product</b> : </label>
+				<?php echo count_referrals_product($details['id']); ?>/<?php echo $details['max_referrals_for_product'];?>				
+ 		    </div> 
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Number of Referrals allowed by a Consumer</b> : </label>
+				<?php echo $details['number_of_referrals_allowed_to_consumer'];?>				
+ 		    </div> 
+			
+  		</div>
+		
+		<div class="form-group row">            
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Referral Program Auto Off Date(mm/dd/yyyy)</b> : </label>
+				<?php echo date('m/d/yy',strtotime($details['referral_program_auto_off_date']));?>				
+ 		    </div> 
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Msg. Displayed To Sender upon Sending Ref. </b> :  </label>
+				<?php echo $details['custom_message_for_sending_reference'];?>			
+ 		    </div> 
+			
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Message for receiver of Reference </b> : </label>
+				<?php echo $details['message_for_receiver_of_reference'];?>			
+ 		    </div> 
+  		</div>
+		
+		<div class="form-group row">            
+			<div class="col-sm-4">
+				<label for="form-field-8"><b>Send Referral message from server</b> : </label>
+				<?php echo $details['send_ref_message_frm_server'];?>				
+ 		    </div> 
+			
+			<div class="col-sm-8">
+				<label for="form-field-8"><b>Message for receiver of Reference from Server</b> : </label>
+				<?php echo $details['message_receiver_ref_frm_server'];?>				
+ 		    </div> 
+			
+			
+			
+  		</div>
+		
+		</div>
+		</fieldset>
+           <br />
+
+<fieldset>
+			<legend>Product Warranty Management</legend>
+		
+		<div class="form-group row">            
+			<div class="col-sm-8">
+				<label for="form-field-8"><b> Product Warranty in Days(0 Stands Without Warranty)</b> : </label>
+				<?php echo $details['warranty_in_days'];?>				
+ 		    </div> 
+			
+			<!--
+			<div class="col-sm-4">
+				<label for="form-field-8">Max Referrals for the product</label><br />
+				<b><?php echo $details['max_referrals_for_product'];?></b>				
+ 		    </div> 
+			
+			<div class="col-sm-4">
+				<label for="form-field-8">Number of Referrals allowed by a Consumer</label><br />
+				<b><?php echo $details['number_of_referrals_allowed_to_consumer'];?></b>				
+ 		    </div> -->			
+  		</div>
+		</fieldset>		   
                                                          
                                                        <!-------------- ASsential attributes-------------------->
                                                     

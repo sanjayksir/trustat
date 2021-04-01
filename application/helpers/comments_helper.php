@@ -94,6 +94,7 @@ function count_all_comments_by_news_id( $news_id ) {
 }
 
 // Get all likes by news id
+/*
 function get_likes_by_news_id( $news_id ) {
     $result = array();
     $ci = & get_instance();
@@ -104,7 +105,7 @@ function get_likes_by_news_id( $news_id ) {
         return $result;
     }
 }
-
+*/
 function get_likes_by_comment_id( $comment_id, $like_type ) {
     $result = array();
     $ci = & get_instance();

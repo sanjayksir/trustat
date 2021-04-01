@@ -96,7 +96,7 @@
 
     <div class="widget-header">
 
-      <h4 class="widget-title">Assign Locations</h4>
+      <h4 class="widget-title">Assign Locations-<?php echo $this->uri->segment(3); ?></h4>
 
       <div class="widget-toolbar"> <a href="#" data-action="collapse"> <i class="ace-icon fa fa-chevron-up"></i> </a> <a href="#" data-action="close"> <i class="ace-icon fa fa-times"></i> </a> <a href="#" class="show_loader"  data-action="reload" style="display:none;"><i class="ace-icon fa fa-refresh"></i></a> </div>
 
@@ -118,7 +118,8 @@
             <select class="form-control" name="locations[]" id="locations" onchange="return get_products(this.value);">
 			<option value="">-Select Locations-</option>
             <?php 
-			$user_id 	= $this->session->userdata('admin_user_id');
+			//$user_id 	= $this->session->userdata('admin_user_id');
+			$user_id 	= $this->uri->segment(3);
 			$plant_data = get_all_active_locations_plant($user_id);
 			foreach($plant_data as $res){?>
             <option value="<?php echo $res['location_id'];?>" <?php if($this->uri->segment(3)==$res['location_id']){echo 'selected';}?>><?php echo $res['location_name'];?></option>
@@ -142,7 +143,7 @@
 				$.ajax({
 				type:'POST',
 				url:'<?php echo base_url().'plant_master/getProductList'?>',
-				data:{id:id},
+				data:{id:id,customer_id:<?php echo $this->uri->segment(3); ?>},
 				success:function(msg){
 					$("#sku_product").html(msg);
 				}
@@ -343,7 +344,7 @@ $.ajax({
 				$('#ajax_msg').text("Product assigned Successfully!").css("color","green").show();
 				$('#blah').attr('src', '').hide();
 				$('#user_frm')[0].reset(); 
-				 window.location.href="<?php echo base_url(); ?>plant_master/list_assigned_locations_sku";						
+				 window.location.href="<?php echo base_url(); ?>plant_master/list_assigned_locations_sku/<?php echo $this->uri->segment(3); ?>";						
 			}
 			 
 		},

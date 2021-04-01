@@ -157,7 +157,7 @@
 					"created_by"		  => $is_parent,
 					"status"			  => 1,
 					"product_description" => '',
-					"product_images"	  => '',
+					"product_image"	  => '',
 					"product_video"	      => '',
 					"product_audio"		  => '',
 					"product_pdf"         => '',
@@ -541,8 +541,8 @@ function AllSelectedConsumersByACustomer1($customer_id, $consumer_selection_crit
 		$this->db->select('C.id');	
 		$this->db->from('consumers C');		
 		$this->db->join('consumer_customer_link CCL', 'CCL.consumer_id = C.id');
-		$this->db->where('CCL.customer_id', $customer_id);
-		
+		//$this->db->where('CCL.customer_id', $customer_id);
+		$this->db->where(array('CCL.customer_id' => $customer_id, 'CCL.registration_status' => "Registered"));
 		
 		
 		
@@ -558,7 +558,7 @@ function AllSelectedConsumersByACustomer1($customer_id, $consumer_selection_crit
 		if($row->consumer_city!='all') {
 		$this->db->where('C.city', $row->consumer_city);
 			}
-		
+		if($row->consumer_age_option=='SpecifyAge') {
 		$consumer_min_dob = date('Y-m-d', strtotime('-' . $row->consumer_min_age . ' years'));
 		$consumer_max_dob = date('Y-m-d', strtotime('-' . $row->consumer_max_age . ' years'));
 		
@@ -570,7 +570,7 @@ function AllSelectedConsumersByACustomer1($customer_id, $consumer_selection_crit
 		$this->db->where('C.dob <=', $consumer_min_dob);
 		//$this->db->or_where('C.dob =', 'NULL');
 			}
-			
+		}
 			/*
 			$arr = explode(' ',trim($earned_loyalty_points_clubbed));
 			$ELP_from = $arr[0];
@@ -829,21 +829,22 @@ function AllSelectedConsumersByACustomer1($customer_id, $consumer_selection_crit
 		return $result;
 }
 			
-		function save_push_sent_text_message($customer_id,$text_message,$send_status,$consumer_selection_criteria){
+		function save_push_sent_text_message($customer_id,$text_message,$send_status,$consumer_selection_criteria,$message_id){
 				if($send_status=='0'){
-				$this->db->query("delete from push_text_message where customer_id='".$customer_id."' ");
+				$this->db->query("delete from push_text_message where customer_id='".$customer_id."' AND text_pp_id='".$message_id."'");
 				$this->session->set_flashdata('success', 'Text un-Pushed Successfully!');
 				//echo $this->db->last_query();exit;
 				return true;
 			}else{
 			if($consumer_selection_criteria=="All") {
 				
-				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."' AND registration_status='Registered';");
 				foreach ($query->result() as $user)  
 				{  
 				//$consumer_ida = $user->id; 
 				//echo $consumer_ida; exit;
 				$insertData=array(
+					"text_pp_id"	 => $message_id,
 					"customer_id"	 => $customer_id,
 					"consumer_id"	 => $user->consumer_id,
 					"text_message"	 => $text_message,
@@ -858,7 +859,7 @@ function AllSelectedConsumersByACustomer1($customer_id, $consumer_selection_crit
 			
 			
 			/*
- 				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."';");
+ 				$query = $this->db->query("SELECT * FROM consumer_customer_link where customer_id='".$customer_id."' AND registration_status='Registered';");
 				foreach ($query->result() as $user)  
 				{  
 				//$consumer_ida = $user->id; 
@@ -872,6 +873,7 @@ function AllSelectedConsumersByACustomer1($customer_id, $consumer_selection_crit
 				{ 
 				$consumer_id = $consumer_idArray->id;
 				$insertData=array(
+					"text_pp_id"	 => $message_id,
 					"customer_id"	 => $customer_id,
 					"consumer_id"	 => $consumer_id,
 					"text_message"	 => $text_message,
@@ -903,7 +905,7 @@ function AllSelectedConsumersByACustomer1($customer_id, $consumer_selection_crit
 					);
 				  $this->db->insert("push_text_message_request", $insertData);
 				
-					$this->session->set_flashdata('success', 'Request to Text Push Message sent Successfully, waiting gor approval');
+					$this->session->set_flashdata('success', 'Request to Text Push Message sent Successfully, waiting for approval');
 					return true;
 			}
 		
@@ -927,7 +929,7 @@ function AllSelectedConsumersByACustomer1($customer_id, $consumer_selection_crit
  				
 				$insertData=array(
 					"approval_date"	 => date("Y-m-d H:i:s"),
-					"approval_status"	 => $send_status
+					"approval_status" => $send_status
 					);
 					$this->db->where('id', $message_id);
 				  $this->db->update("purchased_loyalty_points", $insertData);
@@ -948,7 +950,7 @@ function AllSelectedConsumersByACustomer1($customer_id, $consumer_selection_crit
 		        'to' => $id,
 		         
 		         'notification' => array('title' => 'TRUSTAT text message', 'body' =>  $mess, 'sound'=>'Default', 'timestamp'=>date("Y-m-d H:i:s",time())),
-				  'data' => array('title' => 'TRUSTAT text message', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'high', 'timestamp'=>date("Y-m-d H:i:s",time()))
+				  'data' => array('title' => 'TRUSTAT text message', 'body' =>  $mess, 'sound'=>'Default', 'content_available'=>true, 'priority'=>'low', 'timestamp'=>date("Y-m-d H:i:s",time()))
 		       
 		);
 		$fields = json_encode ( $fields );
@@ -1112,7 +1114,7 @@ function AllSelectedConsumersByACustomer1($customer_id, $consumer_selection_crit
 	function consumed_loyalty_points($user_id) {
 				$this->db->select_sum('points');
 				$this->db->from('loylty_points');
-				$this->db->where(array('customer_id'=> $user_id, 'customer_loyalty_type'=> "TRUSTAT"));
+				$this->db->where(array('customer_id'=> $user_id));
 				$query=$this->db->get();		
 		return $query->row()->points;
     }

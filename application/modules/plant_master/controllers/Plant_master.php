@@ -323,7 +323,7 @@
   
      public function add_location() {
  		 $data					= array();
-   		 $this->load->view('add_location', $data); 
+   		 $this->load->view('add_member', $data); 
       }
  
  
@@ -331,17 +331,90 @@
  		 $data					= array();
 		 $location_id 					= $this->uri->segment(3);//$this->session->userdata('admin_user_id');
  		 $data['get_user_details'] 	= $this->plant_master_model->get_location_details($location_id);
-    	 $this->load->view('add_location', $data); 
+    	 $this->load->view('add_member', $data); 
       }
 
  	 public function save_location() {
 		  //print_r($_POST);exit;
 		  $savedData = $this->input->post();
-  		  echo $this->plant_master_model->save_location($savedData);  exit;
+		 // $location_image = $_FILES['file'];		  
+		  //parse_str($_POST['newdata'], $savedData);        
+        ## helper used for image upload
+		/*
+        $res = upload_image_n_thumb($location_image, 'uploads/rwaprofilesettings', 'thumb');
+        $savedData['location_image'] = '';
+        $result = json_decode($res);
+        if(!empty($result[0]->success)) {
+            $savedData['location_image'] = $result[0]->success;
+        }
+		*/  //$savedData['location_image'] = $location_image;
+	 parse_str($_POST['newdata'], $savedData);        
+        ## helper used for image upload
+        $res = upload_image_n_thumb($_FILES['file'], 'uploads/rwaprofilesettings', 'thumb');
+        $savedData['location_image'] = '';
+        $result = json_decode($res);
+        if (!empty($result[0]->success)) {
+            $savedData['location_image'] = $result[0]->success;
+        }
+		echo $this->plant_master_model->save_location($savedData);  exit;
+      }
+	  
+
+
+	
+   public function save_userL() {
+        $user_id = $this->session->userdata('admin_user_id');
+        $user_name = $this->session->userdata('user_name');
+        if (empty($user_id) || empty($user_name)) {
+
+            redirect('login');
+            exit;
+        }
+        parse_str($_POST['newdata'], $searcharray);
+        
+        ## helper used for image upload
+
+        $res = upload_image_n_thumb($_FILES['file'], 'uploads/rwaprofilesettings', 'thumb');
+
+        $searcharray['profile_photo'] = '';
+
+        $result = json_decode($res);
+
+        if (!empty($result[0]->success)) {
+            $searcharray['profile_photo'] = $result[0]->success;
+        }
+        echo $this->plant_master_model->save_userL($searcharray);
+        exit;
+    }	
+	  
+ 
+	public function add_assign_loyalty_activity_role() {
+				 $data					= array();
+				 $this->load->view('add_assign_loyalty_activity_role', $data); 
+			  }
+	  
+	public function edit_assign_loyalty_activity_role() {
+ 		 $data					= array();
+		 $assign_id 					= $this->uri->segment(3);//$this->session->userdata('admin_user_id');
+		 
+ 		 $data['get_user_details'] 	= $this->plant_master_model->get_assign_loyalty_activity_role_details($assign_id);
+    	 $this->load->view('add_assign_loyalty_activity_role', $data); 
+      }
+	 
+	public function view_assign_loyalty_activity_role() {
+ 		 $data					= array();
+		 $assign_id 					= $this->uri->segment(3);//$this->session->userdata('admin_user_id');
+ 		 $data['get_user_details'] 	= $this->plant_master_model->get_assign_loyalty_activity_role_details($assign_id);
+    	 $this->load->view('add_assign_loyalty_activity_role', $data); 
+      }	 
+	  
+	  public function save_assign_loyalty_activity_role() {
+		  //print_r($_POST);exit;
+		  $savedData = $this->input->post();
+  		  echo $this->plant_master_model->save_assign_loyalty_activity_role($savedData);  exit;
 
       }
-
- 	   
+ 
 	  
 	   public function checkLocationName(){
 		$location_id = '';
@@ -413,7 +486,6 @@
  		 $data						= array();
  		 $data['get_user_details'] 	= $this->plant_master_model->get_location_details_plant();
    		 $this->load->view('assign_location', $data); 
-
      }
 	 
 	 
@@ -465,7 +537,7 @@
 		public function getProductList() {
 			$result = '';
 			$id = $this->input->post('id');
-			$user_id 	= $this->session->userdata('admin_user_id');
+			$user_id 	= $this->input->post('customer_id');
 			## assigned products array
 			$assigned_arr = explode(',',get_assigned_products_list_to_location($id));
 			//print_r($assigned_arr);
@@ -474,8 +546,7 @@
 			 foreach($product_data as $res){?>
             <option value="<?php echo $res['id'];?>" <?php if(in_array($res['id'],$assigned_arr )){echo 'selected';}?>><?php echo $res['product_name'];?></option>
           <?php }
-			return $result;
-	
+			return $result;	
 		 }
 		 
 		public function getAssignedProductList() {
@@ -487,6 +558,28 @@
 			//print_r($assigned_arr); kk
 			//$res_arr[0]['product_id']
 			$product_data = get_all_products_sku($user_id);
+			 ?><option value="">- Please Select a Product -</option><?php
+			 foreach($product_data as $res){?>
+			 <?php if(in_array($res['id'],$assigned_arr)) {?>
+         <option value="<?php if(in_array($res['id'],$assigned_arr)){echo $res['id'];}?>"><?php if(in_array($res['id'],$assigned_arr)){echo $res['product_name'];}?></option>
+			 <?php } ?>
+          <?php }
+			return $result;
+	
+		 }
+		 
+		 
+		 public function getAssignedProductListForCustomer() {
+			$result = '';
+			$id = $this->input->post('id');
+			$customer_id = $this->input->post('customer_id');
+			//$user_id 	= $this->session->userdata('admin_user_id');
+			## assigned products array
+			$assigned_arr = explode(',',get_assigned_products_list_to_location_for_customer($id, $customer_id));
+			//print_r($assigned_arr); kk
+			//$res_arr[0]['product_id']
+			$product_data = get_all_products_sku($customer_id);
+			 ?><option value="">- Please Select a Product -</option><?php
 			 foreach($product_data as $res){?>
 			 <?php if(in_array($res['id'],$assigned_arr)) {?>
          <option value="<?php if(in_array($res['id'],$assigned_arr)){echo $res['id'];}?>"><?php if(in_array($res['id'],$assigned_arr)){echo $res['product_name'];}?></option>
@@ -507,8 +600,14 @@
 		
 		public function list_assigned_locations_sku() {
 			 $data					= array();
-			 $user_id 				= $this->session->userdata('admin_user_id');		
-			 $data['plant_data'] 	= get_all_locations_plant($user_id);
+			 $user_id 				= $this->session->userdata('admin_user_id');
+		if($user_id ==1){
+			$customer_id = $this->uri->segment(3);	
+		}else{
+			$customer_id = $user_id;	
+		}
+			
+			 $data['plant_data'] 	= get_all_locations_plant($customer_id);
 			 $this->load->view('list_location_sku_assign', $data);
      	}
 		
@@ -596,6 +695,26 @@
 			return $result;
 	 }
       
+	 public function getActiveLocationListSA() {
+			$result = '';
+			$id 			= $this->input->post('id');
+            $user_id 		= $this->session->userdata('admin_user_id');
+            if(empty($user_id)){
+                //$user_id			= $this->input->post('ccadminId');
+            }
+			
+			## assigned plants array
+ 			$assigned_arr = explode(',',get_assigned_active_locations_list($id));
+			
+			//print_r($assigned_arr);exit;
+			
+ 			$product_data 	= get_all_active_locations($id);
+			 foreach($product_data as $res){?>
+				<option value="<?php echo $res['location_id'];?>" <?php if(in_array($res['location_id'],$assigned_arr )){echo 'selected';}?>><?php echo $res['location_name'];?></option>
+          <?php }
+			return $result;
+	 }
+
       
       public function getActivePlantControllerList() {
 			$result = '';
@@ -672,10 +791,24 @@
 	
 	  public function list_assigned_locations_user() {
 			 $data					= array();
-			 $parent_id				= $this->session->userdata('admin_user_id');		
+			 $loggedin_user = $this->session->userdata('admin_user_id');	
+			if($loggedin_user==1){
+				$parent_id				= $this->uri->segment(3);
+			}else{
+				$parent_id				= $loggedin_user;
+			}
+			 
 			 $data['plant_data'] 	= get_all_users_exclude_pc($parent_id);
 			 $this->load->view('list_location_user_assign', $data);
      	}
+		
+		
+		 public function list_assigned_activity_role() {
+			 $data					= array();
+			 $parent_id				= $this->session->userdata('admin_user_id');		
+			 $data['plant_data'] 	= get_all_roles_list();
+			 $this->load->view('list_activity_role_assign', $data);
+     	}	
 		
 		
 		public function change_assign_location_status() {
@@ -700,6 +833,18 @@
               $this->load->view('assign_location_to_users_ccadmin_tpl', $data);  
           }else{
             $this->load->view('assign_location_to_users_tpl', $data);   
+          }
+     }
+	 
+	 
+	 	 public function assign_activity_role() {
+ 		 $data						= array();
+ 		 $data['get_user_details'] 	= $this->plant_master_model->get_location_details();
+          $user_id 		= $this->session->userdata('admin_user_id');
+          if($user_id==1){
+              $this->load->view('assign_activity_role_ccadmin_tpl', $data);  
+          }else{
+            $this->load->view('assign_activity_role_tpl', $data);   
           }
      }
 
@@ -744,6 +889,75 @@
           <?php }
 			return $result;
 	 }
+	 
+	 
+	 	public function getAllActivitiList() {
+			$result = '';
+			$id 			= $this->input->post('id');
+            $user_id 		= $this->session->userdata('admin_user_id');
+            if(empty($user_id)){
+                //$user_id			= $this->input->post('ccadminId');
+            }
+			
+			## assigned plants array
+ 			$assigned_arr = explode(',',get_assigned_activity_role_list($id));
+			
+			//print_r($assigned_arr);exit;
+			
+ 			$product_data 	= get_all_active_functionalities($user_id);
+			 foreach($product_data as $res){?>
+				<option value="<?php echo $res['id'];?>" <?php if(in_array($res['id'],$assigned_arr )){echo 'selected';}?>><?php echo $res['functionality_name_value'];?></option>
+          <?php }
+			return $result;
+	 }
+	
+	 	 	public function getAllActivitiList2() {
+			$result = '';
+			$id 			= $this->input->post('id');
+            $user_id 		= $this->session->userdata('admin_user_id');
+            if(empty($user_id)){
+                //$user_id			= $this->input->post('ccadminId');
+            }
+			
+			## assigned plants array
+ 			$assigned_arr = explode(',',get_assigned_activity_role_list($id));
+			
+			//print_r($assigned_arr);exit;
+			
+ 			$product_data 	= get_all_activitis($user_id);
+			 foreach($product_data as $res){?>
+				<?php echo $res['activity_name'];?>-<input type="text" name="locations" id="locations" value="2" size="5" > <br />
+          <?php }
+			return $result;
+	 }
+	 
+	 public function save_assign_role_to_activitis() {
+            $user_id 	= $this->session->userdata('admin_user_id');
+            if($user_id==1){
+                $result = '';
+                //echo '<pre>';print_r($_POST);exit;
+                $plant_array = json_encode($this->input->post('locations'));
+                $assigned_by		         = $this->input->post('user'); 
+				$loyalty_points		         = $this->input->post('loyalty_points2');
+                $plant_controller_user		 = $this->input->post('location_controller_val'); 
+                if(count($this->input->post('locations'))>0 && count($plant_controller_user)>0){
+                    $result = $this->plant_master_model->save_assign_role_to_activitis($plant_array, $plant_controller_user, $assigned_by, $loyalty_points);	
+                }
+            }else{
+				//$plant_array = $_POST['locations'];
+				
+				$all_arraylist = $_POST['locations'];
+				//$all_arraylist= json_decode($all_arraylist,TRUE);
+
+                //$plant_array = json_encode($this->input->post('locations'));
+                $user		 = $this->input->post('user'); 
+				$loyalty_points = $this->input->post('loyalty_points2');
+                if(count($this->input->post('locations'))>0 && count($user)>0){
+                    $result = $this->plant_master_model->save_assign_role_to_activitis($all_arraylist, $user, $loyalty_points, $loyalty_points, $loyalty_points);	
+                }
+            }
+            echo  $result;exit;
+ 		 }
 
 
 	public function view_location() {
